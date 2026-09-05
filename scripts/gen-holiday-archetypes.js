@@ -156,7 +156,7 @@ Output ONLY the JSON array.`;
 async function sonnetRows(prompt) {
   const msg = await client.messages.create({
     model: SONNET,
-    max_tokens: 3000,
+    max_tokens: 4000,
     messages: [{ role: 'user', content: prompt }],
   });
   let text = msg.content[0].text
@@ -177,15 +177,20 @@ async function seed(holiday, arch, def, table, extra, promptFor, target) {
     console.log(`  ${holiday}/${arch} → ${table}: at share, nothing to seed`);
     return 0;
   }
-  const prompt = promptFor(target);
+  // Ask for at most 25 per round (a 70-row JSON overflows the reply and parses to NOTHING —
+  // 2026-09-05 ghost_hunting_crew seeded 0/70 three times). Rounds scale with the target.
+  const PER_ROUND = 25;
+  const maxRounds = Math.ceil(target / 15) + 2;
   // Top-up loop (2026-09-04): lint-dropped rows are REPLACED (up to 3 Sonnet
   // rounds) so a pool lands at N clean rows instead of N-minus-drops; near-dupes
   // (normalized scene) across rounds are skipped.
   const rows = [];
   const seen = new Set();
   let dropped = 0;
-  for (let round = 0; round < 3 && rows.length < target; round++) {
-    const raw = (await sonnetRows(prompt)).filter((o) => o && o.scene);
+  for (let round = 0; round < maxRounds && rows.length < target; round++) {
+    const ask = Math.min(PER_ROUND, target - rows.length + 3);
+    const raw = (await sonnetRows(promptFor(ask))).filter((o) => o && o.scene);
+    if (!raw.length) console.warn(`   ⚠ round ${round + 1}: Sonnet returned 0 parseable rows`);
     raw.forEach((o, i) => {
       const row = { sub_theme: arch, scene: o.scene, ...extra };
       if (o.attire) row.attire = o.attire;
