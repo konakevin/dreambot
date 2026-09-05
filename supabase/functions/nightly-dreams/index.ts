@@ -133,7 +133,7 @@ import {
   type DualSlots,
 } from '../_shared/characterSlotPrompt.ts';
 import { settingClauseOf } from '../_shared/sceneHook.ts';
-import { assessRenderQuality } from '../_shared/qualityGate.ts';
+import { assessRenderQuality, assessSceneFallbackPeople } from '../_shared/qualityGate.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
 import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
@@ -2085,10 +2085,18 @@ Deno.serve(async (req) => {
     // this dream's real place, empty + atmospheric, never strangers.
     sceneFallbackPrompt = buildSceneFallbackPrompt({
       mediumFragment: baseMedium.fluxFragment,
-      // NOT dualSpecialScene — a scenario's scene text describes PEOPLE ("the
-      // couple as pirates"), which would put people back in a people-free scene.
-      // Use the real place; for pure-scenario dreams (no place) fall to a dreamscape.
-      location: iconicAnchor ?? userPlace ?? 'a vast, empty dreamlike landscape',
+      // 2026-09-05: a HOLIDAY scene is people-free by lint, so the fallback
+      // re-renders THAT scene (a Halloween solo whose swap failed used to ship
+      // the user's real place — a sunny Greek alley with no Halloween in it).
+      // Other scenario seeds describe PEOPLE ("the couple as pirates"), so for
+      // them only the people-free SETTING clause is used; a plain location dream
+      // keeps the real place; no place at all → a dreamscape.
+      location:
+        holidayCategory && dualSpecialScene
+          ? dualSpecialScene
+          : dualSpecialScene
+            ? `an empty scene: ${settingClauseOf(dualSpecialScene)}`
+            : (iconicAnchor ?? userPlace ?? 'a vast, empty dreamlike landscape'),
       timeAxis,
       weatherAxis,
       phenomenaAxis,
@@ -3538,8 +3546,45 @@ Output ONLY the prompt.`;
             undefined,
             'jpg'
           );
-          tempUrl = scene.url;
-          if (scene.predictionId) replicatePredictionId = scene.predictionId;
+          let sceneUrl = scene.url;
+          let scenePred = scene.predictionId;
+          // 2026-09-05: the fallback skips the cast gate (nothing to swap), so it
+          // gets its own ONE-question check — an "empty" scene that renders
+          // people is exactly the "strangers shipped" failure (two women in
+          // profile, 2026-09-04). One people-free re-render, then ship the best.
+          const pv = await assessSceneFallbackPeople(sceneUrl);
+          if (pv && !pv.pass) {
+            fallbackReasons.push('pure_scene_fallback:people');
+            if (Date.now() - t0 < 110_000) {
+              try {
+                const scene2 = await generateImage(
+                  'flux-dev',
+                  `${sceneFallbackPrompt}, completely empty of people, not a single human figure anywhere`,
+                  undefined,
+                  {
+                    replicateToken: REPLICATE_TOKEN,
+                    openaiKey: Deno.env.get('OPENAI_API_KEY'),
+                    geminiKey: Deno.env.get('GEMINI_API_KEY'),
+                    xaiKey: Deno.env.get('XAI_API_KEY'),
+                  },
+                  undefined,
+                  'jpg'
+                );
+                const pv2 = await assessSceneFallbackPeople(scene2.url);
+                if (!pv2 || pv2.pass) {
+                  sceneUrl = scene2.url;
+                  scenePred = scene2.predictionId;
+                  fallbackReasons.push('pure_scene_fallback:people_cleared');
+                } else fallbackReasons.push('pure_scene_fallback:people_unresolved');
+              } catch (e2) {
+                fallbackReasons.push(
+                  `pure_scene_fallback:people_rerender_failed:${(e2 as Error).message.slice(0, 60)}`
+                );
+              }
+            } else fallbackReasons.push('pure_scene_fallback:people_skipped_deadline');
+          }
+          tempUrl = sceneUrl;
+          if (scenePred) replicatePredictionId = scenePred;
           sceneFallbackApplied = true;
           logAxes.faceSwapResult = 'pure-scene-fallback'; // → face_swap_mode = null
           fallbackReasons.push('pure_scene_fallback');

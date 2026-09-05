@@ -120,3 +120,71 @@ export async function assessRenderQuality(imageUrl: string): Promise<QualityVerd
     return null;
   }
 }
+
+// ── Pure-scene FALLBACK check (2026-09-05) ──────────────────────────────────
+// When a swap is unusable the render falls back to an EMPTY scene. Twice on
+// 2026-09-04 that fallback shipped strangers (a watercolor of two women in
+// profile; a couple's failed cast). Fallback renders skip the cast gate (no
+// cast to check), so they get this ONE closed question instead: are there
+// people in it? Same contracts: fail-open, conservative, no justification.
+export interface ScenePeopleVerdict {
+  /** false = people are visible as subjects in a scene that must be empty. */
+  pass: boolean;
+  raw: string;
+}
+
+export function buildScenePeoplePrompt(): string {
+  return (
+    'Look at this image. Answer with ONLY one line in exactly this format and nothing else:\n' +
+    'PEOPLE: yes or no\n' +
+    'Answer yes ONLY if one or more people, human faces, or human figures are clearly visible as subjects of the image. ' +
+    'Tiny distant silhouettes, statues, mannequins, skeletons, ghosts, scarecrows, and jack-o-lantern grins are NOT people. ' +
+    'If you are unsure, answer no.'
+  );
+}
+
+export function parseScenePeopleResponse(raw: string): ScenePeopleVerdict | null {
+  const m = (raw || '').match(/\bPEOPLE\s*:\s*(yes|no)\b/i);
+  if (!m) return null;
+  return { pass: m[1].toLowerCase() !== 'yes', raw: (raw || '').slice(0, 200) };
+}
+
+/** FAIL-OPEN: null on any error — the caller ships the fallback ungated. */
+export async function assessSceneFallbackPeople(
+  imageUrl: string
+): Promise<ScenePeopleVerdict | null> {
+  const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
+  if (!anthropicKey) return null;
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': anthropicKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: SONNET,
+        max_tokens: 16,
+        messages: [
+          {
+            role: 'user',
+            content: [
+              { type: 'image', source: { type: 'url', url: imageUrl } },
+              { type: 'text', text: buildScenePeoplePrompt() },
+            ],
+          },
+        ],
+      }),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const txt =
+      data.content && data.content[0] && data.content[0].type === 'text'
+        ? String(data.content[0].text)
+        : '';
+    return parseScenePeopleResponse(txt);
+  } catch (_e) {
+    return null;
+  }
+}

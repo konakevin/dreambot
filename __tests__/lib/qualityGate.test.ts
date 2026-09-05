@@ -5,7 +5,12 @@
  * bias drift IMPOSSIBLE to reintroduce silently — any prompt change must also
  * re-run scripts/eval-quality-gate.ts and hold false positives at ZERO.
  */
-import { buildGatePrompt, parseGateResponse } from '@engine/qualityGate';
+import {
+  buildGatePrompt,
+  parseGateResponse,
+  buildScenePeoplePrompt,
+  parseScenePeopleResponse,
+} from '@engine/qualityGate';
 
 describe('buildGatePrompt — scope + bias locks', () => {
   const p = buildGatePrompt();
@@ -62,5 +67,22 @@ describe('parseGateResponse', () => {
     expect(parseGateResponse('I cannot analyze this image')).toBeNull();
     expect(parseGateResponse('')).toBeNull();
     expect(parseGateResponse('BROKEN: maybe')).toBeNull();
+  });
+});
+
+describe('pure-scene fallback PEOPLE check (2026-09-05)', () => {
+  const p = buildScenePeoplePrompt();
+  it('asks one closed question, conservative, justification-free', () => {
+    expect(p).toContain('PEOPLE: yes or no');
+    expect(p).toMatch(/unsure, answer no/i);
+    expect(p).not.toMatch(/justif|explain|why|reason/i);
+  });
+  it('whitelists Halloween non-people (skeletons, ghosts, scarecrows, grins)', () => {
+    expect(p).toMatch(/skeletons, ghosts, scarecrows/);
+  });
+  it('parses yes → fail, no → pass, garbage → null (fail-open)', () => {
+    expect(parseScenePeopleResponse('PEOPLE: yes')?.pass).toBe(false);
+    expect(parseScenePeopleResponse('people: NO')?.pass).toBe(true);
+    expect(parseScenePeopleResponse('I cannot tell')).toBeNull();
   });
 });
