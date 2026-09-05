@@ -786,3 +786,8 @@ the linter, scrub existing rows, and draw pools with EQUAL AIRTIME (pick the poo
   8/9 couples failed); never run DDL on `holidays` mid-QA (PostgREST schema-cache blank ~5 min);
   never chain `git add` + `git commit` in the shared tree.
 - Reference: §13 hero spec, §14 postcard spec, `HOLIDAY_ARCHETYPE_QA_LOG.md`.
+- **Capacity check (done 2026-09-05):** 12 nightly-eligible users today (83 total, Pro-or-trial via
+  `scripts/lib/nightlyEligibility.js`); nightly volume ~178 renders/day; heavy cap 10 concurrent.
+  Day-of = +1 guaranteed hero render + 1 postcard composite per eligible user → ~12 today; at 10×
+  users (~120) the queue still drains overnight at the heavy cap. Re-run this count the week before
+  Oct 31 (`node -e` snippet in the session log: users × isProActive). No scaling action needed now.
