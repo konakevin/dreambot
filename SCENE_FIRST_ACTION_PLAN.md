@@ -257,3 +257,7 @@ Solos are untouched by the steer (they held identity 0.6+ on 1.1-pro all day).
 - glamour + vintage_film `allowed_models` review (above).
 - Solo `portrait` pool (30% of solo fallback rolls) still static-face-forward; only matters when the authored
   beat falls back. Consider retiring it from the default roll.
+
+**2026-09-06 — Kevin: "no, i don't want to avoid flux 1.1pro."** `dual_avoid_flux11pro` flipped back to FALSE; couples
+return to the flux-1.1-pro pick + the Aug-26 flex clamp. The steer code stays in place, inert. Scene-first actions
+(`scene_action_pct`=100) and the Round A fragment rewrite remain live.
