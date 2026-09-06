@@ -3,8 +3,8 @@ import { DUAL_STANCES, DUAL_STANCES_GEOMETRY, pickDualStance } from '@engine/dua
 import { validateActionBeat } from '@engine/actionSafety';
 
 describe('DUAL_STANCES', () => {
-  it('has a real spread of body language (≥ 8 same-plane stances, unique keys)', () => {
-    expect(DUAL_STANCES.length).toBeGreaterThanOrEqual(8);
+  it('has a real spread of body language (≥ 7 same-plane stances, unique keys)', () => {
+    expect(DUAL_STANCES.length).toBeGreaterThanOrEqual(7);
     expect(new Set(DUAL_STANCES.map((s) => s.key)).size).toBe(DUAL_STANCES.length);
   });
   it.each(DUAL_STANCES.map((s) => [s.key, s.text]))(
@@ -21,6 +21,7 @@ describe('DUAL_STANCES', () => {
     );
     expect(DUAL_STANCES_GEOMETRY.some((s) => /walking/.test(s.text))).toBe(true); // parked (batch 3: 2/2 degraded)
     expect(DUAL_STANCES.some((s) => /nothing held/.test(s.text))).toBe(true);
+    expect(DUAL_STANCES_GEOMETRY.some((s) => s.key === 'show_and_tell')).toBe(true); // parked: objects held up occlude faces
   });
   it('pickDualStance is uniform over the list', () => {
     expect(pickDualStance(() => 0).key).toBe(DUAL_STANCES[0].key);

@@ -109,6 +109,12 @@ export interface EngineConfig {
   /** Couple framing variance (2026-09-06, mig 463): % of couple renders framed as the closer
    *  waist-up two-shot instead of the knees-up default. 0 = off. */
   dualCloserPct: number;
+  /** Scene-first beats on PLAIN-LOCATION dreams (mig 464) — own ramp, 0 = off. */
+  sceneActionLocationPct: number;
+  /** Genre action registers on scene-first renders (mig 464) — 0 = off. */
+  actionRegistersPct: number;
+  /** Let location COUPLES use scene-first beats (mig 465). false = held on the existing path. */
+  sceneActionLocationCouples: boolean;
   /** Holiday POSTCARD overlay scope (migration 459): 'off' | 'day_of' (the day-of hero
    *  only — default) | 'window' (every in-season holiday dream). */
   holidayPostcardScope: 'off' | 'day_of' | 'window';
@@ -163,6 +169,9 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   holidaysEnabled: false,
   dualAvoidFlux11pro: false,
   dualCloserPct: 0,
+  sceneActionLocationPct: 0,
+  actionRegistersPct: 0,
+  sceneActionLocationCouples: false,
   holidayPostcardScope: 'day_of',
 };
 
@@ -272,6 +281,15 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     dualAvoidFlux11pro:
       (data.dual_avoid_flux11pro ?? DEFAULT_ENGINE_CONFIG.dualAvoidFlux11pro) === true,
     dualCloserPct: Number(data.dual_closer_pct ?? DEFAULT_ENGINE_CONFIG.dualCloserPct),
+    sceneActionLocationPct: Number(
+      data.scene_action_location_pct ?? DEFAULT_ENGINE_CONFIG.sceneActionLocationPct
+    ),
+    actionRegistersPct: Number(
+      data.action_registers_pct ?? DEFAULT_ENGINE_CONFIG.actionRegistersPct
+    ),
+    sceneActionLocationCouples:
+      (data.scene_action_location_couples ?? DEFAULT_ENGINE_CONFIG.sceneActionLocationCouples) ===
+      true,
     holidayPostcardScope:
       data.holiday_postcard_scope === 'off' || data.holiday_postcard_scope === 'window'
         ? data.holiday_postcard_scope

@@ -136,6 +136,8 @@ import {
 import { holidayPoolOf } from '../_shared/holidayPools.ts';
 import { steerDualModel } from '../_shared/dualModelSteer.ts';
 import { pickDualStance, type DualStance } from '../_shared/dualStances.ts';
+import { decideSceneFirst, sceneFirstRegister } from '../_shared/sceneFirstEligibility.ts';
+import { getActionRegister, sampleRegister } from '../_shared/actionRegisters.ts';
 import { settingClauseOf } from '../_shared/sceneHook.ts';
 import { assessRenderQuality, assessSceneFallbackPeople } from '../_shared/qualityGate.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
@@ -381,6 +383,11 @@ Deno.serve(async (req) => {
   // regardless of engine_config.scene_action_pct.
   const force_scene_action = body.force_scene_action === true;
   const force_dual_closer = body.force_dual_closer === true;
+  // Genre action registers QA hook (SCENE_FIRST_ACTION_PLAN.md §10): attach the register regardless of
+  // engine_config.action_registers_pct.
+  const force_action_registers = body.force_action_registers === true;
+  // QA: skip every special-scene roll (holiday / goofy / elegant / active) → plain-location dream.
+  const force_plain_location = body.force_plain_location === true;
   // Test hook: force an EXACT action/pose text (semantic-grounding QA — replay
   // a specific historical pose against the action-grounded brief).
   const force_action = typeof body.force_action === 'string' ? body.force_action : null;
@@ -1636,6 +1643,8 @@ Deno.serve(async (req) => {
     let dualSceneKind: 'goofy' | 'elegant' | null = null;
     // Holiday row sub-theme → its MAIN pool names the scene-first action register.
     let holidaySubTheme: string | null = null;
+    // Seed category of the picked scenario row (swashbuckler / victorian / …) → genre action register.
+    let dualSceneCategory: string | null = null;
     // The scene-first authored action that shipped (forensics: rolled_axes.seedSource).
     let sceneActionText: string | null = null;
     // Bespoke pose pool named by the picked scenario row (migration 353) —
@@ -1714,7 +1723,7 @@ Deno.serve(async (req) => {
         const table = isDualFaceSwap ? 'dual_scenarios' : 'single_scenarios';
         const { data: catRows } = await supabase
           .from(table)
-          .select('scene,attire,pool,pose_pool,medium_key,medium_ban')
+          .select('scene,attire,pool,pose_pool,medium_key,medium_ban,category')
           .eq('category', force_scene_category)
           .eq('disabled', false);
         if (catRows && catRows.length > 0) {
@@ -1724,6 +1733,7 @@ Deno.serve(async (req) => {
           dualScenePosePool = (s.pose_pool as string | null) ?? null;
           dualSceneMediumKey = (s.medium_key as string | null) ?? null;
           dualSceneMediumBan = (s.medium_ban as string | null) ?? null;
+          dualSceneCategory = (s.category as string | null | undefined) ?? force_scene_category;
           // Mirror the production per-pool pose behavior so QA reflects the real
           // render: ACTIVE-pool scenes embed the action in the scene text (the
           // pose follows the scene, "caught mid-action"); goofy/elegant draw the
@@ -1795,7 +1805,7 @@ Deno.serve(async (req) => {
           ),
           { activeEnabled: pools.active.length >= 10, holidayPct }
         );
-        const roll = Math.random();
+        const roll = force_plain_location ? 2 : Math.random(); // 2 > every cut → location
         // Shuffle-bag (mig 349): filter each pool to this user's UNSEEN
         // entries before picking; record what was served. Fail-open.
         if (
@@ -1819,6 +1829,7 @@ Deno.serve(async (req) => {
           // NOT the shared 'glamour' pool — glamour is intentionally campy soap-opera
           // (mirrored prayer-hands / game-show smiles) and reads twee on holiday couples.
           dualScenePosePool = s.posePool ?? null;
+          dualSceneCategory = s.category ?? null;
           dualSceneMediumKey = s.mediumKey ?? null;
           dualSceneMediumBan = s.mediumBan ?? null;
           holidayCategory = chosen.key;
@@ -1833,6 +1844,7 @@ Deno.serve(async (req) => {
           dualSpecialWardrobe = s.attire;
           dualSceneKind = 'goofy';
           dualScenePosePool = s.posePool ?? null;
+          dualSceneCategory = s.category ?? null;
           dualSceneMediumKey = s.mediumKey ?? null;
           dualSceneMediumBan = s.mediumBan ?? null;
           recordPick(supabase, userId, 'dual_scn_goofy', s.scene);
@@ -1844,6 +1856,7 @@ Deno.serve(async (req) => {
           dualSpecialWardrobe = s.attire;
           dualSceneKind = 'elegant';
           dualScenePosePool = s.posePool ?? null;
+          dualSceneCategory = s.category ?? null;
           dualSceneMediumKey = s.mediumKey ?? null;
           dualSceneMediumBan = s.mediumBan ?? null;
           recordPick(supabase, userId, 'dual_scn_elegant', s.scene);
@@ -1899,7 +1912,7 @@ Deno.serve(async (req) => {
             holidayPct,
           }
         );
-        const roll = Math.random();
+        const roll = force_plain_location ? 2 : Math.random(); // 2 > every cut → location
         const pickSolo = async (pool: 'goofy' | 'elegant' | 'active') => {
           const candidates = await filterUnseen(
             supabase,
@@ -1939,6 +1952,7 @@ Deno.serve(async (req) => {
           // bokeh"). Same default as every other elegant solo scene (proved today:
           // full-body, scene-integrated). A row can still opt into a pool.
           dualScenePosePool = s.posePool ?? null;
+          dualSceneCategory = s.category ?? null;
           dualSceneMediumKey = s.mediumKey ?? null;
           dualSceneMediumBan = s.mediumBan ?? null;
           holidayCategory = chosen.key;
@@ -1955,6 +1969,7 @@ Deno.serve(async (req) => {
             dualSpecialWardrobe = s.attire;
             dualSceneKind = 'goofy';
             dualScenePosePool = s.posePool ?? null;
+            dualSceneCategory = s.category ?? null;
             dualSceneMediumKey = s.mediumKey ?? null;
             dualSceneMediumBan = s.mediumBan ?? null;
           }
@@ -1965,6 +1980,7 @@ Deno.serve(async (req) => {
             dualSpecialWardrobe = s.attire;
             dualSceneKind = 'elegant';
             dualScenePosePool = s.posePool ?? null;
+            dualSceneCategory = s.category ?? null;
             dualSceneMediumKey = s.mediumKey ?? null;
             dualSceneMediumBan = s.mediumBan ?? null;
           }
@@ -2200,9 +2216,33 @@ Deno.serve(async (req) => {
         // when the biome ACTIVE pose above did NOT fire; swap-safe by the
         // authoring envelope in locationActionBeat.ts. Behind location_action_pct
         // (0 = off) + the force_location_action QA flag.
+        // ── Scene-first action roll (SCENE_FIRST_ACTION_PLAN.md) — decided HERE, before Option B, so a
+        // render never pays for two Sonnet beats. Kevin 2026-09-06: "apply this fix globally to nightly" →
+        // eligible for seeded scenario rows (goofy / elegant / holiday / hero) AND plain-location dreams.
+        // Not for: active rows (the seed carries the verb), a biome ACTIVE pose that fired, a row naming a
+        // bespoke pose_pool, or an explicit force_action.
+        const sfaCfg = await fetchEngineConfig(supabase);
+        const sfaKind =
+          dualActiveScene || soloActiveScene
+            ? 'active'
+            : dualSpecialScene
+              ? 'scenario'
+              : 'location';
+        const sfaDecision = decideSceneFirst({
+          kind: sfaKind,
+          activePoseFired: force_active_pose || !!activePose || !!activeSinglePose,
+          bespokePool: !!dualScenePosePool,
+          forceAction: !!force_action,
+          forceSceneAction: force_scene_action,
+          pctScenario: sfaCfg.sceneActionPct,
+          pctLocation: sfaCfg.sceneActionLocationPct,
+          castCount: selectedCast.length === 2 ? 2 : 1,
+          allowLocationCouples: sfaCfg.sceneActionLocationCouples,
+        });
+        const sfaRoll = sfaDecision.roll;
         let locationAction: string | null = null;
         const plainLocation = !dualSpecialScene && !dualSpecialWardrobe;
-        if (plainLocation && !force_active_pose && !activePose && !activeSinglePose) {
+        if (plainLocation && !sfaRoll && !force_active_pose && !activePose && !activeSinglePose) {
           const locCfg = await fetchEngineConfig(supabase);
           const rollLoc =
             force_location_action ||
@@ -2271,25 +2311,15 @@ Deno.serve(async (req) => {
         let authorAction: AuthorActionSpec | null = null;
         // Couple body-language frame (dualStances.ts) — rolled with the beat, stamped for forensics.
         let dualStance: DualStance | null = null;
-        const sceneFirstEligible =
-          !!dualSpecialScene &&
-          !dualActiveScene &&
-          !soloActiveScene &&
-          !force_action &&
-          bespokePoses.length === 0;
-        if (sceneFirstEligible) {
-          const sfaCfg = await fetchEngineConfig(supabase);
-          const rollSfa =
-            force_scene_action ||
-            (sfaCfg.sceneActionPct > 0 && Math.random() * 100 < sfaCfg.sceneActionPct);
-          if (rollSfa) {
-            const register = holidayCategory
-              ? `holiday:${holidayCategory}${
-                  holidaySubTheme ? ` / ${holidayPoolOf(holidaySubTheme)}` : ''
-                }`
-              : dualSceneKind === 'goofy'
-                ? 'goofy / playful fun'
-                : 'elegant / refined';
+        if (sfaRoll) {
+          {
+            const register = sceneFirstRegister({
+              kind: sfaKind,
+              holidayCategory: holidayCategory ?? null,
+              holidayPool: holidaySubTheme ? holidayPoolOf(holidaySubTheme) : null,
+              sceneKind: dualSceneKind,
+            });
+            if (sfaKind === 'location') fallbackReasons.push('scene_action_location');
             const exemplarPool: string[] =
               selectedCast.length === 2
                 ? dualSceneKind === 'goofy'
@@ -2301,7 +2331,33 @@ Deno.serve(async (req) => {
               dualStance = pickDualStance();
               fallbackReasons.push(`dual_stance:${dualStance.key}`);
             }
-            authorAction = { register, exemplars, stance: dualStance ? dualStance.text : null };
+            // Genre action register (§10.1 C): Halloween pool → scenario category → location biome.
+            let registerActions: string[] | null = null;
+            const registerKey = holidayCategory
+              ? holidaySubTheme
+                ? holidayPoolOf(holidaySubTheme)
+                : null
+              : sfaKind === 'location'
+                ? (biomeKey ?? 'location')
+                : (dualSceneCategory ?? dualSceneKind);
+            const rollRegisters =
+              force_action_registers ||
+              (sfaCfg.actionRegistersPct > 0 && Math.random() * 100 < sfaCfg.actionRegistersPct);
+            if (rollRegisters) {
+              const reg = getActionRegister(registerKey);
+              if (reg) {
+                registerActions = sampleRegister(reg, 6);
+                fallbackReasons.push(`action_register:${registerKey}`);
+              } else {
+                fallbackReasons.push(`action_register:none:${registerKey ?? 'null'}`);
+              }
+            }
+            authorAction = {
+              register,
+              exemplars,
+              stance: dualStance ? dualStance.text : null,
+              registerActions,
+            };
             fallbackReasons.push('scene_action_roll');
           }
         }

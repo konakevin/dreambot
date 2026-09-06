@@ -296,3 +296,133 @@ random closer crop were the variety. Fix, all inert unless the new inputs are pa
   Final: 8 rolled stances (seated_together, leaning_back, shoulder_lean, perched_edge, show_and_tell, mid_laugh,
   hands_free, one_busy_one_easy); 5 parked in `DUAL_STANCES_GEOMETRY` for a wider model. Couple degrade with
   stances ≈ the 1.1-pro baseline (2/7 vs 23-40%); body language now varies per render.
+
+## 10. Phase 2 — GLOBAL rollout + genre action registers (PLAN, 2026-09-06, awaiting Kevin's go)
+
+**Kevin's asks:** "apply this fix globally to nightly … all nightly to have a more natural and dynamic feel";
+"bespoke actions for certain genres of pools so they always make coherent scenes"; "standing in a slight posture
+or pose is still fine, a well composed shot … a nice variety is what we're after"; "plan this first … test test
+test, add unit tests where necessary, make this transition carefully".
+
+**Where nightly stands.** ~60% of nightlies are plain-location ("you at your saved place"), ~40% seeded rows.
+Scene-first beats + couple stances are LIVE on seeded rows only. The location path still runs: biome ACTIVE pose
+(`action_poses.active`, biome-tagged, curated) → Option B place-fit beat (`location_action_pct`=75, its own Sonnet
+call) → generic pools; location couples get no stance roll. A raw location extension exists in the working tree
+(uncommitted, NOT deployed — production is the committed HEAD).
+
+### 10.1 Design
+
+- **A. Eligibility becomes a pure, tested function** — `_shared/sceneFirstEligibility.ts`:
+  `decideSceneFirst({ kind: 'scenario'|'location'|'active'|'hero', activePoseFired, bespokePool, forceAction,
+  forceSceneAction, pctScenario, pctLocation, rng }) → { roll, reason }`. Today this logic is inline in
+  nightly-dreams (untestable). Behaviour-neutral refactor first; golden + full suite green before anything else.
+- **B. Location path joins** with register `candid travel moment at this real place (visitors, not locals)`.
+  When it rolls, Option B's separate Sonnet call is SKIPPED (one beat per render); when it doesn't, Option B /
+  pools work exactly as today. Biome ACTIVE poses keep precedence (curated, dynamic, swap-safe). Own knob
+  `engine_config.scene_action_location_pct` (mig 464, default 0) so the 60% path ramps independently: 0 → 25 →
+  100, never coupled to the seeded-row knob.
+- **C. Genre action registers** — `_shared/actionRegisters.ts` (code v1; DB table `action_registers` later if
+  Kevin wants admin tuning). One register per GENRE = 8-15 coherent things people do in that world PLUS 2-3
+  composed-still options. Keys: the 14 Halloween pools (via `holidayPoolOf`), scenario categories (dual:
+  swashbuckler, artifact_hunter, victorian, gatsby_1920s, regency, renaissance_baroque, romantic_gardens,
+  old_hollywood, modern_blacktie, evening_city, street_cool, absurd_everyday, animal_mayhem, fun_activities,
+  party_carnival, time_travel; single categories map onto the same genres), and the 20 location biomes
+  (`biomeAxes.ts` keys, e.g. tropical_coastal → "rinsing sand off at the tide line, a coconut in hand…"). Sonnet
+  gets the register as "things people do HERE — pick or adapt one, or a composed still". Missing key → today's
+  generic exemplars (never blocks). Needs `category` plumbed through the scenario loaders (select + type) and
+  kept at the pick (`dualSceneCategory`) — a 4-line change, tested.
+- **D. Brief wording (Kevin):** "A well-composed still pose is welcome (weight on one hip, hands in pockets,
+  leaning on something, arms folded) — the goal is VARIETY across renders, not constant action." Two composed-
+  still frames join the rolled stances (`standing easy with one hand on something in the scene`, `composed
+  three-quarter stance, weight back, hands relaxed`). Geometry stances stay parked while couples are on 1.1-pro.
+- **E. Telemetry:** stamps `scene_action_location`, `action_register:<key>`, `dual_stance:<key>` (exists);
+  `rolled_axes.seedSource.sceneAction` (exists). A CI test locks that every register entry passes the validator.
+
+### 10.2 Unit tests (fast jest, all before any deploy)
+
+- `sceneFirstEligibility.test.ts` — every branch: scenario / location / active / hero; active-pose precedence;
+  bespoke pool; force_action; force_scene_action; pct 0 and 100; rng edges; location uses its OWN pct.
+- `actionRegisters.test.ts` — every entry passes `validateActionBeat` for cast 1 AND 2 (an echoed entry ships);
+  every key in `scripts/lib/halloweenPools.js` POOLS + every biome key + every scenario category in the seed
+  taxonomy has a register (parity test, so a new pool cannot ship without one); ≥ 1 composed-still entry per
+  register; no pronouns / banned words.
+- `sceneFirstAction.test.ts` additions — brief carries the register + the composed-still wording; location
+  register text; "Option B skipped when the roll fires" via the pure function contract.
+- Golden fixture re-asserted byte-identical (flag-off / create / DLT untouched). `dualStances` parity:
+  rolled ∩ parked = ∅; composed-still frames present.
+
+### 10.3 Live verification (Kevin's private album, ≤ 3 concurrent, headroom-gated; each batch → contact sheet +
+stamps table in this doc before the next step)
+
+1. **Location:** 8 solos + 8 couples across 4 biomes on real saved places (`force_scene_action`). Pass: beats
+   place-fit; ≥ 6 distinct stances in 8 couples; couple degrade ≤ the 1.1-pro baseline; identity ≥ threshold;
+   zero gaze / profile regressions.
+2. **Genre registers:** 2 renders × 6 genres (12). Pass: action coherent with the genre (no parking meters at
+   the ball, no cutlass at the gala). Kevin grades; heart = fix.
+3. **Regression:** 4 goofy + 4 elegant + 4 Halloween rows — unchanged or better vs §8.
+4. Flip `scene_action_location_pct` → 25, read one nightly's stamps (fallback rate, degrade rate, share of
+   `scene_action_location`), then → 100.
+
+### 10.4 Order of work (each step ends with tests green + a dark deploy)
+
+1. Extract eligibility (A) — refactor only. 2. Location knob + register + Option B skip (B), mig 464, deploy
+dark. 3. Registers + category plumbing (C) + parity tests, deploy dark. 4. Brief wording + composed-still
+stances (D). 5. Batches 10.3.1-3 → fix → commit → ramp (10.3.4).
+
+### 10.5 Kevin's decisions
+
+- Register content: I draft all of them (≈ 50 registers); you grade the 12-render genre batch.
+- Location ramp: 25 → 100 across two nightlies (recommended), or straight to 100 after the batch.
+- Registers in code (v1, recommended) or a DB table with admin tuning from day one.
+
+### Phase 2 build log (2026-09-06)
+
+- Steps 1-4 built + deployed DARK: `_shared/sceneFirstEligibility.ts` (pure, 15 branch tests) drives the roll;
+  `scene_action_location_pct` (mig 464, 0) + `action_registers_pct` (mig 464, 0) + `scene_action_location_couples`
+  (mig 465, false); `_shared/actionRegisters.ts` — 57 registers (14 Halloween pools, 27 scenario genres incl. the
+  ones my capped tally missed: rich_famous, stage_and_fame, out_and_about, surreal_absurd; 20 biomes + a generic
+  `location` fallback) with 38 aliases (solo category names, the wider `location_cards.biome` vocabulary);
+  every entry validator-locked for solo AND couple; `scripts/check-action-registers.js` = live-DB parity (every
+  enabled non-active category, Halloween pool and card biome resolves) — run after seeding a new category.
+  Category plumbed through both scenario loaders + the QA forced-category pick. Brief: composed stills welcome,
+  variety over constant action. QA flags: `force_plain_location`, `force_action_registers`.
+- **Location batch** (7 approved cards across 7 biomes; zen_garden has no card): authored SOLOS 3/3 coherent,
+  full-body, place-fit (compass-rose monument at Amalfi, travel mug at the Silk Road gate, cup at the Prague
+  rail) — curated biome ACTIVE poses keep precedence where they fire (cyclist at the Matterhorn, forest-path run).
+  **Location COUPLES: 4/7 degraded with scene-first + stances vs 2/6 in the same-place CONTROL** (flux-1.1-pro) →
+  held on the existing path behind `scene_action_location_couples=false`. 546s (worker resource limit, no log
+  row) hit 5 direct QA calls today INCLUDING the control → platform, not this change; production goes through the
+  queue with retries. Follow-up: characterize 546s from `function_edge_logs` (query API returned nothing usable).
+- **Genre batch** (6 genres × solo + couple, registers forced): solos 6/6 genre-coherent (pergola wine glass,
+  cedar tumbler, gatsby podium toast, caveman at the mammoth wall, pirate with mackerels, swan-boat pedals);
+  couples 2/6 degraded (baseline). `show_and_tell` parked (objects held up between lens and face → giant_face /
+  faces=0 three times across batches); 7 same-plane stances roll.
+- **Regression batch** (4 goofy / elegant + 4 Halloween, live paths): 8/8 authored (composed stills now appear —
+  "stands with weight on one hip, spinning the basketball between both hands"); couples 1/4 degraded (baseline).
+  Full fast suite 2,471 green.
+
+### Ramp (needs Kevin's approval — nothing below is flipped)
+
+1. `action_registers_pct` → 100 (seeded rows; Kevin grades the 🎬 GENRE renders first).
+2. `scene_action_location_pct` → 25 (location SOLOS only; couples held) → read one nightly's stamps
+   (`scene_action_location` share, fallback rate, identity) → 100.
+3. `scene_action_location_couples` stays false until couples have a model answer (steer, or a 1.1-pro-safe
+   framing) — SCENE_FIRST_ACTION_PLAN.md §8 + this log are the evidence.
+
+## 11. Cleanup / refactor plan (Kevin 2026-09-06: "long overdue … feel free") — AFTER the ramp, behaviour-neutral
+
+The nightly render's cast-action section is a ~250-line inline chain (Option B, biome active poses, bespoke pools,
+scene-first roll, stances, registers, hair variation, composition presets) inside a 4,000-line handler. Plan:
+
+1. `_shared/nightlyQaFlags.ts` — `parseQaFlags(body)` → one typed object for the 34 `force_*` flags (today: 34
+   ad-hoc `const force_x = body.force_x === true` lines). Test: every flag parsed, defaults, no unknown keys.
+2. `_shared/sceneRowPick.ts` — `pickSceneRow(...)` returns `{ kind, scene, attire, category, subTheme, posePool,
+   mediumKey, mediumBan, isActive }` for holiday / goofy / elegant / active / hero / forced-category, replacing
+   six copy-pasted assignment blocks (the `dualSceneCategory` plumbing touched all six today). Test per branch.
+3. `_shared/castActionResolver.ts` — `resolveCastAction(state)` → `{ action, authorAction, dualStance,
+   dualComposition, stamps[] }`: the precedence chain in one pure function (active scene → forced → bespoke pool →
+   scene-first (+ stance + register) → Option B → biome active pose → register pools). Tests lock the precedence
+   table; nightly-dreams becomes a 15-line call. Stamp names unchanged (forensics + monitors depend on them).
+4. Golden fixture + a stamps-parity test (same seeds → same `fallback_reasons` shape) gate each step; each step
+   ships as its own commit + dark deploy; `npm run check` green throughout.
+Estimated −400 lines in `nightly-dreams/index.ts`, no behaviour change.

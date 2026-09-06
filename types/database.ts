@@ -1569,6 +1569,7 @@ export type Database = {
       };
       engine_config: {
         Row: {
+          action_registers_pct: number;
           base_sparkle_cost: number;
           basic_hd_downloads_per_month: number;
           basic_monthly_sparkle_bundle: number;
@@ -1638,6 +1639,7 @@ export type Database = {
           quality_gate_mode: string;
           relationship_regex: string | null;
           relationship_words: string;
+          scene_action_location_pct: number;
           scene_action_pct: number;
           scene_eligible_models: string[];
           scene_embodied_rate: number;
@@ -1654,6 +1656,7 @@ export type Database = {
           welcome_sparkle_bonus: number;
         };
         Insert: {
+          action_registers_pct?: number;
           base_sparkle_cost?: number;
           basic_hd_downloads_per_month?: number;
           basic_monthly_sparkle_bundle?: number;
@@ -1723,6 +1726,7 @@ export type Database = {
           quality_gate_mode?: string;
           relationship_regex?: string | null;
           relationship_words?: string;
+          scene_action_location_pct?: number;
           scene_action_pct?: number;
           scene_eligible_models?: string[];
           scene_embodied_rate?: number;
@@ -1739,6 +1743,7 @@ export type Database = {
           welcome_sparkle_bonus?: number;
         };
         Update: {
+          action_registers_pct?: number;
           base_sparkle_cost?: number;
           basic_hd_downloads_per_month?: number;
           basic_monthly_sparkle_bundle?: number;
@@ -1808,6 +1813,7 @@ export type Database = {
           quality_gate_mode?: string;
           relationship_regex?: string | null;
           relationship_words?: string;
+          scene_action_location_pct?: number;
           scene_action_pct?: number;
           scene_eligible_models?: string[];
           scene_embodied_rate?: number;

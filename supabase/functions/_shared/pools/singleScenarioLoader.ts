@@ -13,6 +13,8 @@
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 
 export interface SingleScenario {
+  /** Seed category (victorian_f / guy_fun / …) → the genre action register (actionRegisters.ts). */
+  category?: string | null;
   scene: string;
   attire: string;
   /** Bespoke pose pool this scenario's renders draw from (migration 353) —
@@ -51,6 +53,7 @@ async function fetchPoolRows(
 ): Promise<Record<string, unknown>[]> {
   const PAGE = 1000;
   for (const select of [
+    'scene,attire,gender,pose_pool,medium_key,medium_ban,category',
     'scene,attire,gender,pose_pool,medium_key,medium_ban',
     'scene,attire,gender,pose_pool',
     'scene,attire,gender',
@@ -93,6 +96,7 @@ export async function loadSingleScenarios(supabase: SupabaseClient): Promise<Loa
           scene: r.scene as string,
           attire: r.attire as string,
           posePool: (r.pose_pool as string | null | undefined) ?? null,
+          category: (r.category as string | null | undefined) ?? null,
           mediumKey: (r.medium_key as string | null | undefined) ?? null,
           mediumBan: (r.medium_ban as string | null | undefined) ?? null,
         });

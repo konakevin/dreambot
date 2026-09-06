@@ -19,6 +19,8 @@ export interface DualScenario {
    *  e.g. 'glamour' for the glamour_shot_retro seeds. Null/undefined = the
    *  default pose behavior for the scenario's kind. */
   posePool?: string | null;
+  /** Seed category (swashbuckler / victorian / …) → the genre action register (actionRegisters.ts). */
+  category?: string | null;
   /** Forced medium for this scenario's renders (migration 354) — e.g.
    *  'photography' for the photo-genre parody seeds. Null/undefined = the
    *  rolled medium. Only face-swap-capable natural mediums are honored. */
@@ -93,6 +95,7 @@ async function fetchPool(supabase: SupabaseClient, pool: string): Promise<DualSc
   // fallback. Each rung pages through the full pool (fetchAllRows).
   let rows: Record<string, unknown>[] = [];
   for (const select of [
+    'scene,attire,pose_pool,medium_key,medium_ban,category',
     'scene,attire,pose_pool,medium_key,medium_ban',
     'scene,attire,pose_pool',
     'scene,attire',
@@ -107,6 +110,7 @@ async function fetchPool(supabase: SupabaseClient, pool: string): Promise<DualSc
     scene: r.scene as string,
     attire: r.attire as string,
     posePool: (r.pose_pool as string | null | undefined) ?? null,
+    category: (r.category as string | null | undefined) ?? null,
     mediumKey: (r.medium_key as string | null | undefined) ?? null,
     mediumBan: (r.medium_ban as string | null | undefined) ?? null,
   }));

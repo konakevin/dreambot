@@ -148,6 +148,9 @@ export interface AuthorActionSpec {
   exemplars: string[];
   /** Rolled couple body-language frame (dualStances.ts) — Sonnet builds the beat around it. */
   stance?: string | null;
+  /** Genre register sample (actionRegisters.ts): coherent things people do in THIS world + composed
+   *  stills — Sonnet picks or adapts one. */
+  registerActions?: string[] | null;
 }
 
 export interface CharacterSlotPipelineResult {
@@ -485,9 +488,17 @@ function buildActionFieldSpec(input: CharacterSlotPipelineInput): string {
   that fits: ${spec.stance}`
       : ''
   }
+${
+  spec.registerActions && spec.registerActions.length > 0
+    ? `
+  Things people do HERE — pick ONE or adapt it to this exact scene, or take a composed still:
+  ${spec.registerActions.map((a) => `"${a.replace(/"/g, '')}"`).join(' · ')}`
+    : ''
+}
   Hands may be busy with a scene object (lifting, stirring, carving, pouring, strumming, toasting…) OR
-  simply natural (pockets, folded arms, hands on hips, resting on something) — vary it, not every moment
-  needs something held. Never merely waiting or contemplating. Hands, props and gestures stay at
+  simply natural (pockets, folded arms, hands on hips, resting on something). A well-composed still pose
+  is welcome — weight on one hip, hands in pockets, leaning on something, arms folded. The goal is VARIETY
+  across renders, not constant action. Never merely waiting or contemplating. Hands, props and gestures stay at
   CHEST LEVEL OR LOWER (no running, jumping, climbing). A held prop ONLY if it obviously belongs here.
   NEVER mention the head, chin, face, or where anyone looks, and no reading / studying / examining /
   consulting (that turns the face down) — faces stay toward the camera by code.

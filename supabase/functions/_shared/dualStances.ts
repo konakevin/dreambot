@@ -39,10 +39,6 @@ export const DUAL_STANCES: readonly DualStance[] = [
     seated: true,
   },
   {
-    key: 'show_and_tell',
-    text: 'both holding something from the scene up at chest height, elbows bent, a clear gap between them',
-  },
-  {
     key: 'mid_laugh',
     text: 'both mid-laugh at something between them, shoulders loose, a clear gap between their heads',
   },
@@ -61,9 +57,15 @@ export const DUAL_STANCES: readonly DualStance[] = [
  * one low, one a step behind, both crouched, objects raised near the face — degraded 4/4 couples
  * (no_dual_split / identity near 0): the 1.1-pro split needs both faces on one plane at one height.
  * Batch 3: mid-stride WALKING degraded 2/2 the same way (bodies angle, one face lost) → parked too.
+ * Genre + location batches: SHOW-AND-TELL (objects held up at chest height) put the object between the
+ * lens and a face → giant_face / faces=0 split rejects 3 times → parked.
  * They render fine on flux-2-flex (full-body, 0 degrades) — re-enable if the couple model steer is on.
  */
 export const DUAL_STANCES_GEOMETRY: readonly DualStance[] = [
+  {
+    key: 'show_and_tell',
+    text: 'both holding something from the scene up at chest height, elbows bent, a clear gap between them',
+  },
   {
     key: 'walking',
     text: 'both mid-stride walking forward side by side, a step apart, arms swinging naturally',
