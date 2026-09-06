@@ -815,3 +815,11 @@ sub_theme, aliased to a genre action register (gothic_manor / haunted_house_come
 now 13 pools / 47 subs (haunted_house_comedy retired; gothic_manor 5 subs; halloween_town_square 1 sub).
 FOLLOW-UP: gothic_manor is under its 70-per-table share (5 subs × 8 rows = 40) — top up with
 `node scripts/gen-holiday-archetypes.js --pool gothic_manor --to-share` when Kevin wants the depth back.
+
+**Same day, after Kevin looked at the fold renders ("they actually look pretty on theme"):** my vote from the
+images, applied — `undead_wedding` (black frock coat between candlelit gravestones) and `stop_motion_whimsy`
+(green fountain, grinning-window buildings, bats) came BACK into Halloween (ledger `unfold-2-subs-ledger.json`);
+the register-driven beats now carry the theme those seeds lacked yesterday. Still folded as year-round seeds:
+gothic_greenhouse, gothic_glam_editorial, ghost_hotel_1920s (elegant; the hotel reads noir-glam, not Halloween),
+afterlife_waiting_room, striped_suit_haunting (goofy; the miniature-town couple has no Halloween in it).
+Taxonomy: 13 pools / 49 subs; gothic_manor 6 subs, halloween_town_square 2.

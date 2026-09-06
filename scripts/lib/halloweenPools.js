@@ -1,7 +1,8 @@
 // Halloween pool taxonomy — SINGLE SOURCE OF TRUTH (Kevin 2026-09-05, HOLIDAY_DREAMS_PLAN.md FINAL list).
 // 2026-09-06: 7 sub-themes that never read as Halloween were FOLDED into the elegant / goofy pools as year-round
-// seeds (gothic_greenhouse, gothic_glam_editorial, ghost_hotel_1920s, undead_wedding → elegant;
-// afterlife_waiting_room, striped_suit_haunting, stop_motion_whimsy → goofy); haunted_house_comedy pool retired.
+// seeds (gothic_greenhouse, gothic_glam_editorial, ghost_hotel_1920s → elegant; afterlife_waiting_room,
+// striped_suit_haunting → goofy); haunted_house_comedy pool retired. undead_wedding + stop_motion_whimsy came
+// BACK the same day (their register-driven renders read fully Halloween).
 // 14 main pools × sub-categories. Each pool: palette, signature objects, whether jack-o-lanterns are
 // allowed, subs. Each sub: costume + setting hints for the generator. The engine mirror is
 // supabase/functions/_shared/holidayPools.ts (parity-tested). Share = ceil(SHARE / subs) per sub, per table.
@@ -62,6 +63,7 @@ const POOLS = {
       'midnight_carriage',
       'gothic_masquerade_ball',
       'macabre_family_mansion',
+      'undead_wedding',
     ],
   },
   haunted_graveyard: {
@@ -82,7 +84,7 @@ const POOLS = {
     objects:
       'crooked spires, a spiral hill, a fountain of glowing green water, pumpkin-headed scarecrows, bats',
     lanterns: true,
-    subs: ['halloween_town_square'],
+    subs: ['halloween_town_square', 'stop_motion_whimsy'],
   },
   halloween_party: {
     palette: 'orange and black party lights, disco-ball sparkle, candy colors',
@@ -439,6 +441,20 @@ const SUBS = {
       'a long pirate frock coat with brass buttons, a tricorn pushed back off the face, tall boots',
     setting:
       'a moonlit ghost galleon with torn sails glowing silver, fog rolling over the deck, chests of cursed gold spilling coins, skeleton crew silhouettes in the rigging, a glowing compass',
+  },
+  undead_wedding: {
+    pool: 'gothic_manor',
+    costume:
+      'a tattered ivory wedding gown with a crown of dead roses, and a faded black tailcoat with a wilted boutonniere',
+    setting:
+      'a blue-lit crypt chapel wedding with a skeletal band on the altar steps, black roses down the aisle, a thousand candles, cobwebbed pews, a moon through a broken rose window',
+  },
+  stop_motion_whimsy: {
+    pool: 'halloween_town_square',
+    costume:
+      'a patchwork pinstripe suit with mismatched buttons, or a rag-doll dress with visible stitching',
+    setting:
+      'a slightly-wrong stop-motion world: a too-perfect crooked house, a garden clipped into curling spirals, an oversized moon, tiny circus tents, a long tunnel of purple light',
   },
 };
 const POOL_OF_SUB = Object.fromEntries(Object.entries(SUBS).map(([s, d]) => [s, d.pool]));
