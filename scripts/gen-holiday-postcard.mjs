@@ -55,7 +55,11 @@ const GREETING = {
   easter: 'Happy Easter',
   july_4th: 'Happy 4th of July',
 }[HOLIDAY];
-const STYLE = {
+// --greeting overrides the default words (e.g. a year-stamped "DreamBot Halloween 2026", Kevin 2026-09-06);
+// --styles <json array> overrides the style list.
+const GREETING_TEXT = arg('greeting', GREETING);
+const STYLE_OVERRIDE = arg('styles', null) ? JSON.parse(arg('styles', null)) : null;
+const STYLE = STYLE_OVERRIDE ?? {
   halloween: [
     'ornate Victorian gothic lettering in glowing orange and gold with black drop shadow, curling bats and tiny jack-o-lanterns tucked into the flourishes, wisps of purple mist',
     'playful chunky retro Halloween lettering, orange letters with black outlines and a purple glow, a friendly grinning jack-o-lantern replacing the O, small bats and candy corn accents',
@@ -65,7 +69,7 @@ const STYLE = {
 
 async function generate(styleIdx) {
   const style = STYLE[styleIdx % STYLE.length];
-  const prompt = `Decorative holiday postcard title artwork: the words "${GREETING}" in ${style}. Wide horizontal banner composition, the text large, centered and fully readable, spelled exactly "${GREETING}". Ornaments only around the letters, nothing else in the image. Isolated on a fully transparent background.`;
+  const prompt = `Decorative holiday postcard title artwork: the words "${GREETING_TEXT}" in ${style}. Wide horizontal banner composition, the text large, centered and fully readable, spelled exactly "${GREETING_TEXT}". Ornaments only around the letters, nothing else in the image. Isolated on a fully transparent background.`;
   let res;
   for (let attempt = 1; ; attempt++) {
     res = await fetch('https://api.openai.com/v1/images/generations', {
