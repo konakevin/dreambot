@@ -957,6 +957,14 @@ export const REGISTER_ALIASES: Record<string, string> = {
   coquette_f: 'romantic_gardens',
   pop_princess_f: 'stage_and_fame',
   girly_cute_f: 'fun_activities',
+  // 2026-09-06: 7 former Halloween sub-themes folded into elegant / goofy as year-round seeds
+  gothic_greenhouse: 'gothic_manor',
+  gothic_glam_editorial: 'gothic_manor',
+  ghost_hotel_1920s: 'gothic_manor',
+  undead_wedding: 'gothic_manor',
+  afterlife_waiting_room: 'haunted_house_comedy',
+  striped_suit_haunting: 'haunted_house_comedy',
+  stop_motion_whimsy: 'surreal_absurd',
   // location_cards.biome uses a wider vocabulary than biomeAxes.ts keys (live parity script, 2026-09-06)
   alpine_snow: 'alpine_mountain',
   gothic_haunted: 'gothic_historic',
@@ -1017,6 +1025,13 @@ export const KNOWN_SCENARIO_CATEGORIES: readonly string[] = [
   'girly_cute_f',
   'girly_fun',
   'guy_fun',
+  'gothic_greenhouse',
+  'gothic_glam_editorial',
+  'ghost_hotel_1920s',
+  'undead_wedding',
+  'afterlife_waiting_room',
+  'striped_suit_haunting',
+  'stop_motion_whimsy',
 ];
 
 /** Resolve a register by key (Halloween pool / scenario category / biome / generic kind), alias-aware. */

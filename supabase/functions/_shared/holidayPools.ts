@@ -1,4 +1,5 @@
 // MIRROR of scripts/lib/halloweenPools.js (parity-locked by __tests__/lib/halloweenPoolsParity.test.ts).
+// 2026-09-06: 7 sub-themes folded out to elegant / goofy (see the tooling file header); 13 pools.
 // The engine only needs: which MAIN pool a sub_theme belongs to, so holiday draws can pick the pool
 // uniformly first (equal airtime, Kevin 2026-09-05) and a row inside it second.
 export const HALLOWEEN_POOL_OF_SUB: Record<string, string> = {
@@ -25,20 +26,13 @@ export const HALLOWEEN_POOL_OF_SUB: Record<string, string> = {
   vampire: 'gothic_manor',
   midnight_carriage: 'gothic_manor',
   gothic_masquerade_ball: 'gothic_manor',
-  gothic_glam_editorial: 'gothic_manor',
-  gothic_greenhouse: 'gothic_manor',
   macabre_family_mansion: 'gothic_manor',
-  undead_wedding: 'gothic_manor',
-  ghost_hotel_1920s: 'gothic_manor',
   reaper: 'haunted_graveyard',
   ghost_glam: 'haunted_graveyard',
   graveyard_picnic: 'haunted_graveyard',
   headless_hollow_bridge: 'haunted_graveyard',
   friendly_ghost_manor: 'haunted_graveyard',
   halloween_town_square: 'halloween_town_square',
-  stop_motion_whimsy: 'halloween_town_square',
-  afterlife_waiting_room: 'haunted_house_comedy',
-  striped_suit_haunting: 'haunted_house_comedy',
   halloween_party: 'halloween_party',
   movie_night: 'halloween_party',
   skeleton_dance_hall: 'halloween_party',
@@ -64,7 +58,6 @@ export const HALLOWEEN_POOLS: string[] = [
   'gothic_manor',
   'haunted_graveyard',
   'halloween_town_square',
-  'haunted_house_comedy',
   'halloween_party',
   'haunted_attractions',
   'mad_lab_and_monsters',

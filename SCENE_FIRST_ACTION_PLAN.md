@@ -444,3 +444,8 @@ Estimated −400 lines in `nightly-dreams/index.ts`, no behaviour change.
      and applies the result.
   Guards: golden fixture unchanged; 11-render all-branch regression after each deploy (🎬 REG2 / REG3) with
   stamp-shape parity; full suite green.
+
+- 2026-09-06 (later): the two open items closed. (1) The 7 non-Halloween sub-themes were folded into elegant /
+  goofy as year-round seeds (HOLIDAY_DREAMS_PLAN.md). (2) glamour + vintage_film validated on flux-2-flex /
+  flux-2-max (16 renders, Kevin: "these all look really good") → added to their allowed + smart sets
+  (DREAMSMART_MODEL_VALIDATION.md).

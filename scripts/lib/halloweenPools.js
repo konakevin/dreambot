@@ -1,4 +1,7 @@
 // Halloween pool taxonomy — SINGLE SOURCE OF TRUTH (Kevin 2026-09-05, HOLIDAY_DREAMS_PLAN.md FINAL list).
+// 2026-09-06: 7 sub-themes that never read as Halloween were FOLDED into the elegant / goofy pools as year-round
+// seeds (gothic_greenhouse, gothic_glam_editorial, ghost_hotel_1920s, undead_wedding → elegant;
+// afterlife_waiting_room, striped_suit_haunting, stop_motion_whimsy → goofy); haunted_house_comedy pool retired.
 // 14 main pools × sub-categories. Each pool: palette, signature objects, whether jack-o-lanterns are
 // allowed, subs. Each sub: costume + setting hints for the generator. The engine mirror is
 // supabase/functions/_shared/holidayPools.ts (parity-tested). Share = ceil(SHARE / subs) per sub, per table.
@@ -58,11 +61,7 @@ const POOLS = {
       'vampire',
       'midnight_carriage',
       'gothic_masquerade_ball',
-      'gothic_glam_editorial',
-      'gothic_greenhouse',
       'macabre_family_mansion',
-      'undead_wedding',
-      'ghost_hotel_1920s',
     ],
   },
   haunted_graveyard: {
@@ -83,14 +82,7 @@ const POOLS = {
     objects:
       'crooked spires, a spiral hill, a fountain of glowing green water, pumpkin-headed scarecrows, bats',
     lanterns: true,
-    subs: ['halloween_town_square', 'stop_motion_whimsy'],
-  },
-  haunted_house_comedy: {
-    palette: 'black-and-white stripes, mint green, sickly chartreuse, dusty attic amber',
-    objects:
-      'striped suits, a netherworld waiting room, a floating dinner party, a cobwebbed attic with a model town, take-a-number tickets (no deserts, no sandworms)',
-    lanterns: false,
-    subs: ['afterlife_waiting_room', 'striped_suit_haunting'],
+    subs: ['halloween_town_square'],
   },
   halloween_party: {
     palette: 'orange and black party lights, disco-ball sparkle, candy colors',
@@ -294,39 +286,12 @@ const SUBS = {
     setting:
       'a grand candlelit gothic ballroom, dripping crystal chandeliers, tall arched windows spilling moonlight, deep-red velvet drapes, a carved staircase, jack-o-lanterns glowing along the balustrade',
   },
-  gothic_glam_editorial: {
-    pool: 'gothic_manor',
-    costume:
-      'haute-couture gothic gowns and sharp suits, dramatic black-and-crimson, opulent jewels',
-    setting:
-      'a hyper-stylized saturated gothic-glam editorial set, dramatic spotlights, black orchids and roses, deep jewel-toned drapes, opulent maximalist décor',
-  },
-  gothic_greenhouse: {
-    pool: 'gothic_manor',
-    costume: 'elegant gothic attire, velvet and lace',
-    setting:
-      'an overgrown moonlit gothic conservatory, black roses, hanging lanterns, cracked glass panes, tangled ivy, jewel-toned light, a mossy stone fountain',
-  },
   macabre_family_mansion: {
     pool: 'gothic_manor',
     costume:
       'a black pinstripe suit with a red boutonniere, or a floor-length black velvet gown with sheer sleeves',
     setting:
       'a gothic mansion foyer in black velvet and dark wood, a carnivorous plant in a brass pot, a grand staircase, candelabra dripping wax, a suit of armor, cobwebbed chandeliers, a raven on the banister',
-  },
-  undead_wedding: {
-    pool: 'gothic_manor',
-    costume:
-      'a tattered ivory wedding gown with a crown of dead roses, and a faded black tailcoat with a wilted boutonniere',
-    setting:
-      'a blue-lit crypt chapel wedding with a skeletal band on the altar steps, black roses down the aisle, a thousand candles, cobwebbed pews, a moon through a broken rose window',
-  },
-  ghost_hotel_1920s: {
-    pool: 'gothic_manor',
-    costume:
-      'a black satin evening gown with a beaded headband, or a white dinner jacket with a black bow tie',
-    setting:
-      'a grand 1920s hotel ballroom out of time, translucent dancers in the mirrors, an art deco chandelier, a brass elevator cage, patterned carpet corridors stretching into darkness',
   },
   reaper: {
     pool: 'haunted_graveyard',
@@ -365,26 +330,6 @@ const SUBS = {
     costume: 'a pinstriped patchwork suit, or a rag-doll patchwork dress with mismatched stitching',
     setting:
       'a whimsical crooked gothic town square, a spiral hill curling under an enormous full moon, pumpkin-headed scarecrows, a fountain of glowing green water, crooked spires, singing jack-o-lanterns lining the walls, bats across the sky',
-  },
-  stop_motion_whimsy: {
-    pool: 'halloween_town_square',
-    costume:
-      'a patchwork pinstripe suit with mismatched buttons, or a rag-doll dress with visible stitching',
-    setting:
-      'a slightly-wrong stop-motion world: a too-perfect crooked house, a garden clipped into curling spirals, an oversized moon, tiny circus tents, a long tunnel of purple light',
-  },
-  afterlife_waiting_room: {
-    pool: 'haunted_house_comedy',
-    costume:
-      'a black-and-white striped suit with a black tie, or a black lace dress with a wide-brim hat tilted back',
-    setting:
-      'a surreal netherworld waiting room with mint-green walls, a black-and-white striped floor, take-a-number ticket dispensers, flickering fluorescent tubes, potted dead plants, striped drapes, a sandworm desert glimpsed through the window',
-  },
-  striped_suit_haunting: {
-    pool: 'haunted_house_comedy',
-    costume: 'a black-and-white striped suit, or a black lace gothic dress with fishnet gloves',
-    setting:
-      'a dusty attic of a haunted house with a sprawling miniature model town on a table, black-and-white striped drapes, floating candlesticks, a striped desert glowing beyond the window, cobwebs and a levitating chair',
   },
   halloween_party: {
     pool: 'halloween_party',

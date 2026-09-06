@@ -803,3 +803,15 @@ Not Halloween as concepts (Kevin's call — cut or reseed with mandatory signifi
 subs), stop_motion_whimsy (garden seeds), gothic_greenhouse, gothic_glam_editorial, ghost_hotel_1920s,
 undead_wedding (as rendered). Untested today: mad_lab_and_monsters, ghost_hunting_crew, seance_parlor,
 cute_halloween, ghost_pirate_ship, haunted_attractions, haunted_graveyard (matrix3 partial only).
+
+
+## 2026-09-06 — 7 sub-themes folded OUT of Halloween (Kevin: "abandon those 7 pools as halloween, but fold those
+seeds into a different pool so we can still use them as random dreams")
+
+Rows moved (pool + category changed, sub_theme kept, disabled flags kept; ledger in the session scratchpad
+`fold-halloween-subs-ledger.json`): gothic_greenhouse, gothic_glam_editorial, ghost_hotel_1920s, undead_wedding →
+`elegant`; afterlife_waiting_room, striped_suit_haunting, stop_motion_whimsy → `goofy`. Their category = the old
+sub_theme, aliased to a genre action register (gothic_manor / haunted_house_comedy / surreal_absurd). Taxonomy
+now 13 pools / 47 subs (haunted_house_comedy retired; gothic_manor 5 subs; halloween_town_square 1 sub).
+FOLLOW-UP: gothic_manor is under its 70-per-table share (5 subs × 8 rows = 40) — top up with
+`node scripts/gen-holiday-archetypes.js --pool gothic_manor --to-share` when Kevin wants the depth back.

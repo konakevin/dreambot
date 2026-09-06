@@ -182,3 +182,12 @@ from the page.
   (`resolveDreamSmartModel`) — the client mirror.
 - `supabase/functions/_shared/nightlyModelPool.ts` — nightly's ≤2✦ pick from the same sets.
 - `SMART_DREAM_PLAN.md` — strategy + original grading history.
+
+## 2026-09-06 — glamour + vintage_film × flux-2-flex / flux-2-max (Kevin: "these all look really good")
+
+16 renders (🧪 DSM in Kevin's album): each medium × each model × solo + couple × (Amalfi location, elegant row).
+16/16 rendered, identity 0.52-0.76, couples 8/8 clean first-try. → `allowed_models` += flex, max and
+`client_meta.smart_dream_models` += flex, max for both mediums (ledger in the session scratchpad). Their allowed
+sets had been 1.1-pro plus three nightly-banned models, so every couple on them landed on 1.1-pro — an oversight
+surfaced by the couple model steer work (SCENE_FIRST_ACTION_PLAN.md §8). NB with `dual_avoid_flux11pro` off the
+Aug-26 dual flex→1.1-pro clamp still applies, so couples on these mediums gain flux-2-max; solos gain both.
