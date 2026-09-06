@@ -14,7 +14,7 @@
  */
 
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
-import type { VibeProfile, DreamCastMember, MoodAxes } from '../_shared/vibeProfile.ts';
+import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import {
   resolveMediumFromDb,
   resolveVibeFromDb,
@@ -131,13 +131,12 @@ import {
   assembleSoloFallbackFromDual,
   type CharacterSlotPipelineInput,
   type DualSlots,
-  type AuthorActionSpec,
 } from '../_shared/characterSlotPrompt.ts';
 import { holidayPoolOf } from '../_shared/holidayPools.ts';
 import { steerDualModel } from '../_shared/dualModelSteer.ts';
-import { pickDualStance, type DualStance } from '../_shared/dualStances.ts';
 import { decideSceneFirst, sceneFirstRegister } from '../_shared/sceneFirstEligibility.ts';
-import { getActionRegister, sampleRegister } from '../_shared/actionRegisters.ts';
+import { parseQaFlags } from '../_shared/nightlyQaFlags.ts';
+import { resolveCastAction } from '../_shared/castActionResolver.ts';
 import { settingClauseOf } from '../_shared/sceneHook.ts';
 import { assessRenderQuality, assessSceneFallbackPeople } from '../_shared/qualityGate.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
@@ -303,151 +302,52 @@ Deno.serve(async (req) => {
     }
   }
 
-  // Preserve explicit null — caller passes null to mean "force scene-only,
-  // no cast". `||` would coerce null → undefined and break the
-  // forceCastRole === null branch downstream in rollDream.
-  const force_cast_role: string | null | undefined =
-    'force_cast_role' in body ? (body.force_cast_role as string | null) : undefined;
-  const force_medium = (body.force_medium as string) || undefined;
-  // QA-only (worker-token gated): override the dreamer's mood sliders to test
-  // the mood → scene-atmosphere mapping without mutating a real profile.
-  const force_moods =
-    body.force_moods && typeof body.force_moods === 'object'
-      ? (body.force_moods as MoodAxes)
-      : undefined;
-  // QA-only (worker-token gated): force the pure-scene awe/moment beat — a
-  // string forces that exact beat, `true` forces the roll on.
-  const force_awe_beat: string | boolean | undefined =
-    typeof body.force_awe_beat === 'string'
-      ? (body.force_awe_beat as string)
-      : body.force_awe_beat === true
-        ? true
-        : undefined;
-  // QA-only (worker-token gated): override the month (1-12) used for the
-  // pure-scene season signal so we can test all four seasons off-date.
-  const force_season_month =
-    typeof body.force_season_month === 'number' &&
-    body.force_season_month >= 1 &&
-    body.force_season_month <= 12
-      ? Math.floor(body.force_season_month)
-      : undefined;
-  const force_vibe = (body.force_vibe as string) || undefined;
-  const force_nightly_path = (body.force_nightly_path as string) || undefined;
-  const force_model = (body.force_model as string) || undefined;
-  // QA hook for female-hair variation: force the % (bypasses engine_config so it
-  // can be tested before the config column is live / at 100 to see the range).
-  const force_female_hair_pct =
-    typeof body.force_female_hair_pct === 'number' ? body.force_female_hair_pct : undefined;
-  // First-dream onboarding flag (set on every first-dream cascade tier). Used to
-  // ban gpt-image-2 (too slow for the onboarding loading screen) — see the model
-  // gate below. Nightlies never set this, so their lego/pixels gpt pins stand.
-  const isFirstDream = body.first_dream === true;
-  // First-dream onboarding mandates the SETTING be one of the user's just-picked
-  // locations (passed in the queue payload at enqueue time). Bypasses the random
-  // place roll below AND the user_recipes-load race (the recipe may not be
-  // persisted yet when the first dream renders).
-  const force_place = (body.force_place as string) || undefined;
-  const force_dual_pool =
-    (body.force_dual_pool as 'partner' | 'companion' | 'playful' | 'dynamic' | undefined) ||
-    undefined;
-  const force_single_pool =
-    (body.force_single_pool as 'portrait' | 'candid' | 'dynamic' | undefined) || undefined;
-  // Force scene cluster picking from a specific sub-pool: 'activity' or
-  // 'spot'. Default (undefined) blends both.
-  const force_cluster_kind = (body.force_cluster_kind as 'activity' | 'spot' | null) || undefined;
-  // First-dream onboarding render only: roll the DEFAULT medium from the
-  // face-swap-eligible pool (instead of the broad dream_eligible pool) so the
-  // user is reliably cast into the scene via face swap. Fully gated — the
-  // normal nightly queue path never sets this, so its dream_eligible roll is
-  // untouched. Ignored when force_medium is also set (explicit wins).
-  const force_face_swap_eligible_raw = body.force_face_swap_eligible === true;
-  // QA: force a special scene path — goofy (force_playful) or dressed-up elegant
-  // (force_elegant) — instead of the random 20%/20%/60% mix. The _single_ variants
-  // force the SOLO special pools (single_scenarios) on a single-cast face swap.
-  const force_playful = body.force_playful === true;
-  const force_elegant = body.force_elegant === true;
-  const force_active = body.force_active === true;
-  const force_single_active = body.force_single_active === true;
-  // Test hook: force a Stage-5c solo composition preset ('three_quarter' | 'enviro_wide').
-  const force_solo_comp =
-    body.force_solo_comp === 'three_quarter' || body.force_solo_comp === 'enviro_wide'
-      ? (body.force_solo_comp as 'three_quarter' | 'enviro_wide')
-      : null;
-  // Test hook: force the ACTIVE pose pool regardless of dual_action_pose_pct
-  // (production-prompt benching — the pencil lesson).
-  const force_active_pose = body.force_active_pose === true;
-  // Test hook: force the generative LOCATION-fit action beat (Option B) on a
-  // plain-location dream regardless of location_action_pct.
-  const force_location_action = body.force_location_action === true;
-  // Scene-first action QA hook (SCENE_FIRST_ACTION_PLAN.md): author the beat from the scene
-  // regardless of engine_config.scene_action_pct.
-  const force_scene_action = body.force_scene_action === true;
-  const force_dual_closer = body.force_dual_closer === true;
-  // Genre action registers QA hook (SCENE_FIRST_ACTION_PLAN.md §10): attach the register regardless of
-  // engine_config.action_registers_pct.
-  const force_action_registers = body.force_action_registers === true;
-  // QA: skip every special-scene roll (holiday / goofy / elegant / active) → plain-location dream.
-  const force_plain_location = body.force_plain_location === true;
-  // Test hook: force an EXACT action/pose text (semantic-grounding QA — replay
-  // a specific historical pose against the action-grounded brief).
-  const force_action = typeof body.force_action === 'string' ? body.force_action : null;
-  const force_single_playful = body.force_single_playful === true;
-  const force_single_elegant = body.force_single_elegant === true;
-  // Test hook: force a special scene from a specific goofy CATEGORY (bucket) —
-  // QA for newly seeded scenario buckets (funny audit 2026-07-09). Queries the
-  // scenario table by category directly; applies to dual or solo per cast.
-  const force_scene_category =
-    typeof body.force_scene_category === 'string' ? body.force_scene_category : null;
-  // force_scene_category is by definition a CAST-scenario force (the scenario
-  // pools are face-swap content) — but the showcase cascade could still roll a
-  // pure_scene / dream-art composition, which silently SKIPS the forced bucket
-  // and renders an unpopulated scene (4/12 faceless QA renders, 2026-09-02).
-  // Forcing a bucket therefore implies forcing a face-swap-eligible cast render.
-  const force_face_swap_eligible = force_face_swap_eligible_raw || force_scene_category !== null;
-  // Holiday Dreams QA: force a holiday season regardless of the date. On the
-  // cast paths it draws that holiday's pool='holiday' rows; on the pure-scene
-  // path it draws its holiday_scenes rows. Test-only.
-  const force_holiday_scene =
-    typeof body.force_holiday_scene === 'string' ? body.force_holiday_scene : null;
-  // QA: force the pure-scene (no-cast) composition even for a user who HAS a cast
-  // photo — the only way to exercise Path 2 (scene-only holiday) on such an account.
-  const force_pure_scene = body.force_pure_scene === true;
-  // DRY RUN: exercise the full roll → recipe → Sonnet brief → prompt-assembly
-  // pipeline for a location and RETURN the assembled prompt WITHOUT rendering
-  // (no Flux, no face swap, no upload, no log). Used to smoke-test every location
-  // pre-go-live so a broken card can never produce a "dead dream" in production.
-  const dry_run = body.dry_run === true;
-  // QA: restrict the holiday draw to a single archetype (sub_theme) so we can grade
-  // one archetype in isolation (vampire / witch / corn_maze / …). Null = mixed.
-  const force_holiday_sub_theme =
-    typeof body.force_holiday_sub_theme === 'string' ? body.force_holiday_sub_theme : null;
-  // Day-of HERO QA (mig 457): render the hero off-season. `force_day_of` = holiday key;
-  // `force_hero_register` = 'cozy' | 'eerie' (else the profile slider decides);
-  // `force_hero_seed` varies the axes so a QA matrix can walk the variants.
-  const force_day_of = typeof body.force_day_of === 'string' ? body.force_day_of : null;
-  const force_hero_register =
-    body.force_hero_register === 'cozy' || body.force_hero_register === 'eerie'
-      ? body.force_hero_register
-      : null;
-  const force_hero_seed = typeof body.force_hero_seed === 'string' ? body.force_hero_seed : null;
-  // First-dream cascade flag — set by RevealStep.tsx. When true:
-  //   • face-swap exhaustion throws { error: 'face_swap_failed',
-  //     swap_kind: 'dual' | 'single' } at 422 instead of soft-falling to the
-  //     base render (the client cascades to single → scene-only).
-  //   • NSFW-retry exhaustion + worker-limit errors come back as 422 with a
-  //     non-shameful code so the client can swap to a safer tier without
-  //     showing the user an NSFW label.
-  // Nightly cron path leaves this false → existing soft-fallback behavior
-  // (base render persists with `fallbackReasons` logged) is unchanged.
-  const strict_face_swap = body.strict_face_swap === true;
-  // QA / dry-run flag — when false, skip the uploads insert + budget upsert so
-  // the Dream Generator Test screen can exercise the nightly pipeline without
-  // polluting the user's album. Default true (normal nightly + first-dream).
-  const persist = body.persist !== false;
-  // dream_queue.id (forwarded by the worker's nightly dispatcher) — lets this
-  // render stamp stage breadcrumbs that survive a hard isolate kill. null on
-  // the direct/QA path (Dream Generator Test screen), where markStage no-ops.
-  const queueJobId = (body.queue_job_id as string) || null;
+  // Request flags — ONE typed parser (SCENE_FIRST_ACTION_PLAN.md §11.1, behaviour-neutral extraction of
+  // the former inline block; every coercion is test-locked in _shared/nightlyQaFlags.ts). Destructured
+  // under the original local names so the rest of this handler is untouched.
+  const {
+    force_cast_role,
+    force_medium,
+    force_moods,
+    force_awe_beat,
+    force_season_month,
+    force_vibe,
+    force_nightly_path,
+    force_model,
+    force_female_hair_pct,
+    isFirstDream,
+    force_place,
+    force_dual_pool,
+    force_single_pool,
+    force_cluster_kind,
+    force_face_swap_eligible_raw,
+    force_playful,
+    force_elegant,
+    force_active,
+    force_single_active,
+    force_solo_comp,
+    force_active_pose,
+    force_location_action,
+    force_scene_action,
+    force_dual_closer,
+    force_action_registers,
+    force_plain_location,
+    force_action,
+    force_single_playful,
+    force_single_elegant,
+    force_scene_category,
+    force_face_swap_eligible,
+    force_holiday_scene,
+    force_pure_scene,
+    dry_run,
+    force_holiday_sub_theme,
+    force_day_of,
+    force_hero_register,
+    force_hero_seed,
+    strict_face_swap,
+    persist,
+    queueJobId,
+  } = parseQaFlags(body);
 
   if (!vibe_profile) {
     return new Response(JSON.stringify({ error: 'vibe_profile is required' }), {
@@ -1647,6 +1547,40 @@ Deno.serve(async (req) => {
     let dualSceneCategory: string | null = null;
     // The scene-first authored action that shipped (forensics: rolled_axes.seedSource).
     let sceneActionText: string | null = null;
+    // ONE place assigns a picked scenario row into the render state (SCENE_FIRST_ACTION_PLAN.md §11.2 —
+    // replaced six copy-pasted blocks). 'active' = the seed carries the verb: no kind / pose pool /
+    // category (the caller sets dualActiveScene / soloActiveScene). A holiday key also records the
+    // season + sub-theme for the register + forensics.
+    // TS cannot see assignments made inside applySceneRow, so it over-narrows `dualSceneKind` at later
+    // comparison sites; read it through this wide-typed accessor there.
+    const sceneKindNow = (): 'goofy' | 'elegant' | null => dualSceneKind;
+    const applySceneRow = (
+      s: {
+        scene: string;
+        attire: string;
+        posePool?: string | null;
+        category?: string | null;
+        mediumKey?: string | null;
+        mediumBan?: string | null;
+        subTheme?: string | null;
+      },
+      kind: 'goofy' | 'elegant' | 'active',
+      holidayKey: string | null = null
+    ) => {
+      dualSpecialScene = s.scene;
+      dualSpecialWardrobe = s.attire;
+      dualSceneMediumKey = s.mediumKey ?? null;
+      dualSceneMediumBan = s.mediumBan ?? null;
+      if (kind !== 'active') {
+        dualSceneKind = kind;
+        dualScenePosePool = s.posePool ?? null;
+        dualSceneCategory = s.category ?? null;
+      }
+      if (holidayKey) {
+        holidayCategory = holidayKey;
+        holidaySubTheme = s.subTheme ?? null;
+      }
+    };
     // Bespoke pose pool named by the picked scenario row (migration 353) —
     // e.g. 'glamour'. Null = default pose behavior for the scene kind.
     let dualScenePosePool: string | null = null;
@@ -1728,21 +1662,23 @@ Deno.serve(async (req) => {
           .eq('disabled', false);
         if (catRows && catRows.length > 0) {
           const s = catRows[Math.floor(Math.random() * catRows.length)];
-          dualSpecialScene = s.scene as string;
-          dualSpecialWardrobe = s.attire as string;
-          dualScenePosePool = (s.pose_pool as string | null) ?? null;
-          dualSceneMediumKey = (s.medium_key as string | null) ?? null;
-          dualSceneMediumBan = (s.medium_ban as string | null) ?? null;
-          dualSceneCategory = (s.category as string | null | undefined) ?? force_scene_category;
-          // Mirror the production per-pool pose behavior so QA reflects the real
-          // render: ACTIVE-pool scenes embed the action in the scene text (the
-          // pose follows the scene, "caught mid-action"); goofy/elegant draw the
-          // pose from their kind's pool.
-          if ((s.pool as string) === 'active') {
+          const sPool = s.pool as string;
+          // Mirror the production per-pool pose behavior so QA reflects the real render: ACTIVE-pool
+          // scenes embed the action in the scene text; goofy/elegant draw the pose from their kind.
+          applySceneRow(
+            {
+              scene: s.scene as string,
+              attire: s.attire as string,
+              posePool: (s.pose_pool as string | null) ?? null,
+              category: (s.category as string | null | undefined) ?? force_scene_category,
+              mediumKey: (s.medium_key as string | null) ?? null,
+              mediumBan: (s.medium_ban as string | null) ?? null,
+            },
+            sPool === 'active' ? 'active' : sPool === 'elegant' ? 'elegant' : 'goofy'
+          );
+          if (sPool === 'active') {
             if (isDualFaceSwap) dualActiveScene = true;
             else soloActiveScene = true;
-          } else {
-            dualSceneKind = (s.pool as string) === 'elegant' ? 'elegant' : 'goofy';
           }
           fallbackReasons.push(`forced_scene_category:${force_scene_category}:${s.pool}`);
         }
@@ -1822,56 +1758,30 @@ Deno.serve(async (req) => {
           const s = pickHoliday(
             await filterUnseen(supabase, userId, `holiday:${chosen.key}`, rows, (x) => x.scene)
           );
-          dualSpecialScene = s.scene;
-          dualSpecialWardrobe = s.attire;
-          dualSceneKind = 'elegant'; // refined partner pose — NO playful thumbs-up/props on holiday
-          // Couples use the refined 'partner' pool (via elegant+wardrobe fall-through),
-          // NOT the shared 'glamour' pool — glamour is intentionally campy soap-opera
-          // (mirrored prayer-hands / game-show smiles) and reads twee on holiday couples.
-          dualScenePosePool = s.posePool ?? null;
-          dualSceneCategory = s.category ?? null;
-          dualSceneMediumKey = s.mediumKey ?? null;
-          dualSceneMediumBan = s.mediumBan ?? null;
-          holidayCategory = chosen.key;
-          holidaySubTheme = s.subTheme ?? null;
+          // 'elegant' = refined partner pose — NO playful thumbs-up/props on holiday. Couples use the
+          // refined 'partner' pool, NOT the campy 'glamour' pool (reads twee on holiday couples).
+          applySceneRow(s, 'elegant', chosen.key);
           fallbackReasons.push(`holiday:${chosen.key}`);
           recordPick(supabase, userId, `holiday:${chosen.key}`, s.scene);
         } else if (force_playful || (!force_elegant && !force_active && roll < goofyCut)) {
           const s = pickDualScenario(
             await filterUnseen(supabase, userId, 'dual_scn_goofy', pools.goofy, (x) => x.scene)
           );
-          dualSpecialScene = s.scene;
-          dualSpecialWardrobe = s.attire;
-          dualSceneKind = 'goofy';
-          dualScenePosePool = s.posePool ?? null;
-          dualSceneCategory = s.category ?? null;
-          dualSceneMediumKey = s.mediumKey ?? null;
-          dualSceneMediumBan = s.mediumBan ?? null;
+          applySceneRow(s, 'goofy');
           recordPick(supabase, userId, 'dual_scn_goofy', s.scene);
         } else if (force_elegant || (!force_active && roll < elegantCut)) {
           const s = pickDualScenario(
             await filterUnseen(supabase, userId, 'dual_scn_elegant', pools.elegant, (x) => x.scene)
           );
-          dualSpecialScene = s.scene;
-          dualSpecialWardrobe = s.attire;
-          dualSceneKind = 'elegant';
-          dualScenePosePool = s.posePool ?? null;
-          dualSceneCategory = s.category ?? null;
-          dualSceneMediumKey = s.mediumKey ?? null;
-          dualSceneMediumBan = s.mediumBan ?? null;
+          applySceneRow(s, 'elegant');
           recordPick(supabase, userId, 'dual_scn_elegant', s.scene);
         } else if ((force_active && pools.active.length > 0) || roll < activeCut) {
           const s = pickDualScenario(
             await filterUnseen(supabase, userId, 'dual_scn_active', pools.active, (x) => x.scene)
           );
-          dualSpecialScene = s.scene;
-          dualSpecialWardrobe = s.attire;
-          // Apply the row's medium ban/key (goofy/elegant branches above do this;
-          // the active branch must too, or fantasy_hero/superhero/giant_critter
-          // render photoreal-creepy instead of painterly). Downstream force/reroll
-          // at ~1358-1441 reads these two vars.
-          dualSceneMediumKey = s.mediumKey ?? null;
-          dualSceneMediumBan = s.mediumBan ?? null;
+          // Medium ban/key applied here too, or fantasy_hero/superhero/giant_critter render
+          // photoreal-creepy instead of painterly (downstream force/reroll reads them).
+          applySceneRow(s, 'active');
           dualActiveScene = true;
           fallbackReasons.push('active_scenario');
           recordPick(supabase, userId, 'dual_scn_active', s.scene);
@@ -1944,19 +1854,9 @@ Deno.serve(async (req) => {
           );
           const pool = unseen.length ? unseen : rows; // fail-open if all seen
           const s = pickHoliday(pool); // equal-airtime across MAIN pools (Kevin 2026-09-05)
-          dualSpecialScene = s.scene;
-          dualSpecialWardrobe = s.attire;
-          dualSceneKind = 'elegant'; // refined solo pose — NO playful/active props on holiday
-          // Kevin 2026-09-04: NO forced glamour pool on holiday solos — it produced
-          // person-first portraits (feather boa, "me in a scarf + pumpkins in the
-          // bokeh"). Same default as every other elegant solo scene (proved today:
-          // full-body, scene-integrated). A row can still opt into a pool.
-          dualScenePosePool = s.posePool ?? null;
-          dualSceneCategory = s.category ?? null;
-          dualSceneMediumKey = s.mediumKey ?? null;
-          dualSceneMediumBan = s.mediumBan ?? null;
-          holidayCategory = chosen.key;
-          holidaySubTheme = s.subTheme ?? null;
+          // 'elegant' = refined solo pose — NO playful/active props on holiday, and NO forced glamour
+          // pool (Kevin 2026-09-04: it produced person-first portraits). A row can still opt into a pool.
+          applySceneRow(s, 'elegant', chosen.key);
           fallbackReasons.push(`holiday:${chosen.key}`);
           recordPick(supabase, userId, `holiday:${chosen.key}`, s.scene);
         } else if (
@@ -1964,34 +1864,14 @@ Deno.serve(async (req) => {
           (!force_single_elegant && !force_single_active && roll < goofyCut)
         ) {
           const s = await pickSolo('goofy');
-          if (s) {
-            dualSpecialScene = s.scene;
-            dualSpecialWardrobe = s.attire;
-            dualSceneKind = 'goofy';
-            dualScenePosePool = s.posePool ?? null;
-            dualSceneCategory = s.category ?? null;
-            dualSceneMediumKey = s.mediumKey ?? null;
-            dualSceneMediumBan = s.mediumBan ?? null;
-          }
+          if (s) applySceneRow(s, 'goofy');
         } else if (force_single_elegant || (!force_single_active && roll < elegantCut)) {
           const s = await pickSolo('elegant');
-          if (s) {
-            dualSpecialScene = s.scene;
-            dualSpecialWardrobe = s.attire;
-            dualSceneKind = 'elegant';
-            dualScenePosePool = s.posePool ?? null;
-            dualSceneCategory = s.category ?? null;
-            dualSceneMediumKey = s.mediumKey ?? null;
-            dualSceneMediumBan = s.mediumBan ?? null;
-          }
+          if (s) applySceneRow(s, 'elegant');
         } else if (force_single_active || roll < activeCut) {
           const s = await pickSolo('active');
           if (s) {
-            dualSpecialScene = s.scene;
-            dualSpecialWardrobe = s.attire;
-            // Apply the row's medium ban/key (see the dual-active branch note).
-            dualSceneMediumKey = s.mediumKey ?? null;
-            dualSceneMediumBan = s.mediumBan ?? null;
+            applySceneRow(s, 'active');
             soloActiveScene = true;
             fallbackReasons.push('active_scenario_solo');
           }
@@ -2265,102 +2145,49 @@ Deno.serve(async (req) => {
         //   elegant scenario → refined partner pool
         //   plain location → the pre-rolled active/classic pose
         const classicPools = await loadClassicPools(supabase);
-        const bespokePoses = dualScenePosePool
-          ? ((selectedCast.length === 2
-              ? classicPools.bespoke.dual[dualScenePosePool]
-              : classicPools.bespoke.solo[dualScenePosePool]) ?? [])
-          : [];
-        let action: string | null;
-        if (force_action) {
-          action = force_action;
-        } else if (selectedCast.length === 2) {
-          if (dualActiveScene) {
-            action =
-              'caught mid-action exactly as the scene describes, with a clear gap between them, both faces toward the camera';
-          } else if (bespokePoses.length > 0) {
-            action = bespokePoses[Math.floor(Math.random() * bespokePoses.length)];
-            fallbackReasons.push(`bespoke_pose:${dualScenePosePool}`);
-          } else if (dualSceneKind === 'goofy') {
-            action = pickDualAction(undefined, 'playful', classicPools.dual);
-          } else if (dualSpecialWardrobe) {
-            action = pickDualAction(
-              selectedCast.find((c) => c.role === 'plus_one')?.relationship,
-              'partner',
-              classicPools.dual
-            );
-          } else if (dualSpecialScene) {
-            action = pickDualAction(undefined, 'playful', classicPools.dual);
-          } else {
-            action = activePose ?? locationAction ?? dualAction;
-          }
-        } else if (soloActiveScene) {
-          action = 'caught mid-action exactly as the scene describes, face toward the camera';
-        } else if (bespokePoses.length > 0) {
-          action = bespokePoses[Math.floor(Math.random() * bespokePoses.length)];
-          fallbackReasons.push(`bespoke_pose_solo:${dualScenePosePool}`);
-        } else {
-          action = activeSinglePose ?? locationAction ?? singleAction ?? null;
-        }
-        // ── Scene-first action (SCENE_FIRST_ACTION_PLAN.md, Kevin 2026-09-05) ──────────
-        // For SEEDED scenario rows the scene is the given and the pose above was rolled blind
-        // from a register pool (→ "leaning on a bridge railing" at a fountain). When this rolls,
-        // Sonnet authors the beat FROM the scene inside the slot call; the pool pose in `action`
-        // stays as the automatic fallback if the authored beat fails the swap-safe validator.
-        // Not for: active rows (the seed already carries the verb), rows naming a bespoke
-        // pose_pool (a curated pool chosen on purpose), or an explicit force_action.
-        let authorAction: AuthorActionSpec | null = null;
-        // Couple body-language frame (dualStances.ts) — rolled with the beat, stamped for forensics.
-        let dualStance: DualStance | null = null;
-        if (sfaRoll) {
-          {
-            const register = sceneFirstRegister({
-              kind: sfaKind,
-              holidayCategory: holidayCategory ?? null,
-              holidayPool: holidaySubTheme ? holidayPoolOf(holidaySubTheme) : null,
-              sceneKind: dualSceneKind,
-            });
-            if (sfaKind === 'location') fallbackReasons.push('scene_action_location');
-            const exemplarPool: string[] =
-              selectedCast.length === 2
-                ? dualSceneKind === 'goofy'
-                  ? classicPools.dual.playful
-                  : classicPools.dual.partner
-                : classicPools.single.candid;
-            const exemplars = [...exemplarPool].sort(() => Math.random() - 0.5).slice(0, 3);
-            if (selectedCast.length === 2) {
-              dualStance = pickDualStance();
-              fallbackReasons.push(`dual_stance:${dualStance.key}`);
-            }
-            // Genre action register (§10.1 C): Halloween pool → scenario category → location biome.
-            let registerActions: string[] | null = null;
-            const registerKey = holidayCategory
-              ? holidaySubTheme
-                ? holidayPoolOf(holidaySubTheme)
-                : null
-              : sfaKind === 'location'
-                ? (biomeKey ?? 'location')
-                : (dualSceneCategory ?? dualSceneKind);
-            const rollRegisters =
-              force_action_registers ||
-              (sfaCfg.actionRegistersPct > 0 && Math.random() * 100 < sfaCfg.actionRegistersPct);
-            if (rollRegisters) {
-              const reg = getActionRegister(registerKey);
-              if (reg) {
-                registerActions = sampleRegister(reg, 6);
-                fallbackReasons.push(`action_register:${registerKey}`);
-              } else {
-                fallbackReasons.push(`action_register:none:${registerKey ?? 'null'}`);
-              }
-            }
-            authorAction = {
-              register,
-              exemplars,
-              stance: dualStance ? dualStance.text : null,
-              registerActions,
-            };
-            fallbackReasons.push('scene_action_roll');
-          }
-        }
+        // The precedence table lives in _shared/castActionResolver.ts (SCENE_FIRST_ACTION_PLAN.md §11.3,
+        // test-locked). This handler only loads the inputs and applies the result.
+        const resolved = resolveCastAction({
+          castCount: selectedCast.length === 2 ? 2 : 1,
+          forceAction: force_action,
+          dualActiveScene,
+          soloActiveScene,
+          bespokePoolName: dualScenePosePool,
+          bespokePoses: dualScenePosePool
+            ? ((selectedCast.length === 2
+                ? classicPools.bespoke.dual[dualScenePosePool]
+                : classicPools.bespoke.solo[dualScenePosePool]) ?? [])
+            : [],
+          sceneKind: sceneKindNow(),
+          hasSpecialScene: !!dualSpecialScene,
+          hasSpecialWardrobe: !!dualSpecialWardrobe,
+          plusOneRelationship: selectedCast.find((c) => c.role === 'plus_one')?.relationship,
+          activePose,
+          activeSinglePose,
+          locationAction,
+          dualAction,
+          singleAction,
+          classicDualPools: classicPools.dual,
+          classicSoloCandid: classicPools.single.candid,
+          sfaRoll,
+          sfaKind,
+          holidayCategory: holidayCategory ?? null,
+          holidayPool: holidaySubTheme ? holidayPoolOf(holidaySubTheme) : null,
+          registerKey: holidayCategory
+            ? holidaySubTheme
+              ? holidayPoolOf(holidaySubTheme)
+              : null
+            : sfaKind === 'location'
+              ? (biomeKey ?? 'location')
+              : (dualSceneCategory ?? sceneKindNow()),
+          rollRegisters:
+            force_action_registers ||
+            (sfaCfg.actionRegistersPct > 0 && Math.random() * 100 < sfaCfg.actionRegistersPct),
+        });
+        const action = resolved.action;
+        const authorAction = resolved.authorAction;
+        const dualStance = resolved.dualStance;
+        fallbackReasons.push(...resolved.stamps);
         // Female-hairstyle variation (2026-08-31): re-style a FEMALE cast
         // member's hair per engine_config.female_hair_variation_pct, biased to
         // the scene register — elegant scenes → updos/glam, active → ponytails/
@@ -2521,7 +2348,7 @@ Deno.serve(async (req) => {
       // scenario (other special) / location (plain location, no scenario).
       kind: holidayCategory
         ? `holiday:${holidayCategory}`
-        : dualActiveScene
+        : dualActiveScene || soloActiveScene
           ? 'active'
           : (dualSceneKind ?? (dualSpecialScene ? 'scenario' : 'location')),
       // The scenario seed text (truncated) — the per-seed identifier for grouping.

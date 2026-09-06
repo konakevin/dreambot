@@ -75,6 +75,8 @@
     "__tests__/lib/dualStances.test.ts",
     "__tests__/lib/sceneFirstEligibility.test.ts",
     "__tests__/lib/actionRegisters.test.ts",
+    "__tests__/lib/nightlyQaFlags.test.ts",
+    "__tests__/lib/castActionResolver.test.ts",
     "__tests__/lib/monumentalFaceSpot.test.ts",
     "__tests__/lib/castScannerPrompts.test.ts",
     "__tests__/lib/embodiedSingleBrief.test.ts",

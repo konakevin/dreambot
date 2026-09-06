@@ -426,3 +426,21 @@ scene-first roll, stances, registers, hair variation, composition presets) insid
 4. Golden fixture + a stamps-parity test (same seeds → same `fallback_reasons` shape) gate each step; each step
    ships as its own commit + dark deploy; `npm run check` green throughout.
 Estimated −400 lines in `nightly-dreams/index.ts`, no behaviour change.
+
+### Ramp + refactor log (2026-09-06, Kevin: "all the renders on my page look amazing … 1) yes 2) prove it 3) do it now")
+
+- **LIVE:** `action_registers_pct` = 100; `scene_action_location_pct` = 100 (solos) after a 16-solo proof across 16
+  biomes (🎬 LOCSOLO): 16/16 rendered, identity 0.47-0.71, 11 authored + place-fit (5 went to curated biome ACTIVE
+  poses by design), every register keyed by biome incl. the aliased card vocabulary. Couples on location stay held.
+- **Refactor §11 done, behaviour-neutral, each step deployed + regression-rendered:**
+  1. `_shared/nightlyQaFlags.ts` — `parseQaFlags(body)` (41 flags, 10 tests: every coercion byte-for-byte);
+     the 145-line inline block is a 46-line destructure.
+  2. `applySceneRow(s, kind, holidayKey?)` — one assignment helper for the 6 scenario-pick branches + the QA
+     forced-category pick (TS over-narrowed `dualSceneKind` past the closure → `sceneKindNow()` accessor).
+     Also fixed forensics: solo active rows now stamp `seedSource.kind='active'` (were 'scenario').
+  3. `_shared/castActionResolver.ts` — `resolveCastAction(inputs)`: the precedence table (force → active →
+     bespoke → goofy/elegant/special → location: active pose ?? Option B ?? classic) + the scene-first block
+     (register, exemplars, stance, genre register, stamps in the original order), 12 tests. Nightly loads inputs
+     and applies the result.
+  Guards: golden fixture unchanged; 11-render all-branch regression after each deploy (🎬 REG2 / REG3) with
+  stamp-shape parity; full suite green.
