@@ -36,8 +36,8 @@ export const DIRECTION_WORDS =
 // beat can re-gender a cast member under the swap (the slot validator bans them too).
 export const PRONOUNS = /\b(she|he|him|her|his|hers|she's|he's)\b/i;
 
-// A seated / kneeling couple fights the dual anchor ("the two stand side by side") and the
-// crop pipeline's same-height rule. Solo beats may sit; couple beats stay on their feet.
+// RETIRED 2026-09-06 (dualStances.ts): seated / kneeling / perched couples are wanted variety; the
+// anchor drops "stand" for those stances. Kept exported for reference only.
 export const NOT_STANDING_DUAL =
   /\b(sitting|seated|sit|sits|kneel\w*|crouch\w*|squat\w*|lying|lie|lies|reclin\w*)\b/i;
 
@@ -91,7 +91,7 @@ export function normalizeActionBeat(raw: string): string {
     .trim()
     .replace(/^["'`]+|["'`]+$/g, '')
     .replace(/\s+/g, ' ')
-    .slice(0, 320)
+    .slice(0, 400)
     .trim();
 }
 
@@ -102,7 +102,8 @@ export function normalizeActionBeat(raw: string): string {
 export function validateActionBeat(beat: string, castCount: 1 | 2): ActionBeatVerdict {
   const b = (beat || '').trim();
   // Couple beats carry one clause per person + the gap → wider caps (44 words / 320 chars).
-  const maxChars = castCount === 2 ? 320 : 220;
+  // Stance-driven couple beats (dualStances.ts) legitimately run 40-50 words → 56 words / 400 chars.
+  const maxChars = castCount === 2 ? 400 : 220;
   if (b.length < 6 || b.length > maxChars || /\n/.test(b)) return { ok: false, reason: 'length' };
   if (UNSAFE_WORDS.test(b)) return { ok: false, reason: 'unsafe_word' };
   if (TOO_ENERGETIC.test(b)) return { ok: false, reason: 'too_energetic' };
@@ -111,13 +112,12 @@ export function validateActionBeat(beat: string, castCount: 1 | 2): ActionBeatVe
   if (GAZE_WORDS.test(b)) return { ok: false, reason: 'gaze' };
   if (PASSIVE_WORDS.test(b)) return { ok: false, reason: 'passive' };
   // Solo beats are one clause; couple beats carry one clause per person + the gap → a wider cap.
-  if (b.split(/\s+/).length > (castCount === 2 ? 44 : 26)) return { ok: false, reason: 'too_long' };
+  if (b.split(/\s+/).length > (castCount === 2 ? 56 : 26)) return { ok: false, reason: 'too_long' };
   if (castCount === 2) {
     const stripped = b.replace(DUAL_PROXIMITY_ALLOW, '');
     if (DUAL_PROXIMITY_VIOLATION.test(stripped) && !DUAL_PROXIMITY_MITIGATED.test(b)) {
       return { ok: false, reason: 'proximity' };
     }
-    if (NOT_STANDING_DUAL.test(b)) return { ok: false, reason: 'not_standing' };
   }
   return { ok: true };
 }

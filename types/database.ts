@@ -1588,6 +1588,7 @@ export type Database = {
           dream_queue_max_jobs_per_tick: number;
           dual_action_pose_pct: number;
           dual_avoid_flux11pro: boolean;
+          dual_closer_pct: number;
           dual_scene_active_pct: number;
           dual_scene_elegant_pct: number;
           dual_scene_goofy_pct: number;
@@ -1672,6 +1673,7 @@ export type Database = {
           dream_queue_max_jobs_per_tick?: number;
           dual_action_pose_pct?: number;
           dual_avoid_flux11pro?: boolean;
+          dual_closer_pct?: number;
           dual_scene_active_pct?: number;
           dual_scene_elegant_pct?: number;
           dual_scene_goofy_pct?: number;
@@ -1756,6 +1758,7 @@ export type Database = {
           dream_queue_max_jobs_per_tick?: number;
           dual_action_pose_pct?: number;
           dual_avoid_flux11pro?: boolean;
+          dual_closer_pct?: number;
           dual_scene_active_pct?: number;
           dual_scene_elegant_pct?: number;
           dual_scene_goofy_pct?: number;

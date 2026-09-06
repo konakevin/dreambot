@@ -106,6 +106,9 @@ export interface EngineConfig {
   /** Couple model steer (dualModelSteer.ts, mig 462): steer DUAL face-swap picks off
    *  flux-1.1-pro/Ultra to a proven sibling the medium allows. false = off. */
   dualAvoidFlux11pro: boolean;
+  /** Couple framing variance (2026-09-06, mig 463): % of couple renders framed as the closer
+   *  waist-up two-shot instead of the knees-up default. 0 = off. */
+  dualCloserPct: number;
   /** Holiday POSTCARD overlay scope (migration 459): 'off' | 'day_of' (the day-of hero
    *  only — default) | 'window' (every in-season holiday dream). */
   holidayPostcardScope: 'off' | 'day_of' | 'window';
@@ -159,6 +162,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   pureSceneOnSwapFail: true,
   holidaysEnabled: false,
   dualAvoidFlux11pro: false,
+  dualCloserPct: 0,
   holidayPostcardScope: 'day_of',
 };
 
@@ -267,6 +271,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     holidaysEnabled: (data.holidays_enabled ?? DEFAULT_ENGINE_CONFIG.holidaysEnabled) === true,
     dualAvoidFlux11pro:
       (data.dual_avoid_flux11pro ?? DEFAULT_ENGINE_CONFIG.dualAvoidFlux11pro) === true,
+    dualCloserPct: Number(data.dual_closer_pct ?? DEFAULT_ENGINE_CONFIG.dualCloserPct),
     holidayPostcardScope:
       data.holiday_postcard_scope === 'off' || data.holiday_postcard_scope === 'window'
         ? data.holiday_postcard_scope

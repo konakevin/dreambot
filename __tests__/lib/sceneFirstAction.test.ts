@@ -141,7 +141,7 @@ describe('scene-first actions — the brief when authorAction is set', () => {
     const brief = buildSlotBrief(authored(dualInput()));
     expect(brief).toContain('You write SIX fields.');
     expect(brief).toContain('"action": "..."');
-    expect(brief).toContain('action (14-32 words, HARD LIMIT 36');
+    expect(brief).toContain('action (20-40 words, HARD LIMIT 48');
     expect(brief).toContain('holiday:halloween / witch_cottage');
     expect(brief).toContain('CHEST LEVEL OR LOWER');
     expect(brief).toContain('one …, the other …');
@@ -232,5 +232,56 @@ describe('scene-first actions — the pipeline', () => {
       r.assembledPrompt.indexOf('ONE person alone in the scene')
     );
     expect(r.assembledPrompt.indexOf(beat)).toBeLessThan(r.assembledPrompt.indexOf('CHARACTER:'));
+  });
+});
+
+// ── Part C — couple variance (2026-09-06): stance in the brief, closer preset, conditional anchor ──
+describe('couple variance', () => {
+  const stanceText =
+    'one seated on something in the scene, the other standing beside at a clear gap';
+  it('the brief carries the rolled stance and no longer mandates busy hands', () => {
+    const brief = buildSlotBrief({
+      ...dualInput(),
+      authorAction: { register: 'holiday:halloween', exemplars: EXEMPLARS, stance: stanceText },
+    });
+    expect(brief).toContain('STANCE for this render');
+    expect(brief).toContain(stanceText);
+    expect(brief).toContain('OR\n  simply natural');
+    expect(brief).not.toContain('feet planted');
+    expect(brief).not.toContain('lean together, sit, or face each other');
+  });
+  it('waist_up preset: anchor + framing say waist-up, default says knees-up; solo ignores it', () => {
+    const closer = assembleCharacterPrompt(dualSlots, {
+      ...dualInput(),
+      dualComposition: 'waist_up',
+    });
+    expect(closer).toContain('shown from the waist up in a closer two-shot');
+    expect(closer).toContain('both shown from the waist up, faces large and clear');
+    expect(closer).not.toContain('knees up');
+    const def = assembleCharacterPrompt(dualSlots, dualInput());
+    expect(def).toContain('shown from at least mid-thigh');
+    expect(def).toContain('both shown from the knees up');
+    const solo = assembleCharacterPrompt(singleSlots, {
+      ...soloInput(),
+      dualComposition: 'waist_up',
+    });
+    expect(solo).toContain('shown from the knees up');
+  });
+  it('seated stance drops "stand" from the anchor; height contrast drops the same-height line', () => {
+    const seated = assembleCharacterPrompt(dualSlots, {
+      ...dualInput(),
+      dualStance: { seated: true },
+    });
+    expect(seated).toContain('the two side by side with a clear gap');
+    expect(seated).not.toContain('the two stand side by side');
+    expect(seated).toContain('both at the same vertical height');
+    const contrast = assembleCharacterPrompt(dualSlots, {
+      ...dualInput(),
+      dualStance: { seated: true, heightContrast: true },
+    });
+    expect(contrast).not.toContain('both at the same vertical height');
+    // the load-bearing head-gap line survives every variant
+    for (const p of [seated, contrast])
+      expect(p).toContain('a clear gap between their two heads, faces apart and not touching');
   });
 });

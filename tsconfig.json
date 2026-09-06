@@ -72,6 +72,7 @@
     "__tests__/lib/sceneFirstAction.test.ts",
     "__tests__/lib/actionSafety.test.ts",
     "__tests__/lib/dualModelSteer.test.ts",
+    "__tests__/lib/dualStances.test.ts",
     "__tests__/lib/monumentalFaceSpot.test.ts",
     "__tests__/lib/castScannerPrompts.test.ts",
     "__tests__/lib/embodiedSingleBrief.test.ts",

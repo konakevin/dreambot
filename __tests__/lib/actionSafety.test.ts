@@ -70,11 +70,6 @@ describe('validateActionBeat — every swap-breaking class is rejected with a re
     ['standing close together on the hayride wagon, arms linked', 2, 'proximity'],
     ['leaning into each other on the hay bale', 2, 'proximity'],
     ['shoulder to shoulder at the candy counter', 2, 'proximity'],
-    [
-      'sitting together on hay bales with mugs of cider, a clear gap between them',
-      2,
-      'not_standing',
-    ],
     ['chin tilted upward toward the enormous moon, hands clasped at the waist', 1, 'gaze'],
     ['one with head tilted slightly down in quiet thought, the other a step apart', 2, 'gaze'],
     ['consulting an open pocket watch with measured attention', 1, 'gaze'],
@@ -101,7 +96,7 @@ describe('validateActionBeat — every swap-breaking class is rejected with a re
       'passive',
     ],
     [
-      'one stirs the cauldron with a long spoon while lifting the iron lid, the other a step apart pours a green potion from a tall bottle into small jars on the crooked shelf under the herbs and candles by the door of the old cottage near the moonlit gate',
+      'one stirs the cauldron with a long spoon while lifting the iron lid and steadying the pot, the other a step apart pours a green potion from a tall bottle into small jars on the crooked shelf under the herbs and candles by the door of the old cottage near the moonlit gate while a black cat watches from the sill above the basin',
       2,
       'too_long',
     ],
@@ -124,7 +119,15 @@ describe('validateActionBeat — every swap-breaking class is rejected with a re
       )
     ).toEqual({ ok: true });
   });
-  it('allows a solo to sit (only couples must stand)', () => {
+  it('couples may sit too (2026-09-06 stance variety)', () => {
+    expect(
+      validateActionBeat(
+        'sitting together on hay bales with mugs of cider, a clear gap between them',
+        2
+      )
+    ).toEqual({ ok: true });
+  });
+  it('allows a solo to sit', () => {
     expect(
       validateActionBeat('sitting on a hay bale with a mug of cider in both hands', 1)
     ).toEqual({ ok: true });

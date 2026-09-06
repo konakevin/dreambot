@@ -261,3 +261,38 @@ Solos are untouched by the steer (they held identity 0.6+ on 1.1-pro all day).
 **2026-09-06 — Kevin: "no, i don't want to avoid flux 1.1pro."** `dual_avoid_flux11pro` flipped back to FALSE; couples
 return to the flux-1.1-pro pick + the Aug-26 flex clamp. The steer code stays in place, inert. Scene-first actions
 (`scene_action_pct`=100) and the Round A fragment rewrite remain live.
+
+### Couple variance (2026-09-06) — Kevin: "every couples render now looks very homogeneous"
+
+Verified on a contact sheet of all 98 couple renders from 2026-09-05: the beat brief ("hands busy with the
+scene's objects, feet planted, never merely standing") plus the validator's no-sitting / no-walking rules for
+couples collapsed every couple into ONE composition — side by side, same scale, feet planted, each holding an
+object at chest height. The old pool poses (sitting on steps, leaning on a rail, crouching, mid-stride) and the
+random closer crop were the variety. Fix, all inert unless the new inputs are passed (golden unchanged):
+- `_shared/dualStances.ts`: 13 body-language frames (seated together, one seated one standing, depth stagger,
+  walking, leaning back, shoulder lean, crouched low, perched on an edge, show-and-tell, toast, mid-laugh,
+  hands free, one busy one easy) rolled per couple render and handed to Sonnet as the STANCE to build the beat
+  around; stamped `dual_stance:<key>`. Every stance text passes the validator verbatim (test-locked).
+- Brief: hands may be busy OR natural ("vary it, not every moment needs something held"); walking allowed;
+  couples may sit (validator rule retired).
+- Anchor drops "stand" for seated stances; the same-height line is omitted for the one-seated-one-standing
+  stance; the load-bearing head-gap line is untouched in every variant.
+- `engine_config.dual_closer_pct` (mig 463): % of couples framed as the closer waist-up two-shot (faces larger,
+  swap-friendly) instead of knees-up — the "randomly a bit closer" crop Kevin missed. NB Kevin's 2026-09-02
+  floor was "closest ≈ 3/4 body"; waist-up is the compromise, tune or zero the knob.
+- Variance batch 1 (10 couples, 1.1-pro, `dual_closer_pct`=30): stances landed where the render survived (one seated
+  on the porch steps + one standing 8/10; perched over a kitten basket; mid-stride down a staircase; holding a globe
+  together). The waist-up crop on 1.1-pro tripped `no_dual_split:giant_face` → 3 of 4 waist-up couples degraded →
+  **`dual_closer_pct` set to 0** (knob stays). 3 beats fell back `too_long` at 46-48 words (stance + two clauses) →
+  couple caps raised to 56 words / 400 chars. The remaining close-ups/degrades in this batch are the 1.1-pro
+  behaviour itself (steer OFF per Kevin), not the stance system.
+- Variance batch 2 (8 couples, 1.1-pro, closer crop off, caps raised → 0 `too_long`): geometry stances degraded
+  4/4 (one seated + one standing, depth stagger, leaning on opposite rails, lanterns raised in a toast → `no_dual_split`
+  / identity ≈ 0); same-plane stances clean (perched on the porch rail with a mug, both lifting lanterns). → the
+  4 geometry stances moved to `DUAL_STANCES_GEOMETRY` (parked, never rolled while couples are on 1.1-pro); 9
+  same-plane stances roll.
+- Variance batch 3 (7 couples, 1.1-pro, 8 same-plane stances): seated on a hay bale / porch steps, perched on a
+  ledge, leaning on the bookshelf, both lifting lanterns — all clean; the 2 degrades were both `walking` → parked.
+  Final: 8 rolled stances (seated_together, leaning_back, shoulder_lean, perched_edge, show_and_tell, mid_laugh,
+  hands_free, one_busy_one_easy); 5 parked in `DUAL_STANCES_GEOMETRY` for a wider model. Couple degrade with
+  stances ≈ the 1.1-pro baseline (2/7 vs 23-40%); body language now varies per render.

@@ -119,6 +119,13 @@ export interface CharacterSlotPipelineInput {
    *  shown as STYLE examples only. Nightly-only — Create/DLT never set it, so with it unset every
    *  code path here is byte-identical to before (locked by __tests__/lib/sceneFirstAction.test.ts). */
   authorAction?: AuthorActionSpec | null;
+  /** COUPLE framing preset (2026-09-06 variance): 'waist_up' = the closer two-shot that used to appear
+   *  at random (faces larger, swap-friendlier); null/'three_quarter' = the knees-up default. Gated by
+   *  engine_config.dual_closer_pct upstream. Solo renders ignore it. */
+  dualComposition?: 'three_quarter' | 'waist_up' | null;
+  /** COUPLE stance flags (dualStances.ts): seated → the anchor stops saying "stand"; heightContrast →
+   *  the "same vertical height" line is omitted (one seated, one standing). */
+  dualStance?: { seated?: boolean; heightContrast?: boolean } | null;
   /** Stage 5c (2026-07-09): expanded SOLO composition preset. null/undefined =
    *  the classic waist-up frontal contract. Only meaningful for cast.length 1;
    *  gated upstream by engine_config.single_composition_expanded_pct. The
@@ -139,6 +146,8 @@ export interface CharacterSlotPipelineInput {
 export interface AuthorActionSpec {
   register: string;
   exemplars: string[];
+  /** Rolled couple body-language frame (dualStances.ts) — Sonnet builds the beat around it. */
+  stance?: string | null;
 }
 
 export interface CharacterSlotPipelineResult {
@@ -467,19 +476,26 @@ function buildActionFieldSpec(input: CharacterSlotPipelineInput): string {
     .slice(0, 3)
     .map((e) => `"${e.replace(/"/g, '')}"`)
     .join(' · ');
-  return `action (${dual ? '14-32 words, HARD LIMIT 36' : '8-20 words, HARD LIMIT 22'} — present-tense like a photo caption; YOU write it, it is not locked. REQUIRED: never omit this field)
+  return `action (${dual ? '20-40 words, HARD LIMIT 48' : '8-20 words, HARD LIMIT 22'} — present-tense like a photo caption; YOU write it, it is not locked. REQUIRED: never omit this field)
   ONE concrete, LIVELY moment that fits THIS EXACT scene and its named objects, in the
-  "${spec.register}" register: hands busy with the scene's own things (lifting, stirring, holding,
-  carving, pouring, handing, strumming, toasting…). Never merely standing, waiting, resting, pausing,
-  or contemplating. Hands, props and gestures stay at CHEST LEVEL OR LOWER; feet planted (no walking,
-  running, jumping, climbing). A held prop ONLY if it obviously belongs in a hand in this scene.
+  "${spec.register}" register.${
+    spec.stance
+      ? `
+  STANCE for this render — build the moment around it if the scene allows, otherwise the closest
+  that fits: ${spec.stance}`
+      : ''
+  }
+  Hands may be busy with a scene object (lifting, stirring, carving, pouring, strumming, toasting…) OR
+  simply natural (pockets, folded arms, hands on hips, resting on something) — vary it, not every moment
+  needs something held. Never merely waiting or contemplating. Hands, props and gestures stay at
+  CHEST LEVEL OR LOWER (no running, jumping, climbing). A held prop ONLY if it obviously belongs here.
   NEVER mention the head, chin, face, or where anyone looks, and no reading / studying / examining /
   consulting (that turns the face down) — faces stay toward the camera by code.
   Refer to people by role, never by pronoun.${
     dual
       ? `
   Give EACH person their own small beat ("one …, the other …") with a clear gap between them —
-  they do NOT touch, hug, kiss, lean together, sit, or face each other.`
+  they do NOT touch, hug, kiss, lean together, or face each other.`
       : ''
   }${
     exemplars
@@ -972,8 +988,19 @@ export function assembleCharacterPrompt(
   // KEEPING every bit of the load-bearing swap-safety verbatim (clear gap between
   // heads, each head on its own side, faces toward camera, three-quarter). This does
   // NOT touch aspect (stays 9:16 phone-portrait) or the gender-safe genderLock.
-  const dualAnchor =
-    'an ENVIRONMENTAL TWO-SHOT of two people together, shown from at least mid-thigh in a three-quarter length composition with the setting sweeping clearly around and above them at a natural editorial distance, NOT a tight face close-up — their faces are a normal-sized part of the frame, never filling it; the two stand side by side with a clear gap between their two heads, both facing toward the camera in a natural, unforced three-quarter view, each face clearly visible and turned toward the viewer, each head on its own side of the frame';
+  // 2026-09-06 variance (Kevin): the couple template was one composition. Two conditional swaps,
+  // both inert unless nightly passes the new inputs: a 'waist_up' closer two-shot (the crop that used
+  // to appear at random on 1.1-pro) and, for seated / perched / crouched stances, "side by side"
+  // instead of "stand side by side" so the anchor stops contradicting the beat.
+  const closer = input.dualComposition === 'waist_up';
+  const seatedStance = !!(input.dualStance && input.dualStance.seated);
+  const dualAnchor = `an ENVIRONMENTAL TWO-SHOT of two people together, ${
+    closer
+      ? 'shown from the waist up in a closer two-shot with the setting clearly visible around and above them'
+      : 'shown from at least mid-thigh in a three-quarter length composition with the setting sweeping clearly around and above them at a natural editorial distance'
+  }, NOT a tight face close-up — their faces are a normal-sized part of the frame, never filling it; the two ${
+    seatedStance ? '' : 'stand '
+  }side by side with a clear gap between their two heads, both facing toward the camera in a natural, unforced three-quarter view, each face clearly visible and turned toward the viewer, each head on its own side of the frame`;
 
   // Framing — includes L/R head-gap + same-height constraints for crop pipeline.
   // The head-gap clause is the load-bearing dual-swap constraint (Kevin
@@ -986,14 +1013,19 @@ export function assembleCharacterPrompt(
   // the dual crop/split). Only the rigid "frontal portrait composition" line is
   // swapped for the candid cinematic-integration line (2026-08-24).
   const framingBlock = [
-    'both shown from the knees up in a three-quarter length composition, fully visible, generous open space around them showing the scene',
+    closer
+      ? 'both shown from the waist up, faces large and clear, open space around them showing the scene'
+      : 'both shown from the knees up in a three-quarter length composition, fully visible, generous open space around them showing the scene',
     'both faces unobstructed, clearly visible and turned toward the camera, easy to read',
     // Detail-not-size background cue (2026-09-02): the visible setting must be
     // specific and recognizable, never a blank sky/wall. SIZE/dominance cues
     // remain forbidden (2026-06-19 hard rule) — this asks for DETAIL only.
     'naturally lit by the scene with soft rim light and ambient colour from the environment, an editorial cinematic photograph feel rather than a stiff studio couple portrait, filmic colour grade, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, never a blank wall or featureless sky behind the couple, any visible sky alive with colour, cloud form, or weather — never flat white',
     'a clear gap between their two heads, faces apart and not touching, each head on its own side of the frame, not cheek to cheek, heads not leaning together',
-    'both at the same vertical height, heads at the same level',
+    // Omitted for a height-contrast stance (one seated, one standing) — dualStances.ts.
+    ...(input.dualStance && input.dualStance.heightContrast
+      ? []
+      : ['both at the same vertical height, heads at the same level']),
   ].join(', ');
 
   // 2026-09-02 background-drowning fix: dual gets ONLY the early scene hook in

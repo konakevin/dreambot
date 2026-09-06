@@ -135,6 +135,7 @@ import {
 } from '../_shared/characterSlotPrompt.ts';
 import { holidayPoolOf } from '../_shared/holidayPools.ts';
 import { steerDualModel } from '../_shared/dualModelSteer.ts';
+import { pickDualStance, type DualStance } from '../_shared/dualStances.ts';
 import { settingClauseOf } from '../_shared/sceneHook.ts';
 import { assessRenderQuality, assessSceneFallbackPeople } from '../_shared/qualityGate.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
@@ -379,6 +380,7 @@ Deno.serve(async (req) => {
   // Scene-first action QA hook (SCENE_FIRST_ACTION_PLAN.md): author the beat from the scene
   // regardless of engine_config.scene_action_pct.
   const force_scene_action = body.force_scene_action === true;
+  const force_dual_closer = body.force_dual_closer === true;
   // Test hook: force an EXACT action/pose text (semantic-grounding QA — replay
   // a specific historical pose against the action-grounded brief).
   const force_action = typeof body.force_action === 'string' ? body.force_action : null;
@@ -2267,6 +2269,8 @@ Deno.serve(async (req) => {
         // Not for: active rows (the seed already carries the verb), rows naming a bespoke
         // pose_pool (a curated pool chosen on purpose), or an explicit force_action.
         let authorAction: AuthorActionSpec | null = null;
+        // Couple body-language frame (dualStances.ts) — rolled with the beat, stamped for forensics.
+        let dualStance: DualStance | null = null;
         const sceneFirstEligible =
           !!dualSpecialScene &&
           !dualActiveScene &&
@@ -2293,7 +2297,11 @@ Deno.serve(async (req) => {
                   : classicPools.dual.partner
                 : classicPools.single.candid;
             const exemplars = [...exemplarPool].sort(() => Math.random() - 0.5).slice(0, 3);
-            authorAction = { register, exemplars };
+            if (selectedCast.length === 2) {
+              dualStance = pickDualStance();
+              fallbackReasons.push(`dual_stance:${dualStance.key}`);
+            }
+            authorAction = { register, exemplars, stance: dualStance ? dualStance.text : null };
             fallbackReasons.push('scene_action_roll');
           }
         }
@@ -2302,6 +2310,7 @@ Deno.serve(async (req) => {
         // the scene register — elegant scenes → updos/glam, active → ponytails/
         // braids, everything else → relaxed. Nightly-only (Create never sets it).
         const hairCfg = await fetchEngineConfig(supabase);
+        const sfaCfgCloser = hairCfg;
         const sceneRegister: 'elegant' | 'active' | 'casual' =
           dualSceneKind === 'elegant'
             ? 'elegant'
@@ -2373,6 +2382,16 @@ Deno.serve(async (req) => {
           avoidList,
           action,
           authorAction,
+          dualStance: dualStance
+            ? { seated: !!dualStance.seated, heightContrast: !!dualStance.heightContrast }
+            : null,
+          // Couple framing variance (2026-09-06): the closer waist-up two-shot at dual_closer_pct.
+          dualComposition:
+            selectedCast.length === 2 &&
+            (force_dual_closer ||
+              (sfaCfgCloser.dualCloserPct > 0 && Math.random() * 100 < sfaCfgCloser.dualCloserPct))
+              ? (fallbackReasons.push('dual_comp:waist_up'), 'waist_up' as const)
+              : null,
           femaleHairVariationPct: force_female_hair_pct ?? hairCfg.femaleHairVariationPct,
           sceneRegister,
           // Stage 5c: expanded solo compositions (three-quarter / enviro-wide)
