@@ -791,3 +791,15 @@ the linter, scrub existing rows, and draw pools with EQUAL AIRTIME (pick the poo
   Day-of = +1 guaranteed hero render + 1 postcard composite per eligible user → ~12 today; at 10×
   users (~120) the queue still drains overnight at the heavy cap. Re-run this count the week before
   Oct 31 (`node -e` snippet in the session log: users × isProActive). No scaling action needed now.
+
+
+## Render verdicts 2026-09-05 (after scene-first actions + couple model steer — see SCENE_FIRST_ACTION_PLAN.md)
+
+Strong every time (keep): halloween_neighborhood (cozy_porch / decorated_neighborhood / jack_o_lantern_overload /
+salem_town_night), pumpkin_patch_night (all six subs — haunted_hayride and pumpkin_king_patch are the best of the
+day), witch_cottage core (witch / witch_sisters_cottage / black_cat_alley / cursed_library), halloween_party
+(movie_night 9-9.5 repeatedly), halloween_town_square/halloween_town_square.
+Not Halloween as concepts (Kevin's call — cut or reseed with mandatory signifiers): haunted_house_comedy (both
+subs), stop_motion_whimsy (garden seeds), gothic_greenhouse, gothic_glam_editorial, ghost_hotel_1920s,
+undead_wedding (as rendered). Untested today: mad_lab_and_monsters, ghost_hunting_crew, seance_parlor,
+cute_halloween, ghost_pirate_ship, haunted_attractions, haunted_graveyard (matrix3 partial only).

@@ -103,6 +103,9 @@ export interface EngineConfig {
   /** Holiday Dreams master kill switch (HOLIDAY_DREAMS_PLAN.md). When false the
    *  whole holiday layer is inert regardless of the date/catalog. Starts false. */
   holidaysEnabled: boolean;
+  /** Couple model steer (dualModelSteer.ts, mig 462): steer DUAL face-swap picks off
+   *  flux-1.1-pro/Ultra to a proven sibling the medium allows. false = off. */
+  dualAvoidFlux11pro: boolean;
   /** Holiday POSTCARD overlay scope (migration 459): 'off' | 'day_of' (the day-of hero
    *  only — default) | 'window' (every in-season holiday dream). */
   holidayPostcardScope: 'off' | 'day_of' | 'window';
@@ -155,6 +158,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   sceneActionPct: 0,
   pureSceneOnSwapFail: true,
   holidaysEnabled: false,
+  dualAvoidFlux11pro: false,
   holidayPostcardScope: 'day_of',
 };
 
@@ -261,6 +265,8 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     pureSceneOnSwapFail:
       (data.pure_scene_on_swap_fail ?? DEFAULT_ENGINE_CONFIG.pureSceneOnSwapFail) !== false,
     holidaysEnabled: (data.holidays_enabled ?? DEFAULT_ENGINE_CONFIG.holidaysEnabled) === true,
+    dualAvoidFlux11pro:
+      (data.dual_avoid_flux11pro ?? DEFAULT_ENGINE_CONFIG.dualAvoidFlux11pro) === true,
     holidayPostcardScope:
       data.holiday_postcard_scope === 'off' || data.holiday_postcard_scope === 'window'
         ? data.holiday_postcard_scope

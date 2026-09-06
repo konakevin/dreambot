@@ -125,3 +125,21 @@ A frozen look = a new `dream_mediums` row, never edited after creation (version 
 
 Christmas signature look (same 5 steps), and the NIGHTLY_IMPRESS_PLAN #2 "legendary dreams"
 treatment = a frozen premium look (best model + masterpiece fragment) rolled at ~3%.
+
+## 8. Round 1 RESULT (2026-09-05) — reliability by medium × model, same 4 Halloween seeds, couples
+
+| combo | clean first-try | identity (L/R range) | read |
+|---|---|---|---|
+| canvas × flux-2-flex | 4/4 | 0.54-0.78 | full-body, medium-faithful, beat rendered (carving at the mantel) |
+| watercolor × flux-2-flex | 4/4 | 0.70-0.79 | full-body, real watercolor register returns |
+| canvas × gemini-2-image | 4/4 | 0.72-0.76 | full-body (pumpkin tree, pajamas) |
+| canvas × gpt-image-2 | 4/4 | 0.62-0.75 | full-body, richest set dressing (skeleton garlands) |
+| illustration × flux-2-max | 4/4 | 0.59-0.74 | full-body (moonlit bridge) |
+| film_noir × flux-1.1-pro (control) | 3/4 | one degraded | two-head close-ups; medium ignored (override fragments) |
+
+20/20 clean on the non-1.1-pro models vs 23-40% degrade on 1.1-pro across today's rounds (SCENE_FIRST_ACTION_PLAN
+§8). The Aug-26 "flex fails the dual split ~25%" observation did not reproduce (0/8). **Decision:** production
+couple renders steer off the 1.1-pro family to the first medium-allowed model in flex → gemini → max → gpt-image-2
+(`_shared/dualModelSteer.ts`, `engine_config.dual_avoid_flux11pro`, mig 462). Round 2 (the LOOK) is now a taste
+pass over these five combos rather than a reliability hunt; the frozen `halloween_hero_v1` medium (§4) should pin
+one of them, never 1.1-pro.

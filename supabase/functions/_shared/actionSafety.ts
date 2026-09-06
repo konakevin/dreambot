@@ -91,7 +91,7 @@ export function normalizeActionBeat(raw: string): string {
     .trim()
     .replace(/^["'`]+|["'`]+$/g, '')
     .replace(/\s+/g, ' ')
-    .slice(0, 220)
+    .slice(0, 320)
     .trim();
 }
 
@@ -101,7 +101,9 @@ export function normalizeActionBeat(raw: string): string {
  */
 export function validateActionBeat(beat: string, castCount: 1 | 2): ActionBeatVerdict {
   const b = (beat || '').trim();
-  if (b.length < 6 || b.length > 220 || /\n/.test(b)) return { ok: false, reason: 'length' };
+  // Couple beats carry one clause per person + the gap → wider caps (44 words / 320 chars).
+  const maxChars = castCount === 2 ? 320 : 220;
+  if (b.length < 6 || b.length > maxChars || /\n/.test(b)) return { ok: false, reason: 'length' };
   if (UNSAFE_WORDS.test(b)) return { ok: false, reason: 'unsafe_word' };
   if (TOO_ENERGETIC.test(b)) return { ok: false, reason: 'too_energetic' };
   if (DIRECTION_WORDS.test(b)) return { ok: false, reason: 'direction' };
@@ -109,7 +111,7 @@ export function validateActionBeat(beat: string, castCount: 1 | 2): ActionBeatVe
   if (GAZE_WORDS.test(b)) return { ok: false, reason: 'gaze' };
   if (PASSIVE_WORDS.test(b)) return { ok: false, reason: 'passive' };
   // Solo beats are one clause; couple beats carry one clause per person + the gap → a wider cap.
-  if (b.split(/\s+/).length > (castCount === 2 ? 36 : 26)) return { ok: false, reason: 'too_long' };
+  if (b.split(/\s+/).length > (castCount === 2 ? 44 : 26)) return { ok: false, reason: 'too_long' };
   if (castCount === 2) {
     const stripped = b.replace(DUAL_PROXIMITY_ALLOW, '');
     if (DUAL_PROXIMITY_VIOLATION.test(stripped) && !DUAL_PROXIMITY_MITIGATED.test(b)) {

@@ -262,7 +262,8 @@ delete). Near-dupe pass after scale: ~9 dupes disabled via 60-char scene key.
   / ~1291+ (solo). Composition roll (dual vs solo vs scene): `_shared/chaosTier.ts:rollNightlyDreamType`.
 - Tuning knobs: `engine_config` (`dual_scene_active_pct`, `single_scene_active_pct`,
   `dual/single_scene_goofy_pct`, `..._elegant_pct`, `location_action_pct`, `scene_action_pct` —
-  scene-first authored actions for scenario rows, mig 461, SCENE_FIRST_ACTION_PLAN.md), read live w/ 60s TTL.
+  scene-first authored actions for scenario rows, mig 461, SCENE_FIRST_ACTION_PLAN.md; `dual_avoid_flux11pro` —
+  couple model steer off flux-1.1-pro, mig 462, `_shared/dualModelSteer.ts`), read live w/ 60s TTL.
 
 **To add a NEW bucket** (do dual + single together):
 1. Add `{ key, label, desc, mediumBan? }` to `ACTIVE_BUCKETS` in BOTH scripts. The `desc` is

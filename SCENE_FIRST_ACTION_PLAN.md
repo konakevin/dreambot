@@ -231,3 +231,29 @@ three-quarter-or-wider; grade 8-9.5 on the Halloween seeds that were 2-3 before.
 
 Also fixed in-flight: pronoun normalization (he/she → the man/the woman) instead of a fallback; REQUIRED note on
 the action field (Sonnet omitted it 1 in 7); open-book / tracing beats added to the gaze rule.
+
+### Couple model steer (2026-09-05, shipped ON)
+
+`_shared/dualModelSteer.ts` + `engine_config.dual_avoid_flux11pro` (mig 462, flipped true after verification).
+Natural-roll verification, 8 Halloween couples: 6 steered to flux-2-flex → 6/6 clean first-try, full-body,
+medium-faithful (Halloween Town watercolor, plaid couple at the wagon in comics, pajama couple in a jack-o-lantern
+hall on canvas); the 2 that could not steer (glamour, vintage_film: no flex/max in `allowed_models`, gemini +
+gpt-image-2 nightly-banned) stayed on 1.1-pro and reproduced the old failures (two-head close-up; degrade). →
+LAST RESORT rule: a couple on such a medium still gets flux-2-flex, stamped `…(last_resort)`. Fix of record:
+add flux-2-flex / flux-2-max to glamour + vintage_film `allowed_models` via the DreamSmart runbook.
+Superseded: the 2026-08-26 dual flex→1.1-pro clamp (never reproduced: 0/14 flex split failures today).
+Solos are untouched by the steer (they held identity 0.6+ on 1.1-pro all day).
+
+### Remaining items (Kevin's call)
+
+- **Halloween sub-themes that do not read as Halloween on ~60 renders today** (cut, or reseed with mandatory
+  signifiers enforced by the linter): `afterlife_waiting_room` + `striped_suit_haunting` (8 renders, 0 Halloween —
+  office / hallway / courtroom), `stop_motion_whimsy` (Halloween only when the seed has the spiral hill; the
+  greenhouse/garden seeds are not), `gothic_greenhouse`, `gothic_glam_editorial`, `ghost_hotel_1920s` (matrix3:
+  roses / library / ballroom, no cue), `undead_wedding` (rendered as a normal wedding; needs skeletal band +
+  cobwebs + blue crypt mandatory). Keep: `cursed_library` (reseeded rows now carry green candles / floating
+  grimoires), `black_cat_alley` (cats + fog + lanterns land every time). Reversible disable script staged:
+  scratchpad `disable-nonhalloween-subs.mjs` (scoped by sub_theme, ledgered).
+- glamour + vintage_film `allowed_models` review (above).
+- Solo `portrait` pool (30% of solo fallback rolls) still static-face-forward; only matters when the authored
+  beat falls back. Consider retiring it from the default roll.

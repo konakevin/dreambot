@@ -141,7 +141,7 @@ describe('scene-first actions — the brief when authorAction is set', () => {
     const brief = buildSlotBrief(authored(dualInput()));
     expect(brief).toContain('You write SIX fields.');
     expect(brief).toContain('"action": "..."');
-    expect(brief).toContain('action (14-30 words, HARD LIMIT 32');
+    expect(brief).toContain('action (14-32 words, HARD LIMIT 36');
     expect(brief).toContain('holiday:halloween / witch_cottage');
     expect(brief).toContain('CHEST LEVEL OR LOWER');
     expect(brief).toContain('one …, the other …');

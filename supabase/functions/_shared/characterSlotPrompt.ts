@@ -467,7 +467,7 @@ function buildActionFieldSpec(input: CharacterSlotPipelineInput): string {
     .slice(0, 3)
     .map((e) => `"${e.replace(/"/g, '')}"`)
     .join(' · ');
-  return `action (${dual ? '14-30 words, HARD LIMIT 32' : '8-20 words, HARD LIMIT 22'} — present-tense like a photo caption; YOU write it, it is not locked. REQUIRED: never omit this field)
+  return `action (${dual ? '14-32 words, HARD LIMIT 36' : '8-20 words, HARD LIMIT 22'} — present-tense like a photo caption; YOU write it, it is not locked. REQUIRED: never omit this field)
   ONE concrete, LIVELY moment that fits THIS EXACT scene and its named objects, in the
   "${spec.register}" register: hands busy with the scene's own things (lifting, stirring, holding,
   carving, pouring, handing, strumming, toasting…). Never merely standing, waiting, resting, pausing,

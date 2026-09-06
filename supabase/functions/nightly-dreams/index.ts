@@ -134,6 +134,7 @@ import {
   type AuthorActionSpec,
 } from '../_shared/characterSlotPrompt.ts';
 import { holidayPoolOf } from '../_shared/holidayPools.ts';
+import { steerDualModel } from '../_shared/dualModelSteer.ts';
 import { settingClauseOf } from '../_shared/sceneHook.ts';
 import { assessRenderQuality, assessSceneFallbackPeople } from '../_shared/qualityGate.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
@@ -1207,6 +1208,7 @@ Deno.serve(async (req) => {
     // + apply the single-swap Ultra clamp. A closure so a scenario medium
     // re-roll (below) can re-pick from the FINAL medium's smart set — the pool
     // is now medium-dependent (unlike the old fixed FACE_SWAP_MODELS rotation).
+    const dualSteerEnabled = (await fetchEngineConfig(supabase)).dualAvoidFlux11pro;
     const pickFaceSwapModelFor = (medium: typeof baseMedium): string => {
       const pool = nightlyModelPool({
         smartDreamModels: medium.smartDreamModels,
@@ -1236,6 +1238,15 @@ Deno.serve(async (req) => {
       // (2× the pool average) → clamp to flux-1.1-pro, a reliable dual sibling
       // (~14%). (flux-2-pro was the original clamp target but is now nightly-banned
       // for cheesy cast output, so we retarget to 1.1-pro. 2026-08-26, Kevin.)
+      // Couple model steer (2026-09-05, dualModelSteer.ts) — when ON it supersedes the flex
+      // clamp below: on the same seeds flux-2-flex went 8/8 clean first-try (the ~25% figure
+      // behind the Aug-26 clamp never reproduced), while 1.1-pro degraded 23-40% and forced
+      // every couple through the four override fragments. Off → exactly the old behavior.
+      if (isDualFaceSwap && dualSteerEnabled) {
+        const steered = steerDualModel(m, medium.allowedModels, NIGHTLY_BANNED_MODELS, true);
+        if (steered.stamp) fallbackReasons.push(steered.stamp);
+        return steered.model;
+      }
       if (isDualFaceSwap && m === 'black-forest-labs/flux-2-flex') {
         m = 'black-forest-labs/flux-1.1-pro';
         fallbackReasons.push('dual_flex_clamped_to_1.1pro');

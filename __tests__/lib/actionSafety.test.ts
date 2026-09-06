@@ -101,7 +101,7 @@ describe('validateActionBeat — every swap-breaking class is rejected with a re
       'passive',
     ],
     [
-      'one stirring the cauldron with a long wooden spoon while lifting the lid, the other a step apart pouring a glowing green potion from a tall bottle into a row of small jars lined up along the crooked shelf',
+      'one stirs the cauldron with a long spoon while lifting the iron lid, the other a step apart pours a green potion from a tall bottle into small jars on the crooked shelf under the herbs and candles by the door of the old cottage near the moonlit gate',
       2,
       'too_long',
     ],
