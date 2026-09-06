@@ -19,7 +19,11 @@
 // characterSlotPrompt imports ./llm.ts (network). Mock it so the module loads.
 jest.mock('@engine/llm', () => ({ callSonnet: jest.fn() }));
 
-import { assembleSoloFallbackFromDual, assembleCharacterPrompt } from '@engine/characterSlotPrompt';
+import {
+  assembleSoloFallbackFromDual,
+  assembleCharacterPrompt,
+  soloRebuildInput,
+} from '@engine/characterSlotPrompt';
 import type { DualSlots, CharacterSlotPipelineInput } from '@engine/characterSlotPrompt';
 
 const dualSlots: DualSlots = {
@@ -123,5 +127,24 @@ describe('assembleSoloFallbackFromDual', () => {
     // Same scene, provably different composition.
     expect(soloOut).toContain('Prainha cove');
     expect(dualOut).toContain('Prainha cove');
+  });
+});
+
+describe('soloRebuildInput — the degrade rebuild renders the REAL medium, not the 1.1-pro override (F2)', () => {
+  const OVERRIDE = 'loose watercolor and ink painting with lifelike adult faces, painterly realism';
+  const REAL = 'watercolor painting on cold-press paper, transparent pigment washes';
+  it('swaps the fragment and leaves everything else identical', () => {
+    const input = { ...partnerLeftSelfRight(), mediumFluxFragment: OVERRIDE };
+    const rebuilt = soloRebuildInput(input, REAL);
+    expect(rebuilt.mediumFluxFragment).toBe(REAL);
+    expect({ ...rebuilt, mediumFluxFragment: OVERRIDE }).toEqual(input);
+    const out = assembleSoloFallbackFromDual(dualSlots, rebuilt, 1);
+    expect(out).toContain(REAL);
+    expect(out).not.toContain('painterly realism');
+    expect(out).toContain('ONE person alone in the scene');
+  });
+  it('an empty real fragment keeps the input fragment (never blanks the medium)', () => {
+    const input = { ...partnerLeftSelfRight(), mediumFluxFragment: OVERRIDE };
+    expect(soloRebuildInput(input, '').mediumFluxFragment).toBe(OVERRIDE);
   });
 });

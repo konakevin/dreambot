@@ -172,3 +172,64 @@ describe('lintHolidayRow — franchise vocabulary ban (Kevin 2026-09-05)', () =>
     expect(errors.some((e: string) => /franchise/.test(e))).toBe(false);
   });
 });
+
+// ── Dream test (NIGHTLY_NO_PLAIN_RENDERS_PLAN.md §7 L1) ─────────────────────────
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const dream = require('../../scripts/lib/holidayPoolLint.js');
+
+describe('lintDreamTest — plain setting + everyday attire is flagged, either rescue clears it', () => {
+  it("flags sunnysteph's seed: a painted studio backdrop with everyday suits", () => {
+    expect(
+      dream.lintDreamTest({
+        scene:
+          'Painted art deco gold-leaf geometric backdrop with a sleek black lacquer pedestal prop off to one side',
+        attire: 'Ivory wide-lapel blazer, leopard-print blouse; charcoal chalk-stripe suit',
+      })
+    ).toHaveLength(1);
+    expect(
+      dream.lintDreamTest({
+        scene: 'Person standing at a zoo railing while a goose honks at them',
+        attire: 'Normal scene-appropriate everyday clothes',
+      })
+    ).toHaveLength(1);
+    expect(
+      dream.lintDreamTest({
+        scene: 'A mint-green office waiting room with a take-a-number dispenser',
+        attire: 'a cardigan and jeans',
+      })
+    ).toHaveLength(1);
+  });
+  it('persona attire rescues a plain setting (a warrior in a corridor is a dream)', () => {
+    expect(
+      dream.lintDreamTest({
+        scene: 'A plain wall in an empty room',
+        attire: 'full plate armor with a crimson cape',
+      })
+    ).toEqual([]);
+    expect(
+      dream.lintDreamTest({
+        scene: 'Hotel lobby with a reception desk',
+        attire: 'a 1920s flapper dress with a beaded headband',
+      })
+    ).toEqual([]);
+  });
+  it('a spectacular setting is never flagged, whatever the clothes', () => {
+    expect(
+      dream.lintDreamTest({
+        scene:
+          'A moonlit cobblestone lane lined with hundreds of glowing jack-o-lanterns, a castle above',
+        attire: 'cozy fall coats and scarves',
+      })
+    ).toEqual([]);
+    expect(
+      dream.lintDreamTest({
+        scene: 'A glacier at dawn, blue ice towering over a frozen lake',
+        attire: 'a parka and jeans',
+      })
+    ).toEqual([]);
+  });
+  it('regexes exist for the engine mirror parity test', () => {
+    expect(dream.PLAIN_SETTING).toBeInstanceOf(RegExp);
+    expect(dream.PERSONA_ATTIRE).toBeInstanceOf(RegExp);
+  });
+});

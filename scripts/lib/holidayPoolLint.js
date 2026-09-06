@@ -150,3 +150,28 @@ module.exports = {
   SCENE_MIN_WORDS,
   SCENE_MAX_WORDS,
 };
+
+// ── Dream test (NIGHTLY_NO_PLAIN_RENDERS_PLAN.md §7 L1) ─────────────────────────
+// A seed is PLAIN when its setting is ordinary/blank AND its attire is everyday. Persona attire rescues a plain
+// setting (a warrior in a corridor is a dream); a spectacular setting rescues plain attire (handled by NOT
+// matching PLAIN_SETTING). Shared by the seeders + scan scripts; the engine mirror is test-locked.
+const PLAIN_SETTING =
+  /\b(?:photo\s+studio|studio\s+backdrop|(?:painted|seamless|geometric|paper|fabric|velvet|gold-leaf)\b[^.]{0,40}?\bbackdrop|backdrop\s+(?:with|and)\s+(?:a\s+)?(?:pedestal|stool|prop)|office|cubicle|waiting\s+room|conference\s+room|boardroom|break\s+room|parking\s+(?:lot|garage)|plain\s+wall|blank\s+wall|hotel\s+lobby|generic\s+street|empty\s+room|plain\s+room|reception\s+desk|mall\s+atrium|shopping\s+mall|strip\s+mall|zoo\s+railing|dmv|laundromat|grocery\s+store|supermarket\s+aisle)\b/i;
+const PERSONA_ATTIRE =
+  /\b(?:costume|armor|armour|chainmail|gown|ballgown|cape|cloak|robe|robes|uniform|tuxedo|tailcoat|flapper|pirate|warrior|knight|astronaut|spacesuit|vampire|witch|wizard|superhero|samurai|kimono|corset|crown|tiara|tricorn|top\s+hat|bustle|regency|victorian|medieval|renaissance|1920s|1970s|1980s|toga|sari|hanbok|frock\s+coat|cravat|waistcoat|opera\s+cape)\b/i;
+
+/**
+ * Dream-test lint for one seed row ({scene, attire}). Returns [] (clean) or ['plain setting + everyday attire'].
+ * Conservative on purpose: only the ordinary-AND-ordinary combination is flagged.
+ */
+function lintDreamTest(row) {
+  const scene = String(row.scene || '');
+  const attire = String(row.attire || '');
+  if (!PLAIN_SETTING.test(scene)) return [];
+  if (PERSONA_ATTIRE.test(attire) || PERSONA_ATTIRE.test(scene)) return [];
+  return ['plain setting + everyday attire (dream test — NIGHTLY_NO_PLAIN_RENDERS_PLAN.md §1)'];
+}
+
+module.exports.PLAIN_SETTING = PLAIN_SETTING;
+module.exports.PERSONA_ATTIRE = PERSONA_ATTIRE;
+module.exports.lintDreamTest = lintDreamTest;

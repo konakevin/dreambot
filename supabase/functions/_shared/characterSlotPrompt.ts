@@ -1084,6 +1084,18 @@ export function assembleCharacterPrompt(
  * @param selfIndex which side of the dual is self: 0 = LEFT, 1 = RIGHT. Picks
  *   self's wardrobe and drops the partner entirely.
  */
+/**
+ * The input for a couple-degrade SOLO rebuild: the same slots/identity, but the medium's REAL face-swap
+ * fragment instead of the flux-1.1-pro override that was chosen for the couple render. Pure; test-locked
+ * (NIGHTLY_NO_PLAIN_RENDERS_PLAN.md F2 — the override + rebuild combination produced the true headshots).
+ */
+export function soloRebuildInput(
+  input: CharacterSlotPipelineInput,
+  realMediumFragment: string
+): CharacterSlotPipelineInput {
+  return { ...input, mediumFluxFragment: realMediumFragment || input.mediumFluxFragment };
+}
+
 export function assembleSoloFallbackFromDual(
   dualSlots: DualSlots,
   dualInput: CharacterSlotPipelineInput,

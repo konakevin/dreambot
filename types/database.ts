@@ -1639,6 +1639,7 @@ export type Database = {
           quality_gate_mode: string;
           relationship_regex: string | null;
           relationship_words: string;
+          scene_action_location_couples: boolean;
           scene_action_location_pct: number;
           scene_action_pct: number;
           scene_eligible_models: string[];
@@ -1652,6 +1653,7 @@ export type Database = {
           single_scene_active_pct: number;
           single_scene_elegant_pct: number;
           single_scene_goofy_pct: number;
+          solo_rebuild_model: string;
           updated_at: string;
           welcome_sparkle_bonus: number;
         };
@@ -1726,6 +1728,7 @@ export type Database = {
           quality_gate_mode?: string;
           relationship_regex?: string | null;
           relationship_words?: string;
+          scene_action_location_couples?: boolean;
           scene_action_location_pct?: number;
           scene_action_pct?: number;
           scene_eligible_models?: string[];
@@ -1739,6 +1742,7 @@ export type Database = {
           single_scene_active_pct?: number;
           single_scene_elegant_pct?: number;
           single_scene_goofy_pct?: number;
+          solo_rebuild_model?: string;
           updated_at?: string;
           welcome_sparkle_bonus?: number;
         };
@@ -1813,6 +1817,7 @@ export type Database = {
           quality_gate_mode?: string;
           relationship_regex?: string | null;
           relationship_words?: string;
+          scene_action_location_couples?: boolean;
           scene_action_location_pct?: number;
           scene_action_pct?: number;
           scene_eligible_models?: string[];
@@ -1826,6 +1831,7 @@ export type Database = {
           single_scene_active_pct?: number;
           single_scene_elegant_pct?: number;
           single_scene_goofy_pct?: number;
+          solo_rebuild_model?: string;
           updated_at?: string;
           welcome_sparkle_bonus?: number;
         };

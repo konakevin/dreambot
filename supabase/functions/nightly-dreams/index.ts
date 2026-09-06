@@ -129,6 +129,7 @@ import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
 import {
   runCharacterSlotPipeline,
   assembleSoloFallbackFromDual,
+  soloRebuildInput,
   type CharacterSlotPipelineInput,
   type DualSlots,
 } from '../_shared/characterSlotPrompt.ts';
@@ -447,6 +448,8 @@ Deno.serve(async (req) => {
     dualSlots: DualSlots;
     input: CharacterSlotPipelineInput;
     selfIndex: 0 | 1;
+    /** The medium's real face-swap fragment (pre-override) for the rebuild. */
+    realMediumFragment: string;
   } | null = null;
   // Hoisted embodied-medium flag so the post-try GPT-image-2 prefix step
   // can skip its canvas-illustration prefix (which fights LEGO / pixels /
@@ -760,6 +763,9 @@ Deno.serve(async (req) => {
     resolvedVibeKey = nightlyVibe.key;
 
     let baseMedium = nightlyMedium;
+    // The medium's REAL face-swap fragment, captured before any flux-1.1-pro override replaces it —
+    // the couple-degrade solo rebuild renders with this (NIGHTLY_NO_PLAIN_RENDERS_PLAN.md F2).
+    let realMediumFragment: string = nightlyMedium.fluxFragment;
 
     console.log(
       '[nightly-dreams] NIGHTLY DREAMBOT | medium:',
@@ -1178,6 +1184,7 @@ Deno.serve(async (req) => {
         nightlyVibe?.key ?? null
       );
       if (modelOverride) {
+        realMediumFragment = baseMedium.fluxFragment;
         baseMedium = { ...baseMedium, fluxFragment: modelOverride };
         console.log(
           `[nightly] face-swap ${faceSwapPrePickedModel}: applied curated medium override (${modelOverride.length} chars)`
@@ -1943,7 +1950,10 @@ Deno.serve(async (req) => {
               faceSwapPrePickedModel,
               nightlyVibe?.key ?? null
             );
-            if (modelOverride) baseMedium = { ...baseMedium, fluxFragment: modelOverride };
+            if (modelOverride) {
+              realMediumFragment = baseMedium.fluxFragment;
+              baseMedium = { ...baseMedium, fluxFragment: modelOverride };
+            }
           }
           fallbackReasons.push(`scene_medium:${dualSceneMediumKey}`);
           console.log(`[nightly] scenario forced medium: ${dualSceneMediumKey}`);
@@ -1992,7 +2002,10 @@ Deno.serve(async (req) => {
               faceSwapPrePickedModel,
               nightlyVibe?.key ?? null
             );
-            if (modelOverride) baseMedium = { ...baseMedium, fluxFragment: modelOverride };
+            if (modelOverride) {
+              realMediumFragment = baseMedium.fluxFragment;
+              baseMedium = { ...baseMedium, fluxFragment: modelOverride };
+            }
           }
           fallbackReasons.push(`scene_medium_ban:${dualSceneMediumBan}->${rerolled.key}`);
           console.log(
@@ -2324,6 +2337,7 @@ Deno.serve(async (req) => {
             dualSlots: slotResult.slots as DualSlots,
             input: slotInput,
             selfIndex: selfIdx === 1 ? 1 : 0,
+            realMediumFragment,
           };
         }
         console.log(
@@ -2986,6 +3000,9 @@ Output ONLY the prompt.`;
     })
   );
   let pickedModel = force_model ? force_model : faceSwapPrePickedModel || sceneBaseModel;
+  // Set when the couple-degrade solo rebuild renders on a different model (F2): the
+  // shipped pixels came from THIS model, so ai_generation_log.model_used must say so.
+  let modelUsedOverride: string | null = null;
 
   // Scene-composition model gate (mig 213). For pure_scene + epic_tiny, the
   // pickedModel is intersected with engine_config.scene_eligible_models.
@@ -3256,15 +3273,27 @@ Output ONLY the prompt.`;
                   // guard saw a wrong-gender partner face and refused → faceless.
                   // Falls back to the legacy prefix only on the freeform-brief
                   // path (soloFallbackCtx null). (root-caused 2026-08-27)
+                  // F2 (NIGHTLY_NO_PLAIN_RENDERS_PLAN.md, 2026-09-06): the rebuild used to carry the
+                  // flux-1.1-pro OVERRIDE fragment ("painterly realism") and render on the couple's
+                  // model — the audit's tightest combination (63% tight crops, 3 of the 4 true
+                  // headshots in 520 renders). It now renders the REAL medium fragment on the solo
+                  // rebuild model (engine_config.solo_rebuild_model, default flux-2-flex: 0% tight
+                  // in the same audit, faithful to real fragments). '' → the couple's model.
+                  const rebuildCfg = await fetchEngineConfig(supabase);
+                  const rebuildModel = rebuildCfg.soloRebuildModel || pickedModel;
+                  if (soloFallbackCtx && rebuildModel !== pickedModel)
+                    modelUsedOverride = rebuildModel;
                   const soloPrompt = soloFallbackCtx
                     ? assembleSoloFallbackFromDual(
                         soloFallbackCtx.dualSlots,
-                        soloFallbackCtx.input,
+                        soloRebuildInput(soloFallbackCtx.input, soloFallbackCtx.realMediumFragment),
                         soloFallbackCtx.selfIndex
                       )
                     : `exactly one person, a solo portrait of a single ${soloNoun} alone, ${finalPrompt}`;
                   fallbackReasons.push(
-                    soloFallbackCtx ? 'solo_fallback:rebuilt_solo' : 'solo_fallback:legacy_prefix'
+                    soloFallbackCtx
+                      ? `solo_fallback:rebuilt_solo:${rebuildModel.replace(/^.*\//, '')}`
+                      : 'solo_fallback:legacy_prefix'
                   );
                   const rr = await generateImage(
                     'flux-dev',
@@ -3276,7 +3305,7 @@ Output ONLY the prompt.`;
                       geminiKey: Deno.env.get('GEMINI_API_KEY'),
                       xaiKey: Deno.env.get('XAI_API_KEY'),
                     },
-                    pickedModel,
+                    soloFallbackCtx ? rebuildModel : pickedModel,
                     'png'
                   );
                   observability.replicateRawUrl = rr.url;
@@ -3965,7 +3994,7 @@ Output ONLY the prompt.`;
         recipe_snapshot: asJsonbObject(vibe_profile),
         rolled_axes: { ...logAxes, timings, observability },
         enhanced_prompt: finalPrompt,
-        model_used: pickedModel,
+        model_used: modelUsedOverride ?? pickedModel,
         cost_cents: getCostCents(pickedModel),
         status: 'completed',
         sonnet_brief: sonnetBrief,
@@ -4012,7 +4041,7 @@ Output ONLY the prompt.`;
           resolved_medium: resolvedMediumKey ?? null,
           resolved_vibe: resolvedVibeKey ?? null,
           // Surfaced for QA of the DreamSmart nightly model pick (dry-run only).
-          model_used: pickedModel,
+          model_used: modelUsedOverride ?? pickedModel,
           fallback_reasons: fallbackReasons,
         }),
         { status: 200, headers: { 'Content-Type': 'application/json' } }

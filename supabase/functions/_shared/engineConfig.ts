@@ -115,6 +115,8 @@ export interface EngineConfig {
   actionRegistersPct: number;
   /** Let location COUPLES use scene-first beats (mig 465). false = held on the existing path. */
   sceneActionLocationCouples: boolean;
+  /** Model for the couple-degrade SOLO rebuild (mig 466). '' → the couple's own model. */
+  soloRebuildModel: string;
   /** Holiday POSTCARD overlay scope (migration 459): 'off' | 'day_of' (the day-of hero
    *  only — default) | 'window' (every in-season holiday dream). */
   holidayPostcardScope: 'off' | 'day_of' | 'window';
@@ -172,6 +174,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   sceneActionLocationPct: 0,
   actionRegistersPct: 0,
   sceneActionLocationCouples: false,
+  soloRebuildModel: 'black-forest-labs/flux-2-flex',
   holidayPostcardScope: 'day_of',
 };
 
@@ -290,6 +293,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     sceneActionLocationCouples:
       (data.scene_action_location_couples ?? DEFAULT_ENGINE_CONFIG.sceneActionLocationCouples) ===
       true,
+    soloRebuildModel: String(data.solo_rebuild_model ?? DEFAULT_ENGINE_CONFIG.soloRebuildModel),
     holidayPostcardScope:
       data.holiday_postcard_scope === 'off' || data.holiday_postcard_scope === 'window'
         ? data.holiday_postcard_scope
