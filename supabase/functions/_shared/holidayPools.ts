@@ -183,6 +183,17 @@ export function filterDayOfRows<T extends { subTheme?: string | null }>(
 ): T[] {
   return rows.filter((r) => isDayOfSub(holiday, r.subTheme) === (mode === 'only'));
 }
+/** Pure: the rows a day-of draw uses (HOLIDAY_DAY_OF_PLAN.md §3.3 R2). Day-of pool first; if it is
+ *  empty, the holiday's window rows (fallback A); if both are empty the caller runs the normal roll
+ *  (fallback B). Never a broken render. */
+export function selectDayOfRows<T>(
+  dayOfRows: T[],
+  windowRows: T[]
+): { rows: T[]; source: 'day_of' | 'fallback_window' | 'none' } {
+  if (dayOfRows.length > 0) return { rows: dayOfRows, source: 'day_of' };
+  if (windowRows.length > 0) return { rows: windowRows, source: 'fallback_window' };
+  return { rows: [], source: 'none' };
+}
 /** Main pool for a row's sub_theme (Halloween or Fall); unknown/null sub_theme → its own bucket (never dropped). */
 export function holidayPoolOf(subTheme: string | null | undefined): string {
   if (!subTheme) return '__unsorted';

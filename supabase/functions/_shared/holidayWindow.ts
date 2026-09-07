@@ -231,6 +231,46 @@ export function mapHolidayCatalogRow(r: Record<string, unknown>): HolidayCatalog
   };
 }
 
+/**
+ * The calendar date a nightly render is FOR (HOLIDAY_DAY_OF_PLAN.md §4). The run fires at 08:00 UTC;
+ * a user whose local hour at that instant is >= `cutoffHour` (default 20) is already in the evening,
+ * and the render is what they wake up to — so it is evaluated against the NEXT local date (Hawaii at
+ * 22:00 Oct 30 → Oct 31). cutoffHour 24 = never shift. Pure: takes the instant explicitly.
+ */
+export function dayOfCalendarDate(
+  now: Date,
+  tz: string | null | undefined,
+  cutoffHour: number
+): CalendarDate {
+  let local: CalendarDate;
+  try {
+    local = localDateInTz(now, tz);
+  } catch (_e) {
+    local = localDateInTz(now, 'UTC');
+  }
+  const hour = localHourInTz(now, tz);
+  const cutoff = Number.isFinite(cutoffHour)
+    ? Math.min(24, Math.max(0, Math.floor(cutoffHour)))
+    : 24;
+  if (hour >= cutoff) return fromSerial(toSerial(local) + 1);
+  return local;
+}
+
+/** The user's local hour (0-23) for an instant + IANA tz (falls back to UTC on a bad tz). */
+export function localHourInTz(now: Date, tz: string | null | undefined): number {
+  try {
+    const h = new Intl.DateTimeFormat('en-US', {
+      timeZone: tz || 'UTC',
+      hour: 'numeric',
+      hour12: false,
+    }).format(now);
+    const n = Number(h);
+    return Number.isFinite(n) ? n % 24 : now.getUTCHours();
+  } catch (_e) {
+    return now.getUTCHours();
+  }
+}
+
 /** The user's local calendar date for an instant + IANA tz (H2 — never server UTC). */
 export function localDateInTz(now: Date, tz: string | null | undefined): CalendarDate {
   const parts = new Intl.DateTimeFormat('en-CA', {

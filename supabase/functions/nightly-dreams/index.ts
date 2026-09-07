@@ -34,17 +34,9 @@ import {
   pickWeightedHoliday,
   mapHolidayCatalogRow,
   localDateInTz,
+  dayOfCalendarDate,
   type ActiveHoliday,
 } from '../_shared/holidayWindow.ts';
-import {
-  fillHeroTemplate,
-  heroSeed,
-  heroSurface,
-  pickHeroRegister,
-  pickHeroRow,
-  type HolidayHeroRow,
-} from '../_shared/holidayHero.ts';
-import { loadHolidayHeroes } from '../_shared/pools/holidayHeroLoader.ts';
 import { dispatchHolidayPostcard } from '../_shared/holidayPostcardDispatch.ts';
 import {
   loadHolidayDual,
@@ -133,7 +125,7 @@ import {
   type CharacterSlotPipelineInput,
   type DualSlots,
 } from '../_shared/characterSlotPrompt.ts';
-import { holidayPoolOf } from '../_shared/holidayPools.ts';
+import { holidayPoolOf, selectDayOfRows } from '../_shared/holidayPools.ts';
 import { steerDualModel } from '../_shared/dualModelSteer.ts';
 import {
   candidateModels,
@@ -351,8 +343,6 @@ Deno.serve(async (req) => {
     dry_run,
     force_holiday_sub_theme,
     force_day_of,
-    force_hero_register,
-    force_hero_seed,
     force_final_prompt,
     force_prompt_style,
     force_dual_slots,
@@ -423,9 +413,9 @@ Deno.serve(async (req) => {
   // force_day_of), its authored recipes, the user's local year (hero seed), and whether
   // this render became a hero (reaches the response + the postcard step).
   let dayOfHoliday: ActiveHoliday | null = null;
-  let heroRows: HolidayHeroRow[] = [];
-  let heroApplied = false;
-  let localYear = new Date().getUTCFullYear();
+  /** HOLIDAY_DAY_OF_PLAN.md: a day-of pool row (or its window fallback) was applied → the postcard
+   *  overlay composites (scope day_of) and the response reports day_of: true. */
+  let dayOfApplied = false;
   // Durable seed-source provenance (migration 450). Declared at handler scope so it
   // reaches BOTH the rolled_axes logAxes AND the uploads insert. Assigned once the
   // scene/pool is resolved (before the composition branch).
@@ -621,8 +611,9 @@ Deno.serve(async (req) => {
             .eq('id', userId)
             .single();
           const userTz = (tzRow as { timezone?: string | null } | null)?.timezone ?? null;
-          const localDate = localDateInTz(new Date(), userTz);
-          localYear = localDate.year;
+          // The date the render is FOR (HOLIDAY_DAY_OF_PLAN.md §4): local date, shifted to the next
+          // day past the evening cutoff so a Hawaii user gets the holiday dream they wake up to.
+          const localDate = dayOfCalendarDate(new Date(), userTz, holCfg.dayOfEveningCutoffHour);
           const { data: catRows } = await supabase
             .from('holidays')
             .select('*')
@@ -639,21 +630,15 @@ Deno.serve(async (req) => {
     } catch (_holErr) {
       activeHolidays = []; // fail to a normal nightly, never a broken render (N2)
     }
-    // Day-of HERO (§13, mig 457): the holiday whose peak is TODAY. Never via the
-    // archetype-QA flag force_holiday_scene (it fakes daysUntilPeak=0 too). The hero
-    // recipes load here; the pre-roll + scenario block consume them. No recipes
-    // authored → the everyday holiday pool still applies (never a broken render).
-    try {
-      dayOfHoliday = force_day_of
-        ? (activeHolidays.find((h) => h.key === force_day_of) ?? null)
-        : force_holiday_scene
-          ? null
-          : (activeHolidays.find((h) => h.daysUntilPeak === 0) ?? null);
-      if (dayOfHoliday)
-        heroRows = await loadHolidayHeroes(supabase, dayOfHoliday.key, Boolean(force_day_of));
-    } catch (_heroErr) {
-      heroRows = [];
-    }
+    // DAY-OF (HOLIDAY_DAY_OF_PLAN.md §3.3): the holiday whose peak is the date this render is FOR and
+    // whose catalog row has day_of_enabled. Never via force_holiday_scene (it fakes daysUntilPeak=0 too).
+    // On the day every eligible nightly draws 100% from the holiday's reserved <key>_day_of pool
+    // (fallback: its window pool → normal roll — never a broken render).
+    dayOfHoliday = force_day_of
+      ? (activeHolidays.find((h) => h.key === force_day_of) ?? null)
+      : force_holiday_scene
+        ? null
+        : (activeHolidays.find((h) => h.daysUntilPeak === 0 && h.dayOfEnabled) ?? null);
 
     let preRolledType: NightlyDreamType | null = null;
     let preRolledMediumToken: string;
@@ -694,14 +679,23 @@ Deno.serve(async (req) => {
       preRolledCastRole = inputs.forceCastRole;
       preRolledComposition = inputs.forceComposition;
     }
-    // Day-of HERO: force a CAST render — the couple if they have a +1, else themselves —
-    // on a face-swap medium (Kevin 2026-09-04). Explicit QA forces (force_medium /
-    // force_cast_role) still win; a user with no self photo keeps their roll and gets
-    // the scene-only hero via Path 2 instead.
-    if (dayOfHoliday && heroRows.length > 0 && hasSelf && !force_medium) {
-      // A QA-supplied force_cast_role picks WHO is cast; the hero still pins the
-      // face-swap medium + character composition (the cascade could otherwise roll a
-      // Dream-Art / embodied type and skip the hero block entirely).
+    // DAY-OF: force a CAST render — the couple if they have a +1, else themselves — on a
+    // face-swap medium (kept from the hero era, Kevin 2026-09-04: the day's dream is personal).
+    // Explicit QA forces (force_medium / force_cast_role) still win; a user with no self photo
+    // keeps their roll and gets the scene-only day-of draw instead.
+    // R2 (HOLIDAY_DAY_OF_PLAN.md): EVERY eligible nightly takes the day-of. A user with no self photo
+    // (or a QA explicit force_cast_role: null = no cast) is pre-rolled to a PURE SCENE so the scene-only
+    // day-of branch is guaranteed to run — otherwise an embodied/character roll would skip every
+    // day-of branch and the user would get a plain nightly on the holiday.
+    const dayOfNoCast = force_cast_role === null || !hasSelf;
+    if (dayOfHoliday && !force_medium && dayOfNoCast) {
+      preRolledComposition = 'pure_scene';
+      preRolledCastRole = null;
+      fallbackReasons.push(`holiday_day_of_preroll:${dayOfHoliday.key}:pure_scene`);
+    }
+    if (dayOfHoliday && hasSelf && !force_medium && !dayOfNoCast) {
+      // A QA-supplied force_cast_role picks WHO is cast; the day-of still pins the face-swap
+      // medium + character composition (the cascade could otherwise roll an embodied type).
       const wanted = force_cast_role ?? (hasPlusOne ? 'dual' : 'self');
       preRolledType =
         wanted === 'dual'
@@ -713,7 +707,7 @@ Deno.serve(async (req) => {
       preRolledMediumToken = inputs.mediumToken;
       preRolledCastRole = inputs.forceCastRole;
       preRolledComposition = inputs.forceComposition;
-      fallbackReasons.push(`holiday_hero_preroll:${dayOfHoliday.key}:${preRolledType}`);
+      fallbackReasons.push(`holiday_day_of_preroll:${dayOfHoliday.key}:${preRolledType}`);
     }
     // A forced scenario bucket must render as a CHARACTER composition — a rolled
     // pure_scene would skip the bucket block downstream (gated on
@@ -1583,8 +1577,8 @@ Deno.serve(async (req) => {
     // Applies to BOTH dual (couples) and single (solo) face-swap dreams: 60%
     // location / 20% goofy / 20% elegant. Single draws from the single_scenarios
     // pools by the cast's gender (any ∪ gender), so attire matches the locked body.
-    let dualSpecialScene: string | null = null;
-    let dualSpecialWardrobe: string | null = null; // the scene's attire (costume/formal/normal)
+    let dualSpecialScene: string | null = null as string | null; // assigned inside applySceneRow (closure) — keep the declared type
+    let dualSpecialWardrobe: string | null = null as string | null; // assigned inside applySceneRow (closure) — keep the declared type // the scene's attire (costume/formal/normal)
     // Which special pool the scene came from — the pose pick branches on THIS,
     // not on wardrobe truthiness (goofy rows carry a literal 'normal…clothes'
     // attire string, so `dualSpecialWardrobe ?` mis-routed all goofy scenes to
@@ -1632,13 +1626,13 @@ Deno.serve(async (req) => {
     };
     // Bespoke pose pool named by the picked scenario row (migration 353) —
     // e.g. 'glamour'. Null = default pose behavior for the scene kind.
-    let dualScenePosePool: string | null = null;
+    let dualScenePosePool: string | null = null as string | null; // assigned inside applySceneRow (closure) — keep the declared type
     // Forced medium named by the picked scenario row (migration 354) — e.g.
     // 'photography' for the photo-genre parody seeds. Null = rolled medium.
-    let dualSceneMediumKey: string | null = null;
+    let dualSceneMediumKey: string | null = null as string | null; // assigned inside applySceneRow (closure) — keep the declared type
     // Banned medium named by the picked scenario row (migration 355) — if the
     // roll landed on it, re-roll from the face-swap pool minus this key.
-    let dualSceneMediumBan: string | null = null;
+    let dualSceneMediumBan: string | null = null as string | null; // assigned inside applySceneRow (closure) — keep the declared type
     // ACTIVE scenario (ACTION_POSE_EXPANSION_PLAN.md): the scene text embeds
     // the body action, so the pose slot gets a fixed face-mandate string
     // instead of a rolled pose (a playful thumbs-up would fight the go-kart).
@@ -1666,17 +1660,30 @@ Deno.serve(async (req) => {
           }))
         );
         const usable = holScenePools.filter((x) => x.rows.length > 0).map((x) => x.h);
-        // Day-of (§13): the scene-only hero — a no-cast user's holiday dream is
-        // guaranteed (100%) and drawn from the day-of holiday itself.
+        // DAY-OF (HOLIDAY_DAY_OF_PLAN.md §3.3): a no-cast user's holiday dream is guaranteed (100%)
+        // from the reserved day-of pool; empty → the holiday's window rows; both empty → normal.
         const dayOfKey = dayOfHoliday ? dayOfHoliday.key : null;
-        const dayOfUsable = dayOfKey ? (usable.find((h) => h.key === dayOfKey) ?? null) : null;
-        const pct = dayOfUsable ? 100 : combineHolidayPct(usable);
-        if (usable.length > 0 && Math.random() * 100 < pct) {
-          const chosen = dayOfUsable ?? pickWeightedHoliday(usable, Math.random());
-          if (dayOfUsable) heroApplied = true;
+        const dayOfSel = dayOfKey
+          ? selectDayOfRows(
+              await loadHolidayScenes(supabase, dayOfKey, force_holiday_sub_theme, 'only'),
+              holScenePools.find((x) => x.h.key === dayOfKey)?.rows ?? []
+            )
+          : null;
+        const pct = dayOfSel && dayOfSel.rows.length > 0 ? 100 : combineHolidayPct(usable);
+        if (dayOfSel && dayOfSel.rows.length > 0) {
+          holidayScene = pickHoliday(dayOfSel.rows);
+          holidayCategory = dayOfKey as string;
+          dayOfApplied = true;
+          fallbackReasons.push(
+            `holiday_day_of:${dayOfKey}:${dayOfSel.source}:${holidayScene.subTheme ?? 'unsorted'}`
+          );
+        } else if (usable.length > 0 && Math.random() * 100 < pct) {
+          const chosen = pickWeightedHoliday(usable, Math.random());
           holidayScene = pickHoliday(holScenePools.find((x) => x.h.key === chosen.key)!.rows);
           holidayCategory = chosen.key;
           fallbackReasons.push(`holiday_scene:${chosen.key}`);
+        }
+        if (holidayScene) {
           if (holidayScene.mediumKey) {
             try {
               const m = await resolveMediumFromDb(holidayScene.mediumKey);
@@ -1732,35 +1739,68 @@ Deno.serve(async (req) => {
           fallbackReasons.push(`forced_scene_category:${force_scene_category}:${s.pool}`);
         }
       }
-      // Day-of HERO (§13, mig 457): ONE honed recipe per surface × register, its axes
-      // filled per user by hash. Bypasses the roll + shuffle-bag — it's THE dream of
-      // the day. Register = the profile's Cute↔Terrifying slider (or a QA force).
+      // DAY-OF (HOLIDAY_DAY_OF_PLAN.md §3.3): every eligible cast nightly draws 100% from the
+      // holiday's reserved <key>_day_of pool and is applied by the SAME applySceneRow path as a window
+      // holiday row (one pipeline). Empty day-of pool → the holiday's window rows; both empty → the
+      // normal roll below. 'elegant' = refined poses (couples → 'partner'), as on every holiday row.
       if (!dualSpecialScene && dayOfHoliday && (isDualFaceSwap || isSingleHumanFaceSwap)) {
-        const surface = heroSurface(isDualFaceSwap, castGender ?? null);
-        const register =
-          force_hero_register ?? pickHeroRegister(nightlyProfile.moods?.cute_terrifying);
-        const heroRow = pickHeroRow(heroRows, surface, register);
-        if (heroRow) {
-          const seed = force_hero_seed ?? heroSeed(userId, dayOfHoliday.key, localYear);
-          const filled = fillHeroTemplate(heroRow, seed);
-          dualSpecialScene = filled.scene;
-          dualSpecialWardrobe = filled.attire;
-          dualSceneKind = 'elegant'; // refined poses: couples → 'partner'
-          // Kevin 2026-09-04/05: NO forced glamour pool on hero solos either — the
-          // "me in a scarf + pumpkins in the bokeh" hero QA renders were this
-          // portrait pool at work. Same default as every other elegant solo scene;
-          // a hero row can still opt into a pool via pose_pool.
-          dualScenePosePool = heroRow.posePool ?? null;
-          dualSceneMediumKey = heroRow.mediumKey ?? null;
-          dualSceneMediumBan = heroRow.mediumBan ?? null;
-          holidayCategory = dayOfHoliday.key;
-          heroApplied = true;
-          const picks = Object.entries(filled.picks)
-            .map(([k, v]) => `${k}=${v}`)
-            .join('|');
-          fallbackReasons.push(
-            `holiday_hero:${dayOfHoliday.key}:${surface}:${heroRow.register}:${picks}`
-          );
+        const key = dayOfHoliday.key;
+        try {
+          if (isDualFaceSwap) {
+            const sel = selectDayOfRows(
+              await loadHolidayDual(supabase, key, force_holiday_sub_theme, 'only'),
+              force_holiday_sub_theme ? [] : await loadHolidayDual(supabase, key, null, 'exclude')
+            );
+            if (sel.rows.length > 0) {
+              const unseen = await filterUnseen(
+                supabase,
+                userId,
+                `holiday:${key}`,
+                sel.rows,
+                (x) => x.scene
+              );
+              const s = pickHoliday(unseen.length ? unseen : sel.rows);
+              applySceneRow(s, 'elegant', key);
+              dayOfApplied = true;
+              fallbackReasons.push(
+                `holiday_day_of:${key}:${sel.source}:${s.subTheme ?? 'unsorted'}`
+              );
+              recordPick(supabase, userId, `holiday:${key}`, s.scene);
+            } else fallbackReasons.push(`holiday_day_of_empty:${key}`);
+          } else {
+            const g = castGender === 'male' || castGender === 'female' ? castGender : 'any';
+            const sel = selectDayOfRows(
+              holidaySingleCandidates(
+                await loadHolidaySingle(supabase, key, force_holiday_sub_theme, 'only'),
+                g
+              ),
+              force_holiday_sub_theme
+                ? []
+                : holidaySingleCandidates(
+                    await loadHolidaySingle(supabase, key, null, 'exclude'),
+                    g
+                  )
+            );
+            if (sel.rows.length > 0) {
+              const unseen = await filterUnseen(
+                supabase,
+                userId,
+                `holiday:${key}`,
+                sel.rows,
+                (x) => x.scene
+              );
+              const s = pickHoliday(unseen.length ? unseen : sel.rows);
+              applySceneRow(s, 'elegant', key);
+              dayOfApplied = true;
+              fallbackReasons.push(
+                `holiday_day_of:${key}:${sel.source}:${s.subTheme ?? 'unsorted'}`
+              );
+              recordPick(supabase, userId, `holiday:${key}`, s.scene);
+            } else fallbackReasons.push(`holiday_day_of_empty:${key}`);
+          }
+        } catch (e) {
+          // Never a broken render: fall through to the normal roll.
+          fallbackReasons.push(`holiday_day_of_error:${(e as Error).message.slice(0, 60)}`);
         }
       }
       if (dualSpecialScene) {
@@ -4170,7 +4210,7 @@ Output ONLY the prompt.`;
     if (holidayCategory) {
       try {
         const pcScope = (await fetchEngineConfig(supabase)).holidayPostcardScope;
-        if (pcScope === 'window' || (pcScope === 'day_of' && heroApplied)) {
+        if (pcScope === 'window' || (pcScope === 'day_of' && dayOfApplied)) {
           const pc = await dispatchHolidayPostcard(imageUrl, holidayCategory);
           fallbackReasons.push(pc.reason);
           lap('postcard');
@@ -4376,7 +4416,7 @@ Output ONLY the prompt.`;
         image_url: imageUrl,
         upload_id: uploadId ?? null,
         prompt_used: finalPrompt,
-        hero: heroApplied,
+        day_of: dayOfApplied,
         resolved_medium: resolvedMediumKey ?? null,
         resolved_vibe: resolvedVibeKey ?? null,
       }),

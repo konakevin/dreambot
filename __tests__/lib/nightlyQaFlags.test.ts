@@ -13,7 +13,6 @@ describe('parseQaFlags', () => {
     expect(f.force_action).toBeNull();
     expect(f.force_scene_category).toBeNull();
     expect(f.force_holiday_scene).toBeNull();
-    expect(f.force_hero_register).toBeNull();
     expect(f.persist).toBe(true);
     expect(f.queueJobId).toBeNull();
     for (const k of [
@@ -74,11 +73,9 @@ describe('parseQaFlags', () => {
     expect(parseQaFlags({ force_season_month: 13 }).force_season_month).toBeUndefined();
     expect(parseQaFlags({ force_season_month: '5' }).force_season_month).toBeUndefined();
   });
-  it('force_solo_comp / force_hero_register are strict enums', () => {
+  it('force_solo_comp is a strict enum', () => {
     expect(parseQaFlags({ force_solo_comp: 'enviro_wide' }).force_solo_comp).toBe('enviro_wide');
     expect(parseQaFlags({ force_solo_comp: 'wide' }).force_solo_comp).toBeNull();
-    expect(parseQaFlags({ force_hero_register: 'eerie' }).force_hero_register).toBe('eerie');
-    expect(parseQaFlags({ force_hero_register: 'spooky' }).force_hero_register).toBeNull();
   });
   it('a forced scenario category implies a face-swap-eligible cast render', () => {
     expect(parseQaFlags({ force_scene_category: 'victorian' }).force_face_swap_eligible).toBe(true);

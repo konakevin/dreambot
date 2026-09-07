@@ -706,6 +706,12 @@ embodied / dream-art nightly types too, for total immersion. Not needed for a gr
 
 ## 13. The day-of "hero" dream — BUILT 2026-09-04 (migrations 457/458, no pools)
 
+> **SUPERSEDED 2026-09-07 — see `HOLIDAY_DAY_OF_PLAN.md`.** Kevin retired the hero recipe rows ("two different
+> prompting methods"): on the day-of every eligible nightly now draws 100% from the holiday's reserved
+> `<key>_day_of` seed pool and is applied by the same code path as any holiday row, then the postcard
+> composites. `holidayHero.ts`, its loader, QA scripts and `force_hero_*` flags were deleted; the
+> `holiday_hero_prompts` table is dropped in the day-of plan's final step. The section below is history.
+
 Kevin's call (2026-09-04): **no day-of seed pools.** On the holiday itself every nightly user gets ONE
 guaranteed, grand, on-brand hero dream — **the couple if they have a +1, else themselves** — built from
 a single curated, honed recipe per surface, personalized so no two are clones.

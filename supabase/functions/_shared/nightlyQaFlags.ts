@@ -53,8 +53,6 @@ export interface NightlyQaFlags {
   dry_run: boolean;
   force_holiday_sub_theme: string | null;
   force_day_of: string | null;
-  force_hero_register: 'cozy' | 'eerie' | null;
-  force_hero_seed: string | null;
   /** QA only: render THIS exact text as the final prompt (skips nothing else — the swap / identity /
    *  quality pipeline runs as normal). Same prompt across models = a fair model comparison. */
   force_final_prompt: string | null;
@@ -169,11 +167,6 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
     force_holiday_sub_theme:
       typeof body.force_holiday_sub_theme === 'string' ? body.force_holiday_sub_theme : null,
     force_day_of: typeof body.force_day_of === 'string' ? body.force_day_of : null,
-    force_hero_register:
-      body.force_hero_register === 'cozy' || body.force_hero_register === 'eerie'
-        ? body.force_hero_register
-        : null,
-    force_hero_seed: typeof body.force_hero_seed === 'string' ? body.force_hero_seed : null,
     force_prompt_style:
       body.force_prompt_style === 'legacy' || body.force_prompt_style === 'subject_first'
         ? body.force_prompt_style

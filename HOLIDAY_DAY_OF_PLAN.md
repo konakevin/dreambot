@@ -213,3 +213,16 @@ Total ≈ 2-3 sessions before Oct 31 with margin.
   Tests: `holidayDayOf.test.ts`, `soloRebuildModel.test.ts`, register + parity + lint suites; full fast
   lane 2770 green; Deno typecheck green. NOT yet wired: the engine's day-of draw (step 2) — the window
   behaviour is unchanged tonight (the new pool has no rows yet, and even seeded it is excluded).
+- 2026-09-07 23:05 UTC — **Step 2 DONE (deployed):** the hero is gone (`holidayHero.ts`, its loader,
+  `force_hero_register/seed`, `qa-holiday-hero.js`, `simulate-holiday-hero.mjs`, `holidayHero.test.ts`
+  deleted; `holiday_hero_prompts` table left for the final drop). One day-of branch for all three
+  surfaces: `dayOfHoliday` = the active holiday whose peak is the date the render is FOR
+  (`dayOfCalendarDate(now, users.timezone, engine_config.day_of_evening_cutoff_hour)` — Hawaii at 22:00
+  Oct 30 → Oct 31; table-tested over 8 timezones × 3 runs, Node mirror in parity) AND
+  `day_of_enabled`; cast paths draw `selectDayOfRows(day-of rows, window rows)` and apply the row through
+  the same `applySceneRow(s, 'elegant', key)` call as a window holiday row; scene-only path the same at
+  100 %; stamps `holiday_day_of:<key>:<day_of|fallback_window>:<sub>` / `holiday_day_of_empty` /
+  `holiday_day_of_error`; the day-of still pre-rolls a CAST render when the user has a self photo
+  (couple if +1) — the personal-dream rule kept from the hero era; postcard scope `day_of` composites on
+  `dayOfApplied`; response field `day_of`. `force_day_of=<key>` now means "pretend today is the peak".
+  Tests: date rule + selection in `holidayDayOf.test.ts`; full lane 2767 green; Deno green.

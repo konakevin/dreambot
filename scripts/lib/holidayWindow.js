@@ -204,7 +204,39 @@ function pickWeightedHoliday(actives, roll) {
   return actives[actives.length - 1]; // fp guard
 }
 
+/** Mirror of the Deno dayOfCalendarDate (HOLIDAY_DAY_OF_PLAN.md §4): local date, shifted to the NEXT
+ *  local date when the local hour at the run is >= cutoffHour (24 = never). */
+function localHourInTz(now, tz) {
+  try {
+    const h = new Intl.DateTimeFormat('en-US', {
+      timeZone: tz || 'UTC',
+      hour: 'numeric',
+      hour12: false,
+    }).format(now);
+    const n = Number(h);
+    return Number.isFinite(n) ? n % 24 : now.getUTCHours();
+  } catch (_e) {
+    return now.getUTCHours();
+  }
+}
+function dayOfCalendarDate(now, tz, cutoffHour) {
+  let local;
+  try {
+    local = localDateInTz(now, tz);
+  } catch (_e) {
+    local = localDateInTz(now, 'UTC');
+  }
+  const hour = localHourInTz(now, tz);
+  const cutoff = Number.isFinite(cutoffHour)
+    ? Math.min(24, Math.max(0, Math.floor(cutoffHour)))
+    : 24;
+  if (hour >= cutoff) return fromSerial(toSerial(local) + 1);
+  return local;
+}
+
 module.exports = {
+  dayOfCalendarDate,
+  localHourInTz,
   toSerial,
   fromSerial,
   easterSunday,

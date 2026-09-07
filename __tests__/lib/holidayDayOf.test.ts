@@ -71,3 +71,51 @@ describe('catalog day_of_enabled', () => {
     expect(off[0].dayOfEnabled).toBe(false);
   });
 });
+
+import { dayOfCalendarDate, localHourInTz } from '@engine/holidayWindow';
+import { selectDayOfRows } from '@engine/holidayPools';
+
+describe('day-of date rule (HOLIDAY_DAY_OF_PLAN.md §4) — the date the render is FOR', () => {
+  // The nightly fires at 08:00 UTC. Rows: [tz, local hour at that run, date on the Oct 31 08:00 UTC run]
+  const run = (iso: string) => new Date(iso);
+  const cases: Array<[string, number, string]> = [
+    ['Europe/Berlin', 9, '2026-10-31'], // 09:00 CET (DST ended Oct 25) — same day
+    ['America/New_York', 4, '2026-10-31'],
+    ['America/Los_Angeles', 1, '2026-10-31'],
+    ['America/Anchorage', 0, '2026-10-31'],
+    ['Pacific/Honolulu', 22, '2026-10-31'], // 22:00 Oct 30 local → shifted to Oct 31 (wakes up to it)
+    ['Asia/Tokyo', 17, '2026-10-31'],
+    ['Asia/Kolkata', 13, '2026-10-31'],
+    ['Australia/Sydney', 19, '2026-10-31'], // 19:00 AEDT — under the 20:00 cutoff, same day
+  ];
+  it.each(cases)('%s at the Oct 31 08:00 UTC run (local hour %i) → %s', (tz, hour, want) => {
+    const now = run('2026-10-31T08:00:00Z');
+    expect(localHourInTz(now, tz)).toBe(hour);
+    const d = dayOfCalendarDate(now, tz, 20);
+    expect(`${d.year}-${String(d.month).padStart(2, '0')}-${String(d.day).padStart(2, '0')}`).toBe(
+      want
+    );
+  });
+  it('Hawaii fires exactly once: the Oct 31 UTC run is its day-of, the Nov 1 UTC run is past it', () => {
+    const a = dayOfCalendarDate(run('2026-10-31T08:00:00Z'), 'Pacific/Honolulu', 20);
+    const b = dayOfCalendarDate(run('2026-11-01T08:00:00Z'), 'Pacific/Honolulu', 20);
+    const c = dayOfCalendarDate(run('2026-10-30T08:00:00Z'), 'Pacific/Honolulu', 20);
+    expect([a.month, a.day]).toEqual([10, 31]);
+    expect([b.month, b.day]).toEqual([11, 1]);
+    expect([c.month, c.day]).toEqual([10, 30]);
+  });
+  it('cutoff 24 never shifts; a bad timezone falls back to UTC', () => {
+    const d = dayOfCalendarDate(run('2026-10-31T08:00:00Z'), 'Pacific/Honolulu', 24);
+    expect([d.month, d.day]).toEqual([10, 30]);
+    const u = dayOfCalendarDate(run('2026-10-31T08:00:00Z'), 'Not/AZone', 20);
+    expect([u.month, u.day]).toEqual([10, 31]);
+  });
+});
+
+describe('selectDayOfRows — never a broken render', () => {
+  it('day-of rows first, then the window rows, then none', () => {
+    expect(selectDayOfRows([1], [2])).toEqual({ rows: [1], source: 'day_of' });
+    expect(selectDayOfRows([], [2])).toEqual({ rows: [2], source: 'fallback_window' });
+    expect(selectDayOfRows([], [])).toEqual({ rows: [], source: 'none' });
+  });
+});
