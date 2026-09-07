@@ -199,3 +199,31 @@ painterly look is worth 0.6 identity, **gpt-image-2** if look trumps speed/cost.
 built): the dual pipeline's `rerender_for_dual` retry runs on `engine_config.dual_retry_model` instead of
 the same model (default '' = today's behaviour), so 1.1-pro keeps the first shot and the barrel clip takes
 the second; the F2 solo rebuild stays on flex (or the same fallback).
+
+### Round 5 (2026-09-07 evening) — Fall ANCHOR + re-authors, and Fall ARMED
+Kevin asked which pools were weak on fall vibes. Measured: cozy_hearth 19% and rainy_day_romance 17% of seed
+scenes named no fall element (a bookshop in the rain is any month); every other pool ≤ 4%. Fix at the source
+(Kevin: "apply the fall anchor and re-author what you need"): `holidayPoolLint.js` FALL_ANCHOR — every
+`category='fall'` / `holiday='fall'` scene must name a fall element (leaves, foliage, maple, harvest, amber,
+cider, first snow …), the two-sided demarcation next to "no pumpkins". 135 rows disabled (62 dual, 60 single,
+13 scene; ledger `fall-build/ledger-fall-anchor.json`), every pool topped back up under the rule, scan 0
+errors, every sub at share. Re-authored hints: moonlit_leaf_garden (silvered fall leaves + late asters, not
+spring-white blooms), amaranth_curtain_terrace (living flower tassels, never fabric), reading_nook / bookshop
+/ window_seat now name maple leaves + apples. Round 5 = 12 renders on the six changed subs: 11 rendered
+(1 × 546), 0 BAD, 0 tight-illegible, all read autumn. **`holidays.fall.is_active = true`** (window Sept 15 →
+Thanksgiving, flat 10%); Halloween already armed. Both seasons live and waiting for their windows.
+
+### 11-night simulation on Kevin's account (2026-09-07, policy mode = shadow, legacy picker renders)
+Driver lesson first: an explicit `force_cast_role: null` is the QA flag for NO cast (the worker omits the
+key) — the first pass rendered 11 scene-only dreams; fixed the driver to omit the key, re-ran.
+Natural roll: 7 location, 1 goofy, 1 active, 1 plus-one solo; night 11 = `force_day_of` Halloween hero.
+| | result |
+|---|---|
+| couples (incl. hero) | 7 — **0 of 7 passed the swap on attempt 1**; 5 rescued by same-model retries (2-3 attempts), 2 degraded to the flex solo rebuild (night 7 active seed; the hero, partner identity 0.09) |
+| solos | 3 + 1 plus-one — identity 0.55-0.68, all full / three-quarter, all strong settings |
+| quality gate | 11 / 11 pass |
+| policy shadow | 24 stamps across faceswap_pick / couple_retry / solo_rebuild, **all match, 0 diffs** |
+| look | solos 4-4.5 (Chillon castle lantern, Ruakuri gorge, beach pop-art, beehive-tower gown); surviving couples mostly tight two-heads on 1.1-pro (4 of 5); Yas Marina card rendered team logos + signage (location-card issue, not the picker) |
+Read: the refactor has changed nothing (shadow = legacy renders, and the shadow agreed everywhere); quality is
+the pre-refactor level. The couple surface is the weak one and it is the MODEL, not the picker: 7/7 first
+attempts failed on flux-1.1-pro tonight. That is exactly what Kevin's fallback rows (Phase 4) address.

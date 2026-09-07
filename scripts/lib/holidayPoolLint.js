@@ -32,6 +32,11 @@ function poolFor(row) {
 const IP_TERM =
   /\b(?:proton packs?|ghostbusters?|ecto-?1|slimer|stay[- ]puft|beetlejuice|sandworms?|sanderson|hocus pocus|jack skellington|oogie|halloweentown|coraline|addams|casper|freddy|jason voorhees|michael myers|elvira|scooby|mystery machine)\b/i;
 const LANTERN_NOUN = /\b(?:pumpkins?|jack-?o-?-?lanterns?|jack o lanterns?|gourds?)\b/i;
+// Fall ANCHOR (Kevin 2026-09-07, two-sided demarcation): a Fall scene must NAME a fall element — a bookshop
+// in the rain is any month of the year. Measured before the rule: cozy_hearth 19% / rainy_day_romance 17%
+// of scenes carried no fall word; every other pool ≤ 4%.
+const FALL_ANCHOR =
+  /\b(?:autumn|fall|leaf|leaves|foliage|maples?|oaks?|aspens?|larch(?:es)?|birch(?:es)?|acorns?|harvest|orchards?|apples?|cider|amber|russet|rust|ochre|copper|crimson|scarlet|golden|gold|bronze|burgundy|hay|wheat|mums?|chrysanthemums?|sunflowers?|marigolds?|dahlias?|amaranth|asters?|frost|first snow|woodsmoke|bonfire)\b/i;
 
 // §6.1 — attire must be CLOTHING ONLY; nothing that occludes/recolors the face.
 const FACE_OCCLUSION =
@@ -99,6 +104,11 @@ function lintHolidayRow(row) {
   {
     const { holiday, poolKey, pool } = poolFor(row);
     const txt = `${row.scene || ''} ${row.attire || ''}`;
+    if (holiday === 'fall' && !FALL_ANCHOR.test(String(row.scene || ''))) {
+      errors.push(
+        'FALL scene names no fall element (leaves / foliage / harvest / amber / cider / first snow …) — the two-sided demarcation (fallPools.js header)'
+      );
+    }
     if (holiday === 'fall' && LANTERN_NOUN.test(txt)) {
       // Demarcation (Kevin 2026-09-07): Halloween owns pumpkins / jack-o-lanterns / gourds; a Fall row
       // never has them, whatever its sub_theme (covers scene-only rows with no sub_theme too).
@@ -155,6 +165,7 @@ function lintHolidayRow(row) {
 }
 
 module.exports = {
+  FALL_ANCHOR,
   lintHolidayRow,
   wordCount,
   FACE_OCCLUSION,

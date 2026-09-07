@@ -233,3 +233,44 @@ describe('lintDreamTest — plain setting + everyday attire is flagged, either r
     expect(dream.PERSONA_ATTIRE).toBeInstanceOf(RegExp);
   });
 });
+
+describe('Fall ANCHOR (two-sided demarcation, 2026-09-07)', () => {
+  it('a Fall scene with no fall element is an error; scene-only rows too', () => {
+    const r = lintHolidayRow({
+      table: 'single_scenarios',
+      category: 'fall',
+      sub_theme: 'bookshop_cafe_rain',
+      scene:
+        'a cramped bookshop cafe on a rainy evening, floor-to-ceiling shelves, a fogged window, a hissing espresso machine, warm pendant lamps',
+      attire: 'a tweed blazer over a turtleneck',
+    });
+    expect(r.errors.some((e: string) => /names no fall element/.test(e))).toBe(true);
+    const s = lintHolidayRow({
+      table: 'holiday_scenes',
+      holiday: 'fall',
+      scene:
+        'A deep window seat piled with cushions, rain streaking tall panes, shelves of worn books, a brass reading lamp, a wool throw and a cup of tea',
+    });
+    expect(s.errors.some((e: string) => /names no fall element/.test(e))).toBe(true);
+  });
+  it('one fall word satisfies it; Halloween rows are untouched by it', () => {
+    const ok = lintHolidayRow({
+      table: 'single_scenarios',
+      category: 'fall',
+      sub_theme: 'bookshop_cafe_rain',
+      scene:
+        'a cramped bookshop cafe on a rainy evening, maple leaves plastered on the fogged window, a bowl of apples on the counter, warm pendant lamps',
+      attire: 'a tweed blazer over a turtleneck',
+    });
+    expect(ok.errors.some((e: string) => /names no fall element/.test(e))).toBe(false);
+    const hw = lintHolidayRow({
+      table: 'single_scenarios',
+      category: 'halloween',
+      sub_theme: 'seance_parlor',
+      scene:
+        'a violet velvet parlor, a glowing crystal ball, a tarot spread, drifting curtains, a levitating table, candelabra',
+      attire: 'a black lace gown',
+    });
+    expect(hw.errors.some((e: string) => /names no fall element/.test(e))).toBe(false);
+  });
+});

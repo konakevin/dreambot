@@ -234,7 +234,7 @@ const SUBS = {
     pool: 'cozy_hearth',
     costume: 'an oversized cream knit, soft joggers, thick socks, a mug held at the chest',
     setting:
-      'a deep window-seat nook piled with cushions, rain streaking tall panes, shelves of worn books, a brass reading lamp, a wool throw, a cup of tea',
+      'a deep window-seat nook piled with cushions, gold maple leaves pressed against the rain-streaked panes, shelves of worn books, a brass reading lamp, a wool throw, apple-cinnamon tea',
   },
   farmhouse_kitchen_baking: {
     pool: 'cozy_hearth',
@@ -246,7 +246,7 @@ const SUBS = {
     pool: 'cozy_hearth',
     costume: 'a tweed blazer over a turtleneck, a wool scarf, a paper cup of coffee',
     setting:
-      'a cramped bookshop cafe on a rainy evening, floor-to-ceiling shelves, a fogged window with rain, a hissing espresso machine, warm pendant lamps',
+      'a cramped bookshop cafe on a rainy autumn evening, floor-to-ceiling shelves, wet maple leaves plastered on the fogged window, a bowl of apples on the counter, a hissing espresso machine, warm pendant lamps',
   },
   // ── harvest_table ──
   long_table_under_oaks: {
@@ -346,7 +346,7 @@ const SUBS = {
     pool: 'rainy_day_romance',
     costume: 'a soft ribbed knit, a wool wrap, thick socks, a mug held at the chest',
     setting:
-      'a deep bay window seat during an autumn storm, rain sheeting the glass, a wool throw, a candle, a garden of whipping golden trees beyond',
+      'a deep bay window seat during an autumn storm, rain sheeting the glass, a wool throw, a candle, whipping golden maples and drifts of wet leaves in the garden beyond',
   },
   // ── autumn_wonder ──
   hot_air_balloons_over_valley: {
@@ -404,11 +404,11 @@ const SUBS = {
       'a valley where a river of orange marigolds winds between golden hills, a wooden footbridge over the blooms, mist in the folds, warm sidelight',
   },
   amaranth_curtain_terrace: {
-    must: [/amaranth/i],
+    must: [/amaranth|tassel/i, /foliage|vines?|leaf|leaves|autumn/i],
     pool: 'autumn_bloom_world',
     costume: 'a burgundy velvet blazer over a cream turtleneck, dark trousers',
     setting:
-      'a stone terrace hung with curtains of burgundy amaranth and trailing amber blooms, a balustrade over a foliage valley, golden-hour haze',
+      'a stone terrace hung with trailing amaranth flower tassels in burgundy and amber (living blooms, never fabric), autumn vines on the balustrade, a foliage valley below, golden-hour haze',
   },
   firefly_birch_cathedral: {
     must: [/birch/i, /firefl/i],
@@ -429,7 +429,7 @@ const SUBS = {
     pool: 'enchanted_gold_forest',
     costume: 'a silver-grey wool wrap over a cream knit dress, or a charcoal overcoat',
     setting:
-      'a moonlit garden of pale night-bloomers and silvered fall leaves, a stone fountain, fireflies, a full moon over a black hedge',
+      'a moonlit garden of silvered fall leaves and late purple asters, a stone fountain drifted with maple leaves, fireflies, a full moon over a black hedge',
   },
   floating_leaf_light_path: {
     must: [/suspend|float|hang|mid-?air|hover/i, /\bleaves\b|\bleaf\b/i],
