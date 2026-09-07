@@ -235,3 +235,23 @@ Total ≈ 2-3 sessions before Oct 31 with margin.
   `.github/workflows/holiday-day-of-monitor.yml` (daily 10:00 UTC). **Dress rehearsal passes:**
   `scripts/simulate-day-of.mjs --holiday halloween --year 2026` → all 8 timezones fire exactly once, on
   the Oct 31 08:00 UTC run (Honolulu via the 20:00 cutoff).
+- 2026-09-07 23:30 UTC — **Step 3 DONE:** `halloween_day_of` seeded to share — 120 dual + 120 single +
+  144 scene rows, all 12 subs covered (`check-holiday-day-of.js --preflight` ✓; dual-proximity scan 0
+  violations). The generator's lint dropped ~110 candidates on the way in: scene over the 30-word cap
+  (39), day-of "no light source" (17), face-bearing decor / mask over the eyes (9), person / pose / camera
+  words in a scene (7) — the register held without a re-author. Sample rows: dressed barns with cider
+  cauldrons, hats tipped back, capes, pumpkins along the floorboards. **Step 4 started:** QA round 1 =
+  12 subs × couple + solo + 6 scene-only via `force_day_of` + `force_holiday_sub_theme` (album captions
+  `🎃 DAY-OF R31 <sub>`), framing judge + sheet.
+- 2026-09-07 23:50 UTC — **QA round 1 (30 renders, `r31-dayof-r1`):** 30/30 rendered, 30/30 drew from
+  the reserved pool (every sub hit), 30/30 postcards, 0 faceless, 0 window fallbacks, 0 errors; couples
+  11 first-try + 1 retry, 0 degrades; models 25 × flux-1.1-pro, 5 × flux-2-flex. Judge: setting
+  "strong" on 29/30, 3 flags (a floating ghost with a pumpkin on trick_or_treat_street — on-theme, not a
+  defect; the overlay on a garden solo — judge confusion; a barn scene whose open doors read as a portal).
+  **The one real weakness: framing — 7 of 12 couples are BUST crops** with the party behind them. Not
+  the closer roll (`dual_closer_pct` = 0) and not the pool (scenes are pure environment by lint): every
+  day-of action beat lived at chest height (glass raised, pumpkin held, mask held), which anchors the
+  crop to the torso on a night scene. **Round 2 variable:** the `halloween_day_of` register rewritten to
+  FULL-BODY celebration beats (walking the street swinging candy buckets, stepping onto the wagon,
+  crouching to light a pumpkin on the step, sitting on a hay bale with boots toward the fire). Target:
+  ≤ 3 of 12 bust.

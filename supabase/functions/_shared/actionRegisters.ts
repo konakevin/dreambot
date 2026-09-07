@@ -26,23 +26,26 @@ export const ACTION_REGISTERS: Record<string, ActionRegister> = {
   // ── Halloween DAY-OF pool (HOLIDAY_DAY_OF_PLAN.md §5) — people CELEBRATING, faces toward camera ──
   halloween_day_of: R(
     [
-      'raising a glowing cocktail glass in a toast at chest height',
-      "holding a lit sparkler out at arm's length, the arc of light trailing",
-      'handing a full-size candy bar into an outstretched candy bucket',
-      'lifting a freshly carved jack-o-lantern up to waist height to show it off',
-      'ladling steaming punch from the cauldron into a tin cup',
-      'holding a candy bucket out at waist height with both hands, mid-laugh',
-      'lighting a paper lantern from a candle held low',
-      'holding a glowing paper lantern out at hip height by its handle',
-      'clinking two mugs of cider together at chest height',
-      'tossing a handful of confetti into the string-light glow',
-      'reaching into a bobbing-for-apples tub with sleeves pushed up',
-      'stringing paper bats along the porch rail',
+      // Round 2 (2026-09-07): FULL-BODY celebration beats — round 1 rendered 7 of 12 couples as bust
+      // crops because every beat lived at chest height (glass raised, pumpkin held). A beat that uses the
+      // legs, the ground or the furniture invites the mid-thigh framing the people line asks for.
+      'walking down the porch-lit street swinging candy buckets at knee height',
+      'stepping up onto the hay wagon with one boot on the wheel spoke',
+      'crouching to set a lit jack-o-lantern down on the bottom step',
+      'strolling under the string lights with a cider mug in one hand, coats open',
+      'sitting on a hay bale by the bonfire with boots stretched toward the flames',
+      'carrying a full candy bowl across the porch to the top step',
+      'perched on the porch rail with legs crossed, a lantern hung on the post',
+      'walking the lantern-lit path with a wicker picnic basket swinging low',
+      'leaning back against the parapet with the skyline behind, one foot up on the ledge',
+      'kneeling at the picnic blanket to light a row of small lanterns',
+      'standing at the trestle table ladling punch from the cauldron into paper cups',
+      'stepping through the barn doors under the bunting with a pumpkin under one arm',
     ],
     [
-      'standing side by side under the string lights with cider mugs in hand',
-      'sitting on a hay bale by the bonfire with a candy bucket between them',
-      'leaning on the rooftop parapet with the skyline behind, glasses raised',
+      'standing side by side on the porch steps under the string lights, full figures, cider mugs in hand',
+      'sitting together on a hay bale by the bonfire, boots on the ground, candy bucket between them',
+      'standing at the rooftop parapet with the skyline behind, full figures, glasses in hand',
     ]
   ),
   // ── Halloween pools ─────────────────────────────────────────────────────────

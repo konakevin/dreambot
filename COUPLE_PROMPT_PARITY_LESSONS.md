@@ -161,3 +161,37 @@ Plan: `COUPLE_PROMPT_PARITY_PLAN.md`. Results: `NIGHTLY_MODEL_POLICY_PLAN.md` §
     knob is a 1.1-pro fix that the rest of the fleet tolerates unchanged. The run cost ≈ $8 and 3 hours,
     and found four defects that predate it (faceless ships, gate ignoring the identity floor, wardrobe
     fidelity, hero medium override) — the parity method paid for itself before the flip.
+29. **Model membership per look is real, and 1.1-pro is not universal (Halloween hero round 1 + re-run).**
+    Same authored midnight-ballroom couple scene, six painterly fragments, five models: flex / gemini /
+    seedream 18/18 first-try with the celebration composed (mid-thigh, toast, chandeliers, moon, pumpkins
+    low); grok 6/6 but small figures; flux-1.1-pro 4 tight two-heads + 1 landscape-with-tiny-couple + 1
+    degrade, and on a re-run with a short inline place 2 FACELESS + 1 degrade + 1 low identity. The v3
+    order fixed 1.1-pro on ordinary daylight / mid-lit scenes (parity, 20 pairs) but a dark ornate
+    candlelit interior still pulls it to its two failure shapes. → The looks catalog must carry per-look
+    model membership from grids like this one, not from assumptions; and "1.1-pro default" is a chain
+    preference, not a guarantee for every look.
+30. **Faceless ships are not rare on a hard scene: 2 of 6.** `pure_scene_fallback` fired twice in one
+    six-render column. Follow-up plan item #2 (never faceless: retry the rebuild on the surface's model
+    before falling to a pure scene, stamp loud, count it) moves from "S, when convenient" to "before Oct 31".
+
+## C. Day-of overhaul (2026-09-07 evening)
+31. **A lint rule authored BEFORE the seeds is worth more than a QA round after.** The three day-of rules
+    (must name a light source; no gargoyle / statue / mask-over-eyes / face paint; pumpkins never at
+    head height) rejected 26 candidates during generation; the 30-word scene cap rejected 39 more. The
+    surviving 384 rows needed no re-author. The pattern: encode the render lesson (dark ornate scene →
+    crop, face-bearing decor → wrong-face swap) as a seed-time gate the moment it is learned.
+32. **Retiring a "second prompting method" is mostly deletion.** The hero's 6 recipe rows, axis filler,
+    loader, two QA scripts and two flags came out in one commit, and the day-of became ~60 lines that
+    call the same `applySceneRow` the window already uses. The proof that it is one pipeline is a smoke
+    render carrying the same stamps a window holiday row carries plus `holiday_day_of:` and `postcard:`.
+33. **The date a nightly is FOR is not the date it runs.** The 08:00 UTC run is 22:00 the evening before
+    in Hawaii; without the evening cutoff a Hawaii user would get the Halloween dream at 22:00 on
+    Halloween night. Any per-user calendar logic in nightly (holidays, birthdays, anniversaries) must go
+    through `dayOfCalendarDate`, never `localDateInTz` alone.
+34. **Where the ACTION BEAT lives on the body decides the crop.** Day-of round 1: 7 of 12 couples came
+    out bust-framed although the people line asks for mid-thigh, the closer roll was 0 % and the scenes
+    were rich. Every beat in the register happened at chest height (a glass raised, a pumpkin held, a mask
+    held) — on a night scene flux-1.1-pro obliges by cropping to the hands. A register for a "celebration"
+    surface must use the legs, the ground and the furniture (walking, stepping up, crouching to a step,
+    sitting on a hay bale) so the frame has a reason to include them. Same law as the playbook's
+    "action verb leads composition" — restated as: the beat's ANATOMY sets the crop.
