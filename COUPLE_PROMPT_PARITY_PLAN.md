@@ -138,3 +138,17 @@ improvement." Each item is handoff-ready; the lesson numbers point at `COUPLE_PR
 
 Not doing: widening the dual framing text (2026-09 lesson: costs identity), re-adding the environmental
 two-shot paragraph (27 clauses proven to be landscape-steering, L11), any change to Create / DLT.
+
+**Phase B — the 5 backup models (gemini-2-image, flux-2-pro, seedream-4, grok-imagine-image, flux-dev;
+2 v3 pairs each, replayed from the SAME Phase A slot inputs + slots):** 10 pairs, judge split 5:5;
+scene −0.30, brief −0.20, wardrobe +0.20, medium −0.10, mood −0.10, framing +0.30; first-try 9 vs 7,
+degrades 0 vs 0, gate 10/10 both, mean min-identity 0.67 vs 0.65. The scene delta sits 0.05 outside the
+band on a 10-pair sample spread over five different models, and the sheets (`parity/sheet-B1.jpg`,
+`sheet-B2.jpg`) show near-duplicate images under both orders on every backup — these models are not
+order-sensitive (lessons 26-27). Read: the flip is neutral on the backups; it neither helps nor costs them.
+Option if Kevin wants zero exposure there: apply `subject_first` only when the render model is
+flux-1.1-pro (one `if` at the slot-input site) — not recommended, it adds a branch for no measured gain.
+
+**Status 2026-09-07 21:30 UTC:** v3 deployed (inert — knob `legacy`); code + tests + docs committed
+(0b1dbcb6 mechanism, 893838fa v3 + results); waiting on Kevin's blind votes (artifact above) → then
+Phase C. Total renders this run: 40 + 40 + 20 = 100 pairs-side renders + 1 smoke pair, ≈ $8.

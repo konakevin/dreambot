@@ -145,3 +145,19 @@ Plan: `COUPLE_PROMPT_PARITY_PLAN.md`. Results: `NIGHTLY_MODEL_POLICY_PLAN.md` §
     fallbacks 4-5 on scene, which is why v2 looked so far behind on scene richness: it was being
     compared against one-person dreams. Any future couple A/B must report the shipped SHAPE (couple /
     solo / faceless) alongside the axis scores — a mean over mixed shapes hides the story.
+26. **The backup models are not order-sensitive.** Phase B replays (same slots, both orders):
+    gemini-2-image and flux-2-pro rendered near-identical dreams under legacy and v3 — same platform,
+    hearth, pirate cove, cabin kitchen, both couples full-figure with clean faces — judge deltas within
+    ±0.5 on gemini (1:1) and all positive on flux-2-pro (2:0). The "first ~60 words" rule (13) is a
+    flux-1.1-pro trait (its CLIP-style attention), not a general one. Practical consequence: the order
+    knob is safe to flip globally; the backups neither need nor mind it. Sheet `parity/sheet-B1.jpg`.
+27. **seedream-4 and grok-imagine-image confirm 26.** Sheet `parity/sheet-B2.jpg`: the corn maze, the
+    cathedral-with-map, the pig farm and the hero barn pairs are near-duplicates under both orders (same
+    composition, same set dressing, same wardrobe). The judge's seedream lean to legacy (5 vs 4 on
+    scene / brief / mood, N=2) is noise on near-identical images — a reminder that a 1-point judge delta
+    on two pairs means nothing; only the 20-pair 1.1-pro sample carries weight.
+28. **Phase B closes:** flux-dev 1:1, all five backups first-try 9/10 vs 7/10, zero degrades either way.
+    Net over the run: 1.1-pro is the only model whose couples live or die by prompt order; the order
+    knob is a 1.1-pro fix that the rest of the fleet tolerates unchanged. The run cost ≈ $8 and 3 hours,
+    and found four defects that predate it (faceless ships, gate ignoring the identity floor, wardrobe
+    fidelity, hero medium override) — the parity method paid for itself before the flip.
