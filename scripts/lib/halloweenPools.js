@@ -8,7 +8,34 @@
 // supabase/functions/_shared/holidayPools.ts (parity-tested). Share = ceil(SHARE / subs) per sub, per table.
 'use strict';
 const SHARE = 70;
+// Per-pool share override: the reserved DAY-OF pool must carry a whole day on its own
+// (HOLIDAY_DAY_OF_PLAN.md §5), so it seeds deeper than the window pools.
+const SHARE_DAY_OF = 120;
 const POOLS = {
+  // ── DAY-OF pool (HOLIDAY_DAY_OF_PLAN.md, 2026-09-07) — RESERVED: never rolls in the window, drawn
+  // 100% on the user's Halloween. People CELEBRATING, lit scenes, costumes with faces clear, pumpkins
+  // LOW and away from heads, no gargoyles / statues / masks over eyes. Key = <holiday>_day_of (generic).
+  halloween_day_of: {
+    palette: 'string-light amber and jack-o-lantern orange against violet and indigo night',
+    objects:
+      'string lights, paper bats, lanterns, cider cauldrons, sparklers, candy buckets, costumes, carved jack-o-lanterns kept low',
+    lanterns: true,
+    share: SHARE_DAY_OF,
+    subs: [
+      'costume_party_barn',
+      'masquerade_ball',
+      'trick_or_treat_street',
+      'haunted_hayride_party',
+      'pumpkin_carving_party',
+      'bonfire_night',
+      'witches_kitchen_party',
+      'haunted_house_queue',
+      'cemetery_lantern_picnic',
+      'halloween_parade',
+      'rooftop_skyline_party',
+      'monster_hotel_gala',
+    ],
+  },
   halloween_neighborhood: {
     palette: 'orange and amber, cozy porch light, deep blue dusk',
     objects:
@@ -481,6 +508,92 @@ const SUBS = {
       'a slightly-wrong stop-motion world: a too-perfect crooked house, a garden clipped into curling spirals, an oversized moon, tiny circus tents, a long tunnel of purple light',
   },
 };
+SUBS.costume_party_barn = {
+  pool: 'halloween_day_of',
+  costume:
+    'a witch gown with the pointed hat tipped back off the face, a dapper vampire cape over a brocade waistcoat, a pirate coat, a rag-doll dress — real costumes, faces uncovered',
+  setting:
+    'a weathered barn dressed for a Halloween costume party at night, orange-and-purple string lights and paper bats across the rafters, a steaming cider cauldron on a trestle table, a bobbing-for-apples tub, hay-bale seating, bunting, carved jack-o-lanterns glowing low along the floorboards',
+};
+SUBS.masquerade_ball = {
+  pool: 'halloween_day_of',
+  costume:
+    'opulent masquerade formalwear — a corseted gown with a sheer cape, a velvet tailcoat — with lace masquerade masks held in the hand or pushed up onto the forehead, never over the eyes',
+  setting:
+    'a moonlit open-air masquerade in a lantern-lit stone courtyard, strings of paper lanterns, a small band under an arch, black roses in urns, drifting fog at ankle height, carved jack-o-lanterns glowing low along the steps',
+};
+SUBS.trick_or_treat_street = {
+  pool: 'halloween_day_of',
+  costume:
+    'playful street costumes — a skeleton-print hoodie with the hood down, a striped witch dress, a caped superhero jacket — candy buckets in hand, faces uncovered',
+  setting:
+    'a porch-lit suburban street on Halloween night, every porch glowing amber, inflatable ghosts and yard skeletons, kids in costume as distant silhouettes far down the sidewalk, carved jack-o-lanterns lining the walk at ground level',
+};
+SUBS.haunted_hayride_party = {
+  pool: 'halloween_day_of',
+  costume:
+    'flannel and denim with a Halloween twist — a pumpkin-print scarf, a felt bat pin, a witch hat tipped back — blankets over the knees',
+  setting:
+    'a torch-lit hayride wagon rolling through a moonlit pumpkin field, lanterns swinging from the wagon posts, pumpkins piled in the back, a huge harvest moon, scarecrows far off on their posts',
+};
+SUBS.pumpkin_carving_party = {
+  pool: 'halloween_day_of',
+  costume:
+    'cozy sweaters with sleeves pushed up, a witch-hat headband, a felt cat-ear headband, aprons dusted with pumpkin pulp',
+  setting:
+    'a lantern-lit porch or picnic table set for a pumpkin-carving party, half-carved pumpkins and scattered seeds on newspaper, string lights overhead, finished jack-o-lanterns glowing low at the feet, mugs of cider',
+};
+SUBS.bonfire_night = {
+  pool: 'halloween_day_of',
+  costume:
+    'layered Halloween-night outfits — a hooded cape with the hood down, a plaid flannel over a skeleton tee, a witch hat tipped back — sparklers in hand',
+  setting:
+    'a roaring bonfire circle in a clearing on Halloween night, sparkler arcs, a cauldron of steaming punch on a log table, log seating, a full moon over black treetops, carved jack-o-lanterns glowing low around the fire ring',
+};
+SUBS.witches_kitchen_party = {
+  pool: 'halloween_day_of',
+  costume:
+    'witch and warlock party wear — a velvet gown with a wide-brim hat tipped back, a brocade waistcoat and cape — no face paint',
+  setting:
+    "a candlelit witch's kitchen party, a bubbling green cauldron, floating candles, shelves of glowing potion bottles, a black cat on the counter, herbs hanging from the beams, a cauldron-punch ladle mid-pour",
+};
+SUBS.haunted_house_queue = {
+  pool: 'halloween_day_of',
+  costume:
+    'fun costumes for a night out — a zombie-bride dress with a tidy face, a mummy jacket with wraps loose at the neck, a devil-horn headband',
+  setting:
+    'the neon-lit entrance of a haunted-house attraction on Halloween night, a glowing marquee, fog machines, ticket booth lights, string lights over the queue, carved jack-o-lanterns low along the rope line',
+};
+SUBS.cemetery_lantern_picnic = {
+  pool: 'halloween_day_of',
+  costume: 'elegant gothic evening wear — a black lace gown, a long frock coat — lanterns in hand',
+  setting:
+    "an elegant lantern picnic among old ivy-clad headstones under a full moon, a blanket spread with candles and a wicker basket, glowing lanterns set on the grass, black roses, low fog, carved jack-o-lanterns glowing low at the blanket's edge",
+};
+SUBS.halloween_parade = {
+  pool: 'halloween_day_of',
+  costume:
+    'parade costumes — a pumpkin-king coat, a witch gown with the hat tipped back, a skeleton-suit jacket — confetti in the hair',
+  setting:
+    'a small-town Halloween night parade, a lit float rolling past, confetti and paper bats, glowing shop windows, string lights across Main Street, crowds as distant silhouettes, carved jack-o-lanterns on the curb',
+};
+SUBS.rooftop_skyline_party = {
+  pool: 'halloween_day_of',
+  costume:
+    'glam party costumes — a sequined cat-suit jacket, a velvet vampire cape over evening wear, a witch hat tipped back — cocktail glasses in hand',
+  setting:
+    'a rooftop Halloween party against a glittering city skyline, string lights and paper bats overhead, a bar cart of glowing cocktails, a full moon over the towers, carved jack-o-lanterns lined along the parapet at knee height',
+};
+SUBS.monster_hotel_gala = {
+  pool: 'halloween_day_of',
+  costume:
+    'grand monster-gala attire — a vampire countess gown, a frankenstein-bolted tuxedo with a tidy face, a mummy-wrap shawl — faces uncovered',
+  setting:
+    'the grand lobby of a monster hotel dressed for its Halloween gala, coffin luggage carts, a bandaged concierge far behind the desk, chandeliers of candles, velvet ropes, carved jack-o-lanterns glowing low along the marble floor',
+};
 const POOL_OF_SUB = Object.fromEntries(Object.entries(SUBS).map(([s, d]) => [s, d.pool]));
-const shareFor = (main) => Math.ceil(SHARE / POOLS[main].subs.length); // always round UP (Kevin)
-module.exports = { SHARE, POOLS, SUBS, POOL_OF_SUB, shareFor };
+// always round UP (Kevin); a pool may override the share (the day-of pool seeds deeper).
+const shareFor = (main) => Math.ceil((POOLS[main].share || SHARE) / POOLS[main].subs.length);
+/** The reserved day-of pool key for a holiday (HOLIDAY_DAY_OF_PLAN.md) — generic: <holiday>_day_of. */
+const dayOfPoolKey = (holiday) => `${holiday}_day_of`;
+module.exports = { SHARE, SHARE_DAY_OF, POOLS, SUBS, POOL_OF_SUB, shareFor, dayOfPoolKey };

@@ -141,6 +141,7 @@ import {
   shadowStampSet,
   type NightlyModelPolicy,
 } from '../_shared/nightlyModelPolicy.ts';
+import { soloRebuildModelFor } from '../_shared/soloRebuildModel.ts';
 import { loadNightlyModelPolicy } from '../_shared/pools/nightlyModelPolicyLoader.ts';
 import { decideSceneFirst, sceneFirstRegister } from '../_shared/sceneFirstEligibility.ts';
 import { parseQaFlags } from '../_shared/nightlyQaFlags.ts';
@@ -607,6 +608,7 @@ Deno.serve(async (req) => {
               emoji: c.emoji,
               holidayPct: 100,
               daysUntilPeak: 0,
+              dayOfEnabled: true, // QA force: the day-of takeover is always on
             },
           ];
         }
@@ -3345,12 +3347,18 @@ Output ONLY the prompt.`;
             // still isn't safe, it returns null → cascade to the clean scene.
             const soloNoun =
               selfGender === 'female' ? 'woman' : selfGender === 'male' ? 'man' : 'person';
+            // NEVER FACELESS (HOLIDAY_DAY_OF_PLAN.md §3.4, 2026-09-07): the guard may re-render the
+            // solo rebuild TWICE — attempt 1 on the configured rebuild model, attempt 2 on a DIFFERENT
+            // model (soloRebuildModelFor) — before the cascade is allowed to fall to a pure scene.
+            // 2 of 6 hero QA renders shipped with no people when a single flex rebuild drew two faces.
+            let rebuildAttempt = 0;
             const guard = await ensureSoloSwapTarget(
               target,
               {
                 castGender: selfGender,
                 replicateToken: REPLICATE_TOKEN,
                 rerender: async () => {
+                  rebuildAttempt += 1;
                   // Rebuild a GENUINE solo prompt for self (partner dropped) from
                   // the dual's own slots. This replaces the old couple-prompt +
                   // "exactly one person" prefix, which kept rendering two people
@@ -3384,6 +3392,21 @@ Output ONLY the prompt.`;
                       fallbackReasons.push(pick.stamp);
                       rebuildModel = pick.model;
                     }
+                  }
+                  // Attempt 2+ switches to a model that differs from attempt 1 (never faceless).
+                  if (rebuildAttempt >= 2) {
+                    const retryModel = soloRebuildModelFor({
+                      attempt: rebuildAttempt,
+                      configuredModel: rebuildModel,
+                      coupleModel: pickedModel,
+                      fallbacks: modelPolicy
+                        ? candidateModels(modelPolicy, 'solo_rebuild', 2, rebuildModel)
+                        : null,
+                    });
+                    fallbackReasons.push(
+                      `solo_rebuild_retry:${rebuildAttempt}:${retryModel.replace(/^.*\//, '')}`
+                    );
+                    rebuildModel = retryModel;
                   }
                   if (soloFallbackCtx && rebuildModel !== pickedModel)
                     modelUsedOverride = rebuildModel;
@@ -3419,7 +3442,9 @@ Output ONLY the prompt.`;
                 log: (m) => console.log(`[nightly-dreams] degrade-guard: ${m}`),
               },
               {
-                maxRerenders: 1,
+                // 2 = attempt 1 on the configured model + attempt 2 on a different model (never faceless);
+                // each re-render is still gated by the guard's recover-budget floor.
+                maxRerenders: 2,
                 mediumKey: resolvedMediumKey,
                 // FULL render deadline + a SHORT reserve: this is the last-resort
                 // solo fallback, guaranteed its reserved window by the shortened
@@ -3716,6 +3741,10 @@ Output ONLY the prompt.`;
           sceneFallbackApplied = true;
           logAxes.faceSwapResult = 'pure-scene-fallback'; // → face_swap_mode = null
           fallbackReasons.push('pure_scene_fallback');
+          // Loud, counted by the day-of monitor (HOLIDAY_DAY_OF_PLAN.md R7): a CAST dream shipped
+          // with nobody in it. Never silent.
+          fallbackReasons.push('SHIPPED_FACELESS');
+          console.warn('[nightly-dreams] SHIPPED_FACELESS — cast dream shipped as a pure scene');
           console.log('[nightly-dreams] swap unusable → shipped pure-scene fallback');
         } catch (e) {
           // Re-render failed → fall through to the old ship-the-unswapped behavior.

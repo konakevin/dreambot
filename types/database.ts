@@ -1578,6 +1578,7 @@ export type Database = {
           chaos_high_threshold: number;
           chaos_low_threshold: number;
           couple_prompt_style: string;
+          day_of_evening_cutoff_hour: number;
           dream_art_mediums: string[];
           dream_art_share: number;
           dream_off_deadline_hours: number;
@@ -1671,6 +1672,7 @@ export type Database = {
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
           couple_prompt_style?: string;
+          day_of_evening_cutoff_hour?: number;
           dream_art_mediums?: string[];
           dream_art_share?: number;
           dream_off_deadline_hours?: number;
@@ -1764,6 +1766,7 @@ export type Database = {
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
           couple_prompt_style?: string;
+          day_of_evening_cutoff_hour?: number;
           dream_art_mediums?: string[];
           dream_art_share?: number;
           dream_off_deadline_hours?: number;
@@ -2157,6 +2160,7 @@ export type Database = {
       holidays: {
         Row: {
           created_at: string;
+          day_of_enabled: boolean;
           display_name: string;
           emoji: string;
           final_days: number;
@@ -2184,6 +2188,7 @@ export type Database = {
         };
         Insert: {
           created_at?: string;
+          day_of_enabled?: boolean;
           display_name: string;
           emoji: string;
           final_days?: number;
@@ -2211,6 +2216,7 @@ export type Database = {
         };
         Update: {
           created_at?: string;
+          day_of_enabled?: boolean;
           display_name?: string;
           emoji?: string;
           final_days?: number;

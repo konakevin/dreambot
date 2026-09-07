@@ -123,6 +123,9 @@ export interface EngineConfig {
   modelPolicyMode: ModelPolicyMode;
   /** Couple prompt order (mig 470, characterSlotPrompt.ts): 'legacy' | 'subject_first'. */
   couplePromptStyle: 'legacy' | 'subject_first';
+  /** Holiday DAY-OF date rule (mig 471, HOLIDAY_DAY_OF_PLAN.md §4): local hour at the 08:00 UTC run
+   *  from which the day-of is evaluated against the NEXT local date (24 = never). Default 20. */
+  dayOfEveningCutoffHour: number;
   /** Holiday POSTCARD overlay scope (migration 459): 'off' | 'day_of' (the day-of hero
    *  only — default) | 'window' (every in-season holiday dream). */
   holidayPostcardScope: 'off' | 'day_of' | 'window';
@@ -183,6 +186,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   soloRebuildModel: 'black-forest-labs/flux-2-flex',
   modelPolicyMode: 'off',
   couplePromptStyle: 'legacy',
+  dayOfEveningCutoffHour: 20,
   holidayPostcardScope: 'day_of',
 };
 
@@ -304,6 +308,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     soloRebuildModel: String(data.solo_rebuild_model ?? DEFAULT_ENGINE_CONFIG.soloRebuildModel),
     modelPolicyMode: parsePolicyMode(data.model_policy_mode),
     couplePromptStyle: data.couple_prompt_style === 'subject_first' ? 'subject_first' : 'legacy',
+    dayOfEveningCutoffHour: clampHour(data.day_of_evening_cutoff_hour, 20),
     holidayPostcardScope:
       data.holiday_postcard_scope === 'off' || data.holiday_postcard_scope === 'window'
         ? data.holiday_postcard_scope
@@ -315,4 +320,11 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
   };
   cachedAt = Date.now();
   return cached;
+}
+
+/** 0-24 integer or the default (24 = never shift the day-of date). */
+function clampHour(v: unknown, dflt: number): number {
+  const n = typeof v === 'number' ? v : Number(v);
+  if (!Number.isFinite(n)) return dflt;
+  return Math.min(24, Math.max(0, Math.floor(n)));
 }

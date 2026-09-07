@@ -40,6 +40,8 @@ export interface HolidayCatalogRow {
   finalPct: number;
   finalDays: number;
   sortOrder: number;
+  /** HOLIDAY_DAY_OF_PLAN.md (mig 471): the day-of takeover is on for this holiday. Default true. */
+  dayOfEnabled?: boolean;
 }
 
 /** A plain calendar date — no timezone, no clock. month is 1-12. */
@@ -55,6 +57,8 @@ export interface ActiveHoliday {
   emoji: string;
   holidayPct: number; // 0-100, integer
   daysUntilPeak: number; // 0 on the peak day
+  /** The catalog's day_of_enabled (default true) — the render only takes over on peak day when true. */
+  dayOfEnabled: boolean;
 }
 
 // ── calendar helpers (UTC-based so they're pure date math, no DST) ─────────────
@@ -189,6 +193,7 @@ export function resolveActiveHolidays(
           emoji: row.emoji,
           holidayPct: rampPct(effective, daysUntil),
           daysUntilPeak: daysUntil,
+          dayOfEnabled: row.dayOfEnabled !== false,
           sortOrder: row.sortOrder,
         });
         break; // found this row's active window; don't double-count year+1
@@ -222,6 +227,7 @@ export function mapHolidayCatalogRow(r: Record<string, unknown>): HolidayCatalog
     finalPct: Number(r.final_pct ?? 0),
     finalDays: Number(r.final_days ?? 0),
     sortOrder: Number(r.sort_order ?? 0),
+    dayOfEnabled: r.day_of_enabled !== false,
   };
 }
 

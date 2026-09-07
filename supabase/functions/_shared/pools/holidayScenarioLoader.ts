@@ -11,7 +11,7 @@
  */
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import type { DualScenario } from './dualScenarioLoader.ts';
-import { holidayPoolOf } from '../holidayPools.ts';
+import { holidayPoolOf, filterDayOfRows, type DayOfMode } from '../holidayPools.ts';
 
 /** Dual holiday row + its sub_theme (→ main pool via holidayPoolOf; equal-airtime draw). */
 export interface HolidayDualScenario extends DualScenario {
@@ -71,6 +71,17 @@ async function fetchAll(
 export async function loadHolidayDual(
   supabase: SupabaseClient,
   category: string,
+  subTheme?: string | null,
+  /** HOLIDAY_DAY_OF_PLAN.md §3.2 — default 'exclude': the window never draws the reserved day-of subs.
+   *  A forced subTheme (QA) bypasses the mode. */
+  dayOf: DayOfMode = 'exclude'
+): Promise<HolidayDualScenario[]> {
+  const base = await loadHolidayDualRaw(supabase, category, subTheme);
+  return subTheme ? base : filterDayOfRows(base, category, dayOf);
+}
+async function loadHolidayDualRaw(
+  supabase: SupabaseClient,
+  category: string,
   subTheme?: string | null
 ): Promise<HolidayDualScenario[]> {
   const cacheKey = subTheme ? `${category}:${subTheme}` : category;
@@ -108,6 +119,21 @@ export async function loadHolidayDual(
 /** Cast single holiday rows, binned by gender ('any' applies to everyone).
  *  `subTheme` (QA only) restricts to one archetype. */
 export async function loadHolidaySingle(
+  supabase: SupabaseClient,
+  category: string,
+  subTheme?: string | null,
+  /** HOLIDAY_DAY_OF_PLAN.md §3.2 — see loadHolidayDual. */
+  dayOf: DayOfMode = 'exclude'
+): Promise<HolidaySinglePools> {
+  const base = await loadHolidaySingleRaw(supabase, category, subTheme);
+  if (subTheme) return base;
+  return {
+    ...base,
+    male: filterDayOfRows(base.male, category, dayOf),
+    female: filterDayOfRows(base.female, category, dayOf),
+  };
+}
+async function loadHolidaySingleRaw(
   supabase: SupabaseClient,
   category: string,
   subTheme?: string | null
@@ -162,6 +188,16 @@ export function holidaySingleCandidates(
 /** Scene-only holiday rows (Path 2) for the active holiday. `subTheme` (QA only)
  *  restricts to one archetype. Empty = caller falls through. */
 export async function loadHolidayScenes(
+  supabase: SupabaseClient,
+  holiday: string,
+  subTheme?: string | null,
+  /** HOLIDAY_DAY_OF_PLAN.md §3.2 — see loadHolidayDual. */
+  dayOf: DayOfMode = 'exclude'
+): Promise<HolidayScene[]> {
+  const base = await loadHolidaySceneRaw(supabase, holiday, subTheme);
+  return subTheme ? base : filterDayOfRows(base, holiday, dayOf);
+}
+async function loadHolidaySceneRaw(
   supabase: SupabaseClient,
   holiday: string,
   subTheme?: string | null

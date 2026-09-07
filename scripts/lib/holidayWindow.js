@@ -133,6 +133,7 @@ function resolveActiveHolidays(today, rows) {
           emoji: row.emoji,
           holidayPct: rampPct(effective, daysUntil),
           daysUntilPeak: daysUntil,
+          dayOfEnabled: row.dayOfEnabled !== false, // mig 471 (HOLIDAY_DAY_OF_PLAN.md)
           sortOrder: row.sortOrder,
         });
         break; // found this row's active window; don't double-count year+1
@@ -165,6 +166,7 @@ function mapHolidayCatalogRow(r) {
     finalPct: Number(r.final_pct ?? 0),
     finalDays: Number(r.final_days ?? 0),
     sortOrder: Number(r.sort_order ?? 0),
+    dayOfEnabled: r.day_of_enabled !== false,
   };
 }
 

@@ -4,6 +4,19 @@
 // The engine only needs: which MAIN pool a sub_theme belongs to, so holiday draws can pick the pool
 // uniformly first (equal airtime, Kevin 2026-09-05) and a row inside it second.
 export const HALLOWEEN_POOL_OF_SUB: Record<string, string> = {
+  // halloween_day_of — RESERVED day-of pool (HOLIDAY_DAY_OF_PLAN.md): never in the window draw.
+  costume_party_barn: 'halloween_day_of',
+  masquerade_ball: 'halloween_day_of',
+  trick_or_treat_street: 'halloween_day_of',
+  haunted_hayride_party: 'halloween_day_of',
+  pumpkin_carving_party: 'halloween_day_of',
+  bonfire_night: 'halloween_day_of',
+  witches_kitchen_party: 'halloween_day_of',
+  haunted_house_queue: 'halloween_day_of',
+  cemetery_lantern_picnic: 'halloween_day_of',
+  halloween_parade: 'halloween_day_of',
+  rooftop_skyline_party: 'halloween_day_of',
+  monster_hotel_gala: 'halloween_day_of',
   cozy_porch: 'halloween_neighborhood',
   decorated_neighborhood: 'halloween_neighborhood',
   trick_or_treating: 'halloween_neighborhood',
@@ -57,6 +70,7 @@ export const HALLOWEEN_POOL_OF_SUB: Record<string, string> = {
   harvest_royalty: 'enchanted_harvest_court',
 };
 export const HALLOWEEN_POOLS: string[] = [
+  'halloween_day_of',
   'halloween_neighborhood',
   'pumpkin_patch_night',
   'witch_cottage',
@@ -150,6 +164,25 @@ export const FALL_POOLS: string[] = [
   'autumn_storybook',
   'high_peaks_fall',
 ];
+/** The reserved day-of pool key for a holiday — generic: `<holiday>_day_of` (HOLIDAY_DAY_OF_PLAN.md §3.1). */
+export function dayOfPoolKey(holiday: string): string {
+  return `${holiday}_day_of`;
+}
+/** True when a row's sub_theme belongs to the holiday's reserved day-of pool. */
+export function isDayOfSub(holiday: string, subTheme: string | null | undefined): boolean {
+  return holidayPoolOf(subTheme) === dayOfPoolKey(holiday);
+}
+/** Day-of draw mode for the holiday loaders (HOLIDAY_DAY_OF_PLAN.md §3.2): the window never sees the
+ *  reserved day-of subs ('exclude', the default); the day-of branch draws ONLY them ('only'). */
+export type DayOfMode = 'only' | 'exclude';
+/** Pure: keep the rows the mode allows. A row with no sub_theme is a window row (never day-of). */
+export function filterDayOfRows<T extends { subTheme?: string | null }>(
+  rows: T[],
+  holiday: string,
+  mode: DayOfMode
+): T[] {
+  return rows.filter((r) => isDayOfSub(holiday, r.subTheme) === (mode === 'only'));
+}
 /** Main pool for a row's sub_theme (Halloween or Fall); unknown/null sub_theme → its own bucket (never dropped). */
 export function holidayPoolOf(subTheme: string | null | undefined): string {
   if (!subTheme) return '__unsorted';

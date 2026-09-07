@@ -15,8 +15,8 @@ describe('Halloween pool taxonomy — engine mirror parity (Kevin 2026-09-05)', 
     expect(HALLOWEEN_POOL_OF_SUB).toEqual(tax.POOL_OF_SUB);
     expect(HALLOWEEN_POOLS).toEqual(Object.keys(tax.POOLS));
   });
-  it('exactly 14 pools (13 after the 2026-09-06 fold + enchanted_harvest_court 2026-09-07); every sub maps to a pool that lists it', () => {
-    expect(HALLOWEEN_POOLS).toHaveLength(14);
+  it('exactly 15 pools (13 after the 2026-09-06 fold + enchanted_harvest_court + the reserved halloween_day_of pool, 2026-09-07); every sub maps to a pool that lists it', () => {
+    expect(HALLOWEEN_POOLS).toHaveLength(15);
     for (const [sub, pool] of Object.entries(tax.POOL_OF_SUB))
       expect(tax.POOLS[pool].subs).toContain(sub);
   });

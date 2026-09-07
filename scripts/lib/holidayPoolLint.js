@@ -35,6 +35,11 @@ const LANTERN_NOUN = /\b(?:pumpkins?|jack-?o-?-?lanterns?|jack o lanterns?|gourd
 // Fall ANCHOR (Kevin 2026-09-07, two-sided demarcation): a Fall scene must NAME a fall element — a bookshop
 // in the rain is any month of the year. Measured before the rule: cozy_hearth 19% / rainy_day_romance 17%
 // of scenes carried no fall word; every other pool ≤ 4%.
+// DAY-OF pool anchors (HOLIDAY_DAY_OF_PLAN.md §5)
+const DAY_OF_LIGHT =
+  /\b(?:string lights?|fairy lights?|lanterns?|bonfire|candle|candlelit|torch|torchlit|torch-lit|moon(?:light|lit)?|neon|marquee|sparklers?|firelight|glow(?:ing)?)\b/i;
+const DAY_OF_FACE_DECOR =
+  /\b(?:gargoyles?|statues?|busts?|skull masks?|masks? over (?:the |their |her |his )?eyes|masked faces?|face ?paint|painted faces?|full-?face masks?)\b/i;
 const FALL_ANCHOR =
   /\b(?:autumn|fall|leaf|leaves|foliage|maples?|oaks?|aspens?|larch(?:es)?|birch(?:es)?|acorns?|harvest|orchards?|apples?|cider|amber|russet|rust|ochre|copper|crimson|scarlet|golden|gold|bronze|burgundy|hay|wheat|mums?|chrysanthemums?|sunflowers?|marigolds?|dahlias?|amaranth|asters?|frost|first snow|woodsmoke|bonfire)\b/i;
 
@@ -104,6 +109,29 @@ function lintHolidayRow(row) {
   {
     const { holiday, poolKey, pool } = poolFor(row);
     const txt = `${row.scene || ''} ${row.attire || ''}`;
+    // DAY-OF pool rules (HOLIDAY_DAY_OF_PLAN.md §5): a lit celebration, no face-bearing decor, no
+    // mask over the eyes, no face paint (the swap needs the face), pumpkins never at head height.
+    if (poolKey === `${holiday}_day_of`) {
+      if (!DAY_OF_LIGHT.test(String(row.scene || ''))) {
+        errors.push(
+          'day-of scene names no light source (string lights / lantern / bonfire / candle / torch / moon / neon / marquee / sparkler)'
+        );
+      }
+      if (DAY_OF_FACE_DECOR.test(txt)) {
+        errors.push(
+          'day-of row has face-bearing decor or a covered face (gargoyle / statue / skull mask / mask over the eyes / face paint) — the swap needs clean faces'
+        );
+      }
+      if (
+        /\b(?:pumpkins?|jack-?o-?lanterns?)\b[^.]{0,40}\b(?:beside (?:her|his|their) (?:head|face)|at (?:head|eye|shoulder) (?:height|level)|on (?:her|his|their) (?:head|shoulder))/i.test(
+          txt
+        )
+      ) {
+        errors.push(
+          'day-of row places a pumpkin at head height — keep carved pumpkins LOW and away from heads'
+        );
+      }
+    }
     if (holiday === 'fall' && !FALL_ANCHOR.test(String(row.scene || ''))) {
       errors.push(
         'FALL scene names no fall element (leaves / foliage / harvest / amber / cider / first snow …) — the two-sided demarcation (fallPools.js header)'

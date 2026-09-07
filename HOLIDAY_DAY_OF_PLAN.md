@@ -193,3 +193,23 @@ Total ≈ 2-3 sessions before Oct 31 with margin.
 
 ## 10. Status log
 - 2026-09-07 — plan written; awaiting Kevin's go. Hero mechanism (mig 457/458) still live until step 2.
+- 2026-09-07 22:40 UTC — **Step 0 DONE (deployed):** the couple cascade's solo rebuild now re-renders
+  twice — attempt 1 on the configured rebuild model, attempt 2 on a DIFFERENT model
+  (`_shared/soloRebuildModel.ts`, pure + tested: couple's model when it differs, else the policy's first
+  fallback, else flux-1.1-pro) — before the pure scene; a cast dream that still ships with nobody in it
+  stamps `SHIPPED_FACELESS` loud (`fallback_reasons`) for the day-of monitor. Each re-render remains gated
+  by the guard's recover-budget floor. **Step 1 DONE (deployed):** migration 471 applied
+  (`holidays.day_of_enabled`, `engine_config.day_of_evening_cutoff_hour` default 20); the reserved
+  `halloween_day_of` pool (12 subs: costume_party_barn, masquerade_ball, trick_or_treat_street,
+  haunted_hayride_party, pumpkin_carving_party, bonfire_night, witches_kitchen_party, haunted_house_queue,
+  cemetery_lantern_picnic, halloween_parade, rooftop_skyline_party, monster_hotel_gala) in
+  `scripts/lib/halloweenPools.js` (share 120 → 10 per sub per table) + the engine mirror with
+  `dayOfPoolKey()` / `isDayOfSub()` / `filterDayOfRows()`; loaders `loadHolidayDual/Single/Scenes` take
+  `dayOf: 'only' | 'exclude'` (default exclude — the window never draws day-of subs; a forced sub_theme
+  bypasses); `holidays.day_of_enabled` rides through `mapHolidayCatalogRow` → `ActiveHoliday.dayOfEnabled`
+  (Node mirror `scripts/lib/holidayWindow.js` kept in parity); a `halloween_day_of` action register
+  (celebration beats, swap-safe); day-of lint rules (must name a light source; no gargoyle / statue /
+  mask over the eyes / face paint; pumpkins never at head height); parity test now expects 15 pools.
+  Tests: `holidayDayOf.test.ts`, `soloRebuildModel.test.ts`, register + parity + lint suites; full fast
+  lane 2770 green; Deno typecheck green. NOT yet wired: the engine's day-of draw (step 2) — the window
+  behaviour is unchanged tonight (the new pool has no rows yet, and even seeded it is excluded).

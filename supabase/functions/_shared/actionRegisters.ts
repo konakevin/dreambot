@@ -23,6 +23,28 @@ export interface ActionRegister {
 const R = (actions: string[], stills: string[]): ActionRegister => ({ actions, stills });
 
 export const ACTION_REGISTERS: Record<string, ActionRegister> = {
+  // ── Halloween DAY-OF pool (HOLIDAY_DAY_OF_PLAN.md §5) — people CELEBRATING, faces toward camera ──
+  halloween_day_of: R(
+    [
+      'raising a glowing cocktail glass in a toast at chest height',
+      "holding a lit sparkler out at arm's length, the arc of light trailing",
+      'handing a full-size candy bar into an outstretched candy bucket',
+      'lifting a freshly carved jack-o-lantern up to waist height to show it off',
+      'ladling steaming punch from the cauldron into a tin cup',
+      'holding a candy bucket out at waist height with both hands, mid-laugh',
+      'lighting a paper lantern from a candle held low',
+      'holding a glowing paper lantern out at hip height by its handle',
+      'clinking two mugs of cider together at chest height',
+      'tossing a handful of confetti into the string-light glow',
+      'reaching into a bobbing-for-apples tub with sleeves pushed up',
+      'stringing paper bats along the porch rail',
+    ],
+    [
+      'standing side by side under the string lights with cider mugs in hand',
+      'sitting on a hay bale by the bonfire with a candy bucket between them',
+      'leaning on the rooftop parapet with the skyline behind, glasses raised',
+    ]
+  ),
   // ── Halloween pools ─────────────────────────────────────────────────────────
   halloween_neighborhood: R(
     [
