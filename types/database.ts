@@ -1577,6 +1577,7 @@ export type Database = {
           bots_seasonal_pct: number;
           chaos_high_threshold: number;
           chaos_low_threshold: number;
+          couple_prompt_style: string;
           dream_art_mediums: string[];
           dream_art_share: number;
           dream_off_deadline_hours: number;
@@ -1669,6 +1670,7 @@ export type Database = {
           bots_seasonal_pct?: number;
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
+          couple_prompt_style?: string;
           dream_art_mediums?: string[];
           dream_art_share?: number;
           dream_off_deadline_hours?: number;
@@ -1761,6 +1763,7 @@ export type Database = {
           bots_seasonal_pct?: number;
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
+          couple_prompt_style?: string;
           dream_art_mediums?: string[];
           dream_art_share?: number;
           dream_off_deadline_hours?: number;

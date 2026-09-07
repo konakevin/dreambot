@@ -126,6 +126,12 @@ export interface CharacterSlotPipelineInput {
   /** COUPLE stance flags (dualStances.ts): seated → the anchor stops saying "stand"; heightContrast →
    *  the "same vertical height" line is omitted (one seated, one standing). */
   dualStance?: { seated?: boolean; heightContrast?: boolean } | null;
+  /** Couple prompt ORDER (2026-09-07 ablation, mig 470): 'legacy' = medium + scene first, the people ~300
+   *  words in (flux-1.1-pro reads it as a landscape and renders the couple tiny / in profile / from behind:
+   *  0/4 usable base renders); 'subject_first' = gender lock, MEDIUM, then the people + a compact framing
+   *  line (place inline), identities, action, scene (4/4 usable on 1.1-pro; 38/40 first-try swaps in QA).
+   *  Default legacy; QA flag force_prompt_style. */
+  promptStyle?: 'legacy' | 'subject_first' | null;
   /** Stage 5c (2026-07-09): expanded SOLO composition preset. null/undefined =
    *  the classic waist-up frontal contract. Only meaningful for cast.length 1;
    *  gated upstream by engine_config.single_composition_expanded_pct. The
@@ -1042,6 +1048,42 @@ export function assembleCharacterPrompt(
   // 2026-09-02 background-drowning fix: dual gets ONLY the early scene hook in
   // the set-at slot (L1). Part ordering + all framing language stay untouched —
   // the 2026-06-19 hard rule (scene stays behind the framing block on duals).
+  // SUBJECT-FIRST couple order (2026-09-07 ablation): the two people and one compact framing line lead;
+  // the scene and the medium follow. Keeps every load-bearing swap-safety clause (gender lock first,
+  // clear gap between heads, each head on its own side, faces toward camera, same height) and the
+  // identity blocks verbatim; drops the long environmental paragraph that flux-1.1-pro reads as
+  // "landscape". Inert unless input.promptStyle === 'subject_first' (golden fixture locks legacy).
+  if (input.promptStyle === 'subject_first') {
+    // v2 (round 3): the MEDIUM stays at position 2 — with it last, 1.1-pro rendered every couple as a
+    // catalog photograph (round 1: 10/10 swaps, 0/10 medium-faithful). The PLACE rides inside the people
+    // sentence so the scene is never a separate leading clause the model can turn into a landscape.
+    const place = location || '';
+    const compactAnchor = `two people ${seatedStance ? 'seated' : 'standing'} side by side ${
+      closer ? 'from the waist up' : 'from mid-thigh up'
+    }${place ? ` at ${place}` : ''}, both facing the camera with large clearly visible faces and a clear gap between their heads, each head on its own side of the frame`;
+    const gapLine = [
+      'a clear gap between their two heads, faces apart and not touching, not cheek to cheek',
+      ...(input.dualStance && input.dualStance.heightContrast
+        ? []
+        : ['both at the same vertical height']),
+    ].join(', ');
+    return [
+      genderLock,
+      mediumSignal,
+      compactAnchor,
+      leftBlock,
+      rightBlock,
+      slots.action || input.action || '',
+      slots.scene_description,
+      gapLine,
+      slots.mood,
+      slots.props,
+      'no text, no words, no letters, no watermarks, ultra detailed',
+    ]
+      .filter((p) => p && p.trim().length > 0)
+      .join(', ');
+  }
+
   const parts = [
     genderLock,
     mediumSignal,

@@ -227,3 +227,29 @@ Natural roll: 7 location, 1 goofy, 1 active, 1 plus-one solo; night 11 = `force_
 Read: the refactor has changed nothing (shadow = legacy renders, and the shadow agreed everywhere); quality is
 the pre-refactor level. The couple surface is the weak one and it is the MODEL, not the picker: 7/7 first
 attempts failed on flux-1.1-pro tonight. That is exactly what Kevin's fallback rows (Phase 4) address.
+
+## 1.1-pro couple POSITIONING fix — `subject_first` prompt order (2026-09-07 evening; NIGHTLY_MODEL_POLICY_PLAN.md §8)
+Kevin: "1.1pro has a real favor of putting characters backs to us … make it so our prompts are constructed in
+a way that the final prompt/intention is preserved as far as how the characters are positioned … up to 10 QA
+rounds … verify your fix with all the other models". Sheets: `scratchpad/fall-build/rounds/r21-fix-r1` …
+`r24-fix-r4`, `r25-xmodel`, `r26-hero`.
+- **fix-r1 (v1, medium last)** — 10 couples on the round-1 Fall subs + natural rolls: 10/10 first-try swaps,
+  identity 0.55-0.79 both sides, judge full/three-quarter everywhere. Flaw: 0/10 medium-faithful — every
+  render a catalog photograph (the medium at the END of a 1.1-pro prompt is ignored).
+- **fix-r2 (v1)** — 10 couples (round-2 Fall subs + goofy + elegant + 2 Halloween heroes): 10/10 first-try;
+  heroes 0.79/0.70 and 0.70/0.75. Same medium flaw.
+- **fix-r3 (v2, medium second, place inline)** — 10 jobs, 3 transport failures (1 × 503 boot, 2 × 150 s
+  gateway timeout), 7/7 first-try; mediums BACK (watercolor border, comic ink, painted fantasy), scenes rich;
+  1 tight (mountain pair, still split cleanly).
+- **fix-r4 (v2)** — the 3 failed seeds + the round-2 set, 13/13 rendered: 11 first-try, hero/1 on attempt 2
+  (R0.033 → 0.68/0.73), hero/2 degraded (R0.043 then L0.179 < 0.25 floor → solo rebuild, which rendered TWO
+  faces because the hero couple `attire` text names both people → solo probes → male vampire lord alone). All
+  12 couples large, frontal, medium-faithful; 1 NONSENSE (giant mushrooms, seed scale).
+- **Totals: subject_first 38/40 first-try (95%), 39/40 shipped as a couple; legacy sim 0/7 first-try.**
+- **fix-r5 xmodel (13 models × 1 couple, apple_orchard_afternoon, subject_first)** — 12/12 rendered models
+  first-try (identity 0.64-0.76 both sides), judge full/strong on all; krea = model "Generation timed out".
+- **fix-r6 hero (4 cozy + 4 eerie day-of couples, distinct seeds)** — 8/8: 6 first-try, 2 second attempt
+  (eerie-8 L0.009 once), 0 degraded; persona held on all eerie; the judge's lone BAD is the postcard overlay
+  on a photo portrait (intended). Hero over all rounds: 8/12 first-try, 11/12 shipped as a couple.
+- **GRAND TOTAL subject_first on 1.1-pro: 48 couples, 44 first-try (92%), 3 retry, 1 degrade — vs legacy
+  0/7 first-try.** Knob left at `legacy`; flip = `engine_config.couple_prompt_style = 'subject_first'`.

@@ -353,6 +353,7 @@ Deno.serve(async (req) => {
     force_hero_register,
     force_hero_seed,
     force_final_prompt,
+    force_prompt_style,
     strict_face_swap,
     persist,
     queueJobId,
@@ -2323,6 +2324,8 @@ Deno.serve(async (req) => {
               ? (fallbackReasons.push('dual_comp:waist_up'), 'waist_up' as const)
               : null,
           femaleHairVariationPct: force_female_hair_pct ?? hairCfg.femaleHairVariationPct,
+          // Couple prompt order (mig 470): QA flag wins, else engine_config.couple_prompt_style.
+          promptStyle: force_prompt_style ?? sfaCfgCloser.couplePromptStyle,
           sceneRegister,
           // Stage 5c: expanded solo compositions (three-quarter / enviro-wide)
           // with singleCompositionExpandedPct probability; classic waist-up

@@ -240,3 +240,77 @@ so a model can't enter the pool without the economics passing.
   wire `model_used` for a retry that shipped on a fallback (index.ts couple `rerender` closure, TODO there).
 - **Also shipped today (QA tooling):** `force_final_prompt` nightly QA flag — render an exact prompt so a
   model comparison is byte-identical input (`__tests__/lib/nightlyQaFlags.test.ts`).
+
+## 8. Why flux-1.1-pro "looked flaky" on couples — it was the PROMPT ORDER (2026-09-07, fixed behind a knob)
+
+**Symptom.** 11-night simulation on Kevin's account (§7, legacy picker): 7 couples, **0 of 7 passed the
+swap on attempt 1**, 5 rescued by same-model retries, 2 degraded to the solo rebuild. Every first-attempt
+failure had the same signature — one side's identity 0.04-0.16 (`identity_sim:L0.594/R0.076`,
+`L0.042/R0.675`, `L0.511/R0.049` …): the swap never took on that face because the base render drew it
+small, in profile, or with its back to the camera.
+
+**Root cause (base-render test, same seeds, no swap).** The legacy dual prompt opens with medium + "set at"
++ the ENVIRONMENTAL TWO-SHOT block + the action and only names the two people ~300 words in. flux-1.1-pro
+reads that as a landscape brief: 0/4 usable base renders (tiny / turned-away couples). The same seeds with
+the people + one compact framing line first: 4/4 usable. Not a swap-pipeline bug; not the model policy.
+
+**Fix — `promptStyle: 'subject_first'` in `_shared/characterSlotPrompt.ts`** (dual assembly only):
+`genderLock, medium, "two people standing side by side from mid-thigh up at <place>, both facing the camera
+with large clearly visible faces and a clear gap between their heads, each head on its own side of the
+frame", LEFT block, RIGHT block, action, scene_description, gap line, mood, props, no-text`. Every
+load-bearing swap-safety clause is kept (gap between heads, heads on separate sides, seated / height-contrast
+/ waist-up variants). v1 put the medium LAST and lost it (10/10 swaps, 0/10 medium-faithful — all
+photographs); v2 keeps the medium at position 2 and the place inside the people sentence so the scene is
+never a separate leading clause.
+- Knob: `engine_config.couple_prompt_style` (`legacy` | `subject_first`, migration 470, default `legacy`
+  → **no behaviour change until flipped**; rollback = set `legacy`, no deploy). QA flag
+  `force_prompt_style`. One assembly call in the render (`index.ts` slot input) → the flip covers every
+  couple surface including the holiday hero.
+- Tests: `__tests__/lib/couplePromptStyle.test.ts` — legacy byte-identical when the style is unset / null /
+  `legacy`; v2 order (gender lock < medium < people-with-place < LEFT < RIGHT < scene); the three variants.
+  `nightlyQaFlags.test.ts` covers the flag.
+
+**QA rounds (Kevin: "do up to 10 QA rounds … verify with all the other models") — all flux-1.1-pro, real
+pipeline, Kevin's cast, `HOLIDAY_ARCHETYPE_QA_LOG.md` "1.1-pro couple positioning" for the sheets:**
+| round | prompt | couples | first-try swap | retry | degraded | notes |
+|---|---|---|---|---|---|---|
+| sim (legacy) | legacy | 7 | **0** | 5 | 2 | baseline; 4 of 5 survivors tight two-heads |
+| fix-r1 | subject_first v1 | 10 | 10 | 0 | 0 | medium lost (all photos) |
+| fix-r2 | subject_first v1 | 10 | 10 | 0 | 0 | incl. 2 Halloween heroes (0.79/0.70, 0.70/0.75) |
+| fix-r3 | subject_first v2 | 7 | 7 | 0 | 0 | 3 transport failures (503, 2 × 150 s gateway); medium back |
+| fix-r4 | subject_first v2 | 13 | 11 | 1 | 1 | the 2 misses = the Halloween hero couple (see hero round) |
+| **subject_first total** | | **40** | **38 (95%)** | 1 | 1 | vs 0% first-try on legacy |
+Judge (framing/setting rubric): every subject_first couple full or three-quarter, faces large and frontal,
+mediums honoured in v2 (comics ink, watercolor border, pencil, canvas, vintage film, photography), scenes
+present (foliage, aurora ridge, shark tunnel, canal bridge). One `NONSENSE` (glowing_mushroom_hollow: giant
+mushrooms over a seated couple) is a seed-scale note, not a positioning miss.
+
+**Residual — the hero couple.** Both round-4 hero misses had the legacy signature (right face 0.033 / 0.043
+on attempt 1) in a midnight gothic scene; round-2's two heroes were clean. Hero-only round (4 cozy + 4
+eerie, distinct `force_hero_seed`) + the 13-model cross-check: results appended below when they land.
+
+**Cross-model check (fix-r5 `xmodel`, one couple per model, same sub `fall/apple_orchard_afternoon`, Kevin's
+cast, `force_prompt_style: subject_first`):** flux-2-flex, gemini-2-image, flux-2-pro, seedream-4,
+grok-imagine-image, flux-dev, flux-1.1-pro-ultra, gpt-image-2, flux-schnell, flux-2-max, flux-2-dev,
+gemini-3-image-preview — **12/12 first-try swaps, identity 0.64-0.76 on both sides, judge full / strong on
+every one**, mediums honoured (comics, illustration, pencil, film noir, watercolor, canvas, vintage film,
+pop art, glamour). flux-krea-dev did not render ("Generation timed out" from the model, 125 s — its own
+cold start, not the prompt). The new order is safe for every backup in Kevin's final rows.
+
+**Hero round (fix-r6 `hero`, 4 cozy + 4 eerie Halloween day-of couples, distinct `force_hero_seed`,
+flux-1.1-pro, subject_first):** 8/8 rendered, **6 first-try, 2 on the second attempt (cozy-4; eerie-8 had
+the legacy signature once, L0.009 → 0.70/0.68), 0 degraded**; judge three-quarter / bust / full, strong
+setting on all, persona held on every eerie one. Combined with fix-r2's two heroes and fix-r4's two: hero
+couples 8 first-try / 3 retry / 1 degrade over 12 — the hero is the weakest surface (midnight photography,
+face-bearing decor: carved jack-o-lanterns, a gargoyle) but ships as a couple 11/12 vs 0/1 in the legacy sim.
+Two hero-only follow-ups, not blockers: (1) the couple `attire` text names both people, so the solo rebuild
+after a hero degrade still renders TWO faces (`degrade_solo_multi_face`) — give the rebuild a solo attire;
+(2) the brief builders forbid face-bearing decor in frame, the hero template does not.
+
+**Grand total, subject_first on flux-1.1-pro: 48 couples, 44 first-try (92%), 3 second attempt, 1 degrade;
+legacy sim 7 couples, 0 first-try, 5 retries, 2 degrades.** The judge saw no couple with backs to the camera,
+in profile, or small in frame in any subject_first round.
+
+**Flip (Kevin's call, one row, no deploy):** `UPDATE public.engine_config SET couple_prompt_style =
+'subject_first';` — the loader's 60 s TTL picks it up; rollback is the same statement with `'legacy'`.
+Tonight's shadow night is unaffected either way (the shadow compares model picks, not prompts).
