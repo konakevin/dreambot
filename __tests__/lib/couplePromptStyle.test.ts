@@ -58,7 +58,7 @@ describe('couple prompt order', () => {
     expect(a).toContain('an ENVIRONMENTAL TWO-SHOT');
     expect(a.indexOf('watercolor painting')).toBeLessThan(a.indexOf('LEFT side of frame'));
   });
-  it('subject_first v2: gender lock, medium, the people (with the place inline), both identity blocks, then the scene detail', () => {
+  it('subject_first v3: gender lock, medium, the people (with the place inline), the scene, then both identity blocks', () => {
     const p = assembleCharacterPrompt(slots, input({ promptStyle: 'subject_first' }));
     const i = (s: string) => {
       const k = p.indexOf(s);
@@ -77,10 +77,11 @@ describe('couple prompt order', () => {
     const left = i('LEFT side of frame');
     const right = i('RIGHT side of frame');
     const scene = i('towering golden stalks forming amber-glowing walls');
+    // v3: people line < SCENE < identities (parity batch 1: scene after identities = blank backdrops)
     expect(medium).toBeLessThan(anchor);
-    expect(anchor).toBeLessThan(left);
+    expect(anchor).toBeLessThan(scene);
+    expect(scene).toBeLessThan(left);
     expect(left).toBeLessThan(right);
-    expect(right).toBeLessThan(scene);
     expect(p).not.toContain('ENVIRONMENTAL TWO-SHOT');
     expect(p).toContain(
       'a clear gap between their two heads, faces apart and not touching, not cheek to cheek'

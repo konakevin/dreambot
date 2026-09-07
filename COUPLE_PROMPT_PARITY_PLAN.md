@@ -87,3 +87,54 @@ Hold at `subject_first` if the real-user numbers match Phase A.
 
 Create / DLT / first-dream couple prompts (they do not pass `promptStyle`); the hero's photography pin vs
 the 1.1-pro override library (separate decision, §8 of the policy plan); the model-policy Phase 3/4.
+
+## 8. RESULTS (2026-09-07 evening, 40 pairs on flux-1.1-pro + Phase B)
+
+Mechanism shipped as planned (§2: `force_slot_input` + `force_dual_slots`, commit 0b1dbcb6). Every pair
+below is the SAME slot input and the SAME Sonnet slots rendered twice; only the prompt order differs.
+Blind paired Sonnet judge, deltas = subject_first − legacy, pass band = within −0.25 (framing must be higher).
+
+**Batches 1-2 = subject_first v2 (scene AFTER the identity blocks) — FAILED parity, 19 pairs:**
+scene −1.63 (won 0 / lost 17), brief fidelity −1.42, mood −0.84, wardrobe +0.63, medium 0.00, framing
++1.32; judge preferred legacy 13:6. v2 fixed the couple and lost the set (lessons 12-17).
+
+**Batches 3-4 = subject_first v3 (people line → FULL scene → identity blocks) — PASSED, 20 pairs:**
+| axis | legacy | v3 | Δ | pairs won / lost | verdict |
+|---|---|---|---|---|---|
+| scene richness | 3.20 | 3.30 | +0.10 | 8 / 9 | pass |
+| brief fidelity | 2.35 | 2.55 | +0.20 | 7 / 6 | pass |
+| wardrobe fidelity | 1.55 | 1.75 | +0.20 | 9 / 4 | pass |
+| medium fidelity | 3.15 | 3.05 | −0.10 | 7 / 10 | pass |
+| mood | 3.40 | 3.40 | 0.00 | 7 / 7 | pass |
+| framing | 3.00 | 3.85 | +0.85 | 11 / 2 | pass (higher) |
+Judge preference subject_first 13 : legacy 7. Stamps (20 renders per style): first-try swap 16 vs 9,
+degraded to solo 1 vs 6, **faceless (`pure_scene_fallback`) 0 vs 2**, shipped below the 0.35 identity
+floor 0 vs 1, quality gate 20/20 vs 18/18, mean min-side identity 0.62 vs 0.47. Sheets:
+`scratchpad/parity/sheet-A3.jpg`, `sheet-A4.jpg`; full size in Kevin's Dreams album (captions `⚖️v3 P<n>`).
+Kevin's blind grading page (db-backed votes): https://claude.ai/code/artifact/f8802bec-8db8-4a44-aa65-75d9e796ec34
+
+**Verdict:** v3 is at parity on every quality axis and materially better on the couple itself. The knob
+`engine_config.couple_prompt_style` stays `legacy` until Kevin's blind votes are in (§5.3) and Phase B is
+recorded below; then Phase C (one live night).
+
+## 9. FOLLOW-UP PLAN — issues found and improvements worth making (ranked)
+
+Kevin: "let's have a plan after the renders to address any issues, or anything you find that might make an
+improvement." Each item is handoff-ready; the lesson numbers point at `COUPLE_PROMPT_PARITY_LESSONS.md`.
+
+| # | item | evidence | what to build | size |
+|---|---|---|---|---|
+| 1 | **Flip `couple_prompt_style = subject_first` (v3)** after Kevin's blind votes ≥ 40 % and Phase B clean; Phase C = one live night + morning audit vs the last 7 nights (first-try, degrade, faceless, gate) | §8 | one row; rollback = `legacy` | trivial |
+| 2 | **A cast dream must never ship faceless.** `pure_scene_fallback` shipped 2 of 39 legacy couples with no people and no quality-gate run | L19 | (a) stamp it loud (`SHIPPED_FACELESS`) + count it in `dream-queue-monitor` / the nightly audit; (b) before falling to a pure scene, retry the solo rebuild ONCE on flux-1.1-pro with the subject_first single line (Kevin: rebuild stays 1.1-pro); (c) log `observability.soloRebuildPrompt` so the two-faces cause (L22-23) can be root-caused on real degrades | S |
+| 3 | **Quality gate must read the identity stamps.** A couple shipped with the partner at 0.27 (< 0.35) and the gate said PASS | L20 | gate = fail (route to the solo rebuild) when `identity_shipped_best` < floor; add the case to the gate's test | S |
+| 4 | **Wardrobe fidelity is 1.6-1.9 / 5 in BOTH orders** — the weakest axis of the whole render | L14, §8 | (a) Sonnet brief: wardrobe as ≤ 8 words, material + colour + one silhouette, no accessories list; (b) in subject_first move "wearing …" to the front of each identity block (before the ~40-word physical description); measure with the same paired judge (10 pairs) | M |
+| 5 | **Solo rebuild renders two people (flux-2-flex)** → gender refuse → faceless | L19, L22-23 | needs #2c first; then either 1.1-pro rebuild (Kevin's call already) or a one-line solo scene from Sonnet at rebuild time | S after #2 |
+| 6 | **Hero couple's photography pin is silently replaced** by one of 5 curated 1.1-pro art fragments (`faceSwapModelOverrides.ts`, keyed by model only) | L2 | decide: exempt `holiday_hero` rows from the override (true photography day-of look) OR retitle the hero row's medium to what it actually renders; either way the `scene_medium:` stamp should name the fragment actually used | S |
+| 7 | **Hero solo fallback renders two people** because the hero `attire` axis names both ("she in …, he in …") | L4 | rebuild attire = self's half only (split on "he in" / "she in") | S |
+| 8 | **Female hair variation (75 %) is a hidden variable in every couple test** | L8 | document in the QA-flag doc + `qa-round.mjs`/`batch.mjs` default `force_female_hair_pct: 0` for A/B work only (never in prod) | trivial |
+| 9 | **Judge protocol for couples:** report the shipped SHAPE (couple / solo / faceless) next to axis means; paired + blind only; holiday overlays declared to the judge | L5, L7, L25 | fold into `judge-pair.mjs` (done for overlay) + the QA log template | trivial |
+| 10 | **Observability gaps found:** the slot input was never logged (fixed 0b1dbcb6); the solo rebuild prompt still isn't; `gate=null` on the pure-scene path | L9, L19 | #2c + stamp `quality_gate:skipped:<why>` instead of nothing | S |
+| 11 | **1.1-pro's first ~60 words rule** (L1, L13) is now a design constraint for every 1.1-pro prompt, not just couples: audit the SINGLE order (scene at word ~100 of ~300 after the identity block) with the same paired method before touching it — it may be leaving set-dressing on the table too | L13 | 10 paired solo renders, same slots, scene-before-identity vs current | M |
+
+Not doing: widening the dual framing text (2026-09 lesson: costs identity), re-adding the environmental
+two-shot paragraph (27 clauses proven to be landscape-steering, L11), any change to Create / DLT.

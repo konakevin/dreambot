@@ -1071,10 +1071,15 @@ export function assembleCharacterPrompt(
       genderLock,
       mediumSignal,
       compactAnchor,
+      // v3 (parity batch 1): the FULL scene sits right behind the people line, BEFORE the identity
+      // blocks. With it after them (v2, word ~200 of ~280) 1.1-pro rendered a portrait on a blank
+      // backdrop: paired blind judge scene 3.9 → 2.0, brief fidelity 3.5 → 1.7, legacy preferred 9/10.
+      // The first clause is still the two people, so the landscape failure of legacy (scene FIRST) does
+      // not return — the order is a slider between the two, and the people line must stay the lead.
+      slots.scene_description,
       leftBlock,
       rightBlock,
       slots.action || input.action || '',
-      slots.scene_description,
       gapLine,
       slots.mood,
       slots.props,
