@@ -274,3 +274,52 @@ describe('Fall ANCHOR (two-sided demarcation, 2026-09-07)', () => {
     expect(hw.errors.some((e: string) => /names no fall element/.test(e))).toBe(false);
   });
 });
+
+describe('DAY-OF pool rules (HOLIDAY_DAY_OF_PLAN.md §5)', () => {
+  const dual = (
+    scene: string,
+    attire = 'She in a witch gown with the hat tipped back, he in a vampire cape'
+  ) => ({
+    category: 'halloween',
+    sub_theme: 'cemetery_lantern_picnic',
+    scene,
+    attire,
+  });
+  const errs = (row: Record<string, unknown>, table = 'dual_scenarios') =>
+    lintHolidayRow({ ...row, table }).errors.map((e: string) => e.split(' — ')[0]);
+  it('a cast day-of row must name a light source', () => {
+    expect(errs(dual('Ivy-clad headstones, a checkered blanket, black roses, low fog.'))).toEqual(
+      expect.arrayContaining([expect.stringContaining('no light source')])
+    );
+    expect(
+      errs(
+        dual('Ivy-clad headstones under a full moon, lanterns on the grass, black roses, low fog.')
+      )
+    ).not.toEqual(expect.arrayContaining([expect.stringContaining('no light source')]));
+  });
+  it('face-bearing decor (stone angel, scarecrow, gargoyle) fails a CAST row but not a scene-only row', () => {
+    const scene =
+      'A stone angel monument under a full moon, lanterns on iron stands, a checkered blanket.';
+    expect(errs(dual(scene))).toEqual(
+      expect.arrayContaining([expect.stringContaining('face-bearing decor')])
+    );
+    expect(
+      errs(
+        dual('A moonlit pumpkin patch with scarecrows on posts, lanterns swinging from the wagon.')
+      )
+    ).toEqual(expect.arrayContaining([expect.stringContaining('face-bearing decor')]));
+    expect(
+      errs({ holiday: 'halloween', sub_theme: 'cemetery_lantern_picnic', scene }, 'holiday_scenes')
+    ).not.toEqual(expect.arrayContaining([expect.stringContaining('face-bearing decor')]));
+  });
+  it('a mask over the eyes or face paint fails a cast row (the swap needs the face)', () => {
+    expect(
+      errs(
+        dual(
+          'Moonlit courtyard, paper lanterns, black roses.',
+          'She in a gown with a lace mask over the eyes, he in a tailcoat'
+        )
+      )
+    ).toEqual(expect.arrayContaining([expect.stringContaining('face-bearing decor')]));
+  });
+});

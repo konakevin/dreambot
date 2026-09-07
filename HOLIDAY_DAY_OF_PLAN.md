@@ -255,3 +255,24 @@ Total ≈ 2-3 sessions before Oct 31 with margin.
   FULL-BODY celebration beats (walking the street swinging candy buckets, stepping onto the wagon,
   crouching to light a pumpkin on the step, sitting on a hay bale with boots toward the fire). Target:
   ≤ 3 of 12 bust.
+- 2026-09-08 00:05 UTC — **QA round 2 (18 renders, `r32-dayof-r2`, register variable):** couples bust
+  crops **7 → 4 of 12**, three-quarter 1 → 6, full 2 → 1 (full-body beats did what they were meant to);
+  solos tight 1 → 0 (3 of 6 full-figure). 18/18 from the pool with postcards, 0 faceless; 1 couple
+  degraded to a solo (left face 0.0 twice = the residual model miss; the FIRST rebuild passed the
+  probes, so the step-0 second attempt was not needed). Judge flags: "Chinese lanterns" on
+  masquerade_ball (my sub hint said paper lanterns — taste call for Kevin), a stone angel on the
+  cemetery solo (face-bearing figure the lint missed). **Fixes:** the day-of face-decor lint now also
+  catches stone angels / angel monuments / cherubs / scarecrows / mannequins / effigies on CAST rows
+  (scene-only rows are exempt — nothing to swap); 9 seeded cast rows disabled (5 dual, 4 single) and
+  their subs topped back up to share under the widened rule; lint suite extended. **Round 3** = 12
+  couples, no new variable (confirmation of the register change).
+- 2026-09-08 00:20 UTC — **QA round 3 (12 couples, `r33-dayof-r3`, no new variable):** 11 rendered
+  (1 transport failure), bust crops **2 of 11** (7 → 4 → 2 over the rounds — the target was ≤ 3),
+  three-quarter 6, full 1, waist 2; 9 first-try + 1 retry, 0 degrades, 0 faceless, 11/11 from the pool
+  with postcards; the judge's lone flag is again the overlay on a lit garden (not a defect). Pool after
+  the lint widening + top-ups: 120 dual / 120 single / 144 scene, preflight clean.
+  **Step 4 status: ready for Kevin's in-app review** — album captions `🎃 DAY-OF R31 <sub>` (round 1,
+  chest-height beats), `R32` (full-body register), `R33` (confirmation). Hearts = the pull list.
+  Remaining: Kevin's sign-off → (a) drop `holiday_hero_prompts` (migration), (b) the R5 proof:
+  Thanksgiving catalog row + `thanksgiving_day_of` pool, (c) optional taste pass on sub hints (paper
+  lanterns on masquerade_ball read "Chinese lantern" to the judge).

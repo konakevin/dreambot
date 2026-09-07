@@ -39,7 +39,7 @@ const LANTERN_NOUN = /\b(?:pumpkins?|jack-?o-?-?lanterns?|jack o lanterns?|gourd
 const DAY_OF_LIGHT =
   /\b(?:string lights?|fairy lights?|lanterns?|bonfire|candle|candlelit|torch|torchlit|torch-lit|moon(?:light|lit)?|neon|marquee|sparklers?|firelight|glow(?:ing)?)\b/i;
 const DAY_OF_FACE_DECOR =
-  /\b(?:gargoyles?|statues?|busts?|skull masks?|masks? over (?:the |their |her |his )?eyes|masked faces?|face ?paint|painted faces?|full-?face masks?)\b/i;
+  /\b(?:gargoyles?|statues?|busts?|stone angels?|angel (?:statues?|monuments?)|cherubs?|scarecrows?|mannequins?|effig(?:y|ies)|skull masks?|masks? over (?:the |their |her |his )?eyes|masked faces?|face ?paint|painted faces?|full-?face masks?)\b/i;
 const FALL_ANCHOR =
   /\b(?:autumn|fall|leaf|leaves|foliage|maples?|oaks?|aspens?|larch(?:es)?|birch(?:es)?|acorns?|harvest|orchards?|apples?|cider|amber|russet|rust|ochre|copper|crimson|scarlet|golden|gold|bronze|burgundy|hay|wheat|mums?|chrysanthemums?|sunflowers?|marigolds?|dahlias?|amaranth|asters?|frost|first snow|woodsmoke|bonfire)\b/i;
 
@@ -117,7 +117,7 @@ function lintHolidayRow(row) {
           'day-of scene names no light source (string lights / lantern / bonfire / candle / torch / moon / neon / marquee / sparkler)'
         );
       }
-      if (DAY_OF_FACE_DECOR.test(txt)) {
+      if (!isSceneOnly && DAY_OF_FACE_DECOR.test(txt)) {
         errors.push(
           'day-of row has face-bearing decor or a covered face (gargoyle / statue / skull mask / mask over the eyes / face paint) — the swap needs clean faces'
         );

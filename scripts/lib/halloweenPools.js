@@ -534,7 +534,7 @@ SUBS.haunted_hayride_party = {
   costume:
     'flannel and denim with a Halloween twist — a pumpkin-print scarf, a felt bat pin, a witch hat tipped back — blankets over the knees',
   setting:
-    'a torch-lit hayride wagon rolling through a moonlit pumpkin field, lanterns swinging from the wagon posts, pumpkins piled in the back, a huge harvest moon, scarecrows far off on their posts',
+    'a torch-lit hayride wagon rolling through a moonlit pumpkin field, lanterns swinging from the wagon posts, pumpkins piled in the back, a huge harvest moon, corn rows fading into the dark',
 };
 SUBS.pumpkin_carving_party = {
   pool: 'halloween_day_of',

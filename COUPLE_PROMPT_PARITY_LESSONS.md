@@ -195,3 +195,10 @@ Plan: `COUPLE_PROMPT_PARITY_PLAN.md`. Results: `NIGHTLY_MODEL_POLICY_PLAN.md` §
     surface must use the legs, the ground and the furniture (walking, stepping up, crouching to a step,
     sitting on a hay bale) so the frame has a reason to include them. Same law as the playbook's
     "action verb leads composition" — restated as: the beat's ANATOMY sets the crop.
+35. **Seed hints and lint rules must agree, or the top-up starves.** The hayride sub's setting hint said
+    "scarecrows on their posts"; the widened face-decor rule (scarecrows are face-bearing) then rejected
+    16 of 17 regenerated candidates for that sub. Whenever a lint rule is added, grep the taxonomy hints
+    for the banned nouns first — the generator cannot out-write its own brief.
+36. **Three rounds, one variable each, with a number to move.** Bust crops 7 → 4 → 2 of 12 across
+    rounds 1-3 with exactly one change (the action register's anatomy). The rounds that convince are
+    the ones where the metric, the variable and the sheet all point the same way.
