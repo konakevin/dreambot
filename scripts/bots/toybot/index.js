@@ -57,6 +57,13 @@ const pathBuilders = {
   'board-game-world': require('./paths/board-game-world'),
   'wooden-toy-land': require('./paths/wooden-toy-land'),
   'tin-toy-parade': require('./paths/tin-toy-parade'),
+  // Halloween seasonal candidates — promoted from AlphaBot (2026-09), see
+  // seasonalPaths.halloween below. Self-contained function-form builders
+  // (own material-look text inline; no per-medium style injection needed).
+  'vintage-halloween-toybox': require('./paths/vintage-halloween-toybox'),
+  'spooky-dollhouse-diorama': require('./paths/spooky-dollhouse-diorama'),
+  'toy-graveyard-diorama': require('./paths/toy-graveyard-diorama'),
+  'jack-o-lantern-toy-parade': require('./paths/jack-o-lantern-toy-parade'),
 };
 
 // Dark-launch set — reachable only via explicit --path/--mode; posts hidden
@@ -132,6 +139,15 @@ module.exports = {
     'board-game-world': 'board_game_diorama',
     'wooden-toy-land': 'wooden_toy_diorama',
     'tin-toy-parade': 'tin_toy_diorama',
+    // Halloween seasonal candidates (promoted from AlphaBot 2026-09) — each
+    // builder is fully self-contained (inlines its own material-look text),
+    // so its medium key carries no injected style (see mediumStyles below).
+    // Bot-wide promptPrefix/promptSuffix apply as-is (matches what was
+    // tested/approved on AlphaBot — no override needed).
+    'vintage-halloween-toybox': 'vintage_halloween_toybox',
+    'spooky-dollhouse-diorama': 'spooky_dollhouse_diorama',
+    'toy-graveyard-diorama': 'toy_graveyard_diorama',
+    'jack-o-lantern-toy-parade': 'jack_o_lantern_toy_parade',
     // monster-boss-battle rotates across the full toy-medium roster so the
     // boss + heroes can land in any toy world (vinyl Funko vs kaiju, action
     // figures vs demon lord, mechs vs alien overlord, etc.)
@@ -257,6 +273,14 @@ module.exports = {
       'heirloom HAND-CARVED WOODEN toys, solid painted wood with visible woodgrain and turned-lathe rounded forms, soft matte painted color, gently rounded edges, occasional natural unpainted beech and maple, Waldorf / Grimm’s / Ostheimer / Brio wooden-toy aesthetic, warm natural wood tones, cozy hobby-table lighting, tilt-shift macro toy photography, tactile wood texture, shallow depth of field',
     tin_toy_diorama:
       'vintage 1950s LITHOGRAPHED PRESSED-TIN wind-up toys, colorful printed-on detail (rivets, faces, dials, clothes printed on the metal), pressed-tin panels with tab-and-slot seams, clockwork wind-up keys, slight patina and tiny scratches, warm enamel sheen, Masudaya / Yonezawa tin-toy register, nostalgic warm studio lighting, tilt-shift macro collectible photography, tactile reflective tin, shallow depth of field',
+    // Halloween seasonal candidates — empty on purpose: each builder inlines
+    // its own material-look text (tin/cardboard/papier-mâché, dollhouse
+    // architecture, graveyard clockwork cast, tin jack-o-lantern parade), so
+    // no extra medium style is injected on top (matches AlphaBot QA config).
+    vintage_halloween_toybox: '',
+    spooky_dollhouse_diorama: '',
+    toy_graveyard_diorama: '',
+    jack_o_lantern_toy_parade: '',
   },
 
   // Per-medium prompt injection — ToyBot's dialect for each toy medium.
@@ -610,6 +634,21 @@ module.exports = {
   // dispatcher never auto-posts them; reachable only via explicit --mode.
   shadowPaths: [], // Stage O paths promoted to live rotation 2026-08-16 (TOY_SHADOW_PATHS const retained for reference)
 
+  // Seasonal-only paths (2026-09-07) — drawn ONLY when
+  // engine_config.bots_seasonal_enabled is true AND the named holiday window
+  // (public.holidays) is calendar-active (scripts/lib/botSeasonal.js). NEVER
+  // list a seasonal path in `paths` below — that fires it year-round, exactly
+  // what this mechanism exists to prevent. Promoted from AlphaBot
+  // (Kevin-approved QA matrix).
+  seasonalPaths: {
+    halloween: [
+      'vintage-halloween-toybox',
+      'spooky-dollhouse-diorama',
+      'toy-graveyard-diorama',
+      'jack-o-lantern-toy-parade',
+    ],
+  },
+
   paths: [
     'claymation',
     'vinyl',
@@ -668,6 +707,12 @@ module.exports = {
       'board-game-world',
       'wooden-toy-land',
       'tin-toy-parade',
+      // Halloween seasonal candidates (promoted from AlphaBot 2026-09) —
+      // protect the curated MVP composition validated during QA.
+      'vintage-halloween-toybox',
+      'spooky-dollhouse-diorama',
+      'toy-graveyard-diorama',
+      'jack-o-lantern-toy-parade',
     ],
     allowSubjectChaosPaths: [
       'claymation',
@@ -713,7 +758,16 @@ module.exports = {
     polishedWords: '65-90',
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
-    skipPaths: [],
+    // Bot-wide polish is disabled (see note above), but these Halloween
+    // seasonal candidates (promoted from AlphaBot 2026-09) are listed here
+    // too so the curated MVP composition stays protected if polish is ever
+    // re-enabled per-path.
+    skipPaths: [
+      'vintage-halloween-toybox',
+      'spooky-dollhouse-diorama',
+      'toy-graveyard-diorama',
+      'jack-o-lantern-toy-parade',
+    ],
   },
 
   // Sensory anchors — lightcolor required, additional channels rolled.

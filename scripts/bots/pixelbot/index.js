@@ -32,6 +32,15 @@ const pathBuilders = {
   'pixel-item-shop': require('./paths/pixel-item-shop'), // Stage K1 SHADOW
   'retro-racing': require('./paths/retro-racing'), // Stage K2 SHADOW
   'pixel-overworld': require('./paths/pixel-overworld'), // Stage K3 SHADOW
+  // Halloween seasonal candidates — promoted from AlphaBot (2026-09), Kevin-
+  // approved via QA matrix. Fire ONLY through seasonalPaths.halloween below,
+  // never in the year-round `paths` rotation.
+  'pixel-haunted-house': require('./paths/pixel-haunted-house'),
+  'pixel-trickortreat-street': require('./paths/pixel-trickortreat-street'),
+  'pixel-witchs-cottage': require('./paths/pixel-witchs-cottage'),
+  'pixel-graveyard-night': require('./paths/pixel-graveyard-night'),
+  'pixel-haunted-overworld': require('./paths/pixel-haunted-overworld'),
+  'pixel-haunted-dungeon': require('./paths/pixel-haunted-dungeon'),
 };
 
 // Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
@@ -119,9 +128,33 @@ module.exports = {
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
   cycleAllPaths: true,
 
+  // Seasonal paths — drawn ONLY when engine_config.bots_seasonal_enabled is
+  // true AND the named holiday window (public.holidays) is calendar-active
+  // (scripts/lib/botSeasonal.js). NEVER add these to `paths` above — that
+  // would fire them in year-round rotation, exactly what this gate prevents.
+  seasonalPaths: {
+    halloween: [
+      'pixel-haunted-house',
+      'pixel-trickortreat-street',
+      'pixel-witchs-cottage',
+      'pixel-graveyard-night',
+      'pixel-haunted-overworld',
+      'pixel-haunted-dungeon',
+    ],
+  },
+
   chaos: {
     enabled: true,
-    skipPaths: [],
+    skipPaths: [
+      // Halloween seasonal candidates — protect the curated MVP composition
+      // proven during AlphaBot QA.
+      'pixel-haunted-house',
+      'pixel-trickortreat-street',
+      'pixel-witchs-cottage',
+      'pixel-graveyard-night',
+      'pixel-haunted-overworld',
+      'pixel-haunted-dungeon',
+    ],
     allowSubjectChaosPaths: [
       'cozy-rpg-town',
       'dungeon-depth',
@@ -143,6 +176,16 @@ module.exports = {
     polishedWords: '65-90',
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
+    // Halloween seasonal candidates — protect the curated MVP composition
+    // proven during AlphaBot QA (same protection as chaos.skipPaths above).
+    skipPaths: [
+      'pixel-haunted-house',
+      'pixel-trickortreat-street',
+      'pixel-witchs-cottage',
+      'pixel-graveyard-night',
+      'pixel-haunted-overworld',
+      'pixel-haunted-dungeon',
+    ],
   },
 
   // Sensory anchors disabled — they bleed generic "arcade/boss-fight/CRT/helipad"

@@ -38,6 +38,17 @@ const pathBuilders = {
   'anime-trains': require('./paths/anime-trains'), // Stage I2 SHADOW
   'winter-anime': require('./paths/winter-anime'), // Stage I3 SHADOW
   'night-touge': require('./paths/night-touge'), // Stage I4 SHADOW
+  // ── Halloween seasonal candidates (promoted from AlphaBot 2026-09-07,
+  // Kevin-approved QA matrix). Wired into seasonalPaths.halloween below, NOT
+  // into paths[] — gated on engine_config.bots_seasonal_enabled + the
+  // Halloween calendar window (scripts/lib/botSeasonal.js). Medium/model
+  // config cloned byte-identical on AlphaBot to MangaBot's own bot-wide
+  // defaults (PROMPT_PREFIX/PROMPT_SUFFIX + allowedModels) — confirmed exact
+  // match, so no mediumByPath/modelByPath override needed here.
+  'anime-halloween-festival': require('./paths/anime-halloween-festival'),
+  'anime-halloween-cozy': require('./paths/anime-halloween-cozy'),
+  'anime-haunted-school': require('./paths/anime-haunted-school'),
+  'anime-witch-familiar': require('./paths/anime-witch-familiar'),
 };
 
 // Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
@@ -201,6 +212,20 @@ module.exports = {
   // MANGA_SHADOW_PATHS const retained — still drives twoPassPolish.skipPaths).
   shadowPaths: [],
 
+  // Seasonal-window paths (2026-09-07) — drawn ONLY when
+  // engine_config.bots_seasonal_enabled is true AND the named holiday window
+  // is calendar-active (scripts/lib/botSeasonal.js + engineConfig.js). NEVER
+  // add a seasonal path to the normal `paths` shuffle-bag above — that would
+  // fire it in year-round rotation, exactly what this mechanism prevents.
+  seasonalPaths: {
+    halloween: [
+      'anime-halloween-festival',
+      'anime-halloween-cozy',
+      'anime-haunted-school',
+      'anime-witch-familiar',
+    ],
+  },
+
   // ghibli-painterly: locked to SDXL. The 2026-05-30 bake-off conclusion was
   // wrong — flux-1.1-pro renders this aesthetic too tight / illustrated, losing
   // the LOOSE HAND-PAINTED brushwork + storybook softness that defined Kevin's
@@ -216,7 +241,14 @@ module.exports = {
 
   chaos: {
     enabled: true,
-    skipPaths: [],
+    skipPaths: [
+      // Halloween seasonal candidates (promoted from AlphaBot 2026-09-07) —
+      // protect the curated MVP composition Kevin approved during QA.
+      'anime-halloween-festival',
+      'anime-halloween-cozy',
+      'anime-haunted-school',
+      'anime-witch-familiar',
+    ],
     allowSubjectChaosPaths: [
       'neo-tokyo',
       'isekai-fantasy',
@@ -269,6 +301,12 @@ module.exports = {
       'space-opera',
       'ghibli-painterly',
       ...MANGA_SHADOW_PATHS, // anime-rain (SHADOW) — scene path, polish OFF
+      // Halloween seasonal candidates (promoted from AlphaBot 2026-09-07) —
+      // protect the curated MVP composition Kevin approved during QA.
+      'anime-halloween-festival',
+      'anime-halloween-cozy',
+      'anime-haunted-school',
+      'anime-witch-familiar',
     ],
     polishedWordsByPath: {
       // Character-rich paths need extra word budget for archetype + outfit + setting + vista

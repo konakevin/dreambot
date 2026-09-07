@@ -36,6 +36,7 @@ const { createClient } = require('@supabase/supabase-js');
 const { pickModel, BOT_BANNED_MODELS } = require('./modelPicker');
 const { applyBotConfigOverlay } = require('./botConfig');
 const { pickFromBag, withRetry } = require('./botCycle');
+const { resolveSeasonalPath } = require('./botSeasonal');
 const { resolveCleanMedium } = require('./cleanMediumByModel');
 const { isOpenAIModel, generateOpenAIImage } = require('./providers/openai');
 const { isGeminiModel, generateGeminiImage } = require('./providers/gemini');
@@ -724,6 +725,12 @@ const _batchPathWindow = {};
 // delete every existing row for the bot first, then insert just this path.
 const _pathCycleState = {};
 
+// Same shape, for a seasonal pick (see botSeasonal.js) — kept as a separate
+// map so a seasonal commit never collides with a normal-cycle commit for the
+// same bot in the same run. cycleKey is the synthetic
+// `${botName}::seasonal::${holidayKey}` bot_path_cycle key, NOT bot.username.
+const _seasonalPathCycleState = {};
+
 // In-process path shuffle-bag for NON-dispatcher cycleAllPaths runs (iter-bot /
 // qa-matrix). A binary used-set (array of paths picked this process) so test
 // batches still cover every path before repeating — WITHOUT reading or writing
@@ -1062,9 +1069,23 @@ async function runBot(opts) {
   const isBatchMode = Boolean(outDir); // iter-bot sets this
   const shouldPostToDB = !dryRun && (!isBatchMode || post);
 
-  // Resolve path — shuffle-bag cycle or rolling dedup window
+  // Resolve path — seasonal gate first (see botSeasonal.js), then the normal
+  // shuffle-bag cycle or rolling dedup window over bot.paths. A seasonal path
+  // is NEVER a member of bot.paths (the shuffle-bag guarantees every bot.paths
+  // entry fires once per cycle, which would fire a holiday path in July) — it
+  // lives in bot.seasonalPaths[holidayKey] and is drawn only through this gate.
   let resolvedPath;
-  if (pathArg === 'random') {
+  const seasonalPick = pathArg === 'random' ? await resolveSeasonalPath({ sb, bot, source }) : null;
+  if (seasonalPick) {
+    resolvedPath = seasonalPick.path;
+    if (source === 'dispatcher') {
+      _seasonalPathCycleState[bot.username] = {
+        cycleKey: seasonalPick.cycleKey,
+        path: seasonalPick.path,
+        didReset: seasonalPick.didReset,
+      };
+    }
+  } else if (pathArg === 'random') {
     if (bot.cycleAllPaths && source === 'dispatcher') {
       // PRODUCTION shuffle-bag — persisted, roster-change-robust (migration 283).
       // Read the cycle's used-set, pick a path NOT yet used this cycle, and stash
@@ -1111,11 +1132,18 @@ async function runBot(opts) {
       pushBatchPath(bot.username, resolvedPath);
     }
   } else {
-    // A path is renderable if it's in the live rotation (bot.paths) OR in the
-    // dark-launch set (bot.shadowPaths). Shadow paths are reachable ONLY by
-    // explicit --path/--mode — the random shuffle-bag above draws from bot.paths
-    // alone, so the dispatcher never auto-posts a shadow path publicly.
-    const known = bot.paths.includes(pathArg) || (bot.shadowPaths || []).includes(pathArg);
+    // A path is renderable if it's in the live rotation (bot.paths), the
+    // dark-launch set (bot.shadowPaths), or a gated seasonal set
+    // (bot.seasonalPaths[holidayKey], e.g. seasonalPaths.halloween). Shadow
+    // and seasonal paths are reachable ONLY by explicit --path/--mode — the
+    // random shuffle-bag above draws from bot.paths alone (or through the
+    // seasonal gate in botSeasonal.js), so the dispatcher never auto-posts
+    // either kind outside its own controlled path.
+    const seasonalPathValues = bot.seasonalPaths ? Object.values(bot.seasonalPaths).flat() : [];
+    const known =
+      bot.paths.includes(pathArg) ||
+      (bot.shadowPaths || []).includes(pathArg) ||
+      seasonalPathValues.includes(pathArg);
     if (!known) {
       throw new Error(`Path '${pathArg}' not in bot.paths: ${bot.paths.join(', ')}`);
     }
@@ -1768,6 +1796,12 @@ async function runBot(opts) {
         errorStage = 'commit-path-cycle';
         await commitPathCycle(sb, bot.username, _pathCycleState[bot.username]);
         delete _pathCycleState[bot.username];
+      }
+      if (source === 'dispatcher' && _seasonalPathCycleState[bot.username]) {
+        errorStage = 'commit-seasonal-path-cycle';
+        const st = _seasonalPathCycleState[bot.username];
+        await commitPathCycle(sb, st.cycleKey, st);
+        delete _seasonalPathCycleState[bot.username];
       }
     }
 

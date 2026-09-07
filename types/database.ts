@@ -1574,6 +1574,7 @@ export type Database = {
           basic_hd_downloads_per_month: number;
           basic_monthly_sparkle_bundle: number;
           bots_seasonal_enabled: boolean;
+          bots_seasonal_pct: number;
           chaos_high_threshold: number;
           chaos_low_threshold: number;
           dream_art_mediums: string[];
@@ -1665,6 +1666,7 @@ export type Database = {
           basic_hd_downloads_per_month?: number;
           basic_monthly_sparkle_bundle?: number;
           bots_seasonal_enabled?: boolean;
+          bots_seasonal_pct?: number;
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
           dream_art_mediums?: string[];
@@ -1756,6 +1758,7 @@ export type Database = {
           basic_hd_downloads_per_month?: number;
           basic_monthly_sparkle_bundle?: number;
           bots_seasonal_enabled?: boolean;
+          bots_seasonal_pct?: number;
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
           dream_art_mediums?: string[];

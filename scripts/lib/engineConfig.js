@@ -23,6 +23,8 @@ const DEFAULT_ENGINE_CONFIG = {
   nightlyRequireAiEnabled: true,
   selfRefRegex: null,
   relationshipRegex: null,
+  botsSeasonalEnabled: false,
+  botsSeasonalPct: 30,
 };
 
 let cached = null;
@@ -33,7 +35,7 @@ async function fetchEngineConfig(sb) {
   const { data, error } = await sb
     .from('engine_config')
     .select(
-      'base_sparkle_cost, welcome_sparkle_bonus, pro_trial_days, prompt_max_length, photo_preprocess_width, photo_preprocess_quality, nightly_max_jobs, nightly_enabled, nightly_require_onboarding, nightly_require_ai_enabled, self_ref_regex, relationship_regex'
+      'base_sparkle_cost, welcome_sparkle_bonus, pro_trial_days, prompt_max_length, photo_preprocess_width, photo_preprocess_quality, nightly_max_jobs, nightly_enabled, nightly_require_onboarding, nightly_require_ai_enabled, self_ref_regex, relationship_regex, bots_seasonal_enabled, bots_seasonal_pct'
     )
     .eq('id', 1)
     .single();
@@ -64,8 +66,15 @@ async function fetchEngineConfig(sb) {
       data.nightly_require_ai_enabled ?? DEFAULT_ENGINE_CONFIG.nightlyRequireAiEnabled,
     selfRefRegex: data.self_ref_regex ?? DEFAULT_ENGINE_CONFIG.selfRefRegex,
     relationshipRegex: data.relationship_regex ?? DEFAULT_ENGINE_CONFIG.relationshipRegex,
+    botsSeasonalEnabled: data.bots_seasonal_enabled ?? DEFAULT_ENGINE_CONFIG.botsSeasonalEnabled,
+    botsSeasonalPct: num(data.bots_seasonal_pct, DEFAULT_ENGINE_CONFIG.botsSeasonalPct),
   };
   return cached;
 }
 
-module.exports = { fetchEngineConfig, DEFAULT_ENGINE_CONFIG };
+/** Test seam — reset the per-process cache (mirrors botConfig._resetBotConfigCache). */
+function _resetEngineConfigCache() {
+  cached = null;
+}
+
+module.exports = { fetchEngineConfig, DEFAULT_ENGINE_CONFIG, _resetEngineConfigCache };

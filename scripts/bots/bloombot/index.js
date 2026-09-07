@@ -50,6 +50,13 @@ const pathBuilders = {
   'moon-garden': require('./paths/moon-garden'), // Stage A3 (SHADOW)
   'rain-garden': require('./paths/rain-garden'), // Stage A4 (SHADOW)
   'great-blossom-tree': require('./paths/great-blossom-tree'), // Stage A5 (SHADOW)
+  // Halloween candidates — promoted from AlphaBot 2026-09-07 (approved QA
+  // matrix). Seasonal-only: fire ONLY via seasonalPaths.halloween below, never
+  // in the year-round paths[] rotation.
+  'moonlit-flower-garden': require('./paths/moonlit-flower-garden'),
+  'overgrown-pumpkin-blooms': require('./paths/overgrown-pumpkin-blooms'),
+  'haunted-mansion-florals': require('./paths/haunted-mansion-florals'),
+  'nightshade-forest-path': require('./paths/nightshade-forest-path'),
 };
 
 module.exports = {
@@ -167,6 +174,20 @@ module.exports = {
   // (shadow: hidden, admin-only). Promote = move the string into paths[].
   shadowPaths: [], // Stage A paths promoted to live rotation 2026-08-16
 
+  // Seasonal-window paths (scripts/lib/botSeasonal.js) — drawn ONLY when
+  // engine_config.bots_seasonal_enabled is true AND the named holiday window
+  // (public.holidays) is calendar-active; NEVER added to paths[] (that would
+  // fire them year-round, exactly what this mechanism exists to prevent).
+  // Promoted from AlphaBot 2026-09-07 (Kevin-approved QA matrix).
+  seasonalPaths: {
+    halloween: [
+      'moonlit-flower-garden',
+      'overgrown-pumpkin-blooms',
+      'haunted-mansion-florals',
+      'nightshade-forest-path',
+    ],
+  },
+
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
   cycleAllPaths: true,
@@ -177,7 +198,21 @@ module.exports = {
     // ornate arrangement; its own whimsy layer supplies the controlled "pop".
     // hanging-flowers skips chaos for the MVP — protect the overhead-canopy
     // walkway composition while validating (2026-06-22; revisit after sign-off).
-    skipPaths: ['flower-arrangement', 'hanging-flowers', 'water-garden', 'flower-fields', 'moon-garden', 'rain-garden', 'great-blossom-tree'],
+    skipPaths: [
+      'flower-arrangement',
+      'hanging-flowers',
+      'water-garden',
+      'flower-fields',
+      'moon-garden',
+      'rain-garden',
+      'great-blossom-tree',
+      // Halloween candidates — protect the curated MVP composition (matches
+      // AlphaBot QA config).
+      'moonlit-flower-garden',
+      'overgrown-pumpkin-blooms',
+      'haunted-mansion-florals',
+      'nightshade-forest-path',
+    ],
     allowSubjectChaosPaths: [
       'landscape',
       'cozy',
@@ -230,6 +265,12 @@ module.exports = {
       'moon-garden',
       'rain-garden',
       'great-blossom-tree',
+      // Halloween candidates — protect the curated MVP composition (matches
+      // AlphaBot QA config).
+      'moonlit-flower-garden',
+      'overgrown-pumpkin-blooms',
+      'haunted-mansion-florals',
+      'nightshade-forest-path',
     ],
   },
 

@@ -29,6 +29,13 @@ const pathBuilders = {
   'tiny-winter-village': require('./paths/tiny-winter-village'),
   'tiny-night-market': require('./paths/tiny-night-market'),
   'tiny-carnival': require('./paths/tiny-carnival'),
+  // Halloween seasonal candidates — promoted from AlphaBot 2026-09-07 (QA'd
+  // and approved by Kevin). Wired ONLY into seasonalPaths.halloween below,
+  // never into paths[] — see that array's comment.
+  'tiny-halloween-village': require('./paths/tiny-halloween-village'),
+  'tiny-halloween-hideaway': require('./paths/tiny-halloween-hideaway'),
+  'tiny-pumpkin-patch': require('./paths/tiny-pumpkin-patch'),
+  'tiny-haunted-hollow': require('./paths/tiny-haunted-hollow'),
 };
 
 // Dark-launch set — reachable only via explicit --path/--mode; posts hidden
@@ -97,6 +104,22 @@ module.exports = {
     'tiny-carnival',
   ],
 
+  // Seasonal-window-gated paths (botSeasonal.js) — drawn ONLY when
+  // engine_config.bots_seasonal_enabled is true AND the named holiday window
+  // (public.holidays) is calendar-active. NEVER add these to paths[] above —
+  // that would fire them in normal year-round rotation, exactly what this
+  // mechanism exists to prevent. Promoted from AlphaBot 2026-09-07 (QA'd and
+  // approved by Kevin); master switch defaults OFF so this changes nothing
+  // live until Kevin flips it for the season.
+  seasonalPaths: {
+    halloween: [
+      'tiny-halloween-village',
+      'tiny-halloween-hideaway',
+      'tiny-pumpkin-patch',
+      'tiny-haunted-hollow',
+    ],
+  },
+
   // Stage N paths promoted to live rotation 2026-08-16 (shadowPaths emptied;
   // TINY_SHADOW_PATHS const retained — still drives allowSubjectChaosPaths below).
   shadowPaths: [],
@@ -107,7 +130,14 @@ module.exports = {
 
   chaos: {
     enabled: true,
-    skipPaths: [],
+    skipPaths: [
+      // Halloween seasonal candidates (promoted from AlphaBot 2026-09-07) —
+      // protect the curated MVP composition; matches AlphaBot QA config.
+      'tiny-halloween-village',
+      'tiny-halloween-hideaway',
+      'tiny-pumpkin-patch',
+      'tiny-haunted-hollow',
+    ],
     allowSubjectChaosPaths: [
       'diorama',
       'miniature-landscape',
@@ -133,6 +163,14 @@ module.exports = {
     polishedWords: '65-90',
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
+    skipPaths: [
+      // Halloween seasonal candidates (promoted from AlphaBot 2026-09-07) —
+      // protect the curated MVP composition; matches AlphaBot QA config.
+      'tiny-halloween-village',
+      'tiny-halloween-hideaway',
+      'tiny-pumpkin-patch',
+      'tiny-haunted-hollow',
+    ],
   },
   sensoryAnchors: {
     enabled: true,

@@ -60,6 +60,14 @@ const pathBuilders = {
   'creature-lantern-festival': require('./paths/creature-lantern-festival'), // Stage H2 SHADOW
   'creature-school': require('./paths/creature-school'), // Stage H4 SHADOW
   'sky-village': require('./paths/sky-village'), // Stage H3 SHADOW
+  // Halloween candidates — promoted from AlphaBot 2026-09-07 (Kevin-approved
+  // QA matrix). Seasonal-only via seasonalPaths.halloween below — NEVER in
+  // paths[] (would fire year-round). See chaos.skipPaths / twoPassPolish.skipPaths.
+  'chibi-halloween-village': require('./paths/chibi-halloween-village'),
+  'chibi-halloween-cozy': require('./paths/chibi-halloween-cozy'),
+  'chibi-halloween-outing': require('./paths/chibi-halloween-outing'),
+  'chibi-pumpkin-patch': require('./paths/chibi-pumpkin-patch'),
+  'chibi-witchs-cottage': require('./paths/chibi-witchs-cottage'),
 };
 
 // Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
@@ -249,6 +257,21 @@ module.exports = {
   // CHIBI_SHADOW_PATHS const retained — still drives chaos-allow + polish-skip below).
   shadowPaths: [],
 
+  // Seasonal-only paths (2026-09-07) — drawn ONLY when
+  // engine_config.bots_seasonal_enabled is true AND the named holiday window
+  // (public.holidays) is calendar-active (scripts/lib/botSeasonal.js). NEVER
+  // list a seasonal path in `paths` above — that fires it year-round, exactly
+  // what this mechanism exists to prevent.
+  seasonalPaths: {
+    halloween: [
+      'chibi-halloween-village',
+      'chibi-halloween-cozy',
+      'chibi-halloween-outing',
+      'chibi-pumpkin-patch',
+      'chibi-witchs-cottage',
+    ],
+  },
+
   // Path weights — 2× indoor boost; everything else 1×.
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -308,7 +331,16 @@ module.exports = {
     // 2026-06-05 — bath-time lean-rebuild: every chaos perturbation (geometry,
     // framing, secondary_light, etc.) pushes the bath vessel further out of
     // focus on a path whose entire identity is "creature in a bath." Skip.
-    skipPaths: ['bath-time'],
+    skipPaths: [
+      'bath-time',
+      // Halloween candidates — protect the curated MVP composition (promoted
+      // from AlphaBot 2026-09-07, matched their AlphaBot chaos.skipPaths).
+      'chibi-halloween-village',
+      'chibi-halloween-cozy',
+      'chibi-halloween-outing',
+      'chibi-pumpkin-patch',
+      'chibi-witchs-cottage',
+    ],
     allowSubjectChaosPaths: [
       'cozy-landscape',
       'rainy-day-cozy',
@@ -363,6 +395,13 @@ module.exports = {
       'creature-county-fair',
       'creature-birthday-party',
       ...CHIBI_SHADOW_PATHS, // creature-autumn-day (SHADOW) — outing skips polish
+      // Halloween candidates — protect the curated MVP composition (promoted
+      // from AlphaBot 2026-09-07, matched their AlphaBot twoPassPolish.skipPaths).
+      'chibi-halloween-village',
+      'chibi-halloween-cozy',
+      'chibi-halloween-outing',
+      'chibi-pumpkin-patch',
+      'chibi-witchs-cottage',
     ],
   },
 

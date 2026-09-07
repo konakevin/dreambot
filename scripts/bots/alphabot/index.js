@@ -69,6 +69,11 @@ const pathBuilders = {
   'sky-bazaar': require('./paths/sky-bazaar'),
   'dream-orchard': require('./paths/dream-orchard'),
   'starlight-carnival': require('./paths/starlight-carnival'),
+  // (Halloween candidates 2026-09 — all 27 approved ones promoted to their
+  // destination bots' own seasonalPaths.halloween 2026-09-07; the 3
+  // superseded BloomBot rejects — gothic-harvest-florals, pumpkin-patch-blooms,
+  // witchs-garden-blooms — deleted, replaced by moonlit-flower-garden /
+  // overgrown-pumpkin-blooms / haunted-mansion-florals / nightshade-forest-path.)
 };
 
 // Look-enabled paths — same derivation DreamBot used (bubble exclusions moot
