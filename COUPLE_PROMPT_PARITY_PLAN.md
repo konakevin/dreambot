@@ -152,3 +152,14 @@ flux-1.1-pro (one `if` at the slot-input site) — not recommended, it adds a br
 **Status 2026-09-07 21:30 UTC:** v3 deployed (inert — knob `legacy`); code + tests + docs committed
 (0b1dbcb6 mechanism, 893838fa v3 + results); waiting on Kevin's blind votes (artifact above) → then
 Phase C. Total renders this run: 40 + 40 + 20 = 100 pairs-side renders + 1 smoke pair, ≈ $8.
+
+## 10. CUT OVER — 2026-09-07 21:38 UTC (Kevin: "flip it to subject_first and let's just cut it over now")
+
+`engine_config.couple_prompt_style = 'subject_first'` (row id 1). Live for every nightly couple from the
+next 08:00 UTC run (loader TTL 60 s). Also shipped just before the flip: the forensic stamp
+`couple_prompt_style:<style>` on every dual render, so the morning audit splits by style rather than by
+time. **Morning audit:** `node scripts/check-couple-prompt-night.js --hours 24` — tallies real-user couple
+renders by style (first-try / retried / solo / faceless / below-floor / gate) against the last 7 nights and
+exits 1 if subject_first is worse on faceless, solo-degrade or first-try. **Rollback:** the same row set to
+`'legacy'` (no deploy). Kevin's blind votes were still pending at the flip; the decision was made on the
+20-pair judged parity (§8) and his own read of the grading page ("they all look great").

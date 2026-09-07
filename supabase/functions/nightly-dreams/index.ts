@@ -2371,6 +2371,10 @@ Deno.serve(async (req) => {
             : slotInput;
         if (slotInputUsed !== slotInput) fallbackReasons.push('qa:force_slot_input');
         slotInputLogged = slotInputUsed;
+        // Forensics: which couple prompt ORDER rendered this dream (COUPLE_PROMPT_PARITY_PLAN.md Phase C).
+        if (isDualFaceSwap) {
+          fallbackReasons.push(`couple_prompt_style:${slotInputUsed.promptStyle ?? 'legacy'}`);
+        }
         const slotResult = await runCharacterSlotPipeline(
           slotInputUsed,
           ANTHROPIC_KEY,
