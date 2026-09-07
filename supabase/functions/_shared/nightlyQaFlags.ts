@@ -10,6 +10,7 @@
  * `queue_job_id` and `force_place` are also set by the production first-dream / queue paths.
  */
 import type { MoodAxes } from './vibeProfile.ts';
+import type { CharacterSlotPipelineInput, DualSlots } from './characterSlotPrompt.ts';
 
 export interface NightlyQaFlags {
   /** Preserves an explicit null (= "force scene-only, no cast"); undefined when absent. */
@@ -59,10 +60,49 @@ export interface NightlyQaFlags {
   force_final_prompt: string | null;
   /** QA: couple prompt order override (mig 470): 'legacy' | 'subject_first'. */
   force_prompt_style: 'legacy' | 'subject_first' | null;
+  /** QA (parity pairs, COUPLE_PROMPT_PARITY_PLAN.md §2): Sonnet's six dual slots, verbatim — the
+   *  slot pipeline skips Sonnet and assembles from these. */
+  force_dual_slots: DualSlots | null;
+  /** QA (parity pairs): the whole character-slot pipeline INPUT of a previous render
+   *  (`ai_generation_log.rolled_axes.observability.slotInput`) — replaces the rolled one so the prompt
+   *  is a pure function of (input, slots, promptStyle). Dual face-swap renders only. */
+  force_slot_input: CharacterSlotPipelineInput | null;
   strict_face_swap: boolean;
   /** Default true; only an explicit `false` disables persistence. */
   persist: boolean;
   queueJobId: string | null;
+}
+
+function parseDualSlots(v: unknown): DualSlots | null {
+  if (!v || typeof v !== 'object') return null;
+  const o = v as Record<string, unknown>;
+  const str = (k: string): string | null => (typeof o[k] === 'string' ? (o[k] as string) : null);
+  const scene = str('scene_description');
+  const left = str('left_wardrobe');
+  const right = str('right_wardrobe');
+  const mood = str('mood');
+  if (scene === null || left === null || right === null || mood === null) return null;
+  return {
+    scene_description: scene,
+    left_wardrobe: left,
+    right_wardrobe: right,
+    mood,
+    props: str('props') ?? '',
+    action: str('action'),
+  };
+}
+
+function isSlotInput(v: unknown): v is CharacterSlotPipelineInput {
+  if (!v || typeof v !== 'object') return false;
+  const o = v as Record<string, unknown>;
+  return (
+    Array.isArray(o.cast) &&
+    o.cast.length >= 1 &&
+    o.cast.length <= 2 &&
+    typeof o.mediumFluxFragment === 'string' &&
+    'iconicAnchor' in o &&
+    'userPlace' in o
+  );
 }
 
 export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
@@ -142,6 +182,8 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
       typeof body.force_final_prompt === 'string' && body.force_final_prompt.trim().length > 0
         ? body.force_final_prompt
         : null,
+    force_dual_slots: parseDualSlots(body.force_dual_slots),
+    force_slot_input: isSlotInput(body.force_slot_input) ? body.force_slot_input : null,
     strict_face_swap: body.strict_face_swap === true,
     persist: body.persist !== false,
     queueJobId: (body.queue_job_id as string) || null,

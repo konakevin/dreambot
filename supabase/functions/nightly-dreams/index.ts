@@ -354,6 +354,8 @@ Deno.serve(async (req) => {
     force_hero_seed,
     force_final_prompt,
     force_prompt_style,
+    force_dual_slots,
+    force_slot_input,
     strict_face_swap,
     persist,
     queueJobId,
@@ -382,6 +384,9 @@ Deno.serve(async (req) => {
   // ── Observability state ────────────────────────────────────────────────
   let sonnetBrief: string | null = null;
   let sonnetRawResponse: string | null = null;
+  /** The exact character-slot pipeline input used (logged to rolled_axes.observability.slotInput so a
+   *  render can be replayed byte-for-byte via force_slot_input — forensics + parity pairs). */
+  let slotInputLogged: CharacterSlotPipelineInput | null = null;
   let visionDescription: string | null = null;
   let replicatePredictionId: string | null = null;
   const fallbackReasons: string[] = [];
@@ -2355,7 +2360,22 @@ Deno.serve(async (req) => {
                 })()))
               : null,
         };
-        const slotResult = await runCharacterSlotPipeline(slotInput, ANTHROPIC_KEY);
+        // Parity QA (COUPLE_PROMPT_PARITY_PLAN.md §2): a forced slot INPUT + forced Sonnet SLOTS make
+        // the prompt a pure function of (input, slots, promptStyle) — the paired A/B differs only in order.
+        const slotInputUsed: CharacterSlotPipelineInput =
+          force_slot_input && isDualFaceSwap
+            ? {
+                ...force_slot_input,
+                promptStyle: force_prompt_style ?? sfaCfgCloser.couplePromptStyle,
+              }
+            : slotInput;
+        if (slotInputUsed !== slotInput) fallbackReasons.push('qa:force_slot_input');
+        slotInputLogged = slotInputUsed;
+        const slotResult = await runCharacterSlotPipeline(
+          slotInputUsed,
+          ANTHROPIC_KEY,
+          isDualFaceSwap ? force_dual_slots : null
+        );
         sonnetBrief = slotResult.briefUsed;
         sonnetRawResponse = slotResult.rawResponse;
         finalPrompt = slotResult.assembledPrompt;
@@ -2372,7 +2392,7 @@ Deno.serve(async (req) => {
           const selfIdx = resolvedCast.findIndex((rc) => rc.role === 'self');
           soloFallbackCtx = {
             dualSlots: slotResult.slots as DualSlots,
-            input: slotInput,
+            input: slotInputUsed,
             selfIndex: selfIdx === 1 ? 1 : 0,
             realMediumFragment,
           };
@@ -3220,6 +3240,7 @@ Output ONLY the prompt.`;
     console.log(`[nightly-dreams] Starting image generation (model: ${pickedModel})...`);
     // Capture for duplicate-bug observability
     const observability: Record<string, unknown> = {};
+    if (slotInputLogged) observability.slotInput = slotInputLogged;
 
     // NOTE: the auto-generated "Place, Region" location geotag (uploads.description)
     // was ripped out 2026-06-15 — it was buggy on no-location / direct renders

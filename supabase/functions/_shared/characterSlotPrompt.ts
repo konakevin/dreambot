@@ -1172,7 +1172,11 @@ export function assembleSoloFallbackFromDual(
 
 export async function runCharacterSlotPipeline(
   input: CharacterSlotPipelineInput,
-  anthropicKey: string
+  anthropicKey: string,
+  /** QA-only (nightly `force_dual_slots`, COUPLE_PROMPT_PARITY_PLAN.md §2): assemble from a
+   *  caller-supplied slot set instead of calling Sonnet, so two prompt styles can be compared on
+   *  IDENTICAL slots. Ignored unless it matches the cast count. */
+  forcedSlots: CharacterSlots | null = null
 ): Promise<CharacterSlotPipelineResult> {
   if (input.cast.length < 1 || input.cast.length > 2) {
     throw new Error(
@@ -1187,7 +1191,18 @@ export async function runCharacterSlotPipeline(
   let lastAttemptBrief = slotBrief;
   let retries = 0;
 
-  for (let attempt = 0; attempt < 2; attempt++) {
+  if (forcedSlots) {
+    const forcedIsDual = 'left_wardrobe' in forcedSlots;
+    if ((castCount === 2) === forcedIsDual) {
+      slots = forcedSlots;
+      rawResponse = JSON.stringify(forcedSlots);
+      fallbackReasons.push('qa:force_dual_slots');
+    } else {
+      fallbackReasons.push('qa:force_dual_slots_ignored:cast_mismatch');
+    }
+  }
+
+  for (let attempt = 0; slots === null && attempt < 2; attempt++) {
     try {
       const sonnet = await callSonnet(lastAttemptBrief, anthropicKey, 500);
       rawResponse = sonnet.rawResponse;

@@ -108,3 +108,61 @@ describe('couple prompt order', () => {
     expect(closer).toContain('side by side from the waist up');
   });
 });
+
+/** Parity-pair mechanism (COUPLE_PROMPT_PARITY_PLAN.md §2): forced slots skip Sonnet and assemble the
+ *  same prompt the direct assembler builds; the style never touches a SOLO prompt. */
+import { runCharacterSlotPipeline } from '@engine/characterSlotPrompt';
+import { callSonnet } from '@engine/llm';
+
+describe('parity pairs: forced slots + solo scope', () => {
+  it('forced dual slots skip Sonnet and assemble exactly what assembleCharacterPrompt builds, per style', async () => {
+    (callSonnet as jest.Mock).mockClear();
+    for (const promptStyle of ['legacy', 'subject_first'] as const) {
+      const inp = input({ promptStyle });
+      const r = await runCharacterSlotPipeline(inp, 'no-key', slots);
+      expect(r.assembledPrompt).toBe(assembleCharacterPrompt(slots, inp));
+      expect(r.fallbackReasons).toContain('qa:force_dual_slots');
+      expect(r.rawResponse).toBe(JSON.stringify(slots));
+    }
+    expect(callSonnet).not.toHaveBeenCalled();
+    const a = await runCharacterSlotPipeline(input({ promptStyle: 'legacy' }), 'no-key', slots);
+    const b = await runCharacterSlotPipeline(
+      input({ promptStyle: 'subject_first' }),
+      'no-key',
+      slots
+    );
+    for (const v of [
+      slots.scene_description,
+      slots.left_wardrobe,
+      slots.right_wardrobe,
+      slots.mood,
+    ]) {
+      expect(a.assembledPrompt).toContain(v);
+      expect(b.assembledPrompt).toContain(v);
+    }
+    expect(a.assembledPrompt).not.toBe(b.assembledPrompt);
+  });
+  it('forced dual slots are ignored (Sonnet path) when the cast is a single', async () => {
+    (callSonnet as jest.Mock).mockClear();
+    (callSonnet as jest.Mock).mockResolvedValue({
+      text: JSON.stringify({ scene_description: 's', wardrobe: 'w', mood: 'm', props: '' }),
+      rawResponse: '{}',
+    });
+    const solo = input({ cast: [input().cast[1]] });
+    const r = await runCharacterSlotPipeline(solo, 'no-key', slots);
+    expect(r.fallbackReasons).toContain('qa:force_dual_slots_ignored:cast_mismatch');
+    expect(callSonnet).toHaveBeenCalled();
+  });
+  it('promptStyle never changes a SOLO prompt', () => {
+    const soloSlots = {
+      scene_description: 'a quiet orchard',
+      wardrobe: 'a wool coat',
+      mood: 'calm',
+      props: '',
+    };
+    const base = input({ cast: [input().cast[1]] });
+    const legacy = assembleCharacterPrompt(soloSlots, { ...base, promptStyle: 'legacy' });
+    const sf = assembleCharacterPrompt(soloSlots, { ...base, promptStyle: 'subject_first' });
+    expect(sf).toBe(legacy);
+  });
+});
