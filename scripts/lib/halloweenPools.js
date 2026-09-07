@@ -3,7 +3,7 @@
 // seeds (gothic_greenhouse, gothic_glam_editorial, ghost_hotel_1920s → elegant; afterlife_waiting_room,
 // striped_suit_haunting → goofy); haunted_house_comedy pool retired. undead_wedding + stop_motion_whimsy came
 // BACK the same day (their register-driven renders read fully Halloween).
-// 14 main pools × sub-categories. Each pool: palette, signature objects, whether jack-o-lanterns are
+// 14 main pools × sub-categories (13 + enchanted_harvest_court, 2026-09-07). Each pool: palette, signature objects, whether jack-o-lanterns are
 // allowed, subs. Each sub: costume + setting hints for the generator. The engine mirror is
 // supabase/functions/_shared/holidayPools.ts (parity-tested). Share = ceil(SHARE / subs) per sub, per table.
 'use strict';
@@ -142,6 +142,16 @@ const POOLS = {
       'a ghost galleon, torn glowing sails, chests of cursed gold, a skeleton crew in the rigging, fog on the deck, a glowing compass',
     lanterns: false,
     subs: ['ghost_pirate_ship'],
+  },
+  // 2026-09-07: autumn_fae + harvest_royalty MOVED here from category=fall (Kevin: "move them if they're
+  // good, viable pools" — both passed the Aug-19 archetype QA at 4.65 / 4.8 and every row is jack-o-lantern-lit,
+  // which Fall no longer allows). Their own pool so the lantern rule stays true.
+  enchanted_harvest_court: {
+    palette: 'plum and amber, gilded oak leaf, candle gold, a huge harvest moon',
+    objects:
+      'a moonlit haunted rose garden, black roses on iron trellises, a cracked marble fountain, a candlelit harvest banquet hall, gourds and grapes down a long table, iron chandeliers, glowing jack-o-lanterns',
+    lanterns: true,
+    subs: ['autumn_fae', 'harvest_royalty'],
   },
 };
 const SUBS = {
@@ -448,6 +458,20 @@ const SUBS = {
       'a tattered ivory wedding gown with a crown of dead roses, and a faded black tailcoat with a wilted boutonniere',
     setting:
       'a blue-lit crypt chapel wedding with a skeletal band on the altar steps, black roses down the aisle, a thousand candles, cobwebbed pews, a moon through a broken rose window',
+  },
+  autumn_fae: {
+    pool: 'enchanted_harvest_court',
+    costume:
+      'a gown of deep-plum and black petals with gossamer dark wings, or a plum velvet doublet with a thorn-and-berry crown resting back off the brow',
+    setting:
+      'a moonlit haunted rose garden, black roses climbing iron trellises, a cracked fountain, fireflies, carved jack-o-lanterns glowing on weathered benches, an enormous amber moon',
+  },
+  harvest_royalty: {
+    pool: 'enchanted_harvest_court',
+    costume:
+      'a regal cloak-gown or cloak-and-doublet of amber, russet and gold autumn-leaf brocade, a crown of gilded oak leaves and acorns, topaz jewels',
+    setting:
+      'a candlelit harvest banquet hall, a long table of gourds, grapes and carved jack-o-lanterns, iron chandeliers ablaze, a roaring stone hearth, violet moonlight through tall windows',
   },
   stop_motion_whimsy: {
     pool: 'halloween_town_square',

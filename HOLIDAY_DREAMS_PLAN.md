@@ -416,6 +416,10 @@ Each sub-theme is authored for **solo** (`single_scenarios`) and **dual** (`dual
 
 ### 8b. Fall / Autumn Americana cluster (cozy · nostalgic · pretty)
 
+> **SUPERSEDED 2026-09-07 by §8d** (the Fall taxonomy Kevin approved). Kept for history; several of these
+> subs (corn maze, trick-or-treat, pumpkin farm, hayride, cabin porch with a pumpkin) now live in HALLOWEEN's
+> `pumpkin_patch_night` / `halloween_neighborhood` pools under the pumpkin demarcation.
+
 The warm heart of the season — fun **fall** scenes that need little or no spook. The dreamer is cast
 right into them in cozy real autumn clothes (no costume required), so these read as "you, on the most
 perfect fall afternoon." Same `pool='holiday'`, `category='halloween'`. These deliberately weight the
@@ -456,6 +460,43 @@ cozy-fall cluster since that's the backbone), QA via `force_scene_category='hall
 proximity scan, grade in-app on AlphaBot / a test user, then scale to ~160 (Sonnet-authored,
 per-sub-theme, solo + dual, mirroring the "active" bucket generators). Suggested split at scale:
 ~55% fall/cozy (8b), ~45% costumed (8a).
+
+### 8d. FALL taxonomy — FINAL (Kevin approved 2026-09-07) 🍂
+
+**Demarcation:** Halloween owns pumpkins, jack-o-lanterns, gourds, costumes and spook. Fall owns foliage,
+orchards, harvest, hearth, rain, flannel and cider. Every Fall pool is `lanterns:false` and the lint
+(`scripts/lib/holidayPoolLint.js`) DROPS any `category='fall'` / `holiday='fall'` row that mentions a
+pumpkin / jack-o-lantern / gourd, whatever its sub_theme (scene-only rows included). Attire = REAL autumn
+wardrobe, never a costume. Window: Sept 15 → Thanksgiving Day, flat 10% (stacks with Halloween's flat 10%
+in October → 20%, drawn in proportion). Source of truth `scripts/lib/fallPools.js`; engine mirror
+`_shared/holidayPools.ts` (`FALL_POOL_OF_SUB` / `FALL_POOLS`, parity-tested); registers in
+`_shared/actionRegisters.ts` (one per pool, validator-locked); generator `gen-holiday-archetypes.js
+--holiday fall --pool <pool> --to-share`.
+
+| pool | palette | subs |
+|---|---|---|
+| golden_foliage | fiery maple, aspen gold, low sunbeams, mist | maple_grove_sunbeams · aspen_gold_high_country · covered_bridge_creek · lakeside_dock_mist · leaf_storm_avenue |
+| orchard_and_cider | apple red, hay gold, cider amber, barn wood | apple_orchard_afternoon · cider_mill_barn · farm_stand_golden_hour · vineyard_harvest_dusk |
+| cozy_hearth | firelight, wool, rain-grey glass, oak | cabin_fireside · reading_nook_rain · farmhouse_kitchen_baking · bookshop_cafe_rain |
+| harvest_table | candle gold, linen, burgundy, copper | long_table_under_oaks · candlelit_farmhouse_feast · barn_harvest_dinner |
+| autumn_town | brick, ivy, lamplight, wet cobbles | new_england_main_street · cobblestone_cafe_terrace · rainy_boulevard_umbrellas · campus_quad_ivy · steam_train_platform |
+| autumn_adventure | canyon rust, alpine gold, river silver | canyon_fall_hike · alpine_lake_trail · foggy_moor_walk · kayak_mirror_lake · horseback_woodland_trail |
+| rainy_day_romance | slate, umbrella red, greenhouse glass | umbrella_bridge_rain · greenhouse_rain_glass · window_seat_storm |
+| autumn_wonder | dreamlike gold, floating leaves, lavender dusk | hot_air_balloons_over_valley · treehouse_village_foliage · cloud_mirror_lake |
+
+**Seeded 2026-09-07 (share = ceil(70 / subs) per sub per table):** 570 dual + 570 single cast rows
+(1,140; lint dropped ~4%), 192 new scene-only rows (6 per sub) + 10 surviving Aug-19 scenes = 202.
+`scan-holiday-pools.js --holiday fall` → 0 errors. The two pre-split subs `autumn_fae` + `harvest_royalty`
+(every row jack-o-lantern-lit, Aug-19 QA 4.65 / 4.8) MOVED to Halloween as their own pool
+`enchanted_harvest_court` (14th pool, `lanterns:true`, share 35/sub — top up via `--pool
+enchanted_harvest_court --to-share`); `canyon_fall_hike` re-authored inside `autumn_adventure` (26 old rows
+disabled); 4 Aug-19 Fall scene-only rows with pumpkins disabled. Ledger:
+session scratchpad `fall-build/ledger-2026-09-07.json`.
+
+**Render QA (18 renders, Kevin's album 🍂 FALL A / B):** 18/18 rendered; every Fall render resolved its
+pool register + authored a scene-first action; solo identity 0.62-0.71; 4 of 10 couples degraded to the
+(F2) solo rebuild — the known flux-1.1-pro painterly-couple rate, not a Fall issue. Kevin grades in-app;
+a sub that misses gets REMOVED (never down-weighted), then `holidays.fall.is_active=true` before Sept 15.
 
 ### 8c. Scene-only Halloween pool 🎃 (no cast — benefits ALL users)
 

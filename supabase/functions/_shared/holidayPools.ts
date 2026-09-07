@@ -1,5 +1,6 @@
 // MIRROR of scripts/lib/halloweenPools.js (parity-locked by __tests__/lib/halloweenPoolsParity.test.ts).
 // 2026-09-06: 7 sub-themes folded out to elegant / goofy (see the tooling file header); 13 pools.
+// 2026-09-07: + enchanted_harvest_court (autumn_fae + harvest_royalty moved in from Fall) = 14 pools.
 // The engine only needs: which MAIN pool a sub_theme belongs to, so holiday draws can pick the pool
 // uniformly first (equal airtime, Kevin 2026-09-05) and a row inside it second.
 export const HALLOWEEN_POOL_OF_SUB: Record<string, string> = {
@@ -52,6 +53,8 @@ export const HALLOWEEN_POOL_OF_SUB: Record<string, string> = {
   seance_parlor: 'seance_parlor',
   cute_halloween: 'cute_halloween',
   ghost_pirate_ship: 'ghost_pirate_ship',
+  autumn_fae: 'enchanted_harvest_court',
+  harvest_royalty: 'enchanted_harvest_court',
 };
 export const HALLOWEEN_POOLS: string[] = [
   'halloween_neighborhood',
@@ -67,10 +70,58 @@ export const HALLOWEEN_POOLS: string[] = [
   'seance_parlor',
   'cute_halloween',
   'ghost_pirate_ship',
+  'enchanted_harvest_court',
 ];
-/** Main pool for a row's sub_theme; unknown/null sub_theme → its own bucket (never dropped). */
+// MIRROR of scripts/lib/fallPools.js (parity-locked by the same test). 2026-09-07 (Kevin approved): 8 Fall pools.
+// Demarcation: Halloween owns pumpkins / jack-o-lanterns / costumes / spook; Fall owns foliage, orchards,
+// harvest, hearth, rain, flannel, cider. Sub-theme names never collide across the two maps (parity-tested).
+export const FALL_POOL_OF_SUB: Record<string, string> = {
+  maple_grove_sunbeams: 'golden_foliage',
+  aspen_gold_high_country: 'golden_foliage',
+  covered_bridge_creek: 'golden_foliage',
+  lakeside_dock_mist: 'golden_foliage',
+  leaf_storm_avenue: 'golden_foliage',
+  apple_orchard_afternoon: 'orchard_and_cider',
+  cider_mill_barn: 'orchard_and_cider',
+  farm_stand_golden_hour: 'orchard_and_cider',
+  vineyard_harvest_dusk: 'orchard_and_cider',
+  cabin_fireside: 'cozy_hearth',
+  reading_nook_rain: 'cozy_hearth',
+  farmhouse_kitchen_baking: 'cozy_hearth',
+  bookshop_cafe_rain: 'cozy_hearth',
+  long_table_under_oaks: 'harvest_table',
+  candlelit_farmhouse_feast: 'harvest_table',
+  barn_harvest_dinner: 'harvest_table',
+  new_england_main_street: 'autumn_town',
+  cobblestone_cafe_terrace: 'autumn_town',
+  rainy_boulevard_umbrellas: 'autumn_town',
+  campus_quad_ivy: 'autumn_town',
+  steam_train_platform: 'autumn_town',
+  canyon_fall_hike: 'autumn_adventure',
+  alpine_lake_trail: 'autumn_adventure',
+  foggy_moor_walk: 'autumn_adventure',
+  kayak_mirror_lake: 'autumn_adventure',
+  horseback_woodland_trail: 'autumn_adventure',
+  umbrella_bridge_rain: 'rainy_day_romance',
+  greenhouse_rain_glass: 'rainy_day_romance',
+  window_seat_storm: 'rainy_day_romance',
+  hot_air_balloons_over_valley: 'autumn_wonder',
+  treehouse_village_foliage: 'autumn_wonder',
+  cloud_mirror_lake: 'autumn_wonder',
+};
+export const FALL_POOLS: string[] = [
+  'golden_foliage',
+  'orchard_and_cider',
+  'cozy_hearth',
+  'harvest_table',
+  'autumn_town',
+  'autumn_adventure',
+  'rainy_day_romance',
+  'autumn_wonder',
+];
+/** Main pool for a row's sub_theme (Halloween or Fall); unknown/null sub_theme → its own bucket (never dropped). */
 export function holidayPoolOf(subTheme: string | null | undefined): string {
   if (!subTheme) return '__unsorted';
-  const p = HALLOWEEN_POOL_OF_SUB[subTheme];
+  const p = HALLOWEEN_POOL_OF_SUB[subTheme] ?? FALL_POOL_OF_SUB[subTheme];
   return p ? p : subTheme;
 }

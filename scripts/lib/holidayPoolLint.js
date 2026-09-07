@@ -16,7 +16,18 @@
  */
 const { VIOLATION, MITIGATED, ALLOW } = require('./posePoolLint');
 
-const TAX = require('./halloweenPools');
+const TAXES = { halloween: require('./halloweenPools'), fall: require('./fallPools') };
+/** The row's main pool: by its holiday (category / holiday column) when known, else the first taxonomy
+ *  that knows the sub_theme (sub names never collide across holidays — parity-tested). */
+function poolFor(row) {
+  const holiday = row.category || row.holiday || null;
+  const taxes = holiday && TAXES[holiday] ? [TAXES[holiday]] : Object.values(TAXES);
+  for (const tax of taxes) {
+    const poolKey = row.sub_theme ? tax.POOL_OF_SUB[row.sub_theme] : null;
+    if (poolKey) return { holiday, poolKey, pool: tax.POOLS[poolKey] };
+  }
+  return { holiday, poolKey: null, pool: null };
+}
 // Franchise vocabulary (the seeds carry a VIBE, never a name — Kevin 2026-09-05). Extend as found.
 const IP_TERM =
   /\b(?:proton packs?|ghostbusters?|ecto-?1|slimer|stay[- ]puft|beetlejuice|sandworms?|sanderson|hocus pocus|jack skellington|oogie|halloweentown|coraline|addams|casper|freddy|jason voorhees|michael myers|elvira|scooby|mystery machine)\b/i;
@@ -85,16 +96,19 @@ function lintHolidayRow(row) {
     errors.push('franchise / character name in seed text — seeds carry the vibe, never the name');
   }
 
-  if (row.sub_theme) {
-    const poolKey = TAX.POOL_OF_SUB[row.sub_theme];
-    const pool = poolKey ? TAX.POOLS[poolKey] : null;
-    if (pool && !pool.lanterns) {
-      const txt = `${row.scene || ''} ${row.attire || ''}`;
-      if (LANTERN_NOUN.test(txt)) {
-        errors.push(
-          `pumpkin/jack-o-lantern in a non-lantern pool (${poolKey}) — see HOLIDAY_DREAMS_PLAN FINAL list`
-        );
-      }
+  {
+    const { holiday, poolKey, pool } = poolFor(row);
+    const txt = `${row.scene || ''} ${row.attire || ''}`;
+    if (holiday === 'fall' && LANTERN_NOUN.test(txt)) {
+      // Demarcation (Kevin 2026-09-07): Halloween owns pumpkins / jack-o-lanterns / gourds; a Fall row
+      // never has them, whatever its sub_theme (covers scene-only rows with no sub_theme too).
+      errors.push(
+        'pumpkin/jack-o-lantern/gourd in a FALL row — Halloween owns those (fallPools.js header)'
+      );
+    } else if (pool && !pool.lanterns && LANTERN_NOUN.test(txt)) {
+      errors.push(
+        `pumpkin/jack-o-lantern in a non-lantern pool (${poolKey}) — see HOLIDAY_DREAMS_PLAN FINAL list`
+      );
     }
   }
 

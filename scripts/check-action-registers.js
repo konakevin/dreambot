@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Live-DB parity for _shared/actionRegisters.ts: every ENABLED non-active scenario category (dual + single),
-// every Halloween pool and every location biome must resolve to a genre register. Exit 1 on a gap.
+// every Halloween + Fall pool and every location biome must resolve to a genre register. Exit 1 on a gap.
 // Run after seeding a new category/pool. (Fast-jest covers the code-side lists; this covers the DB.)
 require('dotenv').config({ path: require('path').join(__dirname, '..', '.env.local') });
 const { createClient } = require('@supabase/supabase-js');
@@ -41,6 +41,8 @@ const resolves = (k) => keys.has(aliases[k] ?? k);
   }
   const { POOLS } = require('./lib/halloweenPools');
   for (const p of Object.keys(POOLS)) if (!resolves(p)) missing.push(`halloween:${p}`);
+  const { POOLS: FALL } = require('./lib/fallPools');
+  for (const p of Object.keys(FALL)) if (!resolves(p)) missing.push(`fall:${p}`);
   const { data: biomes } = await sb.from('location_cards').select('biome').not('biome', 'is', null);
   for (const b of new Set((biomes || []).map((r) => r.biome)))
     if (!resolves(b)) missing.push(`biome:${b}`);

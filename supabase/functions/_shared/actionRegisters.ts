@@ -5,7 +5,7 @@
  *
  * One register per genre: `actions` = coherent things people DO in that world; `stills` = composed poses
  * that are welcome too. Nightly hands Sonnet a shuffled handful as "things people do HERE — pick or adapt
- * one, or a composed still". Keys: the 14 Halloween pools (holidayPools.ts), scenario categories (plus
+ * one, or a composed still". Keys: the 14 Halloween + 8 Fall pools (holidayPools.ts), scenario categories (plus
  * aliases from the single-scenario category names), the 20 location biomes (biomeAxes.ts), and the two
  * generic seeded kinds (goofy / elegant) as the fallback when a row carries no category.
  *
@@ -926,6 +926,152 @@ export const ACTION_REGISTERS: Record<string, ActionRegister> = {
       'tying a sandal strap on the veranda step',
     ],
     ['standing on the veranda with hands folded in front', 'kneeling on the tatami with a tea bowl']
+  ),
+  // ── Fall pools (Kevin approved 2026-09-07; fallPools.js / FALL_POOLS) — real autumn wardrobe, no costume ──
+  golden_foliage: R(
+    [
+      'catching a drifting maple leaf in one open palm at waist height',
+      'brushing fallen leaves off a split-rail fence with one hand',
+      'holding a paper cup of cider with both hands on the covered-bridge walkway',
+      'tying a boot lace with one foot up on a fallen log',
+      'pulling a wool scarf snug with both hands at the collar',
+      'scooping a small pile of red leaves and letting it spill from one hand',
+      'resting a forearm on the dock post beside a tied canoe',
+      'buttoning a wool coat while leaves drift across the trail',
+    ],
+    [
+      'leaning against a maple trunk with hands in coat pockets, one ankle crossed',
+      'standing at the bridge rail with a mug held at waist height, leaves drifting past',
+    ]
+  ),
+  orchard_and_cider: R(
+    [
+      'reaching for a red apple on a low bough, the other hand steadying a woven basket',
+      'holding a slatted crate of apples against one hip',
+      'polishing an apple on a flannel sleeve',
+      'pouring cider from a stoneware jug into a tin cup at the farm-stand counter',
+      'steadying a wooden ladder against an apple tree with one hand',
+      'setting a potted mum onto a hay bale',
+      'turning the iron wheel of a cider press with both hands',
+      'hoisting a crate of grapes onto the vineyard cart',
+    ],
+    [
+      'leaning on the farm-stand counter beside crates of apples, a tin cup at hand',
+      'standing between vineyard rows with a basket resting on one hip',
+    ]
+  ),
+  cozy_hearth: R(
+    [
+      'feeding a split log into the stone fireplace',
+      'cradling a steaming mug with both hands at the window seat',
+      'pulling a wool blanket up around the shoulders by the fire',
+      'stacking two worn hardcovers on the side table beside the brass lamp',
+      'dusting flour off both hands over the butcher-block island',
+      'sliding an apple pie onto the windowsill to cool',
+      'stirring a copper pot on the cast-iron stove',
+      'wrapping both hands around a paper cup at the fogged bookshop window',
+    ],
+    [
+      'leaning against the mantel with a mug held at waist height, firelight on the wool sweater',
+      'standing at the rain-streaked window with a wool throw over one arm',
+    ]
+  ),
+  harvest_table: R(
+    [
+      'setting a candle down the center of the long table',
+      'carrying a basket of crusty bread toward the head of the table',
+      'pouring cider into a pewter goblet',
+      'laying an oak-leaf garland along the linen tablecloth',
+      'lifting the lid off a copper pot of stew, steam rising',
+      'placing a pie onto a wooden board among the dishes',
+      'straightening a linen napkin beside a place setting',
+      'holding a lantern at hip height beside the barn table',
+    ],
+    [
+      'standing at the head of the table with one hand resting on a chair back',
+      'leaning against a barn post with a goblet held at waist height, string lights over the table',
+    ]
+  ),
+  autumn_town: R(
+    [
+      'carrying a paper cup of coffee and a folded newspaper along the brick sidewalk',
+      'setting a potted mum on the general-store step',
+      'pulling a wool coat collar up against the drizzle under a striped awning',
+      'stirring a coffee at a cane cafe table on the cobbled square',
+      'hoisting a vintage suitcase onto the station platform',
+      'tucking a book into a leather satchel on the quad steps',
+      'shaking rain off a closed umbrella at the cafe door',
+      'buttoning a peacoat beside an iron lamp post',
+    ],
+    [
+      'leaning against a lamp post with hands in coat pockets, leaves drifting along the cobbles',
+      'standing on the platform with a suitcase at one side and a coat over the arm',
+    ]
+  ),
+  autumn_adventure: R(
+    [
+      'adjusting a daypack strap on the canyon trail',
+      'refilling a steel bottle at the edge of the alpine lake',
+      'dragging a wooden kayak up the pebble shore by its bow handle',
+      "holding a horse's lead rope loosely at the trail edge",
+      'stepping onto a flat stone at the river crossing, arms out for balance',
+      'brushing bracken off wellies at the stone wall',
+      'zipping a fleece vest at the trailhead',
+      'planting a trekking pole on the switchback',
+    ],
+    [
+      'leaning on a trekking pole at the canyon rim, a river far below',
+      'standing at the lake shore with a paddle held upright at one side',
+    ]
+  ),
+  rainy_day_romance: R(
+    [
+      'holding a red umbrella at one side on the rain-slick bridge',
+      'wiping rain from a greenhouse pane with one sleeve',
+      'cradling a mug at the bay window as rain sheets the glass',
+      'shaking rain off an umbrella under the greenhouse door',
+      'tucking a wool wrap tighter with both hands at the window seat',
+      'brushing wet leaves off a wrought-iron bench',
+      'pulling a trench-coat belt snug on the bridge steps',
+      'setting a candle on the window ledge as the storm rolls in',
+    ],
+    [
+      'leaning on the stone bridge rail with a closed umbrella hooked over one arm',
+      'standing among greenhouse ferns with hands in cardigan pockets, rain on the glass',
+    ]
+  ),
+  autumn_wonder: R(
+    [
+      'gripping the wicker basket rail as the balloon drifts over the valley',
+      'holding a lantern at hip height on the rope bridge between treehouses',
+      'trailing one hand along the rope-bridge rail',
+      'catching a floating golden leaf in one palm at waist height',
+      'steadying a lantern on the pier post beside the mirror lake',
+      'tying off a balloon mooring rope at the basket',
+      'pushing open a treehouse door onto the lantern-lit walkway',
+      'holding a paper cup of cider at the end of the pier',
+    ],
+    [
+      'leaning on the basket rail with the foliage valley far below',
+      'standing at the end of the pier with hands in coat pockets, the lake mirroring the clouds',
+    ]
+  ),
+  // ── Halloween: enchanted_harvest_court (autumn_fae + harvest_royalty, moved in from Fall 2026-09-07) ──
+  enchanted_harvest_court: R(
+    [
+      'holding a goblet of cider at waist height at the banquet table',
+      'resting one hand on the carved back of a throne chair',
+      'setting a gilded oak-leaf crown on the table beside a candelabra',
+      'trailing one hand along the black-rose trellis',
+      'holding a lantern at hip height on the garden path',
+      'lifting a bunch of grapes from a silver platter',
+      'brushing petals off a velvet sleeve',
+      'placing a candle on the cracked fountain rim',
+    ],
+    [
+      'standing at the head of the banquet table with one hand resting on a chair back',
+      'leaning against a garden column with a goblet held at waist height, fireflies in the roses',
+    ]
   ),
 };
 
