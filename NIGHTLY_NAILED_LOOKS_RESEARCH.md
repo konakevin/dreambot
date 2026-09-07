@@ -75,3 +75,9 @@ couples decide. This is where flux-1.1-pro painterly looks will fall and where m
 `BOT_SCENE_QUALITY_PLAYBOOK.md` ("Medium Looks" sections, per-bot model lineups, HTML matrix
 protocol), `SMART_DREAM_PLAN.md` + `DREAMSMART_MODEL_VALIDATION.md` (the model↔style runbook this
 extends), `BOT_MODEL_TALLY.md` (the tally pattern to mirror as `NIGHTLY_LOOK_TALLY.md`).
+
+**2026-09-07 — superseded/extended by `NIGHTLY_LOOKS_FEASIBILITY.md`:** Kevin's direction became "convert
+ALL of nightly to the looks catalog, isolated from the app's mediums, model chain primary with per-model
+look subsets." The feasibility doc carries the inventory of every medium touch point, the recommended
+catalog shape (`dream_mediums` rows in a `nightly_*` namespace + flag + check constraint), the resolver,
+the rollout and the risks. The Halloween hero (`HALLOWEEN_HERO_LOOK_PLAN.md`) is instance #1 in flight.
