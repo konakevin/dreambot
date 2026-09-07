@@ -226,3 +226,12 @@ Total ≈ 2-3 sessions before Oct 31 with margin.
   (couple if +1) — the personal-dream rule kept from the hero era; postcard scope `day_of` composites on
   `dayOfApplied`; response field `day_of`. `force_day_of=<key>` now means "pretend today is the peak".
   Tests: date rule + selection in `holidayDayOf.test.ts`; full lane 2767 green; Deno green.
+- 2026-09-07 23:00 UTC — **Step 3 IN PROGRESS:** `gen-holiday-archetypes.js --holiday halloween --pool
+  halloween_day_of --to-share --kind all` seeding 12 subs × dual / single / scene to share 10 each
+  (dry run: 3/3 clean; the lint's day-of rules run inside the generator). **Step 5 built early:**
+  `scripts/check-holiday-day-of.js` (`--preflight` = pool rows per surface + catalog active /
+  day_of_enabled / overlay asset; peak-night tally = day-of stamps vs postcards vs SHIPPED_FACELESS vs
+  window fallbacks, exit 1 on any gap; `--if-peak` = quiet unless UTC today/yesterday is a peak) +
+  `.github/workflows/holiday-day-of-monitor.yml` (daily 10:00 UTC). **Dress rehearsal passes:**
+  `scripts/simulate-day-of.mjs --holiday halloween --year 2026` → all 8 timezones fire exactly once, on
+  the Oct 31 08:00 UTC run (Honolulu via the 20:00 cutoff).

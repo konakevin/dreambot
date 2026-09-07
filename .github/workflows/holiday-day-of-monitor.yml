@@ -1,0 +1,34 @@
+name: Holiday Day-Of Monitor
+
+# Loud check that a holiday's DAY-OF takeover fired (HOLIDAY_DAY_OF_PLAN.md R7 / §7): every real-user
+# nightly on the peak date drew from the reserved <key>_day_of pool, got its postcard overlay, and no
+# cast dream shipped faceless. Runs daily; the script exits quietly unless UTC today/yesterday is the
+# peak of an active, day_of_enabled holiday (the takeover spans two 08:00 UTC runs across timezones).
+# Mirrors the bot-health-monitor shape. See scripts/check-holiday-day-of.js.
+
+on:
+  schedule:
+    - cron: '0 10 * * *' # daily 10:00 UTC — two hours after the 08:00 nightly
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Check the holiday day-of takeover
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/check-holiday-day-of.js --holiday halloween --if-peak
