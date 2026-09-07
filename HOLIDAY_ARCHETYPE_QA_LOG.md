@@ -109,3 +109,44 @@ before scaling — open item in HOLIDAY_DREAMS_PLAN.md §12.
 **Lessons:** scene = PURE ENVIRONMENT (no people/role clause) · lead every setting with its Halloween
 noun · palette = décor colour, not light · no DDL on `holidays` mid-sample (PostgREST schema reload
 blanked the forced-holiday lookup for ~5 min and 3 renders silently skipped the hero).
+
+## 🍂 FALL dreamy pools — 5-round QA (Kevin 2026-09-07: "go ham on all those and do 5 rounds of qa for each one")
+
+Pools: autumn_bloom_world (6 subs) · enchanted_gold_forest (5) · sky_and_light (5) · autumn_storybook (5) ·
+high_peaks_fall (5). A round = 4 renders per pool (2 couples + 2 solos, subs rotated), judged by (1) my
+visual pass on the contact sheet against the dream test, (2) the Sonnet framing/setting judge (its
+"nonsense" flag fires on the INTENDED dreamy elements here — oversized moon, aurora, floating leaves — so
+it is informational only for these pools), (3) the swap stamps (`ai_generation_log.fallback_reasons`).
+Grades are mine (they skew harsh; Kevin grades in-app). Sheets: session scratchpad `fall-build/rounds/`.
+
+### Round 1 (20 renders, 2 × 546)
+| pool | grade | what worked | misses → fix |
+|---|---|---|---|
+| autumn_bloom_world | 4.0 | chrysanthemum cascade walk (watercolor) on brief; dahlia grove reads colossal | marigold + dahlia couples = tight two-heads (1.1-pro); **sunflower sub rows were dahlia groves (7/12)** |
+| sky_and_light | 4.2 | floating-lantern dock couple 4.5, harvest-moon pier couple 4.5, fog-valley god rays | **aurora rendered under a daytime sky** (11/14 rows had no night word) |
+| autumn_storybook | 4.3 | cottage door (pencil) 4.5, castle terrace couple 4.5, conservatory noir | **windmill sub rendered a castle terrace** (7/14 rows had no windmill) |
+| high_peaks_fall | 4.3 | larch switchbacks, alpine hut mug, ridge above clouds | 2/2 couples degraded (partner identity ≈0 after giant_face) |
+| enchanted_gold_forest | 4.2 | firefly birch cathedral 4.5, moonlit garden bench, mushroom hollow noir | `sunbeam_grove_seed_drift` = Sonnet REFUSAL (renamed → `sunbeam_grove_light`); mushroom couple degraded |
+
+**Root cause (systemic, fixed at the source):** the generator's Fall punch said "fill the setting with an
+ABUNDANCE of this pool's signature objects" — for pools whose subs are distinct PLACES that pulled sibling
+subs' places into a sub's rows (56 off-brief rows in 26 subs). Fix: (a) Fall punch now makes the archetype's
+setting family the HERO and the pool objects accents only; (b) `fallPools.js` subs carry `must` regexes (the
+defining element, e.g. windmill + wheat; aurora + night) and the generator DROPS a row missing one; (c) all
+off-brief rows disabled (ledgers `fall-build/ledger-offbrief-<pool>.json`) and every pool topped back up to
+share under the new rule; scan 0 errors. Also: `sonnetRows` now logs `stop_reason` instead of crashing on an
+empty reply.
+
+### Round 2 (20 renders, 1 × 546) — after the fix
+| pool | grade | read |
+|---|---|---|
+| autumn_bloom_world | 4.4 | sunflower cathedral backlit 4.5 (fix held), marigold bridge 4.5, colossal tree 4.5; amaranth "curtains" rendered as velvet drapes (3.5) |
+| sky_and_light | 4.5 | **aurora now at night** 4.5, cloud-sea summit 4.5, harvest-moon pier solo 4.5 |
+| autumn_storybook | 4.3 | cottage-door couple 4.5 (both present), castle garden 4.5, conservatory 4; canal couple tight two-heads (3) |
+| high_peaks_fall | 4.2 | ridge walk + thermos, glacier lake; both couples degraded |
+| enchanted_gold_forest | 4.3 | sunbeam grove with drifting seeds (fix held), mushroom hollow scale; couples tight (floating leaves, firefly birch) |
+
+**The open problem is COUPLES, not scenes:** rounds 1-2 dreamy-pool couples = 12 / 22 degraded to the solo
+rebuild (all on flux-1.1-pro; reasons: partner identity 0.02-0.14 or `giant_face` no-split). The colossal-
+scale scenes push the camera back until the partner's face is below the swap floor; the F2 rebuild makes the
+solo look great, but the partner is silently dropped. Round 3 = A/B the same subs on flux-2-flex.

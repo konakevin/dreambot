@@ -47,7 +47,10 @@ const ARCHETYPES = Object.fromEntries(
   Object.entries(TAXES).map(([holiday, tax]) => [
     holiday,
     Object.fromEntries(
-      Object.entries(tax.SUBS).map(([k, d]) => [k, A(null, null, d.costume, d.setting)])
+      Object.entries(tax.SUBS).map(([k, d]) => [
+        k,
+        { ...A(null, null, d.costume, d.setting), must: d.must || [] },
+      ])
     ),
   ])
 );
@@ -62,7 +65,11 @@ function castPrompt(holiday, arch, def, n, dual) {
   const isFall = holiday === 'fall';
   const hero = holiday.toUpperCase();
   const punch = P
-    ? `${hero} IS THE HERO of the frame (Kevin 2026-09-04/05). This pool is "${poolKey}" — PALETTE: ${P.palette}. Fill the setting with an ABUNDANCE of THIS pool's signature objects: ${P.objects}. Cinematic: ${
+    ? `${hero} IS THE HERO of the frame (Kevin 2026-09-04/05). This pool is "${poolKey}" — PALETTE: ${P.palette}. ${
+        isFall
+          ? `THIS ARCHETYPE'S SETTING FAMILY IS THE HERO OF EVERY ENTRY — never swap it for a sibling place; the pool's signature objects (${P.objects}) are accents ONLY where they belong in this archetype.`
+          : `Fill the setting with an ABUNDANCE of THIS pool's signature objects: ${P.objects}.`
+      } Cinematic: ${
         isFall
           ? 'low golden light, mist, rain, firelight or drifting leaves where the pool calls for it'
           : 'a moon, fog, candlelight or string light where the pool calls for it'
@@ -103,7 +110,12 @@ async function sonnetRows(prompt) {
     max_tokens: 4000,
     messages: [{ role: 'user', content: prompt }],
   });
-  let text = msg.content[0].text
+  const first = msg.content && msg.content[0];
+  if (!first || typeof first.text !== 'string') {
+    console.warn(`   ⚠ Sonnet returned no text (stop_reason=${msg.stop_reason})`);
+    return [];
+  }
+  let text = first.text
     .trim()
     .replace(/^```(json)?/i, '')
     .replace(/```$/, '')
@@ -139,6 +151,9 @@ async function seed(holiday, arch, def, table, extra, promptFor, target) {
       const row = { sub_theme: arch, scene: o.scene, ...extra };
       if (o.attire) row.attire = o.attire;
       const { errors, warnings } = lintHolidayRow({ ...row, table });
+      for (const re of def.must || [])
+        if (!re.test(String(o.scene)))
+          errors.push(`scene lacks the archetype's defining element ${re}`);
       warnings.forEach((w) => console.warn(`   ⚠ ${holiday}/${arch}/${table}[${i}]: ${w}`));
       if (errors.length) {
         dropped++;

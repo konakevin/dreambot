@@ -72,7 +72,7 @@ export const HALLOWEEN_POOLS: string[] = [
   'ghost_pirate_ship',
   'enchanted_harvest_court',
 ];
-// MIRROR of scripts/lib/fallPools.js (parity-locked by the same test). 2026-09-07 (Kevin approved): 8 Fall pools.
+// MIRROR of scripts/lib/fallPools.js (parity-locked by the same test). 2026-09-07 (Kevin approved): 8 Fall pools + 5 dreamy / BloomBot-register pools = 13.
 // Demarcation: Halloween owns pumpkins / jack-o-lanterns / costumes / spook; Fall owns foliage, orchards,
 // harvest, hearth, rain, flannel, cider. Sub-theme names never collide across the two maps (parity-tested).
 export const FALL_POOL_OF_SUB: Record<string, string> = {
@@ -108,6 +108,32 @@ export const FALL_POOL_OF_SUB: Record<string, string> = {
   hot_air_balloons_over_valley: 'autumn_wonder',
   treehouse_village_foliage: 'autumn_wonder',
   cloud_mirror_lake: 'autumn_wonder',
+  giant_dahlia_grove: 'autumn_bloom_world',
+  chrysanthemum_cascade_walk: 'autumn_bloom_world',
+  colossal_gold_tree: 'autumn_bloom_world',
+  sunflower_cathedral_backlit: 'autumn_bloom_world',
+  marigold_river_valley: 'autumn_bloom_world',
+  amaranth_curtain_terrace: 'autumn_bloom_world',
+  firefly_birch_cathedral: 'enchanted_gold_forest',
+  glowing_mushroom_hollow: 'enchanted_gold_forest',
+  moonlit_leaf_garden: 'enchanted_gold_forest',
+  floating_leaf_light_path: 'enchanted_gold_forest',
+  sunbeam_grove_light: 'enchanted_gold_forest',
+  aurora_larch_ridge: 'sky_and_light',
+  harvest_moonrise_foliage_lake: 'sky_and_light',
+  fog_valley_god_rays: 'sky_and_light',
+  cloud_sea_summit_sunset: 'sky_and_light',
+  floating_lantern_lake: 'sky_and_light',
+  golden_hollow_cottage: 'autumn_storybook',
+  castle_terrace_above_foliage: 'autumn_storybook',
+  amber_windmill_fields: 'autumn_storybook',
+  canal_town_gold_swans: 'autumn_storybook',
+  glass_palace_conservatory: 'autumn_storybook',
+  larch_valley_switchbacks: 'high_peaks_fall',
+  ridge_walk_above_clouds: 'high_peaks_fall',
+  alpine_hut_sunrise: 'high_peaks_fall',
+  glacier_lake_gold: 'high_peaks_fall',
+  wildflower_meadow_first_snow: 'high_peaks_fall',
 };
 export const FALL_POOLS: string[] = [
   'golden_foliage',
@@ -118,6 +144,11 @@ export const FALL_POOLS: string[] = [
   'autumn_adventure',
   'rainy_day_romance',
   'autumn_wonder',
+  'autumn_bloom_world',
+  'enchanted_gold_forest',
+  'sky_and_light',
+  'autumn_storybook',
+  'high_peaks_fall',
 ];
 /** Main pool for a row's sub_theme (Halloween or Fall); unknown/null sub_theme → its own bucket (never dropped). */
 export function holidayPoolOf(subTheme: string | null | undefined): string {

@@ -5,7 +5,7 @@
  *
  * One register per genre: `actions` = coherent things people DO in that world; `stills` = composed poses
  * that are welcome too. Nightly hands Sonnet a shuffled handful as "things people do HERE — pick or adapt
- * one, or a composed still". Keys: the 14 Halloween + 8 Fall pools (holidayPools.ts), scenario categories (plus
+ * one, or a composed still". Keys: the 14 Halloween + 13 Fall pools (holidayPools.ts), scenario categories (plus
  * aliases from the single-scenario category names), the 20 location biomes (biomeAxes.ts), and the two
  * generic seeded kinds (goofy / elegant) as the fallback when a row carries no category.
  *
@@ -1054,6 +1054,87 @@ export const ACTION_REGISTERS: Record<string, ActionRegister> = {
     [
       'leaning on the basket rail with the foliage valley far below',
       'standing at the end of the pier with hands in coat pockets, the lake mirroring the clouds',
+    ]
+  ),
+  // ── Fall dreamy / BloomBot-register pools (Kevin 2026-09-07 "go ham") ──
+  autumn_bloom_world: R(
+    [
+      'brushing one hand along a curtain of amber chrysanthemums',
+      'holding a single giant dahlia bloom at waist height',
+      'stepping over a petal-drifted root on the path',
+      'catching a drifting petal in one open palm',
+      'resting a forearm on the footbridge rail above the marigolds',
+      'gathering a few fallen petals into a basket held at the hip',
+      'parting a cascade of blooms with one hand at the walkway',
+      'setting a lantern on the terrace balustrade',
+    ],
+    [
+      'standing on the petal-carpeted path with hands in coat pockets',
+      'leaning against a colossal dahlia stem with one ankle crossed',
+    ]
+  ),
+  enchanted_gold_forest: R(
+    [
+      'holding a lantern at hip height on the mossy path',
+      'cupping a firefly in one loosely closed hand at waist height',
+      'brushing a hand along a glowing mushroom cap',
+      'catching a suspended golden leaf in one palm',
+      'resting a hand on a white birch trunk',
+      'stepping up the mossy stone stairway with a lantern at the side',
+      'trailing fingertips through drifting seeds in a sunbeam',
+      'pulling a scarf snug at the collar in the moonlight',
+    ],
+    [
+      'standing between the birches with a lantern held at hip height',
+      'leaning against a mossy boulder with hands in coat pockets',
+    ]
+  ),
+  sky_and_light: R(
+    [
+      'setting a paper lantern onto the lake from the dock',
+      'holding a steaming mug with both hands at the pier rail',
+      'zipping a jacket at the summit cairn',
+      'resting one hand on a stone wall above the fog valley',
+      'pulling a scarf snug under the aurora',
+      'planting a trekking pole at the ridge edge',
+      'lifting a lantern to hip height on the dock',
+      'tucking gloved hands into coat pockets at the overlook',
+    ],
+    [
+      'standing at the end of the pier with the harvest moon on the water',
+      'leaning on the summit cairn with the cloud sea below',
+    ]
+  ),
+  autumn_storybook: R(
+    [
+      'pushing open the round cottage door with one hand',
+      'setting a basket of apples on the wooden cart',
+      'resting a hand on the castle balustrade',
+      'holding out a crust of bread to a swan at the quay edge',
+      'brushing leaves off a garden bench',
+      'carrying a watering can between the conservatory tiers',
+      'lighting a lantern by the cottage door',
+      'leaning a bicycle against the windmill wall',
+    ],
+    [
+      'standing on the castle terrace with one hand on the balustrade',
+      'leaning against the windmill doorframe with hands in pockets',
+    ]
+  ),
+  high_peaks_fall: R(
+    [
+      'adjusting a daypack strap on the switchback',
+      'planting both trekking poles at the ridge crest',
+      'refilling a steel bottle at the glacier stream',
+      'holding a steaming mug on the hut bench',
+      'zipping a shell jacket against the summit wind',
+      'brushing snow off a wooden signpost',
+      'stepping onto a granite slab at the lake edge',
+      'tightening a boot lace with one foot up on a rock',
+    ],
+    [
+      'leaning on trekking poles at the crest with the valley below',
+      'standing at the glacier lake shore with hands in jacket pockets',
     ]
   ),
   // ── Halloween: enchanted_harvest_court (autumn_fae + harvest_royalty, moved in from Fall 2026-09-07) ──

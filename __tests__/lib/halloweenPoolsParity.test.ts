@@ -36,8 +36,8 @@ describe('Fall pool taxonomy — engine mirror parity (Kevin approved 2026-09-07
     expect(FALL_POOL_OF_SUB).toEqual(fallTax.POOL_OF_SUB);
     expect(FALL_POOLS).toEqual(Object.keys(fallTax.POOLS));
   });
-  it('8 pools; every sub maps to a pool that lists it; no sub name collides with Halloween', () => {
-    expect(FALL_POOLS).toHaveLength(8);
+  it('13 pools (8 + 5 dreamy, 2026-09-07); every sub maps to a pool that lists it; no sub name collides with Halloween', () => {
+    expect(FALL_POOLS).toHaveLength(13);
     for (const [sub, pool] of Object.entries(fallTax.POOL_OF_SUB))
       expect(fallTax.POOLS[pool].subs).toContain(sub);
     for (const sub of Object.keys(fallTax.SUBS)) expect(tax.SUBS[sub]).toBeUndefined();
