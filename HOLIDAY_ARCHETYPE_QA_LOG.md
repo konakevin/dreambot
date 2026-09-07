@@ -150,3 +150,52 @@ empty reply.
 rebuild (all on flux-1.1-pro; reasons: partner identity 0.02-0.14 or `giant_face` no-split). The colossal-
 scale scenes push the camera back until the partner's face is below the swap floor; the F2 rebuild makes the
 solo look great, but the partner is silently dropped. Round 3 = A/B the same subs on flux-2-flex.
+
+### Round 3 (20 couples) — A/B flux-1.1-pro (natural pick) vs flux-2-flex (forced), same subs
+| model | couples | degraded to solo | shipped weak (self < 0.4) | identity range (both sides) |
+|---|---|---|---|---|
+| flux-1.1-pro | 10 (1 × 546) | 3 | 1 (moonlit garden, L 0.33) | −0.01 … 0.73 |
+| flux-2-flex | 10 | **0** | 0 | **0.62 … 0.75** |
+
+Read: on the colossal-scale Fall seeds the couple problem is the MODEL, not the seeds (same conclusion as
+HALLOWEEN_SIGNATURE_LOOK_PLAN §8 and SCENE_FIRST_ACTION_PLAN §8): flex keeps both faces big enough to swap
+AND stays medium-faithful (comics couple under the colossal tree, watercolor sunflower cathedral, pencil
+lantern dock). Kevin 2026-09-07: keep flux-1.1-pro as the primary ("it does good renders when it works")
+and find a reliable FALLBACK ("clip in the barrel") among models at or below the 1.1-pro / ultra cost tier
+→ model bake-off (next section).
+
+**Gate gap found (fog_valley_god_rays couple, 1.1-pro illustration):** the couple render came out as a
+double-exposure giant profile face; the quality gate flagged it (`quality_gate:enforce:fail:profile`) but a
+couple has no retry there (`profile_dual_noretry` → `shipped_unresolved`) so it shipped as-is. Follow-up: a
+flagged couple should fall to the F2 solo rebuild (or re-roll once) instead of shipping the flagged frame.
+
+### Couple face-swap model BAKE-OFF (2026-09-07) — "clip in the barrel" fallback at ≤ the 1.1-pro / ultra tier
+Same 8 hard Fall seeds per model (colossal_gold_tree, sunflower_cathedral_backlit, floating_leaf_light_path,
+aurora_larch_ridge, harvest_moonrise_foliage_lake, golden_hollow_cottage, ridge_walk_above_clouds,
+glowing_mushroom_hollow), couples only, natural medium roll, `force_model`. Identity = swap similarity
+(self / partner medians; min = worst single face). Look = my grade on the 8-up sheet (medium fidelity,
+integration, dreaminess; harsh). Sheets: scratchpad `fall-build/bakeoff/sheet-<model>.jpg`; album 🔧 BAKE.
+
+| model | ¢ | rendered | degraded → solo | retried | identity self / partner | min | median s | look | notes |
+|---|---|---|---|---|---|---|---|---|---|
+| grok-imagine-image | 2 | 8 | **0** | 1 | 0.72 / 0.72 | 0.57 | 39 | 4.6 | fastest + cheapest clean model; painterly + photo mix, faithful subs |
+| flux-2-pro | 3 | 8 | **0** | 0 | 0.72 / 0.71 | 0.46 | 51 | 4.0 | clean but stiff, posed; nightly-banned 2026-08-26 ("cheesy") |
+| gemini-2-image | 4 | 8 | **0** | 0 | 0.71 / 0.74 | 0.66 | 40 | 4.5 | polished, medium-faithful; nightly-banned 2026-08-26 |
+| gpt-image-2 | 6 | 8 | **0** | 0 | 0.71 / 0.72 | 0.65 | 82 | 4.8 | most cinematic; slowest; all 8 portrait here (ban was wide-aspect + 150s timeouts) |
+| flux-dev | 3 | 8 | **0** | 1 | 0.70 / 0.71 | 0.42 | 37 | 4.0 | reliable, plainer / photoreal-leaning |
+| flux-2-flex | 6 | 8 | **0** | 0 | 0.67 / 0.71 | 0.55 | 68 | 4.5 | the current solo-rebuild model; 10/10 in round 3 too |
+| seedream-4 | 3 | 8 | **0** | 0 | 0.61 / 0.65 | 0.52 | 67 | 4.7 | best painterly warmth + composition; identity a notch lower |
+| flux-schnell | 1 | 8 | 1 | 2 | 0.64 / 0.63 | 0.40 | 50 | 3.3 | tight two-heads, wardrobe drift |
+| flux-krea-dev | 1 | 8 | 2 | 1 | 0.71 / 0.69 | 0.38 | 75 | 3.5 | flat illustration, 2 degrades |
+| flux-1.1-pro-ultra | 6 | 8 | 3 | 1 | 0.58 / 0.63 | −0.02 | 78 | – | confirms the 2026-08-28 ban |
+| **flux-1.1-pro (primary)** | 4 | 7 (+1 546) | **3** | 0 | **0.40 / 0.48** | 0.03 | 67 | – | worst identity in the field on these seeds |
+| flux-2-dev | 3 | 0 | – | – | – | – | – | – | Replicate endpoint error (`q_descale shape`) |
+
+**Read:** on colossal-scale seeds the primary is the outlier, not the seeds. Six models are 0/8 degraded at
+≤ 6¢. For a FALLBACK (fires only when 1.1-pro's first attempt fails the identity gate) the ranking is
+reliability → identity → speed → cost → look: **grok-imagine-image** (2¢, 39 s, 0.72/0.72) first,
+**gemini-2-image** (4¢, 40 s, 0.71/0.74, nightly-banned today) second, **seedream-4** (3¢) if the
+painterly look is worth 0.6 identity, **gpt-image-2** if look trumps speed/cost. Proposed wiring (not
+built): the dual pipeline's `rerender_for_dual` retry runs on `engine_config.dual_retry_model` instead of
+the same model (default '' = today's behaviour), so 1.1-pro keeps the first shot and the barrel clip takes
+the second; the F2 solo rebuild stays on flex (or the same fallback).

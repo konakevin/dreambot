@@ -484,6 +484,25 @@ in October → 20%, drawn in proportion). Source of truth `scripts/lib/fallPools
 | rainy_day_romance | slate, umbrella red, greenhouse glass | umbrella_bridge_rain · greenhouse_rain_glass · window_seat_storm |
 | autumn_wonder | dreamlike gold, floating leaves, lavender dusk | hot_air_balloons_over_valley · treehouse_village_foliage · cloud_mirror_lake |
 
+**+5 dreamy / BloomBot-register pools (Kevin 2026-09-07 "go ham"; Fall = 13 pools / 58 subs):**
+
+| pool | the idea | subs |
+|---|---|---|
+| autumn_bloom_world | BloomBot scale-inversion + great-tree registers in fall blooms | giant_dahlia_grove · chrysanthemum_cascade_walk · colossal_gold_tree · sunflower_cathedral_backlit · marigold_river_valley · amaranth_curtain_terrace |
+| enchanted_gold_forest | moon-garden + dreamscape registers at dusk / night | firefly_birch_cathedral · glowing_mushroom_hollow · moonlit_leaf_garden · floating_leaf_light_path · sunbeam_grove_light |
+| sky_and_light | sky as the hero | aurora_larch_ridge · harvest_moonrise_foliage_lake · fog_valley_god_rays · cloud_sea_summit_sunset · floating_lantern_lake |
+| autumn_storybook | impossible-but-pretty places | golden_hollow_cottage · castle_terrace_above_foliage · amber_windmill_fields · canal_town_gold_swans · glass_palace_conservatory |
+| high_peaks_fall | the big mountain hike | larch_valley_switchbacks · ridge_walk_above_clouds · alpine_hut_sunrise · glacier_lake_gold · wildflower_meadow_first_snow |
+
+**Generator rule learned in QA round 1 (now enforced):** for pools whose subs are distinct PLACES, the
+"fill the setting with the pool's signature objects" punch pulled sibling subs' places into a sub's rows
+(windmill rows full of castles: 56 off-brief rows / 26 subs). Fall's punch now makes the archetype's
+setting family the HERO (pool objects = accents only) and every dreamy sub carries `must` regexes in
+`fallPools.js` (its defining element, e.g. windmill + wheat, aurora + night) that the generator enforces
+per row. Sonnet REFUSES some archetype names outright (`sunbeam_grove_seed_drift` → renamed
+`sunbeam_grove_light`); `sonnetRows` now logs `stop_reason`. QA rounds + the couple model bake-off:
+`HOLIDAY_ARCHETYPE_QA_LOG.md` (🍂 FALL section).
+
 **Seeded 2026-09-07 (share = ceil(70 / subs) per sub per table):** 570 dual + 570 single cast rows
 (1,140; lint dropped ~4%), 192 new scene-only rows (6 per sub) + 10 surviving Aug-19 scenes = 202.
 `scan-holiday-pools.js --holiday fall` → 0 errors. The two pre-split subs `autumn_fae` + `harvest_royalty`

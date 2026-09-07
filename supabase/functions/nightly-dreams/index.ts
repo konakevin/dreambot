@@ -135,6 +135,13 @@ import {
 } from '../_shared/characterSlotPrompt.ts';
 import { holidayPoolOf } from '../_shared/holidayPools.ts';
 import { steerDualModel } from '../_shared/dualModelSteer.ts';
+import {
+  candidateModels,
+  resolveModel,
+  shadowStampSet,
+  type NightlyModelPolicy,
+} from '../_shared/nightlyModelPolicy.ts';
+import { loadNightlyModelPolicy } from '../_shared/pools/nightlyModelPolicyLoader.ts';
 import { decideSceneFirst, sceneFirstRegister } from '../_shared/sceneFirstEligibility.ts';
 import { parseQaFlags } from '../_shared/nightlyQaFlags.ts';
 import { resolveCastAction } from '../_shared/castActionResolver.ts';
@@ -345,6 +352,7 @@ Deno.serve(async (req) => {
     force_day_of,
     force_hero_register,
     force_hero_seed,
+    force_final_prompt,
     strict_face_swap,
     persist,
     queueJobId,
@@ -376,6 +384,12 @@ Deno.serve(async (req) => {
   let visionDescription: string | null = null;
   let replicatePredictionId: string | null = null;
   const fallbackReasons: string[] = [];
+  // Nightly model policy (mig 468, NIGHTLY_MODEL_POLICY_PLAN.md): resolved ONCE per render. 'off' =
+  // the legacy picker everywhere below; 'shadow' = legacy still renders, the policy resolver runs beside
+  // it at every pick site and stamps policy_shadow:<site>:match|diff; 'on' = the policy table decides.
+  const policyMode = (await fetchEngineConfig(supabase)).modelPolicyMode;
+  const modelPolicy: NightlyModelPolicy | null =
+    policyMode === 'off' ? null : await loadNightlyModelPolicy(supabase);
   let logAxes: Record<string, unknown> = {};
   // Pure-scene fallback (DREAM_CAST_HARDENING_PLAN.md) — declared handler-wide so
   // the prompt is BUILT at brief-time (scene context is live) and CONSUMED at the
@@ -1124,7 +1138,7 @@ Deno.serve(async (req) => {
     // re-roll (below) can re-pick from the FINAL medium's smart set — the pool
     // is now medium-dependent (unlike the old fixed FACE_SWAP_MODELS rotation).
     const dualSteerEnabled = (await fetchEngineConfig(supabase)).dualAvoidFlux11pro;
-    const pickFaceSwapModelFor = (medium: typeof baseMedium): string => {
+    const legacyPickFaceSwapModelFor = (medium: typeof baseMedium): string => {
       const pool = nightlyModelPool({
         smartDreamModels: medium.smartDreamModels,
         allowedModels: medium.allowedModels,
@@ -1167,6 +1181,26 @@ Deno.serve(async (req) => {
         fallbackReasons.push('dual_flex_clamped_to_1.1pro');
       }
       return m;
+    };
+    // Policy site: face-swap attempt 1 (couple / solo). Shadow compares; 'on' decides.
+    const pickFaceSwapModelFor = (medium: typeof baseMedium): string => {
+      const legacy = legacyPickFaceSwapModelFor(medium);
+      if (!modelPolicy) return legacy;
+      const pick = resolveModel({
+        surface: isDualFaceSwap ? 'couple' : 'solo',
+        attempt: 1,
+        policy: modelPolicy,
+      });
+      fallbackReasons.push(
+        shadowStampSet(
+          'faceswap_pick',
+          legacy,
+          candidateModels(modelPolicy, isDualFaceSwap ? 'couple' : 'solo', 1)
+        )
+      );
+      if (policyMode !== 'on') return legacy;
+      fallbackReasons.push(pick.stamp);
+      return pick.model;
     };
     if (isFaceSwapCharacter) {
       // DreamSmart pool (2026-07-22): a model proven to render THIS style, ≤2✦,
@@ -2960,6 +2994,12 @@ Output ONLY the prompt.`;
   }
 
   // ── Post-pipeline: sanitize, generate, face swap, persist ──────────────
+  // QA (2026-09-07, model comparison): render an exact, pre-assembled prompt so every model sees
+  // byte-identical input; everything downstream (sanitize, swap, identity gate) runs as normal.
+  if (force_final_prompt) {
+    finalPrompt = force_final_prompt;
+    fallbackReasons.push('qa:force_final_prompt');
+  }
   finalPrompt = sanitizePrompt(finalPrompt);
 
   // DRY RUN short-circuit: the full prompt is assembled + sanitized. Return it
@@ -2999,7 +3039,16 @@ Output ONLY the prompt.`;
       bans: NIGHTLY_BANNED_MODELS,
     })
   );
-  let pickedModel = force_model ? force_model : faceSwapPrePickedModel || sceneBaseModel;
+  // Policy site: scene / pet base pick (surface 'scene').
+  let sceneBaseModelResolved = sceneBaseModel;
+  if (modelPolicy && !faceSwapPrePickedModel && !force_model) {
+    const pick = resolveModel({ surface: 'scene', attempt: 1, policy: modelPolicy });
+    if (policyMode === 'on') {
+      fallbackReasons.push(pick.stamp);
+      sceneBaseModelResolved = pick.model;
+    }
+  }
+  let pickedModel = force_model ? force_model : faceSwapPrePickedModel || sceneBaseModelResolved;
   // Set when the couple-degrade solo rebuild renders on a different model (F2): the
   // shipped pixels came from THIS model, so ai_generation_log.model_used must say so.
   let modelUsedOverride: string | null = null;
@@ -3013,6 +3062,7 @@ Output ONLY the prompt.`;
   // overrides still work.
   if (
     !force_model &&
+    policyMode !== 'on' && // policy 'on': the scene row IS the list (mig 468)
     (resolvedComposition === 'pure_scene' || resolvedComposition === 'epic_tiny')
   ) {
     // Per-medium override (mig 214) wins over engine_config global (mig 213).
@@ -3077,7 +3127,7 @@ Output ONLY the prompt.`;
   const perMediumBans =
     NIGHTLY_BANNED_MODELS_BY_MEDIUM[resolvedMediumKey || ''] || new Set<string>();
   const effectiveBans = new Set<string>([...NIGHTLY_BANNED_MODELS, ...perMediumBans]);
-  if (!force_model && effectiveBans.has(pickedModel)) {
+  if (!force_model && policyMode !== 'on' && effectiveBans.has(pickedModel)) {
     const allowedMinusBanned = resolvedMediumAllowedModels.filter((m) => !effectiveBans.has(m));
     if (allowedMinusBanned.length > 0) {
       const oldModel = pickedModel;
@@ -3096,10 +3146,17 @@ Output ONLY the prompt.`;
       pickedModel = fallback;
     }
   }
+  // Policy shadow: the scene / pet surface compared AFTER the scene gate + ban gate (the legacy model
+  // that actually renders), against everything the scene row could draw.
+  if (modelPolicy && !faceSwapPrePickedModel && !force_model) {
+    fallbackReasons.push(
+      shadowStampSet('scene_final', pickedModel, candidateModels(modelPolicy, 'scene', 1))
+    );
+  }
   // Per-medium pin override — last word on which model renders this nightly.
   // Runs after the ban gate so the pin can override any default pick. Skips
   // when force_model is set (QA wins).
-  if (!force_model) {
+  if (!force_model && policyMode !== 'on') {
     const pin = NIGHTLY_PINNED_MODELS_BY_MEDIUM[resolvedMediumKey || ''];
     if (pin && pickedModel !== pin) {
       console.log(
@@ -3280,7 +3337,26 @@ Output ONLY the prompt.`;
                   // rebuild model (engine_config.solo_rebuild_model, default flux-2-flex: 0% tight
                   // in the same audit, faithful to real fragments). '' → the couple's model.
                   const rebuildCfg = await fetchEngineConfig(supabase);
-                  const rebuildModel = rebuildCfg.soloRebuildModel || pickedModel;
+                  let rebuildModel = rebuildCfg.soloRebuildModel || pickedModel;
+                  // Policy site: solo rebuild (mig 468).
+                  if (modelPolicy) {
+                    const pick = resolveModel({
+                      surface: 'solo_rebuild',
+                      attempt: 1,
+                      policy: modelPolicy,
+                    });
+                    fallbackReasons.push(
+                      shadowStampSet(
+                        'solo_rebuild',
+                        rebuildModel,
+                        candidateModels(modelPolicy, 'solo_rebuild', 1)
+                      )
+                    );
+                    if (policyMode === 'on') {
+                      fallbackReasons.push(pick.stamp);
+                      rebuildModel = pick.model;
+                    }
+                  }
                   if (soloFallbackCtx && rebuildModel !== pickedModel)
                     modelUsedOverride = rebuildModel;
                   const soloPrompt = soloFallbackCtx
@@ -3335,6 +3411,29 @@ Output ONLY the prompt.`;
             return { url: swapped, predictionId: guard.predictionId };
           },
           rerender: async (attempt: number) => {
+            // Policy site: couple attempt ≥ 2 (mig 468) — a random FALLBACK when the row has one, else
+            // the same model again (legacy). NOTE: model_used attribution for a retry that shipped on a
+            // different model lands with the fallback rows (Phase 4, NIGHTLY_MODEL_POLICY_PLAN.md).
+            let rerenderModel = pickedModel;
+            if (modelPolicy) {
+              const pick = resolveModel({
+                surface: 'couple',
+                attempt: attempt + 1,
+                policy: modelPolicy,
+                previousModel: pickedModel,
+              });
+              fallbackReasons.push(
+                shadowStampSet(
+                  'couple_retry',
+                  pickedModel,
+                  candidateModels(modelPolicy, 'couple', attempt + 1, pickedModel)
+                )
+              );
+              if (policyMode === 'on') {
+                fallbackReasons.push(pick.stamp);
+                rerenderModel = pick.model;
+              }
+            }
             const rr = await generateImage(
               'flux-dev',
               // Stage 5a: final retry mutates — see generate-dream twin.
@@ -3348,7 +3447,7 @@ Output ONLY the prompt.`;
                 geminiKey: Deno.env.get('GEMINI_API_KEY'),
                 xaiKey: Deno.env.get('XAI_API_KEY'),
               },
-              pickedModel,
+              rerenderModel,
               isDualFaceSwap ? 'jpg' : 'png'
             );
             observability.replicateRawUrl = rr.url;

@@ -1573,6 +1573,7 @@ export type Database = {
           base_sparkle_cost: number;
           basic_hd_downloads_per_month: number;
           basic_monthly_sparkle_bundle: number;
+          bots_seasonal_enabled: boolean;
           chaos_high_threshold: number;
           chaos_low_threshold: number;
           dream_art_mediums: string[];
@@ -1621,6 +1622,7 @@ export type Database = {
           max_inflight_dreams_per_user: number;
           max_pinned_posts: number;
           min_app_version: string | null;
+          model_policy_mode: string;
           new_scene_max_people: number;
           new_scene_price_best: number;
           new_scene_price_standard: number;
@@ -1662,6 +1664,7 @@ export type Database = {
           base_sparkle_cost?: number;
           basic_hd_downloads_per_month?: number;
           basic_monthly_sparkle_bundle?: number;
+          bots_seasonal_enabled?: boolean;
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
           dream_art_mediums?: string[];
@@ -1710,6 +1713,7 @@ export type Database = {
           max_inflight_dreams_per_user?: number;
           max_pinned_posts?: number;
           min_app_version?: string | null;
+          model_policy_mode?: string;
           new_scene_max_people?: number;
           new_scene_price_best?: number;
           new_scene_price_standard?: number;
@@ -1751,6 +1755,7 @@ export type Database = {
           base_sparkle_cost?: number;
           basic_hd_downloads_per_month?: number;
           basic_monthly_sparkle_bundle?: number;
+          bots_seasonal_enabled?: boolean;
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
           dream_art_mediums?: string[];
@@ -1799,6 +1804,7 @@ export type Database = {
           max_inflight_dreams_per_user?: number;
           max_pinned_posts?: number;
           min_app_version?: string | null;
+          model_policy_mode?: string;
           new_scene_max_people?: number;
           new_scene_price_best?: number;
           new_scene_price_standard?: number;
@@ -2517,6 +2523,30 @@ export type Database = {
           right_label?: string;
           sort_order?: number;
           title?: string;
+        };
+        Relationships: [];
+      };
+      nightly_model_policy: {
+        Row: {
+          fallback_models: string[];
+          notes: string | null;
+          primary_models: string[];
+          surface: string;
+          updated_at: string;
+        };
+        Insert: {
+          fallback_models?: string[];
+          notes?: string | null;
+          primary_models: string[];
+          surface: string;
+          updated_at?: string;
+        };
+        Update: {
+          fallback_models?: string[];
+          notes?: string | null;
+          primary_models?: string[];
+          surface?: string;
+          updated_at?: string;
         };
         Relationships: [];
       };

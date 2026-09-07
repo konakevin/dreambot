@@ -1,0 +1,574 @@
+{
+ "capturedAt": "2026-09-07",
+ "note": "Live medium sets + catalog costs for the nightly model-policy equivalence test (NIGHTLY_MODEL_POLICY_PLAN.md §5). Regenerate with the snippet in the test header when the sets change on purpose.",
+ "sparkleCost": {
+  "black-forest-labs/flux-krea-dev": 1,
+  "black-forest-labs/flux-dev": 1,
+  "black-forest-labs/flux-1.1-pro": 1,
+  "black-forest-labs/flux-1.1-pro-ultra": 2,
+  "black-forest-labs/flux-2-dev": 1,
+  "black-forest-labs/flux-2-pro": 1,
+  "black-forest-labs/flux-2-flex": 2,
+  "black-forest-labs/flux-2-max": 3,
+  "openai/gpt-image-1": 3,
+  "openai/gpt-image-2": 2,
+  "google/gemini-2-image": 1,
+  "google/gemini-3-image-preview": 5,
+  "black-forest-labs/flux-kontext-pro": 1,
+  "black-forest-labs/flux-kontext-max": 2,
+  "sdxl": 1,
+  "black-forest-labs/flux-schnell": 1,
+  "bytedance/seedream-4": 1,
+  "xai/grok-imagine-image": 1
+ },
+ "activeModels": [
+  "black-forest-labs/flux-krea-dev",
+  "black-forest-labs/flux-dev",
+  "black-forest-labs/flux-1.1-pro",
+  "black-forest-labs/flux-1.1-pro-ultra",
+  "black-forest-labs/flux-2-dev",
+  "black-forest-labs/flux-2-pro",
+  "black-forest-labs/flux-2-flex",
+  "black-forest-labs/flux-2-max",
+  "openai/gpt-image-1",
+  "openai/gpt-image-2",
+  "google/gemini-2-image",
+  "google/gemini-3-image-preview",
+  "black-forest-labs/flux-schnell",
+  "bytedance/seedream-4",
+  "xai/grok-imagine-image"
+ ],
+ "globalSceneEligible": [
+  "black-forest-labs/flux-1.1-pro",
+  "black-forest-labs/flux-1.1-pro-ultra",
+  "black-forest-labs/flux-2-max",
+  "google/gemini-2-image",
+  "openai/gpt-image-2"
+ ],
+ "mediums": [
+  {
+   "key": "animation",
+   "faceSwaps": false,
+   "smartDreamModels": [
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "black-forest-labs/flux-2-flex",
+    "google/gemini-3-image-preview",
+    "xai/grok-imagine-image"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-flex",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-2-dev",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "sceneEligibleModels": null
+  },
+  {
+   "key": "anime",
+   "faceSwaps": false,
+   "smartDreamModels": [
+    "black-forest-labs/flux-dev",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "black-forest-labs/flux-2-dev",
+    "black-forest-labs/flux-2-pro",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-2-max",
+    "openai/gpt-image-1",
+    "openai/gpt-image-2",
+    "google/gemini-2-image",
+    "google/gemini-3-image-preview",
+    "xai/grok-imagine-image"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-1.1-pro",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "sceneEligibleModels": null
+  },
+  {
+   "key": "canvas",
+   "faceSwaps": true,
+   "smartDreamModels": [
+    "google/gemini-2-image",
+    "google/gemini-3-image-preview",
+    "openai/gpt-image-2",
+    "openai/gpt-image-1",
+    "black-forest-labs/flux-2-max",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-2-pro",
+    "black-forest-labs/flux-2-dev",
+    "xai/grok-imagine-image",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-1.1-pro",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "sceneEligibleModels": null
+  },
+  {
+   "key": "cinematic",
+   "faceSwaps": false,
+   "smartDreamModels": [],
+   "allowedModels": [
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "openai/gpt-image-2"
+   ],
+   "sceneEligibleModels": [
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "openai/gpt-image-2"
+   ]
+  },
+  {
+   "key": "claymation",
+   "faceSwaps": false,
+   "smartDreamModels": [
+    "black-forest-labs/flux-dev",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "black-forest-labs/flux-2-dev",
+    "black-forest-labs/flux-2-pro",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-2-max",
+    "openai/gpt-image-1",
+    "openai/gpt-image-2",
+    "google/gemini-2-image",
+    "google/gemini-3-image-preview",
+    "xai/grok-imagine-image"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-pro",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-dev",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-2-dev",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "sceneEligibleModels": null
+  },
+  {
+   "key": "comics",
+   "faceSwaps": true,
+   "smartDreamModels": [
+    "google/gemini-2-image",
+    "google/gemini-3-image-preview",
+    "openai/gpt-image-2",
+    "openai/gpt-image-1",
+    "black-forest-labs/flux-2-max",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-2-pro",
+    "black-forest-labs/flux-2-dev",
+    "xai/grok-imagine-image",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-pro",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-dev",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-2-dev",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "sceneEligibleModels": null
+  },
+  {
+   "key": "dreamscape",
+   "faceSwaps": false,
+   "smartDreamModels": [],
+   "allowedModels": [
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "openai/gpt-image-2"
+   ],
+   "sceneEligibleModels": [
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "openai/gpt-image-2"
+   ]
+  },
+  {
+   "key": "fairytale",
+   "faceSwaps": false,
+   "smartDreamModels": [
+    "black-forest-labs/flux-dev",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "black-forest-labs/flux-2-dev",
+    "black-forest-labs/flux-2-pro",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-2-max",
+    "openai/gpt-image-1",
+    "openai/gpt-image-2",
+    "google/gemini-2-image",
+    "google/gemini-3-image-preview",
+    "xai/grok-imagine-image"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "sceneEligibleModels": null
+  },
+  {
+   "key": "film_noir",
+   "faceSwaps": true,
+   "smartDreamModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "google/gemini-3-image-preview",
+    "xai/grok-imagine-image",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "allowedModels": [
+    "google/gemini-2-image"
+   ],
+   "sceneEligibleModels": null
+  },
+  {
+   "key": "glamour",
+   "faceSwaps": true,
+   "smartDreamModels": [
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-2-max",
+    "black-forest-labs/flux-2-pro",
+    "google/gemini-2-image",
+    "google/gemini-3-image-preview",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "black-forest-labs/flux-2-flex"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-2-pro",
+    "google/gemini-2-image",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-2-max"
+   ],
+   "sceneEligibleModels": [
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "openai/gpt-image-2"
+   ]
+  },
+  {
+   "key": "gouache",
+   "faceSwaps": false,
+   "smartDreamModels": [],
+   "allowedModels": [
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "openai/gpt-image-2"
+   ],
+   "sceneEligibleModels": [
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "openai/gpt-image-2"
+   ]
+  },
+  {
+   "key": "handcrafted",
+   "faceSwaps": false,
+   "smartDreamModels": [
+    "black-forest-labs/flux-dev",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "black-forest-labs/flux-2-dev",
+    "black-forest-labs/flux-2-pro",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-2-max",
+    "openai/gpt-image-1",
+    "openai/gpt-image-2",
+    "google/gemini-2-image",
+    "google/gemini-3-image-preview",
+    "xai/grok-imagine-image"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-dev",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "sceneEligibleModels": null
+  },
+  {
+   "key": "illustration",
+   "faceSwaps": true,
+   "smartDreamModels": [
+    "google/gemini-2-image",
+    "google/gemini-3-image-preview",
+    "openai/gpt-image-2",
+    "openai/gpt-image-1",
+    "black-forest-labs/flux-2-max",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-2-pro",
+    "black-forest-labs/flux-2-dev",
+    "xai/grok-imagine-image",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-1.1-pro",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "sceneEligibleModels": null
+  },
+  {
+   "key": "lego",
+   "faceSwaps": false,
+   "smartDreamModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-dev",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "xai/grok-imagine-image"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-dev",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "sceneEligibleModels": null
+  },
+  {
+   "key": "pencil",
+   "faceSwaps": true,
+   "smartDreamModels": [
+    "google/gemini-2-image",
+    "google/gemini-3-image-preview",
+    "openai/gpt-image-2",
+    "openai/gpt-image-1",
+    "black-forest-labs/flux-2-max",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-2-pro",
+    "black-forest-labs/flux-2-dev",
+    "xai/grok-imagine-image",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-1.1-pro",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "sceneEligibleModels": null
+  },
+  {
+   "key": "photography",
+   "faceSwaps": true,
+   "smartDreamModels": [
+    "black-forest-labs/flux-dev",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "black-forest-labs/flux-2-dev",
+    "black-forest-labs/flux-2-pro",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-2-max",
+    "openai/gpt-image-1",
+    "openai/gpt-image-2",
+    "google/gemini-2-image",
+    "google/gemini-3-image-preview",
+    "xai/grok-imagine-image"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-pro",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-dev",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-2-dev",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "sceneEligibleModels": [
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "openai/gpt-image-2"
+   ]
+  },
+  {
+   "key": "pixels",
+   "faceSwaps": false,
+   "smartDreamModels": [
+    "openai/gpt-image-1",
+    "openai/gpt-image-2",
+    "google/gemini-2-image",
+    "google/gemini-3-image-preview",
+    "xai/grok-imagine-image",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-pro",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-dev",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-2-dev",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "sceneEligibleModels": null
+  },
+  {
+   "key": "pop_art",
+   "faceSwaps": true,
+   "smartDreamModels": [
+    "google/gemini-2-image",
+    "google/gemini-3-image-preview",
+    "openai/gpt-image-2",
+    "openai/gpt-image-1",
+    "black-forest-labs/flux-2-max",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-2-pro",
+    "black-forest-labs/flux-2-dev",
+    "xai/grok-imagine-image",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-flex",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-2-dev",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "sceneEligibleModels": null
+  },
+  {
+   "key": "vintage_film",
+   "faceSwaps": true,
+   "smartDreamModels": [
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-2-max",
+    "black-forest-labs/flux-2-pro",
+    "google/gemini-2-image",
+    "google/gemini-3-image-preview",
+    "openai/gpt-image-2",
+    "xai/grok-imagine-image",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "black-forest-labs/flux-2-flex"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-2-pro",
+    "google/gemini-2-image",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-2-max"
+   ],
+   "sceneEligibleModels": null
+  },
+  {
+   "key": "vinyl",
+   "faceSwaps": false,
+   "smartDreamModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-dev",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "xai/grok-imagine-image"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-dev",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "sceneEligibleModels": null
+  },
+  {
+   "key": "watercolor",
+   "faceSwaps": true,
+   "smartDreamModels": [
+    "google/gemini-2-image",
+    "google/gemini-3-image-preview",
+    "openai/gpt-image-2",
+    "openai/gpt-image-1",
+    "black-forest-labs/flux-2-max",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-2-pro",
+    "black-forest-labs/flux-2-dev",
+    "xai/grok-imagine-image",
+    "black-forest-labs/flux-1.1-pro",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "allowedModels": [
+    "black-forest-labs/flux-2-max",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-2-flex",
+    "black-forest-labs/flux-1.1-pro",
+    "openai/gpt-image-2",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "sceneEligibleModels": null
+  }
+ ]
+}

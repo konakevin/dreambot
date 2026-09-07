@@ -11,6 +11,7 @@
  */
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
+import { parsePolicyMode, type ModelPolicyMode } from './nightlyModelPolicy.ts';
 import { DEFAULT_RELATIONSHIP_WORDS, DEFAULT_PET_WORDS } from './selfInsertDetector.ts';
 
 export interface EngineConfig {
@@ -117,6 +118,9 @@ export interface EngineConfig {
   sceneActionLocationCouples: boolean;
   /** Model for the couple-degrade SOLO rebuild (mig 466). '' → the couple's own model. */
   soloRebuildModel: string;
+  /** Nightly model policy (mig 468, NIGHTLY_MODEL_POLICY_PLAN.md): 'off' = legacy picker,
+   *  'shadow' = legacy renders + policy stamps, 'on' = the policy table decides. */
+  modelPolicyMode: ModelPolicyMode;
   /** Holiday POSTCARD overlay scope (migration 459): 'off' | 'day_of' (the day-of hero
    *  only — default) | 'window' (every in-season holiday dream). */
   holidayPostcardScope: 'off' | 'day_of' | 'window';
@@ -175,6 +179,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   actionRegistersPct: 0,
   sceneActionLocationCouples: false,
   soloRebuildModel: 'black-forest-labs/flux-2-flex',
+  modelPolicyMode: 'off',
   holidayPostcardScope: 'day_of',
 };
 
@@ -294,6 +299,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
       (data.scene_action_location_couples ?? DEFAULT_ENGINE_CONFIG.sceneActionLocationCouples) ===
       true,
     soloRebuildModel: String(data.solo_rebuild_model ?? DEFAULT_ENGINE_CONFIG.soloRebuildModel),
+    modelPolicyMode: parsePolicyMode(data.model_policy_mode),
     holidayPostcardScope:
       data.holiday_postcard_scope === 'off' || data.holiday_postcard_scope === 'window'
         ? data.holiday_postcard_scope

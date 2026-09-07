@@ -100,3 +100,17 @@ describe('parseQaFlags', () => {
     expect(parseQaFlags({ force_female_hair_pct: '50' }).force_female_hair_pct).toBeUndefined();
   });
 });
+
+describe('force_final_prompt (QA model comparison, 2026-09-07)', () => {
+  it('passes a non-empty string through verbatim', () => {
+    const p =
+      'MAN on the LEFT, WOMAN on the RIGHT, watercolor painting, set at a sunflower labyrinth';
+    expect(parseQaFlags({ force_final_prompt: p }).force_final_prompt).toBe(p);
+  });
+  it('is null when absent, empty, whitespace, or not a string', () => {
+    expect(parseQaFlags({}).force_final_prompt).toBeNull();
+    expect(parseQaFlags({ force_final_prompt: '' }).force_final_prompt).toBeNull();
+    expect(parseQaFlags({ force_final_prompt: '   ' }).force_final_prompt).toBeNull();
+    expect(parseQaFlags({ force_final_prompt: 42 }).force_final_prompt).toBeNull();
+  });
+});

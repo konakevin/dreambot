@@ -54,6 +54,9 @@ export interface NightlyQaFlags {
   force_day_of: string | null;
   force_hero_register: 'cozy' | 'eerie' | null;
   force_hero_seed: string | null;
+  /** QA only: render THIS exact text as the final prompt (skips nothing else — the swap / identity /
+   *  quality pipeline runs as normal). Same prompt across models = a fair model comparison. */
+  force_final_prompt: string | null;
   strict_face_swap: boolean;
   /** Default true; only an explicit `false` disables persistence. */
   persist: boolean;
@@ -129,6 +132,10 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
         ? body.force_hero_register
         : null,
     force_hero_seed: typeof body.force_hero_seed === 'string' ? body.force_hero_seed : null,
+    force_final_prompt:
+      typeof body.force_final_prompt === 'string' && body.force_final_prompt.trim().length > 0
+        ? body.force_final_prompt
+        : null,
     strict_face_swap: body.strict_face_swap === true,
     persist: body.persist !== false,
     queueJobId: (body.queue_job_id as string) || null,
