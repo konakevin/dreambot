@@ -77,6 +77,7 @@ import {
   markMediumsIntroSeen,
 } from '@/components/MediumsIntroSheet';
 import { SparkleIntroSheet, hasSeenSparkleIntro } from '@/components/SparkleIntroSheet';
+import { GroupPhotoIntroSheet, hasSeenGroupPhotoIntro } from '@/components/GroupPhotoIntroSheet';
 import { sparkleCostFrom, DEFAULT_MODEL_ID } from '@/constants/imageModels';
 import { resolveDreamSmartModel } from '@/lib/dreamSmartModel';
 import { showPremiumGate } from '@/lib/premiumGate';
@@ -580,6 +581,32 @@ export default function CreateScreen() {
   const soloSwapPhoto = !!attachedClassification && isSoloSwapPhoto(attachedClassification);
   const overPeopleCap =
     !!attachedClassification && attachedClassification.num_people > engineConfig.newSceneMaxPeople;
+  // Multi-person (group) photo: 2+ people can't take the exact-face solo swap, so
+  // the render recomposes everyone into the scene on a curated model pair (Nano
+  // Banana / Nano Banana Pro, mapped to the Standard/Ultra tiers). Drives the
+  // group-photo intro + the Quality toggle relabel (NEW_SCENE_MULTIPERSON_FIX.md).
+  const multiPersonPhoto = !!attachedClassification && attachedClassification.num_people > 1;
+  // One-time group-photo teaching sheet: the FIRST time a multi-person photo is
+  // classified, explain that group photos are reimagined together (not an exact
+  // face swap) and that the model options differ. Device-local "seen" flag; the
+  // ref guards against a double-trigger while the photo stays attached.
+  const [groupPhotoIntroVisible, setGroupPhotoIntroVisible] = useState(false);
+  const groupPhotoIntroShownRef = useRef(false);
+  useEffect(() => {
+    if (!multiPersonPhoto || groupPhotoIntroShownRef.current) return;
+    let cancelled = false;
+    hasSeenGroupPhotoIntro().then((seen) => {
+      if (cancelled || seen) return;
+      groupPhotoIntroShownRef.current = true;
+      // Wait a tick so the sheet doesn't fight the photo-attach animation.
+      setTimeout(() => {
+        if (!cancelled) setGroupPhotoIntroVisible(true);
+      }, 350);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [multiPersonPhoto]);
   // Compact one-line summary of the collapsed engine controls, shown while the
   // keyboard is up so the prompt can take the freed vertical space. Text dreams
   // fold Model + Mode; New Scene folds the mode toggle + likeness tier.
@@ -1394,7 +1421,11 @@ export default function CreateScreen() {
                           {/* Row label — "Quality" not "Likeness": objects/scenery have
                       no likeness, and quality is the dimension both tiers share. */}
                           <View className="flex-row items-center mb-1.5 ml-1">
-                            <FormLabel>Quality</FormLabel>
+                            {/* Group photos surface the curated model pair by name
+                            (the tiers ARE the two models: Standard = Nano Banana,
+                            Ultra = Nano Banana Pro), so the row reads as a model
+                            picker. Single-subject photos keep the Quality framing. */}
+                            <FormLabel>{multiPersonPhoto ? 'Model' : 'Quality'}</FormLabel>
                           </View>
                           <View
                             className="flex-row rounded-xl p-1"
@@ -1407,12 +1438,12 @@ export default function CreateScreen() {
                             {[
                               {
                                 tier: 'standard' as const,
-                                label: 'Standard',
+                                label: multiPersonPhoto ? 'Nano Banana' : 'Standard',
                                 price: engineConfig.newScenePriceStandard,
                               },
                               {
                                 tier: 'best' as const,
-                                label: 'Ultra',
+                                label: multiPersonPhoto ? 'Nano Banana Pro' : 'Ultra',
                                 price: engineConfig.newScenePriceBest,
                               },
                             ].map((opt) => {
@@ -1891,6 +1922,14 @@ export default function CreateScreen() {
 
       {/* First-Create-tap teaching sheet — see effect above. */}
       <CreateIntroSheet visible={introVisible} onClose={() => setIntroVisible(false)} />
+
+      {/* Group-photo teaching sheet — shown once the first time a multi-person
+          photo is attached, so the different handling (reimagined together, not
+          an exact swap) + the curated model options aren't confusing. */}
+      <GroupPhotoIntroSheet
+        visible={groupPhotoIntroVisible}
+        onClose={() => setGroupPhotoIntroVisible(false)}
+      />
 
       {/* DreamSmart auto-select notice — a style change committed a new model
           (the current one wasn't supported). "Use it anyway" is a one-step undo:

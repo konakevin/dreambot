@@ -68,7 +68,7 @@ describe('routeNewSceneSubject — the reference-vs-solo-swap fork', () => {
 });
 
 describe('newSceneModel — tier + medium bucket', () => {
-  it('Standard: Seedream for photoreal, Nano Banana for stylized', () => {
+  it('Standard: Seedream for a single photoreal subject, Nano Banana for stylized', () => {
     expect(newSceneModel({ stylized: false, tier: 'standard' })).toBe(NEW_SCENE_MODEL_SEEDREAM);
     expect(newSceneModel({ stylized: true, tier: 'standard' })).toBe(NEW_SCENE_MODEL_NANO_BANANA);
   });
@@ -76,9 +76,48 @@ describe('newSceneModel — tier + medium bucket', () => {
     expect(newSceneModel({ stylized: false, tier: 'best' })).toBe(NEW_SCENE_MODEL_NANO_BANANA_PRO);
     expect(newSceneModel({ stylized: true, tier: 'best' })).toBe(NEW_SCENE_MODEL_NANO_BANANA_PRO);
   });
-  it('fallback flips Seedream ↔ Nano Banana Pro', () => {
+  // Multi-person override (NEW_SCENE_MULTIPERSON_FIX.md): a 2+ person / person+pet
+  // photo can't take the exact-face solo swap, so it lands on the recompose path.
+  // Seedream stays too close to the source there and Flux merges/drops people —
+  // an offline A/B on a real 2-person case found Nano Banana fully transforms and
+  // keeps both people at the SAME 1-sparkle standard cost. So multi-subject kinds
+  // use Nano Banana at standard, regardless of medium, and Nano Banana Pro at best.
+  it('Standard: multi-person / person+pet → Nano Banana even for a photoreal medium', () => {
+    expect(newSceneModel({ stylized: false, tier: 'standard', kind: 'people' })).toBe(
+      NEW_SCENE_MODEL_NANO_BANANA
+    );
+    expect(newSceneModel({ stylized: false, tier: 'standard', kind: 'person_pet' })).toBe(
+      NEW_SCENE_MODEL_NANO_BANANA
+    );
+  });
+  it('Best: multi-person → Nano Banana Pro', () => {
+    expect(newSceneModel({ stylized: false, tier: 'best', kind: 'people' })).toBe(
+      NEW_SCENE_MODEL_NANO_BANANA_PRO
+    );
+  });
+  it('single-subject reference kinds keep the medium bucket (pet/object/scene → Seedream photoreal)', () => {
+    for (const kind of ['pet', 'object', 'scene'] as const) {
+      expect(newSceneModel({ stylized: false, tier: 'standard', kind })).toBe(
+        NEW_SCENE_MODEL_SEEDREAM
+      );
+    }
+  });
+  it('the curated multi-person pair falls back to EACH OTHER, never to Seedream', () => {
+    // A group photo must render on a model that works; a Nano refusal retries the
+    // other Nano (then refunds), never the excluded Seedream (guarantee).
+    expect(newSceneFallbackModel(NEW_SCENE_MODEL_NANO_BANANA)).toBe(
+      NEW_SCENE_MODEL_NANO_BANANA_PRO
+    );
+    expect(newSceneFallbackModel(NEW_SCENE_MODEL_NANO_BANANA_PRO)).toBe(
+      NEW_SCENE_MODEL_NANO_BANANA
+    );
+    expect(newSceneFallbackModel(NEW_SCENE_MODEL_NANO_BANANA)).not.toBe(NEW_SCENE_MODEL_SEEDREAM);
+    expect(newSceneFallbackModel(NEW_SCENE_MODEL_NANO_BANANA_PRO)).not.toBe(
+      NEW_SCENE_MODEL_SEEDREAM
+    );
+  });
+  it('single-subject Seedream keeps its cross-provider fallback', () => {
     expect(newSceneFallbackModel(NEW_SCENE_MODEL_SEEDREAM)).toBe(NEW_SCENE_MODEL_NANO_BANANA_PRO);
-    expect(newSceneFallbackModel(NEW_SCENE_MODEL_NANO_BANANA)).toBe(NEW_SCENE_MODEL_SEEDREAM);
   });
 });
 

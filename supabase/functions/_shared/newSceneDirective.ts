@@ -124,21 +124,52 @@ export const NEW_SCENE_MODEL_NANO_BANANA_PRO = 'google/gemini-3-image-preview'; 
 export type NewSceneTier = 'standard' | 'best';
 
 /**
- * Pick the reference model. Standard: Seedream for photoreal mediums, Nano
- * Banana for stylized (reusing the Restyle curation — a stylized medium is one
- * the DB pegged to a restyle model). Best: Nano Banana Pro for everything.
- * `otherModel` returns the fallback to retry on refusal (visible fallback).
+ * Pick the reference model. Standard: Seedream for a single photoreal subject,
+ * Nano Banana for stylized (reusing the Restyle curation — a stylized medium is
+ * one the DB pegged to a restyle model). Best: Nano Banana Pro for everything.
+ * `newSceneFallbackModel` returns the retry-on-refusal fallback (visible fallback).
+ *
+ * MULTI-PERSON OVERRIDE (2026-09-07, NEW_SCENE_MULTIPERSON_FIX.md): a photo with
+ * 2+ people (kind 'people' / 'person_pet') can never take the exact-face solo
+ * swap, so it lands on this reference (recompose) path. Seedream stays too close
+ * to the source there — it keeps the original clothes + pose and just relights,
+ * so a real transformation ("us as Victorian nobles") reads as a filtered
+ * original; Flux merges/drops a person. An offline A/B on a real 2-person case
+ * (grandmother + granddaughter, regency + hippie scenes) found Nano Banana fully
+ * transforms, keeps BOTH people, and preserves likeness + the child's age — at
+ * the SAME 1-sparkle cost as Seedream (modelPricing.ts). So multi-subject
+ * standard-tier renders use Nano Banana regardless of medium.
  */
-export function newSceneModel(opts: { stylized: boolean; tier: NewSceneTier }): string {
+export function newSceneModel(opts: {
+  stylized: boolean;
+  tier: NewSceneTier;
+  kind?: NewSceneSubjectKind;
+}): string {
   if (opts.tier === 'best') return NEW_SCENE_MODEL_NANO_BANANA_PRO;
+  if (opts.kind === 'people' || opts.kind === 'person_pet') return NEW_SCENE_MODEL_NANO_BANANA;
   return opts.stylized ? NEW_SCENE_MODEL_NANO_BANANA : NEW_SCENE_MODEL_SEEDREAM;
 }
 
-/** The alternate model to retry on a refusal, before refunding. */
+/**
+ * The alternate model to retry on a refusal, before refunding.
+ *
+ * The two CURATED multi-person models fall back to EACH OTHER, never to Seedream
+ * (NEW_SCENE_MULTIPERSON_FIX.md): a group photo must render on a model that
+ * actually works, so a Nano-Banana refusal retries Nano Banana Pro (and vice
+ * versa), and if that ALSO fails the render refunds rather than silently
+ * degrading to the excluded Seedream — a good model or nothing. Single-subject
+ * Seedream (pet/object/scene reference) keeps its cross-provider fallback.
+ */
 export function newSceneFallbackModel(primary: string): string {
-  return primary === NEW_SCENE_MODEL_SEEDREAM
-    ? NEW_SCENE_MODEL_NANO_BANANA_PRO
-    : NEW_SCENE_MODEL_SEEDREAM;
+  switch (primary) {
+    case NEW_SCENE_MODEL_NANO_BANANA:
+      return NEW_SCENE_MODEL_NANO_BANANA_PRO;
+    case NEW_SCENE_MODEL_NANO_BANANA_PRO:
+      return NEW_SCENE_MODEL_NANO_BANANA;
+    case NEW_SCENE_MODEL_SEEDREAM:
+    default:
+      return NEW_SCENE_MODEL_NANO_BANANA_PRO;
+  }
 }
 
 /**

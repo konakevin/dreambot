@@ -812,7 +812,7 @@ async function handleRequest(req: Request): Promise<Response> {
       const stylized =
         !!medium.restyleModel || (medium.restyleModels != null && medium.restyleModels.length > 0);
       const tier: NewSceneTier = body.new_scene_tier === 'best' ? 'best' : 'standard';
-      newSceneRefModel = newSceneModel({ stylized, tier });
+      newSceneRefModel = newSceneModel({ stylized, tier, kind });
       visionDescription = subject_description ?? null;
       finalPrompt = buildNewScenePrompt({
         kind,
