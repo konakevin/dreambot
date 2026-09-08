@@ -1737,7 +1737,13 @@ Deno.serve(async (req) => {
           if (holidayScene.mediumKey) {
             try {
               const m = await resolveMediumFromDb(holidayScene.mediumKey);
-              if (m?.fluxFragment) holidaySceneMediumFragment = m.fluxFragment;
+              if (m?.fluxFragment && m.key === holidayScene.mediumKey) {
+                holidaySceneMediumFragment = m.fluxFragment;
+                // The pinned look IS this dream's medium (§5e stylized scene-only worlds): record it as
+                // uploads.dream_medium so the card label, Dream Again and DLT name the look, not the roll.
+                resolvedMediumKey = m.key;
+                fallbackReasons.push(`holiday_scene_medium:${m.key}`);
+              }
             } catch (_mErr) {
               /* unknown medium key → fall to the rolled medium */
             }

@@ -557,3 +557,17 @@ Total ≈ 2-3 sessions before Oct 31 with margin.
   Stamps: `day_of_model_ban:<models>` on every day-of render; `day_of_model_ban_hit:<a>-><b>` when the
   policy's pick was overridden. Live proof: a day-of scene render stamped `day_of_model_ban:seedream-4`,
   rendered on flux-1.1-pro, postcard ok. The six look rows also no longer list seedream (data, earlier today).
+- 2026-09-08 — **SCENE-ONLY program (Kevin: "omg i love all those scene only halloween renders" / "all
+  approved"):** (1) the fun register's 6 test renders passed Kevin (`🎃 FUN SCENES`); the scale-up (12 per
+  sub × 51 subs across the 14 window pools) is seeding in the background; the plain rows from the morning
+  get disabled once it lands. (2) The 240 accidental cast rows were audited (lint + near-duplicate check +
+  proximity) and 239 re-enabled ("if we paid for those rows, we may as well use them"). (3) Stylized
+  worlds taste test LIVE (commit 3299f5e7, mig 481): `stop_motion_halloween_town` and
+  `land_of_the_dead_marigold`, 3 subs × 3 rows each, pinned looks `halloween_stop_motion` /
+  `halloween_marigold_folk`; 6 renders (`🎃 STYLIZED WORLDS`) all took the pinned look
+  (`holiday_scene_medium:<look>`) — marigold bridge city with candle-bearing cats, a petal spiral over a
+  candlelit ofrenda cemetery, a pumpkin pyramid in a miniature town, a tilt-shift felt village with a
+  skeleton guitarist. Fix shipped with it: a pinned scene look is now recorded as `uploads.dream_medium`
+  (the card said "Photography" under a stop-motion scene). Next on Kevin's word: the remaining five
+  stylized worlds (button-eyed other world, claymation lab, paper-cut shadow theater, felted patch, a
+  separate Día de Muertos pool) and scaling these two to share.
