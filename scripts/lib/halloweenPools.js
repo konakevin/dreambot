@@ -690,6 +690,66 @@ SUBS.ofrenda_cemetery_glow = {
   setting:
     'a Día de Muertos cemetery at night: family ofrendas stacked with candles, marigolds, pan de muerto and painted portraits, cempasúchil petal paths between graves, papel picado strung tree to tree, a celebratory glow — never spooky',
 };
+POOLS.button_eyed_other_world = {
+  sceneOnly: true,
+  sceneMedium: 'halloween_stop_motion',
+  palette: 'cold violet and teal with sickly-sweet pink, a black button moon; felt and lacquer textures',
+  objects:
+    'a too-perfect mirror house, a garden that blooms in the wrong colours, a tunnel of violet light, a circus of trained mice, black buttons everywhere, a moon that is a button, stitched curtains',
+  lanterns: false,
+  subs: ['mirror_house_garden', 'violet_tunnel_door', 'mouse_circus_tent'],
+};
+SUBS.mirror_house_garden = { pool: 'button_eyed_other_world', setting: 'a stop-motion miniature garden behind a too-perfect mirror house at night: flowers blooming in wrong neon colours, snapdragons that snap, a black button moon, stitched hedges, everything a little too tidy' };
+SUBS.violet_tunnel_door = { pool: 'button_eyed_other_world', setting: 'a tiny door in a stop-motion parlour opening onto a long tunnel of violet light, felt walls breathing, black buttons sewn into the wallpaper, a wool cat sitting at the threshold' };
+SUBS.mouse_circus_tent = { pool: 'button_eyed_other_world', setting: 'a stop-motion circus tent of trained felt mice in tiny costumes performing under a paper big-top, striped seats, a button-eyed ringmaster doll silhouette, violet spotlights' };
+POOLS.claymation_monster_lab = {
+  sceneOnly: true,
+  sceneMedium: 'halloween_claymation',
+  palette: 'toxic green, purple and orange plasticine, chrome and glitter goo',
+  objects:
+    'thumbprinted plasticine monsters, beakers of glitter goo, a fork lightning rod, coiled wires, chunky levers, a round delighted monster on a slab, jars of clay eyeballs',
+  lanterns: false,
+  subs: ['glitter_goo_lab', 'monster_birthday_slab', 'clay_bat_belfry'],
+};
+SUBS.glitter_goo_lab = { pool: 'claymation_monster_lab', setting: 'a claymation laboratory where round thumbprinted plasticine monsters stir beakers of glitter goo, a fork lightning rod sparking, coiled wire and chunky levers, everything matte clay with fingerprints' };
+SUBS.monster_birthday_slab = { pool: 'claymation_monster_lab', setting: 'a claymation lab throwing a birthday for the monster on the slab: a lopsided clay cake with candles, plasticine party hats, streamers of clay, delighted round creatures clapping' };
+SUBS.clay_bat_belfry = { pool: 'claymation_monster_lab', setting: 'a claymation bell tower at night, plasticine bats with thumbprint wings hanging in rows, a clay moon, wonky stairs, a bell with a clay cat inside it' };
+POOLS.paper_cutout_shadow_theater = {
+  sceneOnly: true,
+  sceneMedium: 'halloween_papercut',
+  palette: 'black silhouettes over amber, violet and teal backlight; layered paper edges',
+  objects:
+    'layered paper silhouettes in five planes, backlit lanterns, cut-paper bats and owls, a ghost ship of folded card, a haunted forest of paper trees, long theatrical shadows',
+  lanterns: true,
+  subs: ['paper_forest_lanterns', 'folded_ghost_ship', 'shadow_puppet_ball'],
+};
+SUBS.paper_forest_lanterns = { pool: 'paper_cutout_shadow_theater', setting: 'a paper-cut shadow theater of a haunted forest in five layered planes, backlit amber and violet, cut-paper bats and owls, tiny paper lanterns glowing between the trees, long theatrical shadows' };
+SUBS.folded_ghost_ship = { pool: 'paper_cutout_shadow_theater', setting: 'a ghost ship of folded card sailing a paper sea under a cut-paper moon, backlit teal, skeleton silhouettes in the rigging, layered paper waves' };
+SUBS.shadow_puppet_ball = { pool: 'paper_cutout_shadow_theater', setting: 'a shadow-puppet ballroom: cut-paper skeletons and ghosts waltzing as silhouettes across a backlit screen, paper chandeliers, jack-o-lantern cutouts glowing along the floor' };
+POOLS.felted_pumpkin_patch = {
+  sceneOnly: true,
+  sceneMedium: 'halloween_felt',
+  palette: 'wool orange, moss green, plum and cream; yarn and needle-felt textures',
+  objects:
+    'needle-felted pumpkins, a felt scarecrow village, yarn cobwebs, button moons, wool crows, a knitted barn, embroidered vines',
+  lanterns: true,
+  subs: ['felt_patch_moonrise', 'yarn_cobweb_barn', 'wool_crow_harvest'],
+};
+SUBS.felt_patch_moonrise = { pool: 'felted_pumpkin_patch', setting: 'a needle-felted pumpkin patch at moonrise: wool pumpkins with stitched grins, a button moon, embroidered vines, a felt scarecrow village along the rows, macro softness' };
+SUBS.yarn_cobweb_barn = { pool: 'felted_pumpkin_patch', setting: 'a knitted barn strung with yarn cobwebs and felt bats, wool pumpkins glowing through stitched windows, a plum wool night sky with embroidered stars' };
+SUBS.wool_crow_harvest = { pool: 'felted_pumpkin_patch', setting: 'wool crows on a felt fence at a harvest of needle-felted gourds, a knitted hay wagon, a yarn moon, cream and plum wool sky' };
+POOLS.dia_de_muertos_ofrenda = {
+  sceneOnly: true,
+  sceneMedium: 'halloween_marigold_folk',
+  palette: 'marigold orange, magenta, teal and candle gold on deep indigo; cut-paper edges',
+  objects:
+    'family ofrendas, cempasúchil marigold paths, candles, papel picado, sugar-skull calaveras, pan de muerto, painted portraits, calaca musicians, alebrije creatures',
+  lanterns: false,
+  subs: ['family_altar_room', 'cempasuchil_petal_path', 'calavera_bakery_night'],
+};
+SUBS.family_altar_room = { pool: 'dia_de_muertos_ofrenda', setting: 'a Día de Muertos family altar room: a tiered ofrenda stacked with candles, marigolds, pan de muerto, painted portraits and sugar-skull calaveras, papel picado across the ceiling, a celebratory candle glow' };
+SUBS.cempasuchil_petal_path = { pool: 'dia_de_muertos_ofrenda', setting: 'a cempasúchil marigold petal path glowing from a village square to a candlelit cemetery at night, papel picado strung tree to tree, calaca musicians playing on the way, alebrije creatures glowing in the dark' };
+SUBS.calavera_bakery_night = { pool: 'dia_de_muertos_ofrenda', setting: 'a Día de Muertos bakery at night: trays of pan de muerto and painted sugar-skull calaveras, marigold garlands, cut-paper banners, calaca bakers at the ovens, warm candle and oven glow' };
 const POOL_OF_SUB = Object.fromEntries(Object.entries(SUBS).map(([s, d]) => [s, d.pool]));
 const SCENE_ONLY_POOLS = Object.keys(POOLS).filter((p) => POOLS[p].sceneOnly === true);
 // always round UP (Kevin); a pool may override the share (the day-of pool seeds deeper).

@@ -79,6 +79,21 @@ export const HALLOWEEN_POOL_OF_SUB: Record<string, string> = {
   marigold_bridge_city: 'land_of_the_dead_marigold',
   spirit_market_night: 'land_of_the_dead_marigold',
   ofrenda_cemetery_glow: 'land_of_the_dead_marigold',
+  mirror_house_garden: 'button_eyed_other_world',
+  violet_tunnel_door: 'button_eyed_other_world',
+  mouse_circus_tent: 'button_eyed_other_world',
+  glitter_goo_lab: 'claymation_monster_lab',
+  monster_birthday_slab: 'claymation_monster_lab',
+  clay_bat_belfry: 'claymation_monster_lab',
+  paper_forest_lanterns: 'paper_cutout_shadow_theater',
+  folded_ghost_ship: 'paper_cutout_shadow_theater',
+  shadow_puppet_ball: 'paper_cutout_shadow_theater',
+  felt_patch_moonrise: 'felted_pumpkin_patch',
+  yarn_cobweb_barn: 'felted_pumpkin_patch',
+  wool_crow_harvest: 'felted_pumpkin_patch',
+  family_altar_room: 'dia_de_muertos_ofrenda',
+  cempasuchil_petal_path: 'dia_de_muertos_ofrenda',
+  calavera_bakery_night: 'dia_de_muertos_ofrenda',
 };
 export const HALLOWEEN_POOLS: string[] = [
   'halloween_day_of',
@@ -98,12 +113,22 @@ export const HALLOWEEN_POOLS: string[] = [
   'enchanted_harvest_court',
   'stop_motion_halloween_town',
   'land_of_the_dead_marigold',
+  'button_eyed_other_world',
+  'claymation_monster_lab',
+  'paper_cutout_shadow_theater',
+  'felted_pumpkin_patch',
+  'dia_de_muertos_ofrenda',
 ];
 
 /** Pools that carry SCENE rows only (no cast rows, no action register) — stylized worlds (§5e). */
 export const HALLOWEEN_SCENE_ONLY_POOLS: string[] = [
   'stop_motion_halloween_town',
   'land_of_the_dead_marigold',
+  'button_eyed_other_world',
+  'claymation_monster_lab',
+  'paper_cutout_shadow_theater',
+  'felted_pumpkin_patch',
+  'dia_de_muertos_ofrenda',
 ];
 // MIRROR of scripts/lib/fallPools.js (parity-locked by the same test). 2026-09-07 (Kevin approved): 8 Fall pools + 5 dreamy / BloomBot-register pools = 13.
 // Demarcation: Halloween owns pumpkins / jack-o-lanterns / costumes / spook; Fall owns foliage, orchards,
