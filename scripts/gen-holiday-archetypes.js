@@ -52,7 +52,11 @@ const ARCHETYPES = Object.fromEntries(
     Object.fromEntries(
       Object.entries(tax.SUBS).map(([k, d]) => [
         k,
-        { ...A(null, null, d.costume, d.setting, d.palette, d.objects), must: d.must || [] },
+        {
+          ...A(null, (tax.POOLS[d.pool] && tax.POOLS[d.pool].sceneMedium) || null, d.costume, d.setting, d.palette, d.objects),
+          must: d.must || [],
+          sceneOnly: !!(tax.POOLS[d.pool] && tax.POOLS[d.pool].sceneOnly),
+        },
       ])
     ),
   ])
@@ -233,7 +237,7 @@ async function seed(holiday, arch, def, table, extra, promptFor, target) {
       console.warn(`  (skip unknown archetype "${arch}")`);
       continue;
     }
-    if (kind === 'dual' || kind === 'cast' || kind === 'all') {
+    if ((kind === 'dual' || kind === 'cast' || kind === 'all') && !def.sceneOnly) {
       total += await seed(
         holiday,
         arch,
@@ -244,7 +248,7 @@ async function seed(holiday, arch, def, table, extra, promptFor, target) {
         await targetFor('dual_scenarios', arch)
       );
     }
-    if (kind === 'single' || kind === 'cast' || kind === 'all') {
+    if ((kind === 'single' || kind === 'cast' || kind === 'all') && !def.sceneOnly) {
       total += await seed(
         holiday,
         arch,
@@ -261,7 +265,8 @@ async function seed(holiday, arch, def, table, extra, promptFor, target) {
         arch,
         def,
         'holiday_scenes',
-        { holiday }, // no medium pin (Kevin 2026-09-04)
+        // no medium pin by default (Kevin 2026-09-04); scene-only stylized worlds pin their look (§5e)
+        { holiday, ...(def.sceneMedium ? { medium_key: def.sceneMedium } : {}) },
         (n) => scenePrompt(holiday, arch, def, n),
         N ?? 12
       );

@@ -14,7 +14,7 @@ import {
 } from '@engine/actionRegisters';
 import { validateActionBeat } from '@engine/actionSafety';
 import { BIOME_AXES } from '@engine/biomeAxes';
-import { FALL_POOLS, HALLOWEEN_POOLS } from '@engine/holidayPools';
+import { FALL_POOLS, HALLOWEEN_POOLS, HALLOWEEN_SCENE_ONLY_POOLS } from '@engine/holidayPools';
 
 const entries: Array<[string, string]> = [];
 for (const [key, reg] of Object.entries(ACTION_REGISTERS)) {
@@ -31,7 +31,10 @@ describe('action registers — every entry is swap-safe verbatim', () => {
 
 describe('action registers — coverage parity', () => {
   it('every Halloween pool has a register', () => {
-    for (const pool of HALLOWEEN_POOLS) expect(getActionRegister(pool)).not.toBeNull();
+    for (const pool of HALLOWEEN_POOLS) {
+      if (HALLOWEEN_SCENE_ONLY_POOLS.includes(pool)) continue; // scene rows only — no cast, no register (§5e)
+      expect(getActionRegister(pool)).not.toBeNull();
+    }
   });
   it('every Fall pool has a register (Kevin approved the 8 pools 2026-09-07)', () => {
     for (const pool of FALL_POOLS) expect(getActionRegister(pool)).not.toBeNull();

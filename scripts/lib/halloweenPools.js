@@ -638,9 +638,62 @@ SUBS.swamp_witch_bayou = {
   setting:
     'a bayou dock party under a violet sky, green fog rolling over black water, lanterns hung from cypress branches, spanish moss, a bubbling cauldron on the dock, fireflies, will-o-wisps drifting over the water, a rowboat of carved jack-o-lanterns kept low',
 };
+// ── SCENE-ONLY stylized worlds (Kevin 2026-09-08, HOLIDAY_DAY_OF_PLAN.md §5e) ─────────────────────────
+// `sceneOnly: true` → the generator seeds holiday_scenes rows ONLY (no cast rows, no register); the pool's
+// rows pin a scene-only LOOK (`sceneMedium` → holiday_scenes.medium_key → a halloween_* dream_mediums
+// row). Worlds are described by their CRAFT, never by a studio, film or character name (lint IP rule).
+POOLS.stop_motion_halloween_town = {
+  sceneOnly: true,
+  sceneMedium: 'halloween_stop_motion',
+  palette: 'black and orange stripes, bone white, candle yellow, a swirl of purple night; felt and wool textures',
+  objects:
+    'spiral hills, crooked stitched houses, striped lampposts, pumpkin-headed townsfolk as puppets, a curling iron bridge, a crescent moon on wire, felt bats, tiny lanterns',
+  lanterns: true,
+  subs: ['spiral_hill_square', 'pumpkin_mayor_parade', 'stitched_toy_workshop'],
+};
+SUBS.spiral_hill_square = {
+  pool: 'stop_motion_halloween_town',
+  setting:
+    'a hand-built stop-motion miniature town square under a curling spiral hill, crooked felt houses with stitched seams, striped lampposts, pumpkin-headed puppet townsfolk mid-celebration, a painted-cardboard night sky with a wire crescent moon',
+};
+SUBS.pumpkin_mayor_parade = {
+  pool: 'stop_motion_halloween_town',
+  setting:
+    'a stop-motion puppet parade winding through a crooked miniature town: a pumpkin-headed mayor puppet on a float, a felt band of skeleton puppets, striped bunting, confetti of tiny paper bats, tilt-shift tabletop lighting',
+};
+SUBS.stitched_toy_workshop = {
+  pool: 'stop_motion_halloween_town',
+  setting:
+    'a stop-motion toy workshop where stitched puppets build Halloween gifts: wire-jointed hands at tiny benches, spools of black-and-orange thread, a wool cat curled by a felt stove, a window onto the spiral-hill town at night',
+};
+POOLS.land_of_the_dead_marigold = {
+  sceneOnly: true,
+  sceneMedium: 'halloween_marigold_folk',
+  palette: 'marigold orange, magenta, teal, candle gold against deep indigo; cut-paper edges',
+  objects:
+    'cempasúchil marigold petals, papel picado banners, candles, calaca skeleton musicians in embroidered charro suits, alebrije spirit creatures glowing neon, stacked bridges, ofrendas, pan de muerto, sugar-skull calaveras',
+  lanterns: false,
+  subs: ['marigold_bridge_city', 'spirit_market_night', 'ofrenda_cemetery_glow'],
+};
+SUBS.marigold_bridge_city = {
+  pool: 'land_of_the_dead_marigold',
+  setting:
+    'a vertical city of stacked bridges and towers lit by rivers of marigold petals and candles, papel picado across every street, calaca skeleton musicians in embroidered charro suits playing on balconies, neon alebrije spirit creatures gliding between towers',
+};
+SUBS.spirit_market_night = {
+  pool: 'land_of_the_dead_marigold',
+  setting:
+    'a festive night market of the dead: stalls of sugar-skull calaveras and pan de muerto, a calaca mariachi band, cut-paper banners in magenta and teal, alebrije creatures glowing like lanterns, marigold petals underfoot',
+};
+SUBS.ofrenda_cemetery_glow = {
+  pool: 'land_of_the_dead_marigold',
+  setting:
+    'a Día de Muertos cemetery at night: family ofrendas stacked with candles, marigolds, pan de muerto and painted portraits, cempasúchil petal paths between graves, papel picado strung tree to tree, a celebratory glow — never spooky',
+};
 const POOL_OF_SUB = Object.fromEntries(Object.entries(SUBS).map(([s, d]) => [s, d.pool]));
+const SCENE_ONLY_POOLS = Object.keys(POOLS).filter((p) => POOLS[p].sceneOnly === true);
 // always round UP (Kevin); a pool may override the share (the day-of pool seeds deeper).
 const shareFor = (main) => Math.ceil((POOLS[main].share || SHARE) / POOLS[main].subs.length);
 /** The reserved day-of pool key for a holiday (HOLIDAY_DAY_OF_PLAN.md) — generic: <holiday>_day_of. */
 const dayOfPoolKey = (holiday) => `${holiday}_day_of`;
-module.exports = { SHARE, SHARE_DAY_OF, POOLS, SUBS, POOL_OF_SUB, shareFor, dayOfPoolKey };
+module.exports = { SHARE, SHARE_DAY_OF, POOLS, SUBS, POOL_OF_SUB, SCENE_ONLY_POOLS, shareFor, dayOfPoolKey };

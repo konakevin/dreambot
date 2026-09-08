@@ -4,6 +4,7 @@ import {
   HALLOWEEN_POOL_OF_SUB,
   HALLOWEEN_POOLS,
   holidayPoolOf,
+  HALLOWEEN_SCENE_ONLY_POOLS,
 } from '@engine/holidayPools';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const tax = require('../../scripts/lib/halloweenPools.js');
@@ -16,13 +17,18 @@ describe('Halloween pool taxonomy — engine mirror parity (Kevin 2026-09-05)', 
     expect(HALLOWEEN_POOLS).toEqual(Object.keys(tax.POOLS));
   });
   it('exactly 15 pools (13 after the 2026-09-06 fold + enchanted_harvest_court + the reserved halloween_day_of pool, 2026-09-07); every sub maps to a pool that lists it', () => {
-    expect(HALLOWEEN_POOLS).toHaveLength(15);
+    expect(HALLOWEEN_POOLS).toHaveLength(17); // + 2 scene-only stylized worlds (2026-09-08)
     for (const [sub, pool] of Object.entries(tax.POOL_OF_SUB))
       expect(tax.POOLS[pool].subs).toContain(sub);
   });
   it('shares always round UP and land at or above 70 per table', () => {
     for (const main of Object.keys(tax.POOLS))
       expect(tax.shareFor(main) * tax.POOLS[main].subs.length).toBeGreaterThanOrEqual(70);
+  });
+  it('scene-only pools match the taxonomy sceneOnly flag (§5e)', () => {
+    expect(HALLOWEEN_SCENE_ONLY_POOLS).toEqual(tax.SCENE_ONLY_POOLS);
+    for (const p of HALLOWEEN_SCENE_ONLY_POOLS)
+      expect(typeof tax.POOLS[p].sceneMedium).toBe('string');
   });
   it('unknown sub_theme falls back to itself, null to __unsorted', () => {
     expect(holidayPoolOf('cozy_porch')).toBe('halloween_neighborhood');

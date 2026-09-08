@@ -87,6 +87,10 @@ function tripsProximity(text) {
  *   { table: 'dual_scenarios'|'single_scenarios'|'holiday_scenes',
  *     scene, attire?, medium_key?, medium_ban? }
  */
+// §5e stylized scene-only worlds: describe the craft, never the studio / film / character.
+const FRANCHISE_EXTRA =
+  /\b(?:jack skellington|skellington|sally|oogie|zero the ghost|halloween town|christmas town|coraline|wybie|other mother|beldam|miguel|dante|h[eé]ctor|ernesto|mama coco|coco\b|pixar|disney|burton|laika|selick|henry selick|nightmare before christmas|corpse bride|kubo|paranorman|boxtrolls|book of life)\b/i;
+
 function lintHolidayRow(row) {
   const errors = [];
   const warnings = [];
@@ -102,7 +106,7 @@ function lintHolidayRow(row) {
   // signature objects ONLY in the pools that opt in (halloweenPools.js `lanterns`);
   // everywhere else they are the "lantern spam" that flattened 48 pools into one look.
   // Applies to halloween rows whose sub_theme maps to a known pool; unknown subs skip.
-  if (IP_TERM.test(`${row.scene || ''} ${row.attire || ''}`)) {
+  if (IP_TERM.test(`${row.scene || ''} ${row.attire || ''}`) || FRANCHISE_EXTRA.test(`${row.scene || ''} ${row.attire || ''}`)) {
     errors.push('franchise / character name in seed text — seeds carry the vibe, never the name');
   }
 

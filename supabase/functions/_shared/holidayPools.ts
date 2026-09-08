@@ -72,6 +72,13 @@ export const HALLOWEEN_POOL_OF_SUB: Record<string, string> = {
   ghost_pirate_ship: 'ghost_pirate_ship',
   autumn_fae: 'enchanted_harvest_court',
   harvest_royalty: 'enchanted_harvest_court',
+  // SCENE-ONLY stylized worlds (§5e): scene rows only, pinned look via holiday_scenes.medium_key.
+  spiral_hill_square: 'stop_motion_halloween_town',
+  pumpkin_mayor_parade: 'stop_motion_halloween_town',
+  stitched_toy_workshop: 'stop_motion_halloween_town',
+  marigold_bridge_city: 'land_of_the_dead_marigold',
+  spirit_market_night: 'land_of_the_dead_marigold',
+  ofrenda_cemetery_glow: 'land_of_the_dead_marigold',
 };
 export const HALLOWEEN_POOLS: string[] = [
   'halloween_day_of',
@@ -89,6 +96,14 @@ export const HALLOWEEN_POOLS: string[] = [
   'cute_halloween',
   'ghost_pirate_ship',
   'enchanted_harvest_court',
+  'stop_motion_halloween_town',
+  'land_of_the_dead_marigold',
+];
+
+/** Pools that carry SCENE rows only (no cast rows, no action register) — stylized worlds (§5e). */
+export const HALLOWEEN_SCENE_ONLY_POOLS: string[] = [
+  'stop_motion_halloween_town',
+  'land_of_the_dead_marigold',
 ];
 // MIRROR of scripts/lib/fallPools.js (parity-locked by the same test). 2026-09-07 (Kevin approved): 8 Fall pools + 5 dreamy / BloomBot-register pools = 13.
 // Demarcation: Halloween owns pumpkins / jack-o-lanterns / costumes / spook; Fall owns foliage, orchards,
