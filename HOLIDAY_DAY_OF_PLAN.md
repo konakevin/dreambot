@@ -376,3 +376,9 @@ Total ≈ 2-3 sessions before Oct 31 with margin.
   medium on one day-of couple (cemetery) — the 1.1-pro override library repaints it, but if the day-of
   should never roll photography that is a medium-ban on the day-of path (one line); the mad-scientist
   seed that rendered shows an ornate mirror frame (bust crop) — worth a scene-hint pass if it repeats.
+- 2026-09-08 — **Costume pool v2 (`🎃 DAY-OF R36`, 16 couples, one per sub):** Kevin on R35: "costumes are
+  kinda bland … less cliche? the roman garb, etc" → §5b rewritten (34 concepts; commit c7bede83).
+  R36: 15/16 couples (1 solo fallback on witches_cottage_party under the mock-scare stance; 1 three-
+  attempt swap on halloween_parade), 14 first-try, 0 faceless, every pair a distinct v2 concept (vampire
+  hunter / reaper, ghost flapper / crow king, fallen angel / baroque skeleton, Art Deco she-devil / swamp
+  creature, ghost groom / Medusa …). Gallery artifact dfe50486 rebuilt from R36. Awaiting Kevin's read.
