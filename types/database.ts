@@ -2166,6 +2166,7 @@ export type Database = {
           day_of_enabled: boolean;
           day_of_look_keys: string[];
           day_of_medium_ban: string;
+          day_of_model_ban: string[];
           display_name: string;
           emoji: string;
           final_days: number;
@@ -2196,6 +2197,7 @@ export type Database = {
           day_of_enabled?: boolean;
           day_of_look_keys?: string[];
           day_of_medium_ban?: string;
+          day_of_model_ban?: string[];
           display_name: string;
           emoji: string;
           final_days?: number;
@@ -2226,6 +2228,7 @@ export type Database = {
           day_of_enabled?: boolean;
           day_of_look_keys?: string[];
           day_of_medium_ban?: string;
+          day_of_model_ban?: string[];
           display_name?: string;
           emoji?: string;
           final_days?: number;

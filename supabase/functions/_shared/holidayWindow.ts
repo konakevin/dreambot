@@ -46,6 +46,8 @@ export interface HolidayCatalogRow {
   dayOfLookKeys?: string[];
   /** Comma list of medium keys a day-of render never rolls (mig 478). */
   dayOfMediumBan?: string | null;
+  /** Models a day-of render never picks (mig 480); merged into the nightly ban set. */
+  dayOfModelBan?: string[];
 }
 
 /** A plain calendar date — no timezone, no clock. month is 1-12. */
@@ -67,6 +69,8 @@ export interface ActiveHoliday {
   dayOfLookKeys: string[];
   /** Comma list of medium keys the day-of never rolls (mig 478); null = none. */
   dayOfMediumBan: string | null;
+  /** Models the day-of never picks (mig 480); [] = none. */
+  dayOfModelBan: string[];
 }
 
 // ── calendar helpers (UTC-based so they're pure date math, no DST) ─────────────
@@ -204,6 +208,7 @@ export function resolveActiveHolidays(
           dayOfEnabled: row.dayOfEnabled !== false,
           dayOfLookKeys: row.dayOfLookKeys ?? [],
           dayOfMediumBan: row.dayOfMediumBan ?? null,
+          dayOfModelBan: row.dayOfModelBan ?? [],
           sortOrder: row.sortOrder,
         });
         break; // found this row's active window; don't double-count year+1
@@ -242,6 +247,9 @@ export function mapHolidayCatalogRow(r: Record<string, unknown>): HolidayCatalog
       ? (r.day_of_look_keys as unknown[]).filter((k): k is string => typeof k === 'string')
       : [],
     dayOfMediumBan: typeof r.day_of_medium_ban === 'string' ? r.day_of_medium_ban : null,
+    dayOfModelBan: Array.isArray(r.day_of_model_ban)
+      ? (r.day_of_model_ban as unknown[]).filter((k): k is string => typeof k === 'string')
+      : [],
   };
 }
 

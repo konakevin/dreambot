@@ -1,5 +1,5 @@
 /** dayOfLook.ts — the day-of LOOK pick + the medium-ban parser (HOLIDAY_DAY_OF_PLAN.md §5d). */
-import { pickDayOfLook, parseMediumBan } from '@engine/dayOfLook';
+import { pickDayOfLook, parseMediumBan, mergeDayOfBans } from '@engine/dayOfLook';
 import { mapHolidayCatalogRow } from '@engine/holidayWindow';
 
 describe('pickDayOfLook', () => {
@@ -22,6 +22,32 @@ describe('parseMediumBan', () => {
     expect([...parseMediumBan('photography, glamour ,,')]).toEqual(['photography', 'glamour']);
     expect(parseMediumBan(null).size).toBe(0);
     expect(parseMediumBan('').size).toBe(0);
+  });
+});
+
+describe('mergeDayOfBans (mig 480)', () => {
+  const base: ReadonlySet<string> = new Set(['black-forest-labs/flux-2-dev']);
+  it('adds the holiday day-of model ban to the global set; no holiday or empty ban → the same set', () => {
+    const merged = mergeDayOfBans(base, { dayOfModelBan: ['bytedance/seedream-4'] });
+    expect([...merged].sort()).toEqual(['black-forest-labs/flux-2-dev', 'bytedance/seedream-4']);
+    expect(mergeDayOfBans(base, null)).toBe(base);
+    expect(mergeDayOfBans(base, { dayOfModelBan: [] })).toBe(base);
+  });
+  it('the catalog row parses day_of_model_ban (strings only, default [])', () => {
+    const base = {
+      key: 'halloween',
+      display_name: 'Halloween',
+      emoji: '🎃',
+      peak_rule: 'fixed',
+      peak_month: 10,
+      peak_day: 31,
+      window_days: 30,
+      ramp_style: 'linear',
+    };
+    expect(
+      mapHolidayCatalogRow({ ...base, day_of_model_ban: ['bytedance/seedream-4', 3] }).dayOfModelBan
+    ).toEqual(['bytedance/seedream-4']);
+    expect(mapHolidayCatalogRow(base).dayOfModelBan).toEqual([]);
   });
 });
 

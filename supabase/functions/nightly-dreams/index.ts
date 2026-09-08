@@ -135,7 +135,7 @@ import {
 } from '../_shared/nightlyModelPolicy.ts';
 import { soloRebuildModelFor } from '../_shared/soloRebuildModel.ts';
 import { rollHolidayCostumes, costumeStamp } from '../_shared/holidayCostumes.ts';
-import { pickDayOfLook, parseMediumBan } from '../_shared/dayOfLook.ts';
+import { pickDayOfLook, parseMediumBan, mergeDayOfBans } from '../_shared/dayOfLook.ts';
 import { loadNightlyModelPolicy } from '../_shared/pools/nightlyModelPolicyLoader.ts';
 import { decideSceneFirst, sceneFirstRegister } from '../_shared/sceneFirstEligibility.ts';
 import { parseQaFlags } from '../_shared/nightlyQaFlags.ts';
@@ -418,6 +418,9 @@ Deno.serve(async (req) => {
   // force_day_of), its authored recipes, the user's local year (hero seed), and whether
   // this render became a hero (reaches the response + the postcard step).
   let dayOfHoliday: ActiveHoliday | null = null;
+  // The nightly model-ban set for THIS render (global + a day-of holiday's own, mig 480) — assigned once
+  // the day-of holiday is resolved; every model pick site below reads it.
+  let nightlyBans: ReadonlySet<string> = NIGHTLY_BANNED_MODELS;
   /** HOLIDAY_DAY_OF_PLAN.md: a day-of pool row (or its window fallback) was applied → the postcard
    *  overlay composites (scope day_of) and the response reports day_of: true. */
   let dayOfApplied = false;
@@ -606,6 +609,7 @@ Deno.serve(async (req) => {
               dayOfEnabled: true, // QA force: the day-of takeover is always on
               dayOfLookKeys: c.dayOfLookKeys ?? [],
               dayOfMediumBan: c.dayOfMediumBan ?? null,
+              dayOfModelBan: c.dayOfModelBan ?? [],
             },
           ];
         }
@@ -646,6 +650,14 @@ Deno.serve(async (req) => {
       : force_holiday_scene
         ? null
         : (activeHolidays.find((h) => h.daysUntilPeak === 0 && h.dayOfEnabled) ?? null);
+    // DAY-OF MODEL BAN (mig 480, Kevin 2026-09-08 "disable seedream-4 from the day-of models"): the ban
+    // set every model pick below uses — the global list plus the day-of holiday's own. Stamped once.
+    nightlyBans = mergeDayOfBans(NIGHTLY_BANNED_MODELS, dayOfHoliday);
+    if (dayOfHoliday && dayOfHoliday.dayOfModelBan.length > 0) {
+      fallbackReasons.push(
+        `day_of_model_ban:${dayOfHoliday.dayOfModelBan.map((m) => m.split('/').pop()).join('+')}`
+      );
+    }
 
     let preRolledType: NightlyDreamType | null = null;
     let preRolledMediumToken: string;
@@ -1175,7 +1187,7 @@ Deno.serve(async (req) => {
         smartDreamModels: medium.smartDreamModels,
         allowedModels: medium.allowedModels,
         costOf: getSparkleCost,
-        bans: NIGHTLY_BANNED_MODELS,
+        bans: nightlyBans,
       });
       let m = pickFromPool(pool);
       // Ultra clamp (single AND dual): Ultra renders at 4MP. Single-swap providers
@@ -1204,7 +1216,7 @@ Deno.serve(async (req) => {
       // behind the Aug-26 clamp never reproduced), while 1.1-pro degraded 23-40% and forced
       // every couple through the four override fragments. Off → exactly the old behavior.
       if (isDualFaceSwap && dualSteerEnabled) {
-        const steered = steerDualModel(m, medium.allowedModels, NIGHTLY_BANNED_MODELS, true);
+        const steered = steerDualModel(m, medium.allowedModels, nightlyBans, true);
         if (steered.stamp) fallbackReasons.push(steered.stamp);
         return steered.model;
       }
@@ -1222,6 +1234,7 @@ Deno.serve(async (req) => {
         surface: isDualFaceSwap ? 'couple' : 'solo',
         attempt: 1,
         policy: modelPolicy,
+        bans: nightlyBans,
       });
       fallbackReasons.push(
         shadowStampSet(
@@ -1232,6 +1245,13 @@ Deno.serve(async (req) => {
       );
       if (policyMode !== 'on') return legacy;
       fallbackReasons.push(pick.stamp);
+      if (nightlyBans.has(pick.model)) {
+        // A day-of model ban outranks the policy row (mig 480).
+        fallbackReasons.push(
+          `day_of_model_ban_hit:${pick.model.split('/').pop()}->${legacy.split('/').pop()}`
+        );
+        return legacy;
+      }
       return pick.model;
     };
     if (isFaceSwapCharacter) {
@@ -3182,13 +3202,18 @@ Output ONLY the prompt.`;
       smartDreamModels: resolvedMediumSmartModels,
       allowedModels: resolvedMediumAllowedModels,
       costOf: getSparkleCost,
-      bans: NIGHTLY_BANNED_MODELS,
+      bans: nightlyBans,
     })
   );
   // Policy site: scene / pet base pick (surface 'scene').
   let sceneBaseModelResolved = sceneBaseModel;
   if (modelPolicy && !faceSwapPrePickedModel && !force_model) {
-    const pick = resolveModel({ surface: 'scene', attempt: 1, policy: modelPolicy });
+    const pick = resolveModel({
+      surface: 'scene',
+      attempt: 1,
+      policy: modelPolicy,
+      bans: nightlyBans,
+    });
     if (policyMode === 'on') {
       fallbackReasons.push(pick.stamp);
       sceneBaseModelResolved = pick.model;
@@ -3231,7 +3256,7 @@ Output ONLY the prompt.`;
         smartDreamModels: resolvedMediumSmartModels,
         allowedModels: resolvedMediumAllowedModels,
         costOf: getSparkleCost,
-        bans: NIGHTLY_BANNED_MODELS,
+        bans: nightlyBans,
         intersectWith: sceneEligibleModels,
       });
       if (!scenePool.includes(pickedModel)) {
@@ -3497,6 +3522,7 @@ Output ONLY the prompt.`;
                       surface: 'solo_rebuild',
                       attempt: 1,
                       policy: modelPolicy,
+                      bans: nightlyBans,
                     });
                     fallbackReasons.push(
                       shadowStampSet(
@@ -3590,6 +3616,7 @@ Output ONLY the prompt.`;
                 surface: 'couple',
                 attempt: attempt + 1,
                 policy: modelPolicy,
+                bans: nightlyBans,
                 previousModel: pickedModel,
               });
               fallbackReasons.push(

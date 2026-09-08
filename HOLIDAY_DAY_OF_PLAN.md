@@ -500,3 +500,12 @@ Total ≈ 2-3 sessions before Oct 31 with margin.
   day-of solo/couple → pool sub + look + costume + postcard; day-of scene-only → pool + postcard AND the
   photography ban fired live (`day_of_medium_ban:photography->illustration`); a natural nightly today →
   no holiday (nothing active until 9/15). Scene-only window renders re-verified with `force_pure_scene`.
+- 2026-09-08 — **Day-of MODEL BAN (Kevin: "disable seedream-4 from the day-of models, we don't want to risk
+  it"), mig 480:** `holidays.day_of_model_ban text[]` (default `{bytedance/seedream-4}` for every holiday)
+  is merged into the nightly ban set for a day-of render (`mergeDayOfBans`, `_shared/dayOfLook.ts`) and fed
+  to EVERY pick: the legacy face-swap pool, the dual steer, the scene pool, the scene gate, and the policy
+  resolver (`resolveModel({ bans })` — a banned primary falls to the other primaries, then the fallbacks;
+  a banned previous model on a retry falls to a primary; a fully-banned row still picks, never blank).
+  Stamps: `day_of_model_ban:<models>` on every day-of render; `day_of_model_ban_hit:<a>-><b>` when the
+  policy's pick was overridden. Live proof: a day-of scene render stamped `day_of_model_ban:seedream-4`,
+  rendered on flux-1.1-pro, postcard ok. The six look rows also no longer list seedream (data, earlier today).

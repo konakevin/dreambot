@@ -136,6 +136,7 @@ function resolveActiveHolidays(today, rows) {
           dayOfEnabled: row.dayOfEnabled !== false, // mig 471 (HOLIDAY_DAY_OF_PLAN.md)
           dayOfLookKeys: row.dayOfLookKeys || [], // mig 478 (§5d day-of looks)
           dayOfMediumBan: row.dayOfMediumBan || null,
+          dayOfModelBan: row.dayOfModelBan || [], // mig 480
           sortOrder: row.sortOrder,
         });
         break; // found this row's active window; don't double-count year+1
@@ -171,6 +172,7 @@ function mapHolidayCatalogRow(r) {
     dayOfEnabled: r.day_of_enabled !== false,
     dayOfLookKeys: Array.isArray(r.day_of_look_keys) ? r.day_of_look_keys.filter((k) => typeof k === 'string') : [],
     dayOfMediumBan: typeof r.day_of_medium_ban === 'string' ? r.day_of_medium_ban : null,
+    dayOfModelBan: Array.isArray(r.day_of_model_ban) ? r.day_of_model_ban.filter((k) => typeof k === 'string') : [],
   };
 }
 

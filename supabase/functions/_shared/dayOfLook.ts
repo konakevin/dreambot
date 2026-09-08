@@ -18,6 +18,17 @@ export function pickDayOfLook(
   return keys[Math.floor(rng() * keys.length)];
 }
 
+/** The nightly model-ban set for THIS render: the global bans plus the day-of holiday's own
+ *  (`holidays.day_of_model_ban`, mig 480) — the same set is fed to every pick site so a banned model can
+ *  never reach a day-of render through the face-swap pool, the scene pool, a retry or the policy. */
+export function mergeDayOfBans(
+  base: ReadonlySet<string>,
+  holiday: { dayOfModelBan: string[] } | null
+): ReadonlySet<string> {
+  if (!holiday || holiday.dayOfModelBan.length === 0) return base;
+  return new Set([...base, ...holiday.dayOfModelBan]);
+}
+
 /** Comma list → trimmed set (the `holidays.day_of_medium_ban` column). */
 export function parseMediumBan(ban: string | null | undefined): Set<string> {
   return new Set(

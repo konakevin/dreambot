@@ -82,6 +82,10 @@ export interface ResolveInput {
   forceModel?: string | null;
   /** The model attempt 1 rendered on; returned again on attempt ≥ 2 when the row has no fallbacks. */
   previousModel?: string | null;
+  /** Models this render must never pick (the nightly ban set + a day-of holiday's own, mig 480). A banned
+   *  primary falls to the non-banned primaries, then the fallbacks; when everything is banned the row's
+   *  own pick stands (a policy can never go blank). */
+  bans?: ReadonlySet<string> | null;
   rng?: () => number;
 }
 
@@ -106,10 +110,30 @@ export function resolveModel(input: ResolveInput): ResolvedModel {
   if (!row || row.primaryModels.length === 0) {
     throw new Error(`nightly_model_policy: surface "${input.surface}" has no primary models`);
   }
+  const bans = input.bans ?? null;
+  const allowed = (list: string[]) => (bans ? list.filter((m) => !bans.has(m)) : list);
+  const primaries = allowed(row.primaryModels);
+  const fallbacks = allowed(row.fallbackModels);
   let model: string;
-  if (attempt === 1) model = pickUniform(row.primaryModels, rng);
-  else if (row.fallbackModels.length > 0) model = pickUniform(row.fallbackModels, rng);
-  else model = input.previousModel || pickUniform(row.primaryModels, rng);
+  if (attempt === 1) {
+    model =
+      primaries.length > 0
+        ? pickUniform(primaries, rng)
+        : fallbacks.length > 0
+          ? pickUniform(fallbacks, rng)
+          : pickUniform(row.primaryModels, rng);
+  } else if (fallbacks.length > 0) {
+    model = pickUniform(fallbacks, rng);
+  } else if (input.previousModel && !(bans && bans.has(input.previousModel))) {
+    model = input.previousModel;
+  } else {
+    model =
+      primaries.length > 0
+        ? pickUniform(primaries, rng)
+        : row.fallbackModels.length > 0
+          ? pickUniform(row.fallbackModels, rng)
+          : input.previousModel || pickUniform(row.primaryModels, rng);
+  }
   return { model, stamp: `policy:${input.surface}:${attempt}:${shortModel(model)}` };
 }
 

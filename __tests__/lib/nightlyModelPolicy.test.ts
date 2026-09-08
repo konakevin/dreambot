@@ -63,6 +63,58 @@ describe('resolveModel — attempt 1', () => {
       ).toBe(PRO);
     }
   });
+  it('bans (mig 480): a banned primary falls to the other primaries, then the fallbacks; all banned → the row still picks', () => {
+    const policy: NightlyModelPolicy = {
+      ...FINAL,
+      couple: { primaryModels: ['a/one', 'b/two'], fallbackModels: ['c/three'] },
+    };
+    const bans = new Set(['a/one']);
+    for (let i = 0; i < 10; i++) {
+      expect(
+        resolveModel({ surface: 'couple', attempt: 1, policy, bans, rng: () => i / 10 }).model
+      ).toBe('b/two');
+    }
+    expect(
+      resolveModel({
+        surface: 'couple',
+        attempt: 1,
+        policy,
+        bans: new Set(['a/one', 'b/two']),
+        rng: () => 0,
+      }).model
+    ).toBe('c/three');
+    expect(
+      resolveModel({
+        surface: 'couple',
+        attempt: 1,
+        policy,
+        bans: new Set(['a/one', 'b/two', 'c/three']),
+        rng: () => 0,
+      }).model
+    ).toBe('a/one');
+    // fallbacks all banned → the attempt-1 model renders again (it is not banned)
+    expect(
+      resolveModel({
+        surface: 'couple',
+        attempt: 2,
+        policy,
+        bans: new Set(['c/three']),
+        previousModel: 'a/one',
+        rng: () => 0.9,
+      }).model
+    ).toBe('a/one');
+    // …unless the previous model is banned too → a non-banned primary
+    expect(
+      resolveModel({
+        surface: 'couple',
+        attempt: 2,
+        policy,
+        bans: new Set(['c/three', 'a/one']),
+        previousModel: 'a/one',
+        rng: () => 0.9,
+      }).model
+    ).toBe('b/two');
+  });
   it('forceModel wins and is stamped as forced', () => {
     expect(
       resolveModel({ surface: 'couple', attempt: 1, policy: FINAL, forceModel: GEMINI })
