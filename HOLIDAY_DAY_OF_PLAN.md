@@ -169,12 +169,19 @@ to draw from … adapt it … or invent something equally on-location"* (the COS
 Sonnet's 8-15-word paraphrase is what lands in the prompt — a "witch gown with the hat tipped back" hint
 shipped as "a cozy sweater with a witch-hat headband".
 
-- **Pool:** `_shared/holidayCostumes.ts` — `HOLIDAY_COSTUMES[holiday]`, 29 Halloween character
-  archetypes (vampire, witch, pirate, mad scientist, devil, angel, skeleton, zombie prom, black cat,
-  werewolf, mummy, grim reaper, monster bride/groom, superhero, steampunk, 1920s, fairy, viking, Egyptian
-  royalty, Greek deity, rockstar, outlaw, robot, Medusa/gladiator, ghost wedding, jester, dark royalty,
-  pumpkin royalty, Red Riding Hood/wolf), each with a female and a male variant = `label` ("a vampire
-  countess") + `attire` (the verbatim wardrobe text) + a `vibe` (fun / sexy / cool / scary / classic).
+- **Pool:** `_shared/holidayCostumes.ts` — `HOLIDAY_COSTUMES[holiday]`, 34 Halloween character
+  CONCEPTS (v2, Kevin: "costumes are kinda bland … less cliche? the roman garb, etc"): Victorian vampire
+  dandy/countess, art-nouveau moon witch, cursed ghost pirate, mad scientist, Art Deco devil, fallen angel,
+  baroque skeleton, zombie prom, black cat, werewolf in a torn tux, gilded pharaoh mummy, elegant reaper,
+  monster bride/groom, steampunk, speakeasy ghost, moth fairy, undead viking, carnivorous-garden witch,
+  haunted doll/toy soldier, haunted ringmaster, undead gunslinger, swamp creature, Medusa/minotaur, ghost
+  wedding, jester of the dead, dark royalty, pumpkin royalty, Red Riding Hood/wolf, cyber-witch, vampire
+  hunter, raven queen/crow king, drowned siren/sailor, carnival mystic, black widow/spider king — each
+  with a female and a male variant = `label` ("a Victorian vampire countess") + `attire` (the verbatim
+  wardrobe text) + a `vibe` (fun / sexy / cool / scary / classic). Authoring rule (v2): every entry is a
+  specific character concept WITH A TWIST, and every attire names a silhouette, two specific details and
+  one prop in specific colours and materials; no "history class" dress-up (toga, pharaoh, viking-as-is,
+  generic hero, foil robot were cut).
   Swap-safe by construction: clothing + headwear + props only, no mask / face paint / fangs / veil /
   prosthetic / hood up / goggles over the eyes, no hair colour or length change (identity), no pronoun or
   face word — every variant is locked against the slot validator + the §6.1 occlusion rule by

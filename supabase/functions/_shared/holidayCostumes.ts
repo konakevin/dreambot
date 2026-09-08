@@ -41,40 +41,44 @@ const C = (
 });
 
 export const HALLOWEEN_COSTUMES: readonly HolidayCostume[] = [
+  // v2 (2026-09-08, Kevin: "costumes are kinda bland, any way to make them a bit less cliche? the roman
+  // garb, etc"): every entry is a specific CHARACTER CONCEPT with a twist, and every attire names a
+  // silhouette, two specific details and one prop in specific colours and materials. The flat
+  // "history class" entries (toga, pharaoh, viking, generic hero, foil robot) are gone.
   C(
-    'vampire',
+    'victorian_vampire',
     'classic',
     [
-      'a vampire countess',
-      'a floor-length black velvet vampire gown with a high stand-up collar, a blood-red satin lining, a ruby choker and long black gloves',
+      'a Victorian vampire countess',
+      'an oxblood velvet Victorian vampire gown with a black lace high collar, a raven-feather capelet, a garnet choker, black satin gloves and a jet-beaded fan at the hip',
     ],
     [
-      'a vampire count',
-      'a black velvet vampire cape with a crimson lining over a brocade waistcoat, a ruffled white shirt, a ruby stickpin and a high stand-up collar',
+      'a Victorian vampire dandy',
+      'a Victorian vampire dandy’s oxblood velvet frock coat over a black brocade waistcoat, a high lace jabot, a raven-feather collar, a silver bat-topped cane',
     ]
   ),
   C(
-    'witch',
+    'moon_witch',
     'classic',
     [
-      'a witch',
-      'a black witch gown with a corseted bodice and sheer bell sleeves, a wide-brim pointed witch hat tipped back, purple-striped stockings and lace-up boots',
+      'an art-nouveau moon witch',
+      'a midnight-blue velvet witch gown embroidered with silver constellations, a wide-brim pointed hat wrapped in a silver crescent band tipped back, a moonstone pendant, a gnarled silver-tipped staff',
     ],
     [
-      'a warlock',
-      'a warlock’s long black coat with violet embroidery, a wide-brim pointed hat tipped back, a brass-buckled belt and a gnarled staff',
+      'a moon warlock',
+      'a warlock’s midnight-blue velvet coat embroidered with silver constellations, a wide-brim pointed hat with a silver crescent band tipped back, a moonstone pendant, a silver-tipped staff',
     ]
   ),
   C(
-    'pirate',
+    'ghost_pirate',
     'cool',
     [
-      'a pirate queen',
-      'a pirate queen’s crimson frock coat over a laced corset, a tricorn hat, gold hoop earrings, a red sash with a cutlass at the hip, tall boots',
+      'a cursed ghost-pirate queen',
+      'a ghost-pirate queen’s sea-green frock coat crusted with barnacles and pearls over a tattered lace corset, a tricorn hat trailing kelp, a cutlass at the hip, salt-stained tall boots',
     ],
     [
-      'a pirate captain',
-      'a pirate captain’s long navy frock coat with gold braid, a tricorn hat, a ruffled shirt open at the collar, a red sash with a cutlass at the hip, tall boots',
+      'a cursed ghost-pirate captain',
+      'a cursed pirate captain’s sea-green frock coat crusted with barnacles, a tricorn hat trailing kelp and pearls, a tattered ruffled shirt, a cutlass at the hip, salt-stained boots',
     ]
   ),
   C(
@@ -82,47 +86,47 @@ export const HALLOWEEN_COSTUMES: readonly HolidayCostume[] = [
     'fun',
     [
       'a mad scientist',
-      'a white lab coat over a fitted black dress, brass goggles pushed up into the hair, long rubber gloves, a bandolier of glowing green test tubes',
+      'a scorched white lab coat over a fitted emerald dress, brass goggles pushed up into the hair, elbow-length black rubber gloves, a bandolier of glowing green vials, a copper-coil belt',
     ],
     [
       'a mad scientist',
-      'a scorched white lab coat over a waistcoat and bow tie, brass goggles pushed up into the hair, long rubber gloves, a bandolier of glowing green vials',
+      'a scorched white lab coat over a mustard waistcoat and crooked bow tie, brass goggles pushed up into the hair, black rubber gloves, a bandolier of glowing green vials',
     ]
   ),
   C(
-    'devil',
+    'deco_devil',
     'sexy',
     [
-      'a she-devil',
-      'a fitted red satin devil dress with a thigh slit, small red horns on a headband, a pointed-tail belt, red opera gloves and heels',
+      'an Art Deco she-devil',
+      'a liquid-red satin devil gown with a plunging back and a thigh slit, sculpted red-gold horns on a headband, a black feather boa, long red gloves, a red-tipped pointed tail',
     ],
     [
-      'a devil',
-      'a sharp red suit with a black shirt and red tie, small red horns on a headband, a pointed tail, a pitchfork held at the hip',
+      'an Art Deco devil',
+      'a crimson tuxedo with black satin lapels, small red-gold horns on a headband, a black shirt with a red silk tie, a pointed tail, a brass pitchfork held at the hip',
     ]
   ),
   C(
-    'angel',
+    'fallen_angel',
     'sexy',
     [
-      'an angel',
-      'a white silk angel gown with a plunging neckline, large white feathered wings, a gold halo headband, gold sandals',
+      'a fallen angel',
+      'a fallen angel’s charcoal silk gown with a shredded hem, huge black-and-silver feathered wings, a tarnished halo headband, black opera gloves',
     ],
     [
-      'an angel',
-      'a white tailored suit with large white feathered wings, a gold halo headband, gold-rimmed lapels',
+      'a fallen angel',
+      'a fallen angel’s charcoal tailored suit with a torn silver shirt, huge black feathered wings, a tarnished halo headband, silver rings',
     ]
   ),
   C(
-    'skeleton',
-    'fun',
+    'baroque_skeleton',
+    'cool',
     [
-      'a glow-in-the-dark skeleton',
-      'a black skeleton-print catsuit with glowing bone details, a black tutu, a bone-white flower crown',
+      'a baroque skeleton',
+      'a black velvet gown embroidered with a gold baroque skeleton, a gilded ribcage bodice, a crown of black roses, black lace gloves',
     ],
     [
-      'a glow-in-the-dark skeleton',
-      'a black suit printed with glowing white bones, a skeleton-print tie, bone-white gloves',
+      'a baroque skeleton',
+      'a black velvet tailcoat embroidered with a gold baroque ribcage and bones, a black rose boutonniere, gold bone-print gloves',
     ]
   ),
   C(
@@ -130,11 +134,11 @@ export const HALLOWEEN_COSTUMES: readonly HolidayCostume[] = [
     'scary',
     [
       'a zombie prom queen',
-      'a tattered pastel prom gown with a satin prom-queen sash, a crooked tiara, torn lace gloves, a dirt-smudged hem',
+      'a tattered mint-green satin prom gown with a dirt-streaked prom-queen sash, a crooked rhinestone tiara, torn lace gloves, a wilted corsage',
     ],
     [
       'a zombie prom king',
-      'a tattered powder-blue prom tuxedo with a ruffled shirt, a crooked bow tie, a wilted boutonniere, dirt-smudged lapels',
+      'a tattered powder-blue prom tuxedo with a ruffled shirt, a crooked velvet bow tie, a wilted boutonniere, dirt-smudged lapels',
     ]
   ),
   C(
@@ -142,47 +146,47 @@ export const HALLOWEEN_COSTUMES: readonly HolidayCostume[] = [
     'sexy',
     [
       'a black cat',
-      'a sleek black catsuit with a long tail, a black cat-ear headband, a rhinestone collar, black ankle boots',
+      'a sleek black velvet catsuit with a long swishing tail, a black cat-ear headband trimmed in gold, a diamond collar, thigh-high boots',
     ],
     [
       'a black cat',
-      'a black velvet suit with a long tail, a black cat-ear headband, a rhinestone collar pin',
+      'a black velvet tuxedo with a long swishing tail, a black cat-ear headband trimmed in gold, a diamond collar pin',
     ]
   ),
   C(
-    'werewolf',
+    'werewolf_tux',
     'scary',
     [
-      'a werewolf',
-      'a torn red-plaid flannel over a black tank top, ripped jeans, a furry wolf-ear headband, clawed fur gloves, a full-moon pendant',
+      'a werewolf socialite',
+      'a werewolf socialite’s torn silver sequined gown, a shaggy fur stole, a furry wolf-ear headband, clawed fur gloves, a full-moon pendant',
     ],
     [
-      'a werewolf',
-      'a shredded flannel shirt over a torn tee, ripped jeans, a furry wolf-ear headband, clawed fur gloves',
+      'a werewolf in a torn tux',
+      'a werewolf’s shredded black tuxedo with fur bursting from the cuffs, a furry wolf-ear headband, clawed fur gloves, a loosened bow tie',
     ]
   ),
   C(
-    'mummy',
+    'gilded_mummy',
     'fun',
     [
-      'a mummy',
-      'a fitted mummy dress of layered cream bandage wraps, loose wraps trailing from the arms, gold Egyptian jewelry, the wraps loose at the neck',
+      'a gilded pharaoh mummy',
+      'a fitted gown of layered gold-dusted linen wraps, loose wraps trailing from the arms, a lapis-and-gold collar, scarab armbands, the wraps loose at the neck',
     ],
     [
-      'a mummy',
-      'a mummy costume of layered cream bandage wraps over a tunic, loose wraps trailing from the arms, gold Egyptian armbands, the wraps loose at the neck',
+      'a gilded pharaoh mummy',
+      'layered gold-dusted linen wraps over a black tunic, loose wraps trailing from the arms, a lapis-and-gold collar, scarab armbands, the wraps loose at the neck',
     ]
   ),
   C(
-    'grim_reaper',
+    'elegant_reaper',
     'scary',
     [
       'the grim reaper',
-      'a black hooded reaper cloak with the hood down, a glittering black gown beneath, a tall silver scythe held at the side',
+      'a black velvet reaper gown with the hood down, a cathedral-length sheer black cape, a silver scythe-buckle belt, a tall silver scythe held at the side',
     ],
     [
       'the grim reaper',
-      'a black hooded reaper cloak with the hood down over a black suit, a tall silver scythe held at the side',
+      'a floor-length black velvet reaper cloak with the hood down over a charcoal suit, a silver-buckled belt, a tall silver scythe held at the side',
     ]
   ),
   C(
@@ -190,23 +194,11 @@ export const HALLOWEEN_COSTUMES: readonly HolidayCostume[] = [
     'scary',
     [
       'a monster’s bride',
-      'a white shroud gown with a tall stiff collar and trailing gauze, silver bolt earrings, white opera gloves',
+      'a white shroud gown with a tall stiff collar and trailing gauze, silver bolt earrings, white opera gloves, a bouquet of dead lilies',
     ],
     [
       'a stitched-up monster',
       'a shrunken black suit jacket with sleeves too short over a green-grey shirt, heavy black boots, silver bolt earrings, a stitched-seam collar',
-    ]
-  ),
-  C(
-    'superhero',
-    'cool',
-    [
-      'a superhero',
-      'a sleek crimson-and-gold hero suit with a flowing cape, a gold belt and gauntlets, knee-high boots',
-    ],
-    [
-      'a superhero',
-      'a midnight-blue hero suit with a silver emblem, a flowing cape, a silver belt and gauntlets',
     ]
   ),
   C(
@@ -222,111 +214,111 @@ export const HALLOWEEN_COSTUMES: readonly HolidayCostume[] = [
     ]
   ),
   C(
-    'roaring_twenties',
+    'speakeasy_ghost',
     'cool',
     [
-      'a 1920s flapper',
-      'a 1920s flapper dress of black fringe and beads, a feathered headband, long pearls, elbow gloves, t-strap heels',
+      'the ghost of a 1920s flapper',
+      'a ghostly 1920s flapper dress of silver fringe and pearl beads faded to grey, a feathered headband, long pearls, elbow gloves, a cobwebbed fur stole',
     ],
     [
-      'a 1920s gangster',
-      'a 1920s pinstripe gangster suit with a black shirt and white tie, a fedora tipped back, two-tone shoes, a pocket-watch chain',
+      'the ghost of a 1920s bootlegger',
+      'a ghostly 1920s pinstripe suit faded to grey, a fedora tipped back, a cobwebbed carnation, two-tone shoes, a pocket-watch chain',
     ]
   ),
   C(
-    'fairy',
+    'moth_fairy',
     'fun',
     [
-      'a fairy',
-      'a shimmering fairy gown of iridescent tulle, large translucent wings, a flower crown, glitter on the arms, a wand held at the hip',
+      'a moth fairy',
+      'a moth-fairy gown of dusty velvet in moth-wing browns and creams, huge patterned moth wings, a feathered-antennae headband, a lantern held at the hip',
     ],
     [
-      'a fairy king',
-      'a woodland fairy king’s green-and-gold doublet, large translucent wings, a leaf crown, a carved wooden staff',
+      'a moth king',
+      'a moth king’s dusty velvet doublet in moth-wing browns, huge patterned moth wings, a feathered-antennae headband, a lantern held at the hip',
     ]
   ),
   C(
-    'viking',
-    'cool',
+    'draugr',
+    'scary',
     [
-      'a shield-maiden',
-      'a shield-maiden’s leather corset armor over a wool dress, a fur-trimmed cloak, braided leather arm guards, a round shield at the side',
+      'an undead shield-maiden',
+      'an undead shield-maiden’s frost-rimed leather armor over a wool dress, a fur cloak crusted with ice, iron arm rings, a round shield at the side',
     ],
     [
-      'a viking warrior',
-      'a viking warrior’s fur-trimmed cloak over leather armor, iron arm rings, a battle axe held at the side',
+      'an undead viking',
+      'an undead viking’s frost-rimed leather armor, a fur cloak crusted with ice, iron arm rings, a battle axe held at the side',
     ]
   ),
   C(
-    'egyptian_royalty',
-    'sexy',
-    [
-      'an Egyptian queen',
-      'a gold-and-white Egyptian queen gown with a jeweled collar, a gold serpent armband, a gold headdress, gold sandals',
-    ],
-    [
-      'a pharaoh',
-      'a pharaoh’s white linen kilt with a gold-and-blue striped headdress, a jeweled collar, gold armbands',
-    ]
-  ),
-  C(
-    'greek_deity',
-    'classic',
-    [
-      'a Greek goddess',
-      'a draped white Grecian goddess gown with a gold belt, a gold laurel crown, gold arm cuffs, sandals',
-    ],
-    [
-      'a Greek god',
-      'a draped white toga with a gold laurel crown, a gold arm cuff, leather sandals',
-    ]
-  ),
-  C(
-    'rockstar',
-    'cool',
-    [
-      'a glam rockstar',
-      'a glam-rock outfit of black leather pants, a sequined halter top, a studded jacket, a guitar slung low',
-    ],
-    [
-      'a glam rockstar',
-      'a glam-rock outfit of tight black leather pants, an open sequined jacket, a studded belt, a guitar slung low',
-    ]
-  ),
-  C(
-    'outlaw',
-    'cool',
-    [
-      'an outlaw cowgirl',
-      'an outlaw cowgirl’s fringed leather jacket, a wide-brim hat, a red bandana at the neck, a holster belt, boots with spurs',
-    ],
-    [
-      'an outlaw',
-      'an outlaw’s long duster coat, a wide-brim hat, a bandana at the neck, a leather holster belt, boots with spurs',
-    ]
-  ),
-  C(
-    'robot',
+    'carnivorous_garden',
     'fun',
     [
-      'a robot',
-      'a silver metallic robot bodysuit with a glowing blue chest panel, chrome gauntlets and boots, an antenna headband',
+      'a carnivorous-garden witch',
+      'a deep-green velvet gown with sculpted flytrap petals at the shoulders, thorned vine bracelets, a crown of black orchids, a watering can of glowing nectar at the hip',
     ],
     [
-      'a robot',
-      'a boxy silver robot suit with glowing blue chest lights, chrome gauntlets, an antenna headband',
+      'a carnivorous-garden botanist',
+      'a deep-green velvet coat with sculpted flytrap lapels, thorned vine gloves, a black-orchid boutonniere, a brass plant mister at the hip',
     ]
   ),
   C(
-    'medusa_gladiator',
+    'haunted_toys',
+    'scary',
+    [
+      'a haunted porcelain doll',
+      'a haunted porcelain-doll dress of cracked pink satin and lace with a giant bow, striped stockings, mary-jane shoes, a brass wind-up key strapped to the back',
+    ],
+    [
+      'a haunted toy soldier',
+      'a haunted toy-soldier uniform of cracked red-and-blue enamel, gold epaulettes, a tall shako hat, a brass wind-up key strapped to the back',
+    ]
+  ),
+  C(
+    'haunted_ringmaster',
+    'cool',
+    [
+      'a haunted circus ringmaster',
+      'a haunted ringmaster’s crimson tailcoat over a black corset, a top hat trailing black ribbons, fishnets and tall boots, a whip coiled at the hip',
+    ],
+    [
+      'a haunted circus ringmaster',
+      'a haunted ringmaster’s tattered crimson tailcoat, a top hat trailing black ribbons, a brass-buttoned waistcoat, a whip coiled at the hip',
+    ]
+  ),
+  C(
+    'undead_gunslinger',
+    'cool',
+    [
+      'an undead gunslinger',
+      'an undead gunslinger’s dust-grey duster over a corseted saloon dress, a wide-brim hat, a bandana at the neck, a tarnished holster belt, spurred boots',
+    ],
+    [
+      'an undead gunslinger',
+      'an undead gunslinger’s dust-grey duster, a wide-brim hat, a bandana at the neck, a tarnished holster belt, spurred boots',
+    ]
+  ),
+  C(
+    'swamp_creature',
+    'fun',
+    [
+      'a swamp creature',
+      'a swamp-creature gown of layered emerald sequin scales with dripping kelp fringe, a crown of lily pads, webbed green gloves',
+    ],
+    [
+      'a swamp creature',
+      'a swamp creature’s emerald scaled coat with dripping kelp fringe, webbed green gloves, a lily-pad crown',
+    ]
+  ),
+  C(
+    'medusa_minotaur',
     'sexy',
     [
       'Medusa',
       'a shimmering green scaled gown with a slit, a crown of coiled golden serpents worn as a headpiece, gold snake armbands',
     ],
     [
-      'a gladiator',
-      'a gladiator’s leather armor with a bronze breastplate, a red cape, a bronze arm guard, a sword at the hip',
+      'a minotaur',
+      'a minotaur’s bronze breastplate over a black kilt, huge curved horns on a headband, bronze arm cuffs, a labyrinth-embroidered cloak',
     ]
   ),
   C(
@@ -342,15 +334,15 @@ export const HALLOWEEN_COSTUMES: readonly HolidayCostume[] = [
     ]
   ),
   C(
-    'jester',
+    'jester_of_the_dead',
     'fun',
     [
-      'a harlequin jester',
-      'a harlequin jester’s diamond-patterned bodysuit in purple and black, a belled jester collar, striped stockings',
+      'a jester of the dead',
+      'a harlequin jester’s diamond-patterned bodysuit in violet and black, a belled collar, striped stockings, a marotte topped with a tiny silver skull',
     ],
     [
-      'a harlequin jester',
-      'a harlequin jester’s diamond-patterned doublet in purple and green, a belled cap, striped hose',
+      'a jester of the dead',
+      'a harlequin jester’s diamond-patterned doublet in violet and toxic green, a belled cap, striped hose, a marotte topped with a tiny silver skull',
     ]
   ),
   C(
@@ -387,6 +379,78 @@ export const HALLOWEEN_COSTUMES: readonly HolidayCostume[] = [
     [
       'the big bad wolf',
       'a big bad wolf costume of a grey fur-trimmed coat over a torn waistcoat, a furry wolf-ear headband, clawed fur gloves',
+    ]
+  ),
+  C(
+    'cyber_witch',
+    'cool',
+    [
+      'a cyber-witch',
+      'a cyber-witch’s holographic black bodysuit under a translucent neon-violet cape, a pointed hat trimmed in glowing green light tipped back, glowing green nails, platform boots',
+    ],
+    [
+      'a cyber-warlock',
+      'a cyber-warlock’s black tech coat with neon-violet circuit piping, a pointed hat trimmed in glowing green light tipped back, glowing gauntlets',
+    ]
+  ),
+  C(
+    'vampire_hunter',
+    'cool',
+    [
+      'a vampire hunter',
+      'a vampire hunter’s black leather corset over a crimson blouse, a long leather coat, a bandolier of wooden stakes, a crossbow holstered at the hip, a wide-brim hat',
+    ],
+    [
+      'a vampire hunter',
+      'a vampire hunter’s long black leather coat, a wide-brim hat, a bandolier of wooden stakes, a crossbow holstered at the hip',
+    ]
+  ),
+  C(
+    'raven_royalty',
+    'classic',
+    [
+      'a raven queen',
+      'a raven queen’s black feathered gown with a sweeping feather collar, a silver raven crown, a black feather fan held at the hip',
+    ],
+    [
+      'a crow king',
+      'a crow king’s black feathered cloak over a charcoal suit, a silver raven crown, a raven perched on a leather gauntlet',
+    ]
+  ),
+  C(
+    'drowned_sailors',
+    'scary',
+    [
+      'a drowned siren',
+      'a drowned siren’s gown of teal sequin scales under a torn fishnet overlay, a crown of coral and pearls, seaweed-tangled pearl strands, webbed fingerless gloves',
+    ],
+    [
+      'a drowned sailor',
+      'a drowned sailor’s tattered navy peacoat crusted with barnacles, a captain’s cap tipped back, pearl-tangled rope at the belt',
+    ]
+  ),
+  C(
+    'carnival_mystic',
+    'classic',
+    [
+      'a carnival fortune teller',
+      'a fortune teller’s layered violet silk skirts, a gold-coin belt and headscarf, stacked bangles, a crystal ball cradled at the hip',
+    ],
+    [
+      'a carnival mystic',
+      'a carnival mystic’s embroidered violet waistcoat, a gold-coin sash, stacked rings, a tarot deck at the belt',
+    ]
+  ),
+  C(
+    'black_widow',
+    'sexy',
+    [
+      'a black widow',
+      'a black widow’s black lace gown with a red hourglass corset, a spider-web cape, a jet spider brooch, long black gloves',
+    ],
+    [
+      'a spider king',
+      'a spider king’s black tailcoat with a red-hourglass waistcoat, a spider-web cape, jet cufflinks',
     ]
   ),
 ];

@@ -78,10 +78,10 @@ describe('rollHolidayCostumes', () => {
     expect(picks![1].attire).toBe(HALLOWEEN_COSTUMES[1].male.attire);
   });
   it('forced keys pin a member (QA), unknown gender still gets a variant, unknown holiday → null', () => {
-    const picks = rollHolidayCostumes('halloween', couple, () => 0, ['pirate', 'witch']);
-    expect(picks!.map((p) => p.key)).toEqual(['pirate', 'witch']);
+    const picks = rollHolidayCostumes('halloween', couple, () => 0, ['ghost_pirate', 'moon_witch']);
+    expect(picks!.map((p) => p.key)).toEqual(['ghost_pirate', 'moon_witch']);
     expect(picks![0].attire).toBe(
-      HALLOWEEN_COSTUMES.find((c) => c.key === 'pirate')!.female.attire
+      HALLOWEEN_COSTUMES.find((c) => c.key === 'ghost_pirate')!.female.attire
     );
     const solo = rollHolidayCostumes('halloween', [{ role: 'self', gender: null }], () => 0.99);
     expect(solo!.length).toBe(1);
@@ -90,8 +90,11 @@ describe('rollHolidayCostumes', () => {
     expect(rollHolidayCostumes('halloween', [])).toBeNull();
   });
   it('costumeStamp is costume:<key>/<key> in cast order', () => {
-    const picks = rollHolidayCostumes('halloween', couple, () => 0, ['devil', 'angel'])!;
-    expect(costumeStamp(picks)).toBe('costume:devil/angel');
+    const picks = rollHolidayCostumes('halloween', couple, () => 0, [
+      'deco_devil',
+      'fallen_angel',
+    ])!;
+    expect(costumeStamp(picks)).toBe('costume:deco_devil/fallen_angel');
   });
 });
 
@@ -145,7 +148,7 @@ describe('costume lock in the slot pipeline', () => {
       rawResponse: '{}',
     });
     const lock = [
-      HALLOWEEN_COSTUMES.find((c) => c.key === 'vampire')!.female.attire,
+      HALLOWEEN_COSTUMES.find((c) => c.key === 'victorian_vampire')!.female.attire,
       HALLOWEEN_COSTUMES.find((c) => c.key === 'mad_scientist')!.male.attire,
     ];
     const r = await runCharacterSlotPipeline(input({ costumeLock: lock }), 'no-key');
