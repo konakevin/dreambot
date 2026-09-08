@@ -417,3 +417,15 @@ Total ≈ 2-3 sessions before Oct 31 with margin.
   attempt swap on halloween_parade), 14 first-try, 0 faceless, every pair a distinct v2 concept (vampire
   hunter / reaper, ghost flapper / crow king, fallen angel / baroque skeleton, Art Deco she-devil / swamp
   creature, ghost groom / Medusa …). Gallery artifact dfe50486 rebuilt from R36. Awaiting Kevin's read.
+- 2026-09-08 — **Day-of LOOKS live (`🎃 DAY-OF R37`, 16 couples, one per sub; commit 87ab9367, mig 478):**
+  16/16 pinned a look (`day_of_look:` + matching `scene_medium:`), 16/16 uploads carry the look key as
+  `dream_medium`, 16/16 override-exempt (`day_of_look_fragment:`), 0 photography. Shapes: 14 couples
+  (13 first-try + 1 second attempt), 2 solo fallbacks (halloween_parade on classical oil, swamp_witch_bayou
+  on watercolor ink — both rebuilt on flux-2-flex with the look's real fragment), 0 faceless; judge BAD 0,
+  framing three-quarter 8 · full 3 · waist 1 · bust 4. Look spread (uniform pick): ornate ink 6, storybook
+  gouache 3, classical oil 3, watercolor ink 2, digital painting 2. **Model note:** with the model policy
+  still in SHADOW the legacy DreamSmart picker draws uniformly from the look's approved list — 9 renders
+  on flux-1.1-pro, 5 on seedream-4 (all five first-try couples), 2 flex rebuilds. When the policy flips
+  ON, flux-1.1-pro is primary and the look list acts as membership only; until then the day-of is not
+  1.1-pro-first. Kevin's call: leave as-is until the flip (recommended; Halloween is 7 weeks out) or trim
+  the look rows' `smart_dream_models` to 1.1-pro now (one data update, no code).
