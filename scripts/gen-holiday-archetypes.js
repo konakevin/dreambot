@@ -116,7 +116,15 @@ function scenePrompt(holiday, arch, def, n) {
   const TAX = taxFor(holiday);
   const P = TAX && TAX.POOL_OF_SUB[arch] ? TAX.POOLS[TAX.POOL_OF_SUB[arch]] : null;
   const palette = (def && def.palette) || (P && P.palette) || null;
-  return `Generate ${n} DISTINCT rich, standalone ${holiday.toUpperCase()} "${arch}" scenes (NO people) for a dreamy nightly wallpaper — ${tone}. Every entry is this archetype's world: ${def.setting}.${palette ? ` PALETTE: ${palette}.` : ''}
+  // The pool's pumpkin rule (halloweenPools.js `lanterns`; Fall bans them outright) — the CAST brief always
+  // carried it, the SCENE brief did not, so non-lantern pools lost most scene rows to the lint (2026-09-08).
+  const noPumpkins =
+    holiday === 'fall'
+      ? ' NO pumpkins, NO jack-o-lanterns, NO gourds, NO costumes, NO spooky / Halloween anything (a row that mentions them is dropped) — Fall = foliage, orchards, harvest, hearth, rain, cider.'
+      : PS && !PS.lanterns
+        ? ' NO pumpkins, NO jack-o-lanterns, NO gourds anywhere in this pool (a row that mentions them is dropped) — this pool has its own signature objects.'
+        : '';
+  return `Generate ${n} DISTINCT rich, standalone ${holiday.toUpperCase()} "${arch}" scenes (NO people) for a dreamy nightly wallpaper — ${tone}. Every entry is this archetype's world: ${def.setting}.${palette ? ` PALETTE: ${palette}.` : ''}${noPumpkins}
 
 Output ONLY a JSON array of ${n} objects: {"scene":"..."}
 - scene: 35-60 words, a rich immersive environment, defined light, layered depth, saturated color, its own time of day + weather. NO people as the subject (tiny distant silhouettes at most) — never the words man/woman/person/figure/crowd/face/eyes (say "carved grins", not faces). NO text/words/watermarks, NO real brand or place names, NO named franchise characters. Vary the hook across all ${n}: no two scenes share the same event.
