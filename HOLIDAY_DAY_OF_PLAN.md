@@ -595,3 +595,6 @@ Total ≈ 2-3 sessions before Oct 31 with margin.
   `gen-themed-postcard-spots.mjs`, and `audit-themed-pool-realplaces.mjs` demoted the real landmarks the old
   real-city generator had left in the imagined worlds (LOCATION_SEED_PLAYBOOK.md). Fall scene pools: first
   pass running; second pass with the pumpkin-rule fix to follow.
+- 2026-09-08 — **Fall scene-only pools FULL:** two passes (the second with the pumpkin-rule brief fix):
+  **1,807 active scene rows** across the 13 pools (was ~355 this morning), every sub at 12 or more (most
+  pools 24-30 per sub). Fall opens Sept 15 with couple, solo AND scene layers all at depth.
