@@ -97,10 +97,17 @@ Output ONLY a JSON array of ${n} objects: {"scene":"...","attire":"..."}
 Output ONLY the JSON array.`;
 }
 
+// SCENE-ONLY register (Kevin 2026-09-08): these rows never face-swap, so they carry no swap constraint —
+// each Halloween scene is a MOMENT with a hook (a mischief, a spectacle, a magical mishap) told through the
+// environment and its non-human cast. Fall stays cozy-pretty. Lint §6.2 still bans people / face / camera
+// words, so the cast is ghosts, skeletons, cats, bats, owls, animated pumpkins, distant broom silhouettes.
+const HALLOWEEN_SCENE_FUN = (lanterns) => `this is the SCENE-ONLY pool: no face swap, no portrait rules, so go BIG. Every scene is a MOMENT with a hook — something mischievous, magical or spectacular is HAPPENING, told entirely through the environment and its non-human cast: ghosts mid-prank, a skeleton band, black cats in a conga line, bats carrying a banner, owls in tiny hats, ${lanterns ? 'animated jack-o-lanterns rolling into a pyramid, ' : ''}a witch's broom as a distant silhouette across the moon, floating furniture, a candy avalanche, a cauldron overflowing into a river of purple fog. Playful, spooky-beautiful, cinematic, awe not gore. One clear focal event per scene, wide composition with foreground-to-horizon depth`;
 function scenePrompt(holiday, arch, def, n) {
+  const TAXS = taxFor(holiday);
+  const PS = TAXS && TAXS.POOL_OF_SUB[arch] ? TAXS.POOLS[TAXS.POOL_OF_SUB[arch]] : null;
   const tone =
     holiday === 'halloween'
-      ? 'gothic, spooky-beautiful, awe not gore'
+      ? HALLOWEEN_SCENE_FUN(!!(PS && PS.lanterns)) // pumpkin examples only where the pool allows pumpkins (lint)
       : 'cozy, nostalgic, breathtakingly pretty magical fall';
   const TAX = taxFor(holiday);
   const P = TAX && TAX.POOL_OF_SUB[arch] ? TAX.POOLS[TAX.POOL_OF_SUB[arch]] : null;
@@ -108,7 +115,7 @@ function scenePrompt(holiday, arch, def, n) {
   return `Generate ${n} DISTINCT rich, standalone ${holiday.toUpperCase()} "${arch}" scenes (NO people) for a dreamy nightly wallpaper — ${tone}. Every entry is this archetype's world: ${def.setting}.${palette ? ` PALETTE: ${palette}.` : ''}
 
 Output ONLY a JSON array of ${n} objects: {"scene":"..."}
-- scene: 35-60 words, a rich immersive environment, defined light, layered depth, saturated color, its own time of day + weather. NO people as the subject (tiny distant silhouettes at most). NO text/words/watermarks, NO real brand or place names. Vary across all ${n}.
+- scene: 35-60 words, a rich immersive environment, defined light, layered depth, saturated color, its own time of day + weather. NO people as the subject (tiny distant silhouettes at most) — never the words man/woman/person/figure/crowd/face/eyes (say "carved grins", not faces). NO text/words/watermarks, NO real brand or place names, NO named franchise characters. Vary the hook across all ${n}: no two scenes share the same event.
 Output ONLY the JSON array.`;
 }
 

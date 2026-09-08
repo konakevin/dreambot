@@ -266,6 +266,54 @@ the looks you showed me in the matrix sheet, would we be supporting those?" → 
   so a look shows as "Halloween Storybook Gouache" with no app change.
 - **Preflight** (`check-holiday-day-of.js --preflight`) now fails on a missing / inactive / public look row.
 
+### 5e. SCENE-ONLY program — the "fun" register + stylized worlds (Kevin 2026-09-08, PROPOSAL → MVP)
+
+Kevin: "scale up some good scene-only pools for halloween … base them off the same char paths … seed them to
+be more creative and 'fun' since they can be whatever we want and don't have to preserve good face swap
+settings" + "a few looks and pools we should add that we couldn't support in face swap mode. genres like
+nightmare before christmas (the same look, avoid rendering the IP), coraline, and other fun styles — coco
+from disney, day of the dead scenes, all sorts of stuff".
+
+Why scene-only is the place for it: a `holiday_scenes` row never face-swaps, so none of the swap
+invariants (frontal faces, clear head gap, same plane, props at waist height, no masks / face paint) apply,
+AND the row can pin its own medium (`holiday_scenes.medium_key`, already honoured by the render at the
+pure-scene holiday branch). Users this reaches: anyone without a self photo, plus the pure-scene share of
+every nightly roll, for the whole 30-day window (and the day-of scene-only branch).
+
+**Part 1 — the "fun" register on the EXISTING pools (built):** the generator's Halloween scene brief is
+now a MOMENT WITH A HOOK ("something mischievous, magical or spectacular is HAPPENING, told entirely
+through the environment and its non-human cast: ghosts mid-prank, a skeleton band, black cats in a conga
+line, animated jack-o-lanterns rolling into a pyramid, a witch's broom as a distant silhouette across the
+moon, a candy avalanche, a cauldron overflowing into a river of purple fog") on every window pool's setting
++ palette, lint §6.2 still enforced (no people / face / camera words — "carved grins"). MVP: 3 rows per
+sub across haunted_graveyard / halloween_party / gothic_manor (≈ 36 rows) → 6 renders to Kevin's album →
+scale to 12-15 per sub across all 14 pools on his word (≈ 700 rows, ≈ $8). The 206 plain rows seeded
+earlier today stay active until the fun set is in; then disable them (they dilute the draw).
+
+**Part 2 — STYLIZED WORLDS: new scene-only pools with pinned looks (proposal):** genre looks we could
+never run under a face swap, described by their craft, never their franchise. Each pool = a taxonomy
+entry flagged `sceneOnly` (scene rows only, no cast rows, no register needed) + a `dream_mediums` look row
+in the `halloween_` namespace (scene-only, non-public, nightly_skip) pinned by the pool's rows via
+`medium_key`, so the look and the world travel together:
+
+| pool (scene-only) | the world (IP-free) | pinned look |
+|---|---|---|
+| `stop_motion_halloween_town` | a hand-built miniature town of crooked spiral hills, striped stockings on the lampposts, a pumpkin-headed mayor in the square, everything stitched and puppet-jointed | `halloween_stop_motion` — stop-motion puppet film: felt, wire, visible stitching, tiny sets, tilt-shift depth |
+| `button_eyed_other_world` | a too-perfect mirror-house whose garden blooms in the wrong colours, doors that open onto tunnels of violet light, a circus of trained mice, a moon that is a button | `halloween_stop_motion` (same craft, colder palette) |
+| `land_of_the_dead_marigold` | a vertical city of stacked bridges lit by marigold petals and candles, calaca musicians (skeleton figures in embroidered charro suits), alebrije-style spirit creatures glowing neon, papel picado across every street | `halloween_marigold_folk` — painted Mexican folk-art animation: saturated marigold / magenta / teal, cut-paper edges, candle glow |
+| `dia_de_muertos_ofrenda` | a real-world altar tradition: ofrendas with photos-turned-to-paintings, sugar skulls (calaveras), pan de muerto, cempasúchil paths to a cemetery of candlelit family picnics | `halloween_marigold_folk` (respectful, celebratory, never spooky) |
+| `claymation_monster_lab` | a plasticine laboratory where the monsters are round, thumbprinted and delighted, beakers of glitter goo, a lightning rod made of a fork | `halloween_claymation` — clay stop-motion: thumbprints, matte plasticine sheen, chunky proportions |
+| `paper_cutout_shadow_theater` | layered paper silhouettes lit from behind: a haunted forest in five planes, lantern-lit cut-paper bats, a ghost ship of folded card | `halloween_papercut` — layered paper-cut diorama with backlight and long shadows |
+| `felted_pumpkin_patch` | a needle-felted pumpkin patch and scarecrow village in wool, yarn cobwebs, button moons | `halloween_felt` — needle-felt / yarn craft, macro lens softness |
+
+Rules: describe the CRAFT (materials, joints, thumbprints, cut edges) and the WORLD, never the studio,
+film, or character names (the lint gets a franchise-name block list: Jack Skellington, Sally, Oogie,
+Coraline, Wybie, Miguel, Dante, Hector, Pixar, Disney, Burton, Laika, Selick — a row naming one is
+dropped). Día de Muertos rows are celebratory and specific (ofrenda, cempasúchil, calaveras, pan de muerto,
+papel picado), never "spooky". The engine needs ONE change: the taxonomy/mirror flag `sceneOnly` so the
+registers test and the cast loaders skip these pools. Sequence: 2 pools as a taste test (stop-motion town +
+land of the dead, 8 rows each, 2 looks) → renders → Kevin picks → the rest.
+
 ## 6. QA (the same loop as Fall)
 1. Engine unit + dbspec tests green; `force_day_of=halloween` on Kevin's account renders the day-of draw
    with the overlay (couple, solo, scene-only) — 6 renders smoke.
