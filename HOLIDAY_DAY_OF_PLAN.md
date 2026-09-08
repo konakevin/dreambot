@@ -586,3 +586,12 @@ Total ≈ 2-3 sessions before Oct 31 with margin.
   **Open:** a proper judged QA round over the scene-only pools (framing rubric is cast-centric — needs a
   scene rubric: focal event present, no text, look fidelity), and retiring the plain rows once the
   scale-up lands.
+- 2026-09-08 — **Halloween scene-only pools FULL (Kevin: "make sure the halloween ones finish getting
+  filled"):** every pool at or above target — 14 window pools (fun register, 12/sub), the 7 stylized worlds
+  at share (72+ each), the day-of subset (192): **1,514 active scene rows** (220 this morning). Two fixes
+  landed on the way: the scene brief now carries the pool's pumpkin rule (non-lantern pools had been losing
+  most rows to the lint — witch cottage went 0-of-36 clean → 12-of-12), and lint §6.8 drops rows that ask
+  for lettering. Pure-scene location pools: the ten thin themed places topped up to 51-60 eligible with
+  `gen-themed-postcard-spots.mjs`, and `audit-themed-pool-realplaces.mjs` demoted the real landmarks the old
+  real-city generator had left in the imagined worlds (LOCATION_SEED_PLAYBOOK.md). Fall scene pools: first
+  pass running; second pass with the pumpkin-rule fix to follow.
