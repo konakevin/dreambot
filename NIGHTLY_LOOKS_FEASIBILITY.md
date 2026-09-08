@@ -186,3 +186,17 @@ The hero plan (§2b) implements the exact shape at 1/20 scale: nightly-only medi
 a `{look}` axis picked per user by the seed hash, the model pinned by the chain, the override library
 bypassed, a grid page for Kevin's pick, and the two approved fixes (attire split, never faceless). If the
 hero ships clean on Oct 31, the general catalog is the same code with a wider table.
+
+
+## 9. Pilot status (2026-09-08) — the Halloween day-of runs on looks
+
+Built and live on the day-of path (HOLIDAY_DAY_OF_PLAN.md §5d, migration 478): six `halloween_*` rows in
+`dream_mediums` (the §3 "rows in a namespace" design: `is_public=false`, `is_dream_eligible=false`,
+`is_scene_eligible=false`, `nightly_skip=true`, per-look `client_meta.smart_dream_models`), the holiday
+catalog names its look set (`holidays.day_of_look_keys`) and its ban (`day_of_medium_ban`), and the render
+pins the look through the EXISTING scenario medium-pin route — look first, then the model from the look's
+approved list, the 1.1-pro override library exempted, the solo rebuild inheriting the look's real fragment.
+Nothing in the app, Dream Again, DLT or analytics changed (`uploads.dream_medium` = the look key; the card
+label prettifies the key). What the pilot proves for the full catalog: the pin route + the per-look model
+list ARE the resolver from §2 — the remaining work for all-of-nightly is the roll site (replace the
+`dream_eligible_face_swap` roll with a catalog roll + per-user recency) and the catalog authoring/QA in §6.

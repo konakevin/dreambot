@@ -57,6 +57,8 @@ export interface NightlyQaFlags {
    *  also forces the roll on. `force_costume_pct` overrides engine_config.day_of_costume_pct (0 = off). */
   force_costume_keys: string[] | null;
   force_costume_pct: number | undefined;
+  /** Day-of LOOK (mig 478, dayOfLook.ts): pin the look's dream_mediums key for this render. */
+  force_day_of_look: string | null;
   /** QA only: render THIS exact text as the final prompt (skips nothing else — the swap / identity /
    *  quality pipeline runs as normal). Same prompt across models = a fair model comparison. */
   force_final_prompt: string | null;
@@ -181,6 +183,7 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
         : null,
     force_costume_pct:
       typeof body.force_costume_pct === 'number' ? body.force_costume_pct : undefined,
+    force_day_of_look: typeof body.force_day_of_look === 'string' ? body.force_day_of_look : null,
     force_prompt_style:
       body.force_prompt_style === 'legacy' || body.force_prompt_style === 'subject_first'
         ? body.force_prompt_style

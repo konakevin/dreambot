@@ -27,6 +27,7 @@
     "__tests__/lib/soloRebuildModel.test.ts",
     "__tests__/lib/holidayDayOf.test.ts",
     "__tests__/lib/holidayCostumes.test.ts",
+    "__tests__/lib/dayOfLook.test.ts",
     "__tests__/lib/holidayWindowParity.test.ts",
     "__tests__/lib/postcardComposite.test.ts",
     "__tests__/lib/nightlyComposition.test.ts",

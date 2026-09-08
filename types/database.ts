@@ -2164,6 +2164,8 @@ export type Database = {
         Row: {
           created_at: string;
           day_of_enabled: boolean;
+          day_of_look_keys: string[];
+          day_of_medium_ban: string;
           display_name: string;
           emoji: string;
           final_days: number;
@@ -2192,6 +2194,8 @@ export type Database = {
         Insert: {
           created_at?: string;
           day_of_enabled?: boolean;
+          day_of_look_keys?: string[];
+          day_of_medium_ban?: string;
           display_name: string;
           emoji: string;
           final_days?: number;
@@ -2220,6 +2224,8 @@ export type Database = {
         Update: {
           created_at?: string;
           day_of_enabled?: boolean;
+          day_of_look_keys?: string[];
+          day_of_medium_ban?: string;
           display_name?: string;
           emoji?: string;
           final_days?: number;
@@ -4134,6 +4140,7 @@ export type Database = {
         Returns: {
           avatar_url: string;
           id: string;
+          is_public: boolean;
           username: string;
         }[];
       };

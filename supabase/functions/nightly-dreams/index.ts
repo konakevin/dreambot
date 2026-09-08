@@ -135,6 +135,7 @@ import {
 } from '../_shared/nightlyModelPolicy.ts';
 import { soloRebuildModelFor } from '../_shared/soloRebuildModel.ts';
 import { rollHolidayCostumes, costumeStamp } from '../_shared/holidayCostumes.ts';
+import { pickDayOfLook, parseMediumBan } from '../_shared/dayOfLook.ts';
 import { loadNightlyModelPolicy } from '../_shared/pools/nightlyModelPolicyLoader.ts';
 import { decideSceneFirst, sceneFirstRegister } from '../_shared/sceneFirstEligibility.ts';
 import { parseQaFlags } from '../_shared/nightlyQaFlags.ts';
@@ -348,6 +349,7 @@ Deno.serve(async (req) => {
     force_prompt_style,
     force_costume_keys,
     force_costume_pct,
+    force_day_of_look,
     force_dual_slots,
     force_slot_input,
     strict_face_swap,
@@ -602,6 +604,8 @@ Deno.serve(async (req) => {
               holidayPct: 100,
               daysUntilPeak: 0,
               dayOfEnabled: true, // QA force: the day-of takeover is always on
+              dayOfLookKeys: c.dayOfLookKeys ?? [],
+              dayOfMediumBan: c.dayOfMediumBan ?? null,
             },
           ];
         }
@@ -969,6 +973,29 @@ Deno.serve(async (req) => {
       console.log(
         `[nightly-dreams] scene path (${composition}): re-rolled medium '${oldKey}' -> scene-eligible '${nightlyMedium.key}'`
       );
+    }
+    // DAY-OF medium ban on SCENE-ONLY renders (HOLIDAY_DAY_OF_PLAN.md §5d, mig 478): the looks apply to
+    // cast renders (their fragments carry the face clause); a scene-only day-of simply never rolls a
+    // banned medium (photography by default). Cast renders get the ban through dualSceneMediumBan below.
+    if (dayOfHoliday && !force_medium && isSceneComposition) {
+      const banned = parseMediumBan(dayOfHoliday.dayOfMediumBan);
+      if (banned.has(nightlyMedium.key)) {
+        const oldKey = nightlyMedium.key;
+        const sceneToken =
+          composition === 'pure_scene' ? 'dream_eligible_scene' : 'dream_eligible_scene_natural';
+        for (let i = 0; i < 6 && banned.has(nightlyMedium.key); i++) {
+          nightlyMedium = await resolveMediumFromDb(
+            sceneToken,
+            recentMediums,
+            undefined,
+            firstDreamAllow
+          );
+        }
+        baseMedium = nightlyMedium;
+        resolvedMediumKey = nightlyMedium.key;
+        realMediumFragment = nightlyMedium.fluxFragment;
+        fallbackReasons.push(`day_of_medium_ban:${oldKey}->${nightlyMedium.key}`);
+      }
     }
 
     // Capture for the post-try scene-composition model gate.
@@ -1992,6 +2019,27 @@ Deno.serve(async (req) => {
     // keep photography — it coheres for plausible settings (Kevin's hearted forest
     // shots were photography). Reuses the Operation Sweet Dreams ban list + re-roll.
     // Scoped to face-swap renders (scene-only cinematic stays untouched).
+    // DAY-OF LOOK (HOLIDAY_DAY_OF_PLAN.md §5d, mig 478): a day-of CAST render pins its medium to one of
+    // the holiday's curated looks (dream_mediums rows the app never lists). The pin rides the scenario
+    // medium-pin route just below (resolve by key → re-sync the model lists → re-pick the model from the
+    // LOOK's smart_dream_models = per-look model membership) and the 1.1-pro override library is exempted
+    // (the look IS the curated fragment). No look → the holiday's medium ban joins the ban list.
+    let dayOfLookKey: string | null = null;
+    if (dayOfApplied && dayOfHoliday && dualSpecialScene && !force_medium) {
+      const look = pickDayOfLook(dayOfHoliday.dayOfLookKeys, force_day_of_look);
+      if (look) {
+        dayOfLookKey = look;
+        dualSceneMediumKey = look;
+        fallbackReasons.push(`day_of_look:${look}`);
+      } else {
+        fallbackReasons.push('day_of_look:none');
+        if (dayOfHoliday.dayOfMediumBan) {
+          dualSceneMediumBan = [dualSceneMediumBan, dayOfHoliday.dayOfMediumBan]
+            .filter((x): x is string => !!x)
+            .join(',');
+        }
+      }
+    }
     const IMAGINED_BIOME_MEDIUM_BAN =
       'photography,film_noir,vintage_film,double_exposure,heirloom,glamour';
     const imaginedBiome = imaginedLocation;
@@ -2020,6 +2068,9 @@ Deno.serve(async (req) => {
           nightlyMedium = forced;
           resolvedMediumKey = forced.key; // feeds the model ban/scene gates + persist
           baseMedium = applyFaceSwapOverride(forced);
+          // The pinned medium's REAL fragment — the couple-degrade solo rebuild renders with this
+          // (it used to keep the ORIGINAL roll's fragment when the override below did not fire).
+          realMediumFragment = baseMedium.fluxFragment;
           // Re-sync the captured medium metadata so the model pick + gates use
           // the NEW medium (was a pre-existing staleness hazard).
           resolvedMediumAllowedModels = nightlyMedium.allowedModels;
@@ -2030,7 +2081,7 @@ Deno.serve(async (req) => {
             // so the model still matches the style we're actually rendering.
             faceSwapPrePickedModel = pickFaceSwapModelFor(nightlyMedium);
           }
-          if (faceSwapPrePickedModel) {
+          if (faceSwapPrePickedModel && !dayOfLookKey) {
             const modelOverride = pickFaceSwapModelOverride(
               faceSwapPrePickedModel,
               nightlyVibe?.key ?? null
@@ -2039,6 +2090,9 @@ Deno.serve(async (req) => {
               realMediumFragment = baseMedium.fluxFragment;
               baseMedium = { ...baseMedium, fluxFragment: modelOverride };
             }
+          } else if (dayOfLookKey) {
+            // The day-of look is the curated fragment — the per-model override library stays out.
+            fallbackReasons.push(`day_of_look_fragment:${faceSwapPrePickedModel ?? 'none'}`);
           }
           fallbackReasons.push(`scene_medium:${dualSceneMediumKey}`);
           console.log(`[nightly] scenario forced medium: ${dualSceneMediumKey}`);

@@ -42,6 +42,10 @@ export interface HolidayCatalogRow {
   sortOrder: number;
   /** HOLIDAY_DAY_OF_PLAN.md (mig 471): the day-of takeover is on for this holiday. Default true. */
   dayOfEnabled?: boolean;
+  /** DAY-OF LOOKS (mig 478, §5d): dream_mediums keys the day-of cast render pins; empty = normal roll. */
+  dayOfLookKeys?: string[];
+  /** Comma list of medium keys a day-of render never rolls (mig 478). */
+  dayOfMediumBan?: string | null;
 }
 
 /** A plain calendar date — no timezone, no clock. month is 1-12. */
@@ -59,6 +63,10 @@ export interface ActiveHoliday {
   daysUntilPeak: number; // 0 on the peak day
   /** The catalog's day_of_enabled (default true) — the render only takes over on peak day when true. */
   dayOfEnabled: boolean;
+  /** DAY-OF LOOKS (mig 478): the holiday's curated look keys (dream_mediums) — [] = normal roll. */
+  dayOfLookKeys: string[];
+  /** Comma list of medium keys the day-of never rolls (mig 478); null = none. */
+  dayOfMediumBan: string | null;
 }
 
 // ── calendar helpers (UTC-based so they're pure date math, no DST) ─────────────
@@ -194,6 +202,8 @@ export function resolveActiveHolidays(
           holidayPct: rampPct(effective, daysUntil),
           daysUntilPeak: daysUntil,
           dayOfEnabled: row.dayOfEnabled !== false,
+          dayOfLookKeys: row.dayOfLookKeys ?? [],
+          dayOfMediumBan: row.dayOfMediumBan ?? null,
           sortOrder: row.sortOrder,
         });
         break; // found this row's active window; don't double-count year+1
@@ -228,6 +238,10 @@ export function mapHolidayCatalogRow(r: Record<string, unknown>): HolidayCatalog
     finalDays: Number(r.final_days ?? 0),
     sortOrder: Number(r.sort_order ?? 0),
     dayOfEnabled: r.day_of_enabled !== false,
+    dayOfLookKeys: Array.isArray(r.day_of_look_keys)
+      ? (r.day_of_look_keys as unknown[]).filter((k): k is string => typeof k === 'string')
+      : [],
+    dayOfMediumBan: typeof r.day_of_medium_ban === 'string' ? r.day_of_medium_ban : null,
   };
 }
 

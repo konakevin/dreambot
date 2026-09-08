@@ -77,6 +77,19 @@ async function pageAll(q) {
       if (!cat.is_active) problems.push('catalog row is_active = false');
       if (cat.day_of_enabled === false) problems.push('catalog day_of_enabled = false');
       if (!cat.postcard_overlay_url) problems.push('catalog has no postcard_overlay_url (R4)');
+      // §5d (mig 478): every day-of look key must be a live, face-swap, natural dream_mediums row.
+      const lookKeys = Array.isArray(cat.day_of_look_keys) ? cat.day_of_look_keys : [];
+      if (lookKeys.length === 0) problems.push('catalog has no day_of_look_keys (§5d: the day-of medium would fall to the normal roll)');
+      else {
+        const { data: looks } = await sb.from('dream_mediums').select('key,is_active,face_swaps,character_render_mode,is_public').in('key', lookKeys);
+        for (const k of lookKeys) {
+          const m = (looks || []).find((x) => x.key === k);
+          if (!m) problems.push(`look ${k}: no dream_mediums row`);
+          else if (!m.is_active || !m.face_swaps || m.character_render_mode !== 'natural') problems.push(`look ${k}: must be is_active + face_swaps + natural`);
+          else if (m.is_public) problems.push(`look ${k}: is_public=true would list it in the Create picker`);
+        }
+        console.log(`  looks ${lookKeys.length}: ${lookKeys.join(', ')}  ban: ${cat.day_of_medium_ban || '(none)'}`);
+      }
     }
     const { POOL_OF_SUB } = require('./lib/' + holiday + 'Pools');
     const dayOfSubs = Object.entries(POOL_OF_SUB)

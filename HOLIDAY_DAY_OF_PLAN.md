@@ -222,6 +222,41 @@ one standing is the parked height-contrast geometry — 2 of R34's 3 degrades ha
 waist height or lower, a clear gap; every stance + beat passes the couple validator verbatim (registers
 test). Stamp `dual_stance:dayof_<key>` tells forensics which frame a render got.
 
+### 5d. The day-of LOOKS + the photography ban (2026-09-08, mig 478)
+
+Kevin: "did we also finalize the mediums we'll use for the day-of?" — no: the day-of rolled the ordinary
+nightly medium (ten labels across R35/R36, photography once) and on flux-1.1-pro the override library
+then painted with one of four generic art fragments under that label. Kevin: "may as well do both? I liked
+the looks you showed me in the matrix sheet, would we be supporting those?" → both, and yes.
+
+- **The looks = the six hero-look matrix fragments** (`HALLOWEEN_HERO_LOOK_PLAN.md` §7 round 1, F1-F6),
+  each a `dream_mediums` row in the reserved `halloween_` namespace: `halloween_watercolor_ink`,
+  `halloween_ornate_ink`, `halloween_digital_painting`, `halloween_dark_fantasy_oil`,
+  `halloween_storybook_gouache`, `halloween_classical_oil`. Flags: `is_active=true` (Dream Again / DLT /
+  the FK on `uploads.dream_medium` resolve it), `is_public=false` (never in the Create picker —
+  `get_dream_mediums` is public-only), `is_dream_eligible=false`, `is_scene_eligible=false`,
+  `nightly_skip=true` (the normal rolls never see it; the day-of PINS it by key). Per-look MODEL
+  membership in `client_meta.smart_dream_models`: the matrix said F3 (polished digital painting) failed
+  twice on flux-1.1-pro → excluded there (flex default); everything else approved on all five tested
+  models (1.1-pro, flux-2-flex, gemini-2-image, seedream-4, grok-imagine). This is the NIGHTLY LOOKS
+  CATALOG pilot (`NIGHTLY_LOOKS_FEASIBILITY.md` §3 "rows in a namespace") on the smallest surface.
+- **Catalog:** `holidays.day_of_look_keys text[]` (the holiday's look set; empty = normal roll) +
+  `holidays.day_of_medium_ban text` (comma list, default `photography`) — generic per holiday (R5).
+  Read by `holidayWindow.ts` + the Node mirror (`ActiveHoliday.dayOfLookKeys / dayOfMediumBan`).
+- **Engine:** on a day-of CAST render `pickDayOfLook(keys, force_day_of_look)` (`_shared/dayOfLook.ts`,
+  uniform — one day-of per user per holiday) sets `dualSceneMediumKey` = the look, which rides the
+  existing scenario medium-pin route: resolve by key → `uploads.dream_medium` = the look → model lists
+  re-synced → the model RE-PICKED from the look's `smart_dream_models` (look-first, then model) → the
+  1.1-pro override library is EXEMPTED (`day_of_look_fragment:<model>`; the look is the curated
+  fragment) → the solo rebuild inherits the look's real fragment. Stamps: `day_of_look:<key>` then
+  `scene_medium:<key>` (the pin resolved) — a `day_of_look:` without its `scene_medium:` = the pin
+  failed (unknown / non-natural row). No look → `day_of_look:none` and the ban joins
+  `dualSceneMediumBan`. SCENE-ONLY day-of renders keep the scene roll (the look fragments carry the face
+  clause) and just never roll a banned medium (`day_of_medium_ban:<old>-><new>`).
+- **Client label:** the card resolves a medium label via the public list with a prettified-key fallback,
+  so a look shows as "Halloween Storybook Gouache" with no app change.
+- **Preflight** (`check-holiday-day-of.js --preflight`) now fails on a missing / inactive / public look row.
+
 ## 6. QA (the same loop as Fall)
 1. Engine unit + dbspec tests green; `force_day_of=halloween` on Kevin's account renders the day-of draw
    with the overlay (couple, solo, scene-only) — 6 renders smoke.
