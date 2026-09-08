@@ -15,37 +15,99 @@
  * Rules of thumb for authoring: no face / eye / camera words, no pronouns, no "reading / studying / admiring",
  * no "arms raised / overhead", no walking-into-each-other proximity, nothing above the head.
  */
+import type { DualStance } from './dualStances.ts';
+
 export interface ActionRegister {
   actions: string[];
   stills: string[];
+  /** Optional register-OWNED couple stances (dualStances.ts shape). When present, resolveCastAction rolls
+   *  the couple's stance from THIS list instead of the generic DUAL_STANCES — a genre whose body language
+   *  is its own (the Halloween day-of: dancing, sparklers, mock scares) never gets "arms folded, leaning
+   *  on a rail". Every text must pass validateActionBeat for a couple (locked by the registers test). */
+  stances?: readonly DualStance[];
 }
 
-const R = (actions: string[], stills: string[]): ActionRegister => ({ actions, stills });
+const R = (actions: string[], stills: string[], stances?: readonly DualStance[]): ActionRegister =>
+  stances ? { actions, stills, stances } : { actions, stills };
 
 export const ACTION_REGISTERS: Record<string, ActionRegister> = {
   // ── Halloween DAY-OF pool (HOLIDAY_DAY_OF_PLAN.md §5) — people CELEBRATING, faces toward camera ──
+  // Round 4 (2026-09-08, Kevin: "people just standing there … fun halloween activities and poses …
+  // the poses in all of these are boring af"): the beats are ACTIVITIES with the hands and the body
+  // engaged, and the register carries its OWN stance set (`stances`) so the generic body frames
+  // (arms folded, leaning on a rail, perched on an edge — dualStances.ts) never reach a day-of couple.
+  // Swap discipline kept: both people on ONE plane at ONE height (one crouched + one standing is the
+  // height-contrast geometry that degraded 4/4 on 1.1-pro), props at waist height or lower, a clear gap.
   halloween_day_of: R(
     [
-      // Round 2 (2026-09-07): FULL-BODY celebration beats — round 1 rendered 7 of 12 couples as bust
-      // crops because every beat lived at chest height (glass raised, pumpkin held). A beat that uses the
-      // legs, the ground or the furniture invites the mid-thigh framing the people line asks for.
-      'walking down the porch-lit street swinging candy buckets at knee height',
-      'stepping up onto the hay wagon with one boot on the wheel spoke',
-      'crouching to set a lit jack-o-lantern down on the bottom step',
-      'strolling under the string lights with a cider mug in one hand, coats open',
-      'sitting on a hay bale by the bonfire with boots stretched toward the flames',
-      'carrying a full candy bowl across the porch to the top step',
-      'perched on the porch rail with legs crossed, a lantern hung on the post',
-      'walking the lantern-lit path with a wicker picnic basket swinging low',
-      'leaning back against the parapet with the skyline behind, one foot up on the ledge',
-      'kneeling at the picnic blanket to light a row of small lanterns',
-      'standing at the trestle table ladling punch from the cauldron into paper cups',
-      'stepping through the barn doors under the bunting with a pumpkin under one arm',
+      'carving pumpkins at the newspaper-covered table, sleeves pushed up, seeds and pulp everywhere, carving tools at lap level',
+      'sleeves soaked to the elbow at the apple-bobbing tub, a dripping apple held out at waist height',
+      'stirring the cauldron of punch with a long ladle, green steam rolling over the rim',
+      'lighting sparklers off a single candle, sparks trailing low at hip height',
+      'a mock duel with foam swords held low under the string lights, knees bent, capes flaring',
+      'dancing a goofy zombie shuffle under the string lights, elbows out, knees bent',
+      'clinking glowing cocktail glasses at waist height beside the bar cart',
+      'scooping handfuls of candy from a giant bowl into buckets at hip level',
+      'a costume flourish, cape swept wide at hip height, one boot forward, weight on the back leg',
+      'roasting marshmallows on long sticks held out low over the bonfire',
+      'hoisting a glowing jack-o-lantern onto the hay bale at waist height',
+      'pulling the big brass lever of the tesla coil, sparks arcing at knee level',
+      'pouring bubbling green potion from one beaker into another at waist height',
+      'sweeping the cottage step with a witch broom mid-stroke, a black cat on the rail',
+      'tossing a handful of confetti low from the parade curb, a candy bucket at the boots',
+      'kneeling on the picnic blanket lining up a row of tiny lanterns along its edge',
+      'cranking the handle of an old cider press, juice running into a stoneware jug',
+      'holding a wriggling black cat at waist height with both arms, tail swishing',
+      'ladling glowing punch from a smoking cauldron into skull mugs',
+      'striking a mock-monster pose with clawed hands held out at shoulder height and knees bent',
+      'astride a broomstick like a hobby horse, knees bent mid-gallop, cape flying',
+      'fanning out a hand of tarot cards at waist height at the fortune-teller table',
+      'pinning a paper bat onto the string lights while balancing on the bottom porch step',
     ],
     [
-      'standing side by side on the porch steps under the string lights, full figures, cider mugs in hand',
-      'sitting together on a hay bale by the bonfire, boots on the ground, candy bucket between them',
-      'standing at the rooftop parapet with the skyline behind, full figures, glasses in hand',
+      'standing in full costume with a hand on a hip and one boot forward under the string lights',
+      'seated on a hay bale in full costume, leaning back on both hands, a candy bucket at the boots',
+      'leaning back against the bar cart in full costume, a glowing glass held at hip height',
+    ],
+    [
+      {
+        key: 'dayof_dance',
+        text: 'both mid-dance-step under the lights, one arm swept out to the side at shoulder height, the other hand on a hip, knees bent, capes and coats flaring, both at the same height, a clear gap between them',
+      },
+      {
+        key: 'dayof_sparklers',
+        text: 'both holding lit sparklers out low to one side at hip height, trails of sparks arcing at knee level, weight shifted mid-step as if dancing, a clear gap between them',
+      },
+      {
+        key: 'dayof_toast_low',
+        text: 'both holding glowing glasses or mugs out to the side at waist height in a loose toast, one leg kicked back, a clear gap between them',
+      },
+      {
+        key: 'dayof_mock_scare',
+        text: 'one striking a mock-monster pose with clawed hands held out at shoulder height and knees bent, the other recoiling in mock fright with palms held out at chest height, both at the same height, a clear gap between them',
+      },
+      {
+        key: 'dayof_broom_gallop',
+        text: 'both astride broomsticks like hobby horses, knees bent mid-gallop, capes flying, one hand on the broom handle and the other hand out to the side for balance, a clear gap between them',
+      },
+      {
+        key: 'dayof_seated_laugh',
+        text: 'both seated side by side on something solid in the scene (a hay bale, steps, a bench, a wagon edge) mid-laugh, one leaning back on both hands, the other with elbows on knees and a prop at knee level, a clear gap between them',
+        seated: true,
+      },
+      {
+        key: 'dayof_kneeling_busy',
+        text: 'both kneeling side by side at something in the scene (a pumpkin, a candy pile, a cauldron, a picnic blanket), hands busy at lap level, both at the same height, a clear gap between them',
+        seated: true,
+      },
+      {
+        key: 'dayof_costume_flourish',
+        text: 'both showing off the costume, one with a cape or skirt swept out wide to one side at hip height, the other with a hand on a hip and one boot forward, weight on the back leg, a clear gap between them',
+      },
+      {
+        key: 'dayof_hands_busy',
+        text: 'both standing with hands busy on a scene object at waist height (a candy bowl, a lantern, a carving tool, a ladle, a cocktail shaker), sleeves pushed up, mid-laugh, a clear gap between them',
+      },
     ]
   ),
   // ── Halloween pools ─────────────────────────────────────────────────────────

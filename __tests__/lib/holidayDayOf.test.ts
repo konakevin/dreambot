@@ -18,7 +18,7 @@ const rows = [
 ];
 
 describe('reserved day-of pool', () => {
-  it('is keyed <holiday>_day_of and its 12 subs map to it', () => {
+  it('is keyed <holiday>_day_of and its 16 subs map to it', () => {
     expect(dayOfPoolKey('halloween')).toBe('halloween_day_of');
     expect(HALLOWEEN_POOLS).toContain('halloween_day_of');
     expect(holidayPoolOf('masquerade_ball')).toBe('halloween_day_of');

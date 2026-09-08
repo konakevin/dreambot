@@ -110,13 +110,15 @@ export function resolveCastAction(i: CastActionInputs): CastActionResult {
           : i.classicDualPools.partner
         : i.classicSoloCandid;
     const exemplars = [...exemplarPool].sort(() => rng() - 0.5).slice(0, 3);
+    // A register that OWNS its stances (actionRegisters.ts `stances`) supplies the couple's body frame;
+    // otherwise the generic same-plane set. Rolled only when registers roll (the register is the source).
+    const reg = i.rollRegisters ? getActionRegister(i.registerKey) : null;
     if (i.castCount === 2) {
-      dualStance = pickDualStance(rng);
+      dualStance = pickDualStance(rng, reg && reg.stances ? reg.stances : undefined);
       stamps.push(`dual_stance:${dualStance.key}`);
     }
     let registerActions: string[] | null = null;
     if (i.rollRegisters) {
-      const reg = getActionRegister(i.registerKey);
       if (reg) {
         registerActions = sampleRegister(reg, 6, rng);
         stamps.push(`action_register:${i.registerKey}`);

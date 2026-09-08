@@ -91,6 +91,11 @@ export const DUAL_STANCES_GEOMETRY: readonly DualStance[] = [
   },
 ];
 
-export function pickDualStance(rng: () => number = Math.random): DualStance {
-  return DUAL_STANCES[Math.floor(rng() * DUAL_STANCES.length)];
+/** Uniform pick — from `list` when a register carries its own stances (actionRegisters.ts), else the generic set. */
+export function pickDualStance(
+  rng: () => number = Math.random,
+  list: readonly DualStance[] = DUAL_STANCES
+): DualStance {
+  const from = list.length > 0 ? list : DUAL_STANCES;
+  return from[Math.floor(rng() * from.length)];
 }

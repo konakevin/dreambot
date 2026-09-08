@@ -193,3 +193,44 @@ describe('resolveCastAction — scene-first block', () => {
     expect(r.authorAction?.register).toBe('goofy / playful fun');
   });
 });
+
+/** Register-OWNED stances (2026-09-08): the day-of register's stance list replaces the generic roll. */
+import { ACTION_REGISTERS } from '@engine/actionRegisters';
+describe('resolveCastAction — register-owned stances', () => {
+  const rolled = {
+    ...base,
+    sceneKind: 'elegant' as const,
+    hasSpecialScene: true,
+    hasSpecialWardrobe: true,
+    sfaRoll: true,
+    sfaKind: 'scenario' as const,
+    holidayCategory: 'halloween',
+    holidayPool: 'halloween_day_of',
+    registerKey: 'halloween_day_of',
+  };
+  it('a register with stances supplies the couple stance (rng 0 → its first) and its text rides the brief', () => {
+    const r = resolveCastAction({ ...rolled, rollRegisters: true });
+    const own = ACTION_REGISTERS.halloween_day_of.stances![0];
+    expect(r.dualStance?.key).toBe(own.key);
+    expect(r.authorAction?.stance).toBe(own.text);
+    expect(r.stamps).toEqual([
+      `dual_stance:${own.key}`,
+      'action_register:halloween_day_of',
+      'scene_action_roll',
+    ]);
+  });
+  it('registers off → the generic stance set, exactly as before', () => {
+    const r = resolveCastAction({ ...rolled, rollRegisters: false });
+    expect(r.dualStance?.key).toBe(DUAL_STANCES[0].key);
+  });
+  it('a register WITHOUT stances → the generic set', () => {
+    const r = resolveCastAction({
+      ...rolled,
+      holidayPool: 'witch_cottage',
+      registerKey: 'witch_cottage',
+      rollRegisters: true,
+    });
+    expect(ACTION_REGISTERS.witch_cottage.stances).toBeUndefined();
+    expect(r.dualStance?.key).toBe(DUAL_STANCES[0].key);
+  });
+});

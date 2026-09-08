@@ -28,3 +28,15 @@ describe('DUAL_STANCES', () => {
     expect(pickDualStance(() => 0.999).key).toBe(DUAL_STANCES[DUAL_STANCES.length - 1].key);
   });
 });
+
+describe('register-owned stances (2026-09-08)', () => {
+  it('pickDualStance draws from the caller list when given, and from the generic set when it is empty', () => {
+    const custom = [
+      { key: 'a', text: 'a' },
+      { key: 'b', text: 'b' },
+    ];
+    expect(pickDualStance(() => 0.6, custom).key).toBe('b');
+    expect(pickDualStance(() => 0, custom).key).toBe('a');
+    expect(pickDualStance(() => 0, []).key).toBe(DUAL_STANCES[0].key);
+  });
+});

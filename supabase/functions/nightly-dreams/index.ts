@@ -134,6 +134,7 @@ import {
   type NightlyModelPolicy,
 } from '../_shared/nightlyModelPolicy.ts';
 import { soloRebuildModelFor } from '../_shared/soloRebuildModel.ts';
+import { rollHolidayCostumes, costumeStamp } from '../_shared/holidayCostumes.ts';
 import { loadNightlyModelPolicy } from '../_shared/pools/nightlyModelPolicyLoader.ts';
 import { decideSceneFirst, sceneFirstRegister } from '../_shared/sceneFirstEligibility.ts';
 import { parseQaFlags } from '../_shared/nightlyQaFlags.ts';
@@ -345,6 +346,8 @@ Deno.serve(async (req) => {
     force_day_of,
     force_final_prompt,
     force_prompt_style,
+    force_costume_keys,
+    force_costume_pct,
     force_dual_slots,
     force_slot_input,
     strict_face_swap,
@@ -2295,6 +2298,25 @@ Deno.serve(async (req) => {
             : soloActiveScene || !!activePose || !!activeSinglePose
               ? 'active'
               : 'casual';
+        // HOLIDAY COSTUME LOCK (holidayCostumes.ts, HOLIDAY_DAY_OF_PLAN.md §5b): on a day-of cast render
+        // each cast member is dressed in a rolled character costume, locked into the prompt verbatim.
+        // engine_config.day_of_costume_pct (default 100); QA: force_costume_keys / force_costume_pct.
+        const costumePct = force_costume_pct ?? hairCfg.dayOfCostumePct;
+        const costumePicks =
+          dayOfApplied &&
+          dayOfHoliday &&
+          (force_costume_keys !== null || Math.random() * 100 < costumePct)
+            ? rollHolidayCostumes(
+                dayOfHoliday.key,
+                selectedCast.map((m) => ({
+                  role: m.role,
+                  gender: (m as DreamCastMember).gender ?? null,
+                })),
+                Math.random,
+                force_costume_keys
+              )
+            : null;
+        if (costumePicks) fallbackReasons.push(costumeStamp(costumePicks));
         // Captured into a named var (not passed inline) so a later dual-swap
         // failure can rebuild a SOLO prompt for self from the very same input.
         const slotInput: CharacterSlotPipelineInput = {
@@ -2373,6 +2395,7 @@ Deno.serve(async (req) => {
           femaleHairVariationPct: force_female_hair_pct ?? hairCfg.femaleHairVariationPct,
           // Couple prompt order (mig 470): QA flag wins, else engine_config.couple_prompt_style.
           promptStyle: force_prompt_style ?? sfaCfgCloser.couplePromptStyle,
+          costumeLock: costumePicks ? costumePicks.map((p) => p.attire) : null,
           sceneRegister,
           // Stage 5c: expanded solo compositions (three-quarter / enviro-wide)
           // with singleCompositionExpandedPct probability; classic waist-up

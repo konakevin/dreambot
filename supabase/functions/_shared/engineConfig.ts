@@ -126,6 +126,9 @@ export interface EngineConfig {
   /** Holiday DAY-OF date rule (mig 471, HOLIDAY_DAY_OF_PLAN.md §4): local hour at the 08:00 UTC run
    *  from which the day-of is evaluated against the NEXT local date (24 = never). Default 20. */
   dayOfEveningCutoffHour: number;
+  /** Holiday DAY-OF costume lock (mig 476, holidayCostumes.ts): % of day-of cast renders whose cast are
+   *  dressed from the holiday's costume pool (each member a rolled character costume). Default 100. */
+  dayOfCostumePct: number;
   /** Holiday POSTCARD overlay scope (migration 459): 'off' | 'day_of' (the day-of hero
    *  only — default) | 'window' (every in-season holiday dream). */
   holidayPostcardScope: 'off' | 'day_of' | 'window';
@@ -187,6 +190,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   modelPolicyMode: 'off',
   couplePromptStyle: 'legacy',
   dayOfEveningCutoffHour: 20,
+  dayOfCostumePct: 100,
   holidayPostcardScope: 'day_of',
 };
 
@@ -309,6 +313,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     modelPolicyMode: parsePolicyMode(data.model_policy_mode),
     couplePromptStyle: data.couple_prompt_style === 'subject_first' ? 'subject_first' : 'legacy',
     dayOfEveningCutoffHour: clampHour(data.day_of_evening_cutoff_hour, 20),
+    dayOfCostumePct: clampPct(data.day_of_costume_pct, DEFAULT_ENGINE_CONFIG.dayOfCostumePct),
     holidayPostcardScope:
       data.holiday_postcard_scope === 'off' || data.holiday_postcard_scope === 'window'
         ? data.holiday_postcard_scope
@@ -323,6 +328,12 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
 }
 
 /** 0-24 integer or the default (24 = never shift the day-of date). */
+function clampPct(v: unknown, dflt: number): number {
+  const n = Number(v);
+  if (v === null || v === undefined || !Number.isFinite(n)) return dflt;
+  return Math.max(0, Math.min(100, Math.round(n)));
+}
+
 function clampHour(v: unknown, dflt: number): number {
   const n = typeof v === 'number' ? v : Number(v);
   if (!Number.isFinite(n)) return dflt;

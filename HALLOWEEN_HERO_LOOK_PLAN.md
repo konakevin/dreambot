@@ -150,3 +150,22 @@ Re-running the 1.1-pro column with a short inline place ("a midnight masquerade 
 ballroom") and the full scene in the scene slot. If the crops open up → v3.1 = first clause only inline
 (a one-line change in `characterSlotPrompt.ts`, re-verified on 10 parity pairs). If not → the hero's
 model is the flex / gemini / seedream evidence, not 1.1-pro, and the looks catalog records that per look.
+
+**Short-place re-run (1.1-pro column, 6 tiles, 22:10 UTC) — the inline place length was NOT the lever;
+it made 1.1-pro worse:** F1 first-try (two-heads again), F2 FACELESS (`pure_scene_fallback` — an empty
+courtyard shipped), F3 first-try but a profile silhouette pair (R identity 0.40), F4 first-try at identity
+0.47/0.46 (small figures on the staircase), F5 DEGRADED (solo fallback: the man alone with a goblet), F6
+FACELESS (an empty library). Sheet `hero-look/round1/sheet-short-compare.jpg`.
+**Read:** on a dark, ornate, candlelit scene flux-1.1-pro swings between its two failure shapes (giant
+two-heads or tiny / profile figures) regardless of the place text — the exact pair of defects the parity
+study catalogued — while flux-2-flex, gemini-2-image and seedream-4 rendered the celebration 18/18 with
+both faces clean. This is the looks-catalog principle in one grid: these painterly Halloween looks belong
+to flex / gemini / seedream, not to 1.1-pro, and the catalog records membership per look. Two of six
+1.1-pro QA renders shipped with NO PEOPLE — the never-faceless fix (approved item #2) is a hard
+prerequisite for Oct 31 whatever the model.
+**Recommendation to Kevin:** hero model = flux-2-flex primary (6/6 first-try, costumes + props rendered
+as authored on every look, cheapest of the three), gemini-2-image then seedream-4 as the chain fallbacks
+for the hero surface (all inside the ≤5¢ primary budget); 1.1-pro off the hero surface. Look finalists
+for round 2: F5 storybook gouache (the Halloween palette), F4 dark-fantasy oil, F6 classical oil (or F1
+watercolor if Kevin prefers the lighter hand). Round 2 = finalists × cozy couple + male + female on the
+three models.

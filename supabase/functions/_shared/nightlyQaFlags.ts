@@ -53,6 +53,10 @@ export interface NightlyQaFlags {
   dry_run: boolean;
   force_holiday_sub_theme: string | null;
   force_day_of: string | null;
+  /** Day-of COSTUME LOCK (holidayCostumes.ts): pin costume keys in cast order (array or "a,b"); non-null
+   *  also forces the roll on. `force_costume_pct` overrides engine_config.day_of_costume_pct (0 = off). */
+  force_costume_keys: string[] | null;
+  force_costume_pct: number | undefined;
   /** QA only: render THIS exact text as the final prompt (skips nothing else — the swap / identity /
    *  quality pipeline runs as normal). Same prompt across models = a fair model comparison. */
   force_final_prompt: string | null;
@@ -167,6 +171,16 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
     force_holiday_sub_theme:
       typeof body.force_holiday_sub_theme === 'string' ? body.force_holiday_sub_theme : null,
     force_day_of: typeof body.force_day_of === 'string' ? body.force_day_of : null,
+    force_costume_keys: Array.isArray(body.force_costume_keys)
+      ? (body.force_costume_keys as unknown[]).filter((k): k is string => typeof k === 'string')
+      : typeof body.force_costume_keys === 'string'
+        ? body.force_costume_keys
+            .split(',')
+            .map((s) => s.trim())
+            .filter((s) => s.length > 0)
+        : null,
+    force_costume_pct:
+      typeof body.force_costume_pct === 'number' ? body.force_costume_pct : undefined,
     force_prompt_style:
       body.force_prompt_style === 'legacy' || body.force_prompt_style === 'subject_first'
         ? body.force_prompt_style

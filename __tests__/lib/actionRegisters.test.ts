@@ -104,3 +104,29 @@ describe('sampleRegister', () => {
     for (const x of out) expect([...reg.actions, ...reg.stills]).toContain(x);
   });
 });
+
+/** Register-OWNED couple stances (2026-09-08, Kevin: "the poses in all of these are boring af"): a genre
+ *  whose body language is its own supplies the couple's stance instead of the generic dualStances set. */
+import { DUAL_STANCES } from '@engine/dualStances';
+const stanceEntries: Array<[string, string, string]> = [];
+for (const [key, reg] of Object.entries(ACTION_REGISTERS)) {
+  for (const s of reg.stances ?? []) stanceEntries.push([key, s.key, s.text]);
+}
+describe('register-owned stances', () => {
+  it('the Halloween day-of register owns ≥ 8 activity stances with unique keys, none shared with the generic set', () => {
+    const st = ACTION_REGISTERS.halloween_day_of.stances ?? [];
+    expect(st.length).toBeGreaterThanOrEqual(8);
+    expect(new Set(st.map((s) => s.key)).size).toBe(st.length);
+    expect(st.every((s) => !DUAL_STANCES.some((g) => g.key === s.key))).toBe(true);
+    // the activity bar: nobody "standing easy with arms folded" on the day-of
+    expect(st.every((s) => !/arms folded|hands in pockets|standing easy/.test(s.text))).toBe(true);
+    expect(st.some((s) => s.seated)).toBe(true);
+    expect(st.every((s) => !s.heightContrast)).toBe(true); // one-low-one-high is the parked geometry
+  });
+  it.each(stanceEntries)(
+    '%s stance "%s" passes the couple beat validator verbatim',
+    (_k, _s, text) => {
+      expect(validateActionBeat(text, 2)).toEqual({ ok: true });
+    }
+  );
+});

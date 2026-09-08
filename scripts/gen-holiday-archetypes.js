@@ -37,11 +37,14 @@ const TO_SHARE = process.argv.includes('--to-share'); // top up each sub to ceil
 // Each archetype: costume/wardrobe hint (cast only) + setting hint, from the single source of truth
 // per holiday (scripts/lib/halloweenPools.js / fallPools.js: pools × sub-categories, palette + signature
 // objects per pool). Mediums are NOT pinned (Kevin 2026-09-04). Scenes stay pure-environment (linter §6).
-const A = (castMedium, sceneMedium, costume, setting) => ({
+// 2026-09-08: a sub may override its pool's palette / signature objects (the day-of purple/green/black subs).
+const A = (castMedium, sceneMedium, costume, setting, palette, objects) => ({
   castMedium,
   sceneMedium,
   costume,
   setting,
+  palette: palette || null,
+  objects: objects || null,
 });
 const ARCHETYPES = Object.fromEntries(
   Object.entries(TAXES).map(([holiday, tax]) => [
@@ -49,7 +52,7 @@ const ARCHETYPES = Object.fromEntries(
     Object.fromEntries(
       Object.entries(tax.SUBS).map(([k, d]) => [
         k,
-        { ...A(null, null, d.costume, d.setting), must: d.must || [] },
+        { ...A(null, null, d.costume, d.setting, d.palette, d.objects), must: d.must || [] },
       ])
     ),
   ])
@@ -64,11 +67,13 @@ function castPrompt(holiday, arch, def, n, dual) {
   const P = poolKey ? TAX.POOLS[poolKey] : null;
   const isFall = holiday === 'fall';
   const hero = holiday.toUpperCase();
+  const palette = (def && def.palette) || (P && P.palette);
+  const objects = (def && def.objects) || (P && P.objects);
   const punch = P
-    ? `${hero} IS THE HERO of the frame (Kevin 2026-09-04/05). This pool is "${poolKey}" — PALETTE: ${P.palette}. ${
+    ? `${hero} IS THE HERO of the frame (Kevin 2026-09-04/05). This pool is "${poolKey}" — PALETTE: ${palette}. ${
         isFall
           ? `THIS ARCHETYPE'S SETTING FAMILY IS THE HERO OF EVERY ENTRY — never swap it for a sibling place; the pool's signature objects (${P.objects}) are accents ONLY where they belong in this archetype.`
-          : `Fill the setting with an ABUNDANCE of THIS pool's signature objects: ${P.objects}.`
+          : `Fill the setting with an ABUNDANCE of THIS pool's signature objects: ${objects}.`
       } Cinematic: ${
         isFall
           ? 'low golden light, mist, rain, firelight or drifting leaves where the pool calls for it'
@@ -97,7 +102,10 @@ function scenePrompt(holiday, arch, def, n) {
     holiday === 'halloween'
       ? 'gothic, spooky-beautiful, awe not gore'
       : 'cozy, nostalgic, breathtakingly pretty magical fall';
-  return `Generate ${n} DISTINCT rich, standalone ${holiday.toUpperCase()} "${arch}" scenes (NO people) for a dreamy nightly wallpaper — ${tone}. Every entry is this archetype's world: ${def.setting}.
+  const TAX = taxFor(holiday);
+  const P = TAX && TAX.POOL_OF_SUB[arch] ? TAX.POOLS[TAX.POOL_OF_SUB[arch]] : null;
+  const palette = (def && def.palette) || (P && P.palette) || null;
+  return `Generate ${n} DISTINCT rich, standalone ${holiday.toUpperCase()} "${arch}" scenes (NO people) for a dreamy nightly wallpaper — ${tone}. Every entry is this archetype's world: ${def.setting}.${palette ? ` PALETTE: ${palette}.` : ''}
 
 Output ONLY a JSON array of ${n} objects: {"scene":"..."}
 - scene: 35-60 words, a rich immersive environment, defined light, layered depth, saturated color, its own time of day + weather. NO people as the subject (tiny distant silhouettes at most). NO text/words/watermarks, NO real brand or place names. Vary across all ${n}.

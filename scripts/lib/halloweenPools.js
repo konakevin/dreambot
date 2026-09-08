@@ -10,7 +10,7 @@
 const SHARE = 70;
 // Per-pool share override: the reserved DAY-OF pool must carry a whole day on its own
 // (HOLIDAY_DAY_OF_PLAN.md §5), so it seeds deeper than the window pools.
-const SHARE_DAY_OF = 120;
+const SHARE_DAY_OF = 160; // 16 subs × 10 (2026-09-08: +4 purple/green/black subs)
 const POOLS = {
   // ── DAY-OF pool (HOLIDAY_DAY_OF_PLAN.md, 2026-09-07) — RESERVED: never rolls in the window, drawn
   // 100% on the user's Halloween. People CELEBRATING, lit scenes, costumes with faces clear, pumpkins
@@ -34,6 +34,12 @@ const POOLS = {
       'halloween_parade',
       'rooftop_skyline_party',
       'monster_hotel_gala',
+      // 2026-09-08 (Kevin: "a few purple/green/black options"): subs whose worlds are natively purple /
+      // toxic green / black; each carries its OWN palette + objects (overrides the pool's amber list).
+      'witches_cottage_party',
+      'mad_scientist_lab_party',
+      'vampire_lounge',
+      'swamp_witch_bayou',
     ],
   },
   halloween_neighborhood: {
@@ -590,6 +596,47 @@ SUBS.monster_hotel_gala = {
     'grand monster-gala attire — a vampire countess gown, a frankenstein-bolted tuxedo with a tidy face, a mummy-wrap shawl — faces uncovered',
   setting:
     'the grand lobby of a monster hotel dressed for its Halloween gala, coffin luggage carts, a bandaged concierge far behind the desk, chandeliers of candles, velvet ropes, carved jack-o-lanterns glowing low along the marble floor',
+};
+SUBS.witches_cottage_party = {
+  pool: 'halloween_day_of',
+  palette: 'deep purple and black, toxic green window glow, violet lantern light, a pale moon',
+  objects:
+    'broomsticks, black cats, cauldrons, potion bottles, purple paper lanterns, dead trees, crooked fences, carved jack-o-lanterns kept low',
+  costume:
+    'witch and warlock party wear — a velvet gown with a wide-brim hat tipped back, a brocade waistcoat and cape',
+  setting:
+    // short hint on purpose: Sonnet mirrors hint length and the 35-word version overshot the 30-word scene cap on every couple row (2026-09-08)
+    "a witch's crooked cottage garden on Halloween night, green-glowing windows, a violet sky and pale moon, broomsticks by the door, black cats on the fence, a cauldron on the lawn, purple lanterns in the dead tree",
+};
+SUBS.mad_scientist_lab_party = {
+  pool: 'halloween_day_of',
+  palette: 'electric green glass, violet lightning, black iron, silver steel',
+  objects:
+    'tesla coils, beakers, flasks, glowing green vials, copper wire, brass levers, iron gantries, specimen jars, punch served in flasks',
+  costume:
+    'mad-scientist party wear — a lab coat over a fitted dress or a waistcoat, brass goggles pushed up into the hair, long rubber gloves',
+  setting:
+    "a mad scientist's laboratory thrown open for a Halloween party, tesla coils arcing violet lightning, bubbling beakers of electric-green liquid, black iron gantries and spiral stairs, a wall of glowing specimen jars, punch served in flasks",
+};
+SUBS.vampire_lounge = {
+  pool: 'halloween_day_of',
+  palette: 'black and deep purple velvet, absinthe-green glow, candle gold, a blood-red moon',
+  objects:
+    'velvet drapes, candelabras dripping black wax, absinthe glasses, black leather booths, gilt frames, bats in the rafters, a blood-red moon',
+  costume:
+    'vampire lounge glamour — a black velvet gown with a high collar, a crimson-lined cape over a brocade waistcoat',
+  setting:
+    'a velvet vampire lounge on Halloween night, deep purple drapes, black leather booths, green absinthe glowing along the bar, candelabras dripping black wax, bats in the rafters, a blood-red moon through the tall window',
+};
+SUBS.swamp_witch_bayou = {
+  pool: 'halloween_day_of',
+  palette: 'toxic green fog, black water, violet sky, lantern amber, firefly green',
+  objects:
+    'cypress trees, spanish moss, lanterns hung from branches, rowboats, cauldrons, fireflies, will-o-wisps, rolling fog',
+  costume:
+    'swamp-witch party wear — a moss-green lace gown, a wide-brim hat tipped back, a weathered long coat with a bone necklace',
+  setting:
+    'a bayou dock party under a violet sky, green fog rolling over black water, lanterns hung from cypress branches, spanish moss, a bubbling cauldron on the dock, fireflies, will-o-wisps drifting over the water, a rowboat of carved jack-o-lanterns kept low',
 };
 const POOL_OF_SUB = Object.fromEntries(Object.entries(SUBS).map(([s, d]) => [s, d.pool]));
 // always round UP (Kevin); a pool may override the share (the day-of pool seeds deeper).

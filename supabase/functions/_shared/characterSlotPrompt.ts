@@ -132,6 +132,11 @@ export interface CharacterSlotPipelineInput {
    *  line (place inline), identities, action, scene (4/4 usable on 1.1-pro; 38/40 first-try swaps in QA).
    *  Default legacy; QA flag force_prompt_style. */
   promptStyle?: 'legacy' | 'subject_first' | null;
+  /** HOLIDAY COSTUME LOCK (2026-09-08, holidayCostumes.ts): one costume per cast member in `cast` order
+   *  (index 0 = LEFT), rolled by nightly on a holiday's day-of. Sonnet is told the lock so the scene /
+   *  mood / props play off it, and the wardrobe slot(s) are then OVERWRITTEN with the text verbatim — no
+   *  paraphrase can dilute the costume. Ignored unless its length matches the cast. */
+  costumeLock?: string[] | null;
   /** Stage 5c (2026-07-09): expanded SOLO composition preset. null/undefined =
    *  the classic waist-up frontal contract. Only meaningful for cast.length 1;
    *  gated upstream by engine_config.single_composition_expanded_pct. The
@@ -548,11 +553,18 @@ export function buildSlotBrief(input: CharacterSlotPipelineInput): string {
   const travelerRule = isRealWorld
     ? ' The cast are VISITORS/travelers here, NOT locals — dress them in flattering, stylish CONTEMPORARY clothes they would actually travel in, and NEVER in the traditional, national, or ethnic dress of a real-world culture (no kimono, hanfu, mandarin/Mao jacket, sari, kurta, dirndl, lederhosen, keffiyeh, cheongsam, qipao, etc.). A tourist visiting Japan wears their own clothes, not a kimono.'
     : '';
-  const climateGuidance =
-    (input.wardrobeAnchor
-      ? `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: flattering, cool, and distinctive, in pieces true to the period / setting / cultural register of "${location}". One on-location inspiration to draw from: "${input.wardrobeAnchor}". Adapt it into something bold and attractive for each character — flattering silhouette, rich materials, standout details, styled hair — or invent something equally on-location and eye-catching. NEVER plain, dowdy, mundane, frumpy, drab, or merely "historically accurate" — this is a DREAM, so make the outfit sing while staying true to the setting. Avoid generic "linen shirt + chinos" defaults.`
-      : `wardrobe MUST be flattering, stylish, contemporary clothing suited to ${location}'s climate and setting — distinctive, never dowdy or drab. A tropical beach, an alpine village, a desert ruin, a modern city, and an arctic glacier all call for different wardrobe. WARDROBE MOOD for this render: ${wardrobeMood}. Lean into this style while keeping it climate-appropriate and flattering. Bring distinctive pieces, colors, and silhouettes — avoid the same "linen shirt + chinos" default every render.`) +
-    travelerRule;
+  const costumeLock =
+    input.costumeLock && input.costumeLock.length === input.cast.length ? input.costumeLock : null;
+  const climateGuidance = costumeLock
+    ? `WARDROBE — HOLIDAY COSTUME LOCK: this is a costume party and each character's costume is already DECIDED. ${
+        costumeLock.length === 2
+          ? `LEFT wears EXACTLY: "${costumeLock[0]}". RIGHT wears EXACTLY: "${costumeLock[1]}".`
+          : `The character wears EXACTLY: "${costumeLock[0]}".`
+      } The exact costume text is applied by code, so write the wardrobe field(s) as a SHORT reference only (3-6 words, e.g. "the vampire countess costume") and spend your words on the scene and the action. Let the scene, mood, props and action play off the costumes — the cape catching the lantern light, the hat brim in the fog. The costume is clothing, headwear and props only; the face stays fully clear by code.`
+    : (input.wardrobeAnchor
+        ? `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: flattering, cool, and distinctive, in pieces true to the period / setting / cultural register of "${location}". One on-location inspiration to draw from: "${input.wardrobeAnchor}". Adapt it into something bold and attractive for each character — flattering silhouette, rich materials, standout details, styled hair — or invent something equally on-location and eye-catching. NEVER plain, dowdy, mundane, frumpy, drab, or merely "historically accurate" — this is a DREAM, so make the outfit sing while staying true to the setting. Avoid generic "linen shirt + chinos" defaults.`
+        : `wardrobe MUST be flattering, stylish, contemporary clothing suited to ${location}'s climate and setting — distinctive, never dowdy or drab. A tropical beach, an alpine village, a desert ruin, a modern city, and an arctic glacier all call for different wardrobe. WARDROBE MOOD for this render: ${wardrobeMood}. Lean into this style while keeping it climate-appropriate and flattering. Bring distinctive pieces, colors, and silhouettes — avoid the same "linen shirt + chinos" default every render.`) +
+      travelerRule;
 
   const forbiddenList = `━━━ FORBIDDEN IN ANY FIELD — your output will be rejected if you violate ━━━
 - Camera / lens / framing: close-up, wide shot, medium shot, low angle, 85mm, depth of field, fisheye
@@ -768,7 +780,7 @@ const FORBIDDEN_PATTERNS: { name: string; regex: RegExp }[] = [
   { name: 'pronoun', regex: /\b(she|he|him|her|his|hers|she's|he's)\b/i },
 ];
 
-function validateSlots(slots: CharacterSlots): string[] {
+export function validateSlots(slots: CharacterSlots): string[] {
   const violations = new Set<string>();
   const fields: string[] = [slots.scene_description, slots.mood, slots.props ?? ''];
   if ('wardrobe' in slots) fields.push(slots.wardrobe);
@@ -805,6 +817,14 @@ function fallbackSlots(input: CharacterSlotPipelineInput): CharacterSlots {
     mood: moodFallback,
     props: '',
   };
+}
+
+/** Overwrite the wardrobe slot(s) with the locked costume text (cast order: LEFT, RIGHT). */
+export function applyCostumeLock(slots: CharacterSlots, lock: readonly string[]): CharacterSlots {
+  if ('left_wardrobe' in slots) {
+    return { ...slots, left_wardrobe: lock[0], right_wardrobe: lock[1] ?? lock[0] };
+  }
+  return { ...slots, wardrobe: lock[0] };
 }
 
 // ── Final prompt assembly (template-owned geometry) ────────────────────
@@ -1209,7 +1229,10 @@ export async function runCharacterSlotPipeline(
 
   for (let attempt = 0; slots === null && attempt < 2; attempt++) {
     try {
-      const sonnet = await callSonnet(lastAttemptBrief, anthropicKey, 500);
+      // 2026-09-08: 500 → 900 output tokens. Day-of R35: 3 of 12 responses were cut off INSIDE the action
+      // field (the last key) once the costume lock lengthened the wardrobe fields → parsed as "action
+      // missing" → pool-pose fallback. Output tokens only; the brief is unchanged.
+      const sonnet = await callSonnet(lastAttemptBrief, anthropicKey, 900);
       rawResponse = sonnet.rawResponse;
       retries = attempt;
       const parsed = parseSlotsJson(sonnet.text, castCount);
@@ -1229,6 +1252,13 @@ export async function runCharacterSlotPipeline(
   if (!slots) {
     slots = fallbackSlots(input);
     fallbackReasons.push('character_slot_fallback_used');
+  }
+
+  // HOLIDAY COSTUME LOCK (holidayCostumes.ts): the wardrobe slot(s) are the locked text verbatim —
+  // Sonnet's paraphrase (or the fallback / a forced slot set) never decides what they wear.
+  if (input.costumeLock && input.costumeLock.length === castCount) {
+    slots = applyCostumeLock(slots, input.costumeLock);
+    fallbackReasons.push('costume_lock');
   }
 
   // Scene-first action (SCENE_FIRST_ACTION_PLAN.md): the authored beat ships ONLY if it passes

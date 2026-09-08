@@ -127,7 +127,7 @@ paint), carved pumpkins LOW and away from heads, no gargoyles / face-bearing sta
 swap-safe (side by side, clear head gap — the proximity scan gate), solo seeds one person only, scene-only
 seeds the same places with the crowd as distant texture. Genres spanned = the existing pool families:
 
-| sub (12) | genre | the moment |
+| sub (16) | genre | the moment |
 |---|---|---|
 | costume_party_barn | neighborhood | a barn costume party, string lights, cider cauldron, bobbing tub |
 | masquerade_ball | gothic | a moonlit masquerade in a lantern-lit courtyard (open air, not a candlelit ballroom) |
@@ -140,14 +140,80 @@ seeds the same places with the crowd as distant texture. Genres spanned = the ex
 | cemetery_lantern_picnic | ghost glam | an elegant lantern picnic among old stones (no gargoyles) |
 | halloween_parade | town | a small-town parade float / street party in costume |
 | rooftop_skyline_party | glam | a rooftop party, city skyline, jack-o-lanterns on the parapet |
-| monster_hotel_lobby | monster | the monster hotel's Halloween gala (bandaged concierge, coffin luggage) |
+| monster_hotel_gala | monster | the monster hotel's Halloween gala (bandaged concierge, coffin luggage) |
+| witches_cottage_party | witchy · purple/green/black | the crooked cottage garden, green-lit windows, violet sky, broomsticks, black cats |
+| mad_scientist_lab_party | monster · purple/green/black | a lab thrown open for a party, tesla coils, violet lightning, green beakers, punch in flasks |
+| vampire_lounge | gothic · purple/green/black | a velvet vampire lounge, absinthe glow, black wax candelabras, a blood-red moon |
+| swamp_witch_bayou | witchy · purple/green/black | a bayou dock party, green fog on black water, lanterns in the cypress, will-o-wisps |
+
+The last four (2026-09-08, Kevin: "we need a few purple/green/black options … witch's cottage party,
+mad scientist lab party theme etc.") carry their OWN `palette` + `objects` on the sub (taxonomy
+`SUBS.<sub>.palette/objects`; the generator prefers a sub's over its pool's), because the pool-level
+palette is amber/orange and every seed inherited it.
 
 Each sub: dual + single + scene rows, MVP 25 → QA → scale to share (`--to-share`, ceil(70/12) = 6 per sub
 per table is the SHARE rule; the day-of pool gets a larger share knob because it must carry a whole day:
-`SHARE_DAY_OF = 120`). Registers: a `day_of` entry in `actionRegisters.ts` (celebration beats: toasting,
+`SHARE_DAY_OF = 160` = 16 subs × 10). Registers: a `day_of` entry in `actionRegisters.ts` (celebration beats: toasting,
 handing out candy, lighting a lantern, mid-laugh at a costume, sparkler arcs). Generator TAX entry with
 the palette / objects / lanterns=true / subs + per-sub costume and setting hints. Lint: Halloween rules +
 "no gargoyle / statue / mask on face" + "lit" anchors.
+
+### 5b. The costume pool + the costume LOCK (2026-09-08)
+
+Kevin: "people need to look more dressed up in costumes for halloween — even if we can't do face paint or
+masks, we need to have them dressed up in fun, sexy, cool, scary, whatever … they have to find out what
+they 'dressed up' as — perhaps we need a pool of costumes or character archetypes."
+
+Why the seeds alone could not do it: the row's `attire` reaches Sonnet as *"one on-location inspiration
+to draw from … adapt it … or invent something equally on-location"* (the COSTUME DESIGNER brief), and
+Sonnet's 8-15-word paraphrase is what lands in the prompt — a "witch gown with the hat tipped back" hint
+shipped as "a cozy sweater with a witch-hat headband".
+
+- **Pool:** `_shared/holidayCostumes.ts` — `HOLIDAY_COSTUMES[holiday]`, 29 Halloween character
+  archetypes (vampire, witch, pirate, mad scientist, devil, angel, skeleton, zombie prom, black cat,
+  werewolf, mummy, grim reaper, monster bride/groom, superhero, steampunk, 1920s, fairy, viking, Egyptian
+  royalty, Greek deity, rockstar, outlaw, robot, Medusa/gladiator, ghost wedding, jester, dark royalty,
+  pumpkin royalty, Red Riding Hood/wolf), each with a female and a male variant = `label` ("a vampire
+  countess") + `attire` (the verbatim wardrobe text) + a `vibe` (fun / sexy / cool / scary / classic).
+  Swap-safe by construction: clothing + headwear + props only, no mask / face paint / fangs / veil /
+  prosthetic / hood up / goggles over the eyes, no hair colour or length change (identity), no pronoun or
+  face word — every variant is locked against the slot validator + the §6.1 occlusion rule by
+  `__tests__/lib/holidayCostumes.test.ts`.
+- **Roll:** `rollHolidayCostumes(holiday, cast, rng, forceKeys)` — one pick per cast member in cast
+  order (index 0 = LEFT), DISTINCT keys per render (the surprise is the point; a couple rarely matches),
+  the member's gender variant (random when unknown). Nightly rolls it on a day-of cast render at
+  `engine_config.day_of_costume_pct` (mig 476, default 100; 0 = the row's attire hint again). Stamp
+  `costume:<left>/<right>`; QA `force_costume_keys` (pins keys, forces the roll) / `force_costume_pct`.
+- **Lock:** `CharacterSlotPipelineInput.costumeLock: string[]` — the brief tells Sonnet the costumes are
+  DECIDED ("LEFT wears EXACTLY …") so scene / mood / props play off them, and after Sonnet returns the
+  wardrobe slot(s) are OVERWRITTEN with the text verbatim (`applyCostumeLock`, stamp `costume_lock`) —
+  a paraphrase, the fallback slots or a forced slot set can no longer decide what they wear. The row's
+  `attire` is bypassed while the lock is on. Solo rebuilds inherit the locked wardrobe (they reuse the
+  dual slots).
+- **Not yet:** telling the dreamer what they went as (the notification / caption) — the labels are in
+  the log (`observability.slotInput.costumeLock` + the stamp) so it is a message change, not an engine one.
+
+### 5c. Register-owned STANCES — the "boring poses" fix (2026-09-08)
+
+Kevin, on the R34 set: "people just standing there, let's give them fun halloween activities and poses,
+and make these look more natural … the poses in all of these are boring af."
+
+Root cause: every couple render rolls ONE of the seven generic `DUAL_STANCES` (seated together,
+leaning back, shoulder lean, perched on an edge, mid-laugh, hands free, one busy one easy) BEFORE Sonnet
+writes the action, and the brief says "build the moment around it". Five of the seven are static body
+frames ("standing easy with nothing held, hands in pockets, arms folded"), so the register's "ladling
+punch" became "one busy, the other standing with arms folded" — the stance won.
+
+Fix: an `ActionRegister` may OWN its stances (`stances?: DualStance[]`); `resolveCastAction` rolls the
+couple stance from the register's list when it has one (`pickDualStance(rng, reg.stances)`), else the
+generic set — nothing changes for any other register. The day-of register now carries 9 activity stances
+(dance step, sparklers low, low toast, mock scare, broom gallop, seated laugh, both kneeling busy, costume
+flourish, hands busy) and 23 activity beats (carving, apple tub, cauldron, sparklers, foam-sword duel,
+zombie shuffle, candy scooping, marshmallows, tesla lever, potion pouring, broom sweeping, confetti,
+tarot fan, black cat …). Swap discipline kept: both people on ONE plane at ONE height (one crouched +
+one standing is the parked height-contrast geometry — 2 of R34's 3 degrades had exactly that), props at
+waist height or lower, a clear gap; every stance + beat passes the couple validator verbatim (registers
+test). Stamp `dual_stance:dayof_<key>` tells forensics which frame a render got.
 
 ## 6. QA (the same loop as Fall)
 1. Engine unit + dbspec tests green; `force_day_of=halloween` on Kevin's account renders the day-of draw
@@ -276,3 +342,30 @@ Total ≈ 2-3 sessions before Oct 31 with margin.
   Remaining: Kevin's sign-off → (a) drop `holiday_hero_prompts` (migration), (b) the R5 proof:
   Thanksgiving catalog row + `thanksgiving_day_of` pool, (c) optional taste pass on sub hints (paper
   lanterns on masquerade_ball read "Chinese lantern" to the judge).
+- 2026-09-08 — **Kevin's R34 review (12 couples, `🎃 DAY-OF R34`, gallery artifact dfe50486):** three
+  asks — (1) "a few purple/green/black options … witch's cottage party, mad scientist lab party theme
+  etc." → 4 subs with their OWN palette + objects (§5, 16 subs, `SHARE_DAY_OF` 120 → 160), seeded to
+  share (26 + 32 + 32 + 32 rows; witches_cottage couple rows needed a SHORTER setting hint — Sonnet
+  mirrors hint length and every couple row overshot the 30-word cap until the hint was cut), proximity
+  scan 0 violations, preflight 160 / 160 / 192 across 16/16 subs; (2) "people just standing there …
+  fun halloween activities and poses … natural … the poses in all of these are boring af" → register-
+  owned STANCES (§5c: 9 activity stances + 23 activity beats; the generic "arms folded / leaning on a
+  rail / perched" frames never reach a day-of couple; stamp `dual_stance:dayof_*`); (3) "people need to
+  look more dressed up in costumes … fun, sexy, cool, scary … they have to find out what they dressed up
+  as" → the COSTUME POOL + LOCK (§5b: 29 archetypes × 2 variants, `engine_config.day_of_costume_pct`
+  mig 476, stamps `costume:<l>/<r>` + `costume_lock`).
+  **QA round 4 (`🎃 DAY-OF R35`, 16 couples = 12 originals + 4 new subs, all three changes on):**
+  16/16 shipped as COUPLES (R34: 9 of 12 — the 3 solo fallbacks all had one-low-one-high geometry, which
+  the new stances forbid), 13 first-try + 3 second-attempt swaps, 0 faceless, 16/16 from the pool with
+  postcards, judge BAD 0 / nonsense 0, framing three-quarter 6 · full 4 · waist 2 · bust 4 (bust 25 %,
+  R33 was 2 of 11), every render a DISTINCT costume pair (werewolf/mummy, Red Riding Hood/pirate,
+  Greek god/Egyptian queen, pumpkin queen/black cat …) with the verbatim attire in the prompt.
+  **Defect found + fixed in-round:** 3 of the first 12 responses were cut off INSIDE the `action` field
+  (the last JSON key) once the lock lengthened the wardrobe fields → parsed as `scene_action_fallback:
+  missing` → a plain pool pose. Fix: Sonnet now writes the locked wardrobe fields as a 3-6-word
+  reference (the code applies the exact text) and the slot call's output cap went 500 → 900 tokens;
+  `mock_scare` reworded ("hands held out", Sonnet echoed "hands raised" → too_energetic). The 4 affected
+  subs re-rendered after the deploy (R35 part C). **Open notes for Kevin:** `photography` rolled as the
+  medium on one day-of couple (cemetery) — the 1.1-pro override library repaints it, but if the day-of
+  should never roll photography that is a medium-ban on the day-of path (one line); the mad-scientist
+  seed that rendered shows an ornate mirror frame (bust crop) — worth a scene-hint pass if it repeats.
