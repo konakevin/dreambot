@@ -4284,16 +4284,21 @@ Output ONLY the prompt.`;
     // the persisted render by the SEPARATE holiday-postcard fn (never pixel work in this
     // isolate). Scope = engine_config.holiday_postcard_scope: day-of heroes by default,
     // or every in-season holiday dream. Best-effort: any failure keeps the clean image.
+    // uploads.postcard_pending (mig 479): the overlay was wanted but NOT applied (isolate refused an
+    // oversize source, failed, or threw) → the display-variant cron composites it with sharp.
+    let postcardPending: string | null = null;
     if (holidayCategory) {
       try {
         const pcScope = (await fetchEngineConfig(supabase)).holidayPostcardScope;
         if (pcScope === 'window' || (pcScope === 'day_of' && dayOfApplied)) {
           const pc = await dispatchHolidayPostcard(imageUrl, holidayCategory);
           fallbackReasons.push(pc.reason);
+          if (!pc.ok && !pc.reason.includes(':skip:')) postcardPending = holidayCategory;
           lap('postcard');
         }
       } catch (_pcErr) {
         fallbackReasons.push('postcard:fail:threw');
+        postcardPending = holidayCategory;
       }
     }
 
@@ -4392,6 +4397,7 @@ Output ONLY the prompt.`;
           dream_medium: resolvedMediumKey ?? null,
           dream_vibe: resolvedVibeKey ?? null,
           holiday: holidayCategory, // 🎃 marker (§5) — the season this dream belongs to, or null
+          postcard_pending: postcardPending, // mig 479: the cron composites the overlay out-of-process
 
           // Which AI model rendered this — drives the model badge on
           // DreamCard (migration 211, 2026-05-30).

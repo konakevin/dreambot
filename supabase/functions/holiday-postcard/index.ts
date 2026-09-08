@@ -23,6 +23,40 @@ import {
 
 const overlayCache = new Map<string, RgbaImage>();
 
+/** Max source pixels this isolate composites in-process. Above it the decode + JPEG re-encode
+ *  trips the edge resource limit (HTTP 546 — seedream-4's 1440×2560 PNGs, 2026-09-08), so the
+ *  request returns `deferred` immediately and the display-variant cron composites with sharp. */
+const MAX_INLINE_PIXELS = 2_200_000;
+
+/** Cheap header sniff (PNG IHDR / JPEG SOF) — no decode. null when unknown. */
+export function sniffDimensions(buf: Uint8Array): { width: number; height: number } | null {
+  if (buf.length > 24 && buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47) {
+    const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+    return { width: dv.getUint32(16), height: dv.getUint32(20) };
+  }
+  if (buf.length > 4 && buf[0] === 0xff && buf[1] === 0xd8) {
+    const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+    let i = 2;
+    while (i + 9 < buf.length) {
+      if (buf[i] !== 0xff) {
+        i++;
+        continue;
+      }
+      const marker = buf[i + 1];
+      if (marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) {
+        i += 2;
+        continue;
+      }
+      const len = dv.getUint16(i + 2);
+      const isSof =
+        marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc;
+      if (isSof) return { height: dv.getUint16(i + 5), width: dv.getUint16(i + 7) };
+      i += 2 + len;
+    }
+  }
+  return null;
+}
+
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -93,7 +127,18 @@ Deno.serve(async (req) => {
 
     const [overlay, srcRes] = await Promise.all([loadOverlay(overlayUrl), fetch(imageUrl)]);
     if (!srcRes.ok) return json({ ok: false, error: `source fetch ${srcRes.status}` }, 502);
-    const base = await decodeImage(new Uint8Array(await srcRes.arrayBuffer()));
+    const srcBytes = new Uint8Array(await srcRes.arrayBuffer());
+    const dims = sniffDimensions(srcBytes);
+    if (dims && dims.width * dims.height > MAX_INLINE_PIXELS) {
+      // Too big for this isolate — hand it to the out-of-process cron (uploads.postcard_pending).
+      return json({
+        ok: false,
+        deferred: true,
+        error: `too_large:${dims.width}x${dims.height}`,
+        ms: Date.now() - t0,
+      });
+    }
+    const base = await decodeImage(srcBytes);
     const { image, placed } = compositePostcard(base, overlay, layout ?? DEFAULT_POSTCARD_LAYOUT);
     const jpeg = await encodeJpeg(image, 92);
 

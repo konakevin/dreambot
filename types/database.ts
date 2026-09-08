@@ -3350,6 +3350,7 @@ export type Database = {
           output_phash: string | null;
           owner_seen_at: string | null;
           pinned_at: string | null;
+          postcard_pending: string | null;
           posted_at: string | null;
           quarantine_reason: string | null;
           quarantined_at: string | null;
@@ -3404,6 +3405,7 @@ export type Database = {
           output_phash?: string | null;
           owner_seen_at?: string | null;
           pinned_at?: string | null;
+          postcard_pending?: string | null;
           posted_at?: string | null;
           quarantine_reason?: string | null;
           quarantined_at?: string | null;
@@ -3458,6 +3460,7 @@ export type Database = {
           output_phash?: string | null;
           owner_seen_at?: string | null;
           pinned_at?: string | null;
+          postcard_pending?: string | null;
           posted_at?: string | null;
           quarantine_reason?: string | null;
           quarantined_at?: string | null;
@@ -4442,6 +4445,7 @@ export type Database = {
           output_phash: string | null;
           owner_seen_at: string | null;
           pinned_at: string | null;
+          postcard_pending: string | null;
           posted_at: string | null;
           quarantine_reason: string | null;
           quarantined_at: string | null;

@@ -273,6 +273,37 @@ on both the Oct 31 and Nov 1 08:00 UTC runs), tally eligible Pro users vs `holid
 postcards < stamps, or if any faceless shipped. Wired as `holiday-day-of-monitor.yml` triggered at 10:00
 UTC on the catalog's peak dates (a tiny script resolves them from `holidays`).
 
+### 7b. The postcard on LARGE sources — the out-of-process backfill (2026-09-08, mig 479)
+
+Kevin, on R37: "the 'happy halloween' stamp isn't stamping on some of them, is that just a blip in our test
+script?" — no. 4 of 16 overlays failed with `postcard:halloween:fail:http_546`, all four on seedream-4
+renders that persisted as 1440×2560 PNGs (~6 MB). **Why it is expensive:** the `holiday-postcard`
+isolate decodes the whole source in pure JS (upng for PNG — 6 MB inflates to ~15 MB of RGBA), blends,
+then re-encodes 3.7 MP of JPEG with a WASM encoder, inside an edge isolate with a small CPU / memory
+budget; the 768×1344 JPEGs from flux-1.1-pro already take ~2 s, seedream's 2K PNGs are ~3.6× the pixels
+with a slower decoder → the resource limit (546). Seedream is called at a hardcoded `size: '2K'`
+(`_shared/generateImage.ts`), which is where the pixels come from.
+
+**Mitigation (three layers, all live):**
+1. **The isolate refuses oversize sources up front** — a header sniff (PNG IHDR / JPEG SOF, no decode);
+   above `MAX_INLINE_PIXELS` (2.2 MP) it returns `deferred` immediately instead of dying mid-decode.
+   Stamp `postcard:<key>:deferred:too_large:<w>x<h>`.
+2. **The render marks the upload** — `uploads.postcard_pending = <holiday>` whenever the overlay was
+   wanted but not applied (deferred, failed, or threw; a holiday with no artwork is not pending).
+3. **The display-variant cron composites it with real compute** — `scripts/backfill-display-variants.js`
+   (GitHub Actions, every 10 min, sharp) runs a postcard pass FIRST: same placement + scrim math as the
+   edge function (`scripts/lib/postcardLayout.js`, parity-locked by
+   `__tests__/lib/postcardLayoutParity.test.ts`), writes a NEW stamped HQ JPEG (q92) and a NEW display
+   variant (new keys — the old ones may already be CDN-cached), updates `image_url` /
+   `image_url_display`, appends `postcard:<key>:backfilled` to the generation log, clears the marker.
+   Concurrency 3. The monitor counts `backfilled` as applied.
+
+Proof: the 4 failed R37 uploads were marked pending and backfilled by one cron run (stamped HQ + display
+verified by eye — overlay bottom-anchored with the scrim). A forced seedream-4 day-of render then took
+the deferral path end to end (below). **Still open (Kevin's call):** seedream at `'1K'` for nightly
+would cut every downstream step (swap, restore, persist, display, postcard) ~3.5×; flux-1.1-pro's
+native output is 768×1344 anyway.
+
 ## 8. New-holiday checklist (R5) — Christmas, July 4th, Thanksgiving, Easter…
 1. `holidays` row: key, display name, emoji, peak rule (fixed Dec 25 / fixed Jul 4 / nth_weekday 4th Thu
    Nov / easter), window or explicit start, ramp pcts, `day_of_enabled`, postcard asset URL + anchor +

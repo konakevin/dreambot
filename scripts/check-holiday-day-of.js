@@ -151,7 +151,9 @@ async function pageAll(q) {
       t.dayOf++;
       if (d.includes(':day_of:')) t.fromPool++;
       else t.fromWindow++;
-      const pc = f.some((s) => s.startsWith(`postcard:${holiday}:ok`));
+      const pc = f.some(
+        (s) => s.startsWith(`postcard:${holiday}:ok`) || s.startsWith(`postcard:${holiday}:backfilled`)
+      );
       if (pc) t.postcard++;
       else bad.push({ id: r.id, why: 'day-of render without postcard' });
       const isCast = Array.isArray(r.castRoles) && r.castRoles.length > 0;
