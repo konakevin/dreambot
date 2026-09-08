@@ -98,6 +98,15 @@ a pure scene; stamp `SHIPPED_FACELESS` loud and count it in the day-of monitor. 
 
 ## 4. The date rule (R6) — "the dream they see on the holiday"
 
+> **Delivery correction (2026-09-08 launch review):** the nightly is NOT one 08:00 UTC run any more.
+> `nightly-dreams.yml` ticks HOURLY and `scripts/lib/nightlyTimezone.js` enqueues each user on the first tick
+> at or after their LOCAL 4 am, keyed on their local day (no/invalid timezone → first tick at/after 08:00 UTC,
+> UTC day). So the date rule below is evaluated at ~local 4 am, where local hour < cutoff (20) and the
+> day-of date is simply the user's own date: every timezone gets the day-of dream on its own peak morning.
+> The evening-cutoff shift only matters for the 08:00-UTC fallback users. `scripts/simulate-day-of.mjs`
+> now models exactly this delivery (8 timezones + the fallback) and must print "fires exactly once … on
+> the peak date".
+
 Nightly runs at 08:00 UTC. `daysUntilPeak` is computed on the user's LOCAL date at that instant. That is
 right for most of the world and wrong for the far west:
 
