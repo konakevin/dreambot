@@ -571,3 +571,18 @@ Total ≈ 2-3 sessions before Oct 31 with margin.
   (the card said "Photography" under a stop-motion scene). Next on Kevin's word: the remaining five
   stylized worlds (button-eyed other world, claymation lab, paper-cut shadow theater, felted patch, a
   separate Día de Muertos pool) and scaling these two to share.
+- 2026-09-08 — **Stylized worlds batch 2 LIVE + fixes (Kevin: "these are all rad!"):** the remaining five
+  pools seeded (commit 5c83ca98, mig 482: `halloween_claymation`, `halloween_papercut`, `halloween_felt`),
+  10 renders (`🎃 STYLIZED WORLDS 2`) all on their pinned look. Kevin asked whether these were QA'd or
+  one-shot — **one-shot**: every scene-only image is the first render of its seed; quality is structural
+  (no swap constraints, lint-gated rows, the fun brief's focal event, pinned looks) plus a visual pass over
+  ~26 renders. That pass found two defects, both fixed: (a) 7 rows invited rendered TEXT (the fun brief's
+  own "bats carrying a banner") → rows disabled, the phrase removed from the brief, a NEVER-lettering line
+  added, and lint §6.8 (`TEXT_INVITE`) drops such rows at seed time; (b) the claymation and felt looks read
+  as ordinary renders → fragments rewritten to lead with the craft ("EVERYTHING sculpted from matte
+  plasticine … thumbprints on every surface" / "EVERYTHING made of fuzzy felted wool") → re-renders read
+  as clay and wool. The two taste-tested pools were scaled to share (45 rows each); the five new pools are
+  scaling to share in the background; the fun-register scale-up (12/sub × 14 pools) is 8 of 14 pools in.
+  **Open:** a proper judged QA round over the scene-only pools (framing rubric is cast-centric — needs a
+  scene rubric: focal event present, no text, look fidelity), and retiring the plain rows once the
+  scale-up lands.

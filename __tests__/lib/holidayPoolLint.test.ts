@@ -323,3 +323,25 @@ describe('DAY-OF pool rules (HOLIDAY_DAY_OF_PLAN.md §5)', () => {
     ).toEqual(expect.arrayContaining([expect.stringContaining('face-bearing decor')]));
   });
 });
+
+describe('§6.8 rendered-text invitations (2026-09-08)', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { lintHolidayRow } = require('../../scripts/lib/holidayPoolLint.js');
+  const base = { category: 'halloween', sub_theme: 'reaper', table: 'holiday_scenes' };
+  it('drops a scene asking for a banner / sign / lettering', () => {
+    for (const scene of [
+      'Bats carry a stitched banner reading Happy Hauntings across the moon over a lantern-lit graveyard of leaning stones and fog',
+      'A neon sign reading OPEN buzzes over a candy store as ghosts pour rainbow sweets down the moonlit aisles',
+      'Glowing lettering hangs above a skeleton band playing in a candlelit dance hall under the harvest moon',
+    ]) {
+      const { errors } = lintHolidayRow({ ...base, scene });
+      expect(errors.some((e: string) => e.includes('§6.8'))).toBe(true);
+    }
+  });
+  it('keeps a scene that merely has bunting, flags or striped banners with no words', () => {
+    const scene =
+      'Striped bunting and paper flags flutter over a moonlit town square where skeletons waltz between lantern-lit carts of caramel apples';
+    const { errors } = lintHolidayRow({ ...base, scene });
+    expect(errors.some((e: string) => e.includes('§6.8'))).toBe(false);
+  });
+});

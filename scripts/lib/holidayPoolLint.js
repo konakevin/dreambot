@@ -91,6 +91,11 @@ function tripsProximity(text) {
 const FRANCHISE_EXTRA =
   /\b(?:jack skellington|skellington|sally|oogie|zero the ghost|halloween town|christmas town|coraline|wybie|other mother|beldam|miguel|dante|h[eé]ctor|ernesto|mama coco|coco\b|pixar|disney|burton|laika|selick|henry selick|nightmare before christmas|corpse bride|kubo|paranorman|boxtrolls|book of life)\b/i;
 
+// §6.8 (2026-09-08): a seed that asks for a banner / sign / label / lettering makes the model render TEXT
+// (the fun-brief "bats carrying a banner" shipped 7 rows with words on them). Scene + attire.
+const TEXT_INVITE =
+  /\b(?:banners?\s+(?:reading|that\s+reads?|spelling|with\s+(?:the\s+)?words?)|signs?\s+(?:reading|that\s+reads?)|reads?\s+["“']|reading\s+["“']|lettering|letters\s+spell|spelled\s+out|inscription|inscribed|written\s+(?:in|on|across)|words?\s+(?:painted|carved|glowing|written)|labels?\s+(?:reading|that\s+read)|chalkboard|marquee\s+(?:reading|that\s+reads?)|posters?\s+(?:reading|that\s+read)|billboard|neon\s+(?:sign|letters)|calligraphy|typography)\b/i;
+
 function lintHolidayRow(row) {
   const errors = [];
   const warnings = [];
@@ -106,6 +111,9 @@ function lintHolidayRow(row) {
   // signature objects ONLY in the pools that opt in (halloweenPools.js `lanterns`);
   // everywhere else they are the "lantern spam" that flattened 48 pools into one look.
   // Applies to halloween rows whose sub_theme maps to a known pool; unknown subs skip.
+  if (TEXT_INVITE.test(`${row.scene || ''} ${row.attire || ''}`)) {
+    errors.push('seed invites rendered TEXT (banner reading / sign / lettering) — §6.8');
+  }
   if (IP_TERM.test(`${row.scene || ''} ${row.attire || ''}`) || FRANCHISE_EXTRA.test(`${row.scene || ''} ${row.attire || ''}`)) {
     errors.push('franchise / character name in seed text — seeds carry the vibe, never the name');
   }
