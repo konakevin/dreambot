@@ -460,3 +460,15 @@ Total ≈ 2-3 sessions before Oct 31 with margin.
   ON, flux-1.1-pro is primary and the look list acts as membership only; until then the day-of is not
   1.1-pro-first. Kevin's call: leave as-is until the flip (recommended; Halloween is 7 weeks out) or trim
   the look rows' `smart_dream_models` to 1.1-pro now (one data update, no code).
+- 2026-09-08 — **Brand stamp LIVE (Kevin: "E · Painted-in brand (AI) i love this one"):** the Halloween
+  overlay is now the AI-regenerated stamp briefed with the brand — "DreamBot" in a rounded bold face
+  filled with the purple → pink → teal brand gradient, 2026 in the title's orange-gold, the lavender bot
+  mascot peeking over the banner holding its star (`gen-holiday-postcard.mjs --styles` brief in the
+  session log; concept page artifact 3f09a6b0 with 6 options). Set via `--set … --anchor bottom --width 70
+  --margin 4` → `assets/holiday/halloween_postcard_1788839191039.png`; live edge-fn test on a clean render
+  OK (2.7 s, 526×332 placed). **Consistency is by construction:** the stamp is ONE stored PNG pasted onto
+  every day-of render at the same width/anchor — it is never regenerated per dream. Rollback = point
+  `holidays.postcard_overlay_url` back at `assets/holiday/halloween_postcard_1788732509773.png`.
+  New-holiday rule (§8): brief the lettering generator with the brand gradient + mascot line so every
+  holiday's stamp carries the wordmark colours; the exact-wordmark composite (concept A/hybrid) remains
+  the fallback if a regeneration will not hold the gradient.
