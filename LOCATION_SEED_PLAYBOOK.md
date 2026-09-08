@@ -164,3 +164,17 @@ hook. (`nightly-dreams/index.ts` ~line 1994.)
 
 **Verify integration on `ai_generation_log.fallback_reasons` (look for `location_action` / `active_pose`),
 NOT by eyeballing the image.**
+
+## Themed / imagined worlds — depth + real-place hygiene (2026-09-08)
+- **Top up** a thin imagined world's pure-scene pool with `node scripts/gen-themed-postcard-spots.mjs
+  --locations "<a>,<b>" --to 50` — the rubric authors against the location card's own bible (atmosphere /
+  architecture / light / palette / cinematic phrases / must-include), applies the two eligibility rules and
+  drops refusal / people / lettering rows. (`gen-postcard-spots.js` is the REAL-city tool: its "reads as the
+  real place" rubric is wrong for a world.)
+- **Audit** an imagined world for real-world anchors with `node scripts/audit-themed-pool-realplaces.mjs
+  --locations "<a>,<b>" [--floor 45]`: the real-city generator left 30+ real landmarks in ghost town / saloon /
+  prehistoric (Bodie, the Long Branch, Stonehenge) that render as postcards of somewhere else. Flagged rows are
+  demoted (never below the floor) — top up first, then audit. Real places (Coney Island) keep their landmarks.
+- Sept 8 pass: race track garage, fairy cottage, witch's cottage, starship bridge, haunted mansion, foggy
+  graveyard, coney island, prehistoric, ghost town, saloon → 50+ eligible each; real-place demotions on the
+  five imagined ones.
