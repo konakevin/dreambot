@@ -481,3 +481,22 @@ Total ≈ 2-3 sessions before Oct 31 with margin.
   New-holiday rule (§8): brief the lettering generator with the brand gradient + mascot line so every
   holiday's stamp carries the wordmark colours; the exact-wordmark composite (concept A/hybrid) remains
   the fallback if a regeneration will not hold the gradient.
+- 2026-09-08 — **LAUNCH REVIEW (Kevin: "set this live and leave it … make sure all systems are go"):**
+  config (`holidays_enabled` true, postcard scope `day_of`, cutoff 20, costume 100, `subject_first`,
+  policy shadow), catalog (fall 9/15 → Thanksgiving flat 10 %, halloween 30-day window flat 10 %, peak
+  10/31 with overlay + 6 looks + photography ban), date sweep Sept 8 → Dec 1 (fall from 9/15, halloween
+  10/1-10/31, ★ day-of 10/31 only, nothing after 11/26), the delivery-correct simulation (every timezone
+  fires once at its own local-4am enqueue on 10/31), full suite (142 suites / 2888 tests, tsc, deno,
+  proximity 0, prettier), CI green on every push, preflight clean, monitor quiet on a non-peak day.
+  **Three fixes made during the review:** (1) `holidays.fall.day_of_enabled` → false (its peak is
+  Thanksgiving, which has no day-of pool / overlay yet — Thanksgiving gets its own row per §3.1; without
+  this the 11/26 day-of would have fired empty); (2) the Halloween WINDOW had only 14 legacy scene-only
+  rows (`holiday_scenes`, sub null) against Fall's 355 — seeded every window pool's scene rows to share
+  (photo-less users and pure-scene rolls draw from these for 30 days); (3) seedream-4 removed from the six
+  day-of looks' approved models (its 1440×2560 PNGs defer the postcard to the GitHub-throttled cron,
+  ~hourly in practice) so the inline overlay applies on every day-of render; the cron backfill stays as
+  the safety net. Live scenario renders (`🚀 LAUNCH CHECK`): fall window couple/solo → `holiday:fall`,
+  no postcard (scope), no pumpkins; halloween window couple/solo → `holiday:halloween`, no postcard;
+  day-of solo/couple → pool sub + look + costume + postcard; day-of scene-only → pool + postcard AND the
+  photography ban fired live (`day_of_medium_ban:photography->illustration`); a natural nightly today →
+  no holiday (nothing active until 9/15). Scene-only window renders re-verified with `force_pure_scene`.
