@@ -34,8 +34,8 @@ import Constants from 'expo-constants';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
-import { isUpdateRequired } from '@/lib/appVersion';
 import { isSupremeAdmin } from '@/lib/superAdmin';
+import { selectEligibleAnnouncement, type AnnouncementRow } from '@/lib/announcementEligibility';
 
 export interface Announcement {
   id: string;
@@ -46,6 +46,8 @@ export interface Announcement {
   cta_route: string | null;
   style: string;
 }
+
+export type { AnnouncementRow };
 
 // One announcement per session, across remounts.
 let shownThisSession = false;
@@ -79,17 +81,13 @@ export function useAnnouncement() {
       ]);
       if (error || !rows) return null;
       const seenIds = new Set((seen ?? []).map((s) => s.announcement_id));
-      const previewingAsAdmin = isSupremeAdmin(user?.id);
-      const candidate = rows.find(
-        (a) =>
-          !seenIds.has(a.id) &&
-          a.style === 'sheet' &&
-          (a.audience === 'all' || (a.audience === 'pro') === isPro) &&
-          (previewingAsAdmin ||
-            ((a.min_build == null || BUILD === 0 || BUILD >= a.min_build) &&
-              !isUpdateRequired(APP_VERSION, a.min_app_version)))
-      );
-      return candidate ?? null;
+      return selectEligibleAnnouncement(rows, {
+        seenIds,
+        isPro,
+        isAdmin: isSupremeAdmin(user?.id),
+        build: BUILD,
+        appVersion: APP_VERSION,
+      });
     },
     enabled: !!user,
     staleTime: 10 * 60_000,
