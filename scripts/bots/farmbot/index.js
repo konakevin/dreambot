@@ -90,6 +90,7 @@ const pathBuilders = {
   'farmbot-fall-cider-pressing': require('./paths/farmbot-fall-cider-pressing'),
   'farmbot-halloween-pumpkin-carving': require('./paths/farmbot-halloween-pumpkin-carving'),
   'farmbot-halloween-scarecrow-building': require('./paths/farmbot-halloween-scarecrow-building'),
+  'farmbot-halloween-trick-or-treating': require('./paths/farmbot-halloween-trick-or-treating'),
 };
 
 module.exports = {
@@ -199,6 +200,7 @@ module.exports = {
       'farmbot-halloween-costume-parade',
       'farmbot-halloween-pumpkin-carving',
       'farmbot-halloween-scarecrow-building',
+      'farmbot-halloween-trick-or-treating',
     ],
   },
 
