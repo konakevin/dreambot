@@ -84,6 +84,7 @@ const pathBuilders = {
   // separate `seasonalPaths` export below — see that key's own comment.
   'farmbot-fall-hayride': require('./paths/farmbot-fall-hayride'),
   'farmbot-fall-corn-maze': require('./paths/farmbot-fall-corn-maze'),
+  'farmbot-fall-campfire-evening': require('./paths/farmbot-fall-campfire-evening'),
 };
 
 module.exports = {
@@ -182,7 +183,7 @@ module.exports = {
   // ever draws in production) and engine_config.bots_seasonal_pct. See
   // FARMBOT_PATH_BUILD_STATE.md for the full build/QA status of each path.
   seasonalPaths: {
-    fall: ['farmbot-fall-hayride', 'farmbot-fall-corn-maze'],
+    fall: ['farmbot-fall-hayride', 'farmbot-fall-corn-maze', 'farmbot-fall-campfire-evening'],
     halloween: [],
   },
 
