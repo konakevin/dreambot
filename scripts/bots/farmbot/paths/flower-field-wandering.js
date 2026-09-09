@@ -12,6 +12,48 @@
  * No season lock — the wildflower field itself already carries the seasonal
  * signal loosely (spring/summer bloom), so this path rolls SEASON from the
  * shared pool for extra variety instead of hard-locking it.
+ *
+ * ANIMAL-SPOTLIGHT-PARITY FIX (2026-09-09, cross-path audit): this path
+ * originally put ANIMAL COMPANY dead last in the template (after SEASON &
+ * ATMOSPHERE, right before CAMERA) with THE CHARACTER placed 2nd, right
+ * after the place block. Confirmed via a real production `ai_prompt` this
+ * was actively truncating the animal content: a with-character render's
+ * Sonnet output cut off mid-word ("fireflies blink as tiny soft amber
+ * glowing,") right where the animal beat should have continued, then jumped
+ * straight to the closing sentence — the same `maxTokens: 400`
+ * brief-writing-budget mechanism documented on `barn-animal-shelter-
+ * interior.js` and `rainy-farmhouse-morning.js` (content positioned late in
+ * a dense template gets thinned/dropped first, independent of whether the
+ * hard cap is literally hit). Fixed to mirror `woodland-walk.js`'s proven
+ * pattern exactly: ANIMAL COMPANY now comes right after the place block and
+ * BEFORE THE CHARACTER, with the same "required, concrete, clearly-visible
+ * detail, not just background mood" qualifier on its header. Also added an
+ * explicit animal-richness reinforcement clause to the WITH-CHARACTER
+ * closing paragraph (the no-character branch already had one) so the animal
+ * gets comparable descriptive weight to the character, not a single short
+ * clause tacked on. Re-verified via 5 shadow-post test renders: animal
+ * content (when rolled) now appears with real, comparable detail, described
+ * before the character in the prompt, and the character branch still comes
+ * through complete and untruncated.
+ *
+ * ROUND 2 (same day, same audit): the round-1 reorder introduced the flip-
+ * side risk it was explicitly meant to be checked for. Real `ai_prompt` on
+ * 4 of 5 round-1 with-character+animal renders showed the ANIMAL COMPANY
+ * block ballooning into 3-5 invented sentences (well beyond the picked pool
+ * entry's own single sentence), burning enough of Sonnet's `maxTokens: 400`
+ * output budget that THE CHARACTER — even though it's the very next block —
+ * got cut off mid-description, dropping skin tone and/or eye color entirely
+ * in most samples (e.g. one render ended "She w," right before "wears...").
+ * Fixed with two small, positive-primary template directives (no reorder
+ * needed this time): the ANIMAL COMPANY header now asks for "vivid but
+ * efficient, a compact couple of sentences" ONLY when a character is also
+ * present (no cap in the no-character branch, where the animal IS the
+ * subject), and THE CHARACTER header now explicitly names hair/eye/skin as
+ * "essential identifying details ... state all three explicitly and
+ * completely." Re-verified via 5 more shadow-post renders (round 2): animal
+ * stayed concise-but-vivid and un-truncated in every with-character sample,
+ * and every with-character render's `ai_prompt` carried complete hair + eye
+ * + skin tone through to a clean sentence ending.
  */
 
 const { lookOverride } = require('../shared-blocks');
@@ -65,11 +107,12 @@ module.exports = ({ sharedDNA, picker }) => {
 
   return `${lookOverride(sharedDNA && sharedDNA.lookRegister)}━━━ THE FLOWER FIELD (the hero of the shot) ━━━
 ${field}
-${character ? `\n━━━ THE CHARACTER ━━━\n${character}\n` : ''}
+${animal ? `\n━━━ ANIMAL COMPANY (present in this render — a required, concrete, clearly-visible detail, not just background mood${character ? '; describe it vividly but efficiently in a compact couple of sentences, keeping room for the character below to receive full, complete attention' : ''}) ━━━\n${animal}\n` : ''}
+${character ? `\n━━━ THE CHARACTER (lead with their hair color, eye color, AND skin tone, stated explicitly and completely, before any clothing, pose, or activity detail — these three traits are essential and must not be dropped for space) ━━━\n${character}\n` : ''}
 ${activity ? `━━━ WHAT'S HAPPENING ━━━\n${activity}\n\n` : ''}━━━ SEASON & ATMOSPHERE ━━━
 ${season}
 ${weather}
-${animal ? `\n━━━ ANIMAL COMPANY ━━━\n${animal}\n` : ''}
+
 ━━━ CAMERA ━━━
 ${camera}
 ${magic ? `\n━━━ ONE SMALL SERENDIPITY TOUCH ━━━\n${magic}\n` : ''}
@@ -77,8 +120,8 @@ ${
   character
     ? `render a warm, unhurried flower-field wandering moment — the field, the
 character, and every bloom and butterfly rendered with equal loving
-richness, never a bare or empty composition. Every face in the frame, human
-and animal alike, stays clearly separate and fully legible.`
+richness, never a bare or empty composition.${animal ? ' The animal sharing the field with the character is rendered with just as much loving detail and presence as the character, never a small background accent.' : ''} Every face in the frame,
+human and animal alike, stays clearly separate and fully legible.`
     : `no human figure anywhere in the frame — this is a warm, unhurried
 flower-field wandering moment carried entirely by the wide-open field itself
 and whatever wildlife shares it, every bloom and butterfly rendered with

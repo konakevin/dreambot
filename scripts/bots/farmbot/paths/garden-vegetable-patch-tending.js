@@ -57,6 +57,25 @@
  * winter, incompatible with lush leafy rows), matching the "ongoing
  * tending across any season... bias toward summer/autumn harvest
  * abundance" brief.
+ *
+ * ANIMAL-SPOTLIGHT-PARITY FIX (2026-09-09) — audit found CHARACTER placed
+ * before the animal section on most sampled FarmBot paths, this one
+ * included; the maxTokens-400 late-content-drop bug meant animal content
+ * near the end of a dense with-character brief risked being thinned or
+ * dropped entirely. Reordered ANIMAL COMPANY to right after THE VEGETABLE
+ * GARDEN place block, BEFORE THE CHARACTER — mirrors
+ * barn-animal-shelter-interior.js/woodland-walk.js — and strengthened its
+ * wrapper text ("required, concrete... given the same rich, specific,
+ * loving detail as everything else"). Verification renders (10 shadow
+ * posts) came back with animal content surviving richly (a 4-piglet scene
+ * with individually-described poses; a farm cat with full fur/pose detail)
+ * and CHARACTER staying fully intact, not thinned by the reorder. One
+ * render also surfaced a "tiny gardener against enormous rolling hills"
+ * dwarfing artifact (Sonnet's own compression drawing on the WEATHER pool's
+ * "sweeping/vast" framing, not a pool bug) — fixed with an explicit "clear,
+ * present figure... not a distant tiny speck" guard in the closing
+ * reinforcement (same pattern as woodland-walk.js's proven fix); 0/5
+ * recurrence on re-verification.
  */
 
 const { lookOverride } = require('../shared-blocks');
@@ -125,18 +144,21 @@ module.exports = ({ sharedDNA, picker }) => {
 
   return `${lookOverride(sharedDNA && sharedDNA.lookRegister)}━━━ THE VEGETABLE GARDEN (the hero of the shot) ━━━
 ${place}
+${animal ? `\n━━━ ANIMAL COMPANY (present in this render — a required, concrete, clearly-visible presence, not just background mood, given the same rich, specific, loving detail as everything else in the frame) ━━━\n${animal}\n` : ''}
 ${character ? `\n━━━ THE CHARACTER ━━━\n${character}\n` : ''}
 ${activity ? `━━━ WHAT'S HAPPENING (tending the patch) ━━━\n${activity}\n\n` : ''}━━━ ATMOSPHERE ━━━
 ${weather}
-${animal ? `\n━━━ ANIMAL COMPANY ━━━\n${animal}\n` : ''}
+
 ━━━ CAMERA ━━━
 ${camera}
 ${magic ? `\n━━━ ONE SMALL SERENDIPITY TOUCH ━━━\n${magic}\n` : ''}
 ${
   character
-    ? `render a warm, unhurried vegetable-patch tending moment — the garden and
-the character rendered with equal loving richness, the ripe vegetables,
-tools, and soil all clearly legible, never a bare or empty composition.
+    ? `render a warm, unhurried vegetable-patch tending moment — the garden${animal ? ', the animal,' : ''} and
+the character all rendered with equal loving richness${animal ? ' — the animal given just as much rich, specific detail as the character, never reduced to a small tacked-on mention' : ''}, the ripe vegetables,
+tools, and soil all clearly legible, never a bare or empty composition, the
+character a clear, present figure working right among the garden rows,
+close at hand, not a distant tiny speck lost against the landscape beyond.
 Every face in the frame, human and animal alike, stays clearly separate
 and fully legible.`
     : `no human figure anywhere in the frame — this is a warm, quietly

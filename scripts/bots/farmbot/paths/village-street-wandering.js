@@ -26,6 +26,61 @@
  * unfiltered, same as quiet-sunset-on-the-porch) since it's light/atmosphere
  * phrasing rather than a competing landscape, and gives real season/weather
  * variety across renders.
+ *
+ * ANIMAL-SPOTLIGHT-PARITY FIX (2026-09-09, cross-path audit): this path
+ * originally put the animal block dead last (labeled "AN ANIMAL ABOUT",
+ * placed AFTER ATMOSPHERE, right before CAMERA) with the villager(s) block
+ * placed 2nd, right after the place block. Confirmed via a real production
+ * `ai_prompt` this was actively truncating the animal content: a
+ * no-character render's Sonnet output cut off mid-sentence ("Nestled in a
+ * bed of golden hay beside the wall,") right where the guaranteed
+ * `pickPureSceneLife` pick should have continued — the same `maxTokens: 400`
+ * brief-writing-budget mechanism documented on `barn-animal-shelter-
+ * interior.js` and `rainy-farmhouse-morning.js` (content positioned late in
+ * a dense template gets thinned/dropped first). Fixed to mirror
+ * `woodland-walk.js`'s proven place-led pattern: the animal block now comes
+ * right after THE STREET place block and BEFORE the villager(s) block,
+ * relabeled from "AN ANIMAL ABOUT" to the neutral, co-equal "ANIMAL
+ * COMPANY" (matching the precedent files' label) with the same "required,
+ * concrete, clearly-visible detail, not just background mood" qualifier.
+ * Also added an explicit animal-richness reinforcement clause to the
+ * WITH-VILLAGER(S) closing paragraph (the no-character branch already had
+ * one) so the animal gets comparable descriptive weight, not a single short
+ * clause tacked on. Re-verified via 5 shadow-post test renders: animal
+ * content (when rolled) now appears with real, comparable detail, described
+ * before the villager(s) in the prompt, and the villager branch still comes
+ * through complete and untruncated.
+ *
+ * NOTE for the orchestrator (flagged, not changed): this path's with-
+ * character animal roll is `animalChance: 0.35` off a `['low']`-only density
+ * filter (26/120 ANIMAL_COMPANIONS entries) — lower on both axes than
+ * woodland-walk's `0.5` / `['low','medium']` (66 entries) and flower-field's
+ * `0.45` / `['low','medium']`. This may well be intentional (a busy paved
+ * street is a plausible lower-animal-density setting than a woodland or
+ * flower field), but it's a real, measurable contributor to the ~15%
+ * animal-present outlier rate cited in the audit. Left as-is per the task's
+ * explicit instruction not to change probabilities without discussion —
+ * Kevin's call whether to widen the density filter to `['low','medium']` or
+ * bump `animalChance` to bring this path in line with its siblings.
+ *
+ * ROUND 2 (same day, same audit): the round-1 reorder introduced the flip-
+ * side risk it was explicitly meant to be checked for. Real `ai_prompt` on
+ * round-1 with-villager+animal and with-villager-only renders showed the
+ * villager's own hair/eye/skin-tone detail getting cut off mid-word in a
+ * meaningful share of samples (e.g. one render ended "His deep ha," right
+ * before naming the eye color; another ended mid-hair-description with no
+ * skin-tone mention at all) — the same `maxTokens: 400` output-budget
+ * mechanism, now landing on the villager block instead of the animal.
+ * Fixed with two small, positive-primary template directives (no reorder
+ * needed this time): the ANIMAL COMPANY header now asks for "vivid but
+ * efficient, a compact couple of sentences" ONLY when a villager is also
+ * present in that render, and the villager header now explicitly names
+ * hair/eye/skin as "essential identifying details ... state all three
+ * explicitly and completely for each villager." Re-verified via 5 more
+ * shadow-post renders (round 2): animal stayed concise-but-vivid and
+ * un-truncated whenever a villager was also present, and every
+ * with-villager render's `ai_prompt` carried complete hair + eye + skin
+ * tone through to a clean sentence ending.
  */
 
 const { lookOverride } = require('../shared-blocks');
@@ -107,13 +162,13 @@ module.exports = ({ sharedDNA, picker }) => {
 
   return `${lookOverride(sharedDNA && sharedDNA.lookRegister)}━━━ THE STREET (the hero of the shot) ━━━
 ${place}
-${
+${animal ? `\n━━━ ANIMAL COMPANY (present in this render — a required, concrete, clearly-visible detail, not just background mood${characterA ? '; describe it vividly but efficiently in a compact couple of sentences, keeping room for the villager(s) below to receive full, complete attention' : ''}) ━━━\n${animal}\n` : ''}${
   characterA
-    ? `\n━━━ ${headcount >= 2 ? 'VILLAGERS' : 'A VILLAGER'} PASSING THROUGH ━━━\n${characterA}\n${characterB || ''}\n`
+    ? `\n━━━ ${headcount >= 2 ? 'VILLAGERS' : 'A VILLAGER'} PASSING THROUGH (lead with each villager's hair color, eye color, AND skin tone, stated explicitly and completely, before any clothing, pose, or activity detail — these three traits are essential and must not be dropped for space) ━━━\n${characterA}\n${characterB || ''}\n`
     : ''
 }${activity ? `━━━ WHAT'S HAPPENING (incidental, unposed) ━━━\n${activity}\n\n` : ''}━━━ ATMOSPHERE ━━━
 ${weather}
-${animal ? `\n━━━ AN ANIMAL ABOUT ━━━\n${animal}\n` : ''}
+
 ━━━ CAMERA ━━━
 ${camera}
 ${magic ? `\n━━━ ONE SMALL SERENDIPITY TOUCH ━━━\n${magic}\n` : ''}
@@ -122,7 +177,7 @@ ${
     ? `render a quiet, charming village-street wandering moment — the cobblestones,
 flower boxes, and shopfront architecture rendered with just as much loving
 richness as any villager in frame, who reads as passing through the scene
-naturally, never posed or staged. This is NOT a market or shopping scene —
+naturally, never posed or staged.${animal ? ' Any animal present shares full, equal billing in the frame, rendered with just as much loving detail and presence as the villager, never a small background accent.' : ''} This is NOT a market or shopping scene —
 no stalls, no goods laid out for sale, no price boards or displays; the
 street itself carries the moment. Every face in the frame, human and animal
 alike, stays clearly separate and fully legible.`

@@ -204,7 +204,7 @@ module.exports = {
   // the moment its QA is signed off — don't leave entries here longer than
   // the QA session that added them (they silently suppress that path's
   // normal live public posting the whole time they're listed).
-  shadowPaths: ['village-street-wandering', 'flower-field-wandering'],
+  shadowPaths: [],
 
   cycleAllPaths: true,
 

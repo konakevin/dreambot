@@ -45,6 +45,38 @@
  *     actually rendered by Flux. Filtered to the 4 leisure entries that are
  *     genuinely picnic-blanket-compatible (open hay, a fence line, a
  *     blanket in grass/dark) instead of the full leisure tag.
+ *
+ * ANIMAL-SPOTLIGHT-PARITY FIX (2026-09-09) — audit found CHARACTER was
+ * placed before the animal section on 8/10 sampled FarmBot paths, and this
+ * one's baseline DB ai_prompt confirmed the maxTokens-400 late-content-drop
+ * bug hit the ANIMAL VISITOR section specifically (it sat dead last, after
+ * props/season/weather, and was silently dropped from every sampled
+ * render). Reordered to ANIMAL COMPANY (relabeled from the diminishing "AN
+ * ANIMAL VISITOR") right after the fixed picnic anchor, BEFORE THE
+ * CHARACTER — mirrors barn-animal-shelter-interior.js/woodland-walk.js.
+ * Round 1 re-verification then found a NEW regression this reorder
+ * introduced: `${food}` used to sit directly in the picnic anchor block
+ * (before character), and one food pool entry is a 4-item enumerated list
+ * that ate enough budget to truncate CHARACTER down to a single clause.
+ * Fixed by moving `${food}` out of the anchor block into THE SPREAD &
+ * SETTING section (after character/activity) — food is a nice-to-have
+ * layer, not cast-determining, so it's the right thing to deprioritize.
+ * Round 2 also caught a "rendered tiny against the wide meadow" dwarfing
+ * artifact on a with-character render (Sonnet's own compression, not a
+ * pool bug) — added an explicit "clear, present figure... not a distant
+ * tiny speck" guard to the closing reinforcement (same fix pattern as
+ * woodland-walk.js). Round 2 also found the no-character branch's
+ * `pickPureSceneLife()`-guaranteed animal pick can still silently fail to
+ * survive Sonnet's own paraphrase (papaya-guava-orchard's documented
+ * residual risk) — strengthened the wrapper to "not optional, must
+ * actually appear" and now repeat the animal content a second time
+ * verbatim in the no-character closing paragraph. Verified via 15 shadow
+ * renders across 3 rounds: 0/10 character-thinning or dwarfing recurrences
+ * in rounds 2-3; animal survives with rich, comparable detail in the large
+ * majority of renders where it's rolled (residual non-determinism on the
+ * no-character guarantee is a known bot-wide risk, not unique to this
+ * path — see the papaya-guava-orchard lesson in
+ * BOT_SCENE_QUALITY_PLAYBOOK.md).
  */
 
 const { lookOverride } = require('../shared-blocks');
@@ -111,31 +143,34 @@ module.exports = ({ sharedDNA, picker }) => {
       ? picker.pickWithRecency(pools.GENTLE_MAGIC.map((e) => e.description), 'picnic_meadow_magic')
       : null;
 
-  return `${lookOverride(sharedDNA && sharedDNA.lookRegister)}${character ? `━━━ THE CHARACTER ━━━\n${character}\n\n` : ''}━━━ THE PICNIC ━━━
+  return `${lookOverride(sharedDNA && sharedDNA.lookRegister)}━━━ THE PICNIC ━━━
 A checkered picnic blanket spread flat across open meadow grass, a woven
 wicker basket sitting open near its center with a striped cloth lining
 spilling gently over the rim. Loose wildflowers are scattered across the
 blanket's weave, a few more tucked into the basket's handle, and the wide
 open sky stretches pale and unbroken above the meadow with nothing but soft
 drifting clouds overhead.
+${animal ? `\n━━━ ANIMAL COMPANY (present in this render — a required, concrete, clearly-visible presence, not just background mood; it is not optional, it must actually appear in the render, given the same rich, specific, loving detail as everything else in the frame) ━━━\n${animal}\n` : ''}
+${character ? `\n━━━ THE CHARACTER ━━━\n${character}\n` : ''}
+${activity ? `━━━ WHAT'S HAPPENING (unhurried, out in the open air) ━━━\n${activity}\n\n` : ''}━━━ THE SPREAD & SETTING ━━━
 ${food}
-
-${activity ? `━━━ WHAT'S HAPPENING (unhurried, out in the open air) ━━━\n${activity}\n\n` : ''}━━━ THE SETTING ━━━
 ${props}
 ${season}
 ${weather}
-${animal ? `\n━━━ AN ANIMAL VISITOR ━━━\n${animal}\n` : ''}
+
 ━━━ CAMERA ━━━
 ${camera}
 ${magic ? `\n━━━ ONE SMALL SERENDIPITY TOUCH ━━━\n${magic}\n` : ''}
 ${
   character
-    ? `render a warm, unhurried meadow-picnic moment — the character, the picnic
+    ? `render a warm, unhurried meadow-picnic moment — the character${animal ? ', the animal,' : ''} the picnic
 spread, and the open meadow all rendered with equal loving detail, never a
-backdrop. Every face in the frame, human and animal alike, stays clearly
-separate and fully legible, each face keeping its own open space with a
-visible gap of air between it and any other face, so every expression reads
-clean and unambiguous.`
+backdrop${animal ? ' — the animal given just as much rich, specific detail as the character, never reduced to a small tacked-on mention' : ''}, the character a clear, present figure at the heart of the picnic, close
+at hand, not a distant tiny speck lost against the meadow beyond. Every face
+in the frame, human and animal alike, stays clearly separate and fully
+legible, each face keeping its own open space with a visible gap of air
+between it and any other face, so every expression reads clean and
+unambiguous.`
     : `no human figure anywhere in the frame — this is a warm, unhurried
 meadow-picnic still-life, the blanket freshly laid and waiting. The picnic
 spread and the open meadow carry the whole frame, rendered with rich loving
@@ -143,6 +178,6 @@ detail, never plain or empty. Every object in view — the blanket's woven
 texture, the basket, the food, the scattered wildflowers, the meadow grass
 itself — is drawn with the same charming anime-style linework, flat cel
 highlights, and illustrated color treatment as the rest of this bot's
-world.${animal ? ' Any animal present reads as a real, naturally distinct creature with open air around it; any small insect, bird, or floating detail (petals, dust motes, fireflies) stays simple and unposed, with no invented face or cartoon expression.' : ''}`
+world.${animal ? ` The animal company named above must clearly and visibly appear in the render — ${animal} It reads as a real, naturally distinct creature with open air around it; any small insect, bird, or floating detail (petals, dust motes, fireflies) stays simple and unposed, with no invented face or cartoon expression.` : ''}`
 } no text, no words, no watermarks, gallery quality`;
 };
