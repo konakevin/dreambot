@@ -76,6 +76,14 @@ const pathBuilders = {
   'tropical-flower-garden': require('./paths/tropical-flower-garden'),
   'tropical-stream-crossing': require('./paths/tropical-stream-crossing'),
   'papaya-guava-orchard': require('./paths/papaya-guava-orchard'),
+
+  // SEASONAL paths (Fall + Halloween, 2026-09-09 build) — required here so
+  // buildBrief() can resolve them, but deliberately NOT listed in `paths`
+  // below. They are drawn ONLY during their calendar holiday window via the
+  // fleet-wide seasonal mechanism (scripts/lib/botSeasonal.js), from the
+  // separate `seasonalPaths` export below — see that key's own comment.
+  'farmbot-fall-hayride': require('./paths/farmbot-fall-hayride'),
+  'farmbot-fall-corn-maze': require('./paths/farmbot-fall-corn-maze'),
 };
 
 module.exports = {
@@ -165,6 +173,18 @@ module.exports = {
   ],
 
   cycleAllPaths: true,
+
+  // SEASONAL paths (2026-09-09) — NEVER mixed into `paths` above (that would
+  // fire Halloween/Fall content year-round). Drawn only during each
+  // holiday's live calendar window (public.holidays) via botSeasonal.js's
+  // resolveSeasonalPath(), gated by engine_config.bots_seasonal_enabled
+  // (master switch, defaults false — must be flipped on before any of these
+  // ever draws in production) and engine_config.bots_seasonal_pct. See
+  // FARMBOT_PATH_BUILD_STATE.md for the full build/QA status of each path.
+  seasonalPaths: {
+    fall: ['farmbot-fall-hayride', 'farmbot-fall-corn-maze'],
+    halloween: [],
+  },
 
   poolByName(name) {
     if (!(name in pools)) throw new Error(`FarmBot.poolByName: unknown pool "${name}"`);
