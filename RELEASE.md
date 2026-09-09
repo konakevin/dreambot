@@ -270,17 +270,27 @@ users off old builds WITHOUT an App Store change:
   available" nudge. Bump it to the new version AFTER the build is live on the App
   Store (not before — you'd nudge users toward a version they can't download yet).
 - **`min_app_version`** — clients below this get a **blocking, non-dismissible**
-  "Update Required" wall. Only raise this to kill a genuinely broken/unsafe old
-  build. Leave it well behind `latest` normally.
+  "Update Required" wall, with **no admin exemption at all** (confirmed from
+  `ForceUpdateGate.tsx` — no `isSupremeAdmin` check anywhere in it). Only raise
+  this to kill a genuinely broken/unsafe old build, or when explicitly asked to
+  hard-require the new version — it has zero escape hatch, not even for Kevin's
+  own dev device if it's below this version.
 
-Current values (2026-09-04): **`min_app_version = '1.1.0'`** and
-**`latest_app_version = '1.1.0'`** — every client below 1.1.0 is HARD-blocked
-(forced upgrade to the latest build). Set them from the dashboard SQL editor, or
-(what the agent does) a service-role PATCH on the `engine_config` singleton:
+⚠️ **This is a DIFFERENT gate from `announcements.min_app_version`** (the per-row
+column on a single announcement, which only controls whether one promo sheet is
+eligible — no app-wide blocking, and the supreme admin IS exempt there). Don't
+conflate the two when told to "bump the required version" — see the `release`
+Claude Code skill (`.claude/skills/release/SKILL.md`) for the full disambiguation.
+
+Current values: see `RELEASES.md`'s latest row, or query live —
+`SELECT min_app_version, latest_app_version FROM engine_config;` — this file's
+own hardcoded example values go stale fast and are not the source of truth. Set
+them from the dashboard SQL editor, or (what the agent does) a service-role
+PATCH on the `engine_config` singleton:
 
 ```sql
-UPDATE public.engine_config SET latest_app_version = '1.1.0';  -- after 1.1.0 is live
-UPDATE public.engine_config SET min_app_version   = '1.1.0';   -- forces the upgrade
+UPDATE public.engine_config SET latest_app_version = '<X.Y.Z>';  -- after it's live (soft nudge)
+UPDATE public.engine_config SET min_app_version   = '<X.Y.Z>';   -- hard-forces the upgrade, ask before doing this
 ```
 
 ⚠️ `min_app_version` must never exceed the version actually LIVE on the App Store,
