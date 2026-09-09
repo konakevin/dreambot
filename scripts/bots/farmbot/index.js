@@ -88,6 +88,8 @@ const pathBuilders = {
   'farmbot-halloween-barn-party': require('./paths/farmbot-halloween-barn-party'),
   'farmbot-halloween-costume-parade': require('./paths/farmbot-halloween-costume-parade'),
   'farmbot-fall-cider-pressing': require('./paths/farmbot-fall-cider-pressing'),
+  'farmbot-halloween-pumpkin-carving': require('./paths/farmbot-halloween-pumpkin-carving'),
+  'farmbot-halloween-scarecrow-building': require('./paths/farmbot-halloween-scarecrow-building'),
 };
 
 module.exports = {
@@ -192,7 +194,12 @@ module.exports = {
       'farmbot-fall-campfire-evening',
       'farmbot-fall-cider-pressing',
     ],
-    halloween: ['farmbot-halloween-barn-party', 'farmbot-halloween-costume-parade'],
+    halloween: [
+      'farmbot-halloween-barn-party',
+      'farmbot-halloween-costume-parade',
+      'farmbot-halloween-pumpkin-carving',
+      'farmbot-halloween-scarecrow-building',
+    ],
   },
 
   poolByName(name) {
