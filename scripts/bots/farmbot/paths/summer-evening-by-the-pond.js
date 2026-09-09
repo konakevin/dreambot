@@ -5,6 +5,23 @@
  * named first) — season LOCKED to summer since it's in the path name.
  * Uses the path-bespoke POND_PLACE pool (already lush by its own recipe)
  * as the setting anchor; character + activity + animal layer warmly on top.
+ *
+ * ANIMAL-SPOTLIGHT-PARITY FIX (2026-09-09): an audit found this path put
+ * the CHARACTER block before the ANIMAL COMPANY block in the template — a
+ * real defect against the maxTokens: 400 brief-writing lesson documented
+ * fleet-wide in FARMBOT_PATH_BUILD_STATE.md (content positioned LATE in
+ * the input brief reliably gets thinned/dropped by Sonnet, independent of
+ * whether the hard token cap is hit). Confirmed via real DB `ai_prompt`
+ * rows before this fix: one render's animal pick never appeared in the
+ * final Flux prompt at all (and the trailing character description was
+ * cut off mid-word), another had the character description itself
+ * truncated mid-word after a verbose POND_PLACE pick ate the budget.
+ * Reordered to mirror barn-animal-shelter-interior.js / woodland-walk.js:
+ * ANIMAL COMPANY now comes right after THE POND, ahead of THE CHARACTER,
+ * with the same "required, concrete, clearly-visible detail, not just
+ * background mood" framing those precedent files use. Re-verified via
+ * fresh shadow-post renders (see FARMBOT_PATH_BUILD_STATE.md) that this
+ * does not thin the character block in with-character renders.
  */
 
 const { lookOverride } = require('../shared-blocks');
@@ -50,10 +67,11 @@ module.exports = ({ sharedDNA, picker }) => {
 
   return `${lookOverride(sharedDNA && sharedDNA.lookRegister)}━━━ THE POND (the hero of the shot) ━━━
 ${pond}
+${animal ? `\n━━━ ANIMAL COMPANY (present in this render — a required, concrete, clearly-visible detail, not just background mood) ━━━\n${animal}\n` : ''}
 ${character ? `\n━━━ THE CHARACTER ━━━\n${character}\n` : ''}
 ${activity ? `━━━ WHAT'S HAPPENING ━━━\n${activity}\n\n` : ''}━━━ ATMOSPHERE ━━━
 ${weather}
-${animal ? `\n━━━ ANIMAL COMPANY ━━━\n${animal}\n` : ''}
+
 ━━━ CAMERA ━━━
 ${camera}
 ${magic ? `\n━━━ ONE SMALL SERENDIPITY TOUCH ━━━\n${magic}\n` : ''}
