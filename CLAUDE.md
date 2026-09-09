@@ -218,6 +218,16 @@ for the public feed + serves deep-link share targets.**
   `dream_queue` (per-weight concurrency caps) over direct `nightly-dreams`/`generate-dream` calls, and avoid
   the top-of-hour (`:00`) + ~08:00 UTC windows where the crons + nightly already peak. QA render tooling
   (`qa-bot-model-matrix.js`) is already headroom-gated; new heavy scripts must do the same.
+- **`get_feed` (and ANY hot RPC with optional `(p IS NULL OR col = p)` filters) MUST be `LANGUAGE plpgsql`
+  with `SET plan_cache_mode = force_custom_plan` — NEVER `LANGUAGE sql`.** A SQL-language function plans
+  its body with the parameters UNKNOWN, so optional filters get default selectivities → the planner expects
+  a few hundred candidates instead of ~25k → per-row index probes. (2026-09-09: `get_feed` had crept to
+  2-3 s per call / 108k buffers on every tab while the identical body as a statement ran 0.4 s / 7.7k; no
+  commit caused it — data growth made the bad plan expensive. Fixed by migration 488: verbatim body inside
+  plpgsql `RETURN QUERY` + `#variable_conflict use_column` + force_custom_plan → 0.3-0.4 s.) Locked by
+  `__tests__/lib/getFeedPlanGuard.test.ts` (fails if the latest get_feed migration is `LANGUAGE sql`).
+  Diagnose any slow RPC the same way: `extensions.pg_stat_statements` `shared_blks_hit / calls` vs an
+  inline `EXPLAIN (ANALYZE, BUFFERS)` of the body with literal values — a big gap = this trap.
 - **NEVER unscoped deletes on `bot_seeds` / `nightly_seeds`.** Scope by category prefix; `SELECT category,
 count(*) GROUP BY category` first. (The April 2026 incident wiped both with one unscoped delete.)
 - **NEVER `git add -A` / `git add .`** — explicit paths only (shared working tree).

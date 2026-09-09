@@ -6,6 +6,13 @@ design state in the `project_feed_algorithm_v4_state` memory). Part 1
 (candidate windowing, migration 391) is live and expected to hold ~150-350ms
 per call at current scale.
 
+**2026-09-09 (migration 488):** the per-call cost is dominated by PLANNING, not
+the catalog size. `get_feed` as a `LANGUAGE sql` function planned with unknown
+parameters and drifted to 2-3 s / 108k buffers; the same body as plpgsql
+`RETURN QUERY` + `force_custom_plan` runs 0.3-0.4 s / 10.5k. Measure the
+triggers below with `extensions.pg_stat_statements` (available; see CLAUDE.md
+Hard rules for the diagnosis recipe) before assuming the Part 2 rewrite is due.
+
 ## Why this exists
 
 `get_feed` is the app's hottest query: every Home page/refresh/launch, the
