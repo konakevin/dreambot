@@ -3,9 +3,26 @@
  * ANNOUNCEMENTS_PLAN.md).
  *
  * On home mount (+ periodic staleness) fetch active announcements the user
- * hasn't seen, filter by audience + min_build, and surface the highest-
- * priority one. At most ONE announcement is shown per app session (module
- * latch) so stacked rows can't spam — the next one shows next session.
+ * hasn't seen, filter by audience + min_build + min_app_version, and surface
+ * the highest-priority one. At most ONE announcement is shown per app
+ * session (module latch) so stacked rows can't spam — the next one shows
+ * next session.
+ *
+ * min_build (native build number, migration 333) and min_app_version
+ * (marketing version string, e.g. "1.2.0", migration 487) are two
+ * independent floors — either or both may be set on a row. min_app_version
+ * exists because a marketing version can be known and set AHEAD of a
+ * release (it's literally what app.config.js is about to be bumped to),
+ * where min_build can't be known until EAS actually mints that build's
+ * number. Both fail OPEN (never gate) on a null/malformed value — see
+ * lib/appVersion.ts's compareVersions doc.
+ *
+ * The supreme admin (lib/superAdmin.ts) is exempt from BOTH version gates
+ * client-side, mirroring migration 483's RLS preview carve-out (which only
+ * bypasses is_active/starts_at/existing_users_only — it says nothing about
+ * min_build/min_app_version, so without this a draft announcement gated to
+ * an unreleased version would be invisible even to the admin's own preview,
+ * on whatever build they happen to be running day to day).
  *
  * Seen-state is account-bound (announcement_seen), so dismissals survive
  * reinstalls and fresh accounts see current announcements.
@@ -13,9 +30,12 @@
 
 import { useCallback } from 'react';
 import * as Application from 'expo-application';
+import Constants from 'expo-constants';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { isUpdateRequired } from '@/lib/appVersion';
+import { isSupremeAdmin } from '@/lib/superAdmin';
 
 export interface Announcement {
   id: string;
@@ -35,6 +55,7 @@ export function resetAnnouncementSessionLatch() {
 }
 
 const BUILD = Number(Application.nativeBuildVersion) || 0;
+const APP_VERSION = Constants.expoConfig?.version ?? null;
 
 export function useAnnouncement() {
   const user = useAuthStore((s) => s.user);
@@ -50,18 +71,23 @@ export function useAnnouncement() {
       const [{ data: rows, error }, { data: seen }] = await Promise.all([
         supabase
           .from('announcements')
-          .select('id,title,body,image_url,cta_label,cta_route,style,audience,min_build,priority')
+          .select(
+            'id,title,body,image_url,cta_label,cta_route,style,audience,min_build,min_app_version,priority'
+          )
           .order('priority', { ascending: false }),
         supabase.from('announcement_seen').select('announcement_id'),
       ]);
       if (error || !rows) return null;
       const seenIds = new Set((seen ?? []).map((s) => s.announcement_id));
+      const previewingAsAdmin = isSupremeAdmin(user?.id);
       const candidate = rows.find(
         (a) =>
           !seenIds.has(a.id) &&
           a.style === 'sheet' &&
           (a.audience === 'all' || (a.audience === 'pro') === isPro) &&
-          (a.min_build == null || BUILD === 0 || BUILD >= a.min_build)
+          (previewingAsAdmin ||
+            ((a.min_build == null || BUILD === 0 || BUILD >= a.min_build) &&
+              !isUpdateRequired(APP_VERSION, a.min_app_version)))
       );
       return candidate ?? null;
     },

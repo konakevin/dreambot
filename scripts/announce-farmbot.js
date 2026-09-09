@@ -9,17 +9,21 @@
  * telling everyone to "meet FarmBot" while the account is still
  * follower-gated private would be a broken, confusing experience.
  *
- * Run this ONLY at actual go-live, after:
+ * Tied to the 1.2.0 release via `min_app_version: '1.2.0'` (migration 487) —
+ * set ahead of time, right here, so no client below 1.2.0 can ever see this
+ * announcement regardless of when `is_active` gets flipped. See
+ * FARMBOT_GOLIVE_RUNBOOK.md for the full ordered go-live sequence:
  *   1. FarmBot's account is flipped public (UPDATE users SET is_public=true
  *      WHERE username='FarmBot').
  *   2. A bot_schedules row exists for FarmBot (so it starts posting on its
  *      own cadence) — currently has none, by design, while private.
- *   3. Kevin gives the explicit go-ahead.
+ *   3. 1.2.0 is actually live on the App Store.
+ *   4. Kevin gives the explicit go-ahead → `SELECT activate_announcement('farmbot-launch');`
  *
- * Ships with is_active=false so even an accidental early run stays dark —
- * flip it live with:
- *   UPDATE public.announcements SET is_active = true, starts_at = now()
- *   WHERE id = 'farmbot-launch';
+ * Safe to re-run any time before go-live (upserts, ships is_active=false) —
+ * this is how the hero image / copy get updated as they're refined; running
+ * it again never accidentally goes live (is_active + min_app_version both
+ * gate that).
  *
  * Content precedent: the locations-redesign announcement ("We redecorated
  * ✨") — short punchy title, 1-2 sentence playful body, a preview image, one
@@ -45,19 +49,25 @@ async function main() {
         id: 'farmbot-launch',
         title: 'Introducing FarmBot 🌾',
         body: 'Meet our newest addition to the neighborhood, FarmBot! It dreams up cozy farmhouse mornings, sleepy barn animals, and gardens in full bloom. Come say hi.',
-        // Market-town-square hero concept (Anime background-painter look,
-        // cherry-blossom market scene) — Kevin's pick from the 6-concept
-        // vote (scripts/gen-farmbot-announcement-hero.js). Has some faint
-        // garbled text on background shop signage (the known market-square
-        // Flux quirk); Kevin explicitly accepted it as-is, not worth
-        // re-rendering over.
+        // Harvest Festival hero concept (2026-09-09 refresh, v2 vote —
+        // scripts/gen-farmbot-announcement-hero-v2.js, rewritten against
+        // the current 30-path roster + current look register after the old
+        // v1 script's paths were discarded). Hay wagon, string lights,
+        // pumpkins at sunset, character right in frame — Kevin's pick.
+        // Supersedes the original market-town-square hero.
         image_url:
-          'https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/754ad892-3e52-41d9-9364-e41fe081812c/announcement-hero-market-square.jpg',
+          'https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/754ad892-3e52-41d9-9364-e41fe081812c/announcement-hero-harvest-festival.jpg',
         cta_label: 'Meet FarmBot',
         cta_route: `/user/${FARMBOT_USER_ID}`,
         style: 'sheet',
         audience: 'all',
-        min_build: null, // no new client code needed — just a DB is_public flip
+        min_build: null, // native build number isn't known until 1.2.0 is actually built (see min_app_version instead)
+        // Marketing-version floor (migration 487) — set ahead of the actual
+        // build, so no client below 1.2.0 can ever see this, regardless of
+        // is_active timing. Client compares this against
+        // Constants.expoConfig.version via lib/appVersion.ts (fail-open,
+        // useAnnouncement.ts).
+        min_app_version: '1.2.0',
         starts_at: new Date().toISOString(), // overwritten at real go-live anyway
         ends_at: null,
         // The locations-redesign announcement ("We redecorated ✨", priority

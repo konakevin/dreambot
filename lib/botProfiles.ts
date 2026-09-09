@@ -65,6 +65,11 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
     username: 'faebot',
     description: 'Enchanted fae realms, fairy folk, and woodland magic.',
   },
+  farmbot: {
+    username: 'farmbot',
+    description:
+      'Cozy farm life: sleepy barns, orchards, harvest festivals, and tropical fruit groves.',
+  },
   // glowbot: DEACTIVATED 2026-05-22 — retired from the app (off-brand
   // text-overlay content). Filtered out at the source in useBotUsers, so
   // even if a profile entry existed it wouldn't render. Re-enable: restore

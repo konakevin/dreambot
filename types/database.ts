@@ -190,6 +190,7 @@ export type Database = {
           id: string;
           image_url: string | null;
           is_active: boolean;
+          min_app_version: string | null;
           min_build: number | null;
           priority: number;
           starts_at: string;
@@ -207,6 +208,7 @@ export type Database = {
           id: string;
           image_url?: string | null;
           is_active?: boolean;
+          min_app_version?: string | null;
           min_build?: number | null;
           priority?: number;
           starts_at?: string;
@@ -224,6 +226,7 @@ export type Database = {
           id?: string;
           image_url?: string | null;
           is_active?: boolean;
+          min_app_version?: string | null;
           min_build?: number | null;
           priority?: number;
           starts_at?: string;
@@ -3814,6 +3817,7 @@ export type Database = {
     Functions: {
       accept_invite: { Args: { p_game_id: string }; Returns: Json };
       account_created_before: { Args: { ts: string }; Returns: boolean };
+      activate_announcement: { Args: { p_id: string }; Returns: undefined };
       admin_ban_user: { Args: { p_user_id: string }; Returns: undefined };
       admin_db_connections: {
         Args: never;
