@@ -85,6 +85,7 @@ const pathBuilders = {
   'farmbot-fall-hayride': require('./paths/farmbot-fall-hayride'),
   'farmbot-fall-corn-maze': require('./paths/farmbot-fall-corn-maze'),
   'farmbot-fall-campfire-evening': require('./paths/farmbot-fall-campfire-evening'),
+  'farmbot-halloween-barn-party': require('./paths/farmbot-halloween-barn-party'),
 };
 
 module.exports = {
@@ -184,7 +185,7 @@ module.exports = {
   // FARMBOT_PATH_BUILD_STATE.md for the full build/QA status of each path.
   seasonalPaths: {
     fall: ['farmbot-fall-hayride', 'farmbot-fall-corn-maze', 'farmbot-fall-campfire-evening'],
-    halloween: [],
+    halloween: ['farmbot-halloween-barn-party'],
   },
 
   poolByName(name) {
