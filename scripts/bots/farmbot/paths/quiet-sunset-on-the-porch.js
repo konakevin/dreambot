@@ -30,7 +30,10 @@ module.exports = ({ sharedDNA, picker }) => {
     pools.byTags(pools.WORLD_DETAIL_PROPS, ['garden', 'outdoor', 'indoor', 'farmhouse']),
     'porch_props'
   );
-  const season = picker.pickWithRecency(pools.SEASON.map((e) => e.description), 'porch_season');
+  const season = picker.pickWithRecency(
+    pools.SEASON.map((e) => e.description),
+    'porch_season'
+  );
   const weather = picker.pickWithRecency(
     pools.WEATHER_ATMOSPHERE.map((e) => e.description),
     'porch_weather'
@@ -50,25 +53,35 @@ module.exports = ({ sharedDNA, picker }) => {
       });
   const magic =
     Math.random() < 0.15
-      ? picker.pickWithRecency(pools.GENTLE_MAGIC.map((e) => e.description), 'porch_magic')
+      ? picker.pickWithRecency(
+          pools.GENTLE_MAGIC.map((e) => e.description),
+          'porch_magic'
+        )
       : null;
 
-  return `${lookOverride(sharedDNA && sharedDNA.lookRegister)}${character ? `━━━ THE CHARACTER ━━━\n${character}\n\n` : ''}${activity ? `━━━ WHAT'S HAPPENING (quiet, unhurried — nowhere to be) ━━━\n${activity}\n\n` : ''}━━━ THE SETTING ━━━
+  return `${lookOverride(sharedDNA && sharedDNA.lookRegister)}${animal ? `━━━ ANIMAL COMPANY (a required, concrete, clearly-visible presence in this render, described with just as much rich, specific detail as the character — this is not optional background mood, it must actually appear in the finished render, not just be implied) ━━━\n${animal}\n\n` : ''}${character ? `━━━ THE CHARACTER ━━━\n${character}\n\n` : ''}${activity ? `━━━ WHAT'S HAPPENING (quiet, unhurried — nowhere to be) ━━━\n${activity}\n\n` : ''}━━━ THE SETTING ━━━
 ${props}
 ${season}
 ${weather}
-${animal ? `\n━━━ A QUIET COMPANION ━━━\n${animal}\n` : ''}
+
 ━━━ CAMERA ━━━
 ${camera}
 ${magic ? `\n━━━ ONE SMALL SERENDIPITY TOUCH ━━━\n${magic}\n` : ''}
 ${
   character
-    ? `render a calm, contented porch moment — the character rendered warmly, the
-porch and its surroundings just as lushly and richly detailed as the
-character, never a bare or empty composition. Every face in the frame,
-human and animal alike, stays clearly separate and fully legible.`
+    ? `render a calm, contented porch moment — the character rendered warmly, any
+animal present rendered with equal, comparable richness and detail — never
+a single short afterthought clause — and the porch and its surroundings
+just as lushly and richly detailed as both, never a bare or empty
+composition. Every face in the frame, human and animal alike, stays clearly
+separate and fully legible.`
     : `no human figure anywhere in the frame — this is a calm, contented porch
 still-life moment. The porch and its surroundings carry the whole frame,
-rendered with lush loving detail, never bare or empty.${animal ? ' Any animal present reads as a real, naturally distinct creature with open air around it; any small insect, bird, or floating detail (petals, dust motes, fireflies) stays simple and unposed, with no invented face or cartoon expression.' : ''}`
+rendered with lush loving detail, never bare or empty. Reinforcing once
+more: the animal company named above MUST actually appear in the finished
+render, described with the same rich, specific detail as everything else in
+the frame, not just implied — ${animal}
+Any small insect, bird, or floating detail (petals, dust motes, fireflies)
+stays simple and unposed, with no invented face or cartoon expression.`
 } no text, no words, no watermarks, gallery quality`;
 };

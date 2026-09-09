@@ -16,7 +16,9 @@ module.exports = ({ sharedDNA, picker }) => {
   // animal visitor so the frame still feels alive rather than empty.
   const includeCharacter = Math.random() < 0.6;
 
-  const character = includeCharacter ? pools.pickCharacter(picker, ['bakery'], 'bakery_character') : null;
+  const character = includeCharacter
+    ? pools.pickCharacter(picker, ['bakery'], 'bakery_character')
+    : null;
   const food = picker.pickWithRecency(
     pools.byTags(pools.FOOD_AND_BAKING, ['bakery']),
     'bakery_food'
@@ -24,13 +26,19 @@ module.exports = ({ sharedDNA, picker }) => {
   // ACTIVITY entries are phrased as human actions with an implied subject —
   // only meaningful when a character is present.
   const activity = includeCharacter
-    ? picker.pickWithRecency(pools.byTags(pools.ACTIVITY, ['chore', 'bakery', 'leisure']), 'bakery_activity')
+    ? picker.pickWithRecency(
+        pools.byTags(pools.ACTIVITY, ['chore', 'bakery', 'leisure']),
+        'bakery_activity'
+      )
     : null;
   const props = picker.pickWithRecency(
     pools.byTags(pools.WORLD_DETAIL_PROPS, ['indoor', 'bakery']),
     'bakery_props'
   );
-  const season = picker.pickWithRecency(pools.SEASON.map((e) => e.description), 'bakery_season');
+  const season = picker.pickWithRecency(
+    pools.SEASON.map((e) => e.description),
+    'bakery_season'
+  );
   const weather = picker.pickWithRecency(
     pools.WEATHER_ATMOSPHERE.map((e) => e.description),
     'bakery_weather'
@@ -50,30 +58,40 @@ module.exports = ({ sharedDNA, picker }) => {
       });
   const magic =
     Math.random() < 0.15
-      ? picker.pickWithRecency(pools.GENTLE_MAGIC.map((e) => e.description), 'bakery_magic')
+      ? picker.pickWithRecency(
+          pools.GENTLE_MAGIC.map((e) => e.description),
+          'bakery_magic'
+        )
       : null;
 
-  return `${lookOverride(sharedDNA && sharedDNA.lookRegister)}${character ? `━━━ THE CHARACTER ━━━\n${character}\n\n` : ''}━━━ THE FOOD ━━━
+  return `${lookOverride(sharedDNA && sharedDNA.lookRegister)}━━━ THE FOOD ━━━
 ${food}
-
+${animal ? `\n━━━ ANIMAL COMPANY (a required, concrete, clearly-visible presence in this render, described with just as much rich, specific detail as the character — this is not optional background mood, it must actually appear in the finished render, not just be implied) ━━━\n${animal}\n` : ''}
+${character ? `\n━━━ THE CHARACTER ━━━\n${character}\n` : ''}
 ${activity ? `━━━ WHAT'S HAPPENING ━━━\n${activity}\n\n` : ''}━━━ THE SETTING ━━━
 ${props}
 ${season}
 ${weather}
-${animal ? `\n━━━ AN ANIMAL VISITOR ━━━\n${animal}\n` : ''}
+
 ━━━ CAMERA ━━━
 ${camera}
 ${magic ? `\n━━━ ONE SMALL SERENDIPITY TOUCH ━━━\n${magic}\n` : ''}
 ${
   character
     ? `render a warm, inviting bakery-afternoon moment — the character, the food,
-and the setting all rendered with equal loving detail, never a backdrop.
-Every face in the frame, human and animal alike, stays clearly separate and
-fully legible — each face keeps its own open space with a visible gap of
-air between it and any other face, so every expression reads clean and
-unambiguous.`
+the setting, and any animal present all rendered with equal loving,
+comparable detail, never a backdrop and never a single short afterthought
+clause. Every face in the frame, human and animal alike, stays clearly
+separate and fully legible — each face keeps its own open space with a
+visible gap of air between it and any other face, so every expression reads
+clean and unambiguous.`
     : `no human figure anywhere in the frame — this is a warm, inviting bakery
 still-life moment. The food and the setting carry the whole frame, rendered
-with rich loving detail, never plain or empty.${animal ? ' Any animal present reads as a real, naturally distinct creature with open air around it; any small insect, bird, or floating detail (petals, dust motes, fireflies) stays simple and unposed, with no invented face or cartoon expression.' : ''}`
+with rich loving detail, never plain or empty. Reinforcing once more: the
+animal company named above MUST actually appear in the finished render,
+described with the same rich, specific detail as everything else in the
+frame, not just implied — ${animal}
+Any small insect, bird, or floating detail (petals, dust motes, fireflies)
+stays simple and unposed, with no invented face or cartoon expression.`
 } no text, no words, no watermarks, gallery quality`;
 };
