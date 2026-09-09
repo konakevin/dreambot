@@ -52,6 +52,22 @@
  *     CONCEPT, not just literal "sign" wording (this matters extra here
  *     since a roadside cane-stand is an explicit brief element and an easy
  *     place for a "menu board" to sneak in)
+ *
+ * TIME-OF-DAY/WEATHER REBALANCE (2026-09-09): a full-pool scan found this
+ * pool badly skewed toward warm/golden/bright-sun language (81/120 warm,
+ * ZERO cool/varied) — Kevin flagged FarmBot's renders as "always sunny."
+ * `total` bumped 120→155 with `append: true` to add a batch weighted
+ * heavily toward dawn/misty-morning/overcast-midday/dusk/evening/night/
+ * rain (see the TIME-OF-DAY/WEATHER block in the meta-prompt below). That
+ * block also carries a permanent "going forward" requirement so any FUTURE
+ * scale-up of this pool keeps genuine variety instead of regressing back to
+ * all-afternoon — if this script is re-run again once the pool is already
+ * balanced, dial the "≥85% cool" weighting back down to something more even
+ * before generating another batch. Also bakes in the dark+light contradictory-
+ * pairing fix (found and fixed on `farmbot_fishing_dock_place.json` the same
+ * night: "dark glint of water" → Sonnet-escalated into a literal glowing
+ * light source with visible stars in an otherwise-daytime scene) so new
+ * night/moonlit entries here don't reintroduce it.
  */
 const path = require('path');
 const { generatePool } = require('../../lib/seedGenHelper');
@@ -61,7 +77,7 @@ const SEEDS_DIR = path.join(__dirname, '..', '..', 'bots', 'farmbot', 'seeds');
 const RECIPES = [
   {
     outPath: path.join(SEEDS_DIR, 'farmbot_sugarcane_field_place.json'),
-    total: 120,
+    total: 155,
     append: true,
     banHumanLanguage: true,
     metaPrompt: (n) => `Generate ${n} distinct SMALL, CULTIVATED, HAND-TENDED TROPICAL SUGARCANE
@@ -76,24 +92,69 @@ jungle. Every entry must read as neat, tended, and personal/small-crew scale, wi
 throughout: TALL, UPRIGHT ROWS of segmented cane stalks (golden-green to soft purplish-green,
 jointed stems, long thin blade-like leaves fanning and rustling from the top of each stalk) planted
 in straight or gently curving lines, a well-worn dirt path running between the rows wide enough to
-walk down, a curved cane-cutting knife resting against a low wooden fence post, a cart or
-wheelbarrow loaded with freshly cut lengths of cane stacked neatly, woven baskets sitting full or
-half-full at a row's end, a low wooden or woven fence marking the field's edge. A handful of entries
-(not all) may include a small, simple roadside cane-stand: a plain wooden counter, a hand-cranked
-juice press, a stack of clean glass jars or cups — nothing more elaborate. The field is SMALL and
+walk down, a cart or wheelbarrow loaded with freshly cut lengths of cane stacked neatly, woven
+baskets sitting full or half-full at a row's end, a low wooden or woven fence marking the field's
+edge. A handful of entries (not all) may include a small, simple roadside cane-stand: a plain
+wooden counter, a hand-cranked juice press, a stack of clean glass jars or cups — nothing more
+elaborate. The field is SMALL and
 INTIMATE in scale — you can see its far edge, and a nearby farmhouse roofline or a line of a few
 distant coconut palms marking the boundary is fine as a backdrop, but the field itself is always the
 tidy, orderly, CULTIVATED hero, never a dense, overgrown, or wild space, and never a vast industrial
-monoculture worked by machinery. Vary time of day within a warm tropical window (bright high sun,
-hazy warm late-afternoon glow, soft golden late light), viewpoint (looking straight down one row, a
-wide view across several rows toward the field's edge, close on one bundle of cut cane, from the
-row's end looking toward the fence and cart), and which physical detail leads.
+monoculture worked by machinery. Also vary viewpoint (looking straight down one row, a wide view
+across several rows toward the field's edge, close on one bundle of cut cane, from the row's end
+looking toward the fence and cart) and which physical detail leads.
+
+CRITICAL — TIME-OF-DAY / WEATHER (this batch is a REBALANCE — read carefully): the pool's existing
+entries already lean heavily bright-sun and golden-afternoon, so THIS BATCH must draw AT LEAST 85% of
+its entries from the COOL/VARIED categories below, and this requirement holds for any future scale-up
+of this pool too — never let it drift back to all-afternoon. Every entry must fall into ONE of these
+concrete categories:
+  - DAWN: pale early light breaking low over the rows, long soft shadows stretching between the
+    stalks, the sky still holding cool color near the horizon
+  - MISTY MORNING: thin ground mist drifting low between the rows, dew beaded on the leaf blades,
+    muted soft grey-green light
+  - OVERCAST MIDDAY: a flat, even grey-white sky, soft shadowless light across the field, no strong
+    sun or glare
+  - DUSK: fading light, the sky deepening into blue-violet above the rows, only a last thin warm edge
+    low on the horizon
+  - EVENING: dim blue-grey light settling over the field, a farmhouse window's glow far off at the
+    field's edge
+  - NIGHT / MOONLIT: silvery moonlight washing over the rows, the pale glow of a full moon catching
+    the leaf tips, starlight described as its own clean phrase (see the critical wording rule below)
+  - GENTLE RAIN: soft steady rain, rain-darkened stalks and soil, water beading and dripping off the
+    leaf blades — a fine warm-weather drizzle, never a storm or downpour
+  - (a small remaining minority, if any, may use the bright-high-sun / hazy warm-afternoon / soft
+    golden-late-light window this pool already has plenty of)
+
+CRITICAL — NIGHT/MOONLIT WORDING (a real bug, just found and fixed on another FarmBot pool): never
+pair "dark," "darkness," or "shadow" with a light-implying word ("glint," "sparkle," "shimmer,"
+"luminous," "glow") describing the SAME thing — that contradictory pairing gets escalated by
+Sonnet's brief-to-prompt rewrite into a literal glowing light source or a starry night patch cut
+into an otherwise-daytime scene (confirmed real: "a dark glint of water" became "the darkness given
+a gentle luminous sparkle," which rendered as a glowing vertical beam with visible stars slicing
+through a foggy daytime scene — a literal split day/night artifact). Describe moonlight and darkness
+compatibly instead — "silvery moonlight," "the pale glow of a full moon," "starlight" as its own
+clean phrase — never "dark"/"darkness"/"shadow" plus a sparkle/glint/luminous/glow word describing
+the same object.
 
 CRITICAL — SCALE: sugarcane grows tall, well above head height, and that is a genuine, charming part
 of its identity — describe the rows as tall, upright, reaching well overhead, with leaves rustling
 high above. But keep this grounded and approachable, never described as "towering," "looming," or
 in any way emphasizing an overwhelming, dwarfing, or diminishing scale. This is a friendly, walkable,
 human-scale field a family tends by hand, not a colossal or endless expanse.
+
+OCCASIONAL SMALL OBJECT AT THE FENCE/POST (a real over-repetition bug, fixed 2026-09-09 — read
+carefully): a resting hand tool or basket at a fence post or row's end is a nice occasional grounding
+detail, but must NOT become a repeated signature. Only about 1 in 10 entries should include a curved
+cane-cutting knife/machete resting against a post — when you do use it, treat it exactly like any
+other single occasional detail, never as a default element every entry reaches for. For every other
+entry that wants a small resting object at a post or row's end, rotate through genuine variety
+instead: a coiled length of rope, a pair of worn canvas work gloves, a small wooden crate, a folded
+burlap sack, a tin water canteen, a wide-brimmed straw hat, a whetstone, a ball of twine, or a small
+piece of ambient wildlife (a gecko or lizard sunning itself, a dragonfly or butterfly resting on the
+wood, a small bird perched briefly, a snail or a cluster of ladybugs, a spider's web strung between
+two posts). Most entries don't need any resting object at a post at all — the rows, path, baskets,
+and cart already carry plenty of detail on their own.
 
 TROPICAL ATMOSPHERE — since this pool carries its own weather (no separate season/weather pick is
 used with this path), bake warm, humid, tropical atmosphere directly into every entry: thick warm
@@ -127,10 +188,10 @@ Output ONLY a JSON array of ${n} strings, no preamble, no numbering. 25-40 words
 
 Examples:
 ["Tall, upright rows of segmented sugarcane stalks stand in neat lines under bright tropical sun,
-their long thin leaves fanning and catching the light high overhead, a curved cane-cutting knife
-resting against a low fence post at the row's end.", "A well-worn dirt path runs straight between
-two rows of golden-green cane, a wheelbarrow loaded with freshly cut lengths waiting at the near
-edge, warm late-afternoon light glinting off the waxy stalks."]
+their long thin leaves fanning and catching the light high overhead, a small gecko sunning itself
+on a low fence post at the row's end.", "A well-worn dirt path runs straight between two rows of
+golden-green cane, a wheelbarrow loaded with freshly cut lengths waiting at the near edge, warm
+late-afternoon light glinting off the waxy stalks."]
 
 🚫 STRICT BANS: NO named people/characters, NO implied people (figures/crowd/riders/children/kids/
 bystanders/onlookers/laughter/faces/hands/footprints), NO readable text/signage/lettering/numbers/
