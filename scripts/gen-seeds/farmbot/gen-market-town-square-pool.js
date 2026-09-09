@@ -36,7 +36,8 @@ dried flowers or herbs, baskets of baked goods, bunting strung between
 buildings — and HALF as (B) Japanese market style — a narrow shōtengai
 (covered shopping street) hung with plain undyed fabric awnings, or a
 countryside roadside stall (michi-no-eki) with crates of daikon, satsuma,
-and mushrooms under a wooden lean-to roof, paper lanterns strung overhead.
+and mushrooms under a wooden lean-to roof, small glass lanterns strung
+overhead (NEVER paper lanterns — see the strict ban below).
 Each individual entry should be internally coherent to ONE of these two
 styles, not mixed. Both share a small handful of stylized townsfolk (1-3
 people — a shopper with a basket, a vendor arranging goods, a couple
@@ -57,7 +58,7 @@ square, close on one stall with figures nearby, a street-level view down a
 row of stalls). CRITICAL: the SQUARE, STREET, or a stall/architecture
 detail must ALWAYS be the grammatical subject named FIRST in the sentence;
 people appear only in a trailing clause. 25-40 words each. Examples:
-["A cobblestone town square bustles with striped market awnings and crates of ripe autumn produce, a shopper in a knit shawl pausing at a flower-decked stall as a cat weaves between the wicker baskets.", "A narrow shōtengai glows beneath strings of paper lanterns and plain fabric awnings, a vendor arranging crates of daikon and mushrooms as potted chrysanthemums line the stall fronts in the warm evening light."]
+["A cobblestone town square bustles with striped market awnings and crates of ripe autumn produce, a shopper in a knit shawl pausing at a flower-decked stall as a cat weaves between the wicker baskets.", "A narrow shōtengai glows beneath strings of small glass lanterns and plain fabric awnings, a vendor arranging crates of daikon and mushrooms as potted chrysanthemums line the stall fronts in the warm evening light."]
 
 🚫 STRICT BANS: NO named people/characters (describe them generically —
 "a shopper", "a vendor" — never a proper name), NO animals beyond a tiny
@@ -67,7 +68,11 @@ LANGUAGE (including kanji/kana on banners, noren curtains, or lanterns —
 describe them as plain or patterned fabric only, never lettered) — describe
 goods and decoration only, never a sign, NO brand names, NO
 photographer/camera-brand names, NO bare/empty compositions lacking rich
-surrounding detail.
+surrounding detail. CRITICAL — NO "paper lanterns" of any kind (round
+paper chōchin-style lanterns are a strong Flux trigger for hallucinated
+painted characters/text) — if a lantern is wanted, it must always be
+described as a "small glass lantern," never paper, never described as
+bearing any marking, character, or design.
 
 Output ONLY a JSON array of ${n} strings, no preamble, no numbering.`,
   },
