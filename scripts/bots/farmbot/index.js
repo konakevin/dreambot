@@ -8,17 +8,17 @@
  * painterly storybook illustration, warm hand-inked flat cartoon, etc.) —
  * no named studios or franchises, one coherent cozy-anime-storybook identity.
  *
- * SECRET BOT — mirrors AlphaBot's mechanism exactly (Kevin 2026-09-08: "I
- * want it to work like alphabot"), NOT the per-post shadow/dark-launch flag
- * (migration 376 — that's for staging a new path on an otherwise-PUBLIC bot).
- * Privacy is entirely ACCOUNT-level: `users.is_public=false` (see
- * scripts/create-farmbot-account.js) + the migration-116 uploads RLS, which
- * requires a viewer to FOLLOW a private account to see its (normal,
- * is_public=true/is_posted=true) posts — the supreme admin is the only
- * follower (migration 339's get_bot_users carve-out surfaces it to them in
- * the Bots tab like any other bot). No bot_schedules row — never auto-posts
- * (the dispatcher is schedule-row-driven, not bot.paths-driven, so a
- * populated `paths` array here is safe). Renders via `iter-bot.js --bot
+ * LAUNCHED PUBLIC 2026-09-09 — `users.is_public=true`, real `bot_schedules`
+ * row (posts_per_day=2, same dispatcher cadence as every other live bot).
+ * Was previously a SECRET BOT mirroring AlphaBot's private-account mechanism
+ * during development (`users.is_public=false` + migration-116 uploads RLS +
+ * supreme-admin-only follower) — that history is why `paths[]` was already
+ * safely populated before go-live (the dispatcher is schedule-row-driven,
+ * not bot.paths-driven, so a populated array alone never auto-posts). New
+ * paths still prove out privately first, now via AlphaBot's own proving-
+ * ground mechanism (ALPHABOT.md) rather than FarmBot's own former privacy,
+ * or via the `shadowPaths[]` dark-launch flag below (migration 376) for
+ * re-QA on an already-live path. Manual test render: `iter-bot.js --bot
  * farmbot --mode <path> --post`.
  *
  * FULL CONTENT REBUILD (2026-09-08) — Kevin: "throw out what we have in
@@ -35,11 +35,12 @@
  * (YumBot's FOOD_CATALOG/TINY_COMPANIONS/DECOR_ITEMS pattern), scoped
  * entirely to this bot's own files, no shared cross-bot registry.
  *
- * PHASE 1 PILOT (3 paths, proof of concept — do not expand further without
- * Kevin's sign-off): animal-feeding-time (animal-heavy) / cozy-bakery-
- * afternoon (food-heavy) / autumn-village-market (village-life-heavy). Full
- * 22-path roster planned (Phase 1 remaining 7 + Phase 2 + Phase 3) once the
- * POC is approved.
+ * Roster status (see FARMBOT_PATH_BUILD_STATE.md for full history): grew
+ * from the original 3-path pilot through Phase 2/3/tropical expansion/
+ * AlphaBot-promoted candidates to 34 active paths in `paths[]` (2 more
+ * built but deactivated: sugarcane-field, first-snowfall — deactivate-
+ * don't-delete, see their inline notes below) plus 9 dormant seasonal
+ * paths gated to their calendar windows.
  */
 
 const blocks = require('./shared-blocks');
