@@ -148,5 +148,575 @@
       "ANY"
     ],
     "description": "A messy top-knot piled at the crown, with several unruly strands falling freely around the face and neck."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Twin braids beginning just behind the ears and falling to the collarbone, small flyaways at the crown."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "A high ponytail pulled taut at the crown, long and straight, swaying freely past the shoulder blades."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Shoulder-length hair tucked neatly behind one ear, the opposite side left to fall across the cheek in a gentle wave."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Curly and voluminous, the ringlets springing out generously past the shoulders, a few loose spirals falling over the forehead."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A short, tousled crop, slightly windswept, with one wayward lock falling carelessly over the forehead."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A neat side part, hair combed cleanly to one side and tapered close at the ears and nape."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "Short and windswept, every strand pushed back and to one side as though caught mid-gust, ends sticking up slightly."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Hair loosely gathered at the back with a ribbon, soft pieces escaping around the temples and nape."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A single long braid draped over one shoulder and reaching the chest, a few short strands loose at the hairline."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Twin braids draped over each shoulder, tied off at the ends, with small flyaways framing the forehead."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A short, tousled crop, slightly windswept, one lock falling loosely over the forehead."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "A high ponytail pulled tight at the crown, the length cascading straight down the back with a gentle bounce at the tips."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Hair gathered into a low bun at the nape, a few soft strands escaping and curling loosely around the neck."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Shoulder-length hair tucked neatly behind one ear, the other side falling forward in a smooth, straight curtain."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A neat side part, hair lying flat and close on one side, combed cleanly away from the face."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "A single long braid draped over one shoulder, reaching past the chest, with loose strands softening the temples."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Hair loosely gathered at the back with a ribbon, the bulk of it spilling out in an undone, casual bunch."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "Short and windswept all over, tufts pointing in varied directions as though caught mid-gust."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Curly and voluminous, the ringlets springing outward and falling just past the shoulders in a full, lively mass."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Loose waves cascading just past the shoulders, a few soft strands escaping to frame either side of the face."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Twin braids beginning at the temples and falling over the collarbones, each tied off with a small neat knot at the tip."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "A high ponytail pulled tight at the crown, the length spilling down in a gentle sway, wispy baby hairs curling at the hairline."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Curly, voluminous hair with defined ringlets piling generously past the shoulders, a few spirals bouncing free near the cheeks."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A short, tousled crop with a slightly windswept texture, one wayward lock dipping loosely over the forehead."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A neat side part slicked cleanly to one side, the longer top layers lying flat and smooth while the sides taper short."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A single long braid draped over one shoulder, reaching to mid-chest, with a few short strands left loose at the temples."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A messy top-knot perched high on the head, uneven and lived-in, with several loose strands falling at the nape and ears."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Shoulder-length hair tucked neatly behind one ear, the opposite side left to fall softly across the cheek."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A blunt bob cut cleanly at the jaw, the ends straight and even all the way around with no layers."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Long hair divided into twin braids resting over each shoulder, small flyaways escaping along the part."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A short, tousled crop, slightly windswept, one stray lock curling down over the forehead."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "A high ponytail pulled taut at the crown, the tail cascading in loose waves down the back."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Hair gathered into a low bun at the nape, a few soft strands slipping free around the ears."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A neat side part, hair combed smoothly away from the face and tapering close at the sides."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Shoulder-length hair tucked behind one ear, the opposite side left to fall across the cheek."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A loosely piled top-knot, strands sticking out at careless angles and a few wispy pieces trailing down the neck."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "Short and windswept, the ends flicked outward in every direction as though caught mid-gust."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "A single long braid brought over one shoulder, loose hairs softening the plait along its length."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Curly and voluminous, the ringlets full and springy, fanning out past the shoulders with natural depth."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Twin braids beginning just behind the ears and draping forward over the chest, tied off at the ends."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "A high ponytail pulled taut at the crown, the length cascading straight down the back with a slight wave at the tips."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Hair gathered into a simple low bun at the nape, a few loose strands escaping and curling softly around the neck."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A short, tousled crop, slightly windswept, with one wayward lock falling loosely over the forehead."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Shoulder-length hair tucked neatly behind one ear, the other side left to fall in a gentle wave across the cheek."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A messy top-knot sitting high on the head, several unruly wisps fanning out and a few strands trailing down the back of the neck."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "A single long braid draped over one shoulder, slightly loose so small waves ripple through its length down to the waist."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "Short and windswept all over, tufts pushed in different directions as though caught mid-gust, with no clear parting."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Loose waves tumbling just past the shoulders, soft flyaways framing both cheeks and a few strands catching the breeze."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Twin braids beginning high on the head and falling over the front of each shoulder, secured with small neat ties at the ends."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A high ponytail pulled taut at the crown, the gathered length swinging freely and a single wispy strand escaping at the temple."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Hair loosely gathered into a messy top-knot, stray pieces fanning out at the sides and a few short strands falling against the back of the neck."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A short, tousled crop left windswept, with one wayward lock dipping across the forehead and the sides sitting close to the head."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Shoulder-length straight hair tucked neatly behind one ear, the opposite side left to fall forward in a gentle curtain against the jaw."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A neat side part dividing the hair cleanly, each section lying flat and smooth against the skull with the longer side sweeping softly over the forehead."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "A single long braid draped over one shoulder, slightly loosened so small loops of hair bulge gently along its length, the tail bound with a thin tie."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "Short and windswept all over, the textured layers pushed slightly forward as though caught mid-gust, with an uneven, natural silhouette."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Curly and voluminous, the spiraling ringlets springing outward past the shoulders and framing the face in a full, lively halo of dense coils."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Loose waves cascading just past the shoulders, a few soft strands framing either side of the face."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A short, tousled crop, slightly windswept at the top, with one stray lock falling loosely over the forehead."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Twin braids beginning at the temples and falling to mid-chest, tied off with small neat wraps at each end."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Hair gathered into a messy top-knot, several loose strands tumbling free around the ears and nape."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A neat side part combed cleanly to one side, the longer top layer sweeping smoothly away from the face."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "A single long braid draped over one shoulder, reaching the collarbone, with a few wispy flyaways along the length."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A simple blunt bob cut straight at jaw level, hanging evenly on both sides with no layering."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Shoulder-length hair tucked neatly behind one ear, the other side left to fall forward in a gentle wave."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "Short and windswept, the strands pushed back and to one side as though caught mid-gust, with a relaxed, uneven texture."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Curly and voluminous, the ringlets springing outward to frame the face, reaching just past the chin in a full, lively shape."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Twin braids falling to the collarbone, tied off at the ends, with short wispy strands framing the temples."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A short, tousled crop, slightly windswept and uneven, with a single loose lock falling across the forehead."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "A high ponytail gathered at the crown, the tail cascading down the back in soft, sweeping waves."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Hair loosely gathered at the nape into a low bun, several soft strands escaping around the ears and neck."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "A single long braid draped over one shoulder, reaching past the chest, with a few short flyaways along the part."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "Short and windswept, tousled as if caught in a breeze, with the sides lying flat and the top lifted and scattered."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A messy top-knot piled loosely at the crown, several unruly strands spilling out around the base and at the nape."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Curly and voluminous, falling just past the shoulders, the ringlets full and lively with a few spirals resting against the cheeks."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A neat side part with the longer top swept cleanly to one side and the sides lying close to the head."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Long hair split into twin braids resting over the shoulders, each tied off with a small bow, soft baby hairs loose at the temples."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A short, tousled crop, slightly windswept as if caught in a breeze, one unruly lock dipping across the forehead."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "A high ponytail pulled tight at the crown, the length cascading down in loose, sweeping waves past the shoulder blades."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Hair gathered into a relaxed low bun at the nape, several soft strands escaping to frame either side of the face."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A neat side part combed cleanly to one side, the top layer lying flat and smooth while the back tapers short."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "A single thick braid draped over one shoulder, slightly loose and beginning to fray at the mid-section, a few flyaways along the crown."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A messy top-knot piled high and held loosely, short pieces spiking out in various directions and a few longer strands falling free around the ears."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Wavy hair just past the chin, with one side neatly tucked behind the ear and the other allowed to fall forward, framing the cheek."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "Short and windswept all over, the front pushed back haphazardly as though recently tousled by the wind, textured and lightly layered."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Curly, voluminous hair that springs outward and downward to just past the shoulders, the ringlets full and lively with no particular part."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Long, loose waves cascading past the shoulder blades, with soft face-framing tendrils curling gently at the temples."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Twin braids beginning at the crown and falling past the collarbone, each finished with a small tied end, a few short strands loose at the hairline."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A short, tousled crop swept in multiple directions as if caught mid-gust, one stray lock dipping across the forehead."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "Shoulder-length hair tucked neatly behind one ear, the other side left to fall freely in a soft, straight curtain across the cheek."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A messy top-knot piled loosely at the crown, several wayward strands escaping to drape along the back of the neck and over the ears."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "Hair neat with a clean side part, lying smooth and close to the head, the longer top swept evenly across while the sides are kept short."
+  },
+  {
+    "tags": [
+      "female"
+    ],
+    "description": "A single thick braid draped over one shoulder, falling to mid-chest, woven snugly with a few small flyaways along the part."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Curly, voluminous hair springing out in a wide, buoyant halo just past the ears, individual ringlets varying from loose coils to tight spirals throughout."
+  },
+  {
+    "tags": [
+      "male"
+    ],
+    "description": "A high ponytail pulled firmly to the top of the head, the gathered length falling straight down to mid-back, short temple hairs left loose at the sides."
   }
 ]

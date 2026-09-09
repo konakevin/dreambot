@@ -14,8 +14,8 @@ const SEEDS_DIR = path.join(__dirname, '..', '..', 'bots', 'farmbot', 'seeds');
 const RECIPES = [
   {
     outPath: path.join(SEEDS_DIR, 'farmbot_gentle_magic.json'),
-    total: 20,
-    append: false,
+    total: 120,
+    append: true,
     banHumanLanguage: true,
     metaPrompt: (n) => `Generate ${n} distinct GENTLE MAGIC descriptions for a cozy countryside
 bot — a small, rare, subtle enchantment, NEVER epic fantasy. Draw from: a firefly glowing a

@@ -142,5 +142,581 @@
       "autumn"
     ],
     "description": "A winding path carpeted in amber and crimson leaves, a harvest basket of shiny red apples tucked beside a hay bale."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A pair of fuzzy ducklings waddling through a meadow dotted with purple and yellow wildflowers."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Fresh green fields catching the soft morning light, dotted with clusters of white clover and budding hedgerows."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Tall sunflowers swaying gently along a fence line, their golden faces tilted toward a warm afternoon sky."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A basket of ripe strawberries resting in long, sun-warmed grass beside a glittering lakeside edge."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A weathered harvest basket overflowing with red apples, nestled among tumbling golden and amber leaves."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A row of plump pumpkins lining a wooden porch rail, framed by hay bales and warm golden fields beyond."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Falling leaves swirling lazily around a gnarled apple tree, its branches still heavy with late-season fruit."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Soft snow blanketing every rooftop, a warm window glowing gold against the pale white countryside."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Bare, gentle branches laced with frost catching the quiet morning light, a farmhouse chimney curling smoke in the still air."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A meadow edged with wildflowers in soft violet and white, a lamb nestled in the fresh green grass nearby."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Pale pink blossoms clinging to a gnarled old tree while a duckling waddles through a muddy puddle below."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Tall sunflowers leaning toward a hazy golden afternoon, their broad leaves brushing a weathered wooden fence."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A basket of ripe strawberries resting in the shade of a oak at the edge of a shimmering lake, green reeds swaying softly."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Warm sunlight spilling across a rolling meadow of tall grass, seed heads glowing like copper in the late afternoon."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A cluster of round orange pumpkins nestled beside a harvest basket overflowing with rosy apples and dry golden hay."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Fallen leaves in amber and rust swirling around the base of a hay bale at the edge of a warm golden field."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Soft snow draped across bare gentle branches, a farmhouse window casting a honey-warm glow into the quiet white evening."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Delicate frost tracing lacy patterns across a windowpane, a candle flickering warmly just beyond the glass."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A meadow of wild violets and buttercups surrounding a wooden fence draped in soft morning mist."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Fluffy ducklings waddling single file through a field of fresh green clover sparkling with dew."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Tall sunflowers swaying gently in a warm afternoon breeze beside a basket of ripe strawberries."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Golden sunlight filtering through tall grass at the edge of a still, green-fringed lake."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A wooden dock stretching into calm water, wildflowers nodding along the bank in the hazy midday warmth."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A weathered harvest basket overflowing with apples and gourds, surrounded by a carpet of amber fallen leaves."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Rows of golden pumpkins glowing in a warm late-afternoon field edged with maple trees turning fiery red."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Bare branches laced with delicate frost framing a farmhouse chimney curling with gentle woodsmoke."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A lamb nuzzling through a patch of wildflowers while fresh green fields stretch softly into the distance."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Clusters of purple and yellow wildflowers nodding gently beside a weathered wooden fence wrapped in new green vines."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Tall sunflowers leaning toward a hazy golden afternoon, their broad leaves brushing against a wicker basket of ripe strawberries."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Warm sunlight filtering through tall lakeside reeds, rippling softly across calm green water."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A meadow of tall grass swaying lazily in the heat, dotted with the bright red of wild strawberries peeking through the blades."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A wooden cart piled with harvest baskets overflowing with apples, surrounded by drifting amber and crimson leaves."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Plump pumpkins nestled among golden hay bales under a canopy of warm amber leaves catching the low afternoon sun."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Soft snow settled gently on bare branches, a farmhouse window glowing warm amber against the quiet pale evening."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Frost tracing delicate feathered patterns along a wooden fence rail, a rosy light spilling cozily from the barn doorway beyond."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A meadow of wild violets and buttercups stretching toward a low wooden fence where a newborn lamb wobbles on soft legs."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Fresh green hills dotted with pale wildflowers, a gentle breeze bending young wheat in long slow waves."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Tall sunflowers leaning into warm afternoon light, their broad golden faces nodding above a basket of ripe strawberries."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Lakeside reeds swaying in a hazy summer glow, the water shimmering soft and green beneath a wide blue sky."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Tall meadow grass thick with clover, warm golden sunlight spilling long across an open field in the late afternoon."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A scatter of amber and crimson leaves settling around a weathered harvest basket brimming with small round apples."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Plump pumpkins resting in a golden field, dry hay bales casting long shadows in the rich afternoon harvest light."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Bare gentle branches laced with frost catching the pale morning light, a farmhouse chimney breathing up a thin curl of warm smoke."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Clusters of pale pink blossoms overhead, with baby ducklings waddling along a muddy country path below."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Tall sunflowers nodding gently in the warm afternoon light beside a basket of freshly picked strawberries."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A still lakeside edged with lush green reeds, golden sunlight rippling lazily across the water's surface."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Tall swaying grass catching the late-day glow, a weathered wooden fence half hidden among the green."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A harvest basket overflowing with rosy apples, surrounded by pumpkins and a scatter of amber and russet leaves."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Golden fields stretching to the horizon beneath a warm amber sky, hay bales dotting the gentle slope."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Soft snow resting on bare branches, a farmhouse window glowing warm honey-gold against the quiet white evening."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "A dusting of frost tracing delicate lace patterns across the windowpane, candle light flickering cozily within."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A meadow of wild daisies and bluebells nodding gently beside a mossy stone fence, with a newborn lamb resting in the soft grass."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Fresh green fields stretching toward a treeline dusted pink with blooms, a wooden wheelbarrow filled with seedling pots waiting in the yard."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Tall sunflowers leaning toward a bright afternoon sky, their golden heads hovering above a basket brimming with ripe red strawberries."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Warm golden light rippling across a still lakeshore, cattails swaying at the edge of lush green reeds."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Long grass catching the late afternoon sun in a quiet field, fireflies just beginning to flicker at the far edge of the treeline."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A worn wooden cart piled high with pumpkins and harvest apples, surrounded by drifting amber and crimson leaves."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Golden fields glowing under a soft October sky, hay bales dotting the landscape like scattered coins among fallen leaves."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Bare branches laced with delicate frost catching the pale morning light, a farmhouse window glowing warm amber against the quiet snow."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "A gentle dusting of snow settling over a wooden fence and sleeping garden, soft flakes drifting past the golden glow of a lantern by the front door."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A meadow edged with wildflowers in soft pink and violet, a lamb nestled in the fresh green grass."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Pale yellow duckling chicks waddling between clusters of purple wildflowers along a mossy fence post."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Tall sunflowers swaying gently beside a weathered wooden gate, their golden faces tilted toward the warm afternoon light."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A wicker basket overflowing with ripe red strawberries resting at the edge of a sun-dappled garden path."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Tall grass rippling in a lazy breeze along a quiet lakeside, the water shimmering in warm golden light."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A timber porch piled with plump orange pumpkins, a scattering of red and amber leaves curling around the steps."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A woven harvest basket brimming with rosy apples, set against a backdrop of golden fields under a soft copper sky."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Russet and amber leaves spiraling down from a oak tree onto a hay bale tucked beside an old stone wall."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Bare branches laced with delicate frost crystals, a warm farmhouse window glowing honeyed gold against the quiet white countryside."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A meadow of wildflowers in soft pink and yellow, with a pair of wobbly-legged lambs exploring the fresh green grass."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Tall sunflowers swaying in warm golden light, their bright faces turned toward a wide open blue sky."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A quiet lakeside edged with lush greenery, ripe strawberries peeking from a low basket resting in the long grass."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Plump orange pumpkins nestled among fallen leaves in shades of copper, amber, and deep red."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A harvest basket overflowing with rosy apples, set against a warm golden field dotted with bales of hay."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Maple leaves spinning slowly down through still air, landing softly on a mossy stone path lined with late-season wildflowers."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Bare gentle branches laced with frost, catching the pale morning light above a quiet snow-dusted farmyard."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Pale green fields stretching toward a soft dawn sky, a cluster of fuzzy ducklings waddling single-file through the dewy grass."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A meadow of wildflowers in soft lavender and gold, with a pair of wobbly-legged lambs exploring the fresh green grass."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Tall sunflowers leaning gently in the warm afternoon light, a basket of ripe strawberries resting at their roots."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Long golden grass swaying beside a glassy lake, dragonflies hovering over lush green reeds in the hazy midday warmth."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A sun-drenched garden path bordered by climbing greenery, bees drifting lazily between blooms in the thick sweet air."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A wooden cart heaped with pumpkins and rosy apples, surrounded by drifting amber and copper leaves catching the low afternoon sun."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Golden fields dotted with hay bales, a harvest basket brimming with produce sitting beside a gnarled old apple tree."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Falling leaves in deep orange and burgundy spiraling down over a quiet dirt lane lined with lanterns glowing warm."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Soft snow blanketing every rooftop, a warm amber window glowing gently against the white stillness outside."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Bare branches laced with delicate frost catching the pale winter light, a farmhouse chimney curling smoke into the crisp quiet air."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A meadow of wild violet and yellow flowers stretching toward a fence where a pair of fluffy lambs nuzzle in the morning mist."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Fresh green hills dotted with dandelions, a wooden wheelbarrow overflowing with seedling trays ready for planting."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Tall sunflowers leaning gently in a warm breeze, their golden faces tilted toward a hazy afternoon sky."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A weathered wooden basket brimming with ripe red strawberries resting beside a shaded lakeside dock."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Long grass swaying in golden afternoon light, fireflies just beginning to flicker at the meadow's edge."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A mossy stone path carpeted in crimson and amber leaves leading to a porch stacked with harvest pumpkins."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Wicker baskets heaped with rosy apples beside golden hay bales under a soft copper sky."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Bare branches laced with frost catching the pale morning light, a farmhouse chimney curling gentle smoke into the still air."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A meadow brimming with wildflowers in soft lavender and yellow, a newborn lamb nestled among the blooms."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A basket of ripe strawberries resting beside a sun-warmed dock, the lake shimmering with lush green reflections."
   }
 ]

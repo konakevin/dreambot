@@ -14,8 +14,8 @@ const SEEDS_DIR = path.join(__dirname, '..', '..', 'bots', 'farmbot', 'seeds');
 const RECIPES = [
   {
     outPath: path.join(SEEDS_DIR, 'farmbot_camera_composition.json'),
-    total: 20,
-    append: false,
+    total: 120,
+    append: true,
     banHumanLanguage: true,
     metaPrompt: (n) => `Generate ${n} distinct CAMERA/COMPOSITION instructions for a cozy
 countryside bot — how the shot is FRAMED, not what's in it. Draw from: a wide countryside

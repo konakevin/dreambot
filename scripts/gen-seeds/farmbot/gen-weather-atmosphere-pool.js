@@ -14,8 +14,8 @@ const SEEDS_DIR = path.join(__dirname, '..', '..', 'bots', 'farmbot', 'seeds');
 const RECIPES = [
   {
     outPath: path.join(SEEDS_DIR, 'farmbot_weather_atmosphere.json'),
-    total: 25,
-    append: false,
+    total: 120,
+    append: true,
     banHumanLanguage: true,
     metaPrompt: (n) => `Generate ${n} distinct WEATHER/ATMOSPHERE descriptions for a cozy
 countryside bot — light and air quality as an emotional modifier. Draw from: warm morning

@@ -14,8 +14,8 @@ const SEEDS_DIR = path.join(__dirname, '..', '..', 'bots', 'farmbot', 'seeds');
 const RECIPES = [
   {
     outPath: path.join(SEEDS_DIR, 'farmbot_animal_companions.json'),
-    total: 25,
-    append: false,
+    total: 120,
+    append: true,
     banHumanLanguage: true,
     metaPrompt: (n) => `Generate ${n} distinct ANIMAL-COMPANION descriptions for a cozy
 countryside bot. Each describes one cluster of farm/companion animals with a DENSITY level and

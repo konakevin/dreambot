@@ -178,5 +178,699 @@
       "ANY"
     ],
     "description": "A wide earthenware pot of vegetable soup simmering on a cast-iron stove, fat rounds of carrot and chunks of tomato bobbing at the surface, fresh thyme and rosemary draped over the pot's edge, a slow rolling bubble releasing a ribbon of fragrant steam into the warm kitchen air."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A deep-dish apple pie fresh from the oven rests on a flour-dusted wooden table, its golden lattice crust glistening with butter, steam curling lazily upward while a small dish of cinnamon-dusted sugar sits nearby and a halved apple spills its juice beside the dish."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A sun-drenched kitchen windowsill crowded with mismatched glass jars of strawberry and blueberry jam, their ruby and violet contents glowing warmly in the afternoon light, lids sealed with small squares of gingham cloth and twine."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A towering stack of thick buttermilk pancakes on a wide ceramic plate, pat of golden butter slowly melting down the sides, fresh sliced peaches and a drizzle of dark amber honey pooling at the base, steam rising gently from the top."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY"
+    ],
+    "description": "A wicker basket overflowing with freshly picked strawberries, glossy cherries, and fat blueberries, dewdrops still clinging to the fruit, resting on a weathered wooden market table beside a small pot of wildflower honey."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A heavy cast-iron pot of vegetable soup simmering on a stone hearth, thick with golden carrots, plump tomatoes, and fragrant herbs, a wooden ladle resting across the rim and a wisp of steam curling toward the low timber ceiling."
+  },
+  {
+    "tags": [
+      "bakery",
+      "ANY"
+    ],
+    "description": "A row of plump fruit tarts cooling on a wire rack, each filled with silky custard and crowned with glistening halved strawberries, peach slices, and whole blueberries, their buttery shells still warm and barely golden at the edges."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A freshly baked round loaf of sourdough sitting on a linen cloth, its scored crust cracked open to reveal a soft, steaming crumb, a thick slice already cut and spread generously with pale yellow butter that melts into every hollow."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A long farmhouse table set for an autumn morning, a whole pumpkin pie cooling beside a pitcher of fresh cream, mugs of steaming hot cocoa wrapped in knitted cozies, and a bowl of small sugar cookies dusted with cinnamon scattered casually across the wood."
+  },
+  {
+    "tags": [
+      "market",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A wooden crate of freshly harvested mushrooms, deep brown and earthy, nestled beside bundles of tied herbs — rosemary, thyme, and sage — and a loose pile of muddy carrots still crowned with their feathery green tops, all resting on a rough burlap cloth."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A golden waffle iron opened to reveal a perfectly crisped waffle, steam pouring out in soft billows, a small ceramic jug of warm honey tilted mid-pour over its deep pockets, with a handful of fresh cherries and a knob of hand-rolled butter waiting on the side."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A golden-crusted loaf of sourdough rests on a flour-dusted linen cloth, steam curling lazily upward into the warm kitchen air, a thick pat of butter melting into the first torn slice beside it."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A deep-dish apple pie fresh from the oven sits on a wooden trivet, its lattice crust blushing amber and glistening, crimson-sweet juices bubbling up through the weave, the whole kitchen heavy with cinnamon and caramelized fruit."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "market"
+    ],
+    "description": "A weathered wicker basket overflows with sun-warmed strawberries, fat blueberries, and ripe peaches, scattered sprigs of fresh mint tucked between the fruit, droplets of morning dew still clinging to the skin."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A tall stack of thick buttermilk pancakes towers on a hand-thrown ceramic plate, butter pooling golden between each layer, a heavy pour of dark amber maple syrup cascading slowly down the sides, fresh blueberries tumbling off the top."
+  },
+  {
+    "tags": [
+      "market",
+      "farmhouse"
+    ],
+    "description": "A long farmhouse shelf holds a row of jewel-toned preserves — ruby strawberry jam, deep violet blueberry, and burnished peach — each jar catching the slanted afternoon light and glowing like stained glass."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A pumpkin pie just pulled from the oven rests on a rack, its filling set to a silky burnt-orange custard, the fluted pastry edge perfectly golden, a small ceramic pot of whipped cream sitting alongside it in the steam-warmed kitchen."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A deep iron pot of vegetable soup simmers on a wood-burning stove, chunks of carrot, tomato, potato, and wild mushroom bobbing in a rich amber broth, a bundle of fresh thyme and rosemary floating at the surface, vapor rising in soft, fragrant curls."
+  },
+  {
+    "tags": [
+      "bakery",
+      "market"
+    ],
+    "description": "A tray of fruit tarts lines a rough-hewn wooden counter — each crisp pastry shell filled with silky cream and topped with halved cherries, sliced peaches, and whole blueberries arranged in glistening, jewel-like clusters."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A round of pale farmhouse cheese rests on a slate board surrounded by a honeycomb dripping with golden honey, clusters of plump red cherries, and thick slices of crusty bread, the whole arrangement bathed in warm late-afternoon window light."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A batch of just-baked cookies cools on a wire rack, edges crisped to a warm brown and centers still soft, studded with dark chocolate and dried cranberries, a steaming mug of cocoa beside them wrapped in a hand-knit cloth, the whole scene dusted with a whisper of powdered sugar."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A golden lattice-topped apple pie resting on a flour-dusted wooden counter, steam curling lazily from each vent, a scattering of cinnamon-kissed apple slices and a small bundle of dried herbs arranged beside it."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A wide wicker basket overflowing with glossy red strawberries, plump blueberries, and sun-warmed peaches, set on a worn linen cloth beside a pot of freshly made jam with a wooden spoon still resting inside."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A tall stack of thick buttermilk pancakes drizzled with amber honey, a generous curl of soft butter melting between each layer, wild blueberries tumbling down the sides onto a hand-painted ceramic plate."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY"
+    ],
+    "description": "A long farmhouse table lined with mason jars of ruby strawberry jam, golden honey, and deep violet blueberry preserves, each jar catching the warm morning light through a gauze-curtained window."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A heavy iron pot of vegetable soup simmering on a stone hearth, thick with bright orange carrot rounds, plump tomatoes, earthy mushrooms, and fresh herb sprigs, steam rising in soft curls toward the rafters."
+  },
+  {
+    "tags": [
+      "bakery",
+      "market"
+    ],
+    "description": "A wooden crate brimming with small golden pumpkins, clusters of fresh rosemary, and a freshly baked pumpkin loaf wrapped in parchment, the cracked sugar-dusted top still radiating warmth."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A row of miniature fruit tarts cooling on a wire rack, each filled with silky cream and crowned with halved cherries, sliced peaches, and plump blueberries, glazed to a gentle shine."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A deep ceramic mug of hot cocoa topped with a cloud of whipped cream and a dusting of dark cocoa powder, cradled beside a plate of thick chocolate chip cookies on a knitted wool cloth, a frosty window glowing softly behind."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A freshly baked round sourdough loaf split open on a thick oak board, its airy crumb steaming gently, flanked by a crock of pale whipped butter, a wedge of aged cheese, and a small jar of dark cherry jam."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "market"
+    ],
+    "description": "A sun-drenched farmhouse windowsill holding a glass pitcher of cloudy lemonade packed with ice and lemon slices, a pot of fresh mint, a small bowl of ripe cherries, and a linen napkin tied loosely around a bundle of lavender."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A deep-dish apple pie fresh from the oven rests on a flour-dusted wooden table, its golden lattice crust glistening with caramelized sugar, steam curling lazily upward through the warm kitchen light, a scatter of whole apples and a small pot of cinnamon beside it."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A rough-hewn wooden tray overflows with mismatched jars of strawberry, blueberry, and peach jam, their jewel-toned contents glowing ruby and amber where the afternoon sun slants through a lace-curtained window, a butter knife resting lazily across the nearest lid."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A tall stack of golden buttermilk pancakes sits on a hand-painted ceramic plate, butter melting in slow amber rivers down each layer, a small ceramic pitcher of warm honey tipped at the edge, fresh blueberries tumbling across the top."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY"
+    ],
+    "description": "A wide wicker basket heaped with just-picked strawberries, sun-blushed peaches, and dark sweet cherries sits on a worn market table, droplets of morning dew still clinging to the fruit, a bundle of fresh mint tucked into the corner for fragrance."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "bakery"
+    ],
+    "description": "A heavy cast-iron pot of vegetable soup simmers on a stone hearth, its surface bubbling gently with chunks of carrot, tomato, mushroom, and fresh herb, a thick slice of crusty sourdough leaning against the pot rim, steam rising in soft, fragrant wisps."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "Rows of small fruit tarts cool on a wire rack, their buttery shortcrust shells cradling bright pastry cream topped with glossy cherries, halved strawberries, and scattered blueberries, each one catching the warm light like a tiny stained-glass window."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A round pumpkin pie with a perfectly crimped edge sits cradled in a deep ceramic dish on a harvest table, its rich spiced filling cracked ever so slightly in the center, a dollop of cream melting softly on each warm slice already served to the side."
+  },
+  {
+    "tags": [
+      "bakery",
+      "market",
+      "farmhouse"
+    ],
+    "description": "A wooden cutting board holds a generous wedge of farmhouse cheese beside a small pot of golden honeycomb, a cluster of plump grapes, and two thick slices of freshly baked walnut bread, crumbs still warm to the touch scattered all around."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "bakery"
+    ],
+    "description": "A batch of just-baked oatmeal cookies with golden edges and soft centers rests on a sheet of parchment paper draped over a cooling rack, a mug of hot cocoa steaming beside them, tiny wisps of vapor curling upward against the soft blur of a rain-streaked window."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "market",
+      "ANY"
+    ],
+    "description": "A sun-drenched farmhouse table is set with a ceramic pitcher of fresh lemonade beaded with condensation, a pot of chamomile tea with steam drifting from its spout, a small plate of shortbread, and a bowl of fresh-picked herbs and edible flowers arranged as casually as if they had just arrived from the garden."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A lattice-topped apple pie resting on a flour-dusted wooden counter, its golden crust glistening with a butter wash, thick cinnamon-spiced juices bubbling up through the woven pastry strips, a folded linen towel beside it still warm from the oven."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A heavy cast-iron pot of vegetable soup simmering on a stone hearth, steam curling lazily upward past bundles of dried herbs hanging from the rafters, chunky carrots and tomatoes bobbing in a rich amber broth, a wooden ladle resting across the rim."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A towering stack of golden buttermilk pancakes on a hand-painted ceramic plate, a generous pat of butter melting slowly down the sides, a small pitcher of dark amber maple syrup and a scattering of fresh blueberries pooling sweetly around the base."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY"
+    ],
+    "description": "A sun-drenched market table overflowing with a wicker basket of just-picked strawberries, plump peaches, and dark cherries, droplets of morning dew still clinging to their skins, the whole arrangement glowing in warm golden light."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "Rows of fresh-baked cookies cooling on a wire rack — edges crisp and golden, centers soft and pillowy, studded with glossy blueberries and chunks of pale dough, the kitchen behind them hazy with warm, sweet-scented steam."
+  },
+  {
+    "tags": [
+      "market",
+      "farmhouse"
+    ],
+    "description": "A generous spread of artisan cheeses and thick-cut bread on a slate board, a small clay pot of honeycomb beside them oozing amber threads of honey, a cluster of red grapes and a handful of walnuts scattered casually across the weathered wood."
+  },
+  {
+    "tags": [
+      "bakery",
+      "ANY"
+    ],
+    "description": "A round pumpkin pie fresh from the oven, its surface cracked gently at the center and dusted with a whisper of cinnamon, set on a burlap cloth next to a small sugar pumpkin and a tiny jar of whipped cream with a wooden spoon tucked inside."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A long farmhouse table laid with a steaming pot of chamomile tea, mismatched floral cups, a jar of raspberry jam catching the afternoon light in a deep rose glow, a pat of hand-rolled butter on a dish, and thick slices of freshly baked sourdough."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A deep-dish berry pie cooling on a windowsill with the countryside rolling softly beyond the glass, its thick crimson filling seeping through a crumbled oat topping, the sill dusted with flour, a small bowl of fresh cherries resting beside it."
+  },
+  {
+    "tags": [
+      "market",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A wooden crate spilling over with muddy-rooted carrots, knobby mushrooms, vine-ripened tomatoes, and fresh herb bundles tied with twine, beside a basket of brown speckled eggs nested in straw, the whole scene bathed in the soft amber warmth of a late-morning sun."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A deep-dish apple pie fresh from a wood-fired oven, its golden lattice crust glistening with sugar and cinnamon, steam rising in lazy curls above a flour-dusted farmhouse table, a small dish of softened butter and a jar of amber honey resting beside it."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A worn wooden basket overflowing with freshly picked strawberries, fat blueberries, and rosy peaches, a few petals of dried lavender tucked between the fruit, morning light catching every glossy curve on a sunlit porch step."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A towering stack of thick buttermilk pancakes drenched in wild honey, a generous curl of hand-churned butter melting slowly down each golden layer, a small pot of strawberry jam open at the side, steam drifting up from the plate in the soft morning air."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY"
+    ],
+    "description": "A long trestle table lined with mismatched mason jars filled with jewel-toned preserves — cherry, blueberry, peach, and blackberry — each one catching the warm afternoon sun like stained glass, a scattering of fresh fruit arranged naturally around them."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A heavy cast-iron pot of vegetable soup simmering on a stone hearth, thick with carved carrots, plump tomatoes, woody mushrooms, and fresh herbs, a ladle resting across the rim and wisps of fragrant steam rising into the warm kitchen light."
+  },
+  {
+    "tags": [
+      "bakery",
+      "ANY"
+    ],
+    "description": "A rustic pumpkin pie cooling on a wire rack, its deep amber filling cracked ever so slightly at the center, a dusting of nutmeg across the surface, surrounded by small sugar pumpkins and a tied bundle of dried cinnamon sticks on a weathered oak counter."
+  },
+  {
+    "tags": [
+      "bakery",
+      "market",
+      "ANY"
+    ],
+    "description": "A display of hand-crimped fruit tarts arranged on a slate board — each one brimming with pastry cream and crowned with sliced peaches, halved cherries, and scattered blueberries, glazed to a mirror shine and resting on a linen cloth edged with embroidery."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A generous farmhouse spread laid out on a checkered cloth — a round of aged cheese, a crock of freshly churned butter, thick slices of seeded bread still warm from the oven, a small wooden bowl of honey comb, and a clay mug of steaming herbal tea, everything touched by the golden glow of a low afternoon sun."
+  },
+  {
+    "tags": [
+      "bakery",
+      "ANY"
+    ],
+    "description": "Rows of soft sugar cookies and thick-cut shortbreads cooling on parchment-lined racks, some pressed with a flower stamp, others dusted lightly with powdered sugar, a bowl of glossy icing nearby and a scattering of dried rose petals and lavender buds across the baking table."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "market",
+      "ANY"
+    ],
+    "description": "A tall glass pitcher of hand-squeezed lemonade beaded with condensation, slices of lemon and sprigs of fresh mint floating at the surface, set beside a clay mug of rich hot cocoa topped with a swirl of cream, both resting on a mossy stone ledge in dappled orchard shade."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A golden-crusted apple pie rests on a flour-dusted wooden table, its lattice top still glistening from the oven, steam rising lazily through the woven pastry while a sticky amber pool of caramelized filling bubbles at the edges, surrounded by a scatter of whole cinnamon sticks and freshly picked apples."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A towering stack of thick buttermilk pancakes dripping with raw honey, each layer cushioned with a pat of slowly melting butter, flanked by a small ceramic bowl overflowing with fresh blueberries and sliced strawberries glistening with morning dew, soft golden light warming the entire scene."
+  },
+  {
+    "tags": [
+      "market",
+      "farmhouse"
+    ],
+    "description": "A wicker basket overflowing with just-harvested strawberries, their bright red skins dotted with tiny seeds, tumbling alongside ripe peaches and plump cherries across a linen-draped table, a small glass jar of strawberry jam nestled among them catching the afternoon light like a ruby gemstone."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A deep cast-iron pot sits at the heart of a rustic kitchen, brimming with a rich vegetable soup clouded with steam, chunky carrots and bright tomatoes bobbing at the surface alongside sprigs of fresh thyme, a thick heel of crusty bread balanced on the rim of the pot ready to be torn apart."
+  },
+  {
+    "tags": [
+      "bakery",
+      "ANY"
+    ],
+    "description": "Freshly baked chocolate chip cookies cooling on a wire rack, their edges crisp and golden while the centers remain pillowy and soft, a smear of dark melted chocolate pooling beneath a cracked top, the warm glow of a kitchen lamp casting long amber shadows across the rack."
+  },
+  {
+    "tags": [
+      "market",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A long wooden shelf lined with plump honey jars in graduating shades from pale champagne to deep burnt amber, each one glowing like a lantern as afternoon sun streams through a small cottage window, a wooden honey dipper resting across the nearest jar with a slow golden drip suspended mid-air."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A round pumpkin pie fresh from the oven cools on a wrought-iron trivet, its burnished cinnamon-spiced surface cracked ever so slightly at the center, a generous dollop of whipped cream melting softly into the filling, dried orange peel and whole cloves scattered decoratively across the surrounding table."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "Crisp Belgian-style waffles stacked three high on a hand-painted ceramic plate, their deep golden grid pockets cradling pools of melted butter and a cascade of fresh blueberries, a small pitcher of warm maple syrup positioned alongside with a thin amber ribbon of syrup trailing down its spout."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "market",
+      "ANY"
+    ],
+    "description": "A generous country tea spread arranged on a patchwork tablecloth — a pot of steaming chamomile tea, a tiered stand of delicate fruit tarts crowned with halved strawberries and glazed peach slices, a board of crumbling aged cheese alongside dark honeycomb, and a small jar of cherry jam with its spoon resting lazily inside."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A freshly baked loaf of sourdough bread sits halved on a thick wooden chopping board, its open crumb airy and cream-colored, a thick slab of salted butter already spread across one torn piece and beginning to melt into the warm interior, wild herbs and a clutch of tiny tomatoes from the garden scattered loosely around it."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A golden lattice-topped apple pie resting on a flour-dusted wooden counter, steam curling lazily from the slits in the crust, surrounded by scattered cinnamon sticks, a small dish of raw sugar, and three whole apples still wearing their stems."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A tall stack of buttermilk pancakes on a ceramic plate, a generous slab of pale butter melting slowly down the sides, a thick amber ribbon of honey drizzling from a wooden dipper, and a handful of fresh blueberries tumbling across the worn linen tablecloth."
+  },
+  {
+    "tags": [
+      "market",
+      "farmhouse"
+    ],
+    "description": "A sun-drenched market table crowded with squat mason jars of strawberry jam, their ruby contents glowing warmly in the afternoon light, lids sealed with squares of gingham cloth tied with rough twine, fresh strawberries heaped in a shallow wooden crate beside them."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A wide wicker basket overflowing with fresh-baked rolls, their tops cracked and burnished deep amber, a wedge of creamy yellow cheese resting against the side, and a small pot of soft butter with a sprig of fresh thyme pressed into its surface."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A heavy cast iron pot of vegetable soup simmering on a stone hearth, wisps of fragrant steam rising above a broth thick with bright orange carrot rounds, halved cherry tomatoes, chopped mushrooms, and torn herb leaves floating on the surface, a crusty bread heel balanced on the pot's rim."
+  },
+  {
+    "tags": [
+      "bakery",
+      "market",
+      "ANY"
+    ],
+    "description": "A row of petite fruit tarts arranged on a slate board, their buttery shells cradling clouds of vanilla cream and crowned with glistening arrangements of halved strawberries, whole blueberries, and thin-sliced peaches, a light glaze catching every bit of golden light."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A mug of hot cocoa resting on a windowsill with frost blurring the glass behind it, the drink crowned with a mound of softly melting cream, a curl of dark chocolate laid across the top, and a small plate of thick shortbread cookies dusted with powdered sugar beside it."
+  },
+  {
+    "tags": [
+      "market",
+      "farmhouse"
+    ],
+    "description": "A weathered wooden crate holding a generous heap of deep-orange pumpkins and clusters of ripe red apples, a bundle of dried herbs tied with string looped over the crate's edge, the whole arrangement dappled in warm afternoon sunlight filtering through oak leaves overhead."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A freshly baked sponge cake on a pedestal stand, its layers visible where one generous slice has been removed, revealing a thick ribbon of cherry jam and whipped cream within, the top scattered with whole fresh cherries still on their stems and a dusting of fine sugar that catches the light like snow."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A pitcher of cold homemade lemonade beaded with condensation on a porch railing, halved lemons and sprigs of fresh mint floating inside, two mismatched glasses poured full beside a small bowl of fresh peach slices, the soft blur of a sunlit garden meadow stretching out behind."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A deep-dish apple pie just pulled from the oven, its golden lattice crust glistening with a butter wash, steam rising in lazy curls above a flour-dusted wooden table scattered with cinnamon sticks and fresh-cut apple slices."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "market"
+    ],
+    "description": "A sun-warmed wicker basket overflowing with fat strawberries, blueberries, and peaches, droplets of morning dew still clinging to the fruit, resting on a patchwork cloth beside a small jar of golden honey with the dipper still dripping."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A towering stack of thick buttermilk pancakes on a hand-painted ceramic plate, pats of butter melting between each golden layer, warm maple syrup pooling at the edges, a sprig of fresh thyme resting softly alongside."
+  },
+  {
+    "tags": [
+      "farmhouse"
+    ],
+    "description": "A broad clay pot of vegetable soup bubbling gently on a cast-iron stove, chunky carrots, tomatoes, mushrooms, and fresh herbs visible beneath a slow-rolling simmer, a worn wooden ladle resting on a folded linen cloth beside it."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "Rows of small fruit tarts cooling on a wire rack, each one cradling glossy cherries, fresh blueberries, and sliced peaches in a pale golden shell, the kitchen window behind them glowing with soft afternoon light."
+  },
+  {
+    "tags": [
+      "market",
+      "farmhouse"
+    ],
+    "description": "A rough-hewn shelf lined with mason jars of jewel-toned preserves — ruby strawberry, deep blueberry, amber peach — their lids catching slants of golden light, a small wheel of creamy cheese and a cloth-wrapped pat of butter resting nearby."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A freshly baked pumpkin loaf resting on a floured board, its cracked top still venting wisps of warm spiced steam, surrounded by a halved pumpkin, scattered cloves, and a small ceramic dish of soft whipped butter."
+  },
+  {
+    "tags": [
+      "bakery",
+      "ANY"
+    ],
+    "description": "A batch of thick, chewy oat cookies tumbled across a sheet of parchment, edges still soft and golden from the oven, studded with plump dried cherries, the rich warm scent of brown butter almost visible in the honey-toned kitchen light."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A round wooden tray bearing a steaming mug of hot cocoa crowned with a soft cloud of whipped cream, a small plate of shortbread, a jar of dark honey, and a bundle of dried lavender, all arranged on a knitted hearthside cloth."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "market"
+    ],
+    "description": "A deep iron waffle iron lying open to reveal a perfect golden waffle, crisp at every ridge, set on a farm table beside a pitcher of fresh cream, a crock of berry jam, and a small bowl of sliced strawberries still gleaming with juice."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A deep-dish apple pie fresh from a wood-burning oven, its golden lattice crust glistening with butter and sugar, steam curling lazily upward while a thick amber filling bubbles through the gaps, surrounded by a scatter of whole apples and a dusting of cinnamon flour on the worn wooden table beneath it."
+  },
+  {
+    "tags": [
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A massive cast-iron pot of vegetable soup simmering over a hearth flame, thick with chunky carrots, ruby tomatoes, earthy mushrooms, and fragrant herbs, a rolling cloud of steam rising above the rim while a crusty bread loaf and a fat bunch of fresh parsley rest beside it on a rustic stone surface."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A stack of six golden buttermilk pancakes on a ceramic plate, butter melting in slow rivers down the sides, a heavy drizzle of dark wildflower honey pooling at the base, with a small jar of strawberry jam cracked open beside it and a handful of fresh strawberries tumbling across the checkered linen cloth."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY"
+    ],
+    "description": "A sun-drenched market shelf lined with a dozen mismatched glass jars of homemade preserves — deep blueberry, blushing peach, and vivid cherry — each lid catching the golden afternoon light and casting warm jewel-toned shadows across the rough-hewn wooden planks."
+  },
+  {
+    "tags": [
+      "bakery",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A just-baked pumpkin pie resting on a wire cooling rack, its surface cracked in a perfectly rustic pattern and dusted with nutmeg, two whole sugar pumpkins propped beside it along with a ceramic jug of whipped cream and a bundle of dried cinnamon sticks tied with twine."
   }
 ]

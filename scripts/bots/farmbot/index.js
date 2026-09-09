@@ -52,6 +52,30 @@ const pathBuilders = {
   'quiet-sunset-on-the-porch': require('./paths/quiet-sunset-on-the-porch'),
   'summer-evening-by-the-pond': require('./paths/summer-evening-by-the-pond'),
   'first-snowfall': require('./paths/first-snowfall'),
+  'harvest-festival': require('./paths/harvest-festival'),
+  'spring-planting-day': require('./paths/spring-planting-day'),
+  'rainy-farmhouse-morning': require('./paths/rainy-farmhouse-morning'),
+  'flower-field-wandering': require('./paths/flower-field-wandering'),
+  'orchard-afternoon': require('./paths/orchard-afternoon'),
+  'picnic-in-the-meadow': require('./paths/picnic-in-the-meadow'),
+  'woodland-walk': require('./paths/woodland-walk'),
+  'lakeside-riverside-moment': require('./paths/lakeside-riverside-moment'),
+  'village-street-wandering': require('./paths/village-street-wandering'),
+  'flower-shop': require('./paths/flower-shop'),
+  'artisan-workshop': require('./paths/artisan-workshop'),
+  'cozy-inn-interior': require('./paths/cozy-inn-interior'),
+  'fishing-dock': require('./paths/fishing-dock'),
+  'garden-vegetable-patch-tending': require('./paths/garden-vegetable-patch-tending'),
+  'barn-animal-shelter-interior': require('./paths/barn-animal-shelter-interior'),
+  'seasonal-festival': require('./paths/seasonal-festival'),
+  'pineapple-field-afternoon': require('./paths/pineapple-field-afternoon'),
+  'mango-orchard-harvest': require('./paths/mango-orchard-harvest'),
+  'banana-grove-path': require('./paths/banana-grove-path'),
+  'coconut-palm-grove': require('./paths/coconut-palm-grove'),
+  'sugarcane-field': require('./paths/sugarcane-field'),
+  'tropical-flower-garden': require('./paths/tropical-flower-garden'),
+  'tropical-stream-crossing': require('./paths/tropical-stream-crossing'),
+  'papaya-guava-orchard': require('./paths/papaya-guava-orchard'),
 };
 
 module.exports = {
@@ -100,16 +124,44 @@ module.exports = {
   // fully private: the dispatcher only ever runs a bot with a bot_schedules
   // row (none exists for FarmBot), so listing a path here can never trigger
   // an auto-post — safe to list a path the moment it's wired, even mid-QA.
-  // Signed-off (3): animal-feeding-time, cozy-bakery-afternoon,
-  // autumn-village-market. In QA (3, 2026-09-08): quiet-sunset-on-the-porch,
-  // summer-evening-by-the-pond, first-snowfall — see FARMBOT_PATH_BUILD_STATE.md.
+  // Signed-off, see FARMBOT_PATH_BUILD_STATE.md for the full roster + build
+  // status (16 more paths in progress as of 2026-09-09, autonomous multi-
+  // agent push).
+  // 'first-snowfall' DEACTIVATED 2026-09-09 (Kevin: "shut off the snowy paths
+  // for farmbot for now - just deactivate, don't delete") — off-season for
+  // real-world posting right now. Path builder, bespoke pools, and QA history
+  // are untouched (still required in pathBuilders above) — restore by moving
+  // 'first-snowfall' back into this array whenever it's seasonally right.
   paths: [
     'animal-feeding-time',
     'cozy-bakery-afternoon',
     'autumn-village-market',
     'quiet-sunset-on-the-porch',
     'summer-evening-by-the-pond',
-    'first-snowfall',
+    'harvest-festival',
+    'spring-planting-day',
+    'rainy-farmhouse-morning',
+    'flower-field-wandering',
+    'orchard-afternoon',
+    'picnic-in-the-meadow',
+    'woodland-walk',
+    'lakeside-riverside-moment',
+    'village-street-wandering',
+    'flower-shop',
+    'artisan-workshop',
+    'cozy-inn-interior',
+    'fishing-dock',
+    'garden-vegetable-patch-tending',
+    'barn-animal-shelter-interior',
+    'seasonal-festival',
+    'pineapple-field-afternoon',
+    'mango-orchard-harvest',
+    'banana-grove-path',
+    'coconut-palm-grove',
+    'sugarcane-field',
+    'tropical-flower-garden',
+    'tropical-stream-crossing',
+    'papaya-guava-orchard',
   ],
 
   cycleAllPaths: true,
@@ -120,9 +172,21 @@ module.exports = {
   },
 
   rollSharedDNA({ picker }) {
-    const lookRegister = picker
-      ? picker.pickWithRecency(pools.FARMBOT_LOOK_REGISTER, 'look_register')
-      : pools.FARMBOT_LOOK_REGISTER[0];
+    // Defensive fallback (2026-09-09) — two 2026-09-08 renders were traced
+    // (via Kevin hearting them: "drifting from our anime look") to a
+    // completely EMPTY lookOverride() output, silently dropping the anime-
+    // style lead-in entirely (shared-blocks.js's lookOverride returns '' for
+    // any falsy `look`). Root cause: those renders landed in a brief window
+    // while farmbot_look_register.json was being hand-edited multiple times
+    // that same session — picker.pickWithRecency on a momentarily-empty/
+    // mid-write pool array can return undefined. The pool itself is fine
+    // now (5 valid entries, verified), but nothing should ever again let a
+    // render go out with zero anime-style direction — always fall back to
+    // a guaranteed-valid entry rather than propagating a falsy pick.
+    const lookRegister =
+      (picker
+        ? picker.pickWithRecency(pools.FARMBOT_LOOK_REGISTER, 'look_register')
+        : pools.FARMBOT_LOOK_REGISTER[0]) || pools.FARMBOT_LOOK_REGISTER[0];
     return {
       // Bot-wide multi-media look mashup (2026-09-07). Rolled every render;
       // consumed by look-enabled path templates via shared-blocks.lookOverride.

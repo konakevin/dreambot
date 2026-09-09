@@ -119,5 +119,610 @@
       "ANY"
     ],
     "description": "An old stone wall with one patch of moss that stays a deeper, richer green than anything growing around it, even in dry weather, even in the grey of late afternoon."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A lantern hanging by the cottage door glowing a shade warmer and softer than its small flame could reasonably explain."
+  },
+  {
+    "tags": [
+      "SUMMER"
+    ],
+    "description": "A single wildflower at the meadow's edge, slightly larger and more luminous than the rest, its petals holding a glow long after the sun has dipped below the hill."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Moonlight pooling in a hollow between two old tree roots, bright and still, as though it had settled there on purpose and had no intention of moving."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A small blur at the very corner of the eye, just inside the treeline — the suggestion of something slight and quick, gone entirely before you could turn your head."
+  },
+  {
+    "tags": [
+      "AUTUMN"
+    ],
+    "description": "A single fallen leaf resting in a puddle, spinning slowly in a circle with no wind to explain it."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The tall grass at the edge of the garden parting gently in a neat little path, as if something very small had just passed through, though nothing is there now."
+  },
+  {
+    "tags": [
+      "SPRING"
+    ],
+    "description": "A cluster of clover near the stone wall blooming a week before anything else, the blossoms holding a soft pearl-like light in the early morning fog."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A wooden window shutter left ajar, casting a slant of afternoon light onto the floor that seems to stay warm and amber well into the blue hour of evening."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A lantern hanging by the garden gate glowing just a shade warmer than its small flame could reasonably explain, casting a ring of amber light that feels almost like company."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A single wildflower at the edge of the meadow, noticeably larger and softer than the others, its petals holding a faint luminescence that vanishes the moment you look directly at it."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Moonlight pooling in the hollow of an old stone wall in a way the angle simply shouldn't allow, sitting there quietly like spilled milk that forgot to spread."
+  },
+  {
+    "tags": [
+      "spring",
+      "summer"
+    ],
+    "description": "A firefly drifting low over the clover, its light lingering several seconds longer than any other — long enough to make you lower the book in your lap and just watch."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A faint movement at the very edge of the treeline, soft and unhurried, that leaves behind only a slightly swaying fern and the feeling you almost saw something small and shy."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The pond surface holding a shimmer well after the breeze has gone still, as though something just beneath it remembered it was supposed to be glowing."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A cluster of fallen leaves arranged in the cottage doorway in a loose, almost deliberate spiral — too tidy for wind, too gentle to feel like anything other than a small, wordless hello."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A spider's web strung between the fence posts catching a light that isn't quite coming from the overcast sky, each thread holding its own faint, private gleam."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "A patch of frost on the windowpane that melted everywhere else hours ago, still holding its feathery pattern in one corner, softly lit as if reluctant to go."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The old wooden gate to the kitchen garden swinging slowly shut on its own, perfectly timed, with a quietness that feels less like a draft and more like something tidy-minded passing through."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A single wildflower at the meadow's edge, slightly larger and more luminous than the rest, as though lit from somewhere inside."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A lantern hanging by the cottage door glowing a shade warmer and softer than its small flame could possibly explain."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Moonlight pooling in a hollow between the roots of an old oak, brighter there than anywhere else in the yard."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A shape at the very edge of the treeline — small, still, almost the silhouette of something — gone the moment you look directly at it."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A fallen leaf spinning slowly in a sheltered corner of the garden where the air is perfectly calm."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The old stone well catching a glint of reflected light from a direction where there is no obvious source of light at all."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A cluster of clover near the garden gate, each bloom faintly luminous at dusk, as though remembering the afternoon sun a little longer than the others."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The soft sound of wind chimes from somewhere deeper in the orchard, on a morning when the air is perfectly still."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A lantern on the porch post glowing just a shade warmer than its small flame could reasonably account for, casting gold where there should only be amber."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A single wildflower at the meadow's edge, noticeably larger and softer-lit than all the others, as though the afternoon saved its best light especially for that one stem."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Moonlight gathered in the hollow of an old oak's roots, pooling there in a still, silver dish of glow that the surrounding dark doesn't quite touch."
+  },
+  {
+    "tags": [
+      "summer",
+      "spring"
+    ],
+    "description": "A firefly hovering at eye level, its light held on and on, patient and unblinking, just long enough to make you forget to breathe."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Something small and unhurried moving at the treeline — a shape that dissolves the moment your eyes try to settle on it, leaving only the faint impression of something that belonged there."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The garden pond's surface catching a shimmer from no clear source, a faint pearl-colored light drifting slowly beneath the water as though the bottom were quietly dreaming."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A cluster of fallen leaves resting in a near-perfect spiral at the base of the garden gate, arranged with a tidiness no wind ever quite manages on its own."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A patch of clover in the corner of the field sitting in a soft, sourceless brightness even as a cloud draws the rest of the meadow into shade."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The old stone birdbath holding its water perfectly mirror-still on a breezy afternoon, its surface undisturbed as though something gentle were pressing a calm hand just beneath it."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "A thin ring of frost on the windowpane forming overnight in a shape so even and unhurried it seems less like weather and more like someone quietly drew it while the house slept."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A lantern on the porch rail glowing just a shade warmer than its small flame could account for, turning the nearby honeysuckle a soft, impossible gold."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A single wildflower at the meadow's edge, slightly larger and more luminous than the others, as though it caught a light that hasn't quite left yet."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Moonlight pooling in the hollow of an old oak's roots, staying perfectly still even as the branches above it sway."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A firefly drifting low over the clover, its light holding just a breath longer than it should before it finally winks out."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The pond's surface, on an otherwise ordinary afternoon, holding a faint shimmer just beneath the still water — there, then softly gone."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Something small and unfocused moving at the very edge of the treeline, gone the moment you turn to look, leaving only a faint trembling in the fern."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A fallen leaf resting on the stream, spinning gently in a circle where the water is perfectly calm, as if unwilling to drift away."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The garden gate casting a shadow slightly warmer in color than the afternoon light suggests it should be."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A cluster of blossoms on the old apple tree catching the evening light in a way that makes them look, for just a moment, faintly and quietly lit from within."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The tall grass parting in a slow, unhurried path across the field, though the air around you is perfectly still."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A lantern on the porch fence post burning somehow warmer and softer than its small flame could explain, the light almost honeyed."
+  },
+  {
+    "tags": [
+      "spring",
+      "summer"
+    ],
+    "description": "One flower at the meadow's edge growing just slightly larger and more luminous than the rest, its petals catching light from no particular direction."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Moonlight pooling in a hollow between two old tree roots, settled and bright as still water where no gap in the canopy exists above."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A brief, gentle movement at the corner of the treeline — something small and unhurried, soft-edged and just out of focus before it was ever quite there."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A single fallen leaf resting on the stream's surface, drifting upstream for just a moment before the current quietly reclaims it."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The old stone well in the garden casting a shadow that falls in the wrong direction, barely noticeably, as though the light had quietly made an exception."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "A patch of frost on the window glass arranging itself into shapes almost too delicate and considered to be purely accidental — almost."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The tall grass at the field's far edge swaying in a slow, circling pattern when the air is otherwise completely still."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A lantern hung by the garden gate glowing a shade warmer than its small flame could possibly explain, casting amber onto the stones beneath it like late afternoon sun caught and kept."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A single wildflower at the meadow's edge standing half again too tall, its petals holding a quiet luminescence long after the light has left the rest of the field."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Moonlight pooling in the hollow of an old tree root, still and collected there, as though it chose that particular spot and decided to stay."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A firefly drifting slowly across the porch rail, its light steadying into something longer and softer than a blink, almost as if it were simply thinking."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The faintest suggestion of a small shape just behind the fern line — a stillness, a watching — that resolves into nothing when you look directly at it."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A pond's surface shimmering with colors that don't quite match the sky above it, gone the moment you lean closer to be certain."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A cluster of fallen leaves resting in a perfect unhurried spiral at the base of an oak, as though they had all the time in the world and knew exactly where to land."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The smell of bread and clover arriving on a breeze from a direction with no farmhouse in it, warm and close and then simply gone."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A spider's web strung between two fence posts holding a single droplet of dew that catches the morning light in too many colors for one small drop to reasonably contain."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A patch of moss on a stone wall impossibly green even in the shade, soft-looking and still, as if it had been growing there since before the wall was built and intends to outlast it quietly."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A lantern hanging by the cottage door that seems to cast warmth far beyond what its small flame should allow."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A single wildflower at the meadow's edge, slightly larger and more luminous than the rest, as though it caught a light that isn't there."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Moonlight pooling in a hollow between the roots of an old oak, bright and still, even as clouds drift overhead."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A pond's surface holding a faint shimmer just beneath the lily pads, like something calm and patient breathing softly below."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Something small and unhurried slipping between the ferns at the wood's edge — gone before you're sure you saw it at all."
+  },
+  {
+    "tags": [
+      "AUTUMN"
+    ],
+    "description": "A single fallen leaf caught in a slow, lazy spiral near the hedgerow, turning long after the breeze has passed."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The kitchen windowpanes fogged with warmth from within, one small clear circle appearing in the corner as though someone breathed gently on the glass from outside."
+  },
+  {
+    "tags": [
+      "SPRING"
+    ],
+    "description": "A patch of clover near the stone wall blooming a week before anything else in the garden, their petals an almost impossible soft white."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A cobweb strung between two fence posts catching the low morning light in a way that makes it look, just briefly, like something deliberately placed there."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A lantern hanging by the cottage door glowing just a shade warmer than its small flame could reasonably explain, casting honey-gold light on the stones around it."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A single wildflower at the meadow's edge, slightly larger and more luminous than the rest, its petals catching a light that isn't quite coming from the sky."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Moonlight pooling in the hollow of an old oak's roots, sitting there like still water, even as clouds drift slowly overhead."
+  },
+  {
+    "tags": [
+      "spring",
+      "summer"
+    ],
+    "description": "A firefly hovering at eye level near the garden gate, holding its glow for just a breath too long before drifting softly into the tall grass."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The pond's surface holding a faint shimmer in one particular corner, a gentle iridescence beneath the water that moves too slowly to be a reflection."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A blur of something small and soft at the very edge of the treeline — gone the moment you turn your head, leaving only a trembling fern."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A cluster of fallen leaves arranged loosely in a hollow between the roots of an elm, too evenly spaced to be the wind's doing, glowing faintly amber in the dusk."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Morning mist lingering in one low corner of the field long after the rest has lifted, as though the ground there is quietly reluctant to let it go."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Frost forming on the windowpane in delicate, unhurried patterns that seem to spiral inward rather than outward, tracing shapes too deliberate to name."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A patch of clover near the stone wall where the bees always seem to gather just before dusk, long after the flowers have closed, as though drawn to something only they can sense."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "One wildflower standing slightly taller than the rest, its petals an almost unreasonable shade of gold, as though it had caught sunlight and simply kept it."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A lantern hanging from the porch eave glowing warmer and steadier than its small flame seems capable of explaining."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Moonlight gathering in a low hollow of the garden path where the shadows should be deepest, pooling there like poured cream."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A faint movement just beyond the treeline — not quite a shadow, not quite a shape — that is perfectly still the moment you look directly at it."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A single blossom on the old apple tree noticeably larger than the others, almost luminous in the afternoon grey, as if lit from somewhere inside the petal."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The tall grass at the meadow's edge parting softly in a line, as though something unhurried passed through it a moment before you turned to look."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "One fallen leaf spinning slowly in a still corner of the yard, turning in a lazy circle with no wind present to explain it."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A stone birdbath catching the late evening light at an angle that makes the water look impossibly deep, as though the bottom were very far away."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A lantern hanging by the cottage door glowing just a shade warmer than its small flame could reasonably explain, casting amber light that feels almost like a held breath."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Moonlight pooling in the hollow of an old tree stump in the garden, gathering there like water, though the rest of the yard sits in ordinary shadow."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A single wildflower at the meadow's edge, slightly larger and more luminous than the rest, its petals holding a glow the afternoon sun alone doesn't account for."
+  },
+  {
+    "tags": [
+      "spring",
+      "summer"
+    ],
+    "description": "A firefly drifting low over the clover, its light lingering on one spot for just a beat too long before blinking softly away into the tall grass."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The still pond shimmering with a faint, sourceless light just beneath its surface, as though something very quiet lives in the water's memory."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A blur at the treeline — the impression of something small and unhurried stepping behind a birch — gone the moment you look directly at it, almost certainly just the light."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A single fallen leaf resting in the lane, its red deeper and more vivid than all the others, as if autumn concentrated itself into that one ordinary thing."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The kitchen window glowing from inside with a warmth that seems just slightly too golden, the kind of light you associate with a memory rather than a bulb."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Dew on a spider's web between two fence posts catching the morning in a way that makes it look briefly like a map of somewhere you almost recognize."
   }
 ]

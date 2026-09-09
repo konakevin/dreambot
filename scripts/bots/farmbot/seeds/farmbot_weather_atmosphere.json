@@ -148,5 +148,575 @@
       "winter"
     ],
     "description": "Soft snowfall muffling every sound to a whisper, the air clean and weightless, steam curling gently upward from something warm left on a windowsill nearby."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Cool blue-grey light spreading evenly under a soft overcast sky, everything hushed and still, the air carrying a gentle, clean stillness that settles quietly around you."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Pale silvery light resting across fresh snow, the whole countryside washed in soft blue-white quiet, every surface glowing faintly as though lit from within."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A crisp, wide blue autumn sky stretched overhead, the air cool and freshly washed, carrying the faint green scent of damp grass and turned earth."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Silvery moonlight pooling gently across open pastures, the world rendered in soft silver and blue-grey, the night air cool and perfectly still."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A lavender-blue dawn hovering just before sunrise, the sky pale and luminous, the air cool and dewy with a faint violet blush along the horizon line."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Dappled green-filtered light shifting softly through broad leaves overhead, the shade cool and gentle, the air carrying the quiet green freshness of deep summer foliage."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Cool rain-washed air drifting through an open window, the light outside soft and silver-grey, every surface clean and gleaming faintly in the gentle mid-morning quiet."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Morning dew catching pale silver light across the meadow, each small drop glinting cool and quiet, the air fresh and faintly green with new grass."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A misty violet dusk settling slowly over low hills, the light dissolving into soft blue and lilac, the air cool and hushed as the evening folds gently inward."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Soft grey drizzle-light filtering through a cottage window, the room bathed in a calm, even silver-blue glow, the outside world pleasantly blurred and peaceful behind a fine veil of mist."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Cool blue-grey light spreading evenly under a soft overcast sky, the air still and hushed, everything touched with a gentle silver quiet."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Pale silver light resting on fresh snow, the countryside washed in soft cool blue, every surface calm and luminous."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A crisp, wide blue autumn sky overhead, the air clean and cool, the light clear and unhurried across the open fields."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A lavender-blue dawn just beginning to open, pale light pooling low across the meadow before the sun has quite arrived, the air cool and very still."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Soft grey drizzle-light filtering through a window, the world outside gently blurred, the cool damp air carrying the quiet smell of rain on grass."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Rain pattering softly on a tin roof, each drop a small, unhurried tap, the sound folding into a gentle lullaby for the whole cottage."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Fine autumn rain streaks slowly down the windowpane, blurring the amber fields beyond into a warm, watercolour wash of gold and grey."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A light spring drizzle drifts over the meadows, so delicate it is almost more mist than rain, coaxing the earliest wildflowers into blossom."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Fat, lazy raindrops settle one by one onto rose petals, trembling there like tiny glass beads before sliding softly to the earth below."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A gentle shower dimples every puddle along the lane, each little ring spreading and overlapping in a quiet, ever-changing pattern across the water."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Distant thunder rolls low and muffled somewhere far beyond the hills, never drawing closer, just a soft rumble that makes the cottage feel all the more sheltered and still."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The rain eases gradually into the finest of mists, barely felt on the skin, softening the hedgerows until the whole countryside looks wrapped in pale silk."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The rain has only just stopped, and the air carries that clean, mineral-sweet scent of wet earth and grass, every surface glistening as if newly made."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Tiny raindrops cling and tremble along every thread of a spiderweb strung between the garden fence posts, turning it into a string of the smallest, most perfect pearls."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A sun shower drifts through warm golden afternoon light, rain and sunshine falling together, and a soft rainbow arches lazily over the far end of the field as the clouds begin to part."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Rain pattering softly on a tin roof, each drop a quiet tap keeping steady, drowsy time against the silence of the countryside."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Thin silver streaks of rain tracing slow, wandering paths down an old windowpane, the world beyond pleasantly blurred and soft."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A fine spring drizzle drifting over the fields like a pale veil, barely more than a mist, coaxing the green deeper into every blade of grass."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Fat, gentle raindrops resting on rose petals and clover heads, each one a tiny trembling lens holding a miniature reflection of the cloudy sky."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Puddles in the lane rippling outward in soft, overlapping rings with every unhurried drop, the whole surface dancing in a quiet, patient rhythm."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Warm morning sunlight spilling through the trees in long, lazy beams, golden dust motes drifting slowly through the stillness."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A soft summer haze settling over the meadow, fireflies beginning to flicker at the edges of the tall grass as the heat gentles toward evening."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Misty morning air clinging low to the fields, pale and quiet, tiny droplets of dew catching the first pale light on every blade of grass."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Crisp autumn air carrying a faint sweetness, dry leaves spiraling down one by one through amber afternoon light that feels almost edible."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Soft snowfall muffling every sound, the air a hushed and feathery grey-white, steam curling warmly from a mug left on the windowsill nearby."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "The blue hour settling in gently, the sky a deep quiet indigo, the outlines of hedgerows and rooftops softening into silhouette."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Pale pink petals drifting sideways on a barely-there breeze, catching the golden late-afternoon light like slow, unhurried confetti."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A gentle rain falling in the late afternoon, so soft it is more feeling than sound, the air full of green and earth and clean coolness."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Sunbeams breaking through the canopy overhead in thick, golden shafts, floating pollen turning each beam into something almost solid and glowing."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A warm sunset glow washing everything in copper and rose, steam rising lazily from a pot left outside, the whole scene suspended in amber."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Warm morning sunlight pooling across the fields like slow honey, golden dust motes drifting lazily through the open window."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A thick summer haze softening the treeline, the air faintly sweet and still, floating pollen catching the light like tiny sparks."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Misty morning settling low over the meadow, pale and gentle, pink petals falling from the hedgerow in unhurried silence."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Fireflies blinking into life just as the blue hour deepens, the air warm and humming faintly with the last of the day's heat."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Crisp autumn air carrying the faint smell of woodsmoke, golden leaves tumbling slowly past in a light drift, the sky a clean soft blue."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Soft snowfall settling without a sound, the world muffled and pearl-white, steam curling gently from a mug left on the windowsill nearby."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Sunset glow spilling amber and rose across the hillside, the light thick and warm, dew just beginning to gather on the grass below."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Gentle rain tapping quietly on the leaves outside, the air clean and cool, a faint shimmer of sunbeams already breaking through at the field's edge."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A still starry night overhead, the countryside breathing slowly in the dark, steam rising from something warm resting on the porch rail."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Golden late-afternoon light catching every falling leaf as it turns, the air carrying a pleasant bite, the whole lane glowing amber and rust."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Warm morning sunlight spilling soft and gold across the fields, dew still clinging to every blade of grass and catching the light like scattered glass."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A thick summer haze settling lazily over the meadow, the air itself seeming to shimmer, with floating pollen drifting slow and weightless through the stillness."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Misty morning air wrapped gently around the cottage garden, pale pink petals falling from the apple tree and dissolving quietly into the soft grey-white light."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Crisp autumn air carrying a faint bite of woodsmoke, golden late-afternoon light burning low through the turning trees and setting every falling leaf briefly on fire."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Soft snowfall drifting down in unhurried silence, steam curling up from a mug left on the windowsill and dissolving into the still, muffled cold."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Fireflies beginning to surface one by one as blue hour deepens over the long grass, their small lights blinking softly in the cooling dusk."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Sunset glow pouring amber and rose across the sky, golden dust motes floating through the open barn door in slow, warm suspension."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Sunbeams breaking through a thin morning mist in long pale shafts, catching drifting pollen and making the whole lane ahead glow faintly gold."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A starry night overhead, vast and very still, with steam rising from a kettle somewhere nearby and the air carrying just the faintest trace of distant earth and pine."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Blue hour settling over the orchard, the last warmth of the day already gone, fallen leaves lightly frosted and the air clean and thin as cold water."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Warm morning sunlight spilling through the trees in long, lazy beams, golden dust motes drifting slowly through the still air like tiny sparks of something sleepy and gentle."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A summer haze settled soft over the meadow, the air thick and sweet, floating pollen catching the high midday light like a slow, dreamy snowfall in reverse."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Misty morning light wrapped low around the hedgerows, pale and quiet, beads of dew trembling on every blade of grass and catching the first shy color of dawn."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Crisp autumn air carrying a faint woodsmoke sweetness, golden late-afternoon light burning sideways through the turning leaves, each one glowing amber and copper as it lets go and falls."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Soft snowfall drifting in near-silence, the blue hour pressing in gentle and cold, steam curling upward from a mug left on the windowsill in slow, wandering ribbons."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Pale pink petals falling loose on a breath of wind, catching the late-afternoon sunset glow as they tumble, the air smelling faintly of something sweet just beginning to bloom."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Fireflies beginning to surface one by one as the last of the sunset glow fades from orange to plum along the treeline, the warm damp air resting easy and still."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Blue hour settling over the fields like a held breath, the shapes of things going soft at the edges, a single thread of steam rising from somewhere warm and close nearby."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "A loose scatter of dry leaves tumbling slowly across the path in crisp afternoon air, sunbeams slanting gold and thin between bare branches, the light almost too tender to look at directly."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A starry night overhead, vast and unhurried, the air cool and perfectly clear, everything below it resting quiet and small under that deep, patient dark."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Warm morning sunlight spilling softly through the window, golden dust motes drifting lazily through the air like tiny suspended sparks."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A thick summer haze settling over the fields, the air heavy and honeyed, with clouds of pale pollen floating in slow, wandering drifts."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Misty morning light, the world hushed and pearl-grey, petals falling from the blossom trees and settling on the dewy grass below."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Crisp autumn air with a low golden light cutting across the lane, dry leaves spiralling down in slow, unhurried circles all around."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Soft snowfall muffling every sound, the air perfectly still, steam curling gently from a warm mug left on the windowsill."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Blue hour settling in after a warm day, fireflies beginning to blink softly among the tall grasses at the edge of the meadow."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Gentle rain tapping at the glass, the air outside clean and silver-green, thin wisps of steam rising from the warm earth between showers."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Sunset glow washing everything in amber and rose, long quiet shadows stretching across the yard, the light tender and unhurried."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Sunbeams cutting through the canopy overhead, catching the floating pollen in long bright columns that drift and shift with every faint breeze."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A clear starry night, the air carrying just the faintest chill, dew already gathering on the leaves, the countryside settled into deep, contented quiet."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Warm morning sunlight spilling soft and slow across the fields, long shadows still clinging to the hedgerows, dew catching the light like scattered glass beads on every blade of grass."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A thick summer haze settling lazily over the meadow, the air golden and slightly dreamy, floating pollen drifting like tiny lanterns through the warm stillness."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Golden late-afternoon light angled low and honeyed through the trees, dust motes turning to flecks of pure gold where the sunbeams cut between the branches."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Crisp autumn air carrying the faint smell of woodsmoke, amber and copper leaves spinning down in slow spirals, the light thin and clear and perfectly clean."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "A misty spring morning softening every edge into something gentle, pale pink petals falling from the blossom trees and vanishing quietly into the low white haze."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Soft snowfall drifting in unhurried flakes through blue-grey twilight, steam curling warmly from a mug left on the windowsill, the whole world muffled and still."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "Fireflies beginning to pulse and blink at the meadow's edge as the last sunset glow fades to deep violet, the warm air barely moving, the evening holding its breath."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Blue hour settling quietly over the countryside, the sky a deep tender indigo, the first stars appearing one by one above the silhouetted treeline."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Gentle rain falling in a fine silver curtain, the air fresh and green-smelling, each raindrop on the garden leaves making the softest possible sound, dew and rain blurring together."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "A starry night arching wide and unhurried overhead, the Milky Way a faint smear of soft light above the fields, the air cool and clean and very quiet, carrying just a thread of warm steam from somewhere nearby."
+  },
+  {
+    "tags": [
+      "ANY"
+    ],
+    "description": "Warm morning sunlight spilling soft and golden through the trees, long shadows still cool on the grass, a faint curl of steam rising from a mug left on the porch rail."
+  },
+  {
+    "tags": [
+      "summer"
+    ],
+    "description": "A heavy summer haze draped over the fields, the air sweet and still, floating pollen drifting like tiny lanterns through the honeyed light."
+  },
+  {
+    "tags": [
+      "spring"
+    ],
+    "description": "Misty morning light softening every edge, pale pink petals falling unhurried from the apple trees, dew trembling on each blade of grass below."
+  },
+  {
+    "tags": [
+      "autumn"
+    ],
+    "description": "Crisp autumn air carrying the faint scent of woodsmoke, golden late-afternoon light cutting low and warm across the hillside, dry leaves spinning lazily down from the oaks."
+  },
+  {
+    "tags": [
+      "winter"
+    ],
+    "description": "Soft snowfall settling quietly over the garden, the light a muffled silver-white, wisps of steam rising gently from a pot somewhere just inside an open window."
   }
 ]

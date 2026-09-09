@@ -14,8 +14,8 @@ const SEEDS_DIR = path.join(__dirname, '..', '..', 'bots', 'farmbot', 'seeds');
 const RECIPES = [
   {
     outPath: path.join(SEEDS_DIR, 'farmbot_activity.json'),
-    total: 25,
-    append: false,
+    total: 120,
+    append: true,
     banHumanLanguage: true,
     metaPrompt: (n) => `Generate ${n} distinct GENTLE ACTIVITY descriptions for a cozy
 countryside bot — what a character might be doing, described as an ACTION/POSE phrase (not a

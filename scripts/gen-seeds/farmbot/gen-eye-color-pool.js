@@ -15,8 +15,8 @@ const SEEDS_DIR = path.join(__dirname, '..', '..', 'bots', 'farmbot', 'seeds');
 const RECIPES = [
   {
     outPath: path.join(SEEDS_DIR, 'farmbot_eye_color.json'),
-    total: 15,
-    append: false,
+    total: 120,
+    append: true,
     banHumanLanguage: true,
     metaPrompt: (n) => `Generate ${n} distinct EYE COLOR descriptions for young-adult anime
 villager characters. Cover a genuinely wide, natural range: warm brown, deep hazel, soft amber,

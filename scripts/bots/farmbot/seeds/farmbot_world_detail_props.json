@@ -293,5 +293,578 @@
       "farmhouse"
     ],
     "description": "A wide windowsill holding a wicker basket lined with straw and a clutch of fresh brown eggs, the early sun streaming through the glass and casting long oval shadows across the sill's peeling cream paint."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery"
+    ],
+    "description": "A flour-dusted wooden countertop scattered with rolling pins and dough scraps, the surface worn smooth from years of daily kneading, catching the warm glow of an overhead lamp."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A patchwork quilt in faded blues and creams draped loosely over the curved back of a rocking chair, one corner pooling softly onto a braided rag rug below."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A row of copper pots and ladles hanging from a ceiling rail above a warm brick hearth, their burnished surfaces glowing amber in the firelight, each one dented and beloved."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A wicker basket of fresh eggs resting on a deep windowsill, the pale shells catching the soft morning light filtering through a gauzy linen curtain."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "Bundles of dried lavender, rosemary, and thyme tied with rough twine and hanging from a low wooden beam overhead, filling the room with a faint earthy sweetness."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery"
+    ],
+    "description": "A tall wooden shelf lined with jam jars of varying sizes, each sealed with a gingham cloth top, their contents glowing ruby, amber, and deep violet where the window light passes through them."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A cast-iron kettle sitting atop an old iron stove, releasing a thin curl of steam into the warm kitchen air, its spout darkened from years of daily use."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A snug reading nook tucked into a bay window alcove, cushioned with a faded floral pad and bordered by shelves of well-thumbed books, afternoon light pooling across a half-read page."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A sturdy wooden shelf displaying a collection of mismatched teacups in florals and stripes, arranged with quiet care, each one chipped just enough to tell a story."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A wooden butter churn standing quietly in the corner beside a spinning wheel, a wicker basket of undyed wool resting at its base, the whole corner humming with gentle, unhurried domesticity."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery"
+    ],
+    "description": "A flour-dusted wooden countertop stretches the length of a warm kitchen, its surface worn smooth from years of kneading, with a small heap of dough resting at the center beneath a clean linen cloth."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery",
+      "ANY"
+    ],
+    "description": "A row of copper pots and ladles hangs from a iron rail above the stove, each one catching the amber glow of the hearth and casting warm rounded reflections across the ceiling."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A patchwork quilt in faded blues and creams is draped loosely over a rocking chair beside a frost-edged window, one corner tucked as though someone stepped away only moments ago."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A wicker basket of fresh brown eggs sits on a deep windowsill, the morning light filtering through thin curtains and casting soft oval shadows across each egg."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery",
+      "ANY"
+    ],
+    "description": "Bundles of dried lavender, rosemary, and sage hang in loose clusters from a low ceiling beam, their muted purples and silvers swaying faintly whenever the kitchen door opens."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery"
+    ],
+    "description": "A heavy iron kettle steams steadily on the stovetop, its lid trembling with a quiet rattle, filling the kitchen with a soft veil of mist that catches the light near the window."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A deep reading nook is tucked beside a rain-streaked window, cushioned with a worn velvet pillow and a folded wool blanket, a small stack of dog-eared books balanced on the sill beside a cooling mug."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A wooden shelf holds a mismatched collection of teacups — some painted with small florals, others plain cream or chipped at the rim — arranged with the casual care of things used and loved daily."
+  },
+  {
+    "tags": [
+      "indoor",
+      "ANY"
+    ],
+    "description": "Glass jars of homemade jam line a narrow shelf in front of a sun-facing window, their contents glowing deep ruby and amber as the afternoon light passes through them like stained glass."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A large basket of tangled yarn in earthy ochres and soft greens sits beside a spinning wheel in the corner, a half-finished skein looped loosely around one of the wheel's spokes as though work paused mid-thought."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery"
+    ],
+    "description": "A flour-dusted wooden countertop scattered with small craters from kneading, a rolling pin resting at its edge, the whole surface glowing amber under a low hanging lamp."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A patchwork quilt in faded blues and creams draped loosely over a rocking chair, one corner tucked beneath a well-worn armrest as though someone stepped away just moments ago."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery"
+    ],
+    "description": "A row of copper pots and ladles hanging from a ceiling rail above the stove, each one catching a different warm flicker from the hearth below, their bottoms burnished to a deep amber glow."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A wicker basket of fresh brown eggs nestled on a wide windowsill, a soft morning light washing across their mottled shells and the peeling white paint of the sill beneath them."
+  },
+  {
+    "tags": [
+      "indoor",
+      "ANY"
+    ],
+    "description": "A bundle of dried lavender, rosemary, and sage twisted together with twine and suspended from a low ceiling beam, the herbs faintly dusty and curling at their tips, perfuming the whole room."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery"
+    ],
+    "description": "A round-bellied kettle steaming gently on the iron surface of a wood stove, a slow curl of vapor rising toward a ceiling darkened by years of warm, fragrant cooking."
+  },
+  {
+    "tags": [
+      "indoor",
+      "ANY"
+    ],
+    "description": "A deep window nook lined with a flattened cushion in a faded floral print, a small stack of well-thumbed books wedged against the glass, the outside world blurred soft and green beyond the wavy pane."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A rough-hewn wooden shelf holding a mismatched collection of ceramic teacups in cream, sage, and speckled brown, each hung or stacked with the easy confidence of something used daily and loved quietly."
+  },
+  {
+    "tags": [
+      "indoor",
+      "ANY"
+    ],
+    "description": "Glass jars of jewel-toned jams crowding a shelf beside a south-facing window, the light passing through them in pools of ruby, amber, and deep plum that ripple slowly across the whitewashed wall."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A wicker basket of tangled wool skeins in heather and cream sitting beside the rounded base of a spinning wheel, a single length of spun yarn still threaded through its hooks, mid-work and waiting."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery"
+    ],
+    "description": "A flour-dusted wooden countertop stretches beneath low timber beams, scattered with a rolling pin and a small mound of dough resting under a linen cloth, the whole surface warm with the glow of a nearby hearth."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A patchwork quilt in faded blues and creams draped loosely over the arm of a rocking chair, its worn fabric catching the soft afternoon light that spills across a braided rag rug below."
+  },
+  {
+    "tags": [
+      "indoor",
+      "ANY"
+    ],
+    "description": "A row of copper pots and ladles hanging from a wrought-iron rail above a brick hearth, their burnished surfaces glowing amber in the firelight, a faint curl of steam rising from the kettle resting on the grate."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A wicker basket of fresh brown eggs nestled on a deep stone windowsill, the shells speckled and warm-toned, a curtain of white muslin drifting gently beside them in the breeze from a cracked pane."
+  },
+  {
+    "tags": [
+      "indoor",
+      "ANY"
+    ],
+    "description": "Bundles of dried lavender, rosemary, and sage tied with twine and hung upside down from a low ceiling beam, their muted purples and silvers casting faint shadows across the rough-plastered wall beneath."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery"
+    ],
+    "description": "Shelves of glass jam jars lined along a south-facing window, each one a different jewel tone — deep plum, amber, garnet — glowing translucently as morning light passes through them and pools in patches on the wooden floor."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A cozy reading nook tucked into a thick stone wall, a tufted cushion worn soft with years of use resting on the ledge, a small stack of well-thumbed books leaning against the sill beside a half-empty mug of tea."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A wooden shelf displaying an assortment of mismatched teacups — some hand-painted with tiny florals, others plain cream with hairline cracks — arranged with the quiet, deliberate care of something collected over many years."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A butter churn tucked into the corner of a stone-flagged room, its worn wooden stave darkened with age, a folded muslin cloth draped over the handle and a small crock resting on the floor beside it."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A woven basket of yarn in heathered wools — oatmeal, rust, and sage — sitting beside a spinning wheel whose spokes catch the firelight, a half-wound bobbin mid-work and a loose strand trailing across the flagstone floor."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery"
+    ],
+    "description": "A flour-dusted wooden countertop scattered with rolling pins and small ceramic bowls, the morning light catching every pale drift of powder like soft snow."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A patchwork quilt in faded blues and creams draped loosely over a worn rocking chair, one corner trailing gently onto a braided rug below."
+  },
+  {
+    "tags": [
+      "indoor",
+      "ANY"
+    ],
+    "description": "A row of copper pots hanging from a iron ceiling rail, their burnished surfaces glowing amber and rose in the warm light of a nearby hearth."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A deep windowsill lined with a basket of fresh brown eggs, their smooth shells catching the pale countryside light filtering through wavy old glass."
+  },
+  {
+    "tags": [
+      "indoor",
+      "ANY"
+    ],
+    "description": "Bundles of dried lavender, rosemary, and thyme tied with rough twine and hung in loops from a low timber beam, perfuming the still warm air of the room."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery"
+    ],
+    "description": "A heavy cast-iron kettle sitting atop a cream-colored stove, a thin curl of white steam rising steadily from its spout into the hazy kitchen air."
+  },
+  {
+    "tags": [
+      "indoor",
+      "ANY"
+    ],
+    "description": "Shelves of mismatched jam jars lined along a whitewashed wall, their jewel-toned contents — deep plum, amber, and ruby red — glowing richly wherever a shaft of window light falls across them."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A snug reading nook tucked beside a frost-edged window, a knitted blanket pooled on the cushioned bench and a half-finished cup of tea resting on the sill."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A weathered wooden shelf holding a collection of mismatched teacups in soft florals and cream glazes, a few turned slightly as though recently returned from use."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A worn butter churn standing quietly in a corner beside a spinning wheel, a basket of undyed wool yarn resting on the floor between them like a small woolly cloud."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery"
+    ],
+    "description": "A flour-dusted wooden countertop stretches along the bakery wall, its surface worn smooth from years of kneading, with a scattered ring of dough and a small pile of extra flour heaped near the edge."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery",
+      "ANY"
+    ],
+    "description": "A row of copper pots and ladles hang from a ceiling rail above the stove, their burnished surfaces catching the warm amber glow of the kitchen hearth and casting soft honeyed reflections across the stone wall."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A patchwork quilt in faded blues and dusty roses is draped loosely over a wooden rocking chair, its stitching lovingly worn at the edges, a pair of knitting needles tucked into the folds."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery",
+      "ANY"
+    ],
+    "description": "A cluster of dried herb bundles — lavender, rosemary, and thyme — hang upside down from a rough-hewn ceiling beam, filling the warm air with a faint earthy fragrance."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A deep windowsill holds a wicker basket of freshly collected eggs, pale cream and speckled brown, with soft morning light pooling around them and a smear of feather down caught on the wicker edge."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse",
+      "ANY"
+    ],
+    "description": "A wooden shelf lines the cottage wall, crowded with mismatched ceramic teacups in soft florals and earthy glazes, each one hooked carefully or nestled beside a small saucer, giving the impression of a lifetime of quiet morning rituals."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery",
+      "ANY"
+    ],
+    "description": "A cast-iron kettle sits on the stovetop sending a thin curl of steam toward the low ceiling, its dark surface slick with warmth, a folded cloth draped over the handle to protect careful hands."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A low reading nook is tucked into the curve of a cottage window, its cushioned seat covered in a worn linen throw, a small stack of dog-eared books leaning against the whitewashed sill with afternoon light falling golden across the pages."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A tall wooden butter churn stands in the corner of the farmhouse kitchen, its paddle resting against the wall beside it, the floor around it faintly stained and worn from years of daily use."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A deep wicker basket overflowing with skeins of wool in cream, rust, and sage sits beside an old spinning wheel, one thread still loosely threaded through the wheel's spindle as though someone stepped away only moments ago."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery"
+    ],
+    "description": "A flour-dusted wooden countertop stretches the length of a warm kitchen, scattered with a rolling pin and small mounds of dough, the air hazy with a fine white dust caught in slanted morning light."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A patchwork quilt in faded blues and creams draped loosely over the curved arm of a rocking chair, one corner trailing softly onto a braided rug below."
+  },
+  {
+    "tags": [
+      "indoor",
+      "ANY"
+    ],
+    "description": "A row of copper pots and ladles hanging from a ceiling rail above a brick hearth, their rounded bellies glowing amber and rose in the firelight, swaying faintly as if the room itself is breathing."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A deep windowsill holds a wicker basket of fresh eggs nestled in straw, their shells ranging from pale cream to soft speckled brown, the afternoon light pooling warmly around them."
+  },
+  {
+    "tags": [
+      "indoor",
+      "ANY"
+    ],
+    "description": "Bundles of dried lavender, rosemary, and chamomile hang in loose clusters from a low wooden beam, their papery stems tied with twine, perfuming the room with a faint dusty sweetness."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery"
+    ],
+    "description": "A cast-iron kettle sits atop a well-worn stove, a steady curl of white steam rising from its spout, the surrounding tiles darkened with years of gentle heat and care."
+  },
+  {
+    "tags": [
+      "indoor",
+      "ANY"
+    ],
+    "description": "A window nook fitted with a cushioned seat in worn floral linen, a half-read book left face-down on the sill, a knitted throw bunched at one end, winter light pressing softly through the wavy glass panes."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A tall wooden shelf lined with mismatched teacups — some rimmed in gold, some painted with tiny florals, some plain and sturdy — each one slightly tilted on its hook as if well-loved and often reached for."
+  },
+  {
+    "tags": [
+      "indoor",
+      "ANY"
+    ],
+    "description": "A row of glass jam jars arranged on a low shelf catches the afternoon sun, their contents glowing deep ruby, amber, and gold, casting tiny jewel-toned patches of light across the whitewashed wall behind them."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A worn wooden butter churn stands in the corner beside a spinning wheel, a basket of tangled yarn in soft oatmeal and rust tones resting at its base, the whole corner telling a quiet story of slow, steady work."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery"
+    ],
+    "description": "A flour-dusted wooden countertop scattered with small mounds of dough, a rolling pin resting at its edge, and a faint dusting of white powder drifting through a shaft of warm morning light."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A patchwork quilt in faded blues and warm creams draped loosely over the arm of a rocking chair, one corner trailing softly onto a worn pine floorboard."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A row of copper pots hanging from a ceiling rail above a brick hearth, their burnished surfaces catching the amber glow of a low crackling fire."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A wicker basket of fresh brown eggs resting on a deep windowsill, the morning light filtering through the glass and casting soft oval shadows across the sill's painted wood."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "Bundles of dried herbs — lavender, rosemary, and chamomile — hanging upside down from a low ceiling beam, their muted purples and greens filling the room with a faint, earthy fragrance."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "A fat iron kettle steaming gently on a flat-topped wood stove, wisps of vapor curling upward toward a blackened ceiling, a folded cloth tucked beneath its handle."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A wide wooden shelf lined with mismatched teacups in soft florals and hand-painted glazes, each hung on a small hook or set upright, their rims catching the late-afternoon light from a nearby window."
+  },
+  {
+    "tags": [
+      "indoor",
+      "bakery",
+      "farmhouse"
+    ],
+    "description": "Glass jam jars lined neatly across a shelf near the window, their contents glowing deep amber, ruby red, and dark plum as backlit sunlight passes straight through them."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A snug reading nook tucked into a bay window alcove, cushioned with a thick woolen pad, a small crocheted blanket folded at one end, and a rain-streaked pane of old glass framing the grey countryside outside."
+  },
+  {
+    "tags": [
+      "indoor",
+      "farmhouse"
+    ],
+    "description": "A heavy wooden butter churn standing quietly in the corner of a stone-floored room, its worn stave bands darkened with age, a clean linen cloth draped over its lid."
   }
 ]

@@ -14,7 +14,7 @@ const SEEDS_DIR = path.join(__dirname, '..', '..', 'bots', 'farmbot', 'seeds');
 const RECIPES = [
   {
     outPath: path.join(SEEDS_DIR, 'farmbot_world_detail_props.json'),
-    total: 40,
+    total: 120,
     append: true,
     banHumanLanguage: true,
     metaPrompt: (n) => `Generate ${n} distinct INDOOR/COZY-INTERIOR-DETAIL descriptions for a

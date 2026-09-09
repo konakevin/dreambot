@@ -17,8 +17,8 @@ const SEEDS_DIR = path.join(__dirname, '..', '..', 'bots', 'farmbot', 'seeds');
 const RECIPES = [
   {
     outPath: path.join(SEEDS_DIR, 'farmbot_skin_tone.json'),
-    total: 15,
-    append: false,
+    total: 120,
+    append: true,
     banHumanLanguage: true,
     metaPrompt: (n) => `Generate ${n} distinct SKIN TONE descriptions for young-adult anime
 villager characters. Describe purely by VISUAL DEPTH and UNDERTONE — never by ethnicity,

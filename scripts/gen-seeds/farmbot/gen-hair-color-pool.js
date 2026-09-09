@@ -15,8 +15,8 @@ const SEEDS_DIR = path.join(__dirname, '..', '..', 'bots', 'farmbot', 'seeds');
 const RECIPES = [
   {
     outPath: path.join(SEEDS_DIR, 'farmbot_hair_color.json'),
-    total: 20,
-    append: false,
+    total: 120,
+    append: true,
     banHumanLanguage: true,
     metaPrompt: (n) => `Generate ${n} distinct HAIR COLOR descriptions for young-adult anime
 villager characters — COLOR only, no style or length mentioned. Cover a genuinely wide, natural

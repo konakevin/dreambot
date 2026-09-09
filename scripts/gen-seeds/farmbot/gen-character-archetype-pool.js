@@ -21,8 +21,8 @@ const SEEDS_DIR = path.join(__dirname, '..', '..', 'bots', 'farmbot', 'seeds');
 const RECIPES = [
   {
     outPath: path.join(SEEDS_DIR, 'farmbot_character_archetype.json'),
-    total: 30,
-    append: false,
+    total: 120,
+    append: true,
     banHumanLanguage: false,
     metaPrompt: (n) => `Generate ${n} distinct CHARACTER descriptions for a cozy, idyllic
 countryside-village bot. Each is a warm, approachable, cute young-adult anime-villager

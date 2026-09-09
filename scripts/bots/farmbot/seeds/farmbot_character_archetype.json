@@ -73,14 +73,6 @@
   },
   {
     "tags": [
-      "farm",
-      "animal",
-      "male"
-    ],
-    "description": "A horse keeper in a sturdy linen shirt with the cuffs casually folded back, a soft curry brush tucked into the front pocket of his trousers, standing with a gentle relaxed posture and one hand outstretched palm-up in an inviting gesture, expression open and warmly cheerful."
-  },
-  {
-    "tags": [
       "bakery",
       "ANY",
       "female"
@@ -119,14 +111,6 @@
       "male"
     ],
     "description": "A cozy café owner in a neatly pressed collared shirt with the top button undone and sleeves cuffed to the forearm, a short apron tied at the waist with a small sprig of dried lavender tucked into the pocket, standing relaxedly with arms loosely crossed and a soft welcoming smile that reaches his eyes."
-  },
-  {
-    "tags": [
-      "farm",
-      "animal",
-      "male"
-    ],
-    "description": "A warm-natured horse keeper in sturdy canvas trousers and a simple henley shirt, a pair of worn leather riding gloves tucked into his belt, standing with arms lightly folded and weight shifted onto one foot, sporting a calm easy grin and a relaxed unhurried posture."
   },
   {
     "tags": [
@@ -218,14 +202,6 @@
   },
   {
     "tags": [
-      "farm",
-      "animal",
-      "male"
-    ],
-    "description": "A horse keeper in sturdy canvas trousers and a loose henley shirt with a button missing at the collar, a worn leather glove tucked halfway into his back pocket, standing with arms loosely folded and weight shifted to one hip, a calm easy grin and warm relaxed shoulders."
-  },
-  {
-    "tags": [
       "leisure",
       "ANY",
       "female"
@@ -239,5 +215,716 @@
       "male"
     ],
     "description": "A traveling adventurer who settled into village life, wearing a comfortable quilted vest over a plain tunic, well-worn but clean trousers, a small compass charm dangling from a belt loop, standing with arms behind his back and a nostalgic warmly amused smile, posture easy and unhurried."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "female"
+    ],
+    "description": "A potter in a soft linen apron dusted with pale clay smudges over a loose, short-sleeved blouse with a gentle scoop neck, the apron strings tied in a relaxed bow at the back, sitting at a low worktable with her hands resting lightly on an unfinished bowl, a warm and quietly pleased smile on her face as though she has just noticed something she likes about the piece."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "male"
+    ],
+    "description": "A carpenter in a collarless linen work shirt with the sleeves rolled firmly to the elbow, a wide leather tool belt buckled at his waist holding a small mallet and a couple of chisels, a fine scatter of sawdust settled across one forearm, leaning against a timber post with an easy, unhurried grin and his weight shifted comfortably to one side."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "female"
+    ],
+    "description": "A carpenter in a fitted canvas vest worn over a soft cream blouse, the vest's front pocket holding a short pencil stub, a faint pale dusting of sawdust along her left sleeve, standing with one hand resting on a smoothed wooden tabletop she has clearly just finished planing, her expression open and cheerful, a small dimpled smile at the corner of her mouth."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "male"
+    ],
+    "description": "A potter in a thickly woven canvas apron smeared generously with terracotta-coloured clay over a simple round-neck tunic, the apron pocket bulging slightly with a small sponge, seated on a low stool with his elbows on his knees and his clay-dusted hands loosely clasped, looking up with a bright, welcoming smile as though glad for the company."
+  },
+  {
+    "tags": [
+      "market",
+      "leisure",
+      "female"
+    ],
+    "description": "A cheerful fisher in a loose linen blouse tucked into rolled-cuff canvas trousers, a tiny brass anchor charm pinned at the collar, standing with one hip tilted and a fishing rod resting lightly against her shoulder, her expression bright and sun-kissed with a playful upward curl to her smile."
+  },
+  {
+    "tags": [
+      "market",
+      "leisure",
+      "male"
+    ],
+    "description": "A sweet-natured fisher in a soft striped henley with the sleeves pushed to the elbows and a pair of well-patched waders buckled loosely at the chest, a small woven reed fish charm dangling from one strap, crouching at the dock's edge with both elbows on his knees and a gentle, contented grin."
+  },
+  {
+    "tags": [
+      "market",
+      "leisure",
+      "female"
+    ],
+    "description": "A gentle fisher in a breezy off-shoulder smock over a fitted undershirt, a tiny shell pendant threaded on a piece of twine around her neck, sitting cross-legged on a dock post with a tackle box in her lap and a soft, dreamy half-smile as she watches the water."
+  },
+  {
+    "tags": [
+      "market",
+      "leisure",
+      "male"
+    ],
+    "description": "A warm fisher in a comfortable collarless linen shirt and wide-leg sailcloth trousers, a small hand-tied lure tucked behind his ear like a pen, leaning back against a wooden mooring post with arms loosely crossed and an easy, unhurried smile."
+  },
+  {
+    "tags": [
+      "bakery",
+      "leisure",
+      "ANY",
+      "female"
+    ],
+    "description": "A gentle innkeeper in a puff-sleeved blouse tucked into a floral-embroidered apron, a tiny brass bell charm pinned near the collar, standing with hands clasped warmly in front of her and a soft, welcoming smile lighting her face."
+  },
+  {
+    "tags": [
+      "bakery",
+      "leisure",
+      "ANY",
+      "male"
+    ],
+    "description": "A cheerful innkeeper in a loose linen shirt with rolled cuffs and a snug vest bearing a small embroidered leaf at the pocket, leaning one elbow on the counter with a relaxed, easy grin and a friendly tilt of the head."
+  },
+  {
+    "tags": [
+      "bakery",
+      "leisure",
+      "ANY",
+      "female"
+    ],
+    "description": "A cozy innkeeper wearing a ruffled midi skirt and a wide-collared top, a tiny ceramic mug charm dangling from her apron string, hugging a tray to her chest with a playful, dimpled smile."
+  },
+  {
+    "tags": [
+      "bakery",
+      "leisure",
+      "ANY",
+      "male"
+    ],
+    "description": "A warm-hearted innkeeper in a softly rumpled waistcoat over a cream shirt, a little wooden coin charm looped onto his belt, wiping down the bar counter with a cloth and humming contentedly, a gentle upward curve to his lips."
+  },
+  {
+    "tags": [
+      "bakery",
+      "ANY",
+      "female"
+    ],
+    "description": "A cheerful baker in a soft linen apron dusted with flour, the apron strings tied in a lopsided bow at her back, sleeves rolled up past the elbows, a smear of dough on her cheek she hasn't noticed yet. She stands with one hip tilted, hands clasped warmly in front of her, wearing a gentle crinkle-eyed smile that feels like a fresh loaf just out of the oven."
+  },
+  {
+    "tags": [
+      "farm",
+      "animal",
+      "male"
+    ],
+    "description": "A soft-mannered shepherd in a loose cream linen shirt tucked into simple woolen trousers, a wide-brimmed straw hat resting at a slight tilt, one thumb hooked through a belt loop. He leans back on his heels with a patient, unhurried smile, the hem of his trousers showing a careful patch of mismatched fabric near the ankle."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY",
+      "female"
+    ],
+    "description": "A bright-eyed flower seller in a flowy patchwork skirt layered over a simple white blouse, a small woven basket looped over one arm. She stands on the tips of her toes slightly, as if mid-step, holding out a small bloom in offering with a wide, inviting smile and rosy rounded cheeks."
+  },
+  {
+    "tags": [
+      "farm",
+      "female"
+    ],
+    "description": "A cheerful farm girl in a soft gingham dress with the sleeves rolled up and a pair of mismatched knit socks peeking above worn leather boots. She sits perched on a fence rail, feet swinging lazily, one elbow propped on her knee, chin resting in her palm, wearing an easy sun-warmed grin."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY",
+      "male"
+    ],
+    "description": "A friendly village shopkeeper in a neat collarless shirt with a small embroidered pocket, a canvas apron tied around his waist, and the sleeves pushed back to reveal a braided cord bracelet on one wrist. He leans forward on a wooden counter with both forearms resting flat, head tilted warmly, wearing a welcoming open smile."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "female"
+    ],
+    "description": "A gentle herbalist in a soft sage-green pinafore worn over a cream undershirt, tiny dried flower sprigs tucked into the pinafore's front pocket. She sits cross-legged with a small wicker basket in her lap, posture relaxed and slightly forward-leaning, a quiet, thoughtful smile on her softly rounded face."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "male"
+    ],
+    "description": "A settled-down traveler in a comfortable collared shirt with the top button undone and sleeves rolled to the forearm, a faded adventurer's satchel worn crossbody but hanging loose. He stands with arms folded lightly across his chest and weight shifted to one foot, wearing a warm, easy smile and a calm expression that suggests someone who has seen enough of the world and is happy right here."
+  },
+  {
+    "tags": [
+      "bakery",
+      "leisure",
+      "male"
+    ],
+    "description": "A cozy café owner in a soft brown waistcoat over a simple striped shirt, a small dish towel tucked into his apron string, the hem of the apron showing a neatly stitched patch from an old repair. He stands with one hand raised in a little wave, a cheerful dimpled smile, posture open and welcoming as if he's just spotted a favorite regular."
+  },
+  {
+    "tags": [
+      "market",
+      "leisure",
+      "female"
+    ],
+    "description": "A cheerful weaver in a tunic with a small decorative trim along the collar and a woven belt cinching the waist, the hem of her skirt showing a charming fringe of loose threads. She sits sideways on a low wooden stool, legs crossed at the ankle, one hand resting in her lap and the other tucked behind her ear in a thoughtful little gesture, wearing a soft bright smile and a lightly tilted head."
+  },
+  {
+    "tags": [
+      "bakery",
+      "ANY",
+      "female"
+    ],
+    "description": "A round-cheeked baker in a cream linen apron dusted with flour, the apron strings tied in a lopsided bow at the back, sleeves of her soft blouse rolled up past the elbows, a smear of flour across one cheek, standing with her hands clasped together in front of her, leaning forward slightly with a bright, delighted smile as if she has just pulled something wonderful from the oven."
+  },
+  {
+    "tags": [
+      "farm",
+      "animal",
+      "male"
+    ],
+    "description": "A gentle shepherd in a loose moss-green vest over a cream peasant shirt, wearing a wide-brimmed woven straw hat with a small wildflower tucked into the band, one thumb hooked in his belt and his weight shifted to one hip in a leisurely lean, a warm patient smile softening his features, radiating quiet ease."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY",
+      "female"
+    ],
+    "description": "A cheerful flower seller in a patchwork skirt with a neatly patched hem in a contrasting floral fabric, a light cotton blouse with a ruffled collar, a wicker basket of blooms cradled in the crook of one arm, her free hand extending a single daisy outward as if offering it to a passerby, her expression open and glowing with a sunny, gap-toothed grin."
+  },
+  {
+    "tags": [
+      "farm",
+      "animal",
+      "male"
+    ],
+    "description": "A sturdy young farmer in a soft linen tunic with the sleeves rolled to the forearm and a pair of roomy earth-toned trousers tucked into short work boots, a friendly rooster-shaped wooden button on his breast pocket, standing with arms loosely crossed and head tilted at an easy angle, a relaxed half-smile hinting at good humor."
+  },
+  {
+    "tags": [
+      "leisure",
+      "market",
+      "female"
+    ],
+    "description": "A cozy herbalist in a layered sage-green smock over a pale underdress, a small satchel of bundled dried herbs hanging from a cord at her hip, mismatched socks peeking cheerfully above her ankle boots — one striped, one dotted — sitting cross-legged on a low wooden stool with a mortar resting in her lap, humming quietly, her expression soft and dreamily content."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY",
+      "male"
+    ],
+    "description": "A friendly village shopkeeper in a neat waistcoat the color of warm caramel over a loose white shirt, a small measuring tape looped around his neck like a casual accessory, standing behind an imaginary counter with both palms resting flat and a wide welcoming beam on his face, eyebrows lifted in cheerful readiness to help."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "female"
+    ],
+    "description": "A settled adventurer who traded her traveling roads for a quieter life, wearing a softly worn traveling cloak clasped with a little leaf-shaped brooch draped over a cozy knitted cardigan, a faded map tucked half-visible into a satchel at her side, sitting on a fence post with one knee drawn up and an arm resting across it, a small nostalgic smile playing at the corners of her lips, utterly at peace."
+  },
+  {
+    "tags": [
+      "bakery",
+      "leisure",
+      "male"
+    ],
+    "description": "A warm-natured café owner in a striped apron with a tiny embroidered coffee cup near the hem, a relaxed open-collar shirt beneath, carrying a tray with both hands and tilting it forward in a gentle presenting gesture, a wide crinkle-eyed smile suggesting he genuinely loves every single person who walks through his door."
+  },
+  {
+    "tags": [
+      "farm",
+      "ANY",
+      "female"
+    ],
+    "description": "A cheerful gardener in a pair of roomy dungarees with a daisy-shaped patch sewn over one knee pocket, a soft cotton shirt beneath with sleeves rolled to the elbow and a smudge of potting soil along one forearm, kneeling with one knee on the ground and a small trowel held loosely in one hand, looking up with a bright sparkling grin as though she has just spotted something delightful growing."
+  },
+  {
+    "tags": [
+      "bakery",
+      "ANY",
+      "female"
+    ],
+    "description": "A round-cheeked baker in a soft linen apron dusted with flour, sleeves rolled up past the elbows, a tiny heart-shaped button pinned to the apron bib as a charm detail. She stands with her hands clasped warmly in front of her, leaning forward ever so slightly as if about to share something delightful, a wide crinkle-eyed smile on her face."
+  },
+  {
+    "tags": [
+      "farm",
+      "animal",
+      "male"
+    ],
+    "description": "A gentle shepherd in a loose cream-colored linen shirt with one side tucked unevenly into earthy brown trousers, a well-loved wide-brimmed straw hat resting atop his head. He leans on a smooth wooden crook with one ankle crossed casually over the other, wearing a patient, soft smile and a relaxed open expression as though he has all the time in the world."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY",
+      "female"
+    ],
+    "description": "A cheerful flower seller in a breezy floral-printed pinafore dress over a white puff-sleeved blouse, the hem of the pinafore charmingly patched with a small square of contrasting floral fabric. She stands with a wicker basket of blooms hooked over one arm, her free hand extended slightly as if offering a flower, her expression bright and inviting with a dimpled smile."
+  },
+  {
+    "tags": [
+      "farm",
+      "animal",
+      "female"
+    ],
+    "description": "A rosy-cheeked farm girl in a soft sage-green dress with a worn canvas apron over it, the apron pocket overflowing with a few stray blades of hay. She sits perched on a wooden fence rail, boots dangling, one hand braced behind her for balance, giving a relaxed sunny grin with cheerful crinkled eyes."
+  },
+  {
+    "tags": [
+      "farm",
+      "male"
+    ],
+    "description": "A cozy farm boy in a loose woven tunic the color of warm oat, trousers rolled up at the cuffs to reveal mismatched socks — one striped green, one plain mustard — and sturdy open-laced boots. He stands with his hands resting in his pockets and his weight shifted to one hip, chin slightly dipped with a calm, easy-going smile as if just pausing from an afternoon of pleasant work."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "female"
+    ],
+    "description": "A soft-natured herbalist in a loose flowy blouse layered under a deep moss-green vest, a small bundle of dried lavender tucked through the buttonhole like a boutonniere. She sits cross-legged on a low wooden stool with a clay mortar resting in her lap, looking up with a gentle curious tilt of her head and a warm half-smile, expression calm and quietly delighted."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY",
+      "male"
+    ],
+    "description": "A friendly village shopkeeper in a neat collarless shirt with the sleeves rolled to the forearms, a cloth apron tied at the waist and a tiny brass key charm dangling from the apron string. He leans against a wooden counter with both forearms resting on the surface, head tilted welcomingly toward the viewer, a broad genuine smile and bright open expression."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "female"
+    ],
+    "description": "A warm café owner in a soft rust-orange blouse tucked into a tiered midi skirt, a small embroidered teacup patch stitched onto the front pocket of her skirt as a charm detail. She holds a ceramic mug with both hands close to her chest, standing in a relaxed hip-angled pose with a cozy contented smile and half-lidded warm eyes as if savoring a quiet afternoon moment."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "male"
+    ],
+    "description": "A settled-down traveler-turned-villager in a comfortable linen shirt with rolled cuffs and a faded patch sewn onto one elbow, soft trousers, and weathered but well-kept boots. He sits on a low stone step with elbows on his knees and hands loosely clasped, a small carved wooden charm hanging from his belt loop. His expression is easy and content — a gentle knowing smile, like someone who's found exactly where they belong."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "female"
+    ],
+    "description": "A cheerful weaver in a long woven wrap skirt of layered earthy tones with a small tassel fringe at the hem, paired with a snug knit top. A colorful loop of spare thread is tied loosely around her wrist as a charm detail. She stands with one arm extended, holding up a small swatch of woven cloth with visible pride, her expression open and enthusiastic with a wide warm smile and soft, squinting happy eyes."
+  },
+  {
+    "tags": [
+      "farm",
+      "animal",
+      "female"
+    ],
+    "description": "A cheerful farm girl in a soft linen dress with a patched hem, a loose knit vest over the top, and mud-flecked boots, standing with her hands clasped behind her back in a light, bouncy posture, beaming with a bright open smile and rosy cheeks full of warmth."
+  },
+  {
+    "tags": [
+      "farm",
+      "animal",
+      "male"
+    ],
+    "description": "A cozy farm boy in a loose cotton shirt with the sleeves rolled up past the elbows, sturdy suspenders holding up worn trousers, leaning relaxed against a fence post with one thumb hooked in a suspender strap and a gentle, easy grin on his face."
+  },
+  {
+    "tags": [
+      "bakery",
+      "ANY",
+      "female"
+    ],
+    "description": "A baker in a soft cream apron dusted all over with flour, a little smear of it across one cheek, wearing a simple collared blouse tucked neatly beneath, standing with both hands resting lightly on the counter and a warm, inviting smile that crinkles the corners of her eyes."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY",
+      "male"
+    ],
+    "description": "A village shopkeeper in a neat waistcoat over a rolled-sleeve shirt, a small cloth measuring tape draped over one shoulder as a charm detail, leaning forward with elbows on the counter in a friendly, curious posture and a bright welcoming grin."
+  },
+  {
+    "tags": [
+      "farm",
+      "animal",
+      "male"
+    ],
+    "description": "A shepherd in a wide soft-brimmed straw hat and a loose woven tunic, a small hand-sewn patch on one knee of his trousers, resting one arm over a wooden crook with ankles lightly crossed, wearing a patient, dreamy smile as though lost in a pleasant thought."
+  },
+  {
+    "tags": [
+      "market",
+      "leisure",
+      "female"
+    ],
+    "description": "A flower seller wearing a flowy apron over a light sundress, mismatched socks peeking above her ankle boots, holding a small bouquet loosely at her side with petals tucked behind one ear, tilting her head with a soft playful smile and sparkling cheerful eyes."
+  },
+  {
+    "tags": [
+      "bakery",
+      "leisure",
+      "female"
+    ],
+    "description": "A café owner in a ruffled blouse and a short canvas apron tied at the waist, a tiny embroidered teacup motif on the apron pocket, standing with a tray balanced on one hand and the other on her hip, flashing a bright dimpled smile full of easy hospitality."
+  },
+  {
+    "tags": [
+      "ANY",
+      "leisure",
+      "female"
+    ],
+    "description": "An herbalist in a long linen skirt and a soft button-up blouse with tiny flower prints, several small cloth herb pouches hanging from a woven belt at her waist, sitting cross-legged with a bundle of dried herbs in her lap, wearing a calm, gentle smile and a quietly curious expression."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY",
+      "male"
+    ],
+    "description": "A potter in a clay-smudged linen apron worn over a simple collarless shirt, sleeves pushed carelessly past the elbows with faint clay marks up to his forearms, holding a small finished bowl up to the light with a proud, warm grin and relaxed squared shoulders."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "male"
+    ],
+    "description": "A settled-down former traveler in a patchwork jacket of mismatched woven fabrics over a soft undershirt, a single worn compass charm hanging from a belt loop, sitting sideways on a low stone wall with one knee drawn up, resting his chin in one hand with a nostalgic, contented smile."
+  },
+  {
+    "tags": [
+      "farm",
+      "female"
+    ],
+    "description": "A cheerful farm girl in a soft linen dress with a patched hem, a loosely tied apron over the front, sleeves rolled up past the elbows, standing with one hand resting on her hip and the other giving a small friendly wave, wearing a bright open smile with rosy cheeks and an easy, sun-warmed glow about her."
+  },
+  {
+    "tags": [
+      "farm",
+      "animal",
+      "male"
+    ],
+    "description": "A gentle shepherd in a loose cream-colored tunic tucked into simple trousers, a wide-brimmed straw hat tilted slightly to one side, leaning on a wooden crook with one ankle crossed over the other, wearing a soft patient smile and a calm unhurried expression that makes him look perfectly at ease with the world."
+  },
+  {
+    "tags": [
+      "bakery",
+      "ANY",
+      "female"
+    ],
+    "description": "A cozy baker in a warm terracotta-toned dress beneath a flour-dusted apron, a small dough-cutter tucked into the apron pocket, standing with both hands clasped in front of her and a delighted, welcoming grin, a faint smear of flour dusted across one cheek giving her a charmingly busy look."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY",
+      "female"
+    ],
+    "description": "A flower seller in a flowy pastel blouse and a tiered skirt with tiny embroidered blossoms along the hem, a woven basket of wildflowers looped over one arm, head tilted slightly with a sweet dimpled smile, one hand gently lifting a small bouquet as if offering it to you."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY",
+      "male"
+    ],
+    "description": "A village shopkeeper in a neatly buttoned vest over a simple shirt with one sleeve rolled higher than the other, a small measuring tape draped over one shoulder as a charm detail, leaning forward on a wooden counter with both forearms resting on it, wearing a friendly curious expression and a lopsided grin."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "female"
+    ],
+    "description": "A village herbalist in a mossy-green smock dress with deep front pockets stuffed with sprigs of dried lavender, a tiny clay herb-tag charm hanging from a belt loop, seated cross-legged on a low wooden stool, holding a bundle of herbs up to the light with a soft thoughtful smile and bright, gentle eyes."
+  },
+  {
+    "tags": [
+      "bakery",
+      "leisure",
+      "male"
+    ],
+    "description": "A café owner in a crisp white shirt with the collar unbuttoned and sleeves casually rolled to the elbow, a short linen apron tied at the waist with a little hand-drawn menu card tucked into the front pocket, standing with one hand holding a small teacup out in a welcoming gesture, warm relaxed smile, posture easy and unhurried."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "female"
+    ],
+    "description": "A weaver in a cozy layered outfit of a loose blouse and a long wrap skirt in warm earthy tones, a small spool of colorful thread looped around one wrist like a bracelet, seated at a relaxed angle with legs crossed at the ankle, a serene soft smile on her face and a half-finished piece of woven cloth spread across her lap."
+  },
+  {
+    "tags": [
+      "ANY",
+      "male"
+    ],
+    "description": "A former traveling adventurer turned village resident, wearing a comfortable patched linen jacket over a simple undershirt, a single worn map-fold tucked into his breast pocket as a nostalgic charm detail, standing in a casual wide-legged pose with arms loosely folded, expression warm and cheerful with a hint of a knowing smile, radiating the settled, contented air of someone who found exactly where they belong."
+  },
+  {
+    "tags": [
+      "bakery",
+      "ANY",
+      "female"
+    ],
+    "description": "A round-cheeked baker in a flour-dusted linen apron over a soft cream blouse, sleeves pushed up past the elbows, a smear of flour across one cheek, standing with a warm open smile and both hands clasped cheerfully in front of her, radiating cozy contentment."
+  },
+  {
+    "tags": [
+      "farm",
+      "animal",
+      "male"
+    ],
+    "description": "A gentle shepherd in a loose linen shirt with the collar softly undone, earthy brown trousers, and worn leather boots, leaning casually on a wooden crook with one ankle crossed over the other, wearing a patient, easygoing smile and a small wildflower tucked into his breast pocket."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY",
+      "female"
+    ],
+    "description": "A bright-eyed flower seller in a flowy patchwork skirt with a delicately patched hem, a short-sleeved cotton blouse, and a woven basket of fresh blooms hooked over one arm, standing with a cheerful tilt of her head and a wide, dimpled smile as if delighted to see you."
+  },
+  {
+    "tags": [
+      "farm",
+      "animal",
+      "male"
+    ],
+    "description": "A stocky, soft-featured farm boy in a loose homespun tunic with the sleeves rolled up to the forearm, sturdy canvas trousers, and mismatched woolen socks peeking above his boots, sitting on a fence rail with his hands on his knees and a relaxed, good-natured grin."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "female"
+    ],
+    "description": "A serene herbalist in a flowing sage-green dress layered under a linen pinafore, small bundles of dried herbs tucked neatly into the pinafore pocket, seated cross-legged on a low stool with a small wicker basket beside her and a soft, thoughtful smile playing at the corners of her lips."
+  },
+  {
+    "tags": [
+      "market",
+      "leisure",
+      "male"
+    ],
+    "description": "A friendly village shopkeeper in a neatly buttoned waistcoat over a striped linen shirt, one sleeve slightly more rolled than the other, leaning against a wooden counter with arms loosely folded and a cheerful, welcoming smile, as if mid-conversation with an old friend."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "female"
+    ],
+    "description": "A cozy weaver in a loose rust-orange tunic cinched with a simple cloth belt, a tiny shuttle-shaped charm dangling from her belt loop, seated with her hands resting lightly in her lap, posture relaxed and open, wearing a gentle, contented smile with soft, rounded features."
+  },
+  {
+    "tags": [
+      "leisure",
+      "market",
+      "male"
+    ],
+    "description": "A good-humored potter in a clay-smudged canvas apron tied loosely at the waist over a plain cream shirt, cuffs rolled back, standing with his weight shifted to one hip in an easy, unhurried stance, a lopsided grin on his face and faint traces of dried clay dotting his forearms."
+  },
+  {
+    "tags": [
+      "farm",
+      "leisure",
+      "female"
+    ],
+    "description": "A cheerful farm girl in a gingham dress with a soft apron tied over it, one apron string slightly undone and dangling, her posture bright and upright with her hands held lightly behind her back, a wide dimpled smile and a look of easy, sun-warm happiness about her."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "male"
+    ],
+    "description": "A settled-down adventurer in a well-loved but neatly mended traveler's coat worn open over a simple linen shirt, a small stitched patch on one elbow, sitting on a low step with elbows resting on his knees and hands loosely linked, wearing a calm, warmly nostalgic smile as if happily at peace with a quieter life."
+  },
+  {
+    "tags": [
+      "farm",
+      "female"
+    ],
+    "description": "A cheerful farm girl in a sun-faded linen dress with a patched hem, a wide straw hat dangling loosely from one hand, standing with her weight shifted to one hip in a breezy relaxed pose, a bright dimpled smile on her face and a small wildflower tucked into her collar."
+  },
+  {
+    "tags": [
+      "farm",
+      "animal",
+      "male"
+    ],
+    "description": "A cozy farm boy in sturdy suspender trousers over a soft cotton shirt with the sleeves rolled up past the elbow, leaning comfortably against a fence post with arms loosely folded, a gentle lopsided grin, and a bit of straw caught on his shoulder."
+  },
+  {
+    "tags": [
+      "bakery",
+      "ANY",
+      "female"
+    ],
+    "description": "A baker in a cream-colored apron generously dusted with flour, soft puffed-sleeve blouse underneath, standing with both hands resting lightly on the counter, a warm open smile, and a faint smear of cocoa powder along her forearm."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY",
+      "female"
+    ],
+    "description": "A flower seller in a breezy layered skirt of soft muted tones, a woven basket of blossoms hooked over one arm, standing with a light cheerful tilt of the head, a sweet genuine smile, and mismatched floral socks peeking above her ankle boots."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY",
+      "male"
+    ],
+    "description": "A village shopkeeper in a neatly buttoned vest over a linen shirt with the cuffs folded back, leaning forward slightly on the shop counter with both palms flat and a friendly inviting smile, a small brass key charm hanging from his vest pocket."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "female"
+    ],
+    "description": "A herbalist in a soft sage-green pinafore dress over a white blouse, a woven belt cinched loosely at the waist holding a small dried-herb pouch, sitting cross-legged on a low wooden stool with a calm content smile, gently turning a pressed sprig of lavender between her fingers."
+  },
+  {
+    "tags": [
+      "bakery",
+      "leisure",
+      "ANY",
+      "female"
+    ],
+    "description": "A café owner in a warm mustard-yellow apron tied over a ruffled blouse, holding a round tray with both hands and resting it lightly against her hip, a bright welcoming smile, and a tiny teacup charm pinned to the apron strap."
+  },
+  {
+    "tags": [
+      "farm",
+      "animal",
+      "male"
+    ],
+    "description": "A shepherd in a loose cream woolen tunic belted at the hip and simple trousers tucked into soft leather boots, leaning gently on a tall wooden crook with one ankle crossed over the other in an easy idle stance, a patient soft smile, and a small woolen pompom charm tied to the crook."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "male"
+    ],
+    "description": "A former traveling adventurer turned village settler, dressed in a well-worn but tidy cloth tunic with a subtle embroidered border at the hem, a small satchel resting on one hip, seated on a low step with elbows on knees and a relaxed open smile, a tiny travel-worn compass charm hanging from the satchel strap."
+  },
+  {
+    "tags": [
+      "market",
+      "leisure",
+      "female"
+    ],
+    "description": "A weaver in a neatly cinched wrap dress made of softly patterned cloth with a gently patched elbow, sitting sideways on a bench with her legs tucked beneath her, a cheerful curious tilt to her expression, and a small spool of colorful thread dangling from her apron pocket."
+  },
+  {
+    "tags": [
+      "farm",
+      "female"
+    ],
+    "description": "A cheerful farm girl in a soft linen blouse with the sleeves rolled up past the elbows, a grass-stained apron tied snugly at the waist, and sturdy boots peeking out beneath a floral-hemmed skirt with a tiny patch stitched at the side. She stands with her hands clasped behind her back, leaning forward slightly with a bright, dimpled smile and a playful, can-do energy about her."
+  },
+  {
+    "tags": [
+      "bakery",
+      "ANY",
+      "female"
+    ],
+    "description": "A cozy baker wearing a cream linen dress beneath a wide apron dusted generously with flour, the apron strings tied in a lopsided bow at the back. She holds a small loaf against her hip with one arm and waves gently with the other, her expression a soft, warm smile with rosy cheeks, a cheerful smear of flour just below one ear like a little badge of honor."
+  },
+  {
+    "tags": [
+      "farm",
+      "animal",
+      "male"
+    ],
+    "description": "A gentle shepherd in a loose, earthy-toned tunic tucked into simple canvas trousers, a wide-brimmed woven straw hat resting tilted on his head with a small sprig of dried lavender tucked into the band. He leans easily on a smooth wooden crook, one ankle crossed over the other, wearing a patient, unhurried smile and a softly relaxed expression."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY",
+      "female"
+    ],
+    "description": "A flower seller wearing a breezy, ruffled blouse in soft sage green tucked into a layered skirt whose hem is charmingly uneven and patched with a scrap of floral fabric. She cradles a generous bundle of wildflowers in the crook of one arm, tilting the bouquet outward in offering, her expression a gentle, inviting smile with soft, bright eyes full of warmth."
+  },
+  {
+    "tags": [
+      "market",
+      "ANY",
+      "male"
+    ],
+    "description": "A village shopkeeper in a neat waistcoat worn over a loose-collared shirt, the left cuff button undone and the sleeve casually rolled to the forearm. He leans one elbow on an imaginary counter in a comfortable, relaxed pose, chin resting lightly in his hand, wearing a friendly, easy-going grin and a pair of mismatched socks — one striped, one spotted — peeking above his simple ankle boots."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "female"
+    ],
+    "description": "A village herbalist in a soft moss-green wrap dress with tiny embroidered leaves along the collar, a woven satchel slung across one shoulder and a small bundle of dried herbs dangling from the strap. She sits with her legs tucked to the side in a relaxed, unhurried pose, one hand resting open on her knee, wearing a quiet, serene smile and an air of gentle curiosity."
+  },
+  {
+    "tags": [
+      "bakery",
+      "leisure",
+      "male"
+    ],
+    "description": "A café owner in a relaxed linen shirt with the top button open and the sleeves pushed casually to the elbow, a soft apron tied at the waist with a small hand towel tucked into one side. He stands with one hand holding a ceramic mug and the other gesturing in a welcoming wave, his expression a broad, hospitable grin, warm and unhurried."
+  },
+  {
+    "tags": [
+      "market",
+      "leisure",
+      "female"
+    ],
+    "description": "A village weaver in a richly textured tunic woven in warm, earthy tones, layered over a simple undershirt with a delicate wooden button at the neckline. She sits cross-legged with a small square of woven fabric in her lap, holding it up slightly to show off its pattern, wearing a proud and cheerful smile with a playful tilt of her head, a tiny loom shuttle tucked behind one ear."
+  },
+  {
+    "tags": [
+      "leisure",
+      "ANY",
+      "male"
+    ],
+    "description": "A former traveling adventurer turned village potter, now settled and content, wearing a comfortable henley shirt with the sleeves pushed firmly past the elbows and clay-smeared canvas trousers. He sits on a low stool with his elbows on his knees and hands loosely clasped, leaning forward in an easy, open pose, a calm and satisfied smile on his face with a smudge of dried clay across one forearm like a quiet souvenir."
+  },
+  {
+    "tags": [
+      "bakery",
+      "ANY",
+      "female"
+    ],
+    "description": "A cheerful baker wearing a soft cream linen dress beneath a well-loved apron dusted generously with flour, sleeves rolled up past the elbows, a tiny smear of cinnamon across one cheek, standing with hands clasped warmly in front of her, gentle dimpled smile, radiating cozy contentment."
   }
 ]

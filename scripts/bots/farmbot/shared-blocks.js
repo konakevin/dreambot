@@ -55,9 +55,39 @@
  * per this file's own rule above: describe what characters SHOULD look like
  * (cute, round-faced, big joyful eyes) rather than naming "serious" or
  * "mature" to ban them, which would put those exact tokens in front of Flux.
+ *
+ * SINGLE UNIFIED FRAME (Kevin 2026-09-09, "no split frames like this"): a
+ * render posted from rainy-farmhouse-morning came back as a literal split
+ * diptych — a rainy meadow in the top half, a kitchen interior in the
+ * bottom half, divided by a hard white bar, rather than one integrated
+ * scene. Root-caused via the agent's own build log: whenever a scene
+ * combines an interior with something visible beyond a window/doorway,
+ * Sonnet sometimes composes it as two described "zones" ("a window
+ * dominates the upper portion... inside, [X]...") which reads to Flux as
+ * comic-panel instructions rather than one continuous depth-of-field shot.
+ * Fixed with an explicit, POSITIVE structural instruction below (describing
+ * the composition Flux SHOULD produce, not naming "split" or "panel" to ban
+ * them — same positive-only discipline as the rest of this fragment).
+ *
+ * HUE FREEDOM (Kevin 2026-09-09): a review of the whole render grid showed
+ * a strong, consistent golden/amber wash across nearly every render,
+ * independent of scene or weather. Root cause: this fragment previously
+ * said "even where the light is soft, dreamy, or gentle, the palette
+ * itself stays warm and colorful" — an UNCONDITIONAL instruction toward
+ * warm hues on literally every render, applied straight into the final
+ * Flux prompt with no per-scene override (see WRITTEN POSITIVE-ONLY above
+ * — this fragment bypasses Sonnet entirely, so there's no filter to catch
+ * an over-broad rule before Flux sees it). Compounded by
+ * farmbot_weather_atmosphere.json itself skewing 14/25 warm-dominant vs.
+ * 5/25 cool — see that file's rebalance note. Fixed here by keeping the
+ * "vibrant, richly saturated, never washed out" intent (the actual original
+ * ask) but dropping the hard lock to warm specifically — a vivid blue,
+ * green, or violet scene should be exactly as richly saturated as an amber
+ * one. Let hue follow the scene/weather/look freely; only saturation and
+ * richness are the fixed rule.
  */
 const FARMBOT_COZY_NEUTRAL =
-  'OVERARCHING RULE (applies to every single render regardless of scene): this is a cute, adorable, pretty, cozy, peaceful, happy, fun, warm, gentle, storybook-charming farm-life illustration — a small, idyllic, handcrafted countryside world where every tool, structure, and object is charming, old-fashioned, and personal in scale. Color stays vibrant and richly saturated throughout — even where the light is soft, dreamy, or gentle, the palette itself stays warm and colorful. Even the least remarkable render from this bot must still read as nice and wholesome. Any character in the frame is drawn just as cute and adorable as the world around them — a warm round-cheeked face, big joyful sparkling eyes, a playful cheerful expression, like a beloved character from a gentle children\'s picture book. The scene described below is the complete cast list for the frame — render exactly what it names, in exactly the proportions and character-design language the look register above sets, and nothing beyond it. The animation style, rendering medium, finish, and palette are set entirely by the look-register tokens that lead the prompt.';
+  'OVERARCHING RULE (applies to every single render regardless of scene): this is a cute, adorable, pretty, cozy, peaceful, happy, fun, gentle, storybook-charming farm-life illustration — a small, idyllic, handcrafted countryside world where every tool, structure, and object is charming, old-fashioned, and personal in scale. Color stays vibrant and richly saturated throughout, in whatever hues the scene and light actually call for — golden and amber where the scene is sunlit, but just as often deep blues, greens, violets, or silvery greys where the scene calls for it; never washed out or desaturated, and never locked to one palette. Even the least remarkable render from this bot must still read as nice and wholesome. Every render is always ONE single, continuously-composed photograph-like frame with a natural sense of depth — if the scene includes both an interior and something visible beyond a window or doorway, that outside world is glimpsed through the opening as part of the very same unbroken shot, the same way a real camera captures a room with a view, never as a separately divided section of the image. Any character in the frame is drawn just as cute and adorable as the world around them — a round-cheeked face, big joyful sparkling eyes, a playful cheerful expression, like a beloved character from a gentle children\'s picture book. The scene described below is the complete cast list for the frame — render exactly what it names, in exactly the proportions and character-design language the look register above sets, and nothing beyond it. The animation style, rendering medium, finish, and palette are set entirely by the look-register tokens that lead the prompt.';
 
 /**
  * Prepend the ART STYLE block to a path's own scene text. `look` is one

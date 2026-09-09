@@ -75,6 +75,40 @@ function genderOf(entry) {
 // WEATHER_ATMOSPHERE pick already set for that render. If FarmBot ever wants
 // more day/weather/lighting variety, add it to WEATHER_ATMOSPHERE (or a new
 // dedicated axis) — never back into the look register.
+//
+// 4TH CUT (Kevin 2026-09-09, "this look is 3D animation, we don't want it"):
+// "Soft painterly cute anime illustration" — despite saying "anime" 3x
+// anchored to character vocabulary (facial proportions/linework/eyes), a
+// live render Kevin hearted came back unmistakably 3D-CGI (Pixar/DreamWorks-
+// style glossy shading and modeled hair), traced via scenePalette to this
+// exact entry. Root cause: "painterly" is a genuinely double-meaning word in
+// art-style vocabulary — it describes both flat 2D gouache/watercolor art
+// AND 3D-CGI rendered with painterly lighting (a term Pixar/DreamWorks
+// themselves use for their own films' art direction). No amount of
+// surrounding "anime"/"2D" words reliably disambiguates it. Cut outright
+// rather than reworded — this word-choice risk can't be fixed by adding more
+// anchoring vocabulary around it, unlike the first 3 cuts above. Cross-bot
+// rule: treat "painterly" as a suspect word for any 2D-only bot's look
+// register; if used, pair it explicitly with a disambiguator like "2D
+// hand-painted" or "flat painted," and verify with a real render before
+// trusting it.
+//
+// REWORDED not cut (Kevin 2026-09-09, "hearted this one becuase it's not
+// anime"): "Bright flat-color cute anime illustration" rendered as a
+// generic Western storybook-cartoon (thick uniform outlines, simple flat
+// shading, no anime-style eyes) despite saying "anime" 4x. Root cause,
+// different from the painterly case: this entry was the ONLY one of the 5
+// that never mentioned EYES — every other surviving entry explicitly says
+// "big sparkling anime eyes [with catchlights]," which is the single most
+// anime-diagnostic visual cue Flux has to work with; without it, "flat-
+// color/bold outlines/simple shapes" reads as generic flat-cartoon, not
+// anime specifically. Unlike "painterly," none of this entry's words name a
+// rival medium outright — so here the fix WAS reliable: added the same
+// explicit big-eyes-with-catchlights clause the other 4 entries already
+// have. Verified via one isolated look-matrix render: unmistakably anime
+// afterward. Lesson: an entry missing eye-specific language is a warning
+// sign even if it repeats "anime" plenty of times — verify every entry
+// mentions eyes explicitly, not just the style-family word.
 const FARMBOT_LOOK_REGISTER = load('farmbot_look_register');
 
 // Shared cross-path category pools (rebuild 2026-09-08) — each a tagged
@@ -103,6 +137,7 @@ const SEASON = load('farmbot_season'); // section 10
 const WEATHER_ATMOSPHERE = load('farmbot_weather_atmosphere'); // section 11
 const WORLD_DETAIL_PROPS = load('farmbot_world_detail_props'); // section 13
 const GENTLE_MAGIC = load('farmbot_gentle_magic'); // section 14, low-weight/rare
+const AMBIENT_LIFE = load('farmbot_ambient_life'); // fallback life for pure-scene renders (2026-09-09)
 
 // Plain (untagged) shared pool — framing applies universally.
 const CAMERA_COMPOSITION = load('farmbot_camera_composition'); // section 15
@@ -144,11 +179,59 @@ Eyes: ${eyeColor}
 Skin: ${skinTone}`;
 }
 
+/**
+ * Guarantee SOME small living/charming presence in a PURE-SCENE (no
+ * character) render — Kevin 2026-09-09: "the pure scene ones should
+ * encourage animals placed into the comfy scene somehow that makes sense,
+ * or butterflies, fireflies, etc, something besides just a pure nature or
+ * barn scene." A no-character render should never come back as a bare,
+ * lifeless landscape or empty interior.
+ *
+ * Tries an ANIMAL_COMPANIONS-style pick first, at `animalChance`; if that
+ * roll misses (or `animalPool` is empty after a path's own filtering),
+ * falls back to an AMBIENT_LIFE pick (butterflies/fireflies/bees/drifting
+ * petals/etc, filtered by `ambientTags`) — NEVER returns null. Call this
+ * ONLY in a path's no-character branch; the with-character branch keeps its
+ * existing animal-companion logic unchanged (a human already anchors the
+ * scene as inhabited).
+ *
+ * `animalPool` — the path's own already-tag/keyword-filtered array of
+ * ANIMAL_COMPANIONS description strings (or entry objects — either is fine,
+ * picker.pickWithRecency just needs an array to choose from).
+ * `ambientTags` — typically ['outdoor'] or ['indoor'] matching the path's
+ * setting; AMBIENT_LIFE entries tagged "ANY" always pass either way.
+ *
+ * `excludeAmbientTags` (optional) — drops any AMBIENT_LIFE entry that also
+ * carries one of these tags, applied AFTER the ambientTags include-filter.
+ * Use for season-locked paths: most AMBIENT_LIFE entries are warm-weather
+ * wildlife (bees, butterflies, fireflies, cherry blossom petals — tagged
+ * "warm"), which read as a real seasonal mismatch on a winter path (a round
+ * 2026-09-09 `first-snowfall` test render came back with cherry blossoms
+ * blooming through a snow-covered roof). A handful of "winter"-tagged
+ * entries exist specifically for this (robin, snowflakes, paw prints, frost,
+ * breath-fog). Pass `excludeAmbientTags: ['warm']` on any winter-locked path.
+ */
+function pickPureSceneLife(picker, { animalPool, animalChance, ambientTags, excludeAmbientTags, axisPrefix }) {
+  if (animalPool && animalPool.length && Math.random() < animalChance) {
+    return picker.pickWithRecency(animalPool, `${axisPrefix}_animal`);
+  }
+  let candidates = filterByTags(AMBIENT_LIFE, ambientTags);
+  if (excludeAmbientTags && excludeAmbientTags.length) {
+    const excluded = new Set(excludeAmbientTags);
+    candidates = candidates.filter((e) => !e.tags.some((t) => excluded.has(t)));
+  }
+  return picker.pickWithRecency(
+    candidates.map((e) => e.description),
+    `${axisPrefix}_ambient`
+  );
+}
+
 module.exports = {
   byTags,
   filterByTags,
   genderOf,
   pickCharacter,
+  pickPureSceneLife,
 
   FARMBOT_LOOK_REGISTER,
   CHARACTER_ARCHETYPE,
@@ -163,6 +246,7 @@ module.exports = {
   WEATHER_ATMOSPHERE,
   WORLD_DETAIL_PROPS,
   GENTLE_MAGIC,
+  AMBIENT_LIFE,
   CAMERA_COMPOSITION,
   POND_PLACE,
 };

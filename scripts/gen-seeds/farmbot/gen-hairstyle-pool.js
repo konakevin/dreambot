@@ -15,8 +15,8 @@ const SEEDS_DIR = path.join(__dirname, '..', '..', 'bots', 'farmbot', 'seeds');
 const RECIPES = [
   {
     outPath: path.join(SEEDS_DIR, 'farmbot_hairstyle.json'),
-    total: 25,
-    append: false,
+    total: 120,
+    append: true,
     banHumanLanguage: true,
     metaPrompt: (n) => `Generate ${n} distinct HAIRSTYLE descriptions for young-adult anime
 villager characters — STYLE and LENGTH only, absolutely no color mentioned. Cover a genuinely

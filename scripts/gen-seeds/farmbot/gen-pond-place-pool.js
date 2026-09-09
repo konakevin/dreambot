@@ -15,8 +15,8 @@ const SEEDS_DIR = path.join(__dirname, '..', '..', 'bots', 'farmbot', 'seeds');
 const RECIPES = [
   {
     outPath: path.join(SEEDS_DIR, 'farmbot_pond_place.json'),
-    total: 25,
-    append: false,
+    total: 120,
+    append: true,
     banHumanLanguage: true,
     metaPrompt: (n) => `Generate ${n} distinct SUMMER POND descriptions for a cozy countryside
 bot — the pond and its immediate surroundings as a rich, lived-in little world, always in warm
