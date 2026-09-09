@@ -5,6 +5,15 @@ export interface BotUser {
   id: string;
   username: string;
   avatar_url: string | null;
+  /**
+   * false for a fully-private admin-only bot (AlphaBot, FarmBot) — this RPC
+   * only ever returns such a bot to the supreme admin in the first place
+   * (migration 339's carve-out), so any row present with is_public=false is
+   * guaranteed to be one of those. Lets the Bots tab offer a "View Profile"
+   * affordance instead of the normal live per-bot feed, which is always
+   * empty for a private bot (it has zero is_public=true posts by definition).
+   */
+  is_public: boolean;
 }
 
 /**

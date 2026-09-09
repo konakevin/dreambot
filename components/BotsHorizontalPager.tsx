@@ -30,7 +30,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Dimensions, View, StyleSheet } from 'react-native';
+import { Dimensions, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   cancelAnimation,
@@ -40,6 +40,9 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { Text } from '@/components/AppText';
 import { useFeedStore } from '@/store/feed';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
 import { useDreamFeed, prefetchDreamFeed } from '@/hooks/useDreamFeed';
@@ -47,6 +50,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/store/auth';
 import type { BotUser } from '@/hooks/useBotUsers';
 import type { DreamPostItem } from '@/components/DreamCard';
+import { colors } from '@/constants/theme';
+import { fontScale, verticalScale } from '@/lib/responsive';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -220,6 +225,7 @@ export function BotsHorizontalPager({
         <Animated.View style={[StyleSheet.absoluteFill, stripStyle]}>
           {windowItems.map((i) => {
             const item = pages[i];
+            const bot = item.botId ? bots.find((b) => b.id === item.botId) : null;
             return (
               <View key={item.key} style={[styles.page, { left: i * SCREEN_WIDTH }]}>
                 <BotFeedPage
@@ -228,6 +234,7 @@ export function BotsHorizontalPager({
                   onIndexChange={(idx) => indexMapRef.current?.set(keyForBot(item.botId), idx)}
                   onHudToggle={onHudToggle}
                   emptyComponent={emptyComponent}
+                  privateBot={bot && bot.is_public === false ? bot : null}
                 />
               </View>
             );
@@ -249,12 +256,22 @@ function BotFeedPage({
   onIndexChange,
   onHudToggle,
   emptyComponent,
+  privateBot,
 }: {
   botId: string | null;
   initialIndex: number;
   onIndexChange: (index: number) => void;
   onHudToggle?: (visible: boolean) => void;
   emptyComponent?: React.ReactElement;
+  /**
+   * Set when this page's bot is fully private (AlphaBot, FarmBot) — such a
+   * bot always has an empty live feed (zero is_public=true posts by
+   * definition), so its empty state offers "View Profile" instead of the
+   * generic emptyComponent. The profile screen is where the supreme admin's
+   * dark-launch shadow renders actually surface (useShadowPosts, migration
+   * 376) — this page's own feed can never show them.
+   */
+  privateBot?: BotUser | null;
 }) {
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useDreamFeed(
     'bots',
@@ -299,7 +316,7 @@ function BotFeedPage({
       onEndReached={() => {
         if (hasNextPage && !isFetchingNextPage) fetchNextPage();
       }}
-      ListEmptyComponent={emptyComponent}
+      ListEmptyComponent={privateBot ? <PrivateBotEmptyState bot={privateBot} /> : emptyComponent}
       onHudToggle={onHudToggle}
       // CRITICAL: disable swipe-to-profile inside the bots pager. The
       // horizontal pan is owned by the outer pager here, and the card
@@ -308,6 +325,55 @@ function BotFeedPage({
     />
   );
 }
+
+/**
+ * Empty-state for a fully-private admin-only bot's page (AlphaBot, FarmBot)
+ * — this feed is always empty (a private bot has zero is_public=true posts
+ * by definition), so instead of the generic "pick a bot" message this offers
+ * a direct route to the bot's actual profile screen, where the supreme
+ * admin's dark-launch shadow renders surface (useShadowPosts, migration 376).
+ * Only ever rendered for the supreme admin — get_bot_users (migration 339)
+ * never returns a private bot to anyone else, so this page can't mount for
+ * another viewer.
+ */
+function PrivateBotEmptyState({ bot }: { bot: BotUser }) {
+  return (
+    <View style={privateStyles.wrap}>
+      <Ionicons name="lock-closed-outline" size={40} color={colors.textSecondary} />
+      <Text style={privateStyles.title}>{bot.username} is private</Text>
+      <Text style={privateStyles.sub}>
+        Only visible to you — view its profile to see what it has dreamed so far.
+      </Text>
+      <TouchableOpacity
+        style={privateStyles.button}
+        activeOpacity={0.8}
+        onPress={() => router.push(`/user/${bot.id}`)}
+      >
+        <Text style={privateStyles.buttonText}>View Profile</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const privateStyles = StyleSheet.create({
+  wrap: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+    paddingHorizontal: 40,
+  },
+  title: { color: colors.textPrimary, fontSize: fontScale(18), fontWeight: '700' },
+  sub: { color: colors.textSecondary, fontSize: fontScale(14), textAlign: 'center' },
+  button: {
+    marginTop: verticalScale(8),
+    borderRadius: 14,
+    paddingHorizontal: 20,
+    paddingVertical: verticalScale(10),
+    backgroundColor: '#FFFFFF',
+  },
+  buttonText: { color: '#000000', fontSize: fontScale(14), fontWeight: '700' },
+});
 
 const styles = StyleSheet.create({
   viewport: { flex: 1, overflow: 'hidden', backgroundColor: '#000' },

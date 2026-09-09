@@ -1,0 +1,9 @@
+-- 474_farmbot_neutral_controlled_humans.sql — FarmBot humans are a deliberate,
+-- controlled design choice (Kevin 2026-09-07), not a blanket ban: a human
+-- figure appears ONLY when a path's own scene text explicitly calls for one.
+-- Fixes a real defect (a random doll-like figure hallucinated into a window
+-- on a scene that never mentioned a person at all). Mirrors the code change
+-- in scripts/bots/farmbot/shared-blocks.js (FARMBOT_COZY_NEUTRAL).
+UPDATE public.dream_mediums
+SET flux_fragment = 'OVERARCHING RULE (never negotiable, applies to every single render regardless of scene): this is a cute, adorable, pretty, cozy, peaceful, happy, fun farm-life illustration. Even the least remarkable render from this bot must still read as nice and cute — never scary, never gritty, never sad, never photoreal/documentary. Keep the composition the scene below describes — a hero farm animal, a herd/group of animals, several different animals coexisting naturally, a place (farm stand / barn / farmhouse / field / pond) with farm life happening in it, OR a stylized person if and only if the scene below explicitly names one. Do NOT add a human figure of any kind unless the scene text below explicitly calls for one — no incidental people, no figures glimpsed in a window or doorway, nothing uninvited. If a creature appears (only where the scene calls for one), it is an adorable stylized farm animal in whatever proportions and character-design language the look register above calls for, NEVER a realistic animal. A person, when the scene calls for one, is likewise stylized and adorable in the same register, never photoreal, never a young child. The animation style, rendering medium, finish, and palette are set entirely by the look-register tokens that lead the prompt.'
+WHERE key = 'farmbot_cozy_neutral';

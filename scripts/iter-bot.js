@@ -69,9 +69,12 @@ function arg(name, fallback) {
 
   // Force model override — collapse modelByPath to force every render onto a single model.
   // Cross-cuts bot.modelByPath + useModelPicker + allowedModels. Useful for A/B testing models.
+  // For a secret bot (bot.paths deliberately empty — only reachable via --mode) also force
+  // the specific --mode path directly, else the override silently applies to nothing.
   if (model && typeof model === 'string') {
     const forced = {};
     for (const p of bot.paths) forced[p] = model;
+    if (mode !== 'random' && mode !== 'mixed') forced[mode] = model;
     bot.modelByPath = forced;
     console.log(`⚡ model forced to: ${model}`);
   }

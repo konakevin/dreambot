@@ -22,7 +22,7 @@ import * as nav from '@/lib/navigate';
 import type { Announcement } from '@/hooks/useAnnouncement';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
-import { GradientTitle } from '@/components/GradientTitle';
+import { AnimatedGradientTitle } from '@/components/AnimatedGradientTitle';
 import { GradientButton } from '@/components/GradientButton';
 
 interface Props {
@@ -71,9 +71,9 @@ export function AnnouncementSheet({ announcement, onClose }: Props) {
           ONLY — tapping outside the card does nothing (Kevin 2026-08-25). */}
       <View style={s.overlay}>
         <View style={s.card}>
-          <GradientTitle size={22} align="center">
-            {announcement.title}
-          </GradientTitle>
+          <View style={s.titleWrap}>
+            <AnimatedGradientTitle size={22}>{announcement.title}</AnimatedGradientTitle>
+          </View>
 
           {announcement.image_url ? (
             <Image
@@ -105,6 +105,9 @@ export function AnnouncementSheet({ announcement, onClose }: Props) {
 }
 
 const s = StyleSheet.create({
+  titleWrap: {
+    alignItems: 'center',
+  },
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.72)',
