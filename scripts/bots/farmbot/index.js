@@ -100,6 +100,7 @@ const pathBuilders = {
   'laundry-day': require('./paths/laundry-day'),
   'waterfall-glade': require('./paths/waterfall-glade'),
   'market-town-square': require('./paths/market-town-square'),
+  'duck-pond': require('./paths/duck-pond'),
 };
 
 module.exports = {
@@ -196,6 +197,7 @@ module.exports = {
     'laundry-day',
     'waterfall-glade',
     'market-town-square',
+    'duck-pond',
   ],
 
   // Dark-launch QA set (BOT_DARK_LAUNCH_PLAN.md) — FarmBot is now LIVE AND
