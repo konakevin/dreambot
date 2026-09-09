@@ -5,7 +5,7 @@
 > All 17 image bots run on the standalone V2 engine (`scripts/lib/botEngine.js`).
 > Each bot is a pure-data Node module in `scripts/bots/<name>/`. All 17 are
 > scheduled by a single DB-driven dispatcher (`.github/workflows/bots-dispatcher.yml`,
-> fires every 15 min, reads `bot_schedules`) — see [Production Cron](#production-cron)
+> fires hourly, reads `bot_schedules`) — see [Production Cron](#production-cron)
 > for the dispatcher + scheduling-knob details. Two content bots (HumanBot,
 > GlowBot) use custom standalone scripts with Sharp text overlays on a separate
 > workflow — see [Content Bots](#content-bots-humanbot--glowbot).
@@ -1290,7 +1290,7 @@ All 17 image bots are scheduled by `.github/workflows/bots-dispatcher.yml`:
 ```yaml
 on:
   schedule:
-    - cron: '*/15 * * * *'   # every 15 min, UTC
+    - cron: '12 * * * *'   # hourly, UTC (changed from every-15-min 2026-09-09 — see bots-dispatcher.yml's own header comment)
   workflow_dispatch:
     inputs:
       dry_run:
@@ -1612,7 +1612,7 @@ Iterate per "The Iteration Workflow with Kevin" section.
 
 1. `INSERT INTO bot_schedules (bot_name, posts_per_day, active, phase_seed) VALUES ('<name>', 2, true, <hash_mod_1440>);` — pick `phase_seed` deterministically from md5(bot_name) so the bot returns to the same time-of-day after temp deactivation
 2. Commit the bot module files (per `feedback_commit_on_approval.md` — commit IMMEDIATELY when Kevin approves)
-3. Push to main — the dispatcher will pick the new bot up on its next tick (≤15 min). Dispatcher's 6h failsafe will auto-deactivate it if the first render fails repeatedly
+3. Push to main — the dispatcher will pick the new bot up on its next tick (≤1h). Dispatcher's 6h failsafe will auto-deactivate it if the first render fails repeatedly
 
 ### Step 7: Verify in App
 

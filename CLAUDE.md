@@ -110,8 +110,8 @@ cast into one of their places. Free (no charge).
 18 image-gen bots (bloombot, brickbot, chibibot, dinobot, dragonbot, earthbot, faebot, gothbot, mangabot,
 mechbot, oceanbot, pixelbot, retrobot, starbot, steambot, tinybot, toybot, yumbot) post to the public feed
 **2×/day** (per-bot, DB-tunable via `bot_schedules.posts_per_day`; fleet-wide set to 3 on
-2026-08-06, then down to 2 on 2026-08-20). Cadence is DB-driven: `.github/workflows/bots-dispatcher.yml` (every 15 min) reads
-`bot_schedules` for due bots → `scripts/run-bot.js`. Each bot is a self-contained module under
+2026-08-06, then down to 2 on 2026-08-20). Cadence is DB-driven: `.github/workflows/bots-dispatcher.yml` (hourly, changed from
+15 min 2026-09-09) reads `bot_schedules` for due bots → `scripts/run-bot.js`. Each bot is a self-contained module under
 `scripts/bots/<botname>/` (config + paths + pools + seeds); multi-provider (Flux/Gemini/GPT). Full
 architecture, cadence mechanics, entry points (`run-bot.js`, `iter-bot.js`, `qa-bot-model-matrix.js`):
 `ENGINEERING_NOTES.md` + `BOTS.md`. **ALL new-path development happens on AlphaBot, the PRIVATE
@@ -296,8 +296,9 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
   real DDL extracted from migration files via `__tests__/db/_support/pg.ts`). No local Postgres — validate
   dbspecs by pushing + `gh run watch` the `db-tests` job.
 - **GitHub Actions** (`.github/workflows/`, repo `konakevin/dreambot`, trunk `main`): `ci.yml` (every
-  push); `nightly-dreams.yml` (08:00 UTC enqueue); `bots-dispatcher.yml` (15 min); `dream-queue-sync.yml`
-  (5 min reliability backstop — held-connection drain); `refund-stuck-jobs.yml` (5 min); upscale
+  push); `nightly-dreams.yml` (08:00 UTC enqueue); `bots-dispatcher.yml` (hourly); `dream-queue-sync.yml`
+  (5 min reliability backstop — held-connection drain, though see `project_gh_actions_scheduled_workflow_dropout.md`
+  for a caveat on how reliably GitHub actually fires this); `refund-stuck-jobs.yml` (5 min); upscale
   sweep/smoke. Cron secrets: `SUPABASE_SERVICE_ROLE_KEY`, `DREAM_QUEUE_WORKER_TOKEN`, `REPLICATE_API_TOKEN`,
   `ANTHROPIC_API_KEY`.
 - **Monitoring** (fail-loud → GitHub failure email): `dream-queue-monitor` (hourly — stuck/dead-letter +
