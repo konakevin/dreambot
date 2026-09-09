@@ -58,8 +58,8 @@ a little water in it), a small weathered rowboat moored alongside and bumping ge
 dock, a low wooden railing or single simple piling at the dock's edge, a tackle box sitting open
 on the planks, a woven fishing net draped over a post to dry, a rusty old lantern hook, a stack of
 life-worn wooden crab or lobster traps, a frayed life ring hung on a post, weathered rope fenders
-hanging along the edge, moss or lichen creeping up a piling, small gaps between boards showing a
-glint of water below, water lapping gently against the pilings at the edges of the frame (kept
+hanging along the edge, moss or lichen creeping up a piling, small gaps between boards showing
+calm water below, water lapping gently against the pilings at the edges of the frame (kept
 secondary — a background detail, never the described subject of the sentence the way a lake or
 river would be). A heron standing statue-still at the dock's edge or a duck or two paddling near
 the pilings is a welcome touch of stillness/wildlife-neutral detail, described as part of the dock
@@ -76,6 +76,16 @@ CRITICAL — describe light and atmosphere in plain, literal terms only (pools o
 light, a warm glow, soft light spilling across a surface, sunlight glinting off the water) — NEVER
 a metaphorical object-noun standing in for light (no "coins of light," "ribbons of gold," "scattered
 gems of sun," or similar), since figurative light language can render as the literal object instead.
+
+CRITICAL — never pair "dark"/"darkness"/"shadow" with a light-implying word like "glint,"
+"sparkle," "shimmer," "luminous," or "glow" describing the SAME thing (e.g. "a dark glint of water,"
+"the darkness given a gentle luminous sparkle"). That contradictory pairing is exactly the kind of
+phrase Sonnet's brief-to-prompt rewrite tends to escalate into a literal glowing light source or
+starry night-sky patch cut into an otherwise daytime scene (a real bug, seen on this exact pool: "a
+dark glint of water" became "the darkness beneath given a gentle luminous sparkle," which rendered
+as a glowing vertical beam with visible stars slicing through a foggy daytime dock scene — a
+literal split-frame day/night artifact). Describe any gap, shadow, or dark patch of water plainly
+(e.g. "a narrow gap between two boards showing calm water below") with no light-word attached.
 
 CRITICAL — this is a PLACE description with NO people in it at all, not even implied ones. Do NOT
 mention: figures, crowd, riders, children, kids, bystanders, onlookers, laughter, faces, hands,

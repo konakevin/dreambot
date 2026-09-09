@@ -54,6 +54,23 @@
  *     "wooden plant labels" produced literal hallucinated numerals on the
  *     stakes) — explicit ban on any label/marker/tag/sign CONCEPT, not just
  *     literal "sign" wording
+ *
+ * TIME-OF-DAY/WEATHER REBALANCE (2026-09-09): a full-pool scan found this
+ * pool skewed toward warm/golden/bright-sun language (69/120 warm, only 5
+ * cool/varied) — matching Kevin's "always sunny" flag on FarmBot renders
+ * overall. `total` bumped 120→150 with `append: true` to add a batch
+ * weighted heavily toward dawn/misty-morning/overcast-midday/dusk/evening/
+ * night/rain (see the TIME-OF-DAY/WEATHER block below). That block also
+ * carries a permanent "going forward" requirement so any FUTURE scale-up of
+ * this pool keeps genuine variety instead of regressing back to
+ * all-afternoon — if this script is re-run again once the pool is already
+ * balanced, dial the "≥85% cool" weighting back down to something more even
+ * before generating another batch. Also bakes in the dark+light
+ * contradictory-pairing fix (found and fixed on
+ * `farmbot_fishing_dock_place.json` the same night: "dark glint of water" →
+ * Sonnet-escalated into a literal glowing light source with visible stars
+ * in an otherwise-daytime scene) so new night/moonlit entries here don't
+ * reintroduce it.
  */
 const path = require('path');
 const { generatePool } = require('../../lib/seedGenHelper');
@@ -63,7 +80,7 @@ const SEEDS_DIR = path.join(__dirname, '..', '..', 'bots', 'farmbot', 'seeds');
 const RECIPES = [
   {
     outPath: path.join(SEEDS_DIR, 'farmbot_papaya_guava_orchard_place.json'),
-    total: 120,
+    total: 150,
     append: true,
     banHumanLanguage: true,
     metaPrompt: (n) => `Generate ${n} distinct SMALL, CULTIVATED, MIXED-ROW TROPICAL PAPAYA-AND-
@@ -95,11 +112,45 @@ fruit-sorting table holding a few sorted papayas and guavas, a low wooden or wov
 orchard's edge, a coil of twine or a pruning knife resting on a post. The orchard is SMALL and
 INTIMATE in scale — you can see its far edge, a nearby farmhouse roofline or a line of a few coconut
 palms marking the boundary is fine as a distant backdrop, but the orchard itself is always the tidy,
-orderly, CULTIVATED hero, never a dense or overgrown or wild space. Vary time of day within a warm
-tropical window (bright high sun, hazy warm late-afternoon glow, soft golden late light), viewpoint
-(looking straight down a papaya row toward its tall trunks, a wide view across mixed papaya-and-guava
-rows, close on one guava tree's low branches, from the sorting table looking back down a row), and
-which physical detail leads.
+orderly, CULTIVATED hero, never a dense or overgrown or wild space. Also vary viewpoint (looking
+straight down a papaya row toward its tall trunks, a wide view across mixed papaya-and-guava rows,
+close on one guava tree's low branches, from the sorting table looking back down a row) and which
+physical detail leads.
+
+CRITICAL — TIME-OF-DAY / WEATHER (this batch is a REBALANCE — read carefully): the pool's existing
+entries lean heavily bright-sun and golden-afternoon, so THIS BATCH must draw AT LEAST 85% of its
+entries from the COOL/VARIED categories below, and this requirement holds for any future scale-up of
+this pool too — never let it drift back to all-afternoon. Every entry must fall into ONE of these
+concrete categories:
+  - DAWN: pale early light breaking low through the rows, long soft shadows stretching between the
+    trunks, the sky still holding cool color near the horizon
+  - MISTY MORNING: thin ground mist drifting low between the papaya and guava rows, dew beaded on the
+    leaves and ripening fruit skin, muted soft grey-green light
+  - OVERCAST MIDDAY: a flat, even grey-white sky, soft shadowless light through the canopy, no strong
+    sun or glare
+  - DUSK: fading light, the sky deepening into blue-violet above the rows, only a last thin warm edge
+    low on the horizon
+  - EVENING: dim blue-grey light settling over the orchard, a farmhouse window's glow far off at the
+    boundary
+  - NIGHT / MOONLIT: silvery moonlight washing over the rows, the pale glow of a full moon catching
+    the high papaya crowns or the low guava branches, starlight described as its own clean phrase
+    (see the critical wording rule below)
+  - GENTLE RAIN: soft steady rain, rain-darkened leaves and soil, water beading and dripping off the
+    broad papaya leaves or the smaller guava leaves — a fine warm-weather drizzle, never a storm or
+    downpour
+  - (a small remaining minority, if any, may use the bright-high-sun / hazy warm-afternoon / soft
+    golden-late-light window this pool already has plenty of)
+
+CRITICAL — NIGHT/MOONLIT WORDING (a real bug, just found and fixed on another FarmBot pool): never
+pair "dark," "darkness," or "shadow" with a light-implying word ("glint," "sparkle," "shimmer,"
+"luminous," "glow") describing the SAME thing — that contradictory pairing gets escalated by
+Sonnet's brief-to-prompt rewrite into a literal glowing light source or a starry night patch cut
+into an otherwise-daytime scene (confirmed real: "a dark glint of water" became "the darkness given
+a gentle luminous sparkle," which rendered as a glowing vertical beam with visible stars slicing
+through a foggy daytime scene — a literal split day/night artifact). Describe moonlight and darkness
+compatibly instead — "silvery moonlight," "the pale glow of a full moon," "starlight" as its own
+clean phrase — never "dark"/"darkness"/"shadow" plus a sparkle/glint/luminous/glow word describing
+the same object.
 
 TROPICAL ATMOSPHERE — since this pool carries its own weather (no separate season/weather pick is
 used with this path), bake warm, humid, tropical atmosphere directly into every entry: thick warm
