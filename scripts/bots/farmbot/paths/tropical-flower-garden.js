@@ -91,6 +91,89 @@
  * soil as holding "nothing but rich dark earth cradling the blooms," giving
  * Flux a concrete positive answer for what occupies that visual space
  * instead of inventing something. Re-verified clean on round 3.
+ *
+ * ━━━ 2026-09-09 RE-QA: cozy-composition fix (Kevin's post-launch audit) ━━━
+ * Kevin personally reviewed a real render and flagged the compositional
+ * register: a small, distant character standing under a huge ornamental
+ * flower arch, reading as a wide landscape postcard rather than FarmBot's
+ * normal close/medium character-forward framing. Root-caused with real DB
+ * evidence (9 real `tropical-flower-garden` uploads, full `ai_prompt` pulled
+ * — not guessed) to TWO real, confirmed mechanisms, in order of impact:
+ *
+ * 1. PRIMARY — the CAMERA_COMPOSITION filter below was far too permissive.
+ *    The shared `farmbot_camera_composition.json` pool (109 entries) still
+ *    contains ~9 literal "Wide establishing shot... vast... enormous sky"
+ *    entries plus several "Low-angle view... the landscape rising grandly
+ *    upward... nodding large in the near foreground" entries — the 2026-09-09
+ *    "back-turned" bug-fix pass (see FARMBOT_PATH_BUILD_STATE.md) only ever
+ *    purged the 11 over-the-shoulder entries from the LIVE pool (120→109)
+ *    and blocked NEW dwarfing entries at the gen-script source; it never
+ *    purged the dwarfing/wide-establishing entries already baked into the
+ *    existing 109. This path's old blacklist regex (`tiny|dwarfed|sky
+ *    dominating|sweeping|...`) only caught entries using those EXACT words —
+ *    51/109 entries slipped through it uncaught, including every "Wide
+ *    establishing shot" variant (no "tiny"/"dwarfed"/"sweeping" in that
+ *    phrasing at all) and the "rising grandly... nodding large in the near
+ *    foreground" low-angle variants. Confirmed via the real `ai_prompt` data:
+ *    render `012b3d03` picked the "landscape rising grandly... nodding large
+ *    in the near foreground" entry and rendered "Standing on the path
+ *    mid-frame, framed by the rising garden and the grand foreground
+ *    blooms, is a cozy baker..." — a small, framed-by-grandeur character,
+ *    Kevin's exact complaint. Render `a769e696` picked a low-angle
+ *    "sky/treetops arching large... overhead" entry and its character
+ *    description got visibly thinned/truncated (see mechanism 2). FIXED:
+ *    replaced the blacklist with a WHITELIST — only "Medium framing" /
+ *    "Intimate close-up" / "Close intimate framing" / "Soft foreground
+ *    foliage" entries survive (33/109, verified by category, zero
+ *    wide-establishing or dwarfing entries among them) — every one of these
+ *    is close/medium, character-forward, and garden-setting-compatible.
+ * 2. COMPOUNDING — the CROSS-CUTTING maxTokens lesson (Sonnet's brief-writing
+ *    call, fixed `maxTokens: 400`, content late in a dense brief gets
+ *    dropped/thinned first) hits this path specifically hard whenever a
+ *    verbose/establishing garden pick lands, because THE CHARACTER block
+ *    sits 2nd (after the full garden paragraph) with no positive framing
+ *    directive protecting it — 4 of the 5 real post-fix-archetype renders
+ *    pulled show the character description visibly thinned or cut off
+ *    mid-sentence before Sonnet ever reached CAMERA/ACTIVITY. FIXED: added a
+ *    short, front-loaded FRAMING mandate (right after the look-register
+ *    prefix, ahead of even the garden hero block — same proven pattern as
+ *    `papaya-guava-orchard.js`'s CAST pointer and `barn-animal-shelter-
+ *    interior.js`'s ANIMALS-first fix) stating the character (when present)
+ *    is always close/medium-framed, large, and clearly the focus — cheap
+ *    insurance that survives even a badly budget-starved brief — plus the
+ *    same directive repeated a second time in the closing reinforcement
+ *    paragraph (the proven "repeat guaranteed content" pattern from the
+ *    `pickPureSceneLife` lesson).
+ *
+ * Also reworded 5/120 bespoke place-pool entries (indices 5, 17, 27, 48,
+ * 101) that opened with "wide view"/"wide spread"/"wide, cheerful sweep"
+ * establishing-shot language at the SETTING level, toward personal-scale
+ * ("close-knit," "close at hand," "close-set") wording — a minor secondary
+ * contributor, not the primary cause (the pool's actual arch/trellis
+ * entries never use monumental words like "towering"/"massive"/"grand" —
+ * scanned and confirmed clean; the tropical/flower-arch identity is fully
+ * intact, only the 5 "wide"-framed openers changed).
+ *
+ * VERIFIED (round 1, 6 shadow-post renders, real DB `ai_prompt` + real
+ * pixels inspected, not just text): direct before/after smoking-gun found —
+ * pre-fix render `a769e696` (picked the old-pool "Low-angle view, ground
+ * close, sky/treetops arching large overhead" entry, which the whitelist now
+ * excludes) rendered EXACTLY Kevin's complaint: a tiny distant character
+ * standing under a huge bougainvillea arch, framed symmetrically by two
+ * palm trees — a genuine wide landscape postcard. Post-fix: 5/6 renders
+ * with a character all show the character large/close/prominent in the
+ * foreground both in Sonnet's own prompt text ("large and unmistakably
+ * central," "filling the frame," "never distant or small against the
+ * garden behind him") AND confirmed visually in the actual rendered
+ * pixels; the 1 no-character render is a correctly-framed intimate close-up
+ * on baby goats. Tropical identity (hibiscus/plumeria/bird-of-paradise/
+ * bougainvillea/palm/garden arch) unmistakable in 5/6 renders; 1/6 leaned
+ * slightly more generic-cottage in background (still mentioned bird-of-
+ * paradise in its prompt) — normal per-render variance, not a pool/template
+ * defect. Zero regressions on the standard bug list (negation, dark+light
+ * pairing, back-turned camera, signage hallucination) — scanned + confirmed
+ * clean. Signed off round 1. See FARMBOT_PATH_BUILD_STATE.md for the fuller
+ * write-up if it gets folded in there.
  */
 
 const { lookOverride } = require('../shared-blocks');
@@ -169,15 +252,24 @@ module.exports = ({ sharedDNA, picker }) => {
     ? picker.pickWithRecency(FLOWER_GARDEN_ACTIVITIES, 'tropical_flower_garden_activity')
     : null;
 
-  // Manual content filter (CAMERA_COMPOSITION is untagged): drops village/
-  // rooftop/cottage/hedgerow/farmhouse/barn/cozy-interior framings (physical-
-  // setting mismatch for an open-air garden) PLUS every phrasing of the
-  // "character tiny/dwarfed within a sweeping/sky-dominating landscape" bug
-  // (CLAUDE.md hard rule — filter broadly, not just "rolling").
-  const CAMERA_INCOMPATIBLE =
-    /\b(village|rooftops?|cottages?|hedgerows?|farmhouse|barn|interior|tiny|dwarfed|sky dominating|sweeping)\b/i;
+  // WHITELIST (not a blacklist) — see the 2026-09-09 RE-QA header note above.
+  // The old blacklist regex only caught entries using its exact keywords and
+  // let 51/109 entries slip through, including every "Wide establishing
+  // shot" variant and the "landscape rising grandly... large in the near
+  // foreground" low-angle variants — confirmed via real DB `ai_prompt`
+  // evidence to be the primary driver of the "small distant character under
+  // a huge arch" complaint. Only entries whose LEADING phrase is one of the
+  // four confirmed close/medium, character-forward, garden-compatible
+  // categories survive: "Medium framing", "Intimate close-up", "Close
+  // intimate framing", "Soft foreground foliage" (33/109 entries). This
+  // deliberately drops the entire "Wide establishing shot" and "Character
+  // tiny/small/dwarfed" categories outright, plus every "Low-angle view"
+  // entry (that category is a mixed bag — several explicitly say "rising
+  // grandly"/"sky enormous" — not worth the risk for a path that needs to be
+  // thorough about reducing wide/landscape framing).
+  const CAMERA_COMPATIBLE = /^(Medium framing|Intimate close-up|Close intimate framing|Soft foreground foliage)/i;
   const camera = picker.pickWithRecency(
-    pools.CAMERA_COMPOSITION.filter((e) => !CAMERA_INCOMPATIBLE.test(e)),
+    pools.CAMERA_COMPOSITION.filter((e) => CAMERA_COMPATIBLE.test(e)),
     'tropical_flower_garden_camera'
   );
 
@@ -202,25 +294,44 @@ module.exports = ({ sharedDNA, picker }) => {
       ? picker.pickWithRecency(pools.GENTLE_MAGIC.map((e) => e.description), 'tropical_flower_garden_magic')
       : null;
 
-  return `${lookOverride(sharedDNA && sharedDNA.lookRegister)}━━━ THE TROPICAL FLOWER GARDEN (the hero of the shot) ━━━
+  // Front-loaded, short FRAMING mandate — see the 2026-09-09 RE-QA header
+  // note. Placed ahead of even the garden hero block so it survives Sonnet's
+  // fixed maxTokens budget regardless of how verbose the garden pick or
+  // character description turn out to be (the proven pattern: barn-animal-
+  // shelter-interior.js's ANIMALS-first block, papaya-guava-orchard.js's
+  // CAST pointer). Kept to one short paragraph so the garden still gets
+  // primary descriptive billing right after it.
+  const framingMandate = character
+    ? `━━━ FRAMING (essential, read first) ━━━
+The camera holds close and medium on the character — they read large, warm,
+and unmistakably the focus in the foreground of the shot, never a small or
+distant figure dwarfed by the garden behind them.
+
+`
+    : '';
+
+  return `${lookOverride(sharedDNA && sharedDNA.lookRegister)}${framingMandate}━━━ THE TROPICAL FLOWER GARDEN (the hero of the shot) ━━━
 ${garden}
 This is a small, cultivated, hand-tended farm garden — raised beds, a trellis
 or two, a tidy path a family or small crew tends by hand — cheerful order
 throughout, each bed's open soil holding nothing but rich dark earth
 cradling the blooms and their leaves, bordered simply by its own wood or
 stone edge, never a wild or untamed space.
-${character ? `\n━━━ THE CHARACTER ━━━\n${character}\n` : ''}
+${character ? `\n━━━ THE CHARACTER (close and prominent, not a distant speck) ━━━\n${character}\n` : ''}
 ${activity ? `━━━ WHAT'S HAPPENING ━━━\n${activity}\n\n` : ''}━━━ CAMERA ━━━
 ${camera}
 ${animal ? `\n━━━ ANIMAL COMPANY ━━━\n${animal}\n` : ''}
 ${magic ? `\n━━━ ONE SMALL SERENDIPITY TOUCH ━━━\n${magic}\n` : ''}
 ${
   character
-    ? `render a warm, unhurried tropical-garden moment — this is a small,
-cultivated, hand-tended flower garden, NOT a wild jungle or rainforest, with
-the garden, the character, and every open bloom rendered with equal loving
-richness, never a bare or empty composition. Every face in the frame, human
-and animal alike, stays clearly separate and fully legible.`
+    ? `render a warm, unhurried tropical-garden moment, framed close and
+medium on the character — this is a small, cultivated, hand-tended flower
+garden, NOT a wild jungle or rainforest, with the character large, clear,
+and close at hand in the foreground, never a small or distant figure lost
+in the garden behind them, the garden and every open bloom still rendered
+with equal loving richness around them, never a bare or empty composition.
+Every face in the frame, human and animal alike, stays clearly separate and
+fully legible.`
     : `no human figure anywhere in the frame — this is a warm, unhurried
 tropical-garden still-life moment carried entirely by the neat raised beds
 and trellises of a small, cultivated, hand-tended flower garden (NOT a wild
