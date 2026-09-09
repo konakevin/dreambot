@@ -545,6 +545,39 @@ All 157 test-render uploads (106 Halloween + 51 Fall) across all 9 paths were de
 
 FarmBot is now a normal live public bot: 28 regular paths + 9 armed-but-dormant seasonal paths, `bot_schedules` posting on the same hourly-checked cadence as every other bot.
 
+## 2026-09-09: `waterfall-glade` — new path, closes the brief's waterfall gap (AlphaBot-tested, NOT yet registered on FarmBot)
+
+Kevin's audit of FarmBot against the original 17-section creative-direction brief found one confirmed gap: section 2 ("THE WORLD") explicitly lists waterfalls among the world locations alongside forests/lakes/rivers, but a full grep of every FarmBot seed pool found zero waterfall content anywhere. Built as a brand-new path per the standing AlphaBot-first rule (FarmBot is live/public now, so no exceptions).
+
+**Concept**: a small, personal-scale, magical-feeling countryside waterfall — a gentle cascade over mossy rocks into a clear pool, never a huge/Niagara-scale feature (per the brief's "personal in scale" rule). Leans lightly on section 14's Gentle Magic register (a faint rainbow in the mist, ~10% of place-pool entries) while staying grounded — no epic-fantasy imagery. Genuinely distinct from every other water-adjacent path: `summer-evening-by-the-pond` = still pond, `lakeside-riverside-moment` = wide open water, `fishing-dock` = dock structure as hero, `woodland-walk` = forest, no water. This path's hero is specifically the FALLING/CASCADING water.
+
+**Files**:
+- `scripts/gen-seeds/farmbot/gen-waterfall-glade-place-pool.js` → `scripts/bots/farmbot/seeds/farmbot_waterfall_glade_place.json` (119 entries, target 120)
+- `scripts/gen-seeds/farmbot/gen-waterfall-glade-activity-pool.js` → `scripts/bots/farmbot/seeds/farmbot_waterfall_glade_activity.json` (120 entries) — bespoke since the shared ACTIVITY pool has no waterfall-wading content
+- `scripts/gen-seeds/farmbot/gen-waterfall-glade-wildlife-pool.js` → `scripts/bots/farmbot/seeds/farmbot_waterfall_glade_wildlife.json` (119 entries) — bespoke since the shared ANIMAL_COMPANIONS pool is farmyard-only, no water-adjacent wildlife
+- `scripts/bots/farmbot/paths/waterfall-glade.js` — the path builder
+
+All 3 pools seeded at full 120-entry depth from the start (confirmed against this session's Fall/Halloween 9-path build as the current norm, not the older MVP-25 convention) and baked in every standing ban at the meta-prompt source: no negation, no ethnic/national skin-tone labels, no predator animals, no dark+light contradictory pairing (the fishing-dock bug — this was a live risk here since mist/rainbow/light effects are exactly the content class that trips it), no metaphorical light-as-object language, holistic (not per-object) description of stone/fern clusters, no huge/Niagara-scale imagery, no implied-person language.
+
+**Animal-spotlight lesson applied from the start** (per the barn-animal-shelter-interior.js pattern, generalized as a new standing practice): the ANIMAL COMPANY block is placed BEFORE the CHARACTER block in the template whenever both are present, headed "ANIMAL COMPANY" (not "A VISITOR"/"A COMPANION"), drawn from a pool written with descriptive richness comparable to a character description.
+
+**Camera filter**: `CAMERA_COMPOSITION` manually content-filtered (not pulled raw) — excludes farmhouse/barn/village/rooftop/cottage/interior framings (physically incompatible with an outdoor waterfall glade) plus dwarfing/scale-dissolution language (`tiny`, `dwarfed`, `rolling`, `sweeping`, `sky dominating`, `establishing shot`) per the CLAUDE.md hard rule against character-tiny-in-landscape framing — 41/109 entries survive the filter. Note for whoever builds the next path off this pool: a naive `village (street|lane|rooftops)` bigram regex misses "the village, rooftops and garden patches..." (comma-separated) and "Village-street" (hyphenated) — filter on standalone `\bvillage\b`/`\brooftop\b`/`\bcottage\b` instead of requiring adjacency.
+
+**Tested via AlphaBot** (`scripts/bots/alphabot/index.js` — added `waterfall-glade` to `pathBuilders`, `FARMBOT_DESTINED_PATHS`, `mediumByPath`, `paths[]`, `modelByPath`, and all 3 `skipPaths` lists, cloning FarmBot's real `farmbot_cozy_neutral` medium/flux-2-flex lock byte-identical, mirroring the pattern already wired in by a concurrent agent for `farm-fair-festival`/`duck-pond`/etc.). Rendered 6 via `node scripts/iter-bot.js --bot alphabot --mode waterfall-glade --count 6 --label "auto-qa: waterfall-glade R1" --post`.
+
+**QA R1 — PASS, no re-round needed.** Viewed all 6 images + pulled full `ai_prompt` for all 6 (filtered strictly by `recipe.path`, not keyword search). Results: a no-character chipmunk-at-the-pool shot with a rainbow in the mist and an autumn pumpkin cart; a character + fawn drinking + dog, fawn rendered with real prominence; a character sitting and watching with dragonflies caught in a subtle gentle-magic sparkle ring; a tight macro close-up of a hand catching spray (weakest of the 6 compositionally, but not a rule violation); a no-character pair of rabbits sharing clover at a tiered cascade; a character + pair of rabbits at a tiered waterfall with soft magic light-motes, rabbits given genuine visual prominence in the foreground (animal-before-character ordering working as intended). All personal-scale, all charming, all hit the "I want to live there" bar. Zero predator animals, zero signage, zero race labels, zero back-turned/dwarfed framing, zero negation leaks.
+
+**One real finding, NOT a path-specific defect**: every one of the 6 renders' Sonnet-written Flux prompt is truncated mid-word/mid-sentence right where it meets the code-appended suffix (`botEngine.js callClaude()`'s fixed `maxTokens: 400`). Checked whether this is unique to the new path's density: pulled 8 recent `lakeside-riverside-moment` renders (7/8 truncated) and 8 recent `woodland-walk` renders (8/8 truncated) — both are existing, signed-off, "soooooo good" paths. **This is a pre-existing, cross-cutting characteristic of the whole FarmBot template architecture, not something this path introduced** — every path stacks enough axes (place + character + activity + season + weather + camera + optional magic + closing paragraph) to hit the ceiling on its closing flourish. It never manifested as a visible defect on any of the 6 renders (hero/animal/character content is front-loaded and survives; only the last decorative clause gets clipped) — flagging for whoever next looks at `botEngine.js`'s brief-writing token budget bot-wide, out of scope for a single path.
+
+**NOT registered in `farmbot/index.js`/`pools.js`** — per the standing rule, that's Kevin's call after reviewing. Proposed registration lines (byte-identical pattern to every other FarmBot path):
+```js
+// pathBuilders:
+'waterfall-glade': require('./paths/waterfall-glade'),
+// paths[]:
+'waterfall-glade',
+```
+(No `modelByPath`/`mediumByPath` override needed — FarmBot's `index.js` already locks the single `farmbot_cozy_neutral` medium + `flux-2-flex` model bot-wide.)
+
 ## Deferred documentation (once the roster stabilizes, per Kevin)
 - Document the "multi-media look mashup" paradigm in `BOT_SCENE_QUALITY_PLAYBOOK.md`.
 - Document the generalized "secret/admin-only bot" creation recipe.

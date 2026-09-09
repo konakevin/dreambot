@@ -91,6 +91,14 @@ const pathBuilders = {
   'farmbot-halloween-pumpkin-carving': require('./paths/farmbot-halloween-pumpkin-carving'),
   'farmbot-halloween-scarecrow-building': require('./paths/farmbot-halloween-scarecrow-building'),
   'farmbot-halloween-trick-or-treating': require('./paths/farmbot-halloween-trick-or-treating'),
+
+  // Promoted from AlphaBot candidates 2026-09-09 (ALPHABOT.md workflow) —
+  // tested private on AlphaBot with FarmBot's real config cloned byte-
+  // identical, then promoted after QA sign-off.
+  deliveries: require('./paths/deliveries'),
+  'evening-chores': require('./paths/evening-chores'),
+  'laundry-day': require('./paths/laundry-day'),
+  'waterfall-glade': require('./paths/waterfall-glade'),
 };
 
 module.exports = {
@@ -180,7 +188,23 @@ module.exports = {
     'tropical-flower-garden',
     'tropical-stream-crossing',
     'papaya-guava-orchard',
+
+    // Promoted from AlphaBot candidates 2026-09-09.
+    'deliveries',
+    'evening-chores',
+    'laundry-day',
+    'waterfall-glade',
   ],
+
+  // Dark-launch QA set (BOT_DARK_LAUNCH_PLAN.md) — FarmBot is now LIVE AND
+  // PUBLIC (launched 2026-09-09), so any path listed here posts HIDDEN
+  // (shadow=true/is_public=false/is_posted=false, visible only to the
+  // supreme admin via get_shadow_feed) even though it's still in `paths`
+  // above, for the duration of active QA work on it. Remove a path's key
+  // the moment its QA is signed off — don't leave entries here longer than
+  // the QA session that added them (they silently suppress that path's
+  // normal live public posting the whole time they're listed).
+  shadowPaths: ['village-street-wandering', 'flower-field-wandering'],
 
   cycleAllPaths: true,
 
