@@ -40,6 +40,14 @@ Examples:
 rosy). NO readable text, NO brand names, NO named people, NO age-coding (no "weathered,"
 "wrinkled").
 
+🚫 CRITICAL — NEVER use the word "green"/"greenish" anywhere, even paired with "gold" or as a
+description of an "olive" undertone (e.g. NEVER "green-gold undertone," "greenish-gold,"
+"yellow-green," "green-warm"). This is a real, confirmed bug: a render used "olive skin with a
+muted green-gold undertone" and the model painted the character's skin as literally, visibly
+green — not a subtle warm undertone. "Olive" skin tone means warm golden-brown, NEVER an actual
+green hue. If describing an olive undertone, use only warm/brown/gold/tan words (e.g.
+"golden-brown," "warm-brown," "muted gold") — never any word containing "green."
+
 Output ONLY the JSON array, no preamble, no numbering.`,
   },
 ];
