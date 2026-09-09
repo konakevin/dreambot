@@ -147,6 +147,10 @@ module.exports = {
   // real-world posting right now. Path builder, bespoke pools, and QA history
   // are untouched (still required in pathBuilders above) — restore by moving
   // 'first-snowfall' back into this array whenever it's seasonally right.
+  // 'sugarcane-field' DEACTIVATED 2026-09-09 (Kevin: "disable the sugarcane
+  // path(s) from farmbot") — same pattern: path builder + bespoke pools
+  // (incl. today's machete/knife-over-representation fix) stay untouched and
+  // still required in pathBuilders above; restore by moving it back here.
   paths: [
     'animal-feeding-time',
     'cozy-bakery-afternoon',
@@ -173,7 +177,6 @@ module.exports = {
     'mango-orchard-harvest',
     'banana-grove-path',
     'coconut-palm-grove',
-    'sugarcane-field',
     'tropical-flower-garden',
     'tropical-stream-crossing',
     'papaya-guava-orchard',
