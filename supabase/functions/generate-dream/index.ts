@@ -591,12 +591,20 @@ async function handleRequest(req: Request): Promise<Response> {
           ? getSparkleCost(force_model)
           : cfg.baseSparkleCost;
     try {
-      const { data: chargeStatus } = await supabase.rpc('charge_sparkles', {
+      const { data: chargeStatus, error: chargeErr } = await supabase.rpc('charge_sparkles', {
         p_user_id: userId,
         p_amount: dreamCost,
         p_reason: 'dream',
         p_reference_id: jobId,
       });
+      // supabase-js resolves { data: null, error } on a Postgres/PostgREST-level
+      // failure (lock timeout, deadlock, connection blip) — it does NOT throw.
+      // Route it into the same catch below so a DB-level charge failure fails
+      // CLOSED instead of silently falling through with chargeStatus=null/undefined
+      // (which isn't 'insufficient', so the render would otherwise proceed for free).
+      if (chargeErr) {
+        throw new Error(`charge_sparkles RPC error: ${chargeErr.message}`);
+      }
       if (chargeStatus === 'insufficient') {
         // Return (not throw) so this bypasses the refund catch — nothing was
         // charged, so there is nothing to refund.
@@ -691,6 +699,20 @@ async function handleRequest(req: Request): Promise<Response> {
   if (medium_key || vibe_key) {
     // ── V2 ENGINE: Medium + Vibe directive-based generation ──────────
     const vibeProfile = vibe_profile as VibeProfile | undefined;
+
+    // vibe_profile arrives via a raw, unchecked cast (no schema validation) and
+    // was NOT covered by the sanitization pass above — vibeProfile.avoid[] lands
+    // verbatim under a "NEVER INCLUDE" header in the Sonnet brief
+    // (promptCompiler.ts, characterSlotPrompt.ts), read with full engine
+    // authority. nightly-dreams sanitizes the equivalent field
+    // (nightly-dreams/index.ts, avoidList); this path never did (Architect audit
+    // S5, 2026-09-10). Sanitize once here so every downstream consumer of
+    // vibeProfile.avoid inherits the fix.
+    if (vibeProfile?.avoid?.length) {
+      vibeProfile.avoid = vibeProfile.avoid
+        .map((a) => sanitizeUserText(String(a), 'subject_description'))
+        .filter(Boolean);
+    }
 
     // Resolve medium and vibe to real curated entries — never store placeholders.
     // 2026-06-02 — art_styles / aesthetics favorites removed from VibeProfile

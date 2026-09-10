@@ -273,12 +273,18 @@ async function handleRequest(req: Request): Promise<Response> {
     }
     const dreamCost = getSparkleCost(force_model || '');
     try {
-      const { data: chargeStatus } = await supabase.rpc('charge_sparkles', {
+      const { data: chargeStatus, error: chargeErr } = await supabase.rpc('charge_sparkles', {
         p_user_id: userId,
         p_amount: dreamCost,
         p_reason: 'dream',
         p_reference_id: jobId,
       });
+      // See generate-dream's identical comment: supabase-js resolves {error} rather
+      // than throwing on a DB-level failure, so this must be checked explicitly or
+      // a charge error silently falls through as a free render.
+      if (chargeErr) {
+        throw new Error(`charge_sparkles RPC error: ${chargeErr.message}`);
+      }
       if (chargeStatus === 'insufficient') {
         return new Response(JSON.stringify({ error: 'insufficient_sparkles', needed: dreamCost }), {
           status: 402,

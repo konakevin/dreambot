@@ -429,7 +429,11 @@ Deno.serve(async (req) => {
             return { id: job.id, status: 'dispatched', ms: Date.now() - jobT0 };
           }
 
-          await supabase
+          // Guarded on 'in_progress' — matches completeQueueJob's fix (Architect
+          // audit A5, 2026-09-10): without it, a losing duplicate claim (stale-
+          // recovery can re-queue a job that's actually still alive) can complete
+          // AFTER a winning claim already did, silently overwriting upload_id.
+          const { data: nightlyFlipped } = await supabase
             .from('dream_queue')
             .update({
               status: 'completed',
@@ -437,7 +441,15 @@ Deno.serve(async (req) => {
               upload_id: uploadId,
               last_error: null,
             })
-            .eq('id', job.id);
+            .eq('id', job.id)
+            .eq('status', 'in_progress')
+            .select('id');
+          if (!nightlyFlipped || nightlyFlipped.length === 0) {
+            console.warn(
+              `[worker:${workerId}] job ${job.id} was not in_progress at completion time — skipping (likely a duplicate concurrent claim)`
+            );
+            return { id: job.id, status: 'skipped_duplicate', ms: Date.now() - jobT0 };
+          }
           return { id: job.id, status: 'completed', ms: Date.now() - jobT0 };
         } catch (err) {
           const message = ((err as Error).message ?? 'unknown').slice(0, 1000);
@@ -482,7 +494,12 @@ Deno.serve(async (req) => {
           );
 
           if (isDead) {
-            await supabase
+            // Guarded on 'in_progress' (Architect audit A5, 2026-09-10) — the
+            // re-check above only covers create/dlt/first_dream; nightly reaches
+            // here with no prior status re-check, so without this guard a losing
+            // concurrent claim could dead-letter (+ refund + false-notify) a
+            // nightly job a winning claim already completed.
+            const { data: deadFlipped } = await supabase
               .from('dream_queue')
               .update({
                 status: 'dead_letter',
@@ -490,7 +507,15 @@ Deno.serve(async (req) => {
                 last_error: message,
                 completed_at: new Date().toISOString(),
               })
-              .eq('id', job.id);
+              .eq('id', job.id)
+              .eq('status', 'in_progress')
+              .select('id');
+            if (!deadFlipped || deadFlipped.length === 0) {
+              console.warn(
+                `[worker:${workerId}] job ${job.id} was not in_progress when dispatch failed — skipping dead-letter (likely already completed by a concurrent claim)`
+              );
+              return { id: job.id, status: 'skipped_duplicate', ms: Date.now() - jobT0 };
+            }
             // Source-appropriate aftermath (nightly goodwill credit / create-dlt
             // refund + dream_jobs flip + notify) — shared with the stale-recovery
             // path so a hard-killed dream refunds identically to a caught failure.

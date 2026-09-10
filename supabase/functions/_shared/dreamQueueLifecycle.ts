@@ -144,7 +144,13 @@ export async function completeQueueJob(
   jobId: string,
   uploadId: string
 ): Promise<void> {
-  await sb
+  // Guard on 'in_progress': without it, a losing duplicate render (the worker's
+  // stale-recovery sweep can re-queue a job that's actually still alive — dual-swap
+  // renders approach ~2min, past the 5min-stale threshold isn't the only way to hit
+  // this) can complete AFTER a winning render already did, silently overwriting
+  // upload_id — or worse, a losing render's later failQueueJob call can flip this
+  // already-completed row back to dead_letter (see failQueueJob below).
+  const { data: flipped } = await sb
     .from('dream_queue')
     .update({
       status: 'completed',
@@ -152,7 +158,15 @@ export async function completeQueueJob(
       upload_id: uploadId,
       last_error: null,
     })
-    .eq('id', jobId);
+    .eq('id', jobId)
+    .eq('status', 'in_progress')
+    .select('id');
+  if (!flipped || flipped.length === 0) {
+    console.warn(
+      `[completeQueueJob] job ${jobId} was not in_progress at completion time — skipping (likely a duplicate concurrent render racing a prior completion)`
+    );
+    return;
+  }
 
   // AUTHORITATIVE dream_created — every completed create/dlt/first_dream/restyle
   // render flows through here, so this fires regardless of whether the user is
@@ -239,8 +253,10 @@ export async function failQueueJob(
   if (!isDead) {
     // Exponential backoff: created_at into the future so the claim RPC's
     // `created_at <= now()` gate holds the job until the delay elapses.
+    // Guarded on 'in_progress' — a losing concurrent render must not re-queue a
+    // job a winning render already completed.
     const backoffMs = BACKOFF_MS[Math.min(nextAttempt - 1, BACKOFF_MS.length - 1)];
-    await sb
+    const { data: requeued } = await sb
       .from('dream_queue')
       .update({
         status: 'queued',
@@ -250,17 +266,28 @@ export async function failQueueJob(
         worker_id: null,
         created_at: new Date(Date.now() + backoffMs).toISOString(),
       })
-      .eq('id', jobId);
+      .eq('id', jobId)
+      .eq('status', 'in_progress')
+      .select('id');
+    if (!requeued || requeued.length === 0) {
+      console.warn(
+        `[failQueueJob] job ${jobId} was not in_progress at retry time — skipping re-queue (likely already completed by a concurrent render)`
+      );
+    }
     return;
   }
 
   // Dead-letter: terminal. Refund the paid sparkle (idempotent on jobId;
   // refund_sparkles returns the ACTUAL debited amount) + mark dream_jobs failed
   // (resolves the client's polling fallback) + inbox notification.
-  // Flip to dead_letter ONLY from a non-terminal status, and detect whether THIS
-  // call is the one that transitioned it. If it was already dead-lettered (a
-  // duplicate/concurrent call), the side effects below already ran — return so the
-  // nightly goodwill grant (which has no reference_id dedup) stays exactly-once.
+  // Flip to dead_letter ONLY from 'in_progress' (not just "not already
+  // dead_letter" — a `.neq('status','dead_letter')` guard would also match
+  // 'completed', letting a losing concurrent render retroactively dead-letter +
+  // refund + falsely notify-failed a job that already succeeded and was
+  // delivered). Detect whether THIS call is the one that transitioned it: if it
+  // was already dead-lettered OR already completed, the return below skips the
+  // refund/notify side effects so the nightly goodwill grant (no reference_id
+  // dedup) stays exactly-once and a completed job is never touched.
   const { data: flipped } = await sb
     .from('dream_queue')
     .update({
@@ -270,7 +297,7 @@ export async function failQueueJob(
       completed_at: new Date().toISOString(),
     })
     .eq('id', jobId)
-    .neq('status', 'dead_letter')
+    .eq('status', 'in_progress')
     .select('id');
   if (!flipped || flipped.length === 0) return;
 

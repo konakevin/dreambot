@@ -65,6 +65,30 @@ Deno.serve(async (req) => {
     });
   }
 
+  // Service-role client for the rate-limit log + verification + refund.
+  const supabase = createClient(supabaseUrl, serviceRoleKey);
+
+  // Rate limit (mirrors classify-photo/describe-photo/extract-style): 10
+  // calls/min/user via the edge_function_invocations BEFORE INSERT trigger.
+  // This endpoint had no rate limit at all (Architect audit S4, 2026-09-10),
+  // inconsistent with every sibling money/vision-adjacent function.
+  const { error: rateLimitError } = await supabase
+    .from('edge_function_invocations')
+    .insert({ user_id: user.id, function_name: 'refund-self-moderation' });
+  if (rateLimitError) {
+    const isRateLimit =
+      rateLimitError.message?.includes('rate_limited') ||
+      (rateLimitError as { hint?: string }).hint === 'rate_limited';
+    if (isRateLimit) {
+      return new Response(JSON.stringify({ error: 'Rate limit exceeded — try again shortly' }), {
+        status: 429,
+        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      });
+    }
+    console.error('[refund-self-moderation] rate-limit log INSERT failed:', rateLimitError.message);
+    // Fail open: don't block legitimate users on logging failures.
+  }
+
   let body: RequestBody;
   try {
     body = await req.json();
@@ -87,11 +111,8 @@ Deno.serve(async (req) => {
       ? body.reason
       : 'refund:hard_fail:client_moderation';
 
-  // Service-role client for the verification + refund
-  const supabase = createClient(supabaseUrl, serviceRoleKey);
-
-  // Anti-abuse check: a user shouldn't be able to refund a job that
-  // produced an actual upload row. dream_jobs.id is the same UUID the
+  // Anti-abuse check: a user shouldn't be able to refund a job that produced (or
+  // could still produce) an actual upload row. dream_jobs.id is the same UUID the
   // client passed as `job_id` in their original generate-dream call.
   const { data: jobRow } = await supabase
     .from('dream_jobs')
@@ -99,8 +120,21 @@ Deno.serve(async (req) => {
     .eq('id', body.job_id)
     .maybeSingle();
 
-  // Two valid states for refund: (1) no dream_jobs row exists yet (server
-  // never started), (2) row exists for this user and status != 'done'.
+  // Two valid states for refund: (1) no dream_jobs row exists yet (server never
+  // started — the true self-moderation happy path, since client-side moderation
+  // rejects BEFORE generate-dream is ever called), (2) a row exists for this user
+  // AND is in a genuinely TERMINAL failure state.
+  //
+  // 'processing' is NOT terminal — it's the status for the ENTIRE render duration
+  // (seconds to minutes), not just a moderation failure, and it's also the status
+  // during a queue retry backoff. The previous check (`status !== 'done'`) treated
+  // "still rendering, will likely succeed" identically to "genuinely dead," which
+  // let a client refund a job that was mid-render and about to complete normally —
+  // full free dream, repeatable per-job (Architect audit S4, 2026-09-10).
+  // dream_jobs.status only ever reaches 'failed'/'nsfw' from failQueueJob's
+  // dead-letter branch (see _shared/dreamQueueLifecycle.ts) — the one point a job
+  // is truly done retrying and won't produce an upload.
+  const TERMINAL_FAILURE_STATUSES = new Set(['failed', 'nsfw']);
   if (jobRow) {
     if (jobRow.user_id !== user.id) {
       return new Response(JSON.stringify({ error: 'Job belongs to another user' }), {
@@ -108,11 +142,14 @@ Deno.serve(async (req) => {
         headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
       });
     }
-    if (jobRow.status === 'done') {
-      return new Response(JSON.stringify({ error: 'Job already completed; no refund' }), {
-        status: 409,
-        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
-      });
+    if (!TERMINAL_FAILURE_STATUSES.has(jobRow.status)) {
+      return new Response(
+        JSON.stringify({ error: 'Job is not in a terminal failed state; no refund' }),
+        {
+          status: 409,
+          headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+        }
+      );
     }
   }
 

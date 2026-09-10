@@ -8,6 +8,8 @@ import { useDreamStore } from '@/store/dream';
 import { useAlbumStore } from '@/store/album';
 import { useExploreStore } from '@/store/explore';
 import { useDreamsSeenStore } from '@/store/dreamsSeen';
+import { useCommentDrafts } from '@/store/commentDrafts';
+import { useRenderDockStore } from '@/store/renderDock';
 import { queryClient, asyncStoragePersister } from '@/lib/queryClient';
 import {
   isProActive,
@@ -142,6 +144,14 @@ export const useAuthStore = create<AuthState>((set) => ({
     useAlbumStore.getState().clearAlbum();
     useExploreStore.getState().clearPending();
     useDreamsSeenStore.getState().setViewBaseline(null);
+    // commentDrafts + renderDock were missed by the original sweep (Architect
+    // audit S7, 2026-09-10): an unposted comment draft is free TEXT that could
+    // leak to the next user on a shared device (drafts are keyed only by
+    // postId, not userId), and renderDock's `finished` ring holds recent
+    // job/upload ids. clearExcept(null) drops every draft; setState resets
+    // renderDock directly since it has no dedicated clear-all action.
+    useCommentDrafts.getState().clearExcept(null);
+    useRenderDockStore.setState({ finished: [], wantsDreamsTab: false });
     // Clear TanStack Query cache — in-memory AND the persisted-to-disk copy, so
     // the next user on this shared device can't restore the previous user's feed
     // on cold start.

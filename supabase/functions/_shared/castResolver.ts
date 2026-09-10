@@ -92,7 +92,17 @@ export function resolveCastForPrompt(
         // this resolver runs); the `?? ''` only satisfies the optional type.
         sourcePhotoUrl: member.thumb_url ?? '',
         physicalTraits: sanitizeUserText(member.physical_summary || '', 'vision'),
-        relationship: member.relationship,
+        // `relationship` is typed as a closed union at compile time only —
+        // nothing validates the runtime value, and unlike description/
+        // physicalTraits above it was never sanitized. It's interpolated raw
+        // into the brief for any relationship that isn't exactly
+        // 'partner'/'significant_other' (promptCompiler.ts's embodied-medium
+        // RELATIONSHIP GATE line) — prompt-injection reachable via a 2-person
+        // embodied-mode Create render (Architect audit S5, 2026-09-10). The
+        // face-swap dual path and nightly both correctly treat this as a
+        // strict-equality pool key, never interpolated text; sanitizing here
+        // brings the embodied path in line rather than rewriting that call site.
+        relationship: sanitizeUserText(member.relationship ?? '', 'subject_description'),
       };
     });
 }

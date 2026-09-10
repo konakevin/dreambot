@@ -327,11 +327,19 @@ Deno.serve(async (req) => {
   // 425) so we can dial it with no app build; fetchEngineConfig falls back to 5.
   const cfg = await fetchEngineConfig(supabase);
   const maxInflight = cfg.maxInflightDreamsPerUser;
-  const { count: inflight } = await supabase
+  const { count: inflight, error: inflightErr } = await supabase
     .from('dream_queue')
     .select('*', { count: 'exact', head: true })
     .eq('user_id', userId)
     .in('status', ['queued', 'in_progress']);
+  // A query error must not silently bypass the cap (fail-open on a DB hiccup —
+  // Architect audit A5, 2026-09-10): `inflight ?? 0` treats "the check errored"
+  // identically to "genuinely zero in-flight," defeating the anti-abuse valve
+  // exactly when the DB is already under strain. Fail closed instead.
+  if (inflightErr) {
+    console.error('[enqueue-dream] in-flight count query failed:', inflightErr.message);
+    return json({ error: 'check_failed' }, 503);
+  }
   if ((inflight ?? 0) >= maxInflight) {
     return json({ error: 'too_many_inflight', limit: maxInflight }, 429);
   }
@@ -409,12 +417,19 @@ Deno.serve(async (req) => {
       : effectiveForceModel
         ? getSparkleCost(effectiveForceModel)
         : cfg.baseSparkleCost;
-  const { data: chargeStatus } = await supabase.rpc('charge_sparkles', {
+  const { data: chargeStatus, error: chargeErr } = await supabase.rpc('charge_sparkles', {
     p_user_id: userId,
     p_amount: dreamCost,
     p_reason: 'dream',
     p_reference_id: jobId,
   });
+  // supabase-js resolves { data: null, error } on a DB-level failure rather than
+  // throwing — this is the primary paid-dream entry point, so a charge error must
+  // fail CLOSED (never silently fall through to enqueueing an uncharged job).
+  if (chargeErr) {
+    console.error('[enqueue-dream] charge_sparkles RPC error:', chargeErr.message);
+    return json({ error: 'charge_failed' }, 503);
+  }
   if (chargeStatus === 'insufficient') {
     // Mirror generate-dream's 402 contract so the client's existing
     // insufficient_sparkles handling routes back to the paywall.

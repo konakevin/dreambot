@@ -20,6 +20,7 @@ import {
   type PostcardLayout,
   type RgbaImage,
 } from '../_shared/postcardComposite.ts';
+import { timingSafeEqual } from '../_shared/timingSafe.ts';
 
 const overlayCache = new Map<string, RgbaImage>();
 
@@ -84,8 +85,8 @@ Deno.serve(async (req) => {
   const presented = auth.startsWith('Bearer ') ? auth.slice(7) : '';
   const authorized =
     presented.length > 0 &&
-    ((serviceRoleKey.length > 0 && presented === serviceRoleKey) ||
-      (workerToken.length > 0 && presented === workerToken));
+    ((serviceRoleKey.length > 0 && timingSafeEqual(presented, serviceRoleKey)) ||
+      (workerToken.length > 0 && timingSafeEqual(presented, workerToken)));
   if (!authorized) {
     return json({ ok: false, error: 'unauthorized' }, 401);
   }
