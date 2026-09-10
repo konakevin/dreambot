@@ -93,6 +93,23 @@ function AuthInitializer() {
       // (implicit) — just like an OAuth callback. We establish the session, then
       // route to the set-new-password screen instead of the feed. Detect it by
       // the redirect path or an explicit type=recovery.
+      //
+      // KNOWN GAP, INTENTIONALLY NOT FIXED (Architect audit S7, 2026-09-10 —
+      // Kevin's explicit call: leave it for now). The `isRecovery` check below
+      // only decides whether to NAVIGATE to the reset-password screen
+      // afterward — it does NOT gate whether the token below gets CONSUMED.
+      // Every branch (token_hash / code / access_token+refresh_token) runs
+      // unconditionally for ANY incoming dreambot:// link, silently signing
+      // this device into whatever account that token belongs to, with no
+      // confirmation screen. Since the custom URL scheme `dreambot://` (unlike
+      // the domain-verified Universal Link) isn't iOS-verified, a malicious
+      // link (phishing message, QR code, malicious ad) carrying a valid token
+      // pair could switch the victim's session. Impact is session-fixation /
+      // account-confusion, not credential theft — this is a face-swap app, so
+      // the real risk is a subsequent upload landing in the wrong account.
+      // Fix direction, when picked back up: gate token consumption to
+      // `isRecovery` (or a dedicated callback path), and/or show a
+      // "Signed in as X" confirmation before finalizing a deep-link session.
       const isRecovery =
         path === 'reset-password' ||
         parsed.queryParams?.type === 'recovery' ||

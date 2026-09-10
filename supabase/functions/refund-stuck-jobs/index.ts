@@ -15,6 +15,22 @@
  * tied to this jobId. If the inline catch already refunded, this sweeper's
  * refund is a no-op. Safe to run as often as we want.
  *
+ * NO RETRY (Kevin's explicit call, Architect audit A5, 2026-09-10): this
+ * used to re-dispatch the dead job up to 3 times via generate-dream's
+ * `x-dream-retry` header before refunding. That path acks 202 and finishes
+ * in EdgeRuntime.waitUntil — the exact fire-and-forget pattern the platform
+ * silently stopped honoring on 2026-06-17 (see dreamQueueLifecycle.ts's own
+ * history note), so the "retry" was actually a silent no-op that just
+ * delayed the refund by ~15 minutes for zero re-render benefit. The
+ * synchronous alternative (await the re-render like the queue worker's
+ * x-dream-queue dispatch does) was rejected: this sweep can process up to
+ * 200 stuck jobs per run, and awaiting each one (up to ~140s) risks the
+ * sweep itself timing out mid-run under a real incident — worse than doing
+ * nothing. So: every stuck job is refunded immediately, no retry attempt.
+ * generate-dream's `x-dream-retry` header handling is now dead code (no
+ * caller sends it) — left in place rather than ripped out as part of this
+ * fix, since removing it is unrelated cleanup, not a security fix.
+ *
  * POST /functions/v1/refund-stuck-jobs
  * Body: optional { older_than_min?: number } — defaults to 5
  * Auth: deployed --no-verify-jwt (like the rest of the fleet), so it
@@ -42,14 +58,7 @@ interface DreamJob {
   status: string;
   created_at: string;
   error: string | null;
-  payload: Record<string, unknown> | null;
-  attempt_count: number | null;
 }
-
-// Re-dispatch a dead user-dream render up to this many times before refunding —
-// matches the nightly queue's resilience. Each retry waits one sweep interval
-// (~5 min) by resetting the job's created_at.
-const MAX_RETRIES = 3;
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS_HEADERS });
@@ -58,10 +67,10 @@ Deno.serve(async (req) => {
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
   const supabase = createClient(supabaseUrl, serviceRoleKey);
 
-  // Authenticate the caller — this function uses the service role internally (it
-  // sweeps every user's jobs + issues refunds + re-dispatches paid renders), so
-  // it must NOT be invokable anonymously. Accept the service-role key (the cron)
-  // or the worker token. Deployed --no-verify-jwt, so the gateway won't do this.
+  // Authenticate the caller — this function uses the service role internally
+  // (it sweeps every user's jobs + issues refunds), so it must NOT be
+  // invokable anonymously. Accept the service-role key (the cron) or the
+  // worker token. Deployed --no-verify-jwt, so the gateway won't do this.
   const authHeader = req.headers.get('authorization') ?? '';
   const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
   const workerToken = Deno.env.get('DREAM_QUEUE_WORKER_TOKEN');
@@ -91,7 +100,7 @@ Deno.serve(async (req) => {
   // Find stuck jobs
   const { data: stuck, error: queryErr } = await supabase
     .from('dream_jobs')
-    .select('id, user_id, status, created_at, error, payload, attempt_count')
+    .select('id, user_id, status, created_at, error')
     .eq('status', 'processing')
     .lt('created_at', cutoff)
     .limit(200);
@@ -106,49 +115,11 @@ Deno.serve(async (req) => {
 
   const jobs = (stuck ?? []) as DreamJob[];
   let refunded = 0;
-  let redispatched = 0;
   let errors = 0;
 
   for (const job of jobs) {
     try {
-      // RETRY before refunding: if we still have the request payload + retries
-      // left, replay the render via generate-dream (it acks fast + finishes in
-      // the background). Count the attempt + reset the sweep timer FIRST, so a
-      // re-dispatch that fails to send still counts — never an infinite loop.
-      if (job.payload && (job.attempt_count ?? 0) < MAX_RETRIES) {
-        const nextAttempt = (job.attempt_count ?? 0) + 1;
-        await supabase
-          .from('dream_jobs')
-          .update({
-            attempt_count: nextAttempt,
-            created_at: new Date().toISOString(),
-            error: `retry ${nextAttempt}/${MAX_RETRIES} (prev render died)`,
-          })
-          .eq('id', job.id);
-        try {
-          const resp = await fetch(`${supabaseUrl}/functions/v1/generate-dream`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${serviceRoleKey}`,
-              'x-dream-retry': '1',
-            },
-            body: JSON.stringify(job.payload),
-          });
-          console.log(
-            `[refund-stuck-jobs] re-dispatched ${job.id} (attempt ${nextAttempt}/${MAX_RETRIES}, http ${resp.status})`
-          );
-        } catch (e) {
-          console.error(
-            `[refund-stuck-jobs] re-dispatch fetch failed for ${job.id}:`,
-            (e as Error).message
-          );
-        }
-        redispatched++;
-        continue;
-      }
-
-      // Out of retries (or no payload to replay) — refund + mark timeout + notify.
+      // No retry (see file header) — refund + mark timeout + notify immediately.
       // Idempotent refund — returns false if a prior refund exists
       const { data: didRefund, error: refundErr } = await supabase.rpc('refund_sparkles', {
         p_user_id: job.user_id,
@@ -201,13 +172,12 @@ Deno.serve(async (req) => {
   }
 
   console.log(
-    `[refund-stuck-jobs] Done: ${jobs.length} stuck, ${redispatched} re-dispatched, ${refunded} refunded, ${errors} errors`
+    `[refund-stuck-jobs] Done: ${jobs.length} stuck, ${refunded} refunded, ${errors} errors`
   );
 
   return new Response(
     JSON.stringify({
       swept: jobs.length,
-      redispatched,
       refunded,
       errors,
     }),
