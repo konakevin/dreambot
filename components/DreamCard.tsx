@@ -164,7 +164,9 @@ interface Props {
   /** Measured container height — card renders at this height for perfect paging */
   cardHeight?: number;
   isLiked: boolean;
+  /** One-way like (double tap): likes if not liked, never unlikes. */
   onLike: () => void;
+  /** Toggle (heart button): the only path that unlikes. */
   onToggleLike: () => void;
   onComment?: () => void;
   onShare?: () => void;
@@ -405,7 +407,7 @@ export const DreamCard = memo(function DreamCard({
         return;
       }
     }
-    // Single tap toggles HUD (clean-image view). Double tap likes.
+    // Single tap toggles HUD (clean-image view). Double tap LIKES (one-way).
     // To disambiguate, schedule the HUD toggle after a short delay and
     // cancel it if a second tap arrives.
     const now = Date.now();
@@ -424,23 +426,27 @@ export const DreamCard = memo(function DreamCard({
         return;
       }
 
-      onToggleLike();
+      // Double tap is a ONE-WAY like, Instagram-style: it never unlikes. On an
+      // already-liked post only the burst replays — no mutation is sent, so the
+      // AFTER INSERT like-notification trigger can't fire a duplicate (it only
+      // fires on not-liked → liked). Unliking is the deliberate heart-button tap
+      // (onToggleLike). (Kevin 2026-09-11; previously the second double tap
+      // toggled the like off.)
+      if (!isLiked) onLike();
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      if (!isLiked) {
-        heartScale.value = 0;
-        heartOpacity.value = 1;
-        heartScale.value = withSequence(
-          withTiming(1.3, { duration: 200 }),
-          withTiming(1, { duration: 100 }),
-          withTiming(1, { duration: 400 }),
-          withTiming(0, { duration: 200 })
-        );
-        heartOpacity.value = withSequence(
-          withTiming(1, { duration: 200 }),
-          withTiming(1, { duration: 500 }),
-          withTiming(0, { duration: 200 })
-        );
-      }
+      heartScale.value = 0;
+      heartOpacity.value = 1;
+      heartScale.value = withSequence(
+        withTiming(1.3, { duration: 200 }),
+        withTiming(1, { duration: 100 }),
+        withTiming(1, { duration: 400 }),
+        withTiming(0, { duration: 200 })
+      );
+      heartOpacity.value = withSequence(
+        withTiming(1, { duration: 200 }),
+        withTiming(1, { duration: 500 }),
+        withTiming(0, { duration: 200 })
+      );
       lastTap.current = 0;
       return;
     }
