@@ -165,6 +165,10 @@ Kevin's grid → heart = ban → weight 1 → in.
 
 ## 5. Conversion plan — from the medium lottery to the catalog (flux-1.1-pro first)
 
+> **2026-09-11 (later the same day):** the engineering side is now specified in `NIGHTLY_LOOKS_REFACTOR_PLAN.md`
+> (the style contract, the 15-site code map, enforcement, phases 0-5). The table below is the product view;
+> where they differ the refactor plan wins.
+
 **Sequencing rule (feasibility §6.0):** flip `model_policy_mode` shadow → on FIRST and delete the legacy model
 layers (policy Phase 3). It has shadow-matched since 2026-09-07. Looks sit on top of the policy; interleaving
 them makes two systems fight over the model.
