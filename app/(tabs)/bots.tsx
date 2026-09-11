@@ -30,6 +30,9 @@ import { BotsHorizontalPager } from '@/components/BotsHorizontalPager';
 import { BotPillRow } from '@/components/BotPillRow';
 import { prefetchDreamFeed, pruneStaleFeedCaches } from '@/hooks/useDreamFeed';
 
+/** Per-bot feed prewarm concurrency (bots warmed in pager order, this many at a time). */
+const BOT_PREWARM_BATCH = 3;
+
 function EmptyBots() {
   return (
     <View style={s.emptyWrap}>
@@ -43,6 +46,7 @@ function EmptyBots() {
 export default function BotsScreen() {
   const insets = useSafeAreaInsets();
   const user = useAuthStore((s) => s.user);
+  const userId = user?.id;
   const queryClient = useQueryClient();
   const feedSeed = useFeedStore((s) => s.feedSeed);
   const { data: botUsers } = useBotUsers();
@@ -104,18 +108,33 @@ export default function BotsScreen() {
   // This runs again on tab mount alongside the app-load prefetch in
   // home/index.tsx — they share the same query cache so the second
   // call is a cheap no-op when the cache is already warm.
+  //
+  // Keyed on the user ID, not the user object: a token refresh (~every 58 min)
+  // used to hand out a new object and re-run this whole fan-out from an idle
+  // app (2026-09-09, API logs). The bots are warmed a few at a time in pager
+  // order — ~18 simultaneous get_feed RPCs pinned the database for everyone.
   useEffect(() => {
-    if (!botUsers?.length || !user) return;
+    if (!botUsers?.length || !userId) return;
     // Prune the previous seed's orphaned entries BEFORE re-warming ~17 more —
     // this effect re-runs on every feedSeed rotation, and unpruned it was the
     // main driver of the ~1,600-entry cache bloat behind the universal button
     // lag (Kevin 2026-07-21).
     pruneStaleFeedCaches(queryClient, feedSeed);
-    prefetchDreamFeed(queryClient, 'bots', user.id, feedSeed, null);
-    for (const bot of botUsers) {
-      prefetchDreamFeed(queryClient, 'bots', user.id, feedSeed, bot.id);
-    }
-  }, [botUsers, user, feedSeed, queryClient]);
+    let cancelled = false;
+    (async () => {
+      await prefetchDreamFeed(queryClient, 'bots', userId, feedSeed, null);
+      for (let i = 0; i < botUsers.length && !cancelled; i += BOT_PREWARM_BATCH) {
+        await Promise.all(
+          botUsers
+            .slice(i, i + BOT_PREWARM_BATCH)
+            .map((bot) => prefetchDreamFeed(queryClient, 'bots', userId, feedSeed, bot.id))
+        );
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [botUsers, userId, feedSeed, queryClient]);
 
   return (
     <View style={s.root}>

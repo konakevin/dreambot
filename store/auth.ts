@@ -19,6 +19,7 @@ import {
   isDreamEligible as computeDreamEligible,
 } from '@/lib/proStatus';
 import { isSupremeAdmin } from '@/lib/superAdmin';
+import { resolveStableUser } from '@/lib/authUserIdentity';
 import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 
 interface AuthState {
@@ -93,7 +94,7 @@ const CLEARED_ENTITLEMENTS = {
   isDreamEligible: false,
 } as const;
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
   session: null,
   user: null,
   isAdmin: false,
@@ -241,10 +242,14 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      // Token refreshes deliver a NEW user object with the SAME identity; publishing
+      // it re-fired every `useEffect([user])` (the Bots-tab prewarm fan-out, ~19
+      // get_feed RPCs every 58 min). Keep the reference stable — see lib/authUserIdentity.
+      const user = resolveStableUser(get().user, session?.user ?? null, event);
       set({
         session,
-        user: session?.user ?? null,
+        user,
         initialized: true,
         isSuperAdmin: isSupremeAdmin(session?.user?.id),
       });

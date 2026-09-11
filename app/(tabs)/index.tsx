@@ -108,6 +108,7 @@ const USERNAME_SNOOZE_MS = 7 * 24 * 60 * 60 * 1000;
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const user = useAuthStore((s) => s.user);
+  const userId = user?.id;
   const queryClient = useQueryClient();
   const feedSeed = useFeedStore((s) => s.feedSeed);
   const setFeedSeed = useFeedStore((s) => s.setFeedSeed);
@@ -173,8 +174,9 @@ export default function HomeScreen() {
   // prefetched). Tapping the Bots footer icon then loads instantly, and
   // swiping between bots is warm because each bot's query cache + first
   // images are already resident.
+  // Keyed on the user ID (not the object) so a token refresh doesn't re-run it.
   useEffect(() => {
-    if (!user || !botUsers?.length) return;
+    if (!userId || !botUsers?.length) return;
     // Deferred behind interactions like the home-feed warming above — the Bots
     // prefetch is a large fan-out (all-bots + one page per bot) that must never
     // block the first paint.
@@ -185,10 +187,10 @@ export default function HomeScreen() {
       // primary feed load — spiking the connection pool, jamming the JS thread,
       // and dragging the forYou fetch ~800ms slower — and it's redundant, because
       // bots.tsx already prewarms each bot when the Bots tab is actually open.
-      prefetchDreamFeed(queryClient, 'bots', user.id, feedSeed, null);
+      prefetchDreamFeed(queryClient, 'bots', userId, feedSeed, null);
     });
     return () => handle.cancel();
-  }, [user, feedSeed, queryClient, botUsers]);
+  }, [userId, feedSeed, queryClient, botUsers]);
 
   // Read the feed for the ACTIVE tab (not a deferred copy). The feed is keyed
   // on activeTab, so it already remounts synchronously on tap — deferring only
