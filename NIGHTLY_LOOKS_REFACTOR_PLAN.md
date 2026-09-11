@@ -179,6 +179,10 @@ to. Phases 0-1 (behavior-neutral) can proceed in parallel with A; Phase 2+ waits
 | A4 | **The gate** (read from stamps, never by eye): per cast look — first-try dual swap ≥ 3/4, `identity_sim` ≥ 0.50 median, 0 faceless; failing looks → solo/scene only or cut | `NIGHTLY_LOOK_TALLY.md` gate table |
 | A5 | **Kevin's grid**: heart = ban; labels chosen; weights (equal v1) | Kevin's sign-off → **v1 FROZEN** in the tally (keys, labels, surfaces, fragments by row id) |
 
+**Status 2026-09-11:** A1-A4 DONE (mig 494 rows, `force_look` + `force_single_slots` deployed, 104-render matrix,
+stamp gate + Claude's visual grade) → `NIGHTLY_LOOK_TALLY.md`: 8 pass / 7 review / 11 fail; the stamp gate alone
+would have passed 17, so A4 is now stamps AND a visual grade. A5 (Kevin's hearts) pending.
+
 The frozen v1 tally is what Phase 2 seeds and what Phase 4 converges to; a look outside it never reaches a
 user. Adding a look later re-runs A1 (row) → A3-A5 for that row only.
 

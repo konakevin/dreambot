@@ -318,7 +318,13 @@ function esc(s) {
     .replace(/"/g, '&quot;');
 }
 
+function loadGrades() {
+  const p = path.join(OUT_DIR, 'grades.json');
+  return fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, 'utf8')) : {};
+}
+
 function buildHtml(report, looks) {
+  const grades = loadGrades();
   const byLook = new Map();
   for (const r of report.renders) {
     if (!byLook.has(r.look)) byLook.set(r.look, []);
@@ -349,7 +355,18 @@ function buildHtml(report, looks) {
         })
         .join('');
       const verdictClass = g.verdict === 'PASS' ? 'pass' : g.verdict === 'FAIL' ? 'fail' : 'nodata';
-      return `<tr><th class="look"><div class="label">${esc(look.label)}</div><code>${esc(key)}</code><div class="gate ${verdictClass}">${g.verdict}</div><div class="gatemeta">clean couples ${g.clean_couples}/${g.couples} · median id ${g.median_identity == null ? '—' : g.median_identity.toFixed(2)}</div><details><summary>fragment</summary><p>${esc(look.face_swap_flux_fragment || '')}</p></details></th>${cells}</tr>`;
+      const mine = grades[key];
+      const mineClass = mine
+        ? mine.grade === 'PASS'
+          ? 'pass'
+          : mine.grade === 'FAIL'
+            ? 'fail'
+            : 'review'
+        : 'nodata';
+      const mineHtml = mine
+        ? `<div class="gate ${mineClass}">Claude: ${esc(mine.grade)}</div><div class="gatemeta">face ${mine.face}/5 · look ${mine.look}/5</div><p class="note">${esc(mine.note)}</p>`
+        : '';
+      return `<tr><th class="look"><div class="label">${esc(look.label)}</div><code>${esc(key)}</code><div class="gate ${verdictClass}">stamps: ${g.verdict}</div><div class="gatemeta">clean couples ${g.clean_couples}/${g.couples} · median id ${g.median_identity == null ? '—' : g.median_identity.toFixed(2)}</div>${mineHtml}<details><summary>fragment</summary><p>${esc(look.face_swap_flux_fragment || '')}</p></details></th>${cells}</tr>`;
     })
     .join('\n');
   const head = cols.map(([s, n]) => `<th>${s} #${n}</th>`).join('');
@@ -361,13 +378,14 @@ table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid #2b2620;
 thead th{position:sticky;top:0;background:#1a1613;text-align:left;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#b8ab99}
 th.look{width:230px;text-align:left;background:#161310}th.look .label{font-size:16px;font-weight:600}th.look code{color:#9c8f7c;font-size:11px}
 .gate{display:inline-block;margin-top:6px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em}
-.gate.pass{background:#1f4d33;color:#9fe3b7}.gate.fail{background:#5a2320;color:#ffb3ad}.gate.nodata{background:#3a332c;color:#d8cbb6}
+.gate.pass{background:#1f4d33;color:#9fe3b7}.gate.fail{background:#5a2320;color:#ffb3ad}.gate.review{background:#5a4a1e;color:#ffe3a0}.gate.nodata{background:#3a332c;color:#d8cbb6}
+.note{font-size:12px;color:#d8cbb6;margin:6px 0 0;max-width:215px;line-height:1.35}
 .gatemeta{font-size:11px;color:#9c8f7c;margin-top:4px}details{margin-top:6px;font-size:11px;color:#9c8f7c}details p{margin:4px 0 0;max-width:210px}
 td.cell{width:260px}td.cell img{width:250px;height:auto;border-radius:6px;display:block}td.empty{color:#6f6558}
 .meta{font-size:11px;color:#b8ab99;margin-top:4px}.ok{color:#9fe3b7}.bad{color:#ffb3ad}
 </style>
 <header><h1>Nightly Looks Matrix — ${order.length} looks × ${cols.length} renders</h1>
-<p>One fixed scene (${esc(PLACE)}), one cast (Kevin + plus_one), flux-1.1-pro, vibe ${VIBE}. Only the look fragment changes between rows. Gate = stamps only: clean dual swap on ≥ 3/4 couple renders and median identity ≥ 0.50. Click any image for full size. Generated ${new Date().toISOString()}.</p></header>
+<p>One fixed scene (${esc(PLACE)}), one cast (Kevin + plus_one), flux-1.1-pro, vibe ${VIBE}. Only the look fragment changes between rows. Two verdicts per look: <b>stamps</b> (clean dual swap on both couples, median identity ≥ 0.50) and <b>Claude</b> (a visual grade: does the swapped face blend, is the look distinct). Kevin's hearts in the album are the third. Click any image for full size. Generated ${new Date().toISOString()}.</p></header>
 <div style="overflow-x:auto"><table><thead><tr><th>Look</th>${head}</tr></thead><tbody>
 ${rows}
 </tbody></table></div>`;

@@ -90,6 +90,10 @@ model-bound, not medium-bound (consistent with `project_dual_framing_width_costs
 
 ## 3. Catalog v1 — every current nightly look mapped to a curated look (flux-1.1-pro)
 
+> **Superseded by the render test (2026-09-11):** the real-face rule (Kevin) cut the flat / line-art / craft looks,
+> the locked candidate set became 26 (8 derived + 13 painted/drawn + 5 photographic), and the 104-render matrix
+> result lives in `NIGHTLY_LOOK_TALLY.md` (8 pass / 7 review / 11 fail). The tables below are the pre-test draft.
+
 Authoring rules (from the bots + our own swap lessons): pure rendering technique; **no** time-of-day / weather
 / season / lighting words; **no** artist, studio or photographer names; positive-only (no "no X"); a cast
 look carries the proven swap-safety clause *"with lifelike adult faces, realistic human facial proportions with
