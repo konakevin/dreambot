@@ -42,3 +42,31 @@ describe('parity QA flags', () => {
     expect(parseQaFlags({}).force_slot_input).toBeNull();
   });
 });
+
+describe('Phase A2 QA flags (NIGHTLY_LOOKS_REFACTOR_PLAN.md)', () => {
+  const single = {
+    scene_description: 'a glasshouse',
+    wardrobe: 'green velvet jacket',
+    mood: 'lush',
+    props: 'a brass lantern',
+    action: 'one hand on the railing',
+  };
+  it('force_single_slots: full object round-trips; props defaults; missing field → null', () => {
+    expect(parseQaFlags({ force_single_slots: single }).force_single_slots).toEqual(single);
+    expect(
+      parseQaFlags({ force_single_slots: { ...single, props: undefined, action: undefined } })
+        .force_single_slots
+    ).toEqual({ ...single, props: '', action: null });
+    expect(
+      parseQaFlags({ force_single_slots: { ...single, wardrobe: undefined } }).force_single_slots
+    ).toBeNull();
+    expect(parseQaFlags({}).force_single_slots).toBeNull();
+  });
+  it('force_look: a key passes through; empty / missing → undefined (never touches force_medium)', () => {
+    const f = parseQaFlags({ force_look: 'nightly_classical_oil' });
+    expect(f.force_look).toBe('nightly_classical_oil');
+    expect(f.force_medium).toBeUndefined();
+    expect(parseQaFlags({ force_look: '' }).force_look).toBeUndefined();
+    expect(parseQaFlags({}).force_look).toBeUndefined();
+  });
+});

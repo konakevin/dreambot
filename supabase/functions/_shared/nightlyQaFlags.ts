@@ -10,12 +10,16 @@
  * `queue_job_id` and `force_place` are also set by the production first-dream / queue paths.
  */
 import type { MoodAxes } from './vibeProfile.ts';
-import type { CharacterSlotPipelineInput, DualSlots } from './characterSlotPrompt.ts';
+import type { CharacterSlotPipelineInput, DualSlots, SingleSlots } from './characterSlotPrompt.ts';
 
 export interface NightlyQaFlags {
   /** Preserves an explicit null (= "force scene-only, no cast"); undefined when absent. */
   force_cast_role: string | null | undefined;
   force_medium: string | undefined;
+  /** Pin a catalog LOOK by key (NIGHTLY_LOOKS_REFACTOR_PLAN.md Phase A2): resolves like force_medium AND
+   *  exempts the flux-1.1-pro override library so the prompt carries THIS look's fragment; the render
+   *  stamps `look:<key>` + `look_source:force`. */
+  force_look: string | undefined;
   force_moods: MoodAxes | undefined;
   /** A string forces that exact beat, `true` forces the roll on. */
   force_awe_beat: string | boolean | undefined;
@@ -67,6 +71,8 @@ export interface NightlyQaFlags {
   /** QA (parity pairs, COUPLE_PROMPT_PARITY_PLAN.md §2): Sonnet's six dual slots, verbatim — the
    *  slot pipeline skips Sonnet and assembles from these. */
   force_dual_slots: DualSlots | null;
+  /** The solo twin of force_dual_slots (Phase A2): forced Sonnet slots for a single-cast render. */
+  force_single_slots: SingleSlots | null;
   /** QA (parity pairs): the whole character-slot pipeline INPUT of a previous render
    *  (`ai_generation_log.rolled_axes.observability.slotInput`) — replaces the rolled one so the prompt
    *  is a pure function of (input, slots, promptStyle). Dual face-swap renders only. */
@@ -96,6 +102,23 @@ function parseDualSlots(v: unknown): DualSlots | null {
   };
 }
 
+function parseSingleSlots(v: unknown): SingleSlots | null {
+  if (!v || typeof v !== 'object') return null;
+  const o = v as Record<string, unknown>;
+  const str = (k: string): string | null => (typeof o[k] === 'string' ? (o[k] as string) : null);
+  const scene = str('scene_description');
+  const wardrobe = str('wardrobe');
+  const mood = str('mood');
+  if (scene === null || wardrobe === null || mood === null) return null;
+  return {
+    scene_description: scene,
+    wardrobe,
+    mood,
+    props: str('props') ?? '',
+    action: str('action'),
+  };
+}
+
 function isSlotInput(v: unknown): v is CharacterSlotPipelineInput {
   if (!v || typeof v !== 'object') return false;
   const o = v as Record<string, unknown>;
@@ -117,6 +140,7 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
     force_cast_role:
       'force_cast_role' in body ? (body.force_cast_role as string | null) : undefined,
     force_medium: (body.force_medium as string) || undefined,
+    force_look: (body.force_look as string) || undefined,
     force_moods:
       body.force_moods && typeof body.force_moods === 'object'
         ? (body.force_moods as MoodAxes)
@@ -193,6 +217,7 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
         ? body.force_final_prompt
         : null,
     force_dual_slots: parseDualSlots(body.force_dual_slots),
+    force_single_slots: parseSingleSlots(body.force_single_slots),
     force_slot_input: isSlotInput(body.force_slot_input) ? body.force_slot_input : null,
     strict_face_swap: body.strict_face_swap === true,
     persist: body.persist !== false,

@@ -310,7 +310,8 @@ Deno.serve(async (req) => {
   // under the original local names so the rest of this handler is untouched.
   const {
     force_cast_role,
-    force_medium,
+    force_medium: force_medium_raw,
+    force_look,
     force_moods,
     force_awe_beat,
     force_season_month,
@@ -351,11 +352,15 @@ Deno.serve(async (req) => {
     force_costume_pct,
     force_day_of_look,
     force_dual_slots,
+    force_single_slots,
     force_slot_input,
     strict_face_swap,
     persist,
     queueJobId,
   } = parseQaFlags(body);
+  // force_look = force_medium + the override-library exemption + honest stamps (Phase A2). Every
+  // downstream `force_medium` read sees the pinned look key.
+  const force_medium: string | undefined = force_look ?? force_medium_raw;
 
   if (!vibe_profile) {
     return new Response(JSON.stringify({ error: 'vibe_profile is required' }), {
@@ -789,6 +794,10 @@ Deno.serve(async (req) => {
     );
     if (force_medium) {
       nightlyMedium = await resolveMediumFromDb(force_medium);
+    }
+    if (force_look) {
+      fallbackReasons.push(`look:${force_look}`, 'look_source:force');
+      if (nightlyMedium.key !== force_look) fallbackReasons.push(`look_pin_unknown:${force_look}`);
     }
     let nightlyVibe = await resolveVibeFromDb('dream_eligible', recentVibes);
     if (force_vibe) {
@@ -1265,10 +1274,11 @@ Deno.serve(async (req) => {
       );
       // Per-model curated medium-fragment override library. Same library
       // serves single and dual — fragments are subject-agnostic.
-      const modelOverride = pickFaceSwapModelOverride(
-        faceSwapPrePickedModel,
-        nightlyVibe?.key ?? null
-      );
+      // force_look (Phase A2): the pinned look IS the curated fragment — the library must not repaint it.
+      const modelOverride = force_look
+        ? null
+        : pickFaceSwapModelOverride(faceSwapPrePickedModel, nightlyVibe?.key ?? null);
+      if (force_look) fallbackReasons.push('look_override_library:exempt');
       if (modelOverride) {
         realMediumFragment = baseMedium.fluxFragment;
         baseMedium = { ...baseMedium, fluxFragment: modelOverride };
@@ -2507,8 +2517,10 @@ Deno.serve(async (req) => {
         };
         // Parity QA (COUPLE_PROMPT_PARITY_PLAN.md §2): a forced slot INPUT + forced Sonnet SLOTS make
         // the prompt a pure function of (input, slots, promptStyle) — the paired A/B differs only in order.
+        // Phase A2: solos accept the same forced input + forced slots (force_single_slots), so a look
+        // matrix renders the IDENTICAL scene for couple and solo — only the look fragment differs.
         const slotInputUsed: CharacterSlotPipelineInput =
-          force_slot_input && isDualFaceSwap
+          force_slot_input && (isDualFaceSwap || isSingleHumanFaceSwap)
             ? {
                 ...force_slot_input,
                 promptStyle: force_prompt_style ?? sfaCfgCloser.couplePromptStyle,
@@ -2523,7 +2535,7 @@ Deno.serve(async (req) => {
         const slotResult = await runCharacterSlotPipeline(
           slotInputUsed,
           ANTHROPIC_KEY,
-          isDualFaceSwap ? force_dual_slots : null
+          isDualFaceSwap ? force_dual_slots : (force_single_slots ?? null)
         );
         sonnetBrief = slotResult.briefUsed;
         sonnetRawResponse = slotResult.rawResponse;
