@@ -65,7 +65,7 @@ List A threaded through every re-roll as `firstDreamAllow`.
 // _shared/nightlyStyle.ts (pure; the loader is separate)
 interface StyleContract {
   look: { key; label; fragment; swapFragment; directive; models: string[]; weight };
-  surface: 'couple' | 'solo' | 'scene' | 'embodied';
+  surface: NightlySurface;              // 'couple' | 'solo' | 'scene' today; 'embodied' is a declared-but-empty surface (§2b)
   model: string;                       // from nightly_model_policy for this surface ∩ look.models
   source: 'roll' | 'pin:day_of' | 'pin:holiday_scene' | 'pin:scenario' | 'force';
   rebuild: { look; model } | null;     // solo rebuild = same look on the solo_rebuild model, or that model's default look
@@ -74,6 +74,23 @@ interface StyleContract {
 }
 resolveNightlyStyle({ surface, catalog, policy, pins, bans, allowLooks, forces, recentLookKeys, rng }): StyleContract
 ```
+
+**2b. Surfaces are data too (Kevin 2026-09-11: embodied Dream Art is OUT of nightly for now, but must
+"plug in" later without a refactor).** The set of surfaces and their share of a night are config, not code:
+`engine_config.nightly_surface_mix` (jsonb, e.g. `{"scene": 12, "embodied": 0}`; couple/solo take the
+remainder by cast availability, as today's cast roll does). The pre-roll draws the surface from that mix;
+the resolver receives `surface` and rolls only looks whose `nightly_surfaces` contains it. **Plugging in
+embodied later = two data changes and zero code:** (1) insert look rows with `nightly_surfaces = {embodied}`
+(lego / pixels / handcrafted fragments already exist on their app rows and are copied, not shared), (2) set
+`nightly_surface_mix.embodied` to the desired percent. The chaos-tier embodied sub-roll (site 1) and
+`embodied_mediums_mid / _high` are deleted in Phase 4; the embodied brief branch in `index.ts` (the
+character-dominant Dream Art brief) is kept and keyed on `contract.surface === 'embodied'`, so it is dormant,
+not gone. A dbspec asserts every surface with a non-zero mix has ≥ 1 active look per policy model, which is
+what makes a future flip safe: `embodied: 15` with no rows fails CI before it can reach a user.
+
+**The same rule makes any NEW look a data change:** a look is a row (key, label, fragments, directive,
+surfaces, models, weight); the resolver never enumerates keys; the only code that knows a key exists is the
+QA `force_look` flag. New surfaces beyond the four (say, `pet` portraits) are one enum value + a brief branch.
 
 **Precedence (one table, one place):** `force_look` (QA) → day-of look set → holiday-scene pin → scenario pin →
 catalog roll(surface, model, recency, bans, allow-list). A pin that names an unknown/inactive look falls to the
@@ -124,7 +141,7 @@ key against this table today, so looks work with zero client change (feasibility
 text[]`. A dbspec asserts every pin key resolves to an active look.
 
 **Config:** `engine_config.nightly_looks_mode` (`off` | `shadow` | `on`), `nightly_look_recency` (7),
-`first_dream_look_keys text[]` (Phase 5).
+`nightly_surface_mix jsonb` (v1: `{"scene": <today's share>, "embodied": 0}`), `first_dream_look_keys text[]` (Phase 5).
 
 ---
 
@@ -133,7 +150,7 @@ text[]`. A dbspec asserts every pin key resolves to an active look.
 | Layer | Mechanism | Fails when |
 |---|---|---|
 | DB | CHECK constraint on `dream_mediums` | a dashboard edit makes a look public / an app medium a look |
-| DB (CI db-tests) | `nightlyLooks.dbspec.ts`: every active look has fragment + directive (+ swapFragment if couple/solo) + ≥1 model that appears in the policy chain; every pin resolves; each surface × policy model has a default look | a row is half-authored; a pin dangles; a model has no look |
+| DB (CI db-tests) | `nightlyLooks.dbspec.ts`: every active look has fragment + directive (+ swapFragment if couple/solo) + ≥1 model that appears in the policy chain; every pin resolves; each surface with a non-zero `nightly_surface_mix` share × policy model has a default look | a row is half-authored; a pin dangles; a surface is switched on with no looks |
 | CI | `nightlyStyleSingleSource.test.ts`: greps `nightly-dreams/index.ts` — the only style/model imports allowed are `nightlyStyle.ts` + `nightlyModelPolicy.ts`; forbidden: `resolveMediumFromDb`, `applyFaceSwapOverride`, `pickFaceSwapModelOverride`, `nightlyModelPool`, `pickFromPool`, `steerDualModel`, `fetchSceneEligibleModels`, `smartDreamModels`, any `black-forest-labs/`/`google/`/`openai/`/`xai/` literal | someone re-adds a second decision site |
 | CI | `nightlyLooksDisjoint.test.ts`: catalog keys ∩ app-eligible keys = ∅ (from the migrations' seed rows) | a look leaks into Create's pool or vice versa |
 | CI | `nightlyStyle.equivalence.test.ts` (Phase 1): fixtures from real `ai_generation_log` rows → the resolver reproduces the legacy medium / fragment / model | the extraction changes behavior |
@@ -151,7 +168,7 @@ text[]`. A dbspec asserts every pin key resolves to an active look.
 | **1. Extract the style contract — behavior-neutral** | `_shared/nightlyStyle.ts` in `source = legacy` mode: it performs today's roll + re-rolls + pins + bans + override library + first-dream allow-list + forces and returns the contract; `index.ts` sites 1-15 collapse to one call + consumption; `realMediumFragment` etc. removed; persist writes from the contract; honesty assertion added (in legacy mode it reports the override-library dishonesty as `style_contract_note:override_library` rather than a violation) | equivalence fixtures (50 real rows across couple / solo / scene / pinned / day-of / first-dream); golden prompt fixture byte-identical; a shadow night with `style_contract_note` counts = today's override rate | git revert (one commit) |
 | **2. Catalog source behind a flag** | migration (§3 columns + constraint + `halloween_*` back-fill + v1 rows from the catalog plan + pin remap + config); `nightly_looks_mode = shadow` makes the resolver compute the catalog contract alongside legacy and stamp `look_shadow:<surface>:<key>`; `force_look` QA flag | shadow night: every render has a look for its surface × model (coverage, not equality); dbspecs green | `mode = off` |
 | **3. Curation** (Kevin; parallel with 1-2) | reliability gate (cast looks × 4 fixed couples, stamps decide) → Kevin's grid in the Dreams album → weights / bans / labels | `NIGHTLY_LOOK_TALLY.md` | rows are data |
-| **4. Cutover + delete legacy** | `mode = on` → 30 % (per-user hash) → 100 % → two weeks; then delete the legacy source branch, the override-library import, `faceSwapFluxOverrides` use, `force_medium`; the honesty assertion becomes a hard violation | `check-nightly-looks-night.js` per look vs the legacy baseline; `nightlyStyleSingleSource.test.ts` green | percentage down; `mode = shadow` |
+| **4. Cutover + delete legacy** | `mode = on` → 30 % (per-user hash) → 100 % → two weeks; then delete the legacy source branch, the override-library import, `faceSwapFluxOverrides` use, `force_medium`; the honesty assertion becomes a hard violation; the chaos-tier embodied sub-roll + `embodied_mediums_mid/_high` deleted (`nightly_surface_mix.embodied = 0`, brief branch kept dormant) | `check-nightly-looks-night.js` per look vs the legacy baseline; `nightlyStyleSingleSource.test.ts` green | percentage down; `mode = shadow` |
 | **5. First-dream on looks** | `first_dream_look_keys` (List A → look keys); `firstDreamMediums.ts` medium logic deleted; the cascade unchanged | first-dream QA cascade (existing script) | config |
 | **6. Create's override library** (follow-up, not this refactor) | the same "label stays, style changes" exists in `generate-dream` for 1.1-pro cast renders via `createFaceSwapOverrides.ts` / brief builders | — | — |
 
@@ -175,6 +192,6 @@ position 2), the swap pipeline and its degrade cascade, the quality gate, hair v
   `FOLLOWUP.md` before starting.
 
 ## 8. Decisions Kevin owns for THIS plan (the catalog decisions are in the catalog plan §7)
-1. Embodied: a fourth surface with its own looks (recommended, tiny volume) or drop the tier at cutover?
+1. ~~Embodied~~ — DECIDED 2026-09-11: out of nightly at cutover (`nightly_surface_mix.embodied = 0`, no rows), architected as a declared surface so it plugs back in as rows + a percent (§2b).
 2. `force_medium` alias: keep one release for QA scripts, or rename everywhere at once?
 3. Create's override library (§5 row 6): schedule right after, or leave?

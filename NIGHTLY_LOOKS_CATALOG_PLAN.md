@@ -138,8 +138,9 @@ already turned off in the no-plain-renders work). Both stay available to Create 
 **Dropped from the scene roll:** photography; `cinematic` (a film still = photography with a color grade —
 **Kevin decides**, §7 Q1). `halloween_marigold_folk` stays Halloween-only.
 
-### 3c. Embodied "Dream Art" (lego / pixels / handcrafted, 1 %) — **not converted in v1**
-One variable at a time. v2 adds a `surface = embodied` axis and folds them in (or Kevin drops the tier).
+### 3c. Embodied "Dream Art" (lego / pixels / handcrafted, 1 %) — **OUT of nightly (Kevin 2026-09-11)**
+Dropped at cutover, not converted. The surface stays declared in the data model with a 0 % share so it plugs
+back in later as rows + a percent, with no code change (`NIGHTLY_LOOKS_REFACTOR_PLAN.md` §2b).
 
 ---
 
@@ -207,7 +208,7 @@ freely without touching nightly.
 ## 7. Decisions Kevin owns (each changes what gets built)
 1. **Photo-family looks** — Film Noir, Vintage Film, Cinematic (scene): in v1, or out under the no-photography rule? (Noir has the best like-rate in the set today.)
 2. **One model** — v1 authored and gated for flux-1.1-pro only, with flex just for the solo rebuild (and the day-of digital-painting row that excludes 1.1-pro)? Or keep grok / gemini fallbacks with their own subsets now?
-3. **Embodied Dream Art (1 %)** — leave outside the catalog in v1 (recommended), fold in v2, or drop the tier?
+3. ~~Embodied Dream Art~~ — DECIDED 2026-09-11: out of nightly, pluggable later (refactor plan §2b).
 4. **Labels + Dream Again** — show the look's label on the card ("Storybook Gouache") and let Dream Again render it in Create at the normal price (feasibility §4.1 recommends yes)?
 5. **Size** — 12 cast + 12 scene for v1 (above), equal weights, recency 7? Or smaller/larger?
 6. **Sequence** — flip the model policy on first (recommended), then build looks.
