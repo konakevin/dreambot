@@ -200,3 +200,9 @@ Nothing in the app, Dream Again, DLT or analytics changed (`uploads.dream_medium
 label prettifies the key). What the pilot proves for the full catalog: the pin route + the per-look model
 list ARE the resolver from §2 — the remaining work for all-of-nightly is the roll site (replace the
 `dream_eligible_face_swap` roll with a catalog roll + per-user recency) and the catalog authoring/QA in §6.
+
+## 10. Plan of record (2026-09-11)
+
+Kevin greenlit the conversion ("start using this system for nightly dreams", flux-1.1-pro as THE nightly
+model). The build plan, the v1 catalog (12 cast + 12 scene looks mapped from today's pool), the new-look
+brainstorm and the open decisions live in **`NIGHTLY_LOOKS_CATALOG_PLAN.md`**.
