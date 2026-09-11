@@ -228,6 +228,15 @@ for the public feed + serves deep-link share targets.**
   `__tests__/lib/getFeedPlanGuard.test.ts` (fails if the latest get_feed migration is `LANGUAGE sql`).
   Diagnose any slow RPC the same way: `extensions.pg_stat_statements` `shared_blks_hit / calls` vs an
   inline `EXPLAIN (ANALYZE, BUFFERS)` of the body with literal values — a big gap = this trap.
+- **A plpgsql function that `RETURNS TABLE` and uses `RETURN QUERY` MUST start its body with
+  `#variable_conflict use_column`.** Every output column is a plpgsql VARIABLE, so an unqualified
+  `group_key` / `type` / `upload_id` in the query is ambiguous — and it fails at RUNTIME, not at CREATE, so
+  the migration applies clean and the RPC then errors on every call. (2026-09-10: migration 492 converted
+  `get_inbox` to plpgsql for an auth guard without the directive → 42702 on every inbox open for ~6 h; the
+  app showed "All caught up" over 142 unseen notifications. Hotfix 493.) Locked by
+  `__tests__/lib/plpgsqlVariableConflictGuard.test.ts`. Also SMOKE-TEST the RPC as a real user after
+  applying (`set local role authenticated` + `request.jwt.claims` in one Management-API transaction, or a
+  service-role curl) — CREATE succeeding proves nothing for plpgsql.
 - **NEVER unscoped deletes on `bot_seeds` / `nightly_seeds`.** Scope by category prefix; `SELECT category,
 count(*) GROUP BY category` first. (The April 2026 incident wiped both with one unscoped delete.)
 - **NEVER `git add -A` / `git add .`** — explicit paths only (shared working tree).

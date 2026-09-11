@@ -19,14 +19,16 @@ relevant section only when doing that kind of work.
    before `CREATE OR REPLACE` — Postgres can't change return type in-place (42P13).
 5. **Hot RPC with optional filters (`p IS NULL OR col = p`) or tab-style CASEs → write it as
    `LANGUAGE plpgsql` with `SET plan_cache_mode = force_custom_plan` and the query in `RETURN QUERY`
-   (plus `#variable_conflict use_column` when it RETURNS TABLE).** `LANGUAGE sql` plans with the parameters
+   (**`#variable_conflict use_column` as the FIRST body line whenever it RETURNS TABLE** — without it the
+   output-column variables make unqualified column refs ambiguous at RUNTIME; mig 492 broke the inbox this
+   way, hotfix 493, CI guard `plpgsqlVariableConflictGuard.test.ts`).** `LANGUAGE sql` plans with the parameters
    unknown and picks per-row probes at scale (get_feed 2-3 s → 0.4 s, migration 488; CLAUDE.md Hard rules).
    Verify with `EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM public.<rpc>(…)` via the Management API SQL
    endpoint (`scripts/apply-migration.mjs` auth) — the MCP `execute_sql` role is read-only.
 
 ### After adding a migration file
 
-1. `ls supabase/migrations/ | grep ^NNN` for prefix collisions (highest prefix is currently 489).
+1. `ls supabase/migrations/ | grep ^NNN` for prefix collisions (highest prefix is currently 493).
 2. `npx jest __tests__/lib/migrations.test.ts` enforces unique numeric prefixes.
 3. **Apply it: `node scripts/apply-migration.mjs NNN`** (prefix or path; `--dry-run` first for anything
    destructive). Posts the file to the Management API SQL endpoint — identical to pasting it into the
