@@ -163,6 +163,40 @@ text[]`. A dbspec asserts every pin key resolves to an active look.
 
 ## 5. Phases (each shippable alone, each with a flag or a revert)
 
+**Kevin 2026-09-11, two things to build the sequence around:** (1) *test carefully as we move forward* —
+every phase below has an explicit EXIT CRITERION and nothing advances on a green build alone; renders and
+stamps decide. (2) *Nail the final list of looks first so we know the destination* — hence **Phase A**
+(curation) runs BEFORE the cutover and its output, the frozen v1 tally, is the fixed point nightly converges
+to. Phases 0-1 (behavior-neutral) can proceed in parallel with A; Phase 2+ waits for the tally.
+
+### Phase A — nail the list (the destination; ≈ 80 renders, ≈ $7, Kevin's Dreams album)
+
+| Step | What | Exit criterion |
+|---|---|---|
+| A1 | **Candidate rows** (migration): the catalog-plan §3a/§3b looks as `nightly_*` rows in `dream_mediums` (`is_public=false`, `is_dream_eligible=false`, `is_scene_eligible=false`, `nightly_skip=true`, `client_meta.smart_dream_models=['flux-1.1-pro']`, both fragments + directive). Inert: the app never lists them and nightly never rolls them — exactly how the `halloween_*` rows were staged. | dbspec: every candidate row fully authored; catalog ∩ app = ∅ |
+| A2 | **`force_look` QA flag** in `nightly-dreams` (≈ 15 lines): pins the key through the existing scenario-pin route AND exempts the 1.1-pro override library (today `force_medium` alone is repainted at site 9 — line 1268 fires unconditionally; only the day-of pin is exempt). Also stamps `look:<key>` + `look_source:force`. This is the first brick of the contract, not throwaway. | unit test on the pin helper; one forced couple render whose `ai_prompt` opens with the look's fragment and whose `fallback_reasons` has NO `applied curated medium override` |
+| A3 | **The matrix**: `scripts/qa-nightly-looks-matrix.js` (clone of `qa-medium-face-swap-matrix.js`): cast looks × {couple, self} × 2 fixed seeds + scene looks × pure_scene × 2, all `force_model=flux-1.1-pro`, `persist:true` to Kevin's PRIVATE album, captions `✨ LOOK <key> <surface> #<n>`, sequential, `waitForHeadroom` gated, off the :00 / 08:00 UTC windows; writes the grid page (rows = looks, columns = surfaces) | every cell filled; `_report.json` with per-render stamps |
+| A4 | **The gate** (read from stamps, never by eye): per cast look — first-try dual swap ≥ 3/4, `identity_sim` ≥ 0.50 median, 0 faceless; failing looks → solo/scene only or cut | `NIGHTLY_LOOK_TALLY.md` gate table |
+| A5 | **Kevin's grid**: heart = ban; labels chosen; weights (equal v1) | Kevin's sign-off → **v1 FROZEN** in the tally (keys, labels, surfaces, fragments by row id) |
+
+The frozen v1 tally is what Phase 2 seeds and what Phase 4 converges to; a look outside it never reaches a
+user. Adding a look later re-runs A1 (row) → A3-A5 for that row only.
+
+### Exit criteria per engineering phase (nothing advances without them)
+- **P0:** `check-model-policy-shadow.js --hours 96` clean → mode `on` → one soak night with the same script
+  clean → delete the legacy layers → `nightlyNoHardcodedModels` green → a second clean night.
+- **P1:** equivalence fixtures (≥ 50 real rows: couple / solo / scene / scenario-pin / holiday-pin / day-of /
+  first-dream / `force_medium` / `force_look`) reproduce medium, fragment, model, stamps exactly; golden
+  prompt fixture byte-identical; one shadow night with the contract note counts equal to the legacy override
+  rate; `check-forensics` reads unchanged.
+- **P2:** shadow night: 100 % of renders have a `look_shadow` stamp for their surface × model; dbspecs green;
+  `force_look` renders match the frozen tally rows.
+- **P4:** 30 % for 3 nights then 100 % for 14: `check-nightly-looks-night.js` per look ≥ the legacy baseline
+  on first-try swap / degrade / quality-gate pass, 0 contract violations; Kevin's hearts per 100 by look
+  reviewed before the legacy delete.
+- **P5:** the first-dream QA cascade script passes on every tier with look keys.
+
+
 | Phase | Work | Proof | Rollback |
 |---|---|---|---|
 | **0. Model policy ON + delete its legacy layers** (this week; `NIGHTLY_MODEL_POLICY_PLAN.md` Phase 3-4) | `model_policy_mode = on`; delete pool/clamps/steer/bans/scene-gate/ban-gate/`solo_rebuild_model`; Kevin's final rows; `nightlyNoHardcodedModels.test.ts` | `check-model-policy-shadow.js --hours 96` clean (it has matched since 09-07); one soak night | `mode = legacy` (code kept until the soak passes) |
@@ -194,5 +228,5 @@ position 2), the swap pipeline and its degrade cascade, the quality gate, hair v
 
 ## 8. Decisions Kevin owns for THIS plan (the catalog decisions are in the catalog plan §7)
 1. ~~Embodied~~ — DECIDED 2026-09-11: out of nightly at cutover (`nightly_surface_mix.embodied = 0`, no rows), architected as a declared surface so it plugs back in as rows + a percent (§2b).
-2. `force_medium` alias: keep one release for QA scripts, or rename everywhere at once?
+2. ~~`force_medium` alias~~ — DECIDED 2026-09-11: KEEP (the QA scripts depend on it). `force_look` is added alongside; `force_medium` keeps resolving any key for at least one release and is only retired once every `scripts/qa-*` caller is moved.
 3. ~~Create's override library~~ — retracted; Create is honest today (§5 row 6).

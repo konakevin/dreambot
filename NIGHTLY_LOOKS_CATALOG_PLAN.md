@@ -210,5 +210,6 @@ freely without touching nightly.
 2. **One model** — v1 authored and gated for flux-1.1-pro only, with flex just for the solo rebuild (and the day-of digital-painting row that excludes 1.1-pro)? Or keep grok / gemini fallbacks with their own subsets now?
 3. ~~Embodied Dream Art~~ — DECIDED 2026-09-11: out of nightly, pluggable later (refactor plan §2b).
 4. **Labels + Dream Again** — show the look's label on the card ("Storybook Gouache") and let Dream Again render it in Create at the normal price (feasibility §4.1 recommends yes)?
-5. **Size** — 12 cast + 12 scene for v1 (above), equal weights, recency 7? Or smaller/larger?
+5. **Size** — 12 cast + 12 scene for v1 (above), equal weights, recency 7? Or smaller/larger? (The list is
+   FROZEN by Phase A of the refactor plan — candidate rows → matrix to Kevin's album → gate → hearts → tally.)
 6. **Sequence** — flip the model policy on first (recommended), then build looks.
