@@ -27,9 +27,10 @@ parallel and the cutover waits for it.
    No fragment text lives in TypeScript after cutover (the override library is deleted).
 5. **Behavior-neutral first.** The extraction (Phase 1) reproduces today's decisions exactly and is locked by
    equivalence fixtures from real log rows — the same method that made the model-policy shadow trustworthy.
-6. **First-dream and Create are consumers, not exceptions.** First-dream keeps calling `nightly-dreams` with
-   force flags; those flags become look-keyed. Create's own 1.1-pro override library is out of scope here but
-   is the same dishonesty (§8).
+6. **First-dream is a consumer, not an exception.** It keeps calling `nightly-dreams` with force flags; those
+   flags become look-keyed. Create is untouched: its per-(model × medium) override table
+   (`face_swap_model_overrides`, mig 266) already IS the honest shape — one curated fragment per medium per
+   stubborn model, label true — and is the precedent the nightly catalog follows.
 
 ---
 
@@ -170,7 +171,7 @@ text[]`. A dbspec asserts every pin key resolves to an active look.
 | **3. Curation** (Kevin; parallel with 1-2) | reliability gate (cast looks × 4 fixed couples, stamps decide) → Kevin's grid in the Dreams album → weights / bans / labels | `NIGHTLY_LOOK_TALLY.md` | rows are data |
 | **4. Cutover + delete legacy** | `mode = on` → 30 % (per-user hash) → 100 % → two weeks; then delete the legacy source branch, the override-library import, `faceSwapFluxOverrides` use, `force_medium`; the honesty assertion becomes a hard violation; the chaos-tier embodied sub-roll + `embodied_mediums_mid/_high` deleted (`nightly_surface_mix.embodied = 0`, brief branch kept dormant) | `check-nightly-looks-night.js` per look vs the legacy baseline; `nightlyStyleSingleSource.test.ts` green | percentage down; `mode = shadow` |
 | **5. First-dream on looks** | `first_dream_look_keys` (List A → look keys); `firstDreamMediums.ts` medium logic deleted; the cascade unchanged | first-dream QA cascade (existing script) | config |
-| **6. Create's override library** (follow-up, not this refactor) | the same "label stays, style changes" exists in `generate-dream` for 1.1-pro cast renders via `createFaceSwapOverrides.ts` / brief builders | — | — |
+| ~~6. Create's override library~~ | **Retracted 2026-09-11 (I was wrong):** Create's override (`createFaceSwapOverrides.ts`, DB table `face_swap_model_overrides`, mig 266) is keyed by (model × medium) and must render THAT medium's look — a per-medium fragment a stubborn model obeys, label honest. It is the precedent for the looks catalog, not a defect. Nothing to do in Create. | — | — |
 
 **Effort:** P0 ½ day · P1 1-1.5 days · P2 1 day · P3 Kevin + ≈ 200 renders (≈ $16) · P4 ½ day + 2 weeks of
 nights · P5 ½ day. P1 is the one that pays for itself immediately: it deletes the hand-synced state and the
@@ -194,4 +195,4 @@ position 2), the swap pipeline and its degrade cascade, the quality gate, hair v
 ## 8. Decisions Kevin owns for THIS plan (the catalog decisions are in the catalog plan §7)
 1. ~~Embodied~~ — DECIDED 2026-09-11: out of nightly at cutover (`nightly_surface_mix.embodied = 0`, no rows), architected as a declared surface so it plugs back in as rows + a percent (§2b).
 2. `force_medium` alias: keep one release for QA scripts, or rename everywhere at once?
-3. Create's override library (§5 row 6): schedule right after, or leave?
+3. ~~Create's override library~~ — retracted; Create is honest today (§5 row 6).
