@@ -218,11 +218,28 @@ async function renderOne(look, surface, n, seed) {
     ...(couple ? { force_dual_slots: DUAL_SLOTS } : { force_single_slots: SINGLE_SLOTS }),
   };
   const start = Date.now();
-  const res = await fetch(NIGHTLY_URL, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${WORKER_TOKEN}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
+  let res;
+  try {
+    res = await fetch(NIGHTLY_URL, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${WORKER_TOKEN}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+  } catch (e) {
+    // Network-level failure (ECONNRESET etc.): record it and keep the batch going — a thrown fetch used to
+    // take the whole run down (gemini round 2, 2026-09-11) and every queued round behind it.
+    const code = e && e.code ? e.code : e && e.message ? e.message : String(e);
+    return {
+      look: look.key,
+      label: look.label,
+      surface,
+      n,
+      elapsed_s: Math.round((Date.now() - start) / 1000),
+      status: 0,
+      ok: false,
+      error: `fetch failed: ${code}`,
+    };
+  }
   const elapsed = Math.round((Date.now() - start) / 1000);
   let payload;
   try {

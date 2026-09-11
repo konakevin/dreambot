@@ -24,8 +24,11 @@ per-model `grades_by_surface.json` files. Prose sections (§1, §2, §4, §5, §
   (the same without the clause). Rows live in `dream_mediums` with keys `nightly_*`.
 - **Surface** = `solo` (one real face swapped) or `couple` (two faces, the dual swap). A look is approved PER
   surface; scene-only renders (no cast) can use any active look.
-- **Verdict** = PASS / FAIL by EYE per surface on the matrix renders (does the swapped face blend into the medium,
-  does the identity hold, is the look distinct), with the reason on every FAIL. The pipeline's identity score is
+- **Verdict** = PASS / FAIL by EYE per surface on the matrix renders, on four questions: does the swapped face
+  blend into the medium; does the identity hold; is the look distinct; and **is the person INTEGRATED into the
+  scene** (Kevin 2026-09-11: "we want to avoid the strong cardboard-cutout look… there's a difference between
+  standing straight together vs looking pasted in"). Standing straight or side by side is fine; floating on top
+  of the scene with mismatched light, scale or shadow is a FAIL. The reason is written on every FAIL. The pipeline's identity score is
   recorded but is NOT the verdict (§4.1).
 
 ## 2. The method (repeatable; the "fixed-scene matrix")
@@ -47,36 +50,37 @@ per-model `grades_by_surface.json` files. Prose sections (§1, §2, §4, §5, §
 ## 3. Approval matrix — GENERATED (look × model → approved surfaces)
 
 <!-- approval-matrix:start -->
-_Generated 2026-09-11 from flux-1.1-pro (104 renders, 26 graded), grok-imagine-image (21 renders, 0 graded), gemini-2-image (0 renders, 0 graded). Verdicts by eye per surface; reasons in each model's grades_by_surface.json and the Desktop pages._
+_Generated 2026-09-11 from flux-1.1-pro (106 renders, 26 graded), grok-imagine-image (57 renders, 21 graded), gemini-2-image (6 renders, 0 graded). Verdicts by eye per surface; reasons in each model's grades_by_surface.json and the Desktop pages._
 
 | Look | key | flux-1.1-pro | grok-imagine-image | gemini-2-image |
 |---|---|---|---|---|
-| Classical Oil | `nightly_classical_oil` | **couple + solo** | — | — |
-| Digital Painting | `nightly_digital_painting` | **couple + solo** | — | — |
-| Painted Fantasy | `nightly_painted_fantasy` | **couple + solo** | — | — |
+| Classical Oil | `nightly_classical_oil` | **couple + solo** | **couple + solo** | — |
+| Digital Painting | `nightly_digital_painting` | **couple + solo** | **couple + solo** | — |
+| Painted Fantasy | `nightly_painted_fantasy` | **couple + solo** | **couple + solo** | — |
 | Watercolor & Ink | `nightly_watercolor_ink` | none | — | — |
-| Ink Illustration | `nightly_ink_illustration` | solo | — | — |
-| Storybook Gouache | `nightly_storybook_gouache` | solo | — | — |
+| Ink Illustration | `nightly_ink_illustration` | solo | solo | — |
+| Storybook Gouache | `nightly_storybook_gouache` | solo | solo | — |
 | Film Noir | `nightly_film_noir` | none | — | — |
-| Vintage Film | `nightly_vintage_film` | solo | — | — |
-| Baroque Oil | `nightly_baroque_oil` | **couple + solo** | — | — |
-| Salon Realism | `nightly_salon_realism` | **couple + solo** | — | — |
-| Jewel Realism | `nightly_jewel_realism` | solo | — | — |
-| Magazine Cover | `nightly_magazine_cover` | solo | — | — |
-| Retro Movie Poster | `nightly_movie_poster` | solo | — | — |
-| Sci-Fi Paperback | `nightly_scifi_paperback` | solo | — | — |
-| Matte Painting | `nightly_matte_painting` | solo | — | — |
-| Pulp Adventure Cover | `nightly_pulp_cover` | solo | — | — |
-| Fresco | `nightly_fresco` | solo | — | — |
+| Vintage Film | `nightly_vintage_film` | solo | solo | — |
+| Baroque Oil | `nightly_baroque_oil` | **couple + solo** | **couple + solo** | — |
+| Salon Realism | `nightly_salon_realism` | **couple + solo** | **couple + solo** | — |
+| Jewel Realism | `nightly_jewel_realism` | solo | solo | — |
+| Magazine Cover | `nightly_magazine_cover` | solo | solo | — |
+| Retro Movie Poster | `nightly_movie_poster` | solo | solo | — |
+| Sci-Fi Paperback | `nightly_scifi_paperback` | solo | solo | — |
+| Matte Painting | `nightly_matte_painting` | solo | solo | — |
+| Pulp Adventure Cover | `nightly_pulp_cover` | solo | solo | — |
+| Fresco | `nightly_fresco` | solo | solo | — |
 | Pastel Chalk | `nightly_pastel_chalk` | none | — | — |
 | Alla Prima Oil | `nightly_alla_prima` | none | — | — |
 | Cinematic Still | `nightly_cinematic_still` | none | — | — |
-| Kodachrome Slide | `nightly_kodachrome` | couple | — | — |
-| Hand-Tinted Photograph | `nightly_hand_tinted_photo` | **couple + solo** | — | — |
-| Chromolithograph | `nightly_chromolithograph` | **couple + solo** | — | — |
-| Oil Pastel | `nightly_oil_pastel` | solo | — | — |
-| Technicolor | `nightly_technicolor` | **couple + solo** | — | — |
-| Encaustic | `nightly_encaustic` | solo | — | — |
+| Kodachrome Slide | `nightly_kodachrome` | couple | couple | — |
+| Hand-Tinted Photograph | `nightly_hand_tinted_photo` | **couple + solo** | **couple + solo** | — |
+| Chromolithograph | `nightly_chromolithograph` | **couple + solo** | **couple + solo** | — |
+| Oil Pastel | `nightly_oil_pastel` | solo | solo | — |
+| Technicolor | `nightly_technicolor` | **couple + solo** | **couple + solo** | — |
+| Encaustic | `nightly_encaustic` | solo | solo | — |
+| Painted Comic Cover | `nightly_painted_comic_cover` | — | — | — |
 <!-- approval-matrix:end -->
 
 ## 4. Findings that any real-face initiative must carry (learned 2026-09-11)
@@ -98,7 +102,12 @@ _Generated 2026-09-11 from flux-1.1-pro (104 renders, 26 graded), grok-imagine-i
 6. **Wardrobe and action are ignored under strong painted looks on 1.1-pro** (period costume instead of the
    specified green velvet / emerald satin; standing instead of dancing). Costume locks need the same prompt
    position the look has.
-7. **Reliability by model, 30 nights of real couple renders (first-pass dual success):** flux-1.1-pro 57 % ·
+7. **Integration vs pose.** Natural, integrated poses are preferred (a hand on the railing, an arm around
+   a waist, contact shadows, light from the room on the clothes). A stiff pose is acceptable; a "cardboard
+   cutout" (the pair floating over the scene, no contact, mismatched light/scale) is not, and is graded as
+   such even when the face blends. Round 2: grok integrated on every render; 1.1-pro's painted looks tended
+   toward the frontal cutout.
+8. **Reliability by model, 30 nights of real couple renders (first-pass dual success):** flux-1.1-pro 57 % ·
    grok-imagine 67 % · gemini-2-image 58 % · seedream-4 21/21 · flux-2-pro 57 % · flux-1.1-pro-ultra 89 % ·
    flux-2-flex 19 %. Costs: 2 ¢ grok · 3 ¢ seedream / flux-2-pro · 4 ¢ 1.1-pro / gemini · 6 ¢ ultra / flex.
 
