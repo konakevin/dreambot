@@ -127,6 +127,12 @@ Estimate: ≈ 800 lines of `index.ts` → ≈ 120 lines of contract consumption;
 
 ## 3. Data model (the catalog is rows; the constraints are the fence)
 
+> **Implemented 2026-09-11 (mig 495):** `dream_mediums.nightly_look boolean`, `nightly_surfaces text[]` (⊆ {couple,
+> solo}; empty = parked), `weight numeric`, CHECK `nightly_look → NOT is_public AND NOT is_dream_eligible AND NOT
+> is_scene_eligible`, CHECK surfaces ⊆ {couple, solo}. Round-1 verdicts applied: 8 looks both surfaces, 12 solo-only,
+> 1 couple-only (kodachrome), 5 parked; the 6 halloween_* cast looks flagged both. Scene-only renders draw from any
+> active look (no swap constraint). `nightly_default_for` and the `nightly_surface_mix` config land with the resolver.
+
 `dream_mediums` gains (one migration): `nightly_look boolean default false`, `nightly_surfaces text[]`
 (`{couple,solo,scene,embodied}`), `weight numeric default 1`, `nightly_default_for text[]` (models this look
 is the fallback for), plus a CHECK: `nightly_look → NOT is_public AND NOT is_dream_eligible AND NOT

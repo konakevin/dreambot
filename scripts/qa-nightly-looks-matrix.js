@@ -16,6 +16,8 @@
  *   node scripts/qa-nightly-looks-matrix.js                     # full matrix (default --count=2)
  *   node scripts/qa-nightly-looks-matrix.js --only=nightly_fresco,nightly_encaustic --count=1
  *   node scripts/qa-nightly-looks-matrix.js --html-only         # rebuild the page from the saved report
+ *   node scripts/qa-nightly-looks-matrix.js --model=xai/grok-imagine-image        # round 2: approved looks × approved surfaces
+ *   node scripts/qa-nightly-looks-matrix.js --model=google/gemini-2-image --all   # every candidate row, both surfaces
  */
 const fs = require('fs');
 const path = require('path');
@@ -42,15 +44,30 @@ if (!WORKER_TOKEN) {
   console.error('DREAM_QUEUE_WORKER_TOKEN missing from .env.local');
   process.exit(1);
 }
-const MODEL = 'black-forest-labs/flux-1.1-pro';
+const ARGS0 = Object.fromEntries(
+  process.argv.slice(2).map((a) => {
+    const [k, v] = a.replace(/^--/, '').split('=');
+    return [k, v === undefined ? true : v];
+  })
+);
+/** --model=<image_models.id>; default flux-1.1-pro (round 1). Each model gets its own output dir + page. */
+const MODEL = ARGS0.model ? String(ARGS0.model) : 'black-forest-labs/flux-1.1-pro';
+const MODEL_SLUG = MODEL.replace(/^.*\//, '').replace(/[^a-z0-9.-]/gi, '_');
+const IS_ROUND1 = MODEL === 'black-forest-labs/flux-1.1-pro';
 const VIBE = 'cozy';
 const OUT_DIR =
   process.env.LOOKS_OUT_DIR ||
-  '/private/tmp/claude-501/-Users-kevinmchenry-Development-apps-dreambot/8f7586d7-85ff-4f4f-aa92-3bfa523a75a4/scratchpad/looks/matrix';
+  (IS_ROUND1
+    ? '/private/tmp/claude-501/-Users-kevinmchenry-Development-apps-dreambot/8f7586d7-85ff-4f4f-aa92-3bfa523a75a4/scratchpad/looks/matrix'
+    : `/private/tmp/claude-501/-Users-kevinmchenry-Development-apps-dreambot/8f7586d7-85ff-4f4f-aa92-3bfa523a75a4/scratchpad/looks/matrix-${MODEL_SLUG}`);
 fs.mkdirSync(OUT_DIR, { recursive: true });
 const REPORT = path.join(OUT_DIR, 'report.json');
 const HTML = path.join(OUT_DIR, 'nightly-looks-matrix.html');
-const DESKTOP_HTML = path.join(os.homedir(), 'Desktop', 'nightly-looks-matrix.html');
+const DESKTOP_HTML = path.join(
+  os.homedir(),
+  'Desktop',
+  IS_ROUND1 ? 'nightly-looks-matrix.html' : `nightly-looks-matrix-${MODEL_SLUG}.html`
+);
 
 const ARGS = Object.fromEntries(
   process.argv.slice(2).map((a) => {
@@ -109,11 +126,18 @@ function download(url, dest) {
 async function loadLooks() {
   const { data, error } = await sb
     .from('dream_mediums')
-    .select('key,label,face_swap_flux_fragment,flux_fragment,client_meta,sort_order,is_active')
-    .eq('is_active', true)
+    .select(
+      'key,label,face_swap_flux_fragment,flux_fragment,client_meta,sort_order,is_active,nightly_look,nightly_surfaces'
+    )
+    .eq('nightly_look', true)
+    .like('key', 'nightly_%')
     .order('sort_order');
   if (error) throw error;
-  let looks = data.filter((m) => m.client_meta && m.client_meta.nightly_look_candidate === true);
+  // Default = the APPROVED set (active + ≥1 surface, mig 495). --all re-tests every row on both surfaces, parked
+  // ones included — a new model gets a full look, not just what 1.1-pro passed.
+  let looks = ARGS.all
+    ? data
+    : data.filter((m) => m.is_active && (m.nightly_surfaces || []).length > 0);
   if (ONLY) looks = looks.filter((m) => ONLY.includes(m.key));
   return looks;
 }
@@ -222,7 +246,7 @@ async function renderOne(look, surface, n, seed) {
       payload: JSON.stringify(payload).slice(0, 400),
     };
   }
-  const caption = `✨ LOOK ${look.key} ${surface} #${n}`;
+  const caption = `✨ LOOK ${look.key} ${surface} #${n}${IS_ROUND1 ? '' : ` [${MODEL_SLUG}]`}`;
   if (payload.upload_id) {
     const { error: capErr } = await sb
       .from('uploads')
@@ -384,8 +408,8 @@ th.look{width:230px;text-align:left;background:#161310}th.look .label{font-size:
 td.cell{width:260px}td.cell img{width:250px;height:auto;border-radius:6px;display:block}td.empty{color:#6f6558}
 .meta{font-size:11px;color:#b8ab99;margin-top:4px}.ok{color:#9fe3b7}.bad{color:#ffb3ad}
 </style>
-<header><h1>Nightly Looks Matrix — ${order.length} looks × ${cols.length} renders</h1>
-<p>One fixed scene (${esc(PLACE)}), one cast (Kevin + plus_one), flux-1.1-pro, vibe ${VIBE}. Only the look fragment changes between rows. Two verdicts per look: <b>stamps</b> (clean dual swap on both couples, median identity ≥ 0.50) and <b>Claude</b> (a visual grade: does the swapped face blend, is the look distinct). Kevin's hearts in the album are the third. Click any image for full size. Generated ${new Date().toISOString()}.</p></header>
+<header><h1>Nightly Looks Matrix — ${esc(MODEL_SLUG)} — ${order.length} looks</h1>
+<p>One fixed scene (${esc(PLACE)}), one cast (Kevin + plus_one), model ${esc(MODEL)}, vibe ${VIBE}. Only the look fragment changes between rows. Two verdicts per look: <b>stamps</b> (clean dual swap on both couples, median identity ≥ 0.50) and <b>Claude</b> (a visual grade: does the swapped face blend, is the look distinct). Kevin's hearts in the album are the third. Click any image for full size. Generated ${new Date().toISOString()}.</p></header>
 <div style="overflow-x:auto"><table><thead><tr><th>Look</th>${head}</tr></thead><tbody>
 ${rows}
 </tbody></table></div>`;
@@ -408,7 +432,12 @@ async function main() {
   const targets = verify ? looks.slice(0, 1) : looks;
   const count = verify ? 1 : COUNT;
   for (const look of targets)
-    for (let n = 1; n <= count; n++) for (const surface of SURFACES) plan.push([look, surface, n]);
+    for (let n = 1; n <= count; n++)
+      for (const surface of SURFACES) {
+        // A look renders only the surfaces it is approved for (nightly_surfaces) unless --all re-tests everything.
+        if (!ARGS.all && !(look.nightly_surfaces || []).includes(surface)) continue;
+        plan.push([look, surface, n]);
+      }
   console.log(`looks: ${targets.length} · renders planned: ${plan.length} · out: ${OUT_DIR}`);
   for (const [look, surface, n] of plan) {
     const done = report.renders.find(

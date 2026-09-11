@@ -128,3 +128,16 @@ or caricature (floating heads / bobbleheads / no people) ×6, faces turned into 
 | Oil Pastel | `nightly_oil_pastel` | **PASS** | Solo #1 is a plain photo; the pastel look shows only on #2. | **FAIL** | Couple #2 profiles facing each other. |
 | Technicolor | `nightly_technicolor` | **PASS** |  | **PASS** |  |
 | Encaustic | `nightly_encaustic` | **PASS** |  | **FAIL** | Couple #1 giant floating heads; couple #2 bobbleheads. |
+
+## Architecture applied (2026-09-11, mig 495) + round 2 plan
+
+The per-surface verdicts above are now DATA on the rows: `nightly_surfaces` = {couple,solo} (8), {solo} (12),
+{couple} (1: kodachrome), {} parked (5: watercolor_ink, film_noir, pastel_chalk, alla_prima, cinematic_still, kept
+inactive for re-testing). A look is approved per surface, and the resolver rolls only looks approved for the render's
+surface. `scripts/qa-nightly-looks-matrix.js --model=<id>` re-runs the identical matrix (same scene, cast, forced
+slots) on another model, rendering each look only on its approved surfaces (`--all` re-tests every row on both).
+
+**Round 2 candidates (cost per image from `image_models`; couple first-pass dual success over the last 30 nights of
+real users, `ai_generation_log`):** flux-1.1-pro 4¢ · 57 % (baseline) · xai/grok-imagine-image 2¢ · 67 % (and 8/8 in
+the 2026-09-07 bake-off) · google/gemini-2-image 4¢ · 58 % · bytedance/seedream-4 3¢ · 21/21 (small n; 2K PNGs) ·
+flux-2-pro 3¢ · 57 % · flux-1.1-pro-ultra 6¢ · 89 % (same family; heavier swap memory) · flux-2-flex 6¢ · 19 % (no).
