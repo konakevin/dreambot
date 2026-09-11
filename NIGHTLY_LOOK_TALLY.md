@@ -86,3 +86,45 @@ styles.
 - Pull watercolor-ink / ink-illustration / storybook-gouache from `faceSwapModelOverrides.ts` (finding 3) as a
   standalone commit; the override library dies at cutover anyway.
 - Phase 1 (behavior-neutral style contract) proceeds in parallel; Phase 2 seeds from this tally.
+
+
+## Round 1 regraded PER SURFACE (Kevin 2026-09-11: "for solo every look was good; for couples it was different")
+
+Page: `~/Desktop/nightly-looks-verdicts.html`. Same renders, graded by eye per surface; every rejection carries its reason.
+
+**Pass both (8):** Classical Oil, Digital Painting, Painted Fantasy, Baroque Oil, Salon Realism, Hand-Tinted Photograph, Chromolithograph, Technicolor.
+**Pass solo (20 of 26).** The six solo failures are ONE defect: one of the two solos came back as an older grey-bearded
+man instead of Kevin (identity 0.65-0.70, so the floor let it through). It appears on photographic and loose-brush
+looks (noir, kodachrome, cinematic, alla prima, pastel, watercolor) — a solo-swap / base-render age-prior issue to
+investigate on its own, not a reason to drop those looks for solos yet.
+**Pass couple (9 of 26).** Couple failures fall into four buckets: lost her (degraded to Kevin alone) ×7, faceless
+or caricature (floating heads / bobbleheads / no people) ×6, faces turned into profiles ×3, pasted-on / identity ×2.
+
+| Look | key | solo | why | couple | why |
+|---|---|---|---|---|---|
+| Classical Oil | `nightly_classical_oil` | **PASS** |  | **PASS** |  |
+| Digital Painting | `nightly_digital_painting` | **PASS** |  | **PASS** | Frames the couple wide; faces smaller. |
+| Painted Fantasy | `nightly_painted_fantasy` | **PASS** | Costume drift (frock coats), face fine. | **PASS** |  |
+| Watercolor & Ink | `nightly_watercolor_ink` | **FAIL** | Solo #2 came back as an older white-bearded man, not Kevin. Solo #1 greyed the hair. | **FAIL** | Photo faces pasted on a watercolor world; couple #2 bodies dissolve into the path. |
+| Ink Illustration | `nightly_ink_illustration` | **PASS** | Face fine; the ink look barely shows. | **FAIL** | Both couples collapsed to faceless scenes (no people at all). |
+| Storybook Gouache | `nightly_storybook_gouache` | **PASS** |  | **FAIL** | Couple #1 bobblehead caricatures; couple #2 a faceless scene. |
+| Film Noir | `nightly_film_noir` | **FAIL** | Solo #2 came back as an older grey-bearded man, not Kevin. | **FAIL** | Couple #2 lost her: Kevin alone with odd selective color. |
+| Vintage Film | `nightly_vintage_film` | **PASS** |  | **FAIL** | Couple #1 rendered Kevin as an older grey-haired man. Couple #2 is lovely. |
+| Baroque Oil | `nightly_baroque_oil` | **PASS** |  | **PASS** |  |
+| Salon Realism | `nightly_salon_realism` | **PASS** |  | **PASS** |  |
+| Jewel Realism | `nightly_jewel_realism` | **PASS** |  | **FAIL** | Couple #1 collapsed to a faceless scene of the wrong place. |
+| Magazine Cover | `nightly_magazine_cover` | **PASS** | Reads as a plain photo; weak as a look. | **FAIL** | Couple #2 lost her: Kevin alone. Couple #1 stiff. |
+| Retro Movie Poster | `nightly_movie_poster` | **PASS** |  | **FAIL** | Both couples turned to face each other in profile; faces too small to swap. |
+| Sci-Fi Paperback | `nightly_scifi_paperback` | **PASS** | Solo #2 shrank him into a wide vista. | **FAIL** | Both couples lost her: Kevin alone. |
+| Matte Painting | `nightly_matte_painting` | **PASS** | Scene-heavy framing. | **FAIL** | Both couples lost her: the sweeping scene shrinks the people. |
+| Pulp Adventure Cover | `nightly_pulp_cover` | **PASS** |  | **FAIL** | Couple #2 lost her: Kevin alone. Couple #1 faces small. |
+| Fresco | `nightly_fresco` | **PASS** | Solo #1 is a plain photo with the wrong hair; the fresco look disappears. | **FAIL** | Couple #1 bobbleheads; couple #2 giant floating heads. |
+| Pastel Chalk | `nightly_pastel_chalk` | **FAIL** | Solo #1 came back as an older grey-bearded man, not Kevin. | **FAIL** | Couple #2 giant floating heads; couple #1 her hair drifted blonde. |
+| Alla Prima Oil | `nightly_alla_prima` | **FAIL** | Solo #1 came back as an older grey-bearded man, not Kevin. | **FAIL** | Couple #1 lost her: Kevin alone. |
+| Cinematic Still | `nightly_cinematic_still` | **FAIL** | Solo #1 came back as an older grey-bearded man, not Kevin. | **FAIL** | Couple #1 profiles facing each other at the table. Couple #2 is the best photo in the set. |
+| Kodachrome Slide | `nightly_kodachrome` | **FAIL** | Solo #1 came back as an older grey-bearded man, not Kevin. | **PASS** | Her hair went curly-blonde in #1; faces fine. |
+| Hand-Tinted Photograph | `nightly_hand_tinted_photo` | **PASS** |  | **PASS** |  |
+| Chromolithograph | `nightly_chromolithograph` | **PASS** |  | **PASS** |  |
+| Oil Pastel | `nightly_oil_pastel` | **PASS** | Solo #1 is a plain photo; the pastel look shows only on #2. | **FAIL** | Couple #2 profiles facing each other. |
+| Technicolor | `nightly_technicolor` | **PASS** |  | **PASS** |  |
+| Encaustic | `nightly_encaustic` | **PASS** |  | **FAIL** | Couple #1 giant floating heads; couple #2 bobbleheads. |
