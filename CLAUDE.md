@@ -330,6 +330,8 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
   catalog, bot module internals, onboarding flow).
 - **Bots:** `BOT_SCENE_QUALITY_PLAYBOOK.md` (canonical brain), `BOTS.md`, `BOT_MODEL_TALLY.md`,
   `BOT_AXIS_REFACTOR_PLAN.md`, `BOT_PREFIX_NEED_TO_REVIEW_AND_FIX.md`.
+- **Looks (nightly now, Create's real-face mediums later):** `REAL_FACE_LOOKS_REGISTRY.md` (LIVE registry of
+  proven look × model × surface results; generated matrix), `NIGHTLY_LOOKS_REFACTOR_PLAN.md`, `NIGHTLY_LOOK_TALLY.md`.
 - **Engine + scaling:** `QUEUE_WORKERS_REFACTOR.md` (queue status of record + Fly scale runbook),
   `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_IMPRESS_PLAN.md` (always-impress backlog: quality gate, legendary dreams, holidays, weather, pets, taste, arcs — each handoff-ready), `NIGHTLY_SEED_POOL_QA.md`, `NIGHTLY_FUN_SCENARIOS_PLAN.md` (fun/fantasy
   scenario buckets + Option B location-fit actions — LIVE, playbook for adding/scaling/tuning),
