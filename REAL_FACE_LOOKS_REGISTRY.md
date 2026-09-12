@@ -142,6 +142,45 @@ _Generated 2026-09-12 from flux-1.1-pro (172 renders, 43 graded), grok-imagine-i
 - Open questions for that day: labels users see, price tier per model, whether parked looks get a second gate on
   other models before being offered.
 
+## 5b. Nightly keeps EVERY approved look; consolidation happens when Create adopts them (Kevin 2026-09-12)
+
+**Decision:** for nightly, near-duplicate looks stay in the pool — users neither see nor care which medium a night
+was, and subtle variety is fine. "Once we offer these to the create screen as official mediums, we should
+consolidate them at that point." The only thing to manage in nightly is ROLL SKEW: six oil cousins at equal weight
+make "an oil painting" six times as likely as a chromolithograph. The resolver therefore rolls a **family** first
+(equal shares across families) and a look inside the family second (`dream_mediums.nightly_family`, refactor plan
+§2), so the week varies across families while each night can still be a slightly different oil.
+
+**The consolidation shortlist for the Create day** (the compaction Kevin reviewed 2026-09-12 but chose NOT to apply
+to nightly): 43 → 22 unique menu tiles.
+
+| Keep (the strongest of its cluster) | Folds in |
+|---|---|
+| Classical Oil | Salon Realism, Painted Animation Frame |
+| Baroque Oil | — |
+| Painted Fantasy | Jewel Realism |
+| Digital Painting | Matte Painting, Soft Brush Illustration |
+| Oil Pastel | Pastel Portrait, Pastel Chalk |
+| Sci-Fi Paperback | — |
+| Pulp Adventure Cover | Magazine Cover, Painted Comic Cover |
+| Retro Airbrush Poster | Retro Movie Poster |
+| Ink Illustration | — |
+| Storybook Gouache | Gouache Portrait |
+| Painted Graphic Novel | Soft-Shaded Comic |
+| Rotoscoped Animation | — |
+| Marker Illustration | — |
+| Ink-Wash Comic | — |
+| Soft Pop Art | — |
+| Chromolithograph | — |
+| Big Head | — |
+| Watercolor Portrait | Lineless Watercolor, Digital Watercolor, Watercolor & Ink |
+| Aquarelle over Graphite | — |
+| Vintage Film | — |
+| Technicolor | Kodachrome Slide |
+| Hand-Tinted Photograph | — |
+
+Retire outright (never read as their medium or parked): Fresco, Encaustic, Alla Prima Oil, Film Noir, Cinematic Still.
+
 ## 6. How to add or re-test a look (the process)
 
 1. Insert the row (`nightly_*` key, both fragments, directive, `nightly_look=true`, `nightly_surfaces={}` until

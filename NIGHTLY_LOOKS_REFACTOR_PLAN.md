@@ -93,6 +93,13 @@ what makes a future flip safe: `embodied: 15` with no rows fails CI before it ca
 surfaces, models, weight); the resolver never enumerates keys; the only code that knows a key exists is the
 QA `force_look` flag. New surfaces beyond the four (say, `pet` portraits) are one enum value + a brief branch.
 
+**Family-first roll (Kevin 2026-09-12: keep every approved look for nightly, consolidate only when Create adopts
+them).** Near-duplicates stay, so the roll must not skew toward the biggest cluster: `dream_mediums.nightly_family`
+(photographic · painted_realism · covers_posters · comic_print · watercolor) and the resolver picks a FAMILY with
+equal shares (or `engine_config.nightly_family_mix`) among families that have ≥ 1 approved look for (model,
+surface), then a look inside it by `weight`, then applies per-user recency over look keys. Registry §5b holds the
+Create-day consolidation shortlist.
+
 **Precedence (one table, one place):** `force_look` (QA) → day-of look set → holiday-scene pin → scenario pin →
 catalog roll(surface, model, recency, bans, allow-list). A pin that names an unknown/inactive look falls to the
 roll and stamps `look_pin_unknown:<key>` (fail open, never faceless).
