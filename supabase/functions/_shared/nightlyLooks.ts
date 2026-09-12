@@ -41,6 +41,9 @@ export interface LookRow {
   directive: string | null;
   weight: number;
   active: boolean;
+  /** dream_mediums.nightly_enabled — false = reserved (e.g. for a future Create medium) and never rolled by nightly,
+   *  even when approved. Defaults to true when omitted. */
+  nightlyEnabled?: boolean;
 }
 
 export interface LookApproval {
@@ -95,7 +98,7 @@ export function approvedLooks(
       .filter((a) => a.approved && a.model === input.model && a.surface === input.surface)
       .map((a) => a.lookKey)
   );
-  return input.looks.filter((l) => l.active && ok.has(l.key));
+  return input.looks.filter((l) => l.active && l.nightlyEnabled !== false && ok.has(l.key));
 }
 
 export function resolveLook(input: ResolveLookInput): ResolvedLook | null {

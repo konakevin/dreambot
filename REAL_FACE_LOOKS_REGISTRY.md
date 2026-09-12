@@ -181,6 +181,14 @@ to nightly): 43 → 22 unique menu tiles.
 
 Retire outright (never read as their medium or parked): Fresco, Encaustic, Alla Prima Oil, Film Noir, Cinematic Still.
 
+## 5c. Reserved for Create: Big Head (Kevin 2026-09-12)
+
+`nightly_big_head` keeps its approvals (couple + solo on grok and gemini, couple on flux; solos on flux aged into a
+stranger) but is **excluded from nightly** via `dream_mediums.nightly_enabled = false` (mig 500,
+`client_meta.reserved_for = 'create'`). It is the first entry of a future Create "Big Head" medium: an integrated
+painted caricature with the user's real face. The resolver never rolls a reserved look; `force_look` can still
+render it for QA.
+
 ## 6. How to add or re-test a look (the process)
 
 1. Insert the row (`nightly_*` key, both fragments, directive, `nightly_look=true`, `nightly_surfaces={}` until

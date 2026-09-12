@@ -168,6 +168,26 @@ describe('resolveLook — family first, then look', () => {
     expect(seen.has('oil2')).toBe(true); // outside the window of 1
   });
 
+  it('a look reserved for Create (nightly_enabled = false) never rolls even when approved, but can still be forced', () => {
+    const reserved = { ...look('bighead', 'comic_print'), nightlyEnabled: false };
+    const looks = [...LOOKS, reserved];
+    const approvals = [...APPROVALS, ok('bighead', GROK, 'couple'), ok('bighead', GROK, 'solo')];
+    const rng = seeded(11);
+    for (let i = 0; i < 300; i++) {
+      const r = resolveLook({ surface: 'couple', model: GROK, looks, approvals, rng });
+      expect(r!.look.key).not.toBe('bighead');
+    }
+    const forced = resolveLook({
+      surface: 'couple',
+      model: GROK,
+      looks,
+      approvals,
+      forcedLook: 'bighead',
+      rng,
+    });
+    expect(forced!.look.key).toBe('bighead');
+  });
+
   it('returns null (never invents a look) when nothing is approved for the model × surface', () => {
     const r = resolveLook({
       surface: 'couple',
