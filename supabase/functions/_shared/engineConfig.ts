@@ -121,6 +121,11 @@ export interface EngineConfig {
   /** Nightly model policy (mig 468, NIGHTLY_MODEL_POLICY_PLAN.md): 'off' = legacy picker,
    *  'shadow' = legacy renders + policy stamps, 'on' = the policy table decides. */
   modelPolicyMode: ModelPolicyMode;
+  /** Nightly LOOKS path (mig 502, NIGHTLY_LOOKS_REFACTOR_PLAN.md): 'off' = legacy medium chain, 'shadow' =
+   *  legacy renders + `style_shadow:` stamps, 'on' = the style contract decides model + look. */
+  nightlyLooksMode: 'off' | 'shadow' | 'on';
+  /** Per-user recency window over look keys for the looks roll (default 7). */
+  nightlyLookRecency: number;
   /** Couple prompt order (mig 470, characterSlotPrompt.ts): 'legacy' | 'subject_first'. */
   couplePromptStyle: 'legacy' | 'subject_first';
   /** Holiday DAY-OF date rule (mig 471, HOLIDAY_DAY_OF_PLAN.md §4): local hour at the 08:00 UTC run
@@ -188,6 +193,8 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   sceneActionLocationCouples: false,
   soloRebuildModel: 'black-forest-labs/flux-2-flex',
   modelPolicyMode: 'off',
+  nightlyLooksMode: 'off',
+  nightlyLookRecency: 7,
   couplePromptStyle: 'legacy',
   dayOfEveningCutoffHour: 20,
   dayOfCostumePct: 100,
@@ -311,6 +318,11 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
       true,
     soloRebuildModel: String(data.solo_rebuild_model ?? DEFAULT_ENGINE_CONFIG.soloRebuildModel),
     modelPolicyMode: parsePolicyMode(data.model_policy_mode),
+    nightlyLooksMode:
+      data.nightly_looks_mode === 'on' || data.nightly_looks_mode === 'shadow'
+        ? data.nightly_looks_mode
+        : 'off',
+    nightlyLookRecency: Math.max(0, Math.floor(Number(data.nightly_look_recency ?? 7) || 7)),
     couplePromptStyle: data.couple_prompt_style === 'subject_first' ? 'subject_first' : 'legacy',
     dayOfEveningCutoffHour: clampHour(data.day_of_evening_cutoff_hour, 20),
     dayOfCostumePct: clampPct(data.day_of_costume_pct, DEFAULT_ENGINE_CONFIG.dayOfCostumePct),

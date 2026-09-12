@@ -20,6 +20,8 @@ export interface NightlyQaFlags {
    *  exempts the flux-1.1-pro override library so the prompt carries THIS look's fragment; the render
    *  stamps `look:<key>` + `look_source:force`. */
   force_look: string | undefined;
+  /** QA: run the LOOKS PATH (style contract) for this render regardless of engine_config.nightly_looks_mode. */
+  force_looks_path: boolean;
   force_moods: MoodAxes | undefined;
   /** A string forces that exact beat, `true` forces the roll on. */
   force_awe_beat: string | boolean | undefined;
@@ -141,6 +143,7 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
       'force_cast_role' in body ? (body.force_cast_role as string | null) : undefined,
     force_medium: (body.force_medium as string) || undefined,
     force_look: (body.force_look as string) || undefined,
+    force_looks_path: body.force_looks_path === true,
     force_moods:
       body.force_moods && typeof body.force_moods === 'object'
         ? (body.force_moods as MoodAxes)

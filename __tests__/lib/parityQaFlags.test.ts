@@ -70,3 +70,11 @@ describe('Phase A2 QA flags (NIGHTLY_LOOKS_REFACTOR_PLAN.md)', () => {
     expect(parseQaFlags({}).force_look).toBeUndefined();
   });
 });
+
+describe('force_looks_path (Phase 2 QA switch)', () => {
+  it('is true only for a literal true', () => {
+    expect(parseQaFlags({ force_looks_path: true }).force_looks_path).toBe(true);
+    expect(parseQaFlags({ force_looks_path: 'true' }).force_looks_path).toBe(false);
+    expect(parseQaFlags({}).force_looks_path).toBe(false);
+  });
+});
