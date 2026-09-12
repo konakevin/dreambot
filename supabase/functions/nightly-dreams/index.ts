@@ -20,7 +20,23 @@ import {
   resolveVibeFromDb,
   fetchSceneEligibleModels,
   fetchMediums,
+  fetchVibes,
 } from '../_shared/dreamStyles.ts';
+import { loadNightlyLooks } from '../_shared/pools/nightlyLooksLoader.ts';
+import { buildStyleContract, type StyleContract } from '../_shared/nightlyStyle.ts';
+import {
+  afterScenePrompt,
+  applyStyleContract,
+  assertStyleHonesty,
+  looksModeFor,
+  looksSlotInputFields,
+  provisionalLooksMedium,
+  retryPromptFor,
+  shadowStamp,
+  surfaceFor,
+  toVibeRows,
+  type ActiveStyle,
+} from '../_shared/nightlyLooksPath.ts';
 import { firstDreamMediumMode, firstDreamAllowedMediums } from '../_shared/firstDreamMediums.ts';
 import { getBiomeConfig, resolveBiomeFromTags, isValidBiomeConfig } from '../_shared/biomeAxes.ts';
 import { rollDream } from '../_shared/dreamAlgorithm.ts';
@@ -124,6 +140,7 @@ import {
   soloRebuildInput,
   type CharacterSlotPipelineInput,
   type DualSlots,
+  type CharacterSlots,
 } from '../_shared/characterSlotPrompt.ts';
 import { holidayPoolOf, selectDayOfRows } from '../_shared/holidayPools.ts';
 import { steerDualModel } from '../_shared/dualModelSteer.ts';
@@ -316,6 +333,7 @@ Deno.serve(async (req) => {
     force_awe_beat,
     force_season_month,
     force_vibe,
+    force_looks_path,
     force_nightly_path,
     force_model,
     force_female_hair_pct,
@@ -394,9 +412,22 @@ Deno.serve(async (req) => {
   // Nightly model policy (mig 468, NIGHTLY_MODEL_POLICY_PLAN.md): resolved ONCE per render. 'off' =
   // the legacy picker everywhere below; 'shadow' = legacy still renders, the policy resolver runs beside
   // it at every pick site and stamps policy_shadow:<site>:match|diff; 'on' = the policy table decides.
-  const policyMode = (await fetchEngineConfig(supabase)).modelPolicyMode;
+  const engineCfg0 = await fetchEngineConfig(supabase);
+  const policyMode = engineCfg0.modelPolicyMode;
+  // LOOKS PATH (NIGHTLY_LOOKS_REFACTOR_PLAN.md Phase 2, _shared/nightlyLooksPath.ts): 'on' = the style contract
+  // decides model + look + vibe; 'shadow' = legacy renders, the contract is stamped; 'off' = legacy. QA:
+  // force_looks_path. The contract needs the model policy even when policy mode is off.
+  const looksMode = looksModeFor(force_looks_path, engineCfg0.nightlyLooksMode);
+  const looksPath = looksMode === 'on';
   const modelPolicy: NightlyModelPolicy | null =
-    policyMode === 'off' ? null : await loadNightlyModelPolicy(supabase);
+    policyMode === 'off' && looksMode === 'off' ? null : await loadNightlyModelPolicy(supabase);
+  let styleContract: StyleContract | null = null;
+  let activeStyle: ActiveStyle | null = null;
+  let looksVibeFragment: string | null = null;
+  let looksVibePosition: 'early' | 'after_scene' | null = null;
+  let looksSceneModel: string | null = null;
+  /** The cast slots + input of this render, kept for the after-scene vibe retry (nightlyLooksPath.afterScenePrompt). */
+  let castSlotsCtx: { slots: CharacterSlots; input: CharacterSlotPipelineInput } | null = null;
   let logAxes: Record<string, unknown> = {};
   // Pure-scene fallback (DREAM_CAST_HARDENING_PLAN.md) — declared handler-wide so
   // the prompt is BUILT at brief-time (scene context is live) and CONSUMED at the
@@ -803,6 +834,12 @@ Deno.serve(async (req) => {
     if (force_vibe) {
       nightlyVibe = await resolveVibeFromDb(force_vibe);
     }
+    if (looksPath) {
+      // Keep the legacy branching on the face-swap track until the contract replaces the medium (see the hook
+      // before dualSpecialLighting).
+      nightlyMedium = provisionalLooksMedium(nightlyMedium);
+      fallbackReasons.push('looks_path:provisional_medium');
+    }
     resolvedMediumKey = nightlyMedium.key;
     resolvedVibeKey = nightlyVibe.key;
 
@@ -1157,7 +1194,7 @@ Deno.serve(async (req) => {
     // language for stylized mediums (anime, fairytale). Without this, Flux
     // pulls into chibi/oversized-eye proportions that face-swap can't
     // detect. Used for BOTH single and dual face swap.
-    if (faceSwapEligible) {
+    if (faceSwapEligible && !looksPath) {
       const overridden = applyFaceSwapOverride(baseMedium);
       if (overridden !== baseMedium) {
         baseMedium = overridden;
@@ -1263,7 +1300,7 @@ Deno.serve(async (req) => {
       }
       return pick.model;
     };
-    if (isFaceSwapCharacter) {
+    if (isFaceSwapCharacter && !looksPath) {
       // DreamSmart pool (2026-07-22): a model proven to render THIS style, ≤2✦,
       // minus nightly bans. Replaces the old hardcoded FACE_SWAP_MODELS /
       // FIRST_DREAM_MODELS rotations. First-dream uses the same pool (per Kevin);
@@ -2087,7 +2124,12 @@ Deno.serve(async (req) => {
     ]
       .map((k) => k.trim())
       .filter(Boolean);
-    if (dualSceneMediumKey && !force_medium && dualSceneMediumKey !== nightlyMedium.key) {
+    if (
+      dualSceneMediumKey &&
+      !force_medium &&
+      !looksPath &&
+      dualSceneMediumKey !== nightlyMedium.key
+    ) {
       try {
         const forced = await resolveMediumFromDb(
           dualSceneMediumKey,
@@ -2136,7 +2178,12 @@ Deno.serve(async (req) => {
       } catch (_e) {
         // keep the rolled medium
       }
-    } else if (bannedMediums.length && !force_medium && bannedMediums.includes(nightlyMedium.key)) {
+    } else if (
+      bannedMediums.length &&
+      !force_medium &&
+      !looksPath &&
+      bannedMediums.includes(nightlyMedium.key)
+    ) {
       // Scenario-banned medium (migration 355 + Operation Sweet Dreams): the
       // roll landed on a medium this scenario reads badly in (e.g. fantastical
       // buckets + any photo-real-adjacent medium → creepy photoreal
@@ -2189,6 +2236,61 @@ Deno.serve(async (req) => {
         }
       } catch (_e) {
         // keep the rolled medium
+      }
+    }
+    // ── LOOKS PATH: the style contract (model → look → vibe), applied once, here, after every pin is known ──
+    if (looksMode !== 'off' && modelPolicy) {
+      const surface = surfaceFor({ isDualFaceSwap, isSingleHumanFaceSwap });
+      const catalog = await loadNightlyLooks(supabase);
+      const vibeRowsAll = await fetchVibes();
+      const contract = buildStyleContract({
+        surface,
+        policy: modelPolicy,
+        bans: nightlyBans,
+        forceModel: force_model ?? null,
+        looks: catalog.looks,
+        approvals: catalog.approvals,
+        recentLookKeys: recentMediums,
+        recencyWindow: engineCfg0.nightlyLookRecency,
+        forcedLook: force_look ?? null,
+        pinnedLook:
+          dayOfLookKey ?? (holidayScene ? holidayScene.mediumKey : null) ?? dualSceneMediumKey,
+        vibes: toVibeRows(vibeRowsAll),
+        recentVibeKeys: recentVibes,
+        forcedVibe: force_vibe ?? null,
+      });
+      if (!contract) {
+        fallbackReasons.push(`looks_path_no_contract:${surface}`);
+      } else if (!looksPath) {
+        fallbackReasons.push(shadowStamp(contract));
+      } else {
+        const o = applyStyleContract(
+          contract,
+          nightlyMedium,
+          new Map(vibeRowsAll.map((v) => [v.key, v]))
+        );
+        nightlyMedium = o.nightlyMedium;
+        baseMedium = o.baseMedium;
+        realMediumFragment = o.realMediumFragment;
+        resolvedMediumKey = o.resolvedMediumKey;
+        resolvedMediumAllowedModels = o.allowedModels;
+        resolvedMediumSceneModels = o.allowedModels;
+        resolvedMediumSmartModels = o.allowedModels;
+        holidaySceneMediumFragment = null; // the holiday pin went into the contract
+        if (surface === 'scene') looksSceneModel = o.model;
+        else faceSwapPrePickedModel = o.model;
+        if (o.vibe) {
+          nightlyVibe = o.vibe;
+          resolvedVibeKey = o.vibe.key;
+        }
+        looksVibeFragment = o.vibeFragment;
+        looksVibePosition = o.vibePosition;
+        styleContract = contract;
+        activeStyle = o.active;
+        fallbackReasons.push(...o.stamps);
+        console.log(
+          `[nightly-dreams] LOOKS PATH ${surface}: model ${o.model} · look ${o.resolvedMediumKey} · vibe ${o.vibe ? o.vibe.key : 'none'}`
+        );
       }
     }
     const dualSpecialLighting = dualSpecialScene ? pickSpecialLighting() : null;
@@ -2514,6 +2616,12 @@ Deno.serve(async (req) => {
                   return null;
                 })()))
               : null,
+          ...(looksPath
+            ? looksSlotInputFields(
+                { vibeFragment: looksVibeFragment, vibePosition: looksVibePosition },
+                dualSpecialScene ? (dualSpecialLighting ?? null) : null
+              )
+            : {}),
         };
         // Parity QA (COUPLE_PROMPT_PARITY_PLAN.md §2): a forced slot INPUT + forced Sonnet SLOTS make
         // the prompt a pure function of (input, slots, promptStyle) — the paired A/B differs only in order.
@@ -2542,6 +2650,7 @@ Deno.serve(async (req) => {
         finalPrompt = slotResult.assembledPrompt;
         slotPipelineFallbacks = slotResult.fallbackReasons;
         slotPipelineHandled = true;
+        castSlotsCtx = { slots: slotResult.slots, input: slotInputUsed };
         sceneActionText = slotResult.slots.action ?? null;
         // For a DUAL cast, capture self's side + the built dual slots so that if
         // the dual face-swap later fails every retry, the recovery re-renders
@@ -3237,6 +3346,7 @@ Output ONLY the prompt.`;
       sceneBaseModelResolved = pick.model;
     }
   }
+  if (looksPath && looksSceneModel && !force_model) sceneBaseModelResolved = looksSceneModel;
   let pickedModel = force_model ? force_model : faceSwapPrePickedModel || sceneBaseModelResolved;
   // Set when the couple-degrade solo rebuild renders on a different model (F2): the
   // shipped pixels came from THIS model, so ai_generation_log.model_used must say so.
@@ -3252,6 +3362,7 @@ Output ONLY the prompt.`;
   if (
     !force_model &&
     policyMode !== 'on' && // policy 'on': the scene row IS the list (mig 468)
+    !looksPath &&
     (resolvedComposition === 'pure_scene' || resolvedComposition === 'epic_tiny')
   ) {
     // Per-medium override (mig 214) wins over engine_config global (mig 213).
@@ -3316,7 +3427,7 @@ Output ONLY the prompt.`;
   const perMediumBans =
     NIGHTLY_BANNED_MODELS_BY_MEDIUM[resolvedMediumKey || ''] || new Set<string>();
   const effectiveBans = new Set<string>([...NIGHTLY_BANNED_MODELS, ...perMediumBans]);
-  if (!force_model && policyMode !== 'on' && effectiveBans.has(pickedModel)) {
+  if (!force_model && policyMode !== 'on' && !looksPath && effectiveBans.has(pickedModel)) {
     const allowedMinusBanned = resolvedMediumAllowedModels.filter((m) => !effectiveBans.has(m));
     if (allowedMinusBanned.length > 0) {
       const oldModel = pickedModel;
@@ -3345,7 +3456,7 @@ Output ONLY the prompt.`;
   // Per-medium pin override — last word on which model renders this nightly.
   // Runs after the ban gate so the pin can override any default pick. Skips
   // when force_model is set (QA wins).
-  if (!force_model && policyMode !== 'on') {
+  if (!force_model && policyMode !== 'on' && !looksPath) {
     const pin = NIGHTLY_PINNED_MODELS_BY_MEDIUM[resolvedMediumKey || ''];
     if (pin && pickedModel !== pin) {
       console.log(
@@ -3555,6 +3666,20 @@ Output ONLY the prompt.`;
                     }
                   }
                   // Attempt 2+ switches to a model that differs from attempt 1 (never faceless).
+                  let rebuildFragment = soloFallbackCtx ? soloFallbackCtx.realMediumFragment : '';
+                  if (styleContract && activeStyle) {
+                    const pick = styleContract.forRebuild();
+                    rebuildModel = pick.model;
+                    rebuildFragment = pick.fragment;
+                    activeStyle = {
+                      ...activeStyle,
+                      model: pick.model,
+                      lookKey: pick.look.key,
+                      fragment: pick.fragment,
+                    };
+                    if (pick.look.key !== resolvedMediumKey) resolvedMediumKey = pick.look.key;
+                    fallbackReasons.push(...pick.stamps);
+                  }
                   if (rebuildAttempt >= 2) {
                     const retryModel = soloRebuildModelFor({
                       attempt: rebuildAttempt,
@@ -3574,7 +3699,7 @@ Output ONLY the prompt.`;
                   const soloPrompt = soloFallbackCtx
                     ? assembleSoloFallbackFromDual(
                         soloFallbackCtx.dualSlots,
-                        soloRebuildInput(soloFallbackCtx.input, soloFallbackCtx.realMediumFragment),
+                        soloRebuildInput(soloFallbackCtx.input, rebuildFragment),
                         soloFallbackCtx.selfIndex
                       )
                     : `exactly one person, a solo portrait of a single ${soloNoun} alone, ${finalPrompt}`;
@@ -3583,6 +3708,7 @@ Output ONLY the prompt.`;
                       ? `solo_fallback:rebuilt_solo:${rebuildModel.replace(/^.*\//, '')}`
                       : 'solo_fallback:legacy_prefix'
                   );
+                  if (styleContract && soloFallbackCtx) finalPrompt = soloPrompt; // honesty: persist what rendered
                   const rr = await generateImage(
                     'flux-dev',
                     soloPrompt,
@@ -3629,7 +3755,27 @@ Output ONLY the prompt.`;
             // the same model again (legacy). NOTE: model_used attribution for a retry that shipped on a
             // different model lands with the fallback rows (Phase 4, NIGHTLY_MODEL_POLICY_PLAN.md).
             let rerenderModel = pickedModel;
-            if (modelPolicy) {
+            if (styleContract && activeStyle) {
+              const pick = styleContract.forAttempt(attempt + 1);
+              const r = retryPromptFor(finalPrompt, activeStyle, pick);
+              finalPrompt = r.prompt;
+              activeStyle = r.active;
+              fallbackReasons.push(...r.stamps);
+              rerenderModel = pick.model;
+              if (pick.model !== pickedModel) modelUsedOverride = pick.model;
+              if (pick.look.key !== resolvedMediumKey) resolvedMediumKey = pick.look.key;
+              if (attempt >= 2 && castSlotsCtx) {
+                const soft = afterScenePrompt(castSlotsCtx.slots, {
+                  ...castSlotsCtx.input,
+                  mediumFluxFragment: activeStyle.fragment,
+                });
+                if (soft) {
+                  finalPrompt = soft;
+                  activeStyle = { ...activeStyle, vibePosition: 'after_scene' };
+                  fallbackReasons.push('vibe_retry:after_scene');
+                }
+              }
+            } else if (modelPolicy) {
               const pick = resolveModel({
                 surface: 'couple',
                 attempt: attempt + 1,
@@ -3718,6 +3864,17 @@ Output ONLY the prompt.`;
             // generate-dream twin). Subject-count only, never the scene.
             const soloNoun =
               faceSwapGender === 'female' ? 'woman' : faceSwapGender === 'male' ? 'man' : 'person';
+            if (styleContract && activeStyle && castSlotsCtx) {
+              const soft = afterScenePrompt(castSlotsCtx.slots, {
+                ...castSlotsCtx.input,
+                mediumFluxFragment: activeStyle.fragment,
+              });
+              if (soft) {
+                finalPrompt = soft;
+                activeStyle = { ...activeStyle, vibePosition: 'after_scene' };
+                fallbackReasons.push('vibe_retry:after_scene');
+              }
+            }
             const rr = await generateImage(
               'flux-dev',
               `exactly one person, a solo portrait of a single ${soloNoun} alone, ${finalPrompt}`,
@@ -4299,6 +4456,10 @@ Output ONLY the prompt.`;
     // Pre-generated log-row id so upload_id can be backfilled onto exactly
     // this row once the uploads insert returns (audit find: upload_id was
     // never set — forensics couldn't join log ↔ upload on job-less renders).
+    if (activeStyle)
+      fallbackReasons.push(
+        ...assertStyleHonesty(finalPrompt, modelUsedOverride ?? pickedModel, activeStyle)
+      );
     const genLogId = crypto.randomUUID();
     const persistPromise = outBuf
       ? persistBufferToStorage(outBuf, userId, supabase)

@@ -148,6 +148,26 @@ describe('look-neutral solo framing', () => {
     expect(p).toContain('a relaxed warm editorial photograph');
     expect(p).toContain('photographic realism, filmic colour');
   });
+  it('lookNeutralFraming also drops the solo person-line prior and the couple framing prior, and tells Sonnet the LOOK', () => {
+    const solo = assembleCharacterPrompt(soloSlots, base({ lookNeutralFraming: true }));
+    expect(solo).toContain('the clear subject of the scene');
+    expect(solo).not.toContain('candid cinematic photograph');
+    const couple = assembleCharacterPrompt(
+      dualSlots,
+      base({ cast: [SELF, PLUS_ONE], lookNeutralFraming: true })
+    );
+    expect(couple).not.toContain('cinematic photograph');
+    expect(couple).not.toContain('filmic colour grade');
+    expect(couple).toContain('rendered in the same medium and finish as the scene');
+    const legacyCouple = assembleCharacterPrompt(dualSlots, base({ cast: [SELF, PLUS_ONE] }));
+    expect(legacyCouple).toContain('an editorial cinematic photograph feel');
+    const brief = buildSlotBrief(base({ lookNeutralFraming: true }));
+    expect(brief).toContain(
+      'LOOK (the medium this scene will be rendered in): polished digital painting with lifelike adult faces'
+    );
+    expect(brief).toContain('as THIS medium would depict them');
+    expect(buildSlotBrief(base())).not.toContain('LOOK (the medium');
+  });
   it('lookNeutralFraming drops the photo prior and keeps the integration + breadth clauses', () => {
     const p = assembleCharacterPrompt(soloSlots, base({ lookNeutralFraming: true }));
     expect(p).not.toContain('editorial photograph');

@@ -14,6 +14,9 @@ import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.
 import { parsePolicyMode, type ModelPolicyMode } from './nightlyModelPolicy.ts';
 import { DEFAULT_RELATIONSHIP_WORDS, DEFAULT_PET_WORDS } from './selfInsertDetector.ts';
 
+/** Nightly LOOKS path mode (mig 502): 'off' = legacy chain, 'shadow' = legacy + style_shadow stamps, 'on' = the contract decides. */
+export type NightlyLooksMode = 'off' | 'shadow' | 'on';
+
 export interface EngineConfig {
   baseSparkleCost: number;
   welcomeSparkleBonus: number;
@@ -123,7 +126,7 @@ export interface EngineConfig {
   modelPolicyMode: ModelPolicyMode;
   /** Nightly LOOKS path (mig 502, NIGHTLY_LOOKS_REFACTOR_PLAN.md): 'off' = legacy medium chain, 'shadow' =
    *  legacy renders + `style_shadow:` stamps, 'on' = the style contract decides model + look. */
-  nightlyLooksMode: 'off' | 'shadow' | 'on';
+  nightlyLooksMode: NightlyLooksMode;
   /** Per-user recency window over look keys for the looks roll (default 7). */
   nightlyLookRecency: number;
   /** Couple prompt order (mig 470, characterSlotPrompt.ts): 'legacy' | 'subject_first'. */

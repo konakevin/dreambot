@@ -594,7 +594,14 @@ export function buildSlotBrief(input: CharacterSlotPipelineInput): string {
 
   const sharedScene = `LOCATION (scene_description MUST depict this): ${location}
 
-ATMOSPHERIC CONDITIONS (weave into scene_description, do NOT contradict):
+${
+  input.lookNeutralFraming
+    ? `LOOK (the medium this scene will be rendered in): ${input.mediumFluxFragment}
+Write scene_description, wardrobe and props as THIS medium would depict them — a print names printed textures and inks, a painting names brushwork and pigment, a comic names its line and color, a film still names its stock. Use no camera, lens, photo, photograph, snapshot, flash or editorial words unless the LOOK itself is photographic.
+
+`
+    : ''
+}ATMOSPHERIC CONDITIONS (weave into scene_description, do NOT contradict):
 - TIME: ${input.timeAxis}
 - WEATHER: ${input.weatherAxis}
 - PHENOMENON: ${input.phenomenaAxis}
@@ -917,8 +924,9 @@ export function assembleCharacterPrompt(
     // clearly VISIBLE, LARGE and roughly toward camera — a natural three-quarter
     // angle satisfies that (proven by Kevin's hearted Create renders). So frame it
     // as a candid, cinematic subject instead of a posed ID-photo.
-    const singleAnchor =
-      'ONE person alone in the scene, the only person in the image, the clear subject of a candid cinematic photograph, face clearly visible and turned naturally toward the viewer at an easy three-quarter angle';
+    const singleAnchor = input.lookNeutralFraming
+      ? 'ONE person alone in the scene, the only person in the image, the clear subject of the scene, face clearly visible and turned naturally toward the viewer at an easy three-quarter angle'
+      : 'ONE person alone in the scene, the only person in the image, the clear subject of a candid cinematic photograph, face clearly visible and turned naturally toward the viewer at an easy three-quarter angle';
 
     // Framing — single doesn't need the L/R clear-gap line. Stage 5c presets
     // trade face size for composition freedom; the classic waist-up stays the
@@ -1082,7 +1090,9 @@ export function assembleCharacterPrompt(
     // Detail-not-size background cue (2026-09-02): the visible setting must be
     // specific and recognizable, never a blank sky/wall. SIZE/dominance cues
     // remain forbidden (2026-06-19 hard rule) — this asks for DETAIL only.
-    'naturally lit by the scene with soft rim light and ambient colour from the environment, an editorial cinematic photograph feel rather than a stiff studio couple portrait, filmic colour grade, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, never a blank wall or featureless sky behind the couple, any visible sky alive with colour, cloud form, or weather — never flat white',
+    input.lookNeutralFraming
+      ? 'naturally lit by the scene with soft rim light and ambient colour from the environment, a natural candid feel rather than a stiff studio couple portrait, rendered in the same medium and finish as the scene, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, never a blank wall or featureless sky behind the couple, any visible sky alive with colour, cloud form, or weather — never flat white'
+      : 'naturally lit by the scene with soft rim light and ambient colour from the environment, an editorial cinematic photograph feel rather than a stiff studio couple portrait, filmic colour grade, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, never a blank wall or featureless sky behind the couple, any visible sky alive with colour, cloud form, or weather — never flat white',
     'a clear gap between their two heads, faces apart and not touching, each head on its own side of the frame, not cheek to cheek, heads not leaning together',
     // Omitted for a height-contrast stance (one seated, one standing) — dualStances.ts.
     ...(input.dualStance && input.dualStance.heightContrast
