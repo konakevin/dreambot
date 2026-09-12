@@ -24,6 +24,8 @@
     "__tests__/lib/nightlyModelPolicy.equivalence.test.ts",
     "__tests__/lib/couplePromptStyle.test.ts",
     "__tests__/lib/parityQaFlags.test.ts",
+
+    "__tests__/lib/nightlyLooks.test.ts",
     "__tests__/lib/soloRebuildModel.test.ts",
     "__tests__/lib/holidayDayOf.test.ts",
     "__tests__/lib/holidayCostumes.test.ts",

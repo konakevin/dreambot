@@ -100,6 +100,12 @@ equal shares (or `engine_config.nightly_family_mix`) among families that have �
 surface), then a look inside it by `weight`, then applies per-user recency over look keys. Registry §5b holds the
 Create-day consolidation shortlist.
 
+> **Built 2026-09-12:** `_shared/nightlyLooks.ts` — `resolveLook({surface, model, looks, approvals, recentLookKeys,
+> recencyWindow, familyMix, forcedLook, rng})` — pure, locked by `__tests__/lib/nightlyLooks.test.ts` (equal family
+> shares regardless of cluster size, familyMix + look weights, recency with the never-empty floor, approvals filter
+> per model × surface, force_look short-circuit, null when nothing is approved). `dream_mediums.nightly_family` tagged
+> on all 43 rows (mig 499). NOT yet called by the render — Phase 2 wires it behind `nightly_looks_mode`.
+
 **Precedence (one table, one place):** `force_look` (QA) → day-of look set → holiday-scene pin → scenario pin →
 catalog roll(surface, model, recency, bans, allow-list). A pin that names an unknown/inactive look falls to the
 roll and stamps `look_pin_unknown:<key>` (fail open, never faceless).
