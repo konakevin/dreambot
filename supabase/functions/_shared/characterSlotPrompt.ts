@@ -1187,7 +1187,7 @@ export function assembleCharacterPrompt(
     // sentence so the scene is never a separate leading clause the model can turn into a landscape.
     const place = location || '';
     const compactAnchor = `two people ${seatedStance ? 'seated' : 'standing'} side by side ${
-      input.lookNeutralFraming
+      input.richBrief
         ? 'from the knees up in a three-quarter length composition with generous open space around them showing the scene'
         : closer
           ? 'from the waist up'

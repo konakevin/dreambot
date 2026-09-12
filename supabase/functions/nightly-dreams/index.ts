@@ -334,6 +334,7 @@ Deno.serve(async (req) => {
     force_season_month,
     force_vibe,
     force_looks_path,
+    force_rich_brief,
     force_nightly_path,
     force_model,
     force_female_hair_pct,
@@ -2619,7 +2620,8 @@ Deno.serve(async (req) => {
           ...(looksPath
             ? looksSlotInputFields(
                 { vibeFragment: looksVibeFragment, vibePosition: looksVibePosition },
-                dualSpecialScene ? (dualSpecialLighting ?? null) : null
+                dualSpecialScene ? (dualSpecialLighting ?? null) : null,
+                force_rich_brief
               )
             : {}),
         };

@@ -160,7 +160,10 @@ export function applyStyleContract(
  *  authored lighting keeps its slot. */
 export function looksSlotInputFields(
   o: Pick<StyleOverrides, 'vibeFragment' | 'vibePosition'>,
-  specialSceneLighting: string | null
+  specialSceneLighting: string | null,
+  /** QA `force_rich_brief` (2026-09-12: parked by Kevin, off by default): the SET DRESSER + COSTUME DESIGNER brief,
+   *  knees-up couples and no closer roll. Off = the engine's own brief and framing, with only looks + vibes on top. */
+  richBrief = false
 ): Pick<
   CharacterSlotPipelineInput,
   | 'timeAxis'
@@ -179,9 +182,7 @@ export function looksSlotInputFields(
     vibeFragment: o.vibeFragment,
     vibeFragmentPosition: o.vibePosition,
     lookNeutralFraming: true,
-    richBrief: true,
-    // never the closer waist-up crop on the looks path: the scene must show
-    dualComposition: null,
+    ...(richBrief ? { richBrief: true, dualComposition: null } : {}),
   };
 }
 

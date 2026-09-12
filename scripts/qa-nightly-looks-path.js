@@ -84,6 +84,7 @@ async function renderOne(surface, n) {
           force_cast_role: surface === 'couple' ? 'dual' : 'self',
           force_face_swap_eligible: true,
         }),
+    ...(ARGS.rich ? { force_rich_brief: true } : {}),
     ...(ARGS.model ? { force_model: String(ARGS.model) } : {}),
     ...(ARGS.look ? { force_look: String(ARGS.look) } : {}),
     ...(ARGS.vibe ? { force_vibe: String(ARGS.vibe) } : {}),

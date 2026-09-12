@@ -195,9 +195,13 @@ describe('slot input fields, retry, after-scene, honesty, shadow', () => {
       vibeFragment: 'x accent',
       vibeFragmentPosition: 'early',
       lookNeutralFraming: true,
-      richBrief: true,
-      dualComposition: null,
     });
+    const rich = looksSlotInputFields(
+      { vibeFragment: 'x accent', vibePosition: 'early' },
+      null,
+      true
+    );
+    expect(rich).toMatchObject({ richBrief: true, dualComposition: null });
     expect(
       looksSlotInputFields({ vibeFragment: null, vibePosition: null }, 'candlelit special lighting')
         .timeAxis
