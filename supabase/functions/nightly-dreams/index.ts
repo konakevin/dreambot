@@ -2518,6 +2518,19 @@ Deno.serve(async (req) => {
         if (costumePicks) fallbackReasons.push(costumeStamp(costumePicks));
         // Captured into a named var (not passed inline) so a later dual-swap
         // failure can rebuild a SOLO prompt for self from the very same input.
+        // Looks path: the vibe fragment, blank axes, look-neutral framing, the rich brief and the FRAME ROLL
+        // (frame:<surface>:<key> stamped). Null on the legacy path.
+        const looksFields = looksPath
+          ? looksSlotInputFields(
+              { vibeFragment: looksVibeFragment, vibePosition: looksVibePosition },
+              dualSpecialScene ? (dualSpecialLighting ?? null) : null,
+              !force_plain_brief,
+              selectedCast.length === 2 ? 'couple' : 'solo',
+              Math.random,
+              { timeAxis, weatherAxis, phenomenaAxis }
+            )
+          : null;
+        if (looksFields) fallbackReasons.push(looksFields.frameStamp);
         const slotInput: CharacterSlotPipelineInput = {
           cast: resolvedCast.map((rc, i) => ({
             role: rc.role,
@@ -2623,13 +2636,7 @@ Deno.serve(async (req) => {
                   return null;
                 })()))
               : null,
-          ...(looksPath
-            ? looksSlotInputFields(
-                { vibeFragment: looksVibeFragment, vibePosition: looksVibePosition },
-                dualSpecialScene ? (dualSpecialLighting ?? null) : null,
-                !force_plain_brief
-              )
-            : {}),
+          ...(looksFields ?? {}),
         };
         // Parity QA (COUPLE_PROMPT_PARITY_PLAN.md §2): a forced slot INPUT + forced Sonnet SLOTS make
         // the prompt a pure function of (input, slots, promptStyle) — the paired A/B differs only in order.

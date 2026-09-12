@@ -8,6 +8,9 @@ import {
   looksModeFor,
   looksPathBans,
   looksSlotInputFields,
+  frameFields,
+  rollFrame,
+  FRAME_WEIGHTS,
   provisionalLooksMedium,
   retryPromptFor,
   shadowStamp,
@@ -187,30 +190,37 @@ describe('applyStyleContract', () => {
 });
 
 describe('slot input fields, retry, after-scene, honesty, shadow', () => {
-  it('axes go blank (the vibe owns the light) unless a special scene authored its lighting; neutral framing on', () => {
-    const f = looksSlotInputFields({ vibeFragment: 'x accent', vibePosition: 'early' }, null);
-    expect(f).toEqual({
+  it('axes go blank (the vibe owns the light) unless a special scene authored its lighting; neutral framing on; the frame is rolled', () => {
+    const f = looksSlotInputFields(
+      { vibeFragment: 'x accent', vibePosition: 'early' },
+      null,
+      true,
+      'solo',
+      () => 0.01
+    );
+    expect(f).toMatchObject({
       timeAxis: '',
       weatherAxis: '',
       phenomenaAxis: '',
       vibeFragment: 'x accent',
       vibeFragmentPosition: 'early',
       lookNeutralFraming: true,
-      wideFraming: true,
-      soloComposition: 'three_quarter',
-      dualComposition: null,
       richBrief: true,
     });
-    const rich = looksSlotInputFields(
-      { vibeFragment: 'x accent', vibePosition: 'early' },
-      null,
-      true
-    );
-    expect(rich).toMatchObject({ richBrief: true, dualComposition: null, wideFraming: true });
+    expect(f.frameStamp).toMatch(/^frame:solo:/);
     expect(
       looksSlotInputFields({ vibeFragment: null, vibePosition: null }, 'candlelit special lighting')
         .timeAxis
     ).toBe('candlelit special lighting');
+    const plain = looksSlotInputFields(
+      { vibeFragment: 'x accent', vibePosition: 'early' },
+      null,
+      false,
+      'couple',
+      () => 0.01
+    );
+    expect(plain).not.toHaveProperty('richBrief');
+    expect(plain.frameStamp).toMatch(/^frame:couple:/);
   });
   it('retryPromptFor swaps the look fragment when the fallback model re-rolled the look; no-op for the same look', () => {
     const c = contractFor('couple');
@@ -371,5 +381,88 @@ describe('looksPathBans', () => {
     expect(bans.has('openai/gpt-image-2')).toBe(true);
     expect(bans.has('black-forest-labs/flux-2-dev')).toBe(true);
     expect(bans.has('xai/grok-imagine-image')).toBe(true); // day-of ban survives
+  });
+});
+
+describe('frame roll (solos and couples both vary)', () => {
+  it('rolls every frame for both surfaces over the weights, and each frame maps to the right slot fields', () => {
+    const seq = (n: number) => () => (n % 100) / 100;
+    const solos = new Set(Array.from({ length: 100 }, (_, i) => rollFrame('solo', seq(i))));
+    const couples = new Set(Array.from({ length: 100 }, (_, i) => rollFrame('couple', seq(i))));
+    expect([...solos].sort()).toEqual(FRAME_WEIGHTS.solo.map((r) => r.key).sort());
+    expect([...couples].sort()).toEqual(FRAME_WEIGHTS.couple.map((r) => r.key).sort());
+    // solo: enviro_wide first 25%, three_quarter next 45%, waist_up last 30%
+    expect(frameFields('solo', () => 0.1)).toMatchObject({
+      soloComposition: 'enviro_wide',
+      frameInterest: 'wide',
+      frameStamp: 'frame:solo:enviro_wide',
+    });
+    expect(frameFields('solo', () => 0.5)).toMatchObject({
+      soloComposition: 'three_quarter',
+      frameInterest: 'wide',
+    });
+    expect(frameFields('solo', () => 0.9)).toMatchObject({
+      soloComposition: 'waist_up',
+      frameInterest: 'close',
+      frameStamp: 'frame:solo:waist_up',
+    });
+    // couple: full_figure 15%, knees_up 40%, mid_thigh 15%, waist_up 30%
+    expect(frameFields('couple', () => 0.05)).toMatchObject({
+      wideFraming: true,
+      dualComposition: 'full_figure',
+      frameInterest: 'wide',
+      frameStamp: 'frame:couple:full_figure',
+    });
+    expect(frameFields('couple', () => 0.3)).toMatchObject({
+      wideFraming: true,
+      dualComposition: null,
+      frameInterest: 'wide',
+      frameStamp: 'frame:couple:knees_up',
+    });
+    expect(frameFields('couple', () => 0.62)).toMatchObject({
+      wideFraming: false,
+      dualComposition: null,
+      frameInterest: 'wide',
+      frameStamp: 'frame:couple:mid_thigh',
+    });
+    expect(frameFields('couple', () => 0.9)).toMatchObject({
+      wideFraming: false,
+      dualComposition: 'waist_up',
+      frameInterest: 'close',
+      frameStamp: 'frame:couple:waist_up',
+    });
+  });
+});
+
+describe('subtle vibes keep the engine atmosphere axes', () => {
+  it('a vibe with a fragment blanks the axes; a vibe without one keeps them; special-scene lighting still wins', () => {
+    const axes = { timeAxis: 'blue hour', weatherAxis: 'light rain', phenomenaAxis: 'sea mist' };
+    const bold = looksSlotInputFields(
+      { vibeFragment: 'x accent', vibePosition: 'early' },
+      null,
+      true,
+      'solo',
+      () => 0.5,
+      axes
+    );
+    expect(bold).toMatchObject({ timeAxis: '', weatherAxis: '', phenomenaAxis: '' });
+    const subtle = looksSlotInputFields(
+      { vibeFragment: null, vibePosition: null },
+      null,
+      true,
+      'solo',
+      () => 0.5,
+      axes
+    );
+    expect(subtle).toMatchObject(axes);
+    const special = looksSlotInputFields(
+      { vibeFragment: null, vibePosition: null },
+      'candlelit',
+      true,
+      'solo',
+      () => 0.5,
+      axes
+    );
+    expect(special).toMatchObject({ timeAxis: 'candlelit', weatherAxis: 'light rain' });
   });
 });

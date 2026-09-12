@@ -180,13 +180,91 @@ export function applyStyleContract(
  *  verbatim at its version's position, the framing loses its photography priors and its closer crop, and Sonnet
  *  gets the SET DRESSER + COSTUME DESIGNER brief. A special scene's
  *  authored lighting keeps its slot. */
+/**
+ * FRAME ROLL (2026-09-12, Kevin: "i want both the full body shots with more scenery, but knee or waist up is still
+ * desired as long as there is enough in the scene … we don't want regular portrait or headshot type renders").
+ * Weights are per-surface; a 'close' frame carries frameInterest so the set dresser dresses the near field.
+ * One place to edit; move to engine_config when the spread is settled.
+ */
+export const FRAME_WEIGHTS = {
+  solo: [
+    { key: 'enviro_wide', weight: 25 },
+    { key: 'three_quarter', weight: 45 },
+    { key: 'waist_up', weight: 30 },
+  ],
+  couple: [
+    { key: 'full_figure', weight: 15 },
+    { key: 'knees_up', weight: 40 },
+    { key: 'mid_thigh', weight: 15 },
+    { key: 'waist_up', weight: 30 },
+  ],
+} as const;
+export type SoloFrame = (typeof FRAME_WEIGHTS.solo)[number]['key'];
+export type CoupleFrame = (typeof FRAME_WEIGHTS.couple)[number]['key'];
+
+function rollWeighted<T extends { key: string; weight: number }>(
+  rows: readonly T[],
+  rng: () => number
+): T['key'] {
+  const total = rows.reduce((a, r) => a + r.weight, 0);
+  let x = rng() * total;
+  for (const r of rows) {
+    x -= r.weight;
+    if (x < 0) return r.key;
+  }
+  return rows[rows.length - 1].key;
+}
+
+export function rollFrame(
+  surface: 'solo' | 'couple',
+  rng: () => number = Math.random
+): SoloFrame | CoupleFrame {
+  return surface === 'solo'
+    ? rollWeighted(FRAME_WEIGHTS.solo, rng)
+    : rollWeighted(FRAME_WEIGHTS.couple, rng);
+}
+
+/** The rolled frame as slot-input fields + its stamp. Wide stances (dualStances.ts DUAL_STANCES_WIDE) still roll
+ *  for every couple frame: a closer crop then shows the upper half of a whole-body pose, not a torso pose. */
+export function frameFields(
+  surface: 'solo' | 'couple',
+  rng: () => number
+): Pick<
+  CharacterSlotPipelineInput,
+  'wideFraming' | 'soloComposition' | 'dualComposition' | 'frameInterest'
+> & { frameStamp: string } {
+  const f = rollFrame(surface, rng);
+  if (surface === 'solo') {
+    return {
+      wideFraming: true,
+      soloComposition: f as SoloFrame,
+      dualComposition: null,
+      frameInterest: f === 'waist_up' ? 'close' : 'wide',
+      frameStamp: `frame:solo:${f}`,
+    };
+  }
+  return {
+    wideFraming: f === 'knees_up' || f === 'full_figure',
+    soloComposition: null,
+    dualComposition: f === 'waist_up' ? 'waist_up' : f === 'full_figure' ? 'full_figure' : null,
+    frameInterest: f === 'waist_up' ? 'close' : 'wide',
+    frameStamp: `frame:couple:${f}`,
+  };
+}
+
 export function looksSlotInputFields(
   o: Pick<StyleOverrides, 'vibeFragment' | 'vibePosition'>,
   specialSceneLighting: string | null,
   /** The SET DRESSER + COSTUME DESIGNER brief: ON by default on the looks path (2026-09-12, Kevin: "it would be
    *  amazing to have more lush set pieces that add to the scene"); it dresses the ROLLED place with concrete named
    *  things and never touches the pools or the pose. QA `force_plain_brief` turns it off for an A/B. */
-  richBrief = true
+  richBrief = true,
+  surface: 'solo' | 'couple' = 'solo',
+  rng: () => number = Math.random,
+  /** The engine's own rolled atmosphere axes. A vibe WITH a fragment owns the light (axes blank); a vibe with no
+   *  fragment (the "subtle" versions) keeps them, so a render is never left with no light instruction at all
+   *  (2026-09-12 comparison against 1.2.0: this was a real loss on the looks path). */
+  legacyAxes: { timeAxis: string; weatherAxis: string; phenomenaAxis: string } | null = null
 ): Pick<
   CharacterSlotPipelineInput,
   | 'timeAxis'
@@ -199,21 +277,17 @@ export function looksSlotInputFields(
   | 'dualComposition'
   | 'soloComposition'
   | 'wideFraming'
-> {
+  | 'frameInterest'
+> & { frameStamp: string } {
+  const keepAxes = !o.vibeFragment && legacyAxes;
   return {
-    timeAxis: specialSceneLighting ?? '',
-    weatherAxis: '',
-    phenomenaAxis: '',
+    timeAxis: specialSceneLighting ?? (keepAxes ? legacyAxes.timeAxis : ''),
+    weatherAxis: keepAxes ? legacyAxes.weatherAxis : '',
+    phenomenaAxis: keepAxes ? legacyAxes.phenomenaAxis : '',
     vibeFragment: o.vibeFragment,
     vibeFragmentPosition: o.vibePosition,
     lookNeutralFraming: true,
-    // WIDE FRAMING (2026-09-12): the legacy pose pools describe torsos ("arms folded across the chest", "leaning
-    // back", "perched on an edge") and the wider presets only fire on a percentage roll, so 9 of 10 natural renders
-    // came out waist-up or tighter. On the looks path the presets are pinned: solos knees-up three-quarter, couples
-    // knees-up with open space and never the closer waist-up crop.
-    wideFraming: true,
-    soloComposition: 'three_quarter',
-    dualComposition: null,
+    ...frameFields(surface, rng),
     ...(richBrief ? { richBrief: true } : {}),
   };
 }

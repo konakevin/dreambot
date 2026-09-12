@@ -197,35 +197,35 @@ describe('SET DRESSER + COSTUME DESIGNER brief (richBrief) and knees-up couples'
     expect(richDual).toContain('left_wardrobe (18-28 words)');
     expect(richDual).toContain('a DIFFERENT complete outfit that pairs with LEFT');
   });
-  it('wideFraming alone (looks path) frames couples knees-up with open space', () => {
+  it('wideFraming frames couples knees-up with open space; a rolled waist-up frame is honored with the near-field cue', () => {
     const p = assembleCharacterPrompt(
       dualSlots,
-      base({
-        cast: [SELF, PLUS_ONE],
-        promptStyle: 'subject_first',
-        wideFraming: true,
-        dualComposition: 'waist_up',
-      })
+      base({ cast: [SELF, PLUS_ONE], promptStyle: 'subject_first', wideFraming: true })
     );
     expect(p).toContain(
       'from the knees up in a three-quarter length composition with generous open space around them showing the scene'
     );
     expect(p).not.toContain('from mid-thigh up');
-  });
-  it('couples with the rich brief are framed knees-up with open space, and the closer crop is ignored', () => {
-    const p = assembleCharacterPrompt(
+    const close = assembleCharacterPrompt(
       dualSlots,
       base({
         cast: [SELF, PLUS_ONE],
         promptStyle: 'subject_first',
-        richBrief: true,
         dualComposition: 'waist_up',
+        frameInterest: 'close',
       })
+    );
+    expect(close).toContain('from the waist up');
+    expect(close).not.toContain('from the knees up');
+  });
+  it('couples with the rich brief and no closer roll are framed knees-up; legacy stays mid-thigh', () => {
+    const p = assembleCharacterPrompt(
+      dualSlots,
+      base({ cast: [SELF, PLUS_ONE], promptStyle: 'subject_first', richBrief: true })
     );
     expect(p).toContain(
       'from the knees up in a three-quarter length composition with generous open space around them showing the scene'
     );
-    expect(p).not.toContain('from the waist up');
     const legacy = assembleCharacterPrompt(
       dualSlots,
       base({ cast: [SELF, PLUS_ONE], promptStyle: 'subject_first' })
@@ -253,6 +253,56 @@ describe('wideFraming brief (looks path): full-figure stills replace the torso s
       'weight on one hip, hands in pockets, leaning on something, arms folded'
     );
     expect(legacy).not.toContain('FULL-FIGURE');
+  });
+});
+
+describe('frame presets: waist-up solo, closer couple, and the closer-frame set-dresser rule', () => {
+  it('a waist-up solo frame dresses the near field; a closer couple frame says the costumes carry the shot', () => {
+    const solo = assembleCharacterPrompt(
+      soloSlots,
+      base({ lookNeutralFraming: true, soloComposition: 'waist_up', frameInterest: 'close' })
+    );
+    expect(solo).toContain("shown from the waist up, the dressed set within arm's reach");
+    expect(solo).not.toContain('shown from the knees up');
+    const couple = assembleCharacterPrompt(
+      dualSlots,
+      base({
+        cast: [SELF, PLUS_ONE],
+        promptStyle: 'subject_first',
+        dualComposition: 'waist_up',
+        frameInterest: 'close',
+      })
+    );
+    expect(couple).toContain(
+      "from the waist up, the dressed set within arm's reach beside and behind them and their costumes carrying the shot"
+    );
+    const legacyCloser = assembleCharacterPrompt(
+      dualSlots,
+      base({ cast: [SELF, PLUS_ONE], promptStyle: 'subject_first', dualComposition: 'waist_up' })
+    );
+    expect(legacyCloser).toContain('side by side from the waist up at');
+    expect(legacyCloser).not.toContain("arm's reach");
+    const brief = buildSlotBrief(base({ richBrief: true, frameInterest: 'close' }));
+    expect(brief).toContain('THIS IS A CLOSER FRAME (waist up)');
+    expect(buildSlotBrief(base({ richBrief: true }))).not.toContain('CLOSER FRAME');
+  });
+});
+
+describe('full-figure couple frame', () => {
+  it('anchors the couple head to shoes in the foreground of the scene', () => {
+    const p = assembleCharacterPrompt(
+      dualSlots,
+      base({
+        cast: [SELF, PLUS_ONE],
+        promptStyle: 'subject_first',
+        dualComposition: 'full_figure',
+        wideFraming: true,
+      })
+    );
+    expect(p).toContain(
+      'with full figures visible from head to shoes, standing prominent in the foreground of the scene'
+    );
+    expect(p).not.toContain('from the knees up');
   });
 });
 

@@ -217,6 +217,7 @@ async function renderOne(surface, n) {
     look_family: stampVal(stamps, 'look_family:'),
     vibe: vibeKey,
     vibe_family: stampVal(stamps, 'vibe_family:'),
+    frame: stampVal(stamps, 'frame:'),
     vibe_version: stampVal(stamps, 'vibe_version:'),
     identity_sims: sims,
     degraded,
@@ -253,7 +254,7 @@ function buildHtml(report) {
       const sim = r.identity_sims.map((x) => x.toFixed(2)).join('/') || '—';
       return `<section class="card"><header><h2>${esc(r.surface)} #${r.n}</h2><code>${esc((r.model_used || '').replace(/^.*\//, ''))} · ${esc(r.look)} (${esc(r.look_family)}) · ${esc(r.vibe)} (${esc(r.vibe_family)}${r.vibe_version ? ' · ' + esc(r.vibe_version) : ''})</code></header>
 <a href="${esc(r.image_url)}" target="_blank"><img src="${esc(r.image_url)}" loading="lazy"></a>
-<div class="meta">${r.composer === 'legacy-priors' ? '<b class="bad">composer: legacy photo priors</b>' : '<span class="ok">composer: look-neutral</span>'} · ${r.brief === 'set-dresser' ? '<span class="ok">brief: set dresser</span>' : '<b class="bad">brief: legacy</b>'} · id ${sim} · ${r.degraded ? '<b class="bad">degraded</b>' : '<span class="ok">clean</span>'} · ${esc(r.face_swap_result || '')} · ${r.elapsed_s}s</div>
+<div class="meta">${r.frame ? `<span class="ok">frame ${esc(r.frame)}</span> · ` : ''}${r.composer === 'legacy-priors' ? '<b class="bad">composer: legacy photo priors</b>' : '<span class="ok">composer: look-neutral</span>'} · ${r.brief === 'set-dresser' ? '<span class="ok">brief: set dresser</span>' : '<b class="bad">brief: legacy</b>'} · id ${sim} · ${r.degraded ? '<b class="bad">degraded</b>' : '<span class="ok">clean</span>'} · ${esc(r.face_swap_result || '')} · ${r.elapsed_s}s</div>
 <div class="checks">${badge(c.looks_path_on, 'looks path')} ${badge(c.look_fragment_in_prompt, 'look fragment')} ${badge(c.vibe_fragment_in_prompt, 'vibe fragment')} ${badge(c.no_photo_prior, 'no photo prior')} ${badge(c.no_violation, 'honest')}</div>
 <details><summary>stamps</summary><p>${esc(r.stamps.join(' · '))}</p></details><details><summary>prompt</summary><p>${esc(r.prompt)}</p></details></section>`;
     })
@@ -301,8 +302,9 @@ async function main() {
   const models = hist('model_used');
   const lookFams = hist('look_family');
   const vibeFams = hist('vibe_family');
+  const frames = hist('frame');
   console.log(
-    `models: ${JSON.stringify(models)} · look families: ${JSON.stringify(lookFams)} · vibe families: ${JSON.stringify(vibeFams)}`
+    `models: ${JSON.stringify(models)} · look families: ${JSON.stringify(lookFams)} · vibe families: ${JSON.stringify(vibeFams)} · frames: ${JSON.stringify(frames)}`
   );
   if (!LEGACY && ok.length >= 8 && Object.keys(models).length < 2)
     console.log(

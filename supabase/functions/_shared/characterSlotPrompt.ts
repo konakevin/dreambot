@@ -122,7 +122,7 @@ export interface CharacterSlotPipelineInput {
   /** COUPLE framing preset (2026-09-06 variance): 'waist_up' = the closer two-shot that used to appear
    *  at random (faces larger, swap-friendlier); null/'three_quarter' = the knees-up default. Gated by
    *  engine_config.dual_closer_pct upstream. Solo renders ignore it. */
-  dualComposition?: 'three_quarter' | 'waist_up' | null;
+  dualComposition?: 'three_quarter' | 'waist_up' | 'full_figure' | null;
   /** COUPLE stance flags (dualStances.ts): seated → the anchor stops saying "stand"; heightContrast →
    *  the "same vertical height" line is omitted (one seated, one standing). */
   dualStance?: { seated?: boolean; heightContrast?: boolean } | null;
@@ -166,7 +166,10 @@ export interface CharacterSlotPipelineInput {
    *  gated upstream by engine_config.single_composition_expanded_pct. The
    *  Stage-8 identity gates (restore + post-swap verify) are what make the
    *  smaller-face presets safe to ship. */
-  soloComposition?: 'three_quarter' | 'enviro_wide' | null;
+  soloComposition?: 'three_quarter' | 'enviro_wide' | 'waist_up' | null;
+  /** FRAME ROLL (looks path, 2026-09-12): 'close' frames (waist up) tell the SET DRESSER to put the interest
+   *  within arm's reach so a closer frame is never a plain portrait; 'wide' = full or three-quarter. */
+  frameInterest?: 'wide' | 'close' | null;
   /** NIGHTLY female-hairstyle variation (2026-08-31). When > 0, a FEMALE cast
    *  member's hair is re-styled with this % chance (preserving color/length/
    *  bangs/coily texture). Only the nightly path sets this; Create leaves it
@@ -675,7 +678,14 @@ ${
   (brass, mosaic tile, wet basalt, silk banners, paper lanterns, condensation on glass).
   Concrete nouns; nothing generic ("lush foliage", "beautiful scenery"). Keep it a
   BELIEVABLE, elegant, real version of the place — no whimsical, novelty, oversized, comic,
-  or surreal invented oddities unless the location itself is explicitly fantastical.
+  or surreal invented oddities unless the location itself is explicitly fantastical.${
+    input.frameInterest === 'close'
+      ? `
+  THIS IS A CLOSER FRAME (waist up): the far scenery will be soft, so put the interest WITHIN
+  ARM'S REACH — a dressed surface at hand (a table set, a counter, a rail with objects on it),
+  a light source beside them, textures they could touch — and let the costume carry detail.`
+      : ''
+  }
   Do NOT mention people, characters, camera, framing, faces, eyes, pose, or distance.`
     : `scene_description (25-40 words)
   The environment ONLY. Iconic features of the location, light, weather, atmosphere.
@@ -755,7 +765,14 @@ ${
   (brass, mosaic tile, wet basalt, silk banners, paper lanterns, condensation on glass).
   Concrete nouns; nothing generic ("lush foliage", "beautiful scenery"). Keep it a
   BELIEVABLE, elegant, real version of the place — no whimsical, novelty, oversized, comic,
-  or surreal invented oddities unless the location itself is explicitly fantastical.
+  or surreal invented oddities unless the location itself is explicitly fantastical.${
+    input.frameInterest === 'close'
+      ? `
+  THIS IS A CLOSER FRAME (waist up): the far scenery will be soft, so put the interest WITHIN
+  ARM'S REACH — a dressed surface at hand (a table set, a counter, a rail with objects on it),
+  a light source beside them, textures they could touch — and let the costume carry detail.`
+      : ''
+  }
   Do NOT mention people, characters, camera, framing, faces, eyes, pose, or distance.`
     : `scene_description (25-40 words)
   The environment ONLY. Iconic features of the location, light, weather, atmosphere.
@@ -1060,11 +1077,17 @@ export function assembleCharacterPrompt(
             'the person is the unmistakable subject, face large enough to read clearly',
             integrationLine,
           ]
-        : [
-            'shown from the knees up in a three-quarter length composition, fully visible, generous open space around them showing the scene',
-            'face unobstructed and clearly visible to the viewer',
-            integrationLine,
-          ]
+        : input.soloComposition === 'waist_up'
+          ? [
+              "shown from the waist up, the dressed set within arm's reach filling the frame beside and behind them, the costume detail and a prop at hand carrying the shot",
+              'face unobstructed and clearly visible to the viewer',
+              integrationLine,
+            ]
+          : [
+              'shown from the knees up in a three-quarter length composition, fully visible, generous open space around them showing the scene',
+              'face unobstructed and clearly visible to the viewer',
+              integrationLine,
+            ]
     ).join(', ');
 
     // 2026-09-02 background-drowning fix: on SINGLES the scene_description moves
@@ -1200,11 +1223,15 @@ export function assembleCharacterPrompt(
     // sentence so the scene is never a separate leading clause the model can turn into a landscape.
     const place = location || '';
     const compactAnchor = `two people ${seatedStance ? 'seated' : 'standing'} side by side ${
-      input.wideFraming || input.richBrief
-        ? 'from the knees up in a three-quarter length composition with generous open space around them showing the scene'
+      input.dualComposition === 'full_figure'
+        ? 'with full figures visible from head to shoes, standing prominent in the foreground of the scene'
         : closer
-          ? 'from the waist up'
-          : 'from mid-thigh up'
+          ? input.frameInterest === 'close'
+            ? "from the waist up, the dressed set within arm's reach beside and behind them and their costumes carrying the shot"
+            : 'from the waist up'
+          : input.wideFraming || input.richBrief
+            ? 'from the knees up in a three-quarter length composition with generous open space around them showing the scene'
+            : 'from mid-thigh up'
     }${place ? ` at ${place}` : ''}, both facing the camera with large clearly visible faces and a clear gap between their heads, each head on its own side of the frame`;
     const gapLine = [
       'a clear gap between their two heads, faces apart and not touching, not cheek to cheek',
