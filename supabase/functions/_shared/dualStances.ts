@@ -99,3 +99,48 @@ export function pickDualStance(
   const from = list.length > 0 ? list : DUAL_STANCES;
   return from[Math.floor(rng() * from.length)];
 }
+
+/**
+ * WIDE stances (2026-09-12, looks path only): the generic set above describes torsos (leaning back, perched,
+ * hands in pockets, arms folded), and flux-1.1-pro frames whatever body part the text names, so 9 of 10 natural
+ * looks-path renders came out waist-up. These keep every swap rule (one plane, one height, a clear gap, nothing
+ * held up, no walking) and name the LOWER body (a boot on a step, ankles crossed, feet on the ground, full figures
+ * from the knees up) so the frame opens and the set shows. Rolled instead of DUAL_STANCES when the resolver is
+ * asked for wide stances; a register that owns its stances still wins.
+ */
+export const DUAL_STANCES_WIDE: readonly DualStance[] = [
+  {
+    key: 'step_up',
+    text: 'one with a boot up on a step or low ledge and a hand resting on that knee, the other standing tall beside with a hand on a rail or post, full figures from the knees up, a clear gap between them',
+  },
+  {
+    key: 'column_lean',
+    text: 'one leaning a shoulder against a post, column or tree with ankles crossed, the other standing a step apart with weight on the back foot and one hand at the hip, a clear gap between them',
+  },
+  {
+    key: 'seated_steps',
+    text: 'both seated a step apart on wide stone steps or a low wall, feet flat on the ground below and knees showing, hands resting on the stone beside them, a clear gap between them',
+    seated: true,
+  },
+  {
+    key: 'rail_pair',
+    text: 'both standing at a railing, balustrade or fence with one hand each on the rail, boots on the ground and full figures from the knees up, a clear gap between them',
+  },
+  {
+    key: 'stand_open',
+    text: 'both standing tall a step apart with nothing held, arms relaxed at the sides, full figures from the knees up, a clear gap between them',
+  },
+  {
+    key: 'bench_ends',
+    text: 'both seated at either end of a bench with feet on the ground, one arm along the backrest and the far hand resting on a knee, a clear gap between them',
+    seated: true,
+  },
+  {
+    key: 'mid_laugh_open',
+    text: 'both mid-laugh standing with boots planted a step apart, one hand on a hip and the other hand resting on something solid in the scene at hip height, a clear gap between their heads',
+  },
+  {
+    key: 'paused_path',
+    text: 'both paused side by side on the path with full figures from the knees up, one hand each resting on a scene object at hip height, a clear gap between them',
+  },
+];

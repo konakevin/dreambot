@@ -1,5 +1,10 @@
 /** dualStances.ts — couple body-language variety; every stance must survive the beat validator verbatim. */
-import { DUAL_STANCES, DUAL_STANCES_GEOMETRY, pickDualStance } from '@engine/dualStances';
+import {
+  DUAL_STANCES,
+  DUAL_STANCES_GEOMETRY,
+  DUAL_STANCES_WIDE,
+  pickDualStance,
+} from '@engine/dualStances';
 import { validateActionBeat } from '@engine/actionSafety';
 
 describe('DUAL_STANCES', () => {
@@ -38,5 +43,27 @@ describe('register-owned stances (2026-09-08)', () => {
     expect(pickDualStance(() => 0.6, custom).key).toBe('b');
     expect(pickDualStance(() => 0, custom).key).toBe('a');
     expect(pickDualStance(() => 0, []).key).toBe(DUAL_STANCES[0].key);
+  });
+});
+
+describe('DUAL_STANCES_WIDE (looks path, 2026-09-12)', () => {
+  it('has at least 7 same-plane stances with unique keys, none shared with the generic set', () => {
+    expect(DUAL_STANCES_WIDE.length).toBeGreaterThanOrEqual(7);
+    expect(new Set(DUAL_STANCES_WIDE.map((s) => s.key)).size).toBe(DUAL_STANCES_WIDE.length);
+    expect(DUAL_STANCES_WIDE.every((w) => !DUAL_STANCES.some((s) => s.key === w.key))).toBe(true);
+    expect(DUAL_STANCES_WIDE.some((s) => s.heightContrast)).toBe(false);
+  });
+  it.each(DUAL_STANCES_WIDE.map((s) => [s.key, s.text]))(
+    'wide stance "%s" passes the couple beat validator verbatim',
+    (_key, text) => expect(validateActionBeat(text as string, 2)).toEqual({ ok: true })
+  );
+  it('every wide stance names the lower body or the full figure, and none the torso stances that crop the frame', () => {
+    const lower = /knees|boot|feet|ankles|steps|bench|path|rail/;
+    expect(DUAL_STANCES_WIDE.every((s) => lower.test(s.text))).toBe(true);
+    expect(
+      DUAL_STANCES_WIDE.every((s) => !/pockets|arms folded|arms crossed|perched/.test(s.text))
+    ).toBe(true);
+    expect(DUAL_STANCES_WIDE.some((s) => s.seated)).toBe(true);
+    expect(DUAL_STANCES_WIDE.some((s) => /nothing held/.test(s.text))).toBe(true);
   });
 });

@@ -234,6 +234,28 @@ describe('SET DRESSER + COSTUME DESIGNER brief (richBrief) and knees-up couples'
   });
 });
 
+describe('wideFraming brief (looks path): full-figure stills replace the torso stance sentence', () => {
+  it('asks for full-figure stills and drops the folded-arms / pockets suggestions; legacy brief unchanged', () => {
+    const author = {
+      register: 'a candid moment',
+      exemplars: [],
+      stance: null,
+      registerActions: null,
+    };
+    const wide = buildSlotBrief(base({ wideFraming: true, authorAction: author }));
+    expect(wide).toContain('A well-composed FULL-FIGURE');
+    expect(wide).toContain('one boot up on a step or ledge');
+    expect(wide).not.toContain(
+      'weight on one hip, hands in pockets, leaning on something, arms folded'
+    );
+    const legacy = buildSlotBrief(base({ authorAction: author }));
+    expect(legacy).toContain(
+      'weight on one hip, hands in pockets, leaning on something, arms folded'
+    );
+    expect(legacy).not.toContain('FULL-FIGURE');
+  });
+});
+
 describe('Sonnet brief: the vibe owns the light only when a fragment exists', () => {
   it('legacy brief keeps the mood-field-only wording', () => {
     const b = buildSlotBrief(base());

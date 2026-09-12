@@ -530,10 +530,20 @@ ${
   ${spec.registerActions.map((a) => `"${a.replace(/"/g, '')}"`).join(' · ')}`
     : ''
 }
-  Hands may be busy with a scene object (lifting, stirring, carving, pouring, strumming, toasting…) OR
+${
+  input.wideFraming
+    ? `  Hands may be busy with a scene object (lifting, stirring, carving, pouring, strumming, toasting…) OR
+  simply natural (resting on something, one hand on a rail, a hand at the hip). A well-composed FULL-FIGURE
+  still is welcome and preferred: standing tall with weight on the back foot and one hand on a scene object
+  at hip height, one boot up on a step or ledge, a shoulder against a post with ankles crossed, seated on
+  steps or a low wall with feet on the ground, paused on the path with the whole figure showing from the
+  knees down to the feet. Leave out folded arms and hands-in-pockets stances; they crop the frame to the
+  torso. The goal is VARIETY across renders, not constant action.`
+    : `  Hands may be busy with a scene object (lifting, stirring, carving, pouring, strumming, toasting…) OR
   simply natural (pockets, folded arms, hands on hips, resting on something). A well-composed still pose
   is welcome — weight on one hip, hands in pockets, leaning on something, arms folded. The goal is VARIETY
-  across renders, not constant action. Never merely waiting or contemplating. Hands, props and gestures stay at
+  across renders, not constant action.`
+} Never merely waiting or contemplating. Hands, props and gestures stay at
   CHEST LEVEL OR LOWER (no running, jumping, climbing). A held prop ONLY if it obviously belongs here.
   NEVER mention the head, chin, face, or where anyone looks, and no reading / studying / examining /
   consulting (that turns the face down) — faces stay toward the camera by code.

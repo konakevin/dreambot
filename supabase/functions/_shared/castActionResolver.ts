@@ -11,7 +11,7 @@
  *   only its fallback (the slot pipeline prefers the authored beat).
  */
 import { pickDualAction, type DualActionPools } from './pools/dual_actions.ts';
-import { pickDualStance, type DualStance } from './dualStances.ts';
+import { pickDualStance, DUAL_STANCES_WIDE, type DualStance } from './dualStances.ts';
 import { sceneFirstRegister, type SceneFirstKind } from './sceneFirstEligibility.ts';
 import { getActionRegister, sampleRegister } from './actionRegisters.ts';
 import type { AuthorActionSpec } from './characterSlotPrompt.ts';
@@ -50,6 +50,9 @@ export interface CastActionInputs {
   /** Register key: holiday pool → biome (location) → scenario category → kind. */
   registerKey: string | null;
   rollRegisters: boolean;
+  /** Looks path (2026-09-12): roll the WIDE stance set (dualStances.ts DUAL_STANCES_WIDE) and drop the torso stills
+   *  (hands in pockets, arms folded) from the register sample, so the frame opens from the knees up. */
+  wideStances?: boolean;
   rng?: () => number;
 }
 
@@ -60,6 +63,9 @@ export interface CastActionResult {
   /** In the exact order the inline chain pushed them. */
   stamps: string[];
 }
+
+/** Register stills that crop the frame to the torso (looks path drops them; the legacy path keeps them). */
+const TORSO_STILL_RE = /hands in [a-z\- ]*pockets|arms (?:loosely )?(?:folded|crossed)/i;
 
 export function resolveCastAction(i: CastActionInputs): CastActionResult {
   const rng = i.rng ?? Math.random;
@@ -114,13 +120,23 @@ export function resolveCastAction(i: CastActionInputs): CastActionResult {
     // otherwise the generic same-plane set. Rolled only when registers roll (the register is the source).
     const reg = i.rollRegisters ? getActionRegister(i.registerKey) : null;
     if (i.castCount === 2) {
-      dualStance = pickDualStance(rng, reg && reg.stances ? reg.stances : undefined);
+      dualStance = pickDualStance(
+        rng,
+        reg && reg.stances ? reg.stances : i.wideStances ? DUAL_STANCES_WIDE : undefined
+      );
+      if (i.wideStances && !(reg && reg.stances)) stamps.push('wide_stances');
       stamps.push(`dual_stance:${dualStance.key}`);
     }
     let registerActions: string[] | null = null;
     if (i.rollRegisters) {
       if (reg) {
         registerActions = sampleRegister(reg, 6, rng);
+        if (i.wideStances) {
+          const before = registerActions.length;
+          registerActions = registerActions.filter((a) => !TORSO_STILL_RE.test(a));
+          if (registerActions.length < before)
+            stamps.push(`wide_stills_dropped:${before - registerActions.length}`);
+        }
         stamps.push(`action_register:${i.registerKey}`);
       } else {
         stamps.push(`action_register:none:${i.registerKey ?? 'null'}`);

@@ -6,7 +6,7 @@ import {
   SOLO_ACTIVE_ANCHOR,
 } from '@engine/castActionResolver';
 import type { CastActionInputs } from '@engine/castActionResolver';
-import { DUAL_STANCES } from '@engine/dualStances';
+import { DUAL_STANCES, DUAL_STANCES_WIDE } from '@engine/dualStances';
 
 const pools = {
   companion: ['companion A'],
@@ -232,5 +232,30 @@ describe('resolveCastAction — register-owned stances', () => {
     });
     expect(ACTION_REGISTERS.witch_cottage.stances).toBeUndefined();
     expect(r.dualStance?.key).toBe(DUAL_STANCES[0].key);
+  });
+});
+
+describe('wideStances (looks path, 2026-09-12)', () => {
+  it('rolls the WIDE stance set for couples and stamps it; the generic set is untouched otherwise', () => {
+    const wide = resolveCastAction({
+      ...base,
+      castCount: 2,
+      sfaRoll: true,
+      rollRegisters: false,
+      wideStances: true,
+      rng: () => 0,
+    });
+    expect(wide.dualStance).not.toBeNull();
+    expect(DUAL_STANCES_WIDE.some((s) => s.key === wide.dualStance!.key)).toBe(true);
+    expect(wide.stamps).toContain('wide_stances');
+    const legacy = resolveCastAction({
+      ...base,
+      castCount: 2,
+      sfaRoll: true,
+      rollRegisters: false,
+      rng: () => 0,
+    });
+    expect(DUAL_STANCES_WIDE.some((s) => s.key === legacy.dualStance!.key)).toBe(false);
+    expect(legacy.stamps).not.toContain('wide_stances');
   });
 });

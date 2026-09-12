@@ -2462,6 +2462,7 @@ Deno.serve(async (req) => {
           classicSoloCandid: classicPools.single.candid,
           sfaRoll,
           sfaKind,
+          wideStances: looksPath,
           holidayCategory: holidayCategory ?? null,
           holidayPool: holidaySubTheme ? holidayPoolOf(holidaySubTheme) : null,
           registerKey: holidayCategory
