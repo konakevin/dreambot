@@ -22,8 +22,8 @@ export interface NightlyQaFlags {
   force_look: string | undefined;
   /** QA: run the LOOKS PATH (style contract) for this render regardless of engine_config.nightly_looks_mode. */
   force_looks_path: boolean;
-  /** QA: the parked SET DRESSER + COSTUME DESIGNER brief + knees-up couples on the looks path (default off). */
-  force_rich_brief: boolean;
+  /** QA: turn the SET DRESSER + COSTUME DESIGNER brief OFF on the looks path (it is on by default) for an A/B. */
+  force_plain_brief: boolean;
   force_moods: MoodAxes | undefined;
   /** A string forces that exact beat, `true` forces the roll on. */
   force_awe_beat: string | boolean | undefined;
@@ -146,7 +146,7 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
     force_medium: (body.force_medium as string) || undefined,
     force_look: (body.force_look as string) || undefined,
     force_looks_path: body.force_looks_path === true,
-    force_rich_brief: body.force_rich_brief === true,
+    force_plain_brief: body.force_plain_brief === true,
     force_moods:
       body.force_moods && typeof body.force_moods === 'object'
         ? (body.force_moods as MoodAxes)

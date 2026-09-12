@@ -45,6 +45,8 @@ const ARGS = Object.fromEntries(
 const ROUND = String(ARGS.round || 'verify');
 const COUNT = Number(ARGS.count || 1);
 const SURFACES = ARGS.surfaces ? String(ARGS.surfaces).split(',') : ['couple', 'solo', 'scene'];
+/** --legacy: the OLD engine (no force_looks_path); checks that no looks / vibe / policy stamp appears. */
+const LEGACY = ARGS.legacy === true;
 const OUT_DIR = `/private/tmp/claude-501/-Users-kevinmchenry-Development-apps-dreambot/8f7586d7-85ff-4f4f-aa92-3bfa523a75a4/scratchpad/looks/path-${ROUND}`;
 fs.mkdirSync(OUT_DIR, { recursive: true });
 const REPORT = path.join(OUT_DIR, 'report.json');
@@ -77,14 +79,14 @@ async function renderOne(surface, n) {
   const body = {
     user_id: KEVIN,
     persist: true,
-    force_looks_path: true,
+    ...(LEGACY ? {} : { force_looks_path: true }),
     ...(surface === 'scene'
       ? { force_cast_role: null, force_pure_scene: true }
       : {
           force_cast_role: surface === 'couple' ? 'dual' : 'self',
           force_face_swap_eligible: true,
         }),
-    ...(ARGS.rich ? { force_rich_brief: true } : {}),
+    ...(ARGS.plain ? { force_plain_brief: true } : {}),
     ...(ARGS.model ? { force_model: String(ARGS.model) } : {}),
     ...(ARGS.look ? { force_look: String(ARGS.look) } : {}),
     ...(ARGS.vibe ? { force_vibe: String(ARGS.vibe) } : {}),
@@ -136,8 +138,9 @@ async function renderOne(surface, n) {
   }
   const stamps = (log && log.fallback_reasons) || [];
   const prompt = (log && log.enhanced_prompt) || '';
-  const lookKey = stampVal(stamps, 'look:');
-  const vibeKey = stampVal(stamps, 'vibe:');
+  const axes = (log && log.rolled_axes) || {};
+  const lookKey = LEGACY ? (axes.medium ? String(axes.medium) : null) : stampVal(stamps, 'look:');
+  const vibeKey = LEGACY ? (axes.vibe ? String(axes.vibe) : null) : stampVal(stamps, 'vibe:');
   const modelUsed = log && log.model_used;
   // fragments of record
   let lookFrag = null;
@@ -168,8 +171,11 @@ async function renderOne(surface, n) {
     const solo = /identity_sim_solo:([0-9.]+)/.exec(s);
     return solo ? [Number(solo[1])] : [];
   });
+  const legacyClean = !stamps.some((x) =>
+    /looks_path|^look:|^vibe:|vibe_family|^policy:|style_/.test(x)
+  );
   const checks = {
-    looks_path_on: stamps.includes('looks_path:on'),
+    looks_path_on: LEGACY ? legacyClean : stamps.includes('looks_path:on'),
     look_fragment_in_prompt: lookFrag ? prompt.includes(lookFrag.slice(0, 50)) : null,
     vibe_fragment_in_prompt: vibeFrag ? prompt.includes(vibeFrag.slice(0, 40)) : null,
     no_photo_prior: !prompt.includes('editorial photograph'),
@@ -189,7 +195,7 @@ async function renderOne(surface, n) {
       s
     )
   );
-  const caption = `✨ LOOKS PATH ${surface} #${n} [${(modelUsed || '').replace(/^.*\//, '')} · ${(lookKey || '').replace(/^nightly_/, '')} · ${vibeKey || 'no vibe'}]`;
+  const caption = `✨ ${LEGACY ? 'LEGACY' : 'LOOKS PATH'} ${surface} #${n} [${(modelUsed || '').replace(/^.*\//, '')} · ${(lookKey || '').replace(/^nightly_/, '')} · ${vibeKey || 'no vibe'}]`;
   if (payload.upload_id) await sb.from('uploads').update({ caption }).eq('id', payload.upload_id);
   const local = path.join(OUT_DIR, `${surface}-${n}.jpg`);
   try {
@@ -287,6 +293,23 @@ async function main() {
       } else console.log(`FAILED ${r.status ?? ''} ${r.error}`);
     }
   fs.writeFileSync(DESKTOP_HTML, buildHtml(report));
+  // Distribution check (2026-09-12): the resolvers are unit-tested, but the SEAM that feeds them is not — a batch
+  // that rolls one model / one look family / one vibe family is a bug in what the render hands the contract.
+  const ok = report.renders.filter((r) => r.ok);
+  const hist = (key) =>
+    ok.reduce((m, r) => ((m[r[key] || '?'] = (m[r[key] || '?'] || 0) + 1), m), {});
+  const models = hist('model_used');
+  const lookFams = hist('look_family');
+  const vibeFams = hist('vibe_family');
+  console.log(
+    `models: ${JSON.stringify(models)} · look families: ${JSON.stringify(lookFams)} · vibe families: ${JSON.stringify(vibeFams)}`
+  );
+  if (!LEGACY && ok.length >= 8 && Object.keys(models).length < 2)
+    console.log(
+      '⚠ DISTRIBUTION: every render rolled the same model — check the ban set handed to the contract'
+    );
+  if (!LEGACY && ok.length >= 8 && Object.keys(lookFams).length < 2)
+    console.log('⚠ DISTRIBUTION: every render rolled the same look family');
   console.log(`page: ${DESKTOP_HTML}`);
 }
 main().catch((e) => {

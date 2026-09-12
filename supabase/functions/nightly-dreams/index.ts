@@ -29,6 +29,7 @@ import {
   applyStyleContract,
   assertStyleHonesty,
   looksModeFor,
+  looksPathBans,
   looksSlotInputFields,
   provisionalLooksMedium,
   retryPromptFor,
@@ -334,7 +335,7 @@ Deno.serve(async (req) => {
     force_season_month,
     force_vibe,
     force_looks_path,
-    force_rich_brief,
+    force_plain_brief,
     force_nightly_path,
     force_model,
     force_female_hair_pct,
@@ -2247,7 +2248,11 @@ Deno.serve(async (req) => {
       const contract = buildStyleContract({
         surface,
         policy: modelPolicy,
-        bans: nightlyBans,
+        bans: looksPathBans(
+          nightlyBans,
+          modelPolicy,
+          dayOfHoliday ? dayOfHoliday.dayOfModelBan : []
+        ),
         forceModel: force_model ?? null,
         looks: catalog.looks,
         approvals: catalog.approvals,
@@ -2622,7 +2627,7 @@ Deno.serve(async (req) => {
             ? looksSlotInputFields(
                 { vibeFragment: looksVibeFragment, vibePosition: looksVibePosition },
                 dualSpecialScene ? (dualSpecialLighting ?? null) : null,
-                force_rich_brief
+                !force_plain_brief
               )
             : {}),
         };

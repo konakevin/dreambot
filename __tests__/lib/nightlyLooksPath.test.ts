@@ -6,6 +6,7 @@ import {
   applyStyleContract,
   assertStyleHonesty,
   looksModeFor,
+  looksPathBans,
   looksSlotInputFields,
   provisionalLooksMedium,
   retryPromptFor,
@@ -198,6 +199,7 @@ describe('slot input fields, retry, after-scene, honesty, shadow', () => {
       wideFraming: true,
       soloComposition: 'three_quarter',
       dualComposition: null,
+      richBrief: true,
     });
     const rich = looksSlotInputFields(
       { vibeFragment: 'x accent', vibePosition: 'early' },
@@ -358,5 +360,16 @@ describe('end to end: contract → overrides → slot fields → assembled promp
     );
     expect(prompt).not.toContain('editorial photograph');
     expect(assertStyleHonesty(prompt, PRO, o.active)).toEqual([]);
+  });
+});
+
+describe('looksPathBans', () => {
+  it('lifts a legacy ban on a policy primary, keeps every other legacy ban and the day-of bans', () => {
+    const legacy = new Set([GEMINI, 'openai/gpt-image-2', 'black-forest-labs/flux-2-dev']);
+    const bans = looksPathBans(legacy, policy, ['xai/grok-imagine-image']);
+    expect(bans.has(GEMINI)).toBe(false); // a couple/scene primary in the test policy
+    expect(bans.has('openai/gpt-image-2')).toBe(true);
+    expect(bans.has('black-forest-labs/flux-2-dev')).toBe(true);
+    expect(bans.has('xai/grok-imagine-image')).toBe(true); // day-of ban survives
   });
 });

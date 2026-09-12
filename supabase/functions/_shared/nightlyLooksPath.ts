@@ -15,6 +15,7 @@
 import type { ResolvedMedium, ResolvedVibe } from './dreamStyles.ts';
 import type { NightlyLooksMode } from './engineConfig.ts';
 import type { StyleContract, StylePick, StyleSurface } from './nightlyStyle.ts';
+import type { NightlyModelPolicy } from './nightlyModelPolicy.ts';
 import type { ResolvedVibeChoice, VibeRow } from './nightlyVibes.ts';
 import {
   assembleCharacterPrompt,
@@ -23,6 +24,27 @@ import {
 } from './characterSlotPrompt.ts';
 
 export type { NightlyLooksMode };
+
+/**
+ * The ban set the contract rolls against. The legacy NIGHTLY_BANNED_MODELS list bans gemini-2-image and grok on
+ * the OLD mediums (Kevin, 2026-08-26: cheesy on cast dreams), and it silently emptied the looks-path roll down
+ * to flux-1.1-pro (47 of 47 rolls). On the looks path the model policy row is Kevin's explicit decision
+ * (50 / 25 / 25) and the per-look approvals are the quality gate, so a legacy ban on a policy PRIMARY is lifted;
+ * every other legacy ban (flux-2-dev, gpt-image-2 wide aspect, ultra) and every day-of holiday ban still holds.
+ */
+export function looksPathBans(
+  legacyBans: ReadonlySet<string>,
+  policy: NightlyModelPolicy,
+  dayOfBans: readonly string[]
+): ReadonlySet<string> {
+  const primaries = new Set<string>([
+    ...policy.couple.primaryModels,
+    ...policy.solo.primaryModels,
+    ...policy.scene.primaryModels,
+  ]);
+  const kept = [...legacyBans].filter((m) => !primaries.has(m));
+  return new Set<string>([...kept, ...dayOfBans]);
+}
 
 /** QA `force_looks_path` runs the path for one render regardless of engine_config.nightly_looks_mode. */
 export function looksModeFor(
@@ -161,9 +183,10 @@ export function applyStyleContract(
 export function looksSlotInputFields(
   o: Pick<StyleOverrides, 'vibeFragment' | 'vibePosition'>,
   specialSceneLighting: string | null,
-  /** QA `force_rich_brief` (2026-09-12: parked by Kevin, off by default): the SET DRESSER + COSTUME DESIGNER brief,
-   *  knees-up couples and no closer roll. Off = the engine's own brief and framing, with only looks + vibes on top. */
-  richBrief = false
+  /** The SET DRESSER + COSTUME DESIGNER brief: ON by default on the looks path (2026-09-12, Kevin: "it would be
+   *  amazing to have more lush set pieces that add to the scene"); it dresses the ROLLED place with concrete named
+   *  things and never touches the pools or the pose. QA `force_plain_brief` turns it off for an A/B. */
+  richBrief = true
 ): Pick<
   CharacterSlotPipelineInput,
   | 'timeAxis'

@@ -71,10 +71,10 @@ describe('Phase A2 QA flags (NIGHTLY_LOOKS_REFACTOR_PLAN.md)', () => {
   });
 });
 
-describe('force_rich_brief (parked content layer, off by default)', () => {
+describe('force_plain_brief (turns the set-dresser brief off on the looks path)', () => {
   it('is true only for a literal true', () => {
-    expect(parseQaFlags({ force_rich_brief: true }).force_rich_brief).toBe(true);
-    expect(parseQaFlags({}).force_rich_brief).toBe(false);
+    expect(parseQaFlags({ force_plain_brief: true }).force_plain_brief).toBe(true);
+    expect(parseQaFlags({}).force_plain_brief).toBe(false);
   });
 });
 
