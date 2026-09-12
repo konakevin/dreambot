@@ -238,3 +238,79 @@ describe('resolveLook — family first, then look', () => {
     );
   });
 });
+
+describe('legacy family split (mig 513)', () => {
+  const PRO = 'black-forest-labs/flux-1.1-pro';
+  const row = (key: string, family: string): LookRow => ({
+    key,
+    label: key,
+    family,
+    fragment: key,
+    swapFragment: `${key} swap`,
+    directive: null,
+    weight: 1,
+    active: true,
+    nightlyEnabled: true,
+  });
+  const looks = [
+    row('nightly_canvas', 'legacy'),
+    row('nightly_comics', 'legacy'),
+    row('nightly_oil', 'painted_realism'),
+    row('nightly_chromo', 'comic_print'),
+  ];
+  const ok = (k: string): LookApproval => ({
+    lookKey: k,
+    model: PRO,
+    surface: 'solo',
+    approved: true,
+  });
+  const seq = (...v: number[]) => {
+    let i = 0;
+    return () => v[Math.min(i++, v.length - 1)];
+  };
+  it('rolls the legacy set at the percentage, the new set otherwise, and stamps the set', () => {
+    const approvals = looks.map((l) => ok(l.key));
+    const legacy = resolveLook({
+      surface: 'solo',
+      model: PRO,
+      looks,
+      approvals,
+      legacyPct: 35,
+      rng: seq(0.2, 0.01, 0.01),
+    })!;
+    expect(legacy.family).toBe('legacy');
+    expect(legacy.stamps).toContain('look_set:legacy');
+    const fresh = resolveLook({
+      surface: 'solo',
+      model: PRO,
+      looks,
+      approvals,
+      legacyPct: 35,
+      rng: seq(0.9, 0.01, 0.01),
+    })!;
+    expect(fresh.family).not.toBe('legacy');
+    expect(fresh.stamps).toContain('look_set:new');
+  });
+  it('falls to the other set when the chosen one has no approved look, and is inert at 0', () => {
+    const onlyNew = [ok('nightly_oil'), ok('nightly_chromo')];
+    const r = resolveLook({
+      surface: 'solo',
+      model: PRO,
+      looks,
+      approvals: onlyNew,
+      legacyPct: 100,
+      rng: seq(0.01),
+    })!;
+    expect(r.family).not.toBe('legacy');
+    expect(r.stamps).toContain('look_set:new:only');
+    const off = resolveLook({
+      surface: 'solo',
+      model: PRO,
+      looks,
+      approvals: looks.map((l) => ok(l.key)),
+      legacyPct: 0,
+      rng: seq(0.01),
+    })!;
+    expect(off.stamps.some((s) => s.startsWith('look_set:'))).toBe(false);
+  });
+});

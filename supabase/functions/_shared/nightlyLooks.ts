@@ -69,8 +69,15 @@ export interface ResolveLookInput {
   familyMix?: Readonly<Record<string, number>> | null;
   /** QA: pin this look key regardless of approvals. */
   forcedLook?: string | null;
+  /** Chance (0-100) that the roll draws from the LEGACY family (the 1.2.0 mediums, mig 513) before the family-first
+   *  roll; 0 / undefined = legacy is just another family. Falls to the other set when the chosen one has no approved
+   *  look for this model + surface. */
+  legacyPct?: number;
   rng: () => number;
 }
+
+/** dream_mediums.nightly_family of the 1.2.0 mediums folded into the catalog (mig 513). */
+export const LEGACY_FAMILY = 'legacy';
 
 export interface ResolvedLook {
   look: LookRow;
@@ -135,10 +142,25 @@ export function resolveLook(input: ResolveLookInput): ResolvedLook | null {
   }
 
   // Group by family, then apply recency per family with the never-empty floor.
+  // Legacy vs new (Kevin 2026-09-12: "a legacy family type rolled at some percentage — a good mix of old and new").
+  const legacyPct = input.legacyPct ?? 0;
+  const legacySet = candidates.filter((l) => l.family === LEGACY_FAMILY);
+  const newSet = candidates.filter((l) => l.family !== LEGACY_FAMILY);
+  let chosen = candidates;
+  if (legacyPct > 0) {
+    if (legacySet.length > 0 && newSet.length > 0) {
+      const useLegacy = input.rng() * 100 < legacyPct;
+      chosen = useLegacy ? legacySet : newSet;
+      stamps.push(`look_set:${useLegacy ? 'legacy' : 'new'}`);
+    } else {
+      stamps.push(`look_set:${legacySet.length > 0 ? 'legacy' : 'new'}:only`);
+    }
+  }
+
   const window = input.recencyWindow ?? 7;
   const recent = new Set((input.recentLookKeys ?? []).slice(0, window));
   const byFamily = new Map<string, LookRow[]>();
-  for (const l of candidates) {
+  for (const l of chosen) {
     const arr = byFamily.get(l.family) ?? [];
     arr.push(l);
     byFamily.set(l.family, arr);
@@ -156,7 +178,7 @@ export function resolveLook(input: ResolveLookInput): ResolvedLook | null {
   stamps.push(
     `look:${look.key}`,
     `look_family:${pool.family}`,
-    `look_pool:${candidates.length}/${pools.length}`,
+    `look_pool:${chosen.length}/${pools.length}`,
     'look_source:roll'
   );
   return { look, family: pool.family, fragment: fragmentFor(look), source: 'roll', stamps };

@@ -1672,6 +1672,7 @@ export type Database = {
           new_scene_price_best: number;
           new_scene_price_standard: number;
           nightly_enabled: boolean;
+          nightly_legacy_look_pct: number;
           nightly_look_recency: number;
           nightly_looks_mode: string;
           nightly_max_jobs: number;
@@ -1769,6 +1770,7 @@ export type Database = {
           new_scene_price_best?: number;
           new_scene_price_standard?: number;
           nightly_enabled?: boolean;
+          nightly_legacy_look_pct?: number;
           nightly_look_recency?: number;
           nightly_looks_mode?: string;
           nightly_max_jobs?: number;
@@ -1866,6 +1868,7 @@ export type Database = {
           new_scene_price_best?: number;
           new_scene_price_standard?: number;
           nightly_enabled?: boolean;
+          nightly_legacy_look_pct?: number;
           nightly_look_recency?: number;
           nightly_looks_mode?: string;
           nightly_max_jobs?: number;

@@ -29,6 +29,8 @@ export interface StyleContractInput {
   approvals: readonly LookApproval[];
   recentLookKeys?: readonly string[];
   recencyWindow?: number;
+  /** Chance (0-100) of drawing the look from the legacy family first (mig 513). */
+  legacyPct?: number;
   /** QA `force_look` — beats every pin. */
   forcedLook?: string | null;
   /** A pin from the scene data (day-of look set, holiday-scene medium_key, scenario medium_key); an unknown key
@@ -114,6 +116,7 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
     approvals: input.approvals,
     recentLookKeys: input.recentLookKeys ?? [],
     recencyWindow: input.recencyWindow,
+    legacyPct: input.legacyPct,
     forcedLook: pinKnown ? pinKey : null,
     rng,
   });
@@ -178,6 +181,7 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
       approvals: input.approvals,
       recentLookKeys: [base.look.key, ...(input.recentLookKeys ?? [])],
       recencyWindow: input.recencyWindow,
+      legacyPct: input.legacyPct,
       rng,
     });
     if (!re) {

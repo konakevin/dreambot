@@ -145,21 +145,31 @@ async function loadLooks() {
 /** Seed slot input: Kevin's latest logged couple render (cast descriptions + axes), with every
  *  scene-bearing field replaced by the fixed scene. Only the look fragment varies per render. */
 async function loadSeedInput() {
+  // Cheap indexed query (user_id + created_at), filtered in JS: the JSONB filters on rolled_axes used to hit the
+  // statement timeout (57014) on this table.
   const { data, error } = await sb
     .from('ai_generation_log')
     .select('rolled_axes')
     .eq('user_id', KEVIN)
     .eq('status', 'completed')
-    .filter('rolled_axes->>dreamType', 'eq', 'face_swap_dual')
-    .not('rolled_axes->observability->slotInput', 'is', null)
     .order('created_at', { ascending: false })
-    .limit(1);
+    .limit(60);
   if (error) throw error;
-  const si = data && data[0] && data[0].rolled_axes.observability.slotInput;
-  if (!si) throw new Error('no logged couple slotInput to seed from');
+  // The newest dual log can be a solo REBUILD (its logged slotInput has only self); take the newest one that carries
+  // both roles.
+  const si = (data || [])
+    .filter((row) => row.rolled_axes && row.rolled_axes.dreamType === 'face_swap_dual')
+    .map((row) => row.rolled_axes.observability && row.rolled_axes.observability.slotInput)
+    .find(
+      (x) =>
+        x &&
+        Array.isArray(x.cast) &&
+        x.cast.some((c) => c.role === 'self') &&
+        x.cast.some((c) => c.role === 'plus_one')
+    );
+  if (!si) throw new Error('no logged couple slotInput with self + plus_one to seed from');
   const self = si.cast.find((c) => c.role === 'self');
   const plusOne = si.cast.find((c) => c.role === 'plus_one');
-  if (!self || !plusOne) throw new Error('seed slotInput lacks self + plus_one');
   const base = {
     ...si,
     iconicAnchor: PLACE,

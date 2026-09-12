@@ -2258,6 +2258,7 @@ Deno.serve(async (req) => {
         approvals: catalog.approvals,
         recentLookKeys: recentMediums,
         recencyWindow: engineCfg0.nightlyLookRecency,
+        legacyPct: engineCfg0.nightlyLegacyLookPct,
         forcedLook: force_look ?? null,
         pinnedLook:
           dayOfLookKey ?? (holidayScene ? holidayScene.mediumKey : null) ?? dualSceneMediumKey,

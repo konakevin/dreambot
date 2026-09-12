@@ -129,6 +129,9 @@ export interface EngineConfig {
   nightlyLooksMode: NightlyLooksMode;
   /** Per-user recency window over look keys for the looks roll (default 7). */
   nightlyLookRecency: number;
+  /** Looks path: chance (0-100) that a render draws its look from the LEGACY family (the 1.2.0 mediums) before the
+   *  family-first roll (mig 513). */
+  nightlyLegacyLookPct: number;
   /** Couple prompt order (mig 470, characterSlotPrompt.ts): 'legacy' | 'subject_first'. */
   couplePromptStyle: 'legacy' | 'subject_first';
   /** Holiday DAY-OF date rule (mig 471, HOLIDAY_DAY_OF_PLAN.md §4): local hour at the 08:00 UTC run
@@ -198,6 +201,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   modelPolicyMode: 'off',
   nightlyLooksMode: 'off',
   nightlyLookRecency: 7,
+  nightlyLegacyLookPct: 35,
   couplePromptStyle: 'legacy',
   dayOfEveningCutoffHour: 20,
   dayOfCostumePct: 100,
@@ -326,6 +330,10 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
         ? data.nightly_looks_mode
         : 'off',
     nightlyLookRecency: Math.max(0, Math.floor(Number(data.nightly_look_recency ?? 7) || 7)),
+    nightlyLegacyLookPct: Math.min(
+      100,
+      Math.max(0, Math.floor(Number(data.nightly_legacy_look_pct ?? 35) || 0))
+    ),
     couplePromptStyle: data.couple_prompt_style === 'subject_first' ? 'subject_first' : 'legacy',
     dayOfEveningCutoffHour: clampHour(data.day_of_evening_cutoff_hour, 20),
     dayOfCostumePct: clampPct(data.day_of_costume_pct, DEFAULT_ENGINE_CONFIG.dayOfCostumePct),
