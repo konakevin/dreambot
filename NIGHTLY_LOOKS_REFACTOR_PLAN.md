@@ -297,3 +297,44 @@ position 2), the swap pipeline and its degrade cascade, the quality gate, hair v
 The vibe is the contract's third axis. Audit, the ten proposed vibes, the matrix protocol and the design for
 rolling/applying it on the looks path live in `NIGHTLY_VIBES_AUDIT.md` (§6). Nothing ships to the roll until
 Kevin finalises the list from the vibe matrix page.
+
+## Phase 2 wiring: shipped 2026-09-11 (evening), and what the first natural renders taught us
+
+**Built and deployed (commits 286df195, 9071f261):** the looks path lives in `_shared/nightlyLooksPath.ts` as pure steps
+(mode, provisional medium, surface, vibe rows, the contract applied, slot-input fields, retry / after-scene prompts,
+honesty assertion, shadow stamp; 14 tests) with thin seams in `nightly-dreams/index.ts`: provisional medium at the roll,
+legacy override / pre-pick / pin blocks skipped, ONE hook after the pins applies the contract (model → look → vibe), the
+slot input carries the vibe fragment at its version's position + blank axes + look-neutral framing + the rich brief, the
+scene model comes from the contract with the legacy gates skipped, couple retry = `contract.forAttempt()` with the
+after-scene rung at attempt ≥ 2, solo guard re-render = after-scene rung, solo rebuild = `contract.forRebuild()`, honesty
+stamps at persist (`style_contract_violation:*`). QA: `scripts/qa-nightly-looks-path.js --round=<r> --count=<n>
+--surfaces=couple,solo` (natural renders on Kevin's account, honesty checks, page on the Desktop). Mode stays `off` in
+`engine_config` (production untouched); QA uses `force_looks_path`.
+
+**What the natural renders taught us (verify + qa1 + qa2, ~30 renders):**
+1. The path is honest: every render carried `looks_path:on`, the look fragment, the vibe fragment (cast renders), the
+   contract's model, no violations. The couple degrade rate on flux-1.1-pro is high (3 of 5, then 2 of 4) and goes to
+   the solo rebuild on flux-2-flex rather than to the policy fallback model, because the legacy dual pipeline's cascade
+   decides before the retry rung can move the model. Worth a look in Phase 3.
+2. "They all feel exactly the same" (Kevin). Cause 1: THREE photography priors survived in the composer on cast renders
+   ("a relaxed warm editorial photograph … photographic realism, filmic colour" in the solo integration line, "the clear
+   subject of a candid cinematic photograph" in the solo person line, "an editorial cinematic photograph feel … filmic
+   colour grade" in the couple framing line) and Sonnet was never told the LOOK, so it wrote photographic scenes ("a
+   cascade of camera flashes"). All three are now neutral on the path and the brief names the LOOK.
+3. "Nothing interesting about the outfits or scenery." Cause 2: the legacy Sonnet brief was the ceiling: 25-40 word
+   "believable, plain" scene, 8-15 word outfit under the travel-clothes rule, props "strongly prefer empty", couples
+   cropped at mid-thigh with a waist-up closer roll. Each rule killed a specific bug; together they made every dream
+   plain. On the path Sonnet is now the SET DRESSER + COSTUME DESIGNER (55-85 word scene with six concrete named things
+   layered foreground → background, 18-28 word complete outfit for the place / light / look, one prop, knees-up couples,
+   no closer roll). qa2 confirmed richer scenes (rain-slicked teak and brass cleats on a Bora Bora yacht, prayer flags
+   and a lantern at Bhagsu falls) but framing still tight when the scenario says "seated" or the action is functional.
+4. "Generic poses, bleh subject matter" (Kevin). Cause 3, the one that remains: the SUBJECT comes from the pools and the
+   pool action briefs, written in a stock travel / adventure register ("climber plants both mittened hands on the summit
+   wand", "diver crouches at the reef shelf", "warming both hands around a thermos", "seated side by side on the bow of a
+   superyacht", a conference room in an F1 polo). The matrix render Kevin loved was written as a DIRECTOR: a story beat
+   with a relationship and a verb, a dressed set, a costume, a prop with narrative. That is the next phase:
+   `NIGHTLY_DIRECTOR_PLAN.md` (director mode: Sonnet authors the beat on the looks path; pools stay the randomizer and
+   the fallback).
+
+**Do not ship `nightly_looks_mode = on` before director mode lands**: today's path is honest and varied in look and light
+but the subject matter is still the legacy pools', and Kevin does not want a night of those.
