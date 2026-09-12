@@ -21,7 +21,7 @@ export async function loadNightlyModelPolicy(
   if (!bypassCache && cached && now - cached.at < TTL_MS) return cached.policy;
   const { data, error } = await supabase
     .from('nightly_model_policy')
-    .select('surface,primary_models,fallback_models')
+    .select('surface,primary_models,fallback_models,primary_weights,fallback_weights')
     .returns<Record<string, unknown>[]>();
   if (error) {
     console.warn(`[nightlyModelPolicy] load failed (${error.message}) → legacy-equivalent rows`);

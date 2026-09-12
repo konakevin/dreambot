@@ -28,10 +28,16 @@ export const POLICY_SURFACES: readonly PolicySurface[] = [
 ];
 
 export interface PolicyRow {
-  /** Attempt 1 draws uniformly from these. Never empty. */
+  /** Attempt 1 draws from these (weighted by primaryWeights, else uniformly). Never empty. */
   primaryModels: string[];
-  /** Attempt ≥ 2 draws uniformly from these; empty = render the attempt-1 model again (legacy). */
+  /** Attempt ≥ 2 draws from these (weighted by fallbackWeights, else uniformly); empty = render the attempt-1
+   *  model again (legacy). */
   fallbackModels: string[];
+  /** Parallel to primaryModels (mig 501; Kevin 2026-09-12: "50 % 1.1-pro for all renders, 25/25 grok and gemini").
+   *  Missing or shorter than the model list = equal weights. */
+  primaryWeights?: number[];
+  /** Parallel to fallbackModels; same rule. */
+  fallbackWeights?: number[];
 }
 export type NightlyModelPolicy = Record<PolicySurface, PolicyRow>;
 
@@ -99,6 +105,42 @@ function pickUniform(list: string[], rng: () => number): string {
   return list[i];
 }
 
+/** A model list with its weights, kept aligned through the ban filter. */
+interface Weighted {
+  models: string[];
+  weights: number[];
+}
+
+/** Pair each model with its weight (equal weights when the array is missing / short / non-positive), dropping
+ *  banned models AND their weights together so the survivors renormalise among themselves. */
+function weightedList(
+  models: string[],
+  weights: number[] | undefined,
+  bans: ReadonlySet<string> | null
+): Weighted {
+  const usable =
+    weights && weights.length >= models.length && weights.some((w) => Number.isFinite(w) && w > 0);
+  const out: Weighted = { models: [], weights: [] };
+  models.forEach((m, i) => {
+    if (bans && bans.has(m)) return;
+    out.models.push(m);
+    out.weights.push(usable ? Math.max(0, Number(weights[i]) || 0) : 1);
+  });
+  return out;
+}
+
+/** Weighted random pick; falls back to uniform when every weight is zero. */
+function pickWeighted(w: Weighted, rng: () => number): string {
+  const total = w.weights.reduce((a, b) => a + b, 0);
+  if (total <= 0) return pickUniform(w.models, rng);
+  let r = rng() * total;
+  for (let i = 0; i < w.models.length; i++) {
+    r -= w.weights[i];
+    if (r < 0) return w.models[i];
+  }
+  return w.models[w.models.length - 1];
+}
+
 /** Which model renders THIS surface on THIS attempt. Throws on a blank row (a policy can never be blank). */
 export function resolveModel(input: ResolveInput): ResolvedModel {
   const rng = input.rng ?? Math.random;
@@ -111,28 +153,29 @@ export function resolveModel(input: ResolveInput): ResolvedModel {
     throw new Error(`nightly_model_policy: surface "${input.surface}" has no primary models`);
   }
   const bans = input.bans ?? null;
-  const allowed = (list: string[]) => (bans ? list.filter((m) => !bans.has(m)) : list);
-  const primaries = allowed(row.primaryModels);
-  const fallbacks = allowed(row.fallbackModels);
+  const primaries = weightedList(row.primaryModels, row.primaryWeights, bans);
+  const fallbacks = weightedList(row.fallbackModels, row.fallbackWeights, bans);
+  const allPrimaries = weightedList(row.primaryModels, row.primaryWeights, null);
+  const allFallbacks = weightedList(row.fallbackModels, row.fallbackWeights, null);
   let model: string;
   if (attempt === 1) {
     model =
-      primaries.length > 0
-        ? pickUniform(primaries, rng)
-        : fallbacks.length > 0
-          ? pickUniform(fallbacks, rng)
-          : pickUniform(row.primaryModels, rng);
-  } else if (fallbacks.length > 0) {
-    model = pickUniform(fallbacks, rng);
+      primaries.models.length > 0
+        ? pickWeighted(primaries, rng)
+        : fallbacks.models.length > 0
+          ? pickWeighted(fallbacks, rng)
+          : pickWeighted(allPrimaries, rng);
+  } else if (fallbacks.models.length > 0) {
+    model = pickWeighted(fallbacks, rng);
   } else if (input.previousModel && !(bans && bans.has(input.previousModel))) {
     model = input.previousModel;
   } else {
     model =
-      primaries.length > 0
-        ? pickUniform(primaries, rng)
-        : row.fallbackModels.length > 0
-          ? pickUniform(row.fallbackModels, rng)
-          : input.previousModel || pickUniform(row.primaryModels, rng);
+      primaries.models.length > 0
+        ? pickWeighted(primaries, rng)
+        : allFallbacks.models.length > 0
+          ? pickWeighted(allFallbacks, rng)
+          : input.previousModel || pickWeighted(allPrimaries, rng);
   }
   return { model, stamp: `policy:${input.surface}:${attempt}:${shortModel(model)}` };
 }
@@ -186,9 +229,15 @@ export function parsePolicyRows(rows: ReadonlyArray<Record<string, unknown>>): {
       continue;
     const primary = strings(r.primary_models);
     if (primary.length === 0) continue; // blank row → keep the fail-open default
+    const numbers = (v: unknown): number[] =>
+      Array.isArray(v) ? v.map((x) => Number(x)).map((n) => (Number.isFinite(n) ? n : 0)) : [];
+    const pw = numbers(r.primary_weights);
+    const fw = numbers(r.fallback_weights);
     policy[surface as PolicySurface] = {
       primaryModels: primary,
       fallbackModels: strings(r.fallback_models),
+      ...(pw.length > 0 ? { primaryWeights: pw } : {}),
+      ...(fw.length > 0 ? { fallbackWeights: fw } : {}),
     };
     seen.add(surface as PolicySurface);
   }

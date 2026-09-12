@@ -270,3 +270,85 @@ describe('candidateModels / shadowStampSet (shadow compares SETS, not two random
     );
   });
 });
+
+describe('weighted primaries / fallbacks (mig 501, Kevin 2026-09-12: 50 % 1.1-pro, 25/25 grok + gemini)', () => {
+  function seeded(seed: number) {
+    let x = seed >>> 0;
+    return () => {
+      x = (x * 1664525 + 1013904223) >>> 0;
+      return x / 4294967296;
+    };
+  }
+  const WEIGHTED: NightlyModelPolicy = {
+    ...FINAL,
+    couple: {
+      primaryModels: [PRO, GEMINI, GROK],
+      primaryWeights: [50, 25, 25],
+      fallbackModels: [GEMINI, GROK, 'black-forest-labs/flux-2-pro'],
+      fallbackWeights: [45, 45, 10],
+    },
+  };
+
+  it('attempt 1 rolls the primaries at their weights (≈ 50 / 25 / 25)', () => {
+    const rng = seeded(21);
+    const n: Record<string, number> = {};
+    for (let i = 0; i < 4000; i++) {
+      const m = resolveModel({ surface: 'couple', attempt: 1, policy: WEIGHTED, rng }).model;
+      n[m] = (n[m] ?? 0) + 1;
+    }
+    expect(n[PRO] / 4000).toBeGreaterThan(0.46);
+    expect(n[PRO] / 4000).toBeLessThan(0.54);
+    expect(n[GEMINI] / 4000).toBeGreaterThan(0.21);
+    expect(n[GEMINI] / 4000).toBeLessThan(0.29);
+    expect(n[GROK] / 4000).toBeGreaterThan(0.21);
+    expect(n[GROK] / 4000).toBeLessThan(0.29);
+  });
+
+  it('a retry rolls the fallbacks at their weights, and a banned model drops out with its weight (renormalised)', () => {
+    const rng = seeded(8);
+    const n: Record<string, number> = {};
+    for (let i = 0; i < 4000; i++) {
+      const m = resolveModel({
+        surface: 'couple',
+        attempt: 2,
+        policy: WEIGHTED,
+        bans: new Set([GROK]),
+        rng,
+      }).model;
+      n[m] = (n[m] ?? 0) + 1;
+    }
+    expect(n[GROK]).toBeUndefined();
+    // gemini 45 : flux-2-pro 10 among the survivors ≈ 82 % / 18 %
+    expect(n[GEMINI] / 4000).toBeGreaterThan(0.77);
+    expect(n['black-forest-labs/flux-2-pro'] / 4000).toBeGreaterThan(0.13);
+  });
+
+  it("missing or short weight arrays mean equal weights (today's rows keep their uniform behaviour)", () => {
+    const rng = seeded(3);
+    const n: Record<string, number> = {};
+    const uniform: NightlyModelPolicy = {
+      ...FINAL,
+      couple: { primaryModels: [PRO, GEMINI], primaryWeights: [99], fallbackModels: [] },
+    };
+    for (let i = 0; i < 2000; i++) {
+      const m = resolveModel({ surface: 'couple', attempt: 1, policy: uniform, rng }).model;
+      n[m] = (n[m] ?? 0) + 1;
+    }
+    expect(n[PRO] / 2000).toBeGreaterThan(0.44);
+    expect(n[PRO] / 2000).toBeLessThan(0.56);
+  });
+
+  it('parsePolicyRows reads primary_weights / fallback_weights from the table rows', () => {
+    const { policy } = parsePolicyRows([
+      {
+        surface: 'solo',
+        primary_models: [PRO, GEMINI, GROK],
+        primary_weights: ['50', 25, 25],
+        fallback_models: [GEMINI],
+        fallback_weights: [1],
+      },
+    ]);
+    expect(policy.solo.primaryWeights).toEqual([50, 25, 25]);
+    expect(policy.solo.fallbackWeights).toEqual([1]);
+  });
+});

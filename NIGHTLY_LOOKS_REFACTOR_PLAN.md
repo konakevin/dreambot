@@ -219,6 +219,30 @@ would have passed 17, so A4 is now stamps AND a visual grade. A5 (Kevin's hearts
 The frozen v1 tally is what Phase 2 seeds and what Phase 4 converges to; a look outside it never reaches a
 user. Adding a look later re-runs A1 (row) → A3-A5 for that row only.
 
+### Simplification (Kevin 2026-09-12: "we should be able to greatly simplify the engine with these rules")
+
+With the model roll (weighted policy rows, mig 501) and the look roll (per-model approvals + families, migs 498/499,
+`nightlyLooks.ts`) both built and tested as pure functions, the style contract no longer needs a "legacy source"
+mode. **Phase 1 (behavior-neutral extraction of the 15-site chain) is folded into Phase 2:** `resolveNightlyStyle()`
+is built ONLY from the new rules —
+
+    surface (couple | solo | scene)
+      → model  = resolveModel(policy row for the surface, weighted 50/25/25, bans, force_model)
+      → look   = resolveLook(approvals for model × surface, family-first, recency, force_look)
+      → pins   = day-of look set › holiday-scene pin › scenario pin (look keys) override the roll
+      → contract { look, fragments, directive, model, attempt(n), rebuild }
+
+— and the render runs it when `nightly_looks_mode = on`, leaving the legacy chain byte-for-byte untouched when
+`off`. Nothing in the legacy chain is refactored; it is deleted in Phase 4 once the new path has soaked. That removes
+the equivalence-fixture work (1-1.5 days) and the temporary "extracted legacy" code that would have been thrown
+away. What careful testing looks like instead: (a) unit tests on the three pure pieces (done for policy + looks),
+(b) `force_look` / `force_model` matrix renders through the NEW path on Kevin's account, (c) a shadow night that
+stamps the contract the new path WOULD have chosen (`style_shadow:<surface>:<model>:<look>`) so coverage is proven
+before any user sees it, (d) 30 % → 100 % with the per-look monitor, (e) delete legacy. Retry / rebuild: `attempt(2)`
+= policy fallback roll → look re-rolled for the fallback model if the current look is not approved there; `rebuild`
+= the solo_rebuild row (flex) + the current look if approved for (flex, solo), else a flex-approved look. First-dream
+keeps calling the render with its force flags (List A → look keys, Phase 5).
+
 ### Exit criteria per engineering phase (nothing advances without them)
 - **P0:** `check-model-policy-shadow.js --hours 96` clean → mode `on` → one soak night with the same script
   clean → delete the legacy layers → `nightlyNoHardcodedModels` green → a second clean night.
@@ -236,7 +260,7 @@ user. Adding a look later re-runs A1 (row) → A3-A5 for that row only.
 
 | Phase | Work | Proof | Rollback |
 |---|---|---|---|
-| **0. Model policy ON + delete its legacy layers** (this week; `NIGHTLY_MODEL_POLICY_PLAN.md` Phase 3-4) | `model_policy_mode = on`; delete pool/clamps/steer/bans/scene-gate/ban-gate/`solo_rebuild_model`; Kevin's final rows; `nightlyNoHardcodedModels.test.ts` | `check-model-policy-shadow.js --hours 96` clean (it has matched since 09-07); one soak night | `mode = legacy` (code kept until the soak passes) |
+| **0. Model policy ON + delete its legacy layers** (this week; `NIGHTLY_MODEL_POLICY_PLAN.md` Phase 3-4). **Rows decided 2026-09-12 (mig 501):** couples / solos / scenes roll flux-1.1-pro 50 % · gemini 25 % · grok 25 % (weighted primaries; retry = gemini 45 / grok 45 / flux-2-pro 10); `resolveModel` is weight-aware (`primary_weights`, `fallback_weights`). The shadow check now expects DIFFS by design (legacy always picks 1.1-pro; the policy set is three models): the Phase 0 exit criterion becomes one QA night on Kevin's account with mode `on`, not a clean shadow. | `model_policy_mode = on`; delete pool/clamps/steer/bans/scene-gate/ban-gate/`solo_rebuild_model`; Kevin's final rows; `nightlyNoHardcodedModels.test.ts` | `check-model-policy-shadow.js --hours 96` clean (it has matched since 09-07); one soak night | `mode = legacy` (code kept until the soak passes) |
 | **1. Extract the style contract — behavior-neutral** | `_shared/nightlyStyle.ts` in `source = legacy` mode: it performs today's roll + re-rolls + pins + bans + override library + first-dream allow-list + forces and returns the contract; `index.ts` sites 1-15 collapse to one call + consumption; `realMediumFragment` etc. removed; persist writes from the contract; honesty assertion added (in legacy mode it reports the override-library dishonesty as `style_contract_note:override_library` rather than a violation) | equivalence fixtures (50 real rows across couple / solo / scene / pinned / day-of / first-dream); golden prompt fixture byte-identical; a shadow night with `style_contract_note` counts = today's override rate | git revert (one commit) |
 | **2. Catalog source behind a flag** | migration (§3 columns + constraint + `halloween_*` back-fill + v1 rows from the catalog plan + pin remap + config); `nightly_looks_mode = shadow` makes the resolver compute the catalog contract alongside legacy and stamp `look_shadow:<surface>:<key>`; `force_look` QA flag | shadow night: every render has a look for its surface × model (coverage, not equality); dbspecs green | `mode = off` |
 | **3. Curation** (Kevin; parallel with 1-2) | reliability gate (cast looks × 4 fixed couples, stamps decide) → Kevin's grid in the Dreams album → weights / bans / labels | `NIGHTLY_LOOK_TALLY.md` | rows are data |
