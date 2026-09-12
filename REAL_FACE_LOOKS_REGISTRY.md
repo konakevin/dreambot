@@ -6,7 +6,9 @@ LATER initiative: refactoring the mediums the app offers for "real face" Create 
 new-scene). When that work starts, this registry is the shortlist — which looks and which models do well for
 SINGLE vs DUAL — so the Create refactor begins from proven rows instead of a blank page.
 
-**Scope:** every look × model combination that has been through the fixed-scene matrix (§2) and graded. Nightly
+**Scope:** every look × model combination that has been through the fixed-scene matrix (§2) and graded. The
+runtime copy of these verdicts is the `nightly_look_approvals` table (mig 498: look × model × surface → approved,
+source matrix | override); nightly's resolver reads it, Create will read it later. Nightly
 consumes it through `dream_mediums` rows (`nightly_look`, `nightly_surfaces`, mig 494/495). Create does NOT read
 it yet; the mapping is §5.
 
@@ -69,7 +71,7 @@ _Generated 2026-09-12 from flux-1.1-pro (172 renders, 43 graded), grok-imagine-i
 | Retro Movie Poster | `nightly_movie_poster` | solo | solo | solo |
 | Sci-Fi Paperback | `nightly_scifi_paperback` | solo | solo | solo |
 | Matte Painting | `nightly_matte_painting` | solo | solo | solo |
-| Pulp Adventure Cover | `nightly_pulp_cover` | solo | solo | solo |
+| Pulp Adventure Cover | `nightly_pulp_cover` | **couple + solo** | **couple + solo** | **couple + solo** |
 | Fresco | `nightly_fresco` | solo | solo | solo |
 | Pastel Chalk | `nightly_pastel_chalk` | none | — | — |
 | Alla Prima Oil | `nightly_alla_prima` | none | — | — |

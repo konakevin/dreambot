@@ -97,6 +97,15 @@ QA `force_look` flag. New surfaces beyond the four (say, `pet` portraits) are on
 catalog roll(surface, model, recency, bans, allow-list). A pin that names an unknown/inactive look falls to the
 roll and stamps `look_pin_unknown:<key>` (fail open, never faceless).
 
+**Model, then look, per surface (Kevin 2026-09-12: "each nightly chooses from the pool of models and looks based on
+if it's a dual or single character dream").** The policy row for the surface picks the model (already built); the
+look is then rolled from `nightly_look_approvals WHERE model = <picked> AND surface = <couple|solo> AND approved`
+(mig 498: one row per look × model × surface, graded in the fixed-scene matrix, `source = 'override'` for Kevin's
+calls). A dual dream and a single dream therefore draw from DIFFERENT (model × look) pools, and a look approved on
+grok for couples but only for solos on flux behaves exactly that way. The approvals table replaces
+`client_meta.smart_dream_models` as the look's model membership; `nightly_surfaces` stays as the model-agnostic
+union for the pin route and the QA runner. The old sentence follows for the fallback rule:
+
 **Model:** the policy row for the surface picks the model (already built); the look must list it. If the
 picked model is not in `look.models`, the resolver takes the look's first supported model from the policy row's
 candidates; if none, it takes the surface's **default look for that model** (`dream_mediums.nightly_default_for
@@ -127,6 +136,11 @@ Estimate: ≈ 800 lines of `index.ts` → ≈ 120 lines of contract consumption;
 
 ## 3. Data model (the catalog is rows; the constraints are the fence)
 
+> **Implemented 2026-09-12 (mig 498):** `nightly_look_approvals (look_key, model, surface, approved, source, note,
+> graded_at)` seeded from rounds 1-3 (213 rows, 171 approved; flux couples 12 / solos 33, grok 27 / 37, gemini 26 /
+> 36 of the looks each rendered). `nightly_surfaces` refreshed as the union. Open decision: the couple PRIMARY model
+> in `nightly_model_policy` (grok or gemini → 26-27 couple looks; flux → 12).
+>
 > **Implemented 2026-09-11 (mig 495):** `dream_mediums.nightly_look boolean`, `nightly_surfaces text[]` (⊆ {couple,
 > solo}; empty = parked), `weight numeric`, CHECK `nightly_look → NOT is_public AND NOT is_dream_eligible AND NOT
 > is_scene_eligible`, CHECK surfaces ⊆ {couple, solo}. Round-1 verdicts applied: 8 looks both surfaces, 12 solo-only,
