@@ -95,6 +95,9 @@ export interface ResolvedVibe {
   label: string;
   directive: string;
   isDreamEligible: boolean;
+  /** Verbatim ≤140-char light / palette / weather accent for the prompt (dream_vibes.flux_fragment, mig 504;
+   *  NIGHTLY_VIBES_AUDIT.md §6). Null = the vibe has no authored accent (legacy mood-field route only). */
+  fluxFragment: string | null;
   /** Restyle-safe mood line (client_meta.restyle_fragment, migration 320) —
    *  an imperative color/light/atmosphere grade with NO scene content, so
    *  Kontext can apply it without fighting "keep the exact composition".
@@ -227,7 +230,9 @@ export async function fetchVibes(): Promise<ResolvedVibe[]> {
   const sb = getServiceClient();
   const { data, error } = await sb
     .from('dream_vibes')
-    .select('key, label, directive, is_dream_eligible, client_meta, face_swap_directive')
+    .select(
+      'key, label, directive, is_dream_eligible, client_meta, face_swap_directive, flux_fragment'
+    )
     .eq('is_active', true)
     .order('sort_order');
   if (error) {
@@ -242,11 +247,13 @@ export async function fetchVibes(): Promise<ResolvedVibe[]> {
       is_dream_eligible: boolean;
       client_meta: Record<string, unknown> | null;
       face_swap_directive: string | null;
+      flux_fragment: string | null;
     }) => ({
       key: r.key,
       label: r.label,
       directive: r.directive,
       isDreamEligible: !!r.is_dream_eligible,
+      fluxFragment: r.flux_fragment ?? null,
       faceSwapDirective: r.face_swap_directive ?? null,
       restyleFragment:
         r.client_meta && typeof r.client_meta.restyle_fragment === 'string'

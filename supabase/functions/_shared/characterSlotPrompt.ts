@@ -132,6 +132,21 @@ export interface CharacterSlotPipelineInput {
    *  line (place inline), identities, action, scene (4/4 usable on 1.1-pro; 38/40 first-try swaps in QA).
    *  Default legacy; QA flag force_prompt_style. */
   promptStyle?: 'legacy' | 'subject_first' | null;
+  /** VIBE FRAGMENT (2026-09-11, NIGHTLY_VIBES_AUDIT.md §6): the vibe's verbatim ≤140-char light / palette /
+   *  weather accent (dream_vibes.flux_fragment, mig 504), placed directly after scene_description in every
+   *  composer so the accent no longer depends on Sonnet compressing a 700-char directive into three mood words
+   *  at the tail of the prompt. When set, the Sonnet brief also says the vibe OWNS the light of
+   *  scene_description. Null / undefined = the legacy route (mood field only). */
+  vibeFragment?: string | null;
+  /** Where the vibe fragment sits. 'after_scene' (default) = directly after scene_description; 'early' = right
+   *  after the place line, BEFORE the people (round A of the vibe matrix showed Flux ignores a time-of-day change
+   *  written late in the prompt: Sonnet wrote a full-moon night, Flux rendered daylight). A ≤140-char light
+   *  clause early is not scene front-loading (no scene nouns, no dominance words; the 2026-06-19 rule stands). */
+  vibeFragmentPosition?: 'early' | 'after_scene' | null;
+  /** LOOK-NEUTRAL FRAMING (looks path): drops the solo integration line's photography prior ("a relaxed warm
+   *  editorial photograph … photographic realism, filmic colour"), which pulled painted looks back toward a
+   *  photo on every solo cast render. The look's own fragment owns the finish. Default false = legacy text. */
+  lookNeutralFraming?: boolean;
   /** HOLIDAY COSTUME LOCK (2026-09-08, holidayCostumes.ts): one costume per cast member in `cast` order
    *  (index 0 = LEFT), rolled by nightly on a holiday's day-of. Sonnet is told the lock so the scene /
    *  mood / props play off it, and the wardrobe slot(s) are then OVERWRITTEN with the text verbatim — no
@@ -584,7 +599,11 @@ ATMOSPHERIC CONDITIONS (weave into scene_description, do NOT contradict):
 - WEATHER: ${input.weatherAxis}
 - PHENOMENON: ${input.phenomenaAxis}
 
-VIBE (use for the mood field): ${input.vibeDirective}${
+${
+  input.vibeFragment
+    ? `VIBE — the atmosphere of this dream. It OWNS the light, palette and weather of scene_description: write the place under THIS light (never generic daylight), and give the mood field 1-3 phrases from it: ${input.vibeDirective}`
+    : `VIBE (use for the mood field): ${input.vibeDirective}`
+}${
     input.action && !input.authorAction
       ? `
 
@@ -864,6 +883,9 @@ export function assembleCharacterPrompt(
 ): string {
   const location = input.setAtOverride || input.iconicAnchor || input.userPlace || '';
   const mediumSignal = (input.mediumFluxFragment || '').trim();
+  const vibeFrag = (input.vibeFragment || '').trim();
+  const vibeEarly = vibeFrag && input.vibeFragmentPosition === 'early' ? vibeFrag : '';
+  const vibeAfterScene = vibeFrag && input.vibeFragmentPosition !== 'early' ? vibeFrag : '';
   // Early scene hook — the scene's 1-2 most distinctive clauses ride the early
   // "set at" slot (see buildSceneHook). Same for single + dual.
   const sceneHook = buildSceneHook(slots.scene_description, location);
@@ -934,8 +956,9 @@ export function assembleCharacterPrompt(
     // (was waist-up). A 3/4-length face is ~15-20% of frame height — squarely
     // inside the healthy swap band, and the giant-face guard floors the other
     // extreme.
-    const integrationLine =
-      'the subject naturally lit by the scene itself (soft rim light and ambient colour from the environment on them), a relaxed warm editorial photograph, comfortable and natural — looking toward the camera or gently off into the scene, at ease, photographic realism, filmic colour, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, the wall or sky behind the subject full of specific detail, any visible sky alive with colour, cloud form, or weather';
+    const integrationLine = input.lookNeutralFraming
+      ? 'the subject naturally lit by the scene itself (soft rim light and ambient colour from the environment on them), rendered in the same medium and finish as the scene, comfortable and natural — looking toward the camera or gently off into the scene, at ease, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, the wall or sky behind the subject full of specific detail, any visible sky alive with colour, cloud form, or weather'
+      : 'the subject naturally lit by the scene itself (soft rim light and ambient colour from the environment on them), a relaxed warm editorial photograph, comfortable and natural — looking toward the camera or gently off into the scene, at ease, photographic realism, filmic colour, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, the wall or sky behind the subject full of specific detail, any visible sky alive with colour, cloud form, or weather';
     const framingBlock = (
       input.soloComposition === 'enviro_wide'
         ? [
@@ -961,10 +984,12 @@ export function assembleCharacterPrompt(
       genderLock,
       mediumSignal,
       setAt,
+      vibeEarly,
       singleAnchor,
       slots.action || input.action || '',
       identityBlock,
       slots.scene_description,
+      vibeAfterScene,
       framingBlock,
       slots.mood,
       slots.props,
@@ -1091,12 +1116,14 @@ export function assembleCharacterPrompt(
       genderLock,
       mediumSignal,
       compactAnchor,
+      vibeEarly,
       // v3 (parity batch 1): the FULL scene sits right behind the people line, BEFORE the identity
       // blocks. With it after them (v2, word ~200 of ~280) 1.1-pro rendered a portrait on a blank
       // backdrop: paired blind judge scene 3.9 → 2.0, brief fidelity 3.5 → 1.7, legacy preferred 9/10.
       // The first clause is still the two people, so the landscape failure of legacy (scene FIRST) does
       // not return — the order is a slider between the two, and the people line must stay the lead.
       slots.scene_description,
+      vibeAfterScene,
       leftBlock,
       rightBlock,
       slots.action || input.action || '',
@@ -1113,12 +1140,14 @@ export function assembleCharacterPrompt(
     genderLock,
     mediumSignal,
     setAt,
+    vibeEarly,
     dualAnchor,
     slots.action || input.action || '',
     leftBlock,
     rightBlock,
     framingBlock,
     slots.scene_description,
+    vibeAfterScene,
     slots.mood,
     slots.props,
     'foreground midground background stacked top to bottom, layered depth',

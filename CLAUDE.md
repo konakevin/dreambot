@@ -335,7 +335,7 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
 - **Engine + scaling:** `QUEUE_WORKERS_REFACTOR.md` (queue status of record + Fly scale runbook),
   `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_IMPRESS_PLAN.md` (always-impress backlog: quality gate, legendary dreams, holidays, weather, pets, taste, arcs — each handoff-ready), `NIGHTLY_SEED_POOL_QA.md`, `NIGHTLY_FUN_SCENARIOS_PLAN.md` (fun/fantasy
   scenario buckets + Option B location-fit actions — LIVE, playbook for adding/scaling/tuning),
-  `V4_HARDENING_PLAN.md`.
+  `V4_HARDENING_PLAN.md`, `NIGHTLY_VIBES_AUDIT.md` (vibe axis: audit, proposals, matrix, contract design).
 - **Services / money:** `SPARKLE_PAYMENTS_SETUP.md`, `PRO_SUBSCRIPTION_SETUP.md`,
   `SPARKLE_PRICING_STRATEGY.md`, `AUTH_PROVIDERS.md`, `BUNDLE_ID_MIGRATION.md`, `APP_STORE_LISTING.md`,
   `LAUNCH.md`. (Website specifics live in `../dreambot-web/CLAUDE.md`.)

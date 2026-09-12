@@ -808,11 +808,16 @@ export type Database = {
           key: string;
           kontext_directive: string | null;
           label: string;
+          nightly_enabled: boolean;
+          nightly_family: string | null;
+          nightly_look: boolean;
           nightly_skip: boolean;
+          nightly_surfaces: string[];
           preferred_model: string | null;
           render_base: string | null;
           scene_eligible_models: string[] | null;
           sort_order: number;
+          weight: number;
         };
         Insert: {
           allowed_models?: string[] | null;
@@ -837,11 +842,16 @@ export type Database = {
           key: string;
           kontext_directive?: string | null;
           label: string;
+          nightly_enabled?: boolean;
+          nightly_family?: string | null;
+          nightly_look?: boolean;
           nightly_skip?: boolean;
+          nightly_surfaces?: string[];
           preferred_model?: string | null;
           render_base?: string | null;
           scene_eligible_models?: string[] | null;
           sort_order?: number;
+          weight?: number;
         };
         Update: {
           allowed_models?: string[] | null;
@@ -866,11 +876,16 @@ export type Database = {
           key?: string;
           kontext_directive?: string | null;
           label?: string;
+          nightly_enabled?: boolean;
+          nightly_family?: string | null;
+          nightly_look?: boolean;
           nightly_skip?: boolean;
+          nightly_surfaces?: string[];
           preferred_model?: string | null;
           render_base?: string | null;
           scene_eligible_models?: string[] | null;
           sort_order?: number;
+          weight?: number;
         };
         Relationships: [];
       };
@@ -1474,6 +1489,7 @@ export type Database = {
           key: string;
           label: string;
           mood_profile: Json | null;
+          nightly_only: boolean;
           sort_order: number;
         };
         Insert: {
@@ -1487,6 +1503,7 @@ export type Database = {
           key: string;
           label: string;
           mood_profile?: Json | null;
+          nightly_only?: boolean;
           sort_order?: number;
         };
         Update: {
@@ -1500,6 +1517,7 @@ export type Database = {
           key?: string;
           label?: string;
           mood_profile?: Json | null;
+          nightly_only?: boolean;
           sort_order?: number;
         };
         Relationships: [];
@@ -1634,6 +1652,8 @@ export type Database = {
           new_scene_price_best: number;
           new_scene_price_standard: number;
           nightly_enabled: boolean;
+          nightly_look_recency: number;
+          nightly_looks_mode: string;
           nightly_max_jobs: number;
           nightly_require_ai_enabled: boolean;
           nightly_require_onboarding: boolean;
@@ -1729,6 +1749,8 @@ export type Database = {
           new_scene_price_best?: number;
           new_scene_price_standard?: number;
           nightly_enabled?: boolean;
+          nightly_look_recency?: number;
+          nightly_looks_mode?: string;
           nightly_max_jobs?: number;
           nightly_require_ai_enabled?: boolean;
           nightly_require_onboarding?: boolean;
@@ -1824,6 +1846,8 @@ export type Database = {
           new_scene_price_best?: number;
           new_scene_price_standard?: number;
           nightly_enabled?: boolean;
+          nightly_look_recency?: number;
+          nightly_looks_mode?: string;
           nightly_max_jobs?: number;
           nightly_require_ai_enabled?: boolean;
           nightly_require_onboarding?: boolean;
@@ -2553,25 +2577,69 @@ export type Database = {
         };
         Relationships: [];
       };
+      nightly_look_approvals: {
+        Row: {
+          approved: boolean;
+          graded_at: string;
+          look_key: string;
+          model: string;
+          note: string | null;
+          source: string;
+          surface: string;
+        };
+        Insert: {
+          approved?: boolean;
+          graded_at?: string;
+          look_key: string;
+          model: string;
+          note?: string | null;
+          source?: string;
+          surface: string;
+        };
+        Update: {
+          approved?: boolean;
+          graded_at?: string;
+          look_key?: string;
+          model?: string;
+          note?: string | null;
+          source?: string;
+          surface?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'nightly_look_approvals_look_key_fkey';
+            columns: ['look_key'];
+            isOneToOne: false;
+            referencedRelation: 'dream_mediums';
+            referencedColumns: ['key'];
+          },
+        ];
+      };
       nightly_model_policy: {
         Row: {
           fallback_models: string[];
+          fallback_weights: number[];
           notes: string | null;
           primary_models: string[];
+          primary_weights: number[];
           surface: string;
           updated_at: string;
         };
         Insert: {
           fallback_models?: string[];
+          fallback_weights?: number[];
           notes?: string | null;
           primary_models: string[];
+          primary_weights?: number[];
           surface: string;
           updated_at?: string;
         };
         Update: {
           fallback_models?: string[];
+          fallback_weights?: number[];
           notes?: string | null;
           primary_models?: string[];
+          primary_weights?: number[];
           surface?: string;
           updated_at?: string;
         };

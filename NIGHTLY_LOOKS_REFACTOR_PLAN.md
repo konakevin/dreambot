@@ -291,3 +291,9 @@ position 2), the swap pipeline and its degrade cascade, the quality gate, hair v
 1. ~~Embodied~~ — DECIDED 2026-09-11: out of nightly at cutover (`nightly_surface_mix.embodied = 0`, no rows), architected as a declared surface so it plugs back in as rows + a percent (§2b).
 2. ~~`force_medium` alias~~ — DECIDED 2026-09-11: KEEP (the QA scripts depend on it). `force_look` is added alongside; `force_medium` keeps resolving any key for at least one release and is only retired once every `scripts/qa-*` caller is moved.
 3. ~~Create's override library~~ — retracted; Create is honest today (§5 row 6).
+
+## Vibe axis (2026-09-11)
+
+The vibe is the contract's third axis. Audit, the ten proposed vibes, the matrix protocol and the design for
+rolling/applying it on the looks path live in `NIGHTLY_VIBES_AUDIT.md` (§6). Nothing ships to the roll until
+Kevin finalises the list from the vibe matrix page.
