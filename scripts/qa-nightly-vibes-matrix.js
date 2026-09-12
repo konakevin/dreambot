@@ -441,7 +441,11 @@ async function main() {
     const out = path.join(
       os.homedir(),
       'Desktop',
-      KEYS ? 'nightly-vibes-compare-app.html' : 'nightly-vibes-compare.html'
+      ARGS.out
+        ? `${ARGS.out}.html`
+        : KEYS
+          ? 'nightly-vibes-compare-app.html'
+          : 'nightly-vibes-compare.html'
     );
     fs.writeFileSync(path.join(OUT_DIR, 'nightly-vibes-compare.html'), html);
     fs.writeFileSync(out, html);

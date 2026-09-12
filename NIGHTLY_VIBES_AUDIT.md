@@ -257,3 +257,66 @@ h / i / j, same page family):
 
 All 24 are `nightly_only`, not eligible, not in the pool until their renders are in and their versions are
 added (the mig 506 pattern; any version that ships faceless is omitted, nothing else is).
+
+## 10. Rounds e-j results (the 12 app vibes and the 24 gap-fill vibes) and the final pool
+
+Same protocol as rounds A-D (Kevin solo, flux-1.1-pro, digital painting, the glasshouse). Pages:
+`~/Desktop/nightly-vibes-compare-app.html` and `~/Desktop/nightly-vibes-compare-gapfill.html`. No render shipped
+faceless; one drifted below 0.45 (synthwave bold, 0.40). Every version is saved (mig 509).
+
+**The 12 app vibes** (rounds e / g / f). On today's route they are as invisible on the nightly cast path as the
+first 20 were (the finding stands; Kevin's Create experience is a different prompt route). With the early
+fragment they come alive: voltage full neon, high_fantasy torches and banners, ancient overgrown, psychedelic a
+kaleidoscope, minimal a calm muted mist, coquette pink and romantic without feminizing the man.
+
+| vibe | subtle (today) | soft (after scene) | bold (early) |
+|---|---|---|---|
+| coquette | — | 2/4 · id 0.71 | 3/4 · id 0.66 |
+| kawaii | 2/4 · id 0.61 | 3/4 · id 0.72 | 3/4 · id 0.73 |
+| high_fantasy | 1/3 · id 0.66 | 3/4 · id 0.65 | 4/4 · id 0.71 |
+| whimsical | 1/3 · id 0.64 | 2/4 · id 0.70 | 4/4 · id 0.64 |
+| surreal | 1/3 · id 0.71 | 1/3 · id 0.68 | 2/3 · id 0.70 |
+| fierce | 2/3 · id 0.56 | 2/3 · id 0.65 | 3/4 · id 0.68 |
+| voltage | 2/4 · id 0.65 | 3/4 · id 0.66 | 5/4 · id 0.63 |
+| ancient | 1/3 · id 0.69 | 3/4 · id 0.71 | 4/4 · id 0.68 |
+| macabre | 1/3 · id 0.72 | 2/4 · id 0.66 | 3/4 · id 0.59 |
+| shimmer | 1/3 · id 0.63 | 1/3 · id 0.68 | 2/4 · id 0.73 |
+| minimal | — | 2/4 · id 0.70 | 4/4 · id 0.71 |
+| psychedelic | 1/3 · id 0.75 | 4/4 · id 0.64 | 5/4 · id 0.69 |
+
+**The 24 gap-fill vibes** (rounds h / j / i). The early route delivers real weather and season for the first
+time: snowfall, autumn leaves, cherry blossom, fireworks through the dome, god rays, a gilded hall, glowing
+bioluminescent lotuses, cotton-candy pastel light. Recurring flux quirk: cool or night light greys Kevin's hair
+(candlelit, starlit, stained_glass, caustics bold); the other two models are untested on this and the QA night
+covers it. Sunrise and noir never found their own light on any route (icicles for noir on the subtle route).
+
+| vibe | subtle (today) | soft (after scene) | bold (early) |
+|---|---|---|---|
+| snowfall | 3/4 · id 0.68 | 4/4 · id 0.70 | 5/5 · id 0.71 |
+| candlelit | 3/4 · id 0.74 | 2/4 · id 0.57 | 4/4 · id 0.71 |
+| fog | 3/4 · id 0.67 | 3/4 · id 0.71 | 5/4 · id 0.67 |
+| rainfall | 1/3 · id 0.66 | 3/4 · id 0.72 | 4/4 · id 0.58 |
+| sunrise | 3/4 · id 0.62 | 2/4 · id 0.72 | 2/3 · id 0.69 |
+| bioluminescent | 2/3 · id 0.69 | 3/4 · id 0.69 | 5/4 · id 0.62 |
+| noir | 2/3 · id 0.72 | 2/3 · id 0.71 | 3/4 · id 0.61 |
+| caustics | 1/3 · id 0.69 | 3/4 · id 0.70 | 3/3 · id 0.68 |
+| opulent | 1/3 · id 0.72 | 4/4 · id 0.67 | 5/5 · id 0.67 |
+| synthwave | 1/3 · id 0.69 | 4/4 · id 0.68 | 5/3 · id 0.40 |
+| autumnal | 1/3 · id 0.61 | 3/4 · id 0.68 | 5/5 · id 0.66 |
+| blossom | 3/4 · id 0.71 | 2/3 · id 0.67 | 5/5 · id 0.69 |
+| starlit | 1/3 · id 0.70 | 2/3 · id 0.72 | 4/3 · id 0.70 |
+| godrays | 1/3 · id 0.63 | 2/3 · id 0.71 | 5/5 · id 0.67 |
+| fireworks | 3/4 · id 0.68 | 1/3 · id 0.67 | 5/5 · id 0.67 |
+| carnival | 2/4 · id 0.73 | 4/4 · id 0.62 | 4/4 · id 0.67 |
+| cotton_candy | 3/4 · id 0.63 | 3/4 · id 0.69 | 4/4 · id 0.68 |
+| overcast | 1/3 · id 0.70 | 2/3 · id 0.68 | 4/4 · id 0.70 |
+| stained_glass | 1/3 · id 0.65 | 4/4 · id 0.69 | 4/4 · id 0.62 |
+| dreamy | 1/3 · id 0.64 | 3/4 · id 0.70 | 4/4 · id 0.70 |
+| chaos | 2/3 · id 0.66 | 3/4 · id 0.69 | 5/3 · id 0.66 |
+| majestic | 1/3 · id 0.70 | 2/3 · id 0.71 | 3/4 · id 0.61 |
+| ominous | 1/3 · id 0.63 | 3/4 · id 0.71 | 3/4 · id 0.67 |
+| aura | 2/3 · id 0.75 | 2/3 · id 0.68 | 3/4 · id 0.71 |
+
+**The pool after mig 509:** 174 version rows across 56 families (20 original × subtle/soft/bold + 6 wild; 36 new
+× subtle/soft/bold). The Create picker still lists 22; the legacy nightly roll still rolls the 5 incumbents.
+Nothing reaches production until the looks path is wired and switched on.
