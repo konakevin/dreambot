@@ -1,0 +1,230 @@
+{
+ "nightly_classical_oil": {
+  "solo": "PASS",
+  "solo_reason": "Painted, integrated, wardrobe honored.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; arms around each other, contact shadows, painted skin."
+ },
+ "nightly_baroque_oil": {
+  "solo": "PASS",
+  "solo_reason": "Darker painted realism; distinct from Classical.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; deep varnished tones."
+ },
+ "nightly_salon_realism": {
+  "solo": "PASS",
+  "solo_reason": "Period costume, highly finished; very distinct.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; period attire, polished finish."
+ },
+ "nightly_digital_painting": {
+  "solo": "PASS",
+  "solo_reason": "Glossy illustrative finish.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; glossy digital finish, faces natural."
+ },
+ "nightly_painted_fantasy": {
+  "solo": "PASS",
+  "solo_reason": "Painted, saturated, integrated.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; painted skin, saturated palette."
+ },
+ "nightly_hand_tinted_photo": {
+  "solo": "PASS",
+  "solo_reason": "Sepia-tinted period photo; distinct.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; convincing hand-tinted photograph."
+ },
+ "nightly_chromolithograph": {
+  "solo": "PASS",
+  "solo_reason": "Printed plate with paper border and caption line; the most distinct look on gemini.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; printed-plate texture with its own paper border, faces natural."
+ },
+ "nightly_technicolor": {
+  "solo": "PASS",
+  "solo_reason": "Photographic, saturated; natural and integrated.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; photographic, natural; overlaps Kodachrome."
+ },
+ "nightly_kodachrome": {
+  "solo": null,
+  "solo_reason": "",
+  "couple": "PASS",
+  "couple_reason": "Both landed; warm period photo, faces natural."
+ },
+ "nightly_ink_illustration": {
+  "solo": "PASS",
+  "solo_reason": "Illustrated world with a painted face; distinct and it blends.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_storybook_gouache": {
+  "solo": "PASS",
+  "solo_reason": "Painted picture-book illustration, no caricature; distinct.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_jewel_realism": {
+  "solo": "PASS",
+  "solo_reason": "Painted realism; close to Classical on gemini.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_magazine_cover": {
+  "solo": "PASS",
+  "solo_reason": "Painted realism; little to separate from Classical.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_movie_poster": {
+  "solo": "PASS",
+  "solo_reason": "Painted realism; little to separate from Classical.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_scifi_paperback": {
+  "solo": "PASS",
+  "solo_reason": "Painted with a galaxy sky through the dome; fun and distinct.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_matte_painting": {
+  "solo": "PASS",
+  "solo_reason": "Painted realism; close to Classical.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_pulp_cover": {
+  "solo": "PASS",
+  "solo_reason": "Painted realism; close to Classical.",
+  "couple": "PASS",
+  "couple_reason": "Kevin override 2026-09-12: approved for couples without a render on this model (every couple this model rendered passed)."
+ },
+ "nightly_fresco": {
+  "solo": "PASS",
+  "solo_reason": "Soft plaster-and-pastel texture; mildly distinct.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_oil_pastel": {
+  "solo": "PASS",
+  "solo_reason": "Pastel stroke texture; distinct.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_encaustic": {
+  "solo": "PASS",
+  "solo_reason": "Painted realism; close to Classical.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_vintage_film": {
+  "solo": "PASS",
+  "solo_reason": "Faded period photo; distinct and natural.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_painted_comic_cover": {
+  "solo": "PASS",
+  "solo_reason": "Painted-photo finish, natural.",
+  "couple": "PASS",
+  "couple_reason": "Painted comic-cover illustration, natural faces, wardrobe honored; distinct."
+ },
+ "nightly_soft_comic": {
+  "solo": "PASS",
+  "solo_reason": "Illustrated, natural.",
+  "couple": "PASS",
+  "couple_reason": "Soft illustrated comic, natural faces; distinct."
+ },
+ "nightly_rotoscope": {
+  "solo": "PASS",
+  "solo_reason": "One render; mildly caricatured but the face holds.",
+  "couple": "FAIL",
+  "couple_reason": "Both couples came back with cartoon-enlarged eyes and caricature faces: the big-eye failure. Recognizable but not real faces."
+ },
+ "nightly_painted_animation": {
+  "solo": "PASS",
+  "solo_reason": "Painted, natural.",
+  "couple": "PASS",
+  "couple_reason": "Painted-film finish, natural faces."
+ },
+ "nightly_airbrush_poster": {
+  "solo": "PASS",
+  "solo_reason": "Painted, natural.",
+  "couple": "PASS",
+  "couple_reason": "Painted realism, natural."
+ },
+ "nightly_marker": {
+  "solo": "PASS",
+  "solo_reason": "Marker illustration; distinct.",
+  "couple": "PASS",
+  "couple_reason": "A real marker illustration with natural faces; distinct."
+ },
+ "nightly_ink_wash_comic": {
+  "solo": "PASS",
+  "solo_reason": "Ink and wash; distinct.",
+  "couple": "PASS",
+  "couple_reason": "Ink lines with wash, natural faces; distinct."
+ },
+ "nightly_soft_pop_art": {
+  "solo": "PASS",
+  "solo_reason": "Pop poster look; distinct.",
+  "couple": "PASS",
+  "couple_reason": "Pop poster with halftone texture and natural faces: pop art that survives the swap. Distinct."
+ },
+ "nightly_painted_graphic_novel": {
+  "solo": "PASS",
+  "solo_reason": "Colored illustration, natural.",
+  "couple": "PASS",
+  "couple_reason": "Colored-pencil-and-paint panel look, natural faces; distinct."
+ },
+ "nightly_lineless_watercolor": {
+  "solo": "PASS",
+  "solo_reason": "Watercolor, natural; distinct.",
+  "couple": "PASS",
+  "couple_reason": "True watercolor, natural faces; distinct."
+ },
+ "nightly_watercolor_portrait": {
+  "solo": "PASS",
+  "solo_reason": "Watercolor on #1, photographic on #2.",
+  "couple": "PASS",
+  "couple_reason": "Watercolor-painted realism, natural."
+ },
+ "nightly_digital_watercolor": {
+  "solo": null,
+  "solo_reason": "",
+  "couple": "PASS",
+  "couple_reason": "Watercolor illustration, natural faces."
+ },
+ "nightly_gouache_portrait": {
+  "solo": "PASS",
+  "solo_reason": "Painted, natural.",
+  "couple": "PASS",
+  "couple_reason": "Painted, natural."
+ },
+ "nightly_aquarelle_graphite": {
+  "solo": "PASS",
+  "solo_reason": "Watercolor illustration on #1, photographic on #2.",
+  "couple": "PASS",
+  "couple_reason": "Soft watercolor over pencil, natural faces; distinct."
+ },
+ "nightly_soft_brush_illustration": {
+  "solo": "PASS",
+  "solo_reason": "One render; painted, natural.",
+  "couple": "PASS",
+  "couple_reason": "Painted, natural."
+ },
+ "nightly_pastel_portrait": {
+  "solo": "PASS",
+  "solo_reason": "Painted, natural.",
+  "couple": "PASS",
+  "couple_reason": "Soft painted, natural."
+ },
+ "nightly_big_head": {
+  "solo": "PASS",
+  "solo_reason": "Integrated big-head caricature with a real face; fun.",
+  "couple": "PASS",
+  "couple_reason": "Integrated big-head caricatures with your real faces, mid-dance, painted as part of the figures. Exactly the idea; fun and distinct."
+ }
+}

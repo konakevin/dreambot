@@ -1,0 +1,146 @@
+{
+ "snowfall": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Snow on the ground and a palace behind; winter arrived."
+ },
+ "candlelit": {
+  "accent": 2,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Green velvet by a teal pool; few candles."
+ },
+ "fog": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Misty and soft."
+ },
+ "rainfall": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Rain and a dark coat, wet stone."
+ },
+ "sunrise": {
+  "accent": 2,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Warm and bright."
+ },
+ "bioluminescent": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Purple wisteria and blue water; a glow beginning."
+ },
+ "noir": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Bright white mist; not noir."
+ },
+ "caustics": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Turquoise pool light."
+ },
+ "opulent": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Chandeliers overhead."
+ },
+ "synthwave": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Purple-magenta glow, face intact."
+ },
+ "autumnal": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Orange leaves and blooms."
+ },
+ "blossom": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Orange-red foliage rather than blossom."
+ },
+ "starlit": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Dark and warm; no stars."
+ },
+ "godrays": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Bright; faint rays."
+ },
+ "fireworks": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Green coat, no fireworks."
+ },
+ "carnival": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Blue string lights overhead."
+ },
+ "cotton_candy": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Pink tint."
+ },
+ "overcast": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Moody, but the shirt came open."
+ },
+ "stained_glass": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Stained-glass panes overhead."
+ },
+ "dreamy": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Hazy pastel."
+ },
+ "chaos": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Colorful blooms against teal."
+ },
+ "majestic": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Warm."
+ },
+ "ominous": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Dark teal with lanterns."
+ },
+ "aura": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Warm and bright, wide."
+ }
+}

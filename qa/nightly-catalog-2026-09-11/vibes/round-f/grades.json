@@ -1,0 +1,74 @@
+{
+ "coquette": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Pink roses framing the scene, warm romantic light; the man stays a man."
+ },
+ "kawaii": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Pastel blooms, mint and pink, koi. Sweet without turning cartoon."
+ },
+ "high_fantasy": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Torches and lanterns, banners on the columns, a warm enchanted glow."
+ },
+ "whimsical": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Lanterns and drifting golden sparkles; playful."
+ },
+ "surreal": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Bright and colorful; the impossible touches did not land."
+ },
+ "fierce": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Warm windy golden light, hair and leaves moving."
+ },
+ "voltage": {
+  "accent": 5,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Full neon magenta and cyan on a wet floor. Unmistakable."
+ },
+ "ancient": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Moss, overgrowth and aged stone; the glasshouse reclaimed."
+ },
+ "macabre": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Dark coat, moody lanterns; spooky-cute stripes did not appear."
+ },
+ "shimmer": {
+  "accent": 2,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Bright, warm and flattering; a soft bloom at most."
+ },
+ "minimal": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Muted mist, quiet light, a black turtleneck. Calm and clean."
+ },
+ "psychedelic": {
+  "accent": 5,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Kaleidoscope rainbow pattern across the whole glasshouse."
+ }
+}

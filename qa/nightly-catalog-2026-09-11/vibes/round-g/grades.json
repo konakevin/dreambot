@@ -1,0 +1,74 @@
+{
+ "coquette": {
+  "accent": 2,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Blooms and a warm cast; the pink stays shy."
+ },
+ "kawaii": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Pink wisteria and, for once, the locked blue velvet jacket."
+ },
+ "high_fantasy": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Lanterns, and the coat grew epaulettes: the realm leaked into the wardrobe."
+ },
+ "whimsical": {
+  "accent": 2,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Bright and cheerful, the green velvet jacket honored; little whimsy."
+ },
+ "surreal": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Dark coat, plain glasshouse."
+ },
+ "fierce": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Bright and saturated; a fuller beard than Kevin's."
+ },
+ "voltage": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Lantern bokeh and dark teal water; neon implied rather than shown."
+ },
+ "ancient": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Overgrown, greenish, weathered."
+ },
+ "macabre": {
+  "accent": 2,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Moody mist and fallen leaves, dark coat; no spooky-cute."
+ },
+ "shimmer": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Bright and plain."
+ },
+ "minimal": {
+  "accent": 2,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Misty, quiet, a green shirt."
+ },
+ "psychedelic": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Violet-blue psychedelic glow, koi drifting through the air."
+ }
+}

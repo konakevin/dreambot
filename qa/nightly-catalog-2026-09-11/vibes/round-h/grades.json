@@ -1,0 +1,146 @@
+{
+ "snowfall": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Snow flecks on the coat and a cool cast; a hint of winter."
+ },
+ "candlelit": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Warm lanterns; candlelight implied."
+ },
+ "fog": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Warm mist."
+ },
+ "rainfall": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain daylight."
+ },
+ "sunrise": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "A golden glow through the palms."
+ },
+ "bioluminescent": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Lanterns, daylight; no glow."
+ },
+ "noir": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Icicles dripping from every beam in a bright glasshouse. Not noir, but its own thing."
+ },
+ "caustics": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain daylight."
+ },
+ "opulent": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain daylight."
+ },
+ "synthwave": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Warm plain daylight."
+ },
+ "autumnal": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain daylight."
+ },
+ "blossom": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Pink roses overhead."
+ },
+ "starlit": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain daylight with koi."
+ },
+ "godrays": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain daylight."
+ },
+ "fireworks": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Sparklers bursting over the dome, in daylight."
+ },
+ "carnival": {
+  "accent": 2,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Pink flowers and lanterns."
+ },
+ "cotton_candy": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "A pink haze over the glasshouse."
+ },
+ "overcast": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain daylight; overalls appeared."
+ },
+ "stained_glass": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain daylight."
+ },
+ "dreamy": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain daylight."
+ },
+ "chaos": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Orange blooms; nothing chaotic."
+ },
+ "majestic": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain daylight."
+ },
+ "ominous": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain wide daylight."
+ },
+ "aura": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Warm close-up."
+ }
+}

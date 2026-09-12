@@ -1,0 +1,62 @@
+{
+ "kawaii": {
+  "accent": 2,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Pink wisteria and bright blooms; a hint of candy."
+ },
+ "high_fantasy": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Pink flowers and a lantern; daylight. No realm."
+ },
+ "whimsical": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain daylight."
+ },
+ "surreal": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain daylight; nothing impossible."
+ },
+ "fierce": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "A wide bright shot with a turquoise pool; the figure shrank a little (0.56)."
+ },
+ "voltage": {
+  "accent": 2,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Lanterns and a teal-lit pool; a whisper of neon."
+ },
+ "ancient": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain daylight."
+ },
+ "macabre": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain daylight, dark shirt."
+ },
+ "shimmer": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain daylight; the vibe IS a flattering pass, and none applied."
+ },
+ "psychedelic": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Plain daylight, dark coat. No pattern."
+ }
+}

@@ -1,0 +1,158 @@
+{
+ "nightly_classical_oil": {
+  "grade": "PASS",
+  "face": 5,
+  "look": 5,
+  "note": "Painted skin continuous with the oil world; no pasted-on edge; both couples and solos clean. The benchmark."
+ },
+ "nightly_digital_painting": {
+  "grade": "PASS",
+  "face": 4,
+  "look": 4,
+  "note": "Glossy digital-painting realism, faces natural. Tends to frame the couple wide (small faces) under this look; watch swap size."
+ },
+ "nightly_painted_fantasy": {
+  "grade": "PASS",
+  "face": 4,
+  "look": 4,
+  "note": "Faces integrate; strong jewel palette. The fantasy prior drifts wardrobe into costume (open shirt + chest tattoo, military coats)."
+ },
+ "nightly_watercolor_ink": {
+  "grade": "FAIL",
+  "face": 1,
+  "look": 3,
+  "note": "Textbook pasted-on: photographic faces on a watercolor world; couple #2 body dissolves into the path; solos drift identity (grey hair, a different older man). Stamps passed, eyes do not."
+ },
+ "nightly_ink_illustration": {
+  "grade": "FAIL",
+  "face": 0,
+  "look": 2,
+  "note": "Both couples degraded all the way to faceless pure-scene fallbacks (easel in mountains, silhouettes on cliffs). Solos render but the ink look barely shows."
+ },
+ "nightly_storybook_gouache": {
+  "grade": "FAIL",
+  "face": 1,
+  "look": 3,
+  "note": "Couple #1 bobblehead caricature proportions; couple #2 faceless pure-scene fallback. Solos fine but generic. Storybook language = cartoon proportions, as feared."
+ },
+ "nightly_film_noir": {
+  "grade": "FAIL",
+  "face": 2,
+  "look": 3,
+  "note": "Couple #2 degraded to a solo with selective color (koi and orchids in color, everything else grey), not noir at all. Solo #2 drifted to an older grey-bearded man. Monochrome + swap is unreliable."
+ },
+ "nightly_vintage_film": {
+  "grade": "REVIEW",
+  "face": 3,
+  "look": 4,
+  "note": "Photographic base blends faces with no pasted edge, but couple #1 rendered Kevin as a grey-haired older man (identity drift the stamps let through). Couple #2 and both solos are lovely period photos."
+ },
+ "nightly_baroque_oil": {
+  "grade": "PASS",
+  "face": 5,
+  "look": 5,
+  "note": "Both couples and solos superb: painted skin, deep grounds, velvet. The look pulls period costume (frock coats, gowns), which reads as a feature. Distinct from Classical Oil by darkness and grandeur."
+ },
+ "nightly_salon_realism": {
+  "grade": "PASS",
+  "face": 5,
+  "look": 4,
+  "note": "Refined, bright, smooth realism; faces natural in all four. Cousin of Classical/Baroque but lighter and more finished; keep if room."
+ },
+ "nightly_jewel_realism": {
+  "grade": "REVIEW",
+  "face": 3,
+  "look": 4,
+  "note": "Couple #1 collapsed to a faceless pure-scene fallback that ignored the scene (a neon waterfront with a MARINA sign). Couple #2 and both solos are good, saturated, faces fine."
+ },
+ "nightly_magazine_cover": {
+  "grade": "REVIEW",
+  "face": 3,
+  "look": 3,
+  "note": "Couple #2 degraded to Kevin alone. Couple #1 is a stiff painted illustration; solos read as ordinary photos. Weak identity as a look."
+ },
+ "nightly_movie_poster": {
+  "grade": "FAIL",
+  "face": 2,
+  "look": 3,
+  "note": "The poster prior turns the couple to face EACH OTHER in profile with small faces (both couples), so the swap has little to land on (median identity 0.51, the lowest pass). Solos are fine but the look is not distinct."
+ },
+ "nightly_scifi_paperback": {
+  "grade": "FAIL",
+  "face": 2,
+  "look": 4,
+  "note": "Both couples degraded to Kevin alone (the second face never split). Ironically the only look that honored the green velvet jacket. Solo #2 shrank him into a wide vista."
+ },
+ "nightly_matte_painting": {
+  "grade": "FAIL",
+  "face": 2,
+  "look": 4,
+  "note": "Both couples degraded to Kevin alone: 'sweeping painted environment' shrinks the people, exactly the face-swap hard rule. Pretty renders, unusable for couples."
+ },
+ "nightly_pulp_cover": {
+  "grade": "REVIEW",
+  "face": 3,
+  "look": 4,
+  "note": "Couple #2 degraded to Kevin alone; couple #1 landed but small. Solos are excellent: rugged painted-realism adventurer, faces integrated. Worth a re-gate with tighter framing."
+ },
+ "nightly_fresco": {
+  "grade": "FAIL",
+  "face": 0,
+  "look": 2,
+  "note": "Couple #1 sepia bobblehead caricatures; couple #2 giant floating faces over tiny bodies (the swap pasted full-size faces onto a wide scene). Solo #1 is a plain photo with the wrong hair. Cut."
+ },
+ "nightly_pastel_chalk": {
+  "grade": "FAIL",
+  "face": 1,
+  "look": 4,
+  "note": "Couple #1 is a genuinely pretty pastel painting but the plus-one drifted blonde; couple #2 giant floating heads; solo #1 an older grey-bearded stranger. Lovely look, unsafe swap."
+ },
+ "nightly_alla_prima": {
+  "grade": "FAIL",
+  "face": 2,
+  "look": 4,
+  "note": "Couple #1 degraded to Kevin alone; solo #1 drifted to an older grey-bearded stranger. Couple #2 and solo #2 are handsome loose-brush paintings. Two failures of four."
+ },
+ "nightly_cinematic_still": {
+  "grade": "REVIEW",
+  "face": 3,
+  "look": 4,
+  "note": "Couple #2 and solo #2 are the most natural faces in the whole matrix (a real photo). But couple #1 turned the pair into profiles at the table and solo #1 drifted to an older man."
+ },
+ "nightly_kodachrome": {
+  "grade": "REVIEW",
+  "face": 4,
+  "look": 4,
+  "note": "Both couples natural with true retro color (plus-one's hair went blonde-curly in #1). Solo #1 drifted to an older grey-bearded man again."
+ },
+ "nightly_hand_tinted_photo": {
+  "grade": "PASS",
+  "face": 4,
+  "look": 5,
+  "note": "Distinct period tinted-photo look, faces blend as photographs do; couple #2 goes dark sepia Victorian. Kevin reads a touch heavier in the solos."
+ },
+ "nightly_chromolithograph": {
+  "grade": "PASS",
+  "face": 4,
+  "look": 5,
+  "note": "The most distinct new look: Victorian printed illustration realism. Both couples natural, both solos good. A real gap filled."
+ },
+ "nightly_oil_pastel": {
+  "grade": "REVIEW",
+  "face": 3,
+  "look": 4,
+  "note": "Couple #1 a fine pastel painting; couple #2 turned the pair into profiles. Solo #1 came out as a plain photo, solo #2 a rich textured painting."
+ },
+ "nightly_technicolor": {
+  "grade": "PASS",
+  "face": 4,
+  "look": 3,
+  "note": "All four natural; saturated dye-transfer color reads. Overlaps Vintage Film / Kodachrome; keep one or two of the three."
+ },
+ "nightly_encaustic": {
+  "grade": "FAIL",
+  "face": 0,
+  "look": 3,
+  "note": "Couple #1 giant floating heads over a landscape, couple #2 bobblehead caricatures. Solos fine. The wax language reads as 'craft' and shrinks the people."
+ }
+}

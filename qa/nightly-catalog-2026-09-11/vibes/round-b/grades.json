@@ -1,0 +1,122 @@
+{
+ "cinematic": {
+  "accent": 2,
+  "pretty": 4,
+  "verdict": "REWORK",
+  "note": "Painterly at last (the look-neutral framing works) but still daylight; no filmic grade."
+ },
+ "cozy": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Warm lantern glow and golden mist. Cozy finally reads."
+ },
+ "epic": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "REWORK",
+  "note": "Warm haze and a tighter waist-up crop; nothing monumental."
+ },
+ "nostalgic": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "REWORK",
+  "note": "Warm and bright; a khaki vest. Faint."
+ },
+ "peaceful": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Warm golden mist and calm; warm rather than pale, but serene."
+ },
+ "dark": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "REWORK",
+  "note": "Soft daylight. The late fragment cannot turn day into night."
+ },
+ "ethereal": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "REWORK",
+  "note": "Sun shafts through the glass, but the figure shrank to the far end of the path."
+ },
+ "arcane": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Golden motes drifting in daylight; magic without the lanterns."
+ },
+ "enchanted": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "REWORK",
+  "note": "A few lanterns, otherwise daylight."
+ },
+ "nightshade": {
+  "accent": 4,
+  "pretty": 5,
+  "verdict": "KEEP",
+  "note": "Blue dusk, lanterns, drifting flakes, dark coat. Gothic and elegant."
+ },
+ "golden_hour": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Warm lantern glow; less sunset than the v1 card."
+ },
+ "blue_hour": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Teal-blue glass with warm lamps."
+ },
+ "moonlit": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "REWORK",
+  "note": "Daylight with a stained-glass window. No moon."
+ },
+ "stormlight": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "REWORK",
+  "note": "Bright daylight."
+ },
+ "festive": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "String lights everywhere, reflections on a wet floor."
+ },
+ "after_rain": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "REWORK",
+  "note": "Mild; a damp look at most."
+ },
+ "sun_drenched": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Bright and sunny."
+ },
+ "spotlight": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "REWORK",
+  "note": "Daylight. No spot."
+ },
+ "aurora": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "REWORK",
+  "note": "Daylight. No aurora."
+ },
+ "prism": {
+  "accent": 1,
+  "pretty": 3,
+  "verdict": "REWORK",
+  "note": "Daylight. No refractions."
+ }
+}

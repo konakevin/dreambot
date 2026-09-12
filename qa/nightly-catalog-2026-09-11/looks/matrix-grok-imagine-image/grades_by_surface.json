@@ -1,0 +1,230 @@
+{
+ "nightly_baroque_oil": {
+  "solo": "PASS",
+  "solo_reason": "Darker, moodier than Classical; distinct.",
+  "couple": "PASS",
+  "couple_reason": ""
+ },
+ "nightly_chromolithograph": {
+  "solo": "PASS",
+  "solo_reason": "Aged printed-plate look with paper border; the most distinct.",
+  "couple": "PASS",
+  "couple_reason": "Couple #1 heads slightly enlarged (mild print-caricature); #2 clean."
+ },
+ "nightly_classical_oil": {
+  "solo": "PASS",
+  "solo_reason": "",
+  "couple": "PASS",
+  "couple_reason": "Both landed, wardrobe honored."
+ },
+ "nightly_digital_painting": {
+  "solo": "PASS",
+  "solo_reason": "Glossy illustrative finish; distinct.",
+  "couple": "PASS",
+  "couple_reason": ""
+ },
+ "nightly_encaustic": {
+  "solo": "PASS",
+  "solo_reason": "Reads as generic painted realism.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_fresco": {
+  "solo": "PASS",
+  "solo_reason": "Muted mineral palette; mildly distinct.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_hand_tinted_photo": {
+  "solo": "PASS",
+  "solo_reason": "Soft tinted-photo palette; distinct.",
+  "couple": "PASS",
+  "couple_reason": ""
+ },
+ "nightly_ink_illustration": {
+  "solo": "PASS",
+  "solo_reason": "Clean linework world with a painted face; reads as illustration and the face still blends.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_jewel_realism": {
+  "solo": "PASS",
+  "solo_reason": "Reads as generic painted realism; little to separate it from Classical.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_kodachrome": {
+  "solo": null,
+  "solo_reason": "",
+  "couple": "PASS",
+  "couple_reason": "Both natural; period photo palette."
+ },
+ "nightly_magazine_cover": {
+  "solo": "PASS",
+  "solo_reason": "Reads as generic painted realism.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_matte_painting": {
+  "solo": "PASS",
+  "solo_reason": "Reads as generic painted realism.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_movie_poster": {
+  "solo": "PASS",
+  "solo_reason": "Reads as generic painted realism.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_oil_pastel": {
+  "solo": "PASS",
+  "solo_reason": "Soft painterly; mildly distinct.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_painted_fantasy": {
+  "solo": "PASS",
+  "solo_reason": "Saturated jewel palette, painterly sky; distinct.",
+  "couple": "PASS",
+  "couple_reason": ""
+ },
+ "nightly_pulp_cover": {
+  "solo": "PASS",
+  "solo_reason": "Reads as generic painted realism.",
+  "couple": "PASS",
+  "couple_reason": "Kevin override 2026-09-12: approved for couples without a render on this model (every couple this model rendered passed)."
+ },
+ "nightly_salon_realism": {
+  "solo": "PASS",
+  "solo_reason": "Close to Classical Oil on grok.",
+  "couple": "PASS",
+  "couple_reason": ""
+ },
+ "nightly_scifi_paperback": {
+  "solo": "PASS",
+  "solo_reason": "Dramatic painted sky; mildly distinct.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_storybook_gouache": {
+  "solo": "PASS",
+  "solo_reason": "Painterly illustration, no caricature on grok.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_technicolor": {
+  "solo": "PASS",
+  "solo_reason": "Photographic, saturated; distinct from the painted set.",
+  "couple": "PASS",
+  "couple_reason": ""
+ },
+ "nightly_vintage_film": {
+  "solo": "PASS",
+  "solo_reason": "Faded film photo; distinct.",
+  "couple": null,
+  "couple_reason": ""
+ },
+ "nightly_painted_comic_cover": {
+  "solo": "PASS",
+  "solo_reason": "Natural, integrated; reads as painted realism.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; painted comic-cover realism, wardrobe honored, integrated."
+ },
+ "nightly_soft_comic": {
+  "solo": "PASS",
+  "solo_reason": "Illustrated world, natural face; distinct comic-illustration feel.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; soft painted comic illustration, her face mildly stylized in #2 but recognizable."
+ },
+ "nightly_rotoscope": {
+  "solo": "PASS",
+  "solo_reason": "Flat-color animated look with a natural face; distinct.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; flat-color animated look with painted faces, clearly \"animated\" yet the faces hold. Distinct."
+ },
+ "nightly_painted_animation": {
+  "solo": "PASS",
+  "solo_reason": "Painted-film finish, natural.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; painted-film finish, natural faces."
+ },
+ "nightly_airbrush_poster": {
+  "solo": "PASS",
+  "solo_reason": "Painted realism; not very distinct on grok.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; painted realism, less distinct on grok."
+ },
+ "nightly_marker": {
+  "solo": "PASS",
+  "solo_reason": "Real marker illustration, natural face; distinct.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; a real marker illustration, faces natural. Distinct."
+ },
+ "nightly_ink_wash_comic": {
+  "solo": "PASS",
+  "solo_reason": "Ink lines with wash, natural face; distinct.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; ink lines with wash, faces slightly illustrated but recognizable. Distinct."
+ },
+ "nightly_soft_pop_art": {
+  "solo": "PASS",
+  "solo_reason": "Bold saturated illustration, natural face; distinct.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; bold saturated pop illustration with red accents, faces natural. Distinct."
+ },
+ "nightly_painted_graphic_novel": {
+  "solo": "PASS",
+  "solo_reason": "Painted, natural; reads as painted realism.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; painted panels, natural faces."
+ },
+ "nightly_lineless_watercolor": {
+  "solo": "PASS",
+  "solo_reason": "True watercolor with a natural face; distinct.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; a true watercolor look with natural faces. Distinct."
+ },
+ "nightly_watercolor_portrait": {
+  "solo": "PASS",
+  "solo_reason": "Watercolor-painted realism, natural.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; watercolor-painted realism."
+ },
+ "nightly_digital_watercolor": {
+  "solo": "PASS",
+  "solo_reason": "Watercolor illustration, natural face; distinct.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; watercolor illustration, faces natural. Distinct."
+ },
+ "nightly_gouache_portrait": {
+  "solo": "PASS",
+  "solo_reason": "Painted, natural.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; painted, natural."
+ },
+ "nightly_aquarelle_graphite": {
+  "solo": "PASS",
+  "solo_reason": "Soft luminous watercolor with a painted sky; distinct.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; soft painted realism."
+ },
+ "nightly_soft_brush_illustration": {
+  "solo": "PASS",
+  "solo_reason": "Brush-painted realism, natural.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; brush-painted realism."
+ },
+ "nightly_pastel_portrait": {
+  "solo": "PASS",
+  "solo_reason": "Soft pastel painting, natural.",
+  "couple": "PASS",
+  "couple_reason": "Both landed; soft pastel painting, natural faces."
+ },
+ "nightly_big_head": {
+  "solo": "PASS",
+  "solo_reason": "Mild big-head proportions with your real face, integrated; fun.",
+  "couple": "PASS",
+  "couple_reason": "Both landed as INTEGRATED big-head caricatures with your real faces: painted as part of the figure, not pasted. The Big Head idea works on grok."
+ }
+}

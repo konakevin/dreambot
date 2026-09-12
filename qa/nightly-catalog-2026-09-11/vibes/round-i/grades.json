@@ -1,0 +1,146 @@
+{
+ "snowfall": {
+  "accent": 5,
+  "pretty": 5,
+  "verdict": "KEEP",
+  "note": "Snow on the railings, a blue winter night, one lantern. Exactly it."
+ },
+ "candlelit": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Candles everywhere and warm gold, but the hair went grey (cool-light aging on flux)."
+ },
+ "fog": {
+  "accent": 5,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Dense luminous fog with haloed lanterns."
+ },
+ "rainfall": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Rain streaks and wet stone, a dome through the downpour; identity 0.58."
+ },
+ "sunrise": {
+  "accent": 2,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "White blooms and cool light; no sunrise glow."
+ },
+ "noir": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Dark and moody with hard light; the blinds did not appear."
+ },
+ "opulent": {
+  "accent": 5,
+  "pretty": 5,
+  "verdict": "KEEP",
+  "note": "Chandeliers, gilt and a grand gallery. A palace."
+ },
+ "synthwave": {
+  "accent": 5,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Full magenta-cyan synthwave, but the face drifted hard (0.40)."
+ },
+ "autumnal": {
+  "accent": 5,
+  "pretty": 5,
+  "verdict": "KEEP",
+  "note": "Autumn leaves drifting and carpeting the path. Perfect."
+ },
+ "blossom": {
+  "accent": 5,
+  "pretty": 5,
+  "verdict": "KEEP",
+  "note": "Cherry blossom petals everywhere. Perfect."
+ },
+ "starlit": {
+  "accent": 4,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Blue night with lanterns, but grey hair again."
+ },
+ "godrays": {
+  "accent": 5,
+  "pretty": 5,
+  "verdict": "KEEP",
+  "note": "Volumetric sun rays through the haze. Breathtaking."
+ },
+ "fireworks": {
+  "accent": 5,
+  "pretty": 5,
+  "verdict": "KEEP",
+  "note": "Fireworks through the glass dome, glow on the wet floor."
+ },
+ "carnival": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "String bulbs and festival lights; carnival without the tents."
+ },
+ "overcast": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Soft grey Nordic light, muted palette."
+ },
+ "stained_glass": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Pink and magenta colored light through the panes; grey hair."
+ },
+ "dreamy": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Lavender-pink haze. Dreamy indeed."
+ },
+ "chaos": {
+  "accent": 5,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Rainbow light from every direction. Wild, as written."
+ },
+ "majestic": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Warm lantern grandeur; close to opulent, less gilt."
+ },
+ "ominous": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Dark teal and foreboding."
+ },
+ "aura": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Warm glow, a tighter waist-up frame."
+ },
+ "bioluminescent": {
+  "accent": 5,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Teal and magenta glowing lotuses on dark water. Otherworldly."
+ },
+ "caustics": {
+  "accent": 3,
+  "pretty": 3,
+  "verdict": "KEEP",
+  "note": "Turquoise water light, but grey hair again."
+ },
+ "cotton_candy": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Pink-lilac pastel light over everything."
+ }
+}

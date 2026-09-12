@@ -1,0 +1,260 @@
+{
+ "nightly_classical_oil": {
+  "solo": "PASS",
+  "solo_reason": "",
+  "couple": "PASS",
+  "couple_reason": ""
+ },
+ "nightly_digital_painting": {
+  "solo": "PASS",
+  "solo_reason": "",
+  "couple": "PASS",
+  "couple_reason": "Frames the couple wide; faces smaller."
+ },
+ "nightly_painted_fantasy": {
+  "solo": "PASS",
+  "solo_reason": "Costume drift (frock coats), face fine.",
+  "couple": "PASS",
+  "couple_reason": ""
+ },
+ "nightly_watercolor_ink": {
+  "solo": "FAIL",
+  "solo_reason": "Solo #2 came back as an older white-bearded man, not Kevin. Solo #1 greyed the hair.",
+  "couple": "FAIL",
+  "couple_reason": "Photo faces pasted on a watercolor world; couple #2 bodies dissolve into the path."
+ },
+ "nightly_ink_illustration": {
+  "solo": "PASS",
+  "solo_reason": "Face fine; the ink look barely shows.",
+  "couple": "FAIL",
+  "couple_reason": "Both couples collapsed to faceless scenes (no people at all)."
+ },
+ "nightly_storybook_gouache": {
+  "solo": "PASS",
+  "solo_reason": "",
+  "couple": "FAIL",
+  "couple_reason": "Couple #1 bobblehead caricatures; couple #2 a faceless scene."
+ },
+ "nightly_film_noir": {
+  "solo": "FAIL",
+  "solo_reason": "Solo #2 came back as an older grey-bearded man, not Kevin.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #2 lost her: Kevin alone with odd selective color."
+ },
+ "nightly_vintage_film": {
+  "solo": "PASS",
+  "solo_reason": "",
+  "couple": "FAIL",
+  "couple_reason": "Couple #1 rendered Kevin as an older grey-haired man. Couple #2 is lovely."
+ },
+ "nightly_baroque_oil": {
+  "solo": "PASS",
+  "solo_reason": "",
+  "couple": "PASS",
+  "couple_reason": ""
+ },
+ "nightly_salon_realism": {
+  "solo": "PASS",
+  "solo_reason": "",
+  "couple": "PASS",
+  "couple_reason": ""
+ },
+ "nightly_jewel_realism": {
+  "solo": "PASS",
+  "solo_reason": "",
+  "couple": "FAIL",
+  "couple_reason": "Couple #1 collapsed to a faceless scene of the wrong place."
+ },
+ "nightly_magazine_cover": {
+  "solo": "PASS",
+  "solo_reason": "Reads as a plain photo; weak as a look.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #2 lost her: Kevin alone. Couple #1 stiff."
+ },
+ "nightly_movie_poster": {
+  "solo": "PASS",
+  "solo_reason": "",
+  "couple": "FAIL",
+  "couple_reason": "Both couples turned to face each other in profile; faces too small to swap."
+ },
+ "nightly_scifi_paperback": {
+  "solo": "PASS",
+  "solo_reason": "Solo #2 shrank him into a wide vista.",
+  "couple": "FAIL",
+  "couple_reason": "Both couples lost her: Kevin alone."
+ },
+ "nightly_matte_painting": {
+  "solo": "PASS",
+  "solo_reason": "Scene-heavy framing.",
+  "couple": "FAIL",
+  "couple_reason": "Both couples lost her: the sweeping scene shrinks the people."
+ },
+ "nightly_pulp_cover": {
+  "solo": "PASS",
+  "solo_reason": "",
+  "couple": "PASS",
+  "couple_reason": "Kevin override 2026-09-12: pass for couples (couple #1 landed; #2 degraded to a well-rendered solo)."
+ },
+ "nightly_fresco": {
+  "solo": "PASS",
+  "solo_reason": "Solo #1 is a plain photo with the wrong hair; the fresco look disappears.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #1 bobbleheads; couple #2 giant floating heads."
+ },
+ "nightly_pastel_chalk": {
+  "solo": "FAIL",
+  "solo_reason": "Solo #1 came back as an older grey-bearded man, not Kevin.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #2 giant floating heads; couple #1 her hair drifted blonde."
+ },
+ "nightly_alla_prima": {
+  "solo": "FAIL",
+  "solo_reason": "Solo #1 came back as an older grey-bearded man, not Kevin.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #1 lost her: Kevin alone."
+ },
+ "nightly_cinematic_still": {
+  "solo": "FAIL",
+  "solo_reason": "Solo #1 came back as an older grey-bearded man, not Kevin.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #1 profiles facing each other at the table. Couple #2 is the best photo in the set."
+ },
+ "nightly_kodachrome": {
+  "solo": "FAIL",
+  "solo_reason": "Solo #1 came back as an older grey-bearded man, not Kevin.",
+  "couple": "PASS",
+  "couple_reason": "Her hair went curly-blonde in #1; faces fine."
+ },
+ "nightly_hand_tinted_photo": {
+  "solo": "PASS",
+  "solo_reason": "",
+  "couple": "PASS",
+  "couple_reason": ""
+ },
+ "nightly_chromolithograph": {
+  "solo": "PASS",
+  "solo_reason": "",
+  "couple": "PASS",
+  "couple_reason": ""
+ },
+ "nightly_oil_pastel": {
+  "solo": "PASS",
+  "solo_reason": "Solo #1 is a plain photo; the pastel look shows only on #2.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #2 profiles facing each other."
+ },
+ "nightly_technicolor": {
+  "solo": "PASS",
+  "solo_reason": "",
+  "couple": "PASS",
+  "couple_reason": ""
+ },
+ "nightly_encaustic": {
+  "solo": "PASS",
+  "solo_reason": "",
+  "couple": "FAIL",
+  "couple_reason": "Couple #1 giant floating heads; couple #2 bobbleheads."
+ },
+ "nightly_painted_comic_cover": {
+  "solo": "FAIL",
+  "solo_reason": "Solo #1 came back as an older grey-bearded man. Solo #2 natural and integrated.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #2 profiles facing each other with small faces. Couple #1 landed and reads as a painted cover."
+ },
+ "nightly_soft_comic": {
+  "solo": "PASS",
+  "solo_reason": "Both natural and integrated; the comic look softens into photo-illustration.",
+  "couple": "FAIL",
+  "couple_reason": "Both couples turned into profiles facing each other; faces too small to swap."
+ },
+ "nightly_rotoscope": {
+  "solo": "PASS",
+  "solo_reason": "Solo #1 photoreal (look absent); solo #2 a fun mild big-head figure with a real face.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #1 became an integrated big-head caricature with real faces (a Big Head hit, not a rotoscope); couple #2 3D-animated figures in profile."
+ },
+ "nightly_painted_animation": {
+  "solo": "FAIL",
+  "solo_reason": "Solo #2 came back as an older grey-bearded man. Solo #1 natural.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #1 profiles facing each other. Couple #2 landed, painted and natural."
+ },
+ "nightly_airbrush_poster": {
+  "solo": "PASS",
+  "solo_reason": "Both natural, integrated; reads photographic rather than airbrushed.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #2 collapsed into a surreal giant face over a birch forest with a tiny couple. Couple #1 is a genuinely distinct airbrushed poster portrait."
+ },
+ "nightly_marker": {
+  "solo": "PASS",
+  "solo_reason": "Solo #1 a real marker illustration with a recognizable face; solo #2 photoreal.",
+  "couple": "FAIL",
+  "couple_reason": "Both couples became marker caricatures with big heads; her face is drawn, not swapped. Promising as a deliberate caricature/Big Head look, not as a real-face look."
+ },
+ "nightly_ink_wash_comic": {
+  "solo": "PASS",
+  "solo_reason": "Both good: ink-wash illustration and a painted variant, faces natural.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #1 bobblehead caricature with approximate faces. Couple #2 (retried) landed as a genuine ink-wash illustration, natural and integrated: half-way there."
+ },
+ "nightly_soft_pop_art": {
+  "solo": "PASS",
+  "solo_reason": "Both natural; no pop-art look survives.",
+  "couple": "FAIL",
+  "couple_reason": "Both couples rendered as giant floating heads over the scene."
+ },
+ "nightly_lineless_watercolor": {
+  "solo": "PASS",
+  "solo_reason": "Both real watercolor paintings, natural and integrated; the most watercolor-like solo in the set.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #1 giant floating heads; couple #2 a surreal giant face with a swing."
+ },
+ "nightly_watercolor_portrait": {
+  "solo": "PASS",
+  "solo_reason": "Both painted, natural, integrated.",
+  "couple": "PASS",
+  "couple_reason": "Both couples landed facing camera in painted watercolor realism; wardrobe drifted formal."
+ },
+ "nightly_digital_watercolor": {
+  "solo": "PASS",
+  "solo_reason": "Both natural; the look reads photographic.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #1 bobblehead caricature with drawn faces. Couple #2 landed."
+ },
+ "nightly_gouache_portrait": {
+  "solo": "PASS",
+  "solo_reason": "Both natural, photographic; gouache look absent.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #1 profiles facing each other. Couple #2 landed, painted and natural."
+ },
+ "nightly_aquarelle_graphite": {
+  "solo": "FAIL",
+  "solo_reason": "Solo #2 came back as an older grey-bearded man. Solo #1 a lovely aquarelle.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #1 Kevin rendered balding (identity drift); couple #2 giant heads."
+ },
+ "nightly_soft_brush_illustration": {
+  "solo": "PASS",
+  "solo_reason": "Both natural and integrated (the retry landed); reads photographic rather than brush-painted.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #2 profiles facing each other. Couple #1 landed as painted realism."
+ },
+ "nightly_pastel_portrait": {
+  "solo": "PASS",
+  "solo_reason": "Both natural; #1 genuinely pastel.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #2 profiles facing each other. Couple #1 landed, soft and painted."
+ },
+ "nightly_painted_graphic_novel": {
+  "solo": "PASS",
+  "solo_reason": "Both painted, natural, integrated; distinct dark painterly finish.",
+  "couple": "FAIL",
+  "couple_reason": "Couple #1 collapsed to a faceless night path; couple #2 a tight two-face portrait crop that loses the scene."
+ },
+ "nightly_big_head": {
+  "couple": "PASS",
+  "couple_reason": "Integrated big-head caricatures with your real faces (wardrobe drifted to suit and coat); painted as part of the figures. One couple degraded on the stamps but shipped as a couple.",
+  "solo": "FAIL",
+  "solo_reason": "Both solos came back as an older white-haired, white-bearded man: the age-drift defect, exaggerated by the caricature."
+ }
+}

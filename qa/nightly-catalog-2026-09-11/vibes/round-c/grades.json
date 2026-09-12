@@ -1,0 +1,122 @@
+{
+ "cinematic": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Misty teal, distant lanterns, a dark Victorian suit. Moody and filmic."
+ },
+ "cozy": {
+  "accent": 5,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Lanterns and candles everywhere. Unmistakably cozy, a touch much."
+ },
+ "epic": {
+  "accent": 5,
+  "pretty": 2,
+  "verdict": "REWORK",
+  "note": "Dramatic storm sky and sun rays, but the camera left the glasshouse and the figure shrank (identity 0.36). Sky nouns in the fragment."
+ },
+ "nostalgic": {
+  "accent": 4,
+  "pretty": 5,
+  "verdict": "KEEP",
+  "note": "Sunset through teal glass, roses on the railing. Warm and wistful."
+ },
+ "peaceful": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Pale mist, soft light, calm water."
+ },
+ "dark": {
+  "accent": 5,
+  "pretty": 3,
+  "verdict": "REWORK",
+  "note": "A full-moon night with lanterns, but an exterior view and a small figure (identity 0.45). 'Night' pulled the camera outside."
+ },
+ "ethereal": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Soft luminous glow, blooms at the edges."
+ },
+ "arcane": {
+  "accent": 0,
+  "pretty": 0,
+  "verdict": "RETRY",
+  "note": "Four 546 worker-limit failures in a row; no render."
+ },
+ "enchanted": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Lantern-lit warm glow with petals on the path."
+ },
+ "nightshade": {
+  "accent": 5,
+  "pretty": 5,
+  "verdict": "KEEP",
+  "note": "Moonlit night, lanterns, dark coat. Gothic glamour exactly as written."
+ },
+ "golden_hour": {
+  "accent": 5,
+  "pretty": 5,
+  "verdict": "KEEP",
+  "note": "Sunset blazing through the glass. The best card of every round."
+ },
+ "blue_hour": {
+  "accent": 5,
+  "pretty": 5,
+  "verdict": "KEEP",
+  "note": "Cobalt glass, warm lamps, wet floor. Exactly blue hour."
+ },
+ "moonlit": {
+  "accent": 1,
+  "pretty": 1,
+  "verdict": "REWORK",
+  "note": "DERAILED: a TV news desk by the sea, no Kevin (identity 0.00). The early fragment can hijack the scene when the words are ambiguous."
+ },
+ "stormlight": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Teal storm light, wind in the fronds, saturated color."
+ },
+ "festive": {
+  "accent": 5,
+  "pretty": 5,
+  "verdict": "KEEP",
+  "note": "String lights and confetti. A party."
+ },
+ "after_rain": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Mist and a wet reflective floor."
+ },
+ "sun_drenched": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Bright saturated sun."
+ },
+ "spotlight": {
+  "accent": 5,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Purple stage lights, dark surroundings, one spot. A bit of a nightclub; tone the magenta down."
+ },
+ "aurora": {
+  "accent": 5,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Aurora rippling through the glass, a fur-collared coat. Identity 0.56, a little low."
+ },
+ "prism": {
+  "accent": 4,
+  "pretty": 3,
+  "verdict": "REWORK",
+  "note": "Rainbow-tinted light and refractions, but the face aged (grey beard, identity 0.56)."
+ }
+}

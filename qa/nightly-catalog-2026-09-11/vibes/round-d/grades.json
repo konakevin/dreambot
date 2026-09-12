@@ -1,0 +1,50 @@
+{
+ "cozy": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Lanterns moderated, warm amber. Cozy without the candle spam."
+ },
+ "epic": {
+  "accent": 5,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "Golden sun rays streaming through the glasshouse, monumental and INSIDE this time. Still a full-body figure; identity 0.50 sits right at the gate."
+ },
+ "dark": {
+  "accent": 5,
+  "pretty": 5,
+  "verdict": "KEEP",
+  "note": "Night interior, lanterns and candles, deep blue shadow, the face lit. Exactly the fix."
+ },
+ "arcane": {
+  "accent": 5,
+  "pretty": 5,
+  "verdict": "KEEP",
+  "note": "Hanging lanterns, drifting motes, blossoms. Magic, and the face is clean (0.72)."
+ },
+ "moonlit": {
+  "accent": 5,
+  "pretty": 5,
+  "verdict": "KEEP",
+  "note": "Cool silver-blue misty night, lanterns, the face lit (identity 0.73). The faceless derail is gone."
+ },
+ "spotlight": {
+  "accent": 4,
+  "pretty": 4,
+  "verdict": "KEEP",
+  "note": "One bright spot from above, dark blue surroundings, lanterns. The nightclub magenta is gone."
+ },
+ "aurora": {
+  "accent": 5,
+  "pretty": 4,
+  "verdict": "REWORK",
+  "note": "Aurora through the palms with a warm lantern, but the hair and beard went grey again (identity 0.64). The green light ages the face twice in a row."
+ },
+ "prism": {
+  "accent": 3,
+  "pretty": 4,
+  "verdict": "CUT",
+  "note": "Bright cyan-and-pink garden with faint rainbow light. Pretty, but the accent is weak and the face drifted in both rounds (0.56, 0.57)."
+ }
+}

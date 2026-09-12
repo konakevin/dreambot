@@ -1,0 +1,22 @@
+{
+ "cinematic":   {"accent":1,"pretty":3,"verdict":"REWORK","note":"Generic daylight glasshouse. Nothing filmic reached the render: on a cast render composition is locked, so the directive has nothing left to say."},
+ "cozy":        {"accent":1,"pretty":3,"verdict":"REWORK","note":"Bright daylight and a tighter waist-up crop. Sonnet wrote 'warm golden lamplight' but the render shows none of it."},
+ "epic":        {"accent":2,"pretty":3,"verdict":"REWORK","note":"Wider full-body framing and cool mist. The only thing 'epic' did was shrink the figure, the failure mode the looks matrix flagged for composition words."},
+ "nostalgic":   {"accent":3,"pretty":4,"verdict":"KEEP","note":"Warm amber light and fallen leaves on the path; reads as a fond autumn afternoon. One of three vibes that survived the v1 route."},
+ "peaceful":    {"accent":1,"pretty":2,"verdict":"REWORK","note":"Bright daylight, grey sweater, half turned away; identity 0.48, the lowest of the round. Indistinguishable from cinematic and cozy."},
+ "dark":        {"accent":2,"pretty":4,"verdict":"REWORK","note":"Foggy, desaturated and moody, and the velvet jacket finally rendered. But it is overcast day, not night; no candle, no deep shadow."},
+ "ethereal":    {"accent":1,"pretty":3,"verdict":"REWORK","note":"Bright daylight with magenta bougainvillea. No glow, no haze, no pearl light."},
+ "arcane":      {"accent":4,"pretty":4,"verdict":"KEEP","note":"Amber lanterns everywhere and glowing blossoms on the pond. Magic read clearly because the directive names concrete light objects."},
+ "enchanted":   {"accent":1,"pretty":3,"verdict":"REWORK","note":"Plain daylight. 'Glittering motes' and 'colors glowing brighter than life' produced nothing."},
+ "nightshade":  {"accent":3,"pretty":3,"verdict":"REWORK","note":"Teal mist and orange orchids, but it restyled the locked velvet jacket into a leather adventurer coat: the vibe leaked into the wardrobe."},
+ "golden_hour": {"accent":5,"pretty":5,"verdict":"KEEP","note":"Sunset amber pouring through the glass, teal sky, wet reflective floor, a lit gazebo. The best card of the round and proof a light-first vibe works."},
+ "blue_hour":   {"accent":2,"pretty":4,"verdict":"REWORK","note":"Amber lanterns lit and a cooler cast, but the sky is still daytime. Sonnet wrote cobalt dusk; Flux kept the day."},
+ "moonlit":     {"accent":1,"pretty":3,"verdict":"REWORK","note":"Sonnet wrote a full-moon night with silver light and indigo shadow; Flux rendered overcast daylight with petals on the pond. The clearest proof the scene text arrives too late."},
+ "stormlight":  {"accent":2,"pretty":3,"verdict":"REWORK","note":"Slightly stormy grey light. No thunderheads, no sun shafts, no drama."},
+ "festive":     {"accent":1,"pretty":2,"verdict":"REWORK","note":"No string lights, no confetti. Instead flying koi and a giant lantern: Flux turned 'drifting' into fish. The one render that went wrong rather than flat."},
+ "after_rain":  {"accent":2,"pretty":4,"verdict":"REWORK","note":"Warm and faintly damp; misses the wet mirror surfaces and beaded drops that make the vibe."},
+ "sun_drenched":{"accent":3,"pretty":3,"verdict":"REWORK","note":"Bright saturated tropical light did arrive, but the face drifted (full beard, open shirt, identity 0.59)."},
+ "spotlight":   {"accent":1,"pretty":3,"verdict":"REWORK","note":"Even daylight everywhere. No spotlight, no dark surroundings, no beam."},
+ "aurora":      {"accent":1,"pretty":3,"verdict":"REWORK","note":"Sonnet wrote the aurora sky; Flux rendered day with lanterns and painted the coat green instead (the palette leaked into the wardrobe)."},
+ "prism":       {"accent":1,"pretty":3,"verdict":"REWORK","note":"Plain daylight. No refractions, no rainbow arcs, no iridescence."}
+}
