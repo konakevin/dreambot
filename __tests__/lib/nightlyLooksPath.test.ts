@@ -195,6 +195,8 @@ describe('slot input fields, retry, after-scene, honesty, shadow', () => {
       vibeFragment: 'x accent',
       vibeFragmentPosition: 'early',
       lookNeutralFraming: true,
+      richBrief: true,
+      dualComposition: null,
     });
     expect(
       looksSlotInputFields({ vibeFragment: null, vibePosition: null }, 'candlelit special lighting')

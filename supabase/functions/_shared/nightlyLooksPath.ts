@@ -155,7 +155,8 @@ export function applyStyleContract(
 }
 
 /** The slot-input additions on the looks path: the vibe OWNS the light (axes blank), the fragment travels
- *  verbatim at its version's position, and the solo framing line loses its photography prior. A special scene's
+ *  verbatim at its version's position, the framing loses its photography priors and its closer crop, and Sonnet
+ *  gets the SET DRESSER + COSTUME DESIGNER brief. A special scene's
  *  authored lighting keeps its slot. */
 export function looksSlotInputFields(
   o: Pick<StyleOverrides, 'vibeFragment' | 'vibePosition'>,
@@ -168,6 +169,8 @@ export function looksSlotInputFields(
   | 'vibeFragment'
   | 'vibeFragmentPosition'
   | 'lookNeutralFraming'
+  | 'richBrief'
+  | 'dualComposition'
 > {
   return {
     timeAxis: specialSceneLighting ?? '',
@@ -176,6 +179,9 @@ export function looksSlotInputFields(
     vibeFragment: o.vibeFragment,
     vibeFragmentPosition: o.vibePosition,
     lookNeutralFraming: true,
+    richBrief: true,
+    // never the closer waist-up crop on the looks path: the scene must show
+    dualComposition: null,
   };
 }
 

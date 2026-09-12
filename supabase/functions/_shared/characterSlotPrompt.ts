@@ -147,6 +147,12 @@ export interface CharacterSlotPipelineInput {
    *  editorial photograph … photographic realism, filmic colour"), which pulled painted looks back toward a
    *  photo on every solo cast render. The look's own fragment owns the finish. Default false = legacy text. */
   lookNeutralFraming?: boolean;
+  /** SET DRESSER + COSTUME DESIGNER brief (looks path, 2026-09-11): Sonnet writes a 55-85 word scene with at
+   *  least six concrete named things layered foreground → background, an 18-28 word complete outfit chosen for
+   *  the place, light and LOOK, and one tasteful prop. The legacy brief (25-40 / 8-15 / props empty) was tightened
+   *  over months to kill specific bugs and together those rules made every natural nightly plain. Every safety
+   *  rule stays (no oddities, no people/camera words, no ethnic dress on real places). Default false = legacy. */
+  richBrief?: boolean;
   /** HOLIDAY COSTUME LOCK (2026-09-08, holidayCostumes.ts): one costume per cast member in `cast` order
    *  (index 0 = LEFT), rolled by nightly on a holiday's day-of. Sonnet is told the lock so the scene /
    *  mood / props play off it, and the wardrobe slot(s) are then OVERWRITTEN with the text verbatim — no
@@ -646,27 +652,58 @@ ${sharedScene}
 
 FIELDS YOU OWN:
 
-scene_description (25-40 words)
+${
+  input.richBrief
+    ? `scene_description (55-85 words)
+  You are the SET DRESSER. The environment ONLY, dressed like a location a production designer
+  prepared for a shoot: name at least SIX concrete, specific things that belong to THIS exact
+  place, layered foreground / midground / background — architecture, plants, furnishings,
+  props, surface textures, and one or two light sources — with named materials and colors
+  (brass, mosaic tile, wet basalt, silk banners, paper lanterns, condensation on glass).
+  Concrete nouns; nothing generic ("lush foliage", "beautiful scenery"). Keep it a
+  BELIEVABLE, elegant, real version of the place — no whimsical, novelty, oversized, comic,
+  or surreal invented oddities unless the location itself is explicitly fantastical.
+  Do NOT mention people, characters, camera, framing, faces, eyes, pose, or distance.`
+    : `scene_description (25-40 words)
   The environment ONLY. Iconic features of the location, light, weather, atmosphere.
   Keep it a BELIEVABLE, elegant, real version of the place — no whimsical, novelty,
   oversized, comic, or surreal invented oddities (no giant mushrooms, no absurd
   sculptures) unless the location itself is explicitly fantastical.
-  Do NOT mention people, characters, camera, framing, faces, eyes, pose, or distance.
+  Do NOT mention people, characters, camera, framing, faces, eyes, pose, or distance.`
+}
 
-wardrobe (8-15 words)
+${
+  input.richBrief
+    ? `wardrobe (18-28 words)
+  You are the COSTUME DESIGNER for a ${m.gender}${buildHint} (${m.identity}): ONE complete,
+  specific outfit a stylist would choose for this place, this light and this LOOK — garments,
+  fabric, color, cut and one accessory (a silk scarf, a brass watch, a wide-brim hat).
+  Elevated and photogenic, never plain travel clothes.
+  ${climateGuidance}
+  Clothing words only. Do NOT describe body, face, hair (locked). Do NOT describe pose.`
+    : `wardrobe (8-15 words)
   Clothing worn by the character — a ${m.gender}${buildHint} (${m.identity}).
   ${climateGuidance}
-  Clothing words only. Do NOT describe body, face, hair (locked). Do NOT describe pose.
+  Clothing words only. Do NOT describe body, face, hair (locked). Do NOT describe pose.`
+}
 
 mood (1-3 short phrases)
   Emotional tone. Examples: "warm reverent calm", "playful golden afternoon", "quiet awe".
 
-props (0-10 words — STRONGLY PREFER an empty string "")
+${
+  input.richBrief
+    ? `props (3-12 words)
+  ONE tasteful, believable prop that belongs to this exact place, register and action and
+  gives the shot a story (a champagne flute at a gala, a brass lantern in an alley, a paper
+  map on a harbor wall, a bouquet, a vintage camera). Empty string only if nothing fits.
+  NEVER whimsical, novelty, oversized, comic, organic-oddity, or out-of-place objects.`
+    : `props (0-10 words — STRONGLY PREFER an empty string "")
   Usually leave EMPTY. Only if a prop genuinely elevates the shot, a single TASTEFUL,
   believable object that naturally belongs in this exact place and register (a champagne
   flute at a gala, a surfboard at a beach, a lantern in an alley). NEVER whimsical,
   novelty, oversized, comic, organic-oddity, or out-of-place objects (never a giant
-  mushroom, an absurd sculpture, a random creature). When in doubt, empty string.
+  mushroom, an absurd sculpture, a random creature). When in doubt, empty string.`
+}
 
 ${actionSpec}${forbiddenList}
 
@@ -695,14 +732,41 @@ ${sharedScene}
 
 FIELDS YOU OWN:
 
-scene_description (25-40 words)
+${
+  input.richBrief
+    ? `scene_description (55-85 words)
+  You are the SET DRESSER. The environment ONLY, dressed like a location a production designer
+  prepared for a shoot: name at least SIX concrete, specific things that belong to THIS exact
+  place, layered foreground / midground / background — architecture, plants, furnishings,
+  props, surface textures, and one or two light sources — with named materials and colors
+  (brass, mosaic tile, wet basalt, silk banners, paper lanterns, condensation on glass).
+  Concrete nouns; nothing generic ("lush foliage", "beautiful scenery"). Keep it a
+  BELIEVABLE, elegant, real version of the place — no whimsical, novelty, oversized, comic,
+  or surreal invented oddities unless the location itself is explicitly fantastical.
+  Do NOT mention people, characters, camera, framing, faces, eyes, pose, or distance.`
+    : `scene_description (25-40 words)
   The environment ONLY. Iconic features of the location, light, weather, atmosphere.
   Keep it a BELIEVABLE, elegant, real version of the place — no whimsical, novelty,
   oversized, comic, or surreal invented oddities (no giant mushrooms, no absurd
   sculptures) unless the location itself is explicitly fantastical.
-  Do NOT mention people, characters, camera, framing, faces, eyes, pose, or distance.
+  Do NOT mention people, characters, camera, framing, faces, eyes, pose, or distance.`
+}
 
-left_wardrobe (8-15 words)
+${
+  input.richBrief
+    ? `left_wardrobe (18-28 words)
+  You are the COSTUME DESIGNER for the LEFT character — a ${left.gender}${leftBuildHint} (${left.identity}):
+  ONE complete, specific outfit a stylist would choose for this place, this light and this
+  LOOK — garments, fabric, color, cut and one accessory. Elevated and photogenic, never plain
+  travel clothes.
+  ${climateGuidance}
+  Clothing words only. Do NOT describe body, face, hair (locked). Do NOT describe pose.
+
+right_wardrobe (18-28 words)
+  The RIGHT character — a ${right.gender}${rightBuildHint} (${right.identity}): the same standard,
+  a DIFFERENT complete outfit that pairs with LEFT's (they dressed for the same evening, not in
+  the same clothes). Same climate rules. Do NOT describe body, face, hair (locked) or pose.`
+    : `left_wardrobe (8-15 words)
   Clothing worn by the LEFT character — a ${left.gender}${leftBuildHint} (${left.identity}).
   ${climateGuidance}
   Clothing words only. Do NOT describe body, face, hair (locked). Do NOT describe pose.
@@ -710,17 +774,26 @@ left_wardrobe (8-15 words)
 right_wardrobe (8-15 words)
   Clothing worn by the RIGHT character — a ${right.gender}${rightBuildHint} (${right.identity}).
   Same climate rules and wardrobe mood as LEFT. Pick distinctive wardrobe in the chosen mood.
-  Do NOT describe body, face, hair (locked). Do NOT describe pose.
+  Do NOT describe body, face, hair (locked). Do NOT describe pose.`
+}
 
 mood (1-3 short phrases)
   Emotional tone. Examples: "warm reverent calm", "playful golden afternoon", "quiet awe".
 
-props (0-10 words — STRONGLY PREFER an empty string "")
+${
+  input.richBrief
+    ? `props (3-12 words)
+  ONE tasteful, believable prop that belongs to this exact place, register and action and
+  gives the shot a story (a champagne flute at a gala, a brass lantern in an alley, a paper
+  map on a harbor wall, a bouquet). Empty string only if nothing fits. NEVER whimsical,
+  novelty, oversized, comic, organic-oddity, or out-of-place objects.`
+    : `props (0-10 words — STRONGLY PREFER an empty string "")
   Usually leave EMPTY. Only if a prop genuinely elevates the shot, a single TASTEFUL,
   believable object that naturally belongs in this exact place and register (a champagne
   flute at a gala, a surfboard at a beach). NEVER whimsical, novelty, oversized, comic,
   organic-oddity, or out-of-place objects (never a giant mushroom, an absurd sculpture,
-  a random creature). When in doubt, empty string.
+  a random creature). When in doubt, empty string.`
+}
 
 ${actionSpec}${forbiddenList}
 
@@ -1114,7 +1187,11 @@ export function assembleCharacterPrompt(
     // sentence so the scene is never a separate leading clause the model can turn into a landscape.
     const place = location || '';
     const compactAnchor = `two people ${seatedStance ? 'seated' : 'standing'} side by side ${
-      closer ? 'from the waist up' : 'from mid-thigh up'
+      input.lookNeutralFraming
+        ? 'from the knees up in a three-quarter length composition with generous open space around them showing the scene'
+        : closer
+          ? 'from the waist up'
+          : 'from mid-thigh up'
     }${place ? ` at ${place}` : ''}, both facing the camera with large clearly visible faces and a clear gap between their heads, each head on its own side of the frame`;
     const gapLine = [
       'a clear gap between their two heads, faces apart and not touching, not cheek to cheek',

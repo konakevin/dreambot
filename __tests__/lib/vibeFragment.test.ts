@@ -177,6 +177,48 @@ describe('look-neutral solo framing', () => {
   });
 });
 
+describe('SET DRESSER + COSTUME DESIGNER brief (richBrief) and knees-up couples', () => {
+  it('richBrief raises the scene / wardrobe budgets, demands concrete set dressing and one prop; legacy brief unchanged', () => {
+    const rich = buildSlotBrief(base({ richBrief: true }));
+    expect(rich).toContain('scene_description (55-85 words)');
+    expect(rich).toContain('You are the SET DRESSER');
+    expect(rich).toContain('at least SIX concrete, specific things');
+    expect(rich).toContain('wardrobe (18-28 words)');
+    expect(rich).toContain('You are the COSTUME DESIGNER');
+    expect(rich).toContain('props (3-12 words)');
+    expect(rich).toContain('no whimsical, novelty, oversized, comic'); // the safety rules survive
+    expect(rich).not.toContain('scene_description (25-40 words)');
+    const legacy = buildSlotBrief(base());
+    expect(legacy).toContain('scene_description (25-40 words)');
+    expect(legacy).toContain('wardrobe (8-15 words)');
+    expect(legacy).toContain('STRONGLY PREFER an empty string');
+    expect(legacy).not.toContain('SET DRESSER');
+    const richDual = buildSlotBrief(base({ cast: [SELF, PLUS_ONE], richBrief: true }));
+    expect(richDual).toContain('left_wardrobe (18-28 words)');
+    expect(richDual).toContain('a DIFFERENT complete outfit that pairs with LEFT');
+  });
+  it('couples on the looks path are framed knees-up with open space, and the closer crop is ignored', () => {
+    const p = assembleCharacterPrompt(
+      dualSlots,
+      base({
+        cast: [SELF, PLUS_ONE],
+        promptStyle: 'subject_first',
+        lookNeutralFraming: true,
+        dualComposition: 'waist_up',
+      })
+    );
+    expect(p).toContain(
+      'from the knees up in a three-quarter length composition with generous open space around them showing the scene'
+    );
+    expect(p).not.toContain('from the waist up');
+    const legacy = assembleCharacterPrompt(
+      dualSlots,
+      base({ cast: [SELF, PLUS_ONE], promptStyle: 'subject_first' })
+    );
+    expect(legacy).toContain('from mid-thigh up');
+  });
+});
+
 describe('Sonnet brief: the vibe owns the light only when a fragment exists', () => {
   it('legacy brief keeps the mood-field-only wording', () => {
     const b = buildSlotBrief(base());

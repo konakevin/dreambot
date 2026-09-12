@@ -127,7 +127,7 @@ async function renderOne(surface, n) {
   for (let i = 0; i < 6 && !log; i++) {
     const { data } = await sb
       .from('ai_generation_log')
-      .select('id,fallback_reasons,enhanced_prompt,model_used,rolled_axes')
+      .select('id,fallback_reasons,enhanced_prompt,model_used,rolled_axes,sonnet_brief')
       .eq('upload_id', payload.upload_id)
       .limit(1);
     log = data && data[0];
@@ -179,6 +179,7 @@ async function renderOne(surface, n) {
           stamps.some((s) => s.includes(modelUsed.replace(/^.*\//, '')))
         : null,
   };
+  const brief = /SET DRESSER/.test((log && log.sonnet_brief) || '') ? 'set-dresser' : 'legacy';
   const composer = /candid cinematic photograph|editorial cinematic photograph/.test(prompt)
     ? 'legacy-priors'
     : 'look-neutral';
@@ -216,6 +217,7 @@ async function renderOne(surface, n) {
     stamps,
     prompt,
     composer,
+    brief,
     face_swap_result: log && log.rolled_axes && log.rolled_axes.faceSwapResult,
   };
 }
@@ -244,7 +246,7 @@ function buildHtml(report) {
       const sim = r.identity_sims.map((x) => x.toFixed(2)).join('/') || '—';
       return `<section class="card"><header><h2>${esc(r.surface)} #${r.n}</h2><code>${esc((r.model_used || '').replace(/^.*\//, ''))} · ${esc(r.look)} (${esc(r.look_family)}) · ${esc(r.vibe)} (${esc(r.vibe_family)}${r.vibe_version ? ' · ' + esc(r.vibe_version) : ''})</code></header>
 <a href="${esc(r.image_url)}" target="_blank"><img src="${esc(r.image_url)}" loading="lazy"></a>
-<div class="meta">${r.composer === 'legacy-priors' ? '<b class="bad">composer: legacy photo priors</b>' : '<span class="ok">composer: look-neutral</span>'} · id ${sim} · ${r.degraded ? '<b class="bad">degraded</b>' : '<span class="ok">clean</span>'} · ${esc(r.face_swap_result || '')} · ${r.elapsed_s}s</div>
+<div class="meta">${r.composer === 'legacy-priors' ? '<b class="bad">composer: legacy photo priors</b>' : '<span class="ok">composer: look-neutral</span>'} · ${r.brief === 'set-dresser' ? '<span class="ok">brief: set dresser</span>' : '<b class="bad">brief: legacy</b>'} · id ${sim} · ${r.degraded ? '<b class="bad">degraded</b>' : '<span class="ok">clean</span>'} · ${esc(r.face_swap_result || '')} · ${r.elapsed_s}s</div>
 <div class="checks">${badge(c.looks_path_on, 'looks path')} ${badge(c.look_fragment_in_prompt, 'look fragment')} ${badge(c.vibe_fragment_in_prompt, 'vibe fragment')} ${badge(c.no_photo_prior, 'no photo prior')} ${badge(c.no_violation, 'honest')}</div>
 <details><summary>stamps</summary><p>${esc(r.stamps.join(' · '))}</p></details><details><summary>prompt</summary><p>${esc(r.prompt)}</p></details></section>`;
     })
