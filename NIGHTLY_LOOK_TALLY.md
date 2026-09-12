@@ -141,3 +141,79 @@ slots) on another model, rendering each look only on its approved surfaces (`--a
 real users, `ai_generation_log`):** flux-1.1-pro 4¢ · 57 % (baseline) · xai/grok-imagine-image 2¢ · 67 % (and 8/8 in
 the 2026-09-07 bake-off) · google/gemini-2-image 4¢ · 58 % · bytedance/seedream-4 3¢ · 21/21 (small n; 2K PNGs) ·
 flux-2-pro 3¢ · 57 % · flux-1.1-pro-ultra 6¢ · 89 % (same family; heavier swap memory) · flux-2-flex 6¢ · 19 % (no).
+
+
+## Rounds 2 + 3 — three models, 42 looks (2026-09-11/12)
+
+Round 2 re-ran the 21 approved looks on **grok-imagine-image** (2 ¢) and **gemini-2-image** (4 ¢), approved surfaces
+only; round 3 added 17 comic-family / watercolor-adjacent / big-head candidates (migs 496-497) on all three models,
+both surfaces. Same fixed scene, same cast, same forced slots. Graded by eye per surface with Kevin's integration
+criterion. Page: `~/Desktop/nightly-looks-compare.html`; registry block regenerated in `REAL_FACE_LOOKS_REGISTRY.md`.
+
+**Per model (looks passing / looks graded):** flux-1.1-pro couples 11/43 · solos 33/43 ·
+grok couples 26/26 · solos 37/37 ·
+gemini couples 25/26 · solos 36/36.
+
+**Headline:** the couple problem is a MODEL problem, not a look problem. grok and gemini landed every couple on
+every look they rendered (23 looks pass both surfaces on both), honored the wardrobe and the pose, integrated
+the people (contact shadows, hands on the world), and showed no identity or age drift. flux-1.1-pro passed
+11 of 43 couple looks and produced every failure class in the catalog (profiles, floating heads,
+caricature, lost partner, age drift). The comic and watercolor families that fail on flux (Soft Pop Art, Marker,
+Ink-Wash Comic, Lineless Watercolor, Digital Watercolor, Rotoscope on grok) are real, distinct, swap-safe looks on
+grok and gemini. The exceptions on the two cheaper models: gemini's Rotoscope couples came back with cartoon-
+enlarged eyes (the big-eye failure), and the Big Head solo on flux aged into a white-haired stranger. Trade-off:
+grok flattens several painted registers into one "painted realism" (Jewel, Magazine, Movie Poster, Matte, Pulp,
+Encaustic read alike), gemini keeps them more distinct and is the most consistent compositionally (nearly the same
+pose every render). Costs: grok 2 ¢, gemini 4 ¢, flux 4 ¢ per base render.
+
+**Passing both surfaces on all three models (9):** Classical Oil, Digital Painting, Painted Fantasy, Baroque Oil, Salon Realism, Hand-Tinted Photograph, Chromolithograph, Technicolor, Watercolor Portrait.
+
+| Look | key | flux-1.1-pro | grok-imagine-image | gemini-2-image |
+|---|---|---|---|---|
+| Classical Oil | `nightly_classical_oil` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Digital Painting | `nightly_digital_painting` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Painted Fantasy | `nightly_painted_fantasy` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Watercolor & Ink | `nightly_watercolor_ink` | none | — | — |
+| Ink Illustration | `nightly_ink_illustration` | solo | solo | solo |
+| Storybook Gouache | `nightly_storybook_gouache` | solo | solo | solo |
+| Film Noir | `nightly_film_noir` | none | — | — |
+| Vintage Film | `nightly_vintage_film` | solo | solo | solo |
+| Baroque Oil | `nightly_baroque_oil` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Salon Realism | `nightly_salon_realism` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Jewel Realism | `nightly_jewel_realism` | solo | solo | solo |
+| Magazine Cover | `nightly_magazine_cover` | solo | solo | solo |
+| Retro Movie Poster | `nightly_movie_poster` | solo | solo | solo |
+| Sci-Fi Paperback | `nightly_scifi_paperback` | solo | solo | solo |
+| Matte Painting | `nightly_matte_painting` | solo | solo | solo |
+| Pulp Adventure Cover | `nightly_pulp_cover` | solo | solo | solo |
+| Fresco | `nightly_fresco` | solo | solo | solo |
+| Pastel Chalk | `nightly_pastel_chalk` | none | — | — |
+| Alla Prima Oil | `nightly_alla_prima` | none | — | — |
+| Cinematic Still | `nightly_cinematic_still` | none | — | — |
+| Kodachrome Slide | `nightly_kodachrome` | couple | couple | couple |
+| Hand-Tinted Photograph | `nightly_hand_tinted_photo` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Chromolithograph | `nightly_chromolithograph` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Oil Pastel | `nightly_oil_pastel` | solo | solo | solo |
+| Technicolor | `nightly_technicolor` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Encaustic | `nightly_encaustic` | solo | solo | solo |
+| Painted Comic Cover | `nightly_painted_comic_cover` | none | **couple + solo** | **couple + solo** |
+| Soft-Shaded Comic | `nightly_soft_comic` | solo | **couple + solo** | **couple + solo** |
+| Rotoscoped Animation | `nightly_rotoscope` | solo | **couple + solo** | solo |
+| Painted Animation Frame | `nightly_painted_animation` | none | **couple + solo** | **couple + solo** |
+| Retro Airbrush Poster | `nightly_airbrush_poster` | solo | **couple + solo** | **couple + solo** |
+| Marker Illustration | `nightly_marker` | solo | **couple + solo** | **couple + solo** |
+| Ink-Wash Comic | `nightly_ink_wash_comic` | solo | **couple + solo** | **couple + solo** |
+| Soft Pop Art | `nightly_soft_pop_art` | solo | **couple + solo** | **couple + solo** |
+| Painted Graphic Novel | `nightly_painted_graphic_novel` | solo | **couple + solo** | **couple + solo** |
+| Lineless Watercolor | `nightly_lineless_watercolor` | solo | **couple + solo** | **couple + solo** |
+| Watercolor Portrait | `nightly_watercolor_portrait` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Digital Watercolor | `nightly_digital_watercolor` | solo | **couple + solo** | couple |
+| Gouache Portrait | `nightly_gouache_portrait` | solo | **couple + solo** | **couple + solo** |
+| Aquarelle over Graphite | `nightly_aquarelle_graphite` | none | **couple + solo** | **couple + solo** |
+| Soft Brush Illustration | `nightly_soft_brush_illustration` | solo | **couple + solo** | **couple + solo** |
+| Pastel Portrait | `nightly_pastel_portrait` | solo | **couple + solo** | **couple + solo** |
+| Big Head | `nightly_big_head` | couple | **couple + solo** | **couple + solo** |
+
+**Recommendation for the final approval matrix:** approve per (look × model × surface) exactly as the table
+says, and let the nightly model policy decide the model: with grok or gemini as the couple primary, the couple
+catalog is 25+ looks instead of 9; with flux-1.1-pro it is 9. Kevin's hearts in the album finalize it.

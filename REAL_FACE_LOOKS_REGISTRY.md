@@ -50,37 +50,53 @@ per-model `grades_by_surface.json` files. Prose sections (§1, §2, §4, §5, §
 ## 3. Approval matrix — GENERATED (look × model → approved surfaces)
 
 <!-- approval-matrix:start -->
-_Generated 2026-09-11 from flux-1.1-pro (106 renders, 26 graded), grok-imagine-image (57 renders, 21 graded), gemini-2-image (6 renders, 0 graded). Verdicts by eye per surface; reasons in each model's grades_by_surface.json and the Desktop pages._
+_Generated 2026-09-12 from flux-1.1-pro (172 renders, 43 graded), grok-imagine-image (125 renders, 38 graded), gemini-2-image (126 renders, 38 graded). Verdicts by eye per surface; reasons in each model's grades_by_surface.json and the Desktop pages._
 
 | Look | key | flux-1.1-pro | grok-imagine-image | gemini-2-image |
 |---|---|---|---|---|
-| Classical Oil | `nightly_classical_oil` | **couple + solo** | **couple + solo** | — |
-| Digital Painting | `nightly_digital_painting` | **couple + solo** | **couple + solo** | — |
-| Painted Fantasy | `nightly_painted_fantasy` | **couple + solo** | **couple + solo** | — |
+| Classical Oil | `nightly_classical_oil` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Digital Painting | `nightly_digital_painting` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Painted Fantasy | `nightly_painted_fantasy` | **couple + solo** | **couple + solo** | **couple + solo** |
 | Watercolor & Ink | `nightly_watercolor_ink` | none | — | — |
-| Ink Illustration | `nightly_ink_illustration` | solo | solo | — |
-| Storybook Gouache | `nightly_storybook_gouache` | solo | solo | — |
+| Ink Illustration | `nightly_ink_illustration` | solo | solo | solo |
+| Storybook Gouache | `nightly_storybook_gouache` | solo | solo | solo |
 | Film Noir | `nightly_film_noir` | none | — | — |
-| Vintage Film | `nightly_vintage_film` | solo | solo | — |
-| Baroque Oil | `nightly_baroque_oil` | **couple + solo** | **couple + solo** | — |
-| Salon Realism | `nightly_salon_realism` | **couple + solo** | **couple + solo** | — |
-| Jewel Realism | `nightly_jewel_realism` | solo | solo | — |
-| Magazine Cover | `nightly_magazine_cover` | solo | solo | — |
-| Retro Movie Poster | `nightly_movie_poster` | solo | solo | — |
-| Sci-Fi Paperback | `nightly_scifi_paperback` | solo | solo | — |
-| Matte Painting | `nightly_matte_painting` | solo | solo | — |
-| Pulp Adventure Cover | `nightly_pulp_cover` | solo | solo | — |
-| Fresco | `nightly_fresco` | solo | solo | — |
+| Vintage Film | `nightly_vintage_film` | solo | solo | solo |
+| Baroque Oil | `nightly_baroque_oil` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Salon Realism | `nightly_salon_realism` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Jewel Realism | `nightly_jewel_realism` | solo | solo | solo |
+| Magazine Cover | `nightly_magazine_cover` | solo | solo | solo |
+| Retro Movie Poster | `nightly_movie_poster` | solo | solo | solo |
+| Sci-Fi Paperback | `nightly_scifi_paperback` | solo | solo | solo |
+| Matte Painting | `nightly_matte_painting` | solo | solo | solo |
+| Pulp Adventure Cover | `nightly_pulp_cover` | solo | solo | solo |
+| Fresco | `nightly_fresco` | solo | solo | solo |
 | Pastel Chalk | `nightly_pastel_chalk` | none | — | — |
 | Alla Prima Oil | `nightly_alla_prima` | none | — | — |
 | Cinematic Still | `nightly_cinematic_still` | none | — | — |
-| Kodachrome Slide | `nightly_kodachrome` | couple | couple | — |
-| Hand-Tinted Photograph | `nightly_hand_tinted_photo` | **couple + solo** | **couple + solo** | — |
-| Chromolithograph | `nightly_chromolithograph` | **couple + solo** | **couple + solo** | — |
-| Oil Pastel | `nightly_oil_pastel` | solo | solo | — |
-| Technicolor | `nightly_technicolor` | **couple + solo** | **couple + solo** | — |
-| Encaustic | `nightly_encaustic` | solo | solo | — |
-| Painted Comic Cover | `nightly_painted_comic_cover` | — | — | — |
+| Kodachrome Slide | `nightly_kodachrome` | couple | couple | couple |
+| Hand-Tinted Photograph | `nightly_hand_tinted_photo` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Chromolithograph | `nightly_chromolithograph` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Oil Pastel | `nightly_oil_pastel` | solo | solo | solo |
+| Technicolor | `nightly_technicolor` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Encaustic | `nightly_encaustic` | solo | solo | solo |
+| Painted Comic Cover | `nightly_painted_comic_cover` | none | **couple + solo** | **couple + solo** |
+| Soft-Shaded Comic | `nightly_soft_comic` | solo | **couple + solo** | **couple + solo** |
+| Rotoscoped Animation | `nightly_rotoscope` | solo | **couple + solo** | solo |
+| Painted Animation Frame | `nightly_painted_animation` | none | **couple + solo** | **couple + solo** |
+| Retro Airbrush Poster | `nightly_airbrush_poster` | solo | **couple + solo** | **couple + solo** |
+| Marker Illustration | `nightly_marker` | solo | **couple + solo** | **couple + solo** |
+| Ink-Wash Comic | `nightly_ink_wash_comic` | solo | **couple + solo** | **couple + solo** |
+| Soft Pop Art | `nightly_soft_pop_art` | solo | **couple + solo** | **couple + solo** |
+| Painted Graphic Novel | `nightly_painted_graphic_novel` | solo | **couple + solo** | **couple + solo** |
+| Lineless Watercolor | `nightly_lineless_watercolor` | solo | **couple + solo** | **couple + solo** |
+| Watercolor Portrait | `nightly_watercolor_portrait` | **couple + solo** | **couple + solo** | **couple + solo** |
+| Digital Watercolor | `nightly_digital_watercolor` | solo | **couple + solo** | couple |
+| Gouache Portrait | `nightly_gouache_portrait` | solo | **couple + solo** | **couple + solo** |
+| Aquarelle over Graphite | `nightly_aquarelle_graphite` | none | **couple + solo** | **couple + solo** |
+| Soft Brush Illustration | `nightly_soft_brush_illustration` | solo | **couple + solo** | **couple + solo** |
+| Pastel Portrait | `nightly_pastel_portrait` | solo | **couple + solo** | **couple + solo** |
+| Big Head | `nightly_big_head` | couple | **couple + solo** | **couple + solo** |
 <!-- approval-matrix:end -->
 
 ## 4. Findings that any real-face initiative must carry (learned 2026-09-11)
