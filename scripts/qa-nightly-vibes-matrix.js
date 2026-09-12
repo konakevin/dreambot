@@ -49,6 +49,8 @@ const ARGS = Object.fromEntries(
 const ROUND = String(ARGS.round || 'a');
 const COUNT = Number(ARGS.count || 1);
 const ONLY = ARGS.only ? String(ARGS.only).split(',') : null;
+/** --keys=a,b,c tests ARBITRARY vibe keys (any active row) instead of the CANDIDATES list, status 'create'. */
+const KEYS = ARGS.keys ? String(ARGS.keys).split(',') : null;
 const MODEL = String(ARGS.model || 'black-forest-labs/flux-1.1-pro');
 const MODEL_SLUG = MODEL.replace(/^.*\//, '');
 const LOOK_KEY = String(ARGS.look || 'nightly_digital_painting');
@@ -117,7 +119,8 @@ function download(url, dest) {
 }
 
 async function loadVibes() {
-  const keys = CANDIDATES.map(([k]) => k);
+  const cands = KEYS ? KEYS.map((k) => [k, 'create']) : CANDIDATES;
+  const keys = cands.map(([k]) => k);
   const { data, error } = await sb
     .from('dream_vibes')
     .select(
@@ -126,11 +129,13 @@ async function loadVibes() {
     .in('key', keys);
   if (error) throw error;
   const byKey = new Map(data.map((v) => [v.key, v]));
-  return CANDIDATES.filter(([k]) => !ONLY || ONLY.includes(k)).map(([k, status]) => {
-    const v = byKey.get(k);
-    if (!v) throw new Error(`vibe ${k} not in dream_vibes`);
-    return { ...v, status };
-  });
+  return cands
+    .filter(([k]) => !ONLY || ONLY.includes(k))
+    .map(([k, status]) => {
+      const v = byKey.get(k);
+      if (!v) throw new Error(`vibe ${k} not in dream_vibes`);
+      return { ...v, status };
+    });
 }
 
 async function loadLook() {
@@ -433,7 +438,11 @@ async function main() {
   if (ARGS.compare) {
     const rounds = String(ARGS.compare).split(',');
     const html = buildCompareHtml(rounds, vibes, look);
-    const out = path.join(os.homedir(), 'Desktop', 'nightly-vibes-compare.html');
+    const out = path.join(
+      os.homedir(),
+      'Desktop',
+      KEYS ? 'nightly-vibes-compare-app.html' : 'nightly-vibes-compare.html'
+    );
     fs.writeFileSync(path.join(OUT_DIR, 'nightly-vibes-compare.html'), html);
     fs.writeFileSync(out, html);
     console.log(`compare page: ${out}`);

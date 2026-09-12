@@ -16,6 +16,7 @@
  */
 import { resolveModel, type NightlyModelPolicy, type PolicySurface } from './nightlyModelPolicy.ts';
 import { resolveLook, type LookApproval, type LookRow, type LookSurface } from './nightlyLooks.ts';
+import { resolveVibe, type ResolvedVibeChoice, type VibeRow } from './nightlyVibes.ts';
 
 export type StyleSurface = 'couple' | 'solo' | 'scene';
 
@@ -33,6 +34,12 @@ export interface StyleContractInput {
   /** A pin from the scene data (day-of look set, holiday-scene medium_key, scenario medium_key); an unknown key
    *  falls through to the roll with a stamp. */
   pinnedLook?: string | null;
+  /** The vibe axis (NIGHTLY_VIBES_AUDIT.md §9): the pool rows; omitted = no vibe decision (contract.vibe null). */
+  vibes?: readonly VibeRow[];
+  recentVibeKeys?: readonly string[];
+  vibeRecency?: number;
+  /** QA `force_vibe` — any active row, pool or not. */
+  forcedVibe?: string | null;
   rng?: () => number;
 }
 
@@ -52,6 +59,8 @@ export interface StyleContract extends StylePick {
   directive: string | null;
   family: string;
   source: 'roll' | 'force' | 'pin';
+  /** The vibe (third axis): its verbatim fragment + position for the slot input; null when no pool was given. */
+  vibe: ResolvedVibeChoice | null;
   /** Couple retry n ≥ 2: the policy fallback roll for the model; the same look if approved there, else a re-roll. */
   forAttempt(attempt: number): StylePick;
   /** Couple → solo rebuild: the solo_rebuild row's model; the same look if approved for (model, solo), else one that is. */
@@ -117,6 +126,18 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
     input.forcedLook && pinKnown ? 'force' : input.pinnedLook && pinKnown ? 'pin' : 'roll';
   if (source === 'pin') stamps.push(`look_source:pin:${pinKey}`);
 
+  const vibe = input.vibes
+    ? resolveVibe({
+        vibes: input.vibes,
+        recentVibeKeys: input.recentVibeKeys,
+        recencyWindow: input.vibeRecency,
+        forcedVibe: input.forcedVibe,
+        rng,
+      })
+    : null;
+  if (vibe) stamps.push(...vibe.stamps);
+  else if (input.vibes) stamps.push('vibe_none');
+
   const base = {
     surface: input.surface,
     lookSurface,
@@ -128,6 +149,7 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
     directive: resolved.look.directive,
     family: resolved.family,
     source,
+    vibe,
     stamps,
   };
 

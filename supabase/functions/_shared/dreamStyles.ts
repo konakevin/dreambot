@@ -98,6 +98,12 @@ export interface ResolvedVibe {
   /** Verbatim ≤140-char light / palette / weather accent for the prompt (dream_vibes.flux_fragment, mig 504;
    *  NIGHTLY_VIBES_AUDIT.md §6). Null = the vibe has no authored accent (legacy mood-field route only). */
   fluxFragment: string | null;
+  /** Where the fragment sits in a cast prompt (mig 506): 'early' (before the person) | 'after_scene' | null. */
+  fragmentPosition: 'early' | 'after_scene' | null;
+  /** In the nightly LOOKS-PATH vibe roll (mig 506; independent of isDreamEligible = the legacy roll). */
+  nightlyPool: boolean;
+  /** Base vibe key this row is a VERSION of (mig 506); the roll picks a family first. Null = a base row. */
+  versionOf: string | null;
   /** Restyle-safe mood line (client_meta.restyle_fragment, migration 320) —
    *  an imperative color/light/atmosphere grade with NO scene content, so
    *  Kontext can apply it without fighting "keep the exact composition".
@@ -231,7 +237,7 @@ export async function fetchVibes(): Promise<ResolvedVibe[]> {
   const { data, error } = await sb
     .from('dream_vibes')
     .select(
-      'key, label, directive, is_dream_eligible, client_meta, face_swap_directive, flux_fragment'
+      'key, label, directive, is_dream_eligible, client_meta, face_swap_directive, flux_fragment, fragment_position, nightly_pool, version_of'
     )
     .eq('is_active', true)
     .order('sort_order');
@@ -248,12 +254,21 @@ export async function fetchVibes(): Promise<ResolvedVibe[]> {
       client_meta: Record<string, unknown> | null;
       face_swap_directive: string | null;
       flux_fragment: string | null;
+      fragment_position: string | null;
+      nightly_pool: boolean | null;
+      version_of: string | null;
     }) => ({
       key: r.key,
       label: r.label,
       directive: r.directive,
       isDreamEligible: !!r.is_dream_eligible,
       fluxFragment: r.flux_fragment ?? null,
+      fragmentPosition:
+        r.fragment_position === 'early' || r.fragment_position === 'after_scene'
+          ? r.fragment_position
+          : null,
+      nightlyPool: r.nightly_pool === true,
+      versionOf: r.version_of ?? null,
       faceSwapDirective: r.face_swap_directive ?? null,
       restyleFragment:
         r.client_meta && typeof r.client_meta.restyle_fragment === 'string'

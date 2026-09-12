@@ -205,3 +205,55 @@ vibes whose fragments were rewritten after round C.
 incumbents all stay but only because the mechanism changed under them; on today's route four of them were
 invisible. `is_dream_eligible` flips for the kept new + Create-only rows once Kevin signs off; the cut rows stay
 in the table (nightly_only, not eligible) so nothing is lost.
+
+## 9. Kevin's decisions (2026-09-11, evening) and the versions model
+
+**"I liked every single version of the vibes … can we save all versions of each as a different vibe?"** Done
+(mig 506). The recommended-list table in §8 is superseded: nothing is cut. Each version of a vibe is its own
+`dream_vibes` row, grouped by `version_of` into a FAMILY, exactly as rendered:
+
+| version | key suffix | accent route | matrix round |
+|---|---|---|---|
+| subtle | `__subtle` | no fragment; the directive reaches Flux only through Sonnet's mood words (today's route) | A |
+| soft | `__soft` | the original (mig 504) fragment placed AFTER scene_description | B |
+| bold | `__bold` | the current fragment placed EARLY (the mig 505 rewrite where one exists) | C / D |
+| wild | `__wild` | the ORIGINAL sky-naming fragment placed EARLY, for the 6 rewritten vibes (the camera roams) | C |
+
+66 version rows (20 subtle + 20 soft + 20 bold + 6 wild; moonlit's wild card shipped faceless and is omitted).
+The 20 base rows stay canonical / Create-facing and are NOT in the pool (their `__bold` twin is).
+
+**Gating, three independent flags:** `is_dream_eligible` = the LEGACY nightly roll (still only the 5 incumbents'
+base rows; production tonight is unchanged); `nightly_pool` = the LOOKS-PATH roll (the 66 version rows);
+`nightly_only` = hidden from `get_dream_vibes()` (every version row; the Create picker still lists 22).
+
+**The roll (`_shared/nightlyVibes.ts`, wired into `buildStyleContract().vibe`):** family-first like looks:
+pick a family the user has not had in the recency window (any version counts as the family), then a version
+within it uniformly. Never-empty floor. Stamps `vibe:<key>`, `vibe_family:<base>`, `vibe_version:<tag>`,
+`vibe_source:roll|force`, `vibe_pool:<rows>/<families>`. `force_vibe` reaches any active row, pool or not. The
+contract exposes `vibe.fragment` + `vibe.position` for the slot input (`vibeFragment`, `vibeFragmentPosition`);
+a subtle version sends no fragment, which reproduces round A byte-for-byte.
+
+**"Did we really test all the vibes in the app?"** No. The 20 candidates left 12 ACTIVE Create vibes untested on
+my judgment alone (coquette, kawaii, high_fantasy, whimsical, surreal, fierce, voltage, ancient, macabre,
+shimmer, minimal, psychedelic). Kevin is right that the vibes work in Create: `promptCompiler.ts` and the
+single/dual brief builders hand Sonnet the FULL directive and Sonnet writes the whole prompt. The loss is
+specific to nightly's slot pipeline (`characterSlotPrompt.ts`), which asks Sonnet for "1-3 short mood phrases"
+and places them at the tail. Correction in flight: mig 507 gives the 12 fragments; rounds e (subtle) / f (bold)
+/ g (soft) render them through the same matrix; page `~/Desktop/nightly-vibes-compare-app.html`.
+
+**"Any vibes we have a missing gap on?"** The 32 were heavy on warm and magical, thin on weather, season, pure
+light effects and palettes. Mig 508 adds 19 families and revives the 5 inactive rows for the matrix (rounds
+h / i / j, same page family):
+
+| gap | new vibes |
+|---|---|
+| weather | snowfall, fog, rainfall, overcast |
+| time of day | sunrise, starlit |
+| pure light effects | candlelit, godrays, caustics, stained_glass, noir |
+| season | autumnal, blossom |
+| palette / world | bioluminescent, synthwave, cotton_candy, opulent |
+| event | fireworks, carnival |
+| revived (were inactive) | dreamy, chaos, majestic, ominous, aura |
+
+All 24 are `nightly_only`, not eligible, not in the pool until their renders are in and their versions are
+added (the mig 506 pattern; any version that ships faceless is omitted, nothing else is).

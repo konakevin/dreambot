@@ -1484,13 +1484,17 @@ export type Database = {
           description: string | null;
           directive: string;
           face_swap_directive: string | null;
+          flux_fragment: string | null;
+          fragment_position: string | null;
           is_active: boolean;
           is_dream_eligible: boolean;
           key: string;
           label: string;
           mood_profile: Json | null;
           nightly_only: boolean;
+          nightly_pool: boolean;
           sort_order: number;
+          version_of: string | null;
         };
         Insert: {
           client_meta?: Json | null;
@@ -1498,13 +1502,17 @@ export type Database = {
           description?: string | null;
           directive: string;
           face_swap_directive?: string | null;
+          flux_fragment?: string | null;
+          fragment_position?: string | null;
           is_active?: boolean;
           is_dream_eligible?: boolean;
           key: string;
           label: string;
           mood_profile?: Json | null;
           nightly_only?: boolean;
+          nightly_pool?: boolean;
           sort_order?: number;
+          version_of?: string | null;
         };
         Update: {
           client_meta?: Json | null;
@@ -1512,15 +1520,27 @@ export type Database = {
           description?: string | null;
           directive?: string;
           face_swap_directive?: string | null;
+          flux_fragment?: string | null;
+          fragment_position?: string | null;
           is_active?: boolean;
           is_dream_eligible?: boolean;
           key?: string;
           label?: string;
           mood_profile?: Json | null;
           nightly_only?: boolean;
+          nightly_pool?: boolean;
           sort_order?: number;
+          version_of?: string | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'dream_vibes_version_of_fkey';
+            columns: ['version_of'];
+            isOneToOne: false;
+            referencedRelation: 'dream_vibes';
+            referencedColumns: ['key'];
+          },
+        ];
       };
       dual_scenarios: {
         Row: {
