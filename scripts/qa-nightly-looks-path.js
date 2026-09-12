@@ -139,7 +139,15 @@ async function renderOne(surface, n) {
   const stamps = (log && log.fallback_reasons) || [];
   const prompt = (log && log.enhanced_prompt) || '';
   const axes = (log && log.rolled_axes) || {};
-  const lookKey = LEGACY ? (axes.medium ? String(axes.medium) : null) : stampVal(stamps, 'look:');
+  // The effective look after a retry / rebuild re-roll: the last look_retry:<n>:reroll:<key> or look_rebuild:reroll:<key>
+  // wins over the first roll's look: stamp.
+  const rerolls = stamps.filter((x) => /^look_(retry:\d+|rebuild):reroll:/.test(x));
+  const rerolled = rerolls.length ? rerolls[rerolls.length - 1].split(':').pop() : null;
+  const lookKey = LEGACY
+    ? axes.medium
+      ? String(axes.medium)
+      : null
+    : rerolled || stampVal(stamps, 'look:');
   const vibeKey = LEGACY ? (axes.vibe ? String(axes.vibe) : null) : stampVal(stamps, 'vibe:');
   const modelUsed = log && log.model_used;
   // fragments of record
@@ -190,11 +198,14 @@ async function renderOne(surface, n) {
   const composer = /candid cinematic photograph|editorial cinematic photograph/.test(prompt)
     ? 'legacy-priors'
     : 'look-neutral';
-  const degraded = stamps.some((s) =>
-    /dual_degrade|no_dual_split|solo_rebuild|faceless|swap_failed|degrade_single|SHIPPED_FACELESS/.test(
-      s
-    )
-  );
+  // Degraded = the FINAL outcome (a couple that failed attempt 1 and shipped as a real dual swap on the retry model
+  // is NOT degraded; the old regex flagged the attempt-1 stamp).
+  const fsr = (log && log.rolled_axes && log.rolled_axes.faceSwapResult) || '';
+  const degraded =
+    surface === 'couple'
+      ? fsr !== 'dual-success'
+      : stamps.some((s) => /solo_rebuild|faceless|swap_failed|SHIPPED_FACELESS/.test(s)) ||
+        fsr === 'failed';
   const caption = `✨ ${LEGACY ? 'LEGACY' : 'LOOKS PATH'} ${surface} #${n} [${(modelUsed || '').replace(/^.*\//, '')} · ${(lookKey || '').replace(/^nightly_/, '')} · ${vibeKey || 'no vibe'}]`;
   if (payload.upload_id) await sb.from('uploads').update({ caption }).eq('id', payload.upload_id);
   const local = path.join(OUT_DIR, `${surface}-${n}.jpg`);

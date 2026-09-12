@@ -338,3 +338,40 @@ stamps at persist (`style_contract_violation:*`). QA: `scripts/qa-nightly-looks-
 
 **Do not ship `nightly_looks_mode = on` before director mode lands**: today's path is honest and varied in look and light
 but the subject matter is still the legacy pools', and Kevin does not want a night of those.
+
+## 1.2.0 vs the looks path: the comparison Kevin asked for (2026-09-12)
+
+Reference = his 30 most recent PUBLIC posts (`uploads.is_public`, the app's posts album; `is_posted` is the wrong
+flag and `posted_at` sorts nulls first): 30 character renders, a real spread of full-body / three-quarter / waist-up,
+overwhelmingly the scenario-driven, costume-rich renders (starship bridge, pirate, Roman couple, sea turtles, red
+carpet), rendered by flux-1.1-pro through the legacy override library plus a few on flex / ultra.
+
+**Kept, byte-identical:** the composition roll (character / epic_tiny / pure_scene), the cast roll, the location
+pools + biome axes (wardrobe anchor, TIME / WEATHER / PHENOMENA), the scenario pools (goofy / elegant / active / genre
+/ holiday, ~50% of nightlies), the action pools, registers, Option B and authored actions, costume locks, hair
+variation, the identity gates, the dual pipeline and the solo rebuild.
+
+**Changed on the path:** medium → look (the catalog + the legacy family, see below); model = the weighted policy
+(50/25/25) instead of the DreamSmart pool; vibe = 175 versions (family-first) with the fragment placed per version;
+the composer's three photography priors removed and Sonnet told the LOOK; the SET DRESSER + COSTUME DESIGNER brief
+(on by default; `force_plain_brief` for an A/B); framing = a rolled axis (couple full_figure 15 / knees_up 40 /
+mid_thigh 15 / waist_up 30; solo enviro_wide 25 / three_quarter 45 / waist_up 30; a waist-up frame tells the set
+dresser to dress the near field; stamp `frame:<surface>:<key>`); whole-body couple stances (`DUAL_STANCES_WIDE`)
+and torso stills dropped from the register sample; the legacy per-model override library and per-medium overrides
+skipped (the approvals table is the quality gate instead).
+
+**Missed and fixed today:** (1) the render handed the contract the legacy ban list, which bans gemini and grok, so
+the roll was 47/47 flux-1.1-pro (`looksPathBans`, unit-tested; the QA runner now warns on a single-model batch);
+(2) a vibe version with no fragment blanked the atmosphere axes and left no light instruction (axes now pass
+through for fragment-less vibes); (3) couples never had a full-body frame (added); (4) the mediums his posts
+rendered with were absent: in 1.2.0 every flux face-swap render replaced the medium fragment with one of FOUR
+override fragments (three already looks; adult cartoon added) and the other models rendered the medium's own
+fragment. Mig 511 added eight looks; Kevin graded them on the flux matrix (colored pencil scrapped, glamour solo
+only); mig 513 files them under a `legacy` family rolled at `engine_config.nightly_legacy_look_pct` (35) before the
+family-first roll: on flux 35% legacy then 13% per new family; on gemini / grok 0% until their matrix approvals
+land (`look_set:new:only`). Per-look banned vibe families (`client_meta.banned_vibes`) exist; the only entry is
+`epic` on adult cartoon, inherited from the override library.
+
+**Still open:** scene-only renders on the looks path have had one verify render (Kevin: character only for tests);
+the legacy looks on gemini / grok (matrix running); the subject-matter register of the pools (director mode,
+parked); the QA runner's honesty flag on one gemini couple (`vibe_fragment_missing` after a retry) to trace.
