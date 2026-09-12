@@ -43,6 +43,8 @@ export function resolveVibe(input: {
   recentVibeKeys?: readonly string[];
   recencyWindow?: number;
   forcedVibe?: string | null;
+  /** Vibe FAMILIES excluded for this render (the rolled look's banned vibes). A force still wins. */
+  excludeFamilies?: readonly string[];
   rng?: () => number;
 }): ResolvedVibeChoice | null {
   const rng = input.rng ?? Math.random;
@@ -73,7 +75,9 @@ export function resolveVibe(input: {
     stamps.push(`vibe_force_unknown:${input.forcedVibe}`);
   }
 
-  const pool = active.filter((v) => v.nightlyPool);
+  const banned = new Set(input.excludeFamilies ?? []);
+  const pool = active.filter((v) => v.nightlyPool && !banned.has(v.family));
+  if (banned.size > 0) stamps.push(`vibe_bans:${[...banned].join('+')}`);
   if (pool.length === 0) {
     stamps.push('vibe_pool_empty');
     return null;

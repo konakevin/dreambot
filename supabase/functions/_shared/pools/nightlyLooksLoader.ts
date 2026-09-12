@@ -12,6 +12,12 @@ export interface NightlyLooksCatalog {
 }
 
 const TTL_MS = 60_000;
+
+function bannedVibesOf(meta: unknown): string[] {
+  if (!meta || typeof meta !== 'object') return [];
+  const v = (meta as { banned_vibes?: unknown }).banned_vibes;
+  return Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : [];
+}
 let cached: { at: number; catalog: NightlyLooksCatalog } | null = null;
 
 export async function loadNightlyLooks(
@@ -25,7 +31,7 @@ export async function loadNightlyLooks(
     supabase
       .from('dream_mediums')
       .select(
-        'key,label,nightly_family,flux_fragment,face_swap_flux_fragment,directive,weight,is_active,nightly_enabled'
+        'key,label,nightly_family,flux_fragment,face_swap_flux_fragment,directive,weight,is_active,nightly_enabled,client_meta'
       )
       .eq('nightly_look', true)
       .returns<Record<string, unknown>[]>(),
@@ -50,6 +56,7 @@ export async function loadNightlyLooks(
     weight: Number(r.weight ?? 1) || 1,
     active: r.is_active === true,
     nightlyEnabled: r.nightly_enabled !== false,
+    bannedVibes: bannedVibesOf(r.client_meta),
   }));
   const approvals: LookApproval[] = (appr.data ?? [])
     .filter((a) => a.surface === 'couple' || a.surface === 'solo')

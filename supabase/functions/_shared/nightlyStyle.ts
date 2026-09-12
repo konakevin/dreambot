@@ -132,6 +132,7 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
         recentVibeKeys: input.recentVibeKeys,
         recencyWindow: input.vibeRecency,
         forcedVibe: input.forcedVibe,
+        excludeFamilies: resolved.look.bannedVibes ?? [],
         rng,
       })
     : null;

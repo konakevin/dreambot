@@ -135,3 +135,58 @@ describe('style contract carries the vibe as its third axis', () => {
     expect(none.vibe).toBeNull();
   });
 });
+
+describe('per-look banned vibe families', () => {
+  it('excludes the banned families from the roll and stamps them; a force still wins', () => {
+    const r = resolveVibe({
+      vibes: POOL,
+      excludeFamilies: ['cozy', 'aurora'],
+      rng: seq(0.01, 0.01),
+    })!;
+    expect(r.family).toBe('festive');
+    expect(r.stamps).toContain('vibe_bans:cozy+aurora');
+    const forced = resolveVibe({
+      vibes: POOL,
+      excludeFamilies: ['cozy'],
+      forcedVibe: 'cozy__bold',
+    })!;
+    expect(forced.vibe.key).toBe('cozy__bold');
+    expect(resolveVibe({ vibes: POOL, excludeFamilies: ['cozy', 'aurora', 'festive'] })).toBeNull();
+  });
+  it("the contract passes the rolled look's banned vibes to the vibe roll", () => {
+    const PRO = 'black-forest-labs/flux-1.1-pro';
+    const policy: NightlyModelPolicy = {
+      couple: { primaryModels: [PRO], fallbackModels: [] },
+      solo: { primaryModels: [PRO], fallbackModels: [] },
+      solo_rebuild: { primaryModels: [PRO], fallbackModels: [] },
+      scene: { primaryModels: [PRO], fallbackModels: [] },
+    };
+    const looks: LookRow[] = [
+      {
+        key: 'cartoon',
+        label: 'cartoon',
+        family: 'comic_print',
+        fragment: 'c',
+        swapFragment: 'c swap',
+        directive: null,
+        weight: 1,
+        active: true,
+        nightlyEnabled: true,
+        bannedVibes: ['cozy', 'aurora'],
+      },
+    ];
+    const approvals: LookApproval[] = [
+      { lookKey: 'cartoon', model: PRO, surface: 'solo', approved: true },
+    ];
+    const c = buildStyleContract({
+      surface: 'solo',
+      policy,
+      looks,
+      approvals,
+      vibes: POOL,
+      rng: seq(0.01, 0.01),
+    })!;
+    expect(c.vibe!.family).toBe('festive');
+    expect(c.stamps).toContain('vibe_bans:cozy+aurora');
+  });
+});

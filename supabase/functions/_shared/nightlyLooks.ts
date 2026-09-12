@@ -41,6 +41,9 @@ export interface LookRow {
   directive: string | null;
   weight: number;
   active: boolean;
+  /** dream_mediums.client_meta.banned_vibes — vibe FAMILIES this look never rolls with (the 1.2.0 override library
+   *  banned 'epic' on the adult-cartoon fragment; the contract passes these to the vibe roll). */
+  bannedVibes?: readonly string[];
   /** dream_mediums.nightly_enabled — false = reserved (e.g. for a future Create medium) and never rolled by nightly,
    *  even when approved. Defaults to true when omitted. */
   nightlyEnabled?: boolean;
