@@ -153,6 +153,9 @@ export interface CharacterSlotPipelineInput {
    *  over months to kill specific bugs and together those rules made every natural nightly plain. Every safety
    *  rule stays (no oddities, no people/camera words, no ethnic dress on real places). Default false = legacy. */
   richBrief?: boolean;
+  /** WIDE FRAMING (looks path, 2026-09-12): couples anchored knees-up with open space instead of "from mid-thigh up";
+   *  set with soloComposition 'three_quarter' + dualComposition null by looksSlotInputFields. Default false = legacy. */
+  wideFraming?: boolean;
   /** HOLIDAY COSTUME LOCK (2026-09-08, holidayCostumes.ts): one costume per cast member in `cast` order
    *  (index 0 = LEFT), rolled by nightly on a holiday's day-of. Sonnet is told the lock so the scene /
    *  mood / props play off it, and the wardrobe slot(s) are then OVERWRITTEN with the text verbatim — no
@@ -1187,7 +1190,7 @@ export function assembleCharacterPrompt(
     // sentence so the scene is never a separate leading clause the model can turn into a landscape.
     const place = location || '';
     const compactAnchor = `two people ${seatedStance ? 'seated' : 'standing'} side by side ${
-      input.richBrief
+      input.wideFraming || input.richBrief
         ? 'from the knees up in a three-quarter length composition with generous open space around them showing the scene'
         : closer
           ? 'from the waist up'

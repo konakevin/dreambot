@@ -174,6 +174,8 @@ export function looksSlotInputFields(
   | 'lookNeutralFraming'
   | 'richBrief'
   | 'dualComposition'
+  | 'soloComposition'
+  | 'wideFraming'
 > {
   return {
     timeAxis: specialSceneLighting ?? '',
@@ -182,7 +184,14 @@ export function looksSlotInputFields(
     vibeFragment: o.vibeFragment,
     vibeFragmentPosition: o.vibePosition,
     lookNeutralFraming: true,
-    ...(richBrief ? { richBrief: true, dualComposition: null } : {}),
+    // WIDE FRAMING (2026-09-12): the legacy pose pools describe torsos ("arms folded across the chest", "leaning
+    // back", "perched on an edge") and the wider presets only fire on a percentage roll, so 9 of 10 natural renders
+    // came out waist-up or tighter. On the looks path the presets are pinned: solos knees-up three-quarter, couples
+    // knees-up with open space and never the closer waist-up crop.
+    wideFraming: true,
+    soloComposition: 'three_quarter',
+    dualComposition: null,
+    ...(richBrief ? { richBrief: true } : {}),
   };
 }
 

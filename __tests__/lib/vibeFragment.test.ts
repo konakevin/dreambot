@@ -197,6 +197,21 @@ describe('SET DRESSER + COSTUME DESIGNER brief (richBrief) and knees-up couples'
     expect(richDual).toContain('left_wardrobe (18-28 words)');
     expect(richDual).toContain('a DIFFERENT complete outfit that pairs with LEFT');
   });
+  it('wideFraming alone (looks path) frames couples knees-up with open space', () => {
+    const p = assembleCharacterPrompt(
+      dualSlots,
+      base({
+        cast: [SELF, PLUS_ONE],
+        promptStyle: 'subject_first',
+        wideFraming: true,
+        dualComposition: 'waist_up',
+      })
+    );
+    expect(p).toContain(
+      'from the knees up in a three-quarter length composition with generous open space around them showing the scene'
+    );
+    expect(p).not.toContain('from mid-thigh up');
+  });
   it('couples with the rich brief are framed knees-up with open space, and the closer crop is ignored', () => {
     const p = assembleCharacterPrompt(
       dualSlots,
