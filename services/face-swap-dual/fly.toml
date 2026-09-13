@@ -22,6 +22,17 @@ primary_region = 'iad'
   min_machines_running = 1
   processes = ['app']
 
+  # PER-MACHINE CONCURRENCY (2026-09-12). Without this block Fly's default lets ~20 requests pile onto one
+  # machine. Two concurrent dual swaps on one 2 GB performance-1x hung it (both pipelines completed, neither
+  # finished, health check failed 26 s later) and the two edge requests died at the gateway's 150 s idle
+  # cutoff. soft_limit 1 → the proxy prefers a free machine / auto-starts the standby for a second concurrent
+  # swap; hard_limit 2 → a third queues rather than stacking. Capacity beyond that = `fly scale count N`
+  # (QUEUE_WORKERS_REFACTOR.md runbook: scale Fly first, then raise the heavy cap).
+  [http_service.concurrency]
+    type = 'requests'
+    soft_limit = 1
+    hard_limit = 2
+
   [[http_service.checks]]
     interval = '30s'
     timeout = '5s'

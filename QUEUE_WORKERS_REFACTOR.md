@@ -237,11 +237,11 @@ One UUID is `dream_queue.id == dream_jobs.id == job_id == sparkle ledger referen
 
 ### The knobs (all live-tunable in `engine_config`, no deploy)
 
-| Knob | Default | What it does |
-| --- | --- | --- |
-| `dream_queue_max_concurrent` | 40 | LIGHT (text/restyle) simultaneous renders. Fast + no Fly.io dep → wide. |
-| `dream_queue_max_concurrent_heavy` | 10 | HEAVY (face-swap/dual) simultaneous renders. **Bounded by the Fly.io `face-swap-dual` service.** |
-| `dream_queue_max_jobs_per_tick` | 10 | Per-tick claim ceiling per pool. |
+| Knob                               | Default | What it does                                                                                     |
+| ---------------------------------- | ------- | ------------------------------------------------------------------------------------------------ |
+| `dream_queue_max_concurrent`       | 40      | LIGHT (text/restyle) simultaneous renders. Fast + no Fly.io dep → wide.                          |
+| `dream_queue_max_concurrent_heavy` | 10      | HEAVY (face-swap/dual) simultaneous renders. **Bounded by the Fly.io `face-swap-dual` service.** |
+| `dream_queue_max_jobs_per_tick`    | 10      | Per-tick claim ceiling per pool.                                                                 |
 
 `_shared/engineConfig.ts` mirrors them with code fallbacks (40 / 10 / 10) so a missing row never breaks the worker.
 
@@ -251,10 +251,11 @@ The HEAVY cap is the **Fly.io `face-swap-dual` service capacity**, not Supabase.
 
 **RUNBOOK — scaling the Fly heavy ceiling (do this BEFORE raising the cap):**
 `services/face-swap-dual/fly.toml` is currently effectively **one machine** (`min_machines_running=1`, no explicit count, no `[http_service.concurrency]`). The app is stateless (each swap is independent), so it scales horizontally cleanly. Steps, from `services/face-swap-dual/`:
+
 1. `fly scale count 2` (or 3) — pins N machines. Verify: `fly machines list`.
 2. Re-run `node scripts/loadtest-dual-swap.js` (or `loadtest-mixed.js --heavy N`) at the new intended concurrency to confirm no `face-swap-dual@fly` exhaustion / no 546.
 3. Only then raise `dream_queue_max_concurrent_heavy` in `engine_config` (live, no deploy) to ~`10 × machine_count` and watch `dream-queue-monitor` for dead_letters.
-Rule of thumb from the load test: ~10 concurrent dual swaps per 1-vCPU/2GB machine. Never raise the cap past tested Fly capacity — excess just exhausts the swap service.
+   Rule of thumb from the load test: ~10 concurrent dual swaps per 1-vCPU/2GB machine. Never raise the cap past tested Fly capacity — excess just exhausts the swap service.
 
 **Hardening pass 2026-06-17 (this section is the status of record):** (a) the per-weight cap is now enforced ATOMICALLY inside `claim_dream_queue_jobs_by_weight` (migration 275, per-weight advisory lock) so overlapping invokers can't overshoot; (b) the worker has an `x-worker-sync` mode + a GitHub Actions backstop (`.github/workflows/dream-queue-sync.yml`, every 5 min) that drains via a HELD connection — the queue keeps draining even if `EdgeRuntime.waitUntil` is dropped by the platform (which happened 2026-06-17 and stalled the queue); (c) `RENDER_TIMEOUT_MS` lowered to 120s (under the 150s request-idle ceiling); (d) `generateImage` 429 retry is now bounded (3); (e) nightly user fetches are paginated (PostgREST's silent 1000-row cap was dropping users 1001+). See `[[project_waituntil_regression_synchronous_queue_render]]`.
 
@@ -273,3 +274,15 @@ Rule of thumb from the load test: ~10 concurrent dual swaps per 1-vCPU/2GB machi
 
 - Single-face-swap path wasn't load-tested in isolation (it's on Replicate, not Fly.io — lower risk).
 - Scale the Fly.io dual-swap service to lift the heavy ceiling for big simultaneous-dual bursts.
+
+## Fly engine concurrency + bounded dispatch (2026-09-12)
+
+Two concurrent dual swaps on one 2 GB `face-swap-dual` machine hung it (both pipelines completed, neither
+finished, health check failed 26 s later) and the edge's unbounded Fly fetch sat until the gateway's 150 s
+`IDLE_TIMEOUT` — two dreams lost with no log row. `fly.toml` had NO `[http_service.concurrency]` block, so Fly's
+default (~20 requests per machine) stacked every swap on the one warm machine and `fly scale count` did not
+spread load. Now: `soft_limit = 1, hard_limit = 2` per machine (engine v24) and `dualSwapDispatch.ts` aborts the
+Fly call shortly after the render's own dual deadline → `dual_swap_error` → re-render / gender-safe solo.
+**Runbook implication:** the heavy cap (`dream_queue_max_concurrent_heavy`) should not exceed ~2 × the Fly
+machine count; scale Fly first (`fly scale count N`), then raise the cap. Hang signature in `fly logs`: a machine
+logging "Starting — budget" twice with no "Done in".

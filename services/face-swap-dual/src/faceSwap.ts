@@ -19,14 +19,14 @@
 // deno-lint-ignore-file no-explicit-any
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { decodeImage, encodeJpeg } from './imageCodec.ts';
-import { verifyDualIdentity, type DualIdentityRead } from './faceEmbed.ts';
+import { type DualIdentityRead, verifyDualIdentity } from './faceEmbed.ts';
 import { detectFacesWithGender, type GenderedFace } from './faceDetect.ts';
 import {
-  planDualSplit,
-  faceCropBox,
   compositeFaceMasked,
-  iou,
   type FaceBox,
+  faceCropBox,
+  iou,
+  planDualSplit,
 } from './faceDetectMath.ts';
 
 const DEFAULT_MAX_WAIT_MS = 90_000;
@@ -55,15 +55,21 @@ export async function ensureHttpsImageUrl(
   userId: string,
   bucket = 'uploads'
 ): Promise<{ url: string; tempPath: string | null }> {
-  if (typeof url !== 'string') throw new Error('ensureHttpsImageUrl: url is not a string');
+  if (typeof url !== 'string') {
+    throw new Error('ensureHttpsImageUrl: url is not a string');
+  }
   if (!url.startsWith('data:')) return { url, tempPath: null };
 
   // Parse: data:<mime>;base64,<payload>
   const comma = url.indexOf(',');
-  if (comma < 0) throw new Error('ensureHttpsImageUrl: malformed data URL (no payload)');
+  if (comma < 0) {
+    throw new Error('ensureHttpsImageUrl: malformed data URL (no payload)');
+  }
   const header = url.slice(5, comma); // e.g. "image/png;base64"
   const mimeMatch = header.match(/^image\/(png|jpeg|jpg|webp)/i);
-  if (!mimeMatch) throw new Error(`ensureHttpsImageUrl: unsupported mime in data URL: ${header}`);
+  if (!mimeMatch) {
+    throw new Error(`ensureHttpsImageUrl: unsupported mime in data URL: ${header}`);
+  }
   if (!/;base64$/i.test(header)) {
     throw new Error(`ensureHttpsImageUrl: only base64 data URLs supported, got: ${header}`);
   }
@@ -76,11 +82,17 @@ export async function ensureHttpsImageUrl(
   const bytes = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
 
-  const tempPath = `${userId}/swap-target-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-  const { error: upErr } = await supabase.storage
-    .from(bucket)
-    .upload(tempPath, bytes, { contentType, upsert: false, cacheControl: '300' });
-  if (upErr) throw new Error(`ensureHttpsImageUrl: temp upload failed: ${upErr.message}`);
+  const tempPath = `${userId}/swap-target-${Date.now()}-${Math.random()
+    .toString(36)
+    .slice(2, 8)}.${ext}`;
+  const { error: upErr } = await supabase.storage.from(bucket).upload(tempPath, bytes, {
+    contentType,
+    upsert: false,
+    cacheControl: '300',
+  });
+  if (upErr) {
+    throw new Error(`ensureHttpsImageUrl: temp upload failed: ${upErr.message}`);
+  }
   const { data: pub } = supabase.storage.from(bucket).getPublicUrl(tempPath);
   return { url: pub.publicUrl, tempPath };
 }
@@ -123,7 +135,9 @@ interface FaceSwapModel {
 
 function parseUrlOrFirst(out: unknown): string | null {
   if (typeof out === 'string') return out || null;
-  if (Array.isArray(out) && out.length > 0 && typeof out[0] === 'string') return out[0] || null;
+  if (Array.isArray(out) && out.length > 0 && typeof out[0] === 'string') {
+    return out[0] || null;
+  }
   return null;
 }
 
@@ -131,7 +145,10 @@ const FACE_SWAP_MODELS: FaceSwapModel[] = [
   {
     name: 'cdingram',
     version: 'd1d6ea8c8be89d664a07a457526f7128109dee7030fdac424788d762c71ed111',
-    buildInput: (source, target) => ({ swap_image: source, input_image: target }),
+    buildInput: (source, target) => ({
+      swap_image: source,
+      input_image: target,
+    }),
     parseOutput: parseUrlOrFirst,
   },
   {
@@ -149,7 +166,9 @@ const FACE_SWAP_MODELS: FaceSwapModel[] = [
       if (out && typeof out === 'object') {
         const obj = out as Record<string, unknown>;
         if (obj.status === 'failed' || obj.code === 500) return null;
-        if (typeof obj.image === 'string' && obj.image.length > 0) return obj.image;
+        if (typeof obj.image === 'string' && obj.image.length > 0) {
+          return obj.image;
+        }
       }
       return parseUrlOrFirst(out);
     },
@@ -157,7 +176,10 @@ const FACE_SWAP_MODELS: FaceSwapModel[] = [
   {
     name: 'pikachupichu25',
     version: '94b109952d4dd3cb6e9947340a6a099cc9a4821af8807a879c1f7af92e2a3b00',
-    buildInput: (source, target) => ({ swap_image: source, target_image: target }),
+    buildInput: (source, target) => ({
+      swap_image: source,
+      target_image: target,
+    }),
     parseOutput: parseUrlOrFirst,
   },
 ];
@@ -221,11 +243,17 @@ async function perturbSourceImage(
   const quality = 90 + Math.floor(Math.random() * 6); // 90-95, near-lossless JPEG
   const bytes = await encodeJpeg({ data, width: w, height: h }, quality);
 
-  const path = `temp/${userId}/perturbed-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
-  const { error } = await supabase.storage
-    .from('uploads')
-    .upload(path, bytes, { contentType: 'image/jpeg', upsert: true, cacheControl: '2592000' });
-  if (error) throw new Error(`Perturbed source upload failed: ${error.message}`);
+  const path = `temp/${userId}/perturbed-${Date.now()}-${Math.random()
+    .toString(36)
+    .slice(2, 8)}.jpg`;
+  const { error } = await supabase.storage.from('uploads').upload(path, bytes, {
+    contentType: 'image/jpeg',
+    upsert: true,
+    cacheControl: '2592000',
+  });
+  if (error) {
+    throw new Error(`Perturbed source upload failed: ${error.message}`);
+  }
   return {
     url: supabase.storage.from('uploads').getPublicUrl(path).data.publicUrl,
     path,
@@ -305,9 +333,13 @@ async function faceSwapOnce(
       }),
     });
 
-    if (!res.ok) throw new Error(`Face swap create failed: ${res.status} (${model.name})`);
+    if (!res.ok) {
+      throw new Error(`Face swap create failed: ${res.status} (${model.name})`);
+    }
     const data = await res.json();
-    if (!data.id) throw new Error(`No prediction ID from face swap (${model.name})`);
+    if (!data.id) {
+      throw new Error(`No prediction ID from face swap (${model.name})`);
+    }
 
     const maxPolls = Math.ceil(maxWaitMs / POLL_INTERVAL_MS);
     for (let i = 0; i < maxPolls; i++) {
@@ -403,7 +435,12 @@ export async function faceSwap(
   replicateToken: string,
   supabase: SupabaseClient,
   userId: string,
-  opts?: { maxWaitMs?: number; retry?: boolean; skipPrimary?: boolean; perturb?: boolean }
+  opts?: {
+    maxWaitMs?: number;
+    retry?: boolean;
+    skipPrimary?: boolean;
+    perturb?: boolean;
+  }
 ): Promise<string> {
   const maxWaitMs = opts?.maxWaitMs ?? DEFAULT_MAX_WAIT_MS;
   const retry = opts?.retry ?? true;
@@ -455,7 +492,9 @@ export async function faceSwap(
       // a hard failure (Kevin's plus_one face would still render with
       // their unperturbed photo, just possibly into the canned scene).
       console.warn(
-        `[faceSwap] perturbSourceImage failed (continuing unperturbed): ${(e as Error).message.slice(0, 80)}`
+        `[faceSwap] perturbSourceImage failed (continuing unperturbed): ${(
+          e as Error
+        ).message.slice(0, 80)}`
       );
     }
   }
@@ -472,7 +511,9 @@ export async function faceSwap(
       for (let attempt = 1; attempt <= maxPrimaryAttempts; attempt++) {
         try {
           const remaining = deadline - Date.now();
-          if (remaining <= 0) throw new Error(`Face swap deadline exceeded (${primary.name})`);
+          if (remaining <= 0) {
+            throw new Error(`Face swap deadline exceeded (${primary.name})`);
+          }
           // Cap the primary so it can't eat the whole budget and starve fallbacks.
           const primaryWait = Math.min(remaining, PRIMARY_ATTEMPT_CAP_MS);
           const url = await faceSwapOnce(
@@ -484,8 +525,9 @@ export async function faceSwap(
             primary,
             primaryWait
           );
-          if (attempt > 1)
+          if (attempt > 1) {
             console.log(`[faceSwap] primary recovered on attempt ${attempt}/${maxPrimaryAttempts}`);
+          }
           return url;
         } catch (err) {
           lastErr = err as Error;
@@ -493,14 +535,20 @@ export async function faceSwap(
           if (attempt < maxPrimaryAttempts && isTransientReplicateError(msg)) {
             const delay = BACKOFF_MS[attempt - 1] ?? BACKOFF_MS[BACKOFF_MS.length - 1];
             console.warn(
-              `[faceSwap] primary ${primary.name} attempt ${attempt}/${maxPrimaryAttempts} failed (${msg.slice(0, 80)}) — retrying in ${delay}ms`
+              `[faceSwap] primary ${primary.name} attempt ${attempt}/${maxPrimaryAttempts} failed (${msg.slice(
+                0,
+                80
+              )}) — retrying in ${delay}ms`
             );
             await new Promise((r) => setTimeout(r, delay));
             continue;
           }
           // Non-transient OR primary exhausted: break out and try fallbacks
           console.warn(
-            `[faceSwap] primary ${primary.name} exhausted after ${attempt}/${maxPrimaryAttempts} (${msg.slice(0, 80)})`
+            `[faceSwap] primary ${primary.name} exhausted after ${attempt}/${maxPrimaryAttempts} (${msg.slice(
+              0,
+              80
+            )})`
           );
           break;
         }
@@ -714,14 +762,23 @@ async function perFaceCompositeSwap(
   const swapOne = async (src: string, face: FaceBox, label: string) => {
     const box = faceCropBox(face, W, H);
     const cropPixels = cropRect(base, W, box.x, box.y, box.w, box.h);
-    const jpeg = await encodeJpeg({ data: cropPixels, width: box.w, height: box.h }, 92);
+    const jpeg = await encodeJpeg(
+      {
+        data: cropPixels,
+        width: box.w,
+        height: box.h,
+      },
+      92
+    );
     const path = `temp/${userId}/face-${label}-${Date.now()}.jpg`;
     const up = await supabase.storage.from('uploads').upload(path, jpeg, {
       contentType: 'image/jpeg',
       upsert: true,
       cacheControl: '2592000',
     });
-    if (up.error) throw new Error(`Upload ${label} face crop failed: ${up.error.message}`);
+    if (up.error) {
+      throw new Error(`Upload ${label} face crop failed: ${up.error.message}`);
+    }
     const cropUrl = supabase.storage.from('uploads').getPublicUrl(path).data.publicUrl;
     const swapUrl = await faceSwap(src, cropUrl, replicateToken, supabase, userId, {
       maxWaitMs: swapBudgetMs,
@@ -801,6 +858,31 @@ export interface DualSwapResult {
 
 /** Measure identity on a successful swap when IDENTITY_VERIFY is on. Never
  *  throws; ~1-2s (3 fetches + detect + 4 embeds), skipped entirely when off. */
+/**
+ * GENDER CONFLICT CHECK (2026-09-12, Kevin's aquarelle couple crossed). The Haiku override used to REPLACE the
+ * engine's genderage read (`genderOverride?.left ?? fL.gender`). On that render the engine detected three faces
+ * (a painted mural woman + the couple), picked the right two, and read them male/female — correct — while Haiku,
+ * counting the mural as "the person on the LEFT", said female/male. The override won and the swap crossed.
+ * Now: when the engine has a confident read of BOTH faces it is about to swap and the override disagrees, the
+ * attempt is REJECTED (caller re-renders) instead of trusting either read alone. The override still fills in
+ * when genderage has no read or reads two of the same gender (the 2026-08-05 painted-face case).
+ * DUAL_GENDER_CONFLICT=shadow logs the conflict and keeps the legacy override-wins routing; anything else = enforce.
+ */
+function conflictEnforced(): boolean {
+  return Deno.env.get('DUAL_GENDER_CONFLICT') !== 'shadow';
+}
+
+export function genderRouteConflict(
+  override: { left: 'male' | 'female'; right: 'male' | 'female' } | null | undefined,
+  fL: { gender?: 'male' | 'female' | null },
+  fR: { gender?: 'male' | 'female' | null }
+): string | null {
+  if (!override) return null;
+  if (!fL.gender || !fR.gender || fL.gender === fR.gender) return null;
+  if (override.left === fL.gender && override.right === fR.gender) return null;
+  return `gender_conflict:haiku=${override.left}/${override.right},genderage=${fL.gender}/${fR.gender}`;
+}
+
 async function maybeMeasureIdentity(
   swappedUrl: string,
   leftSrc: string,
@@ -809,7 +891,9 @@ async function maybeMeasureIdentity(
   const mode = Deno.env.get('IDENTITY_VERIFY');
   if (mode !== 'shadow' && mode !== 'enforce') return undefined;
   const read = await verifyDualIdentity(swappedUrl, leftSrc, rightSrc);
-  if (read) console.log(`[identity] L=${read.left ?? '?'} R=${read.right ?? '?'} ${read.ms}ms`);
+  if (read) {
+    console.log(`[identity] L=${read.left ?? '?'} R=${read.right ?? '?'} ${read.ms}ms`);
+  }
   return read;
 }
 
@@ -839,7 +923,10 @@ export async function dualFaceSwap(
   userId: string,
   deadlineMs?: number,
   skipPrimary = false,
-  genders?: { left?: 'male' | 'female' | null; right?: 'male' | 'female' | null },
+  genders?: {
+    left?: 'male' | 'female' | null;
+    right?: 'male' | 'female' | null;
+  },
   // R2 (2026-07-09): caller-supplied read of the RENDERED faces' genders
   // (left/right by x-order), from a Haiku vision confirm after a
   // gender_unconfirmed reject. Substitutes for genderage on THIS attempt —
@@ -850,11 +937,15 @@ export async function dualFaceSwap(
   const deadline = deadlineMs ?? Date.now() + DEFAULT_MAX_WAIT_MS + 15_000;
   const dynamicSplit = Deno.env.get('DUAL_SWAP_DYNAMIC_SPLIT') === 'true';
   console.log(
-    `[dualFaceSwap] Starting — budget ${Math.round((deadline - Date.now()) / 1000)}s dynamicSplit=${dynamicSplit}`
+    `[dualFaceSwap] Starting — budget ${Math.round(
+      (deadline - Date.now()) / 1000
+    )}s dynamicSplit=${dynamicSplit}`
   );
 
   const targetResp = await fetch(targetImageUrl);
-  if (!targetResp.ok) throw new Error(`Download target failed: ${targetResp.status}`);
+  if (!targetResp.ok) {
+    throw new Error(`Download target failed: ${targetResp.status}`);
+  }
   const targetImg = await decodeImage(new Uint8Array(await targetResp.arrayBuffer()));
   const W = targetImg.width;
   const H = targetImg.height;
@@ -886,13 +977,28 @@ export async function dualFaceSwap(
           console.log(
             `[dualFaceSwap] no clean split (${split.reason}, faces=${faceCount}) — re-render`
           );
-          return { swappedUrl: null, faceCount, reason: `no_split:${split.reason}` };
+          return {
+            swappedUrl: null,
+            faceCount,
+            reason: `no_split:${split.reason}`,
+          };
         }
         // reason==='overlap' → faces too close to split into vertical strips
         // (stacked / close pose: piggyback, dip, dancing). Use the PER-FACE
         // COMPOSITE path, which crops + swaps + composites each face independently.
         const fL = split.leftBox as GenderedFace;
         const fR = split.rightBox as GenderedFace;
+        const conflictPF = genderRouteConflict(genderOverride, fL, fR);
+        if (conflictPF) {
+          console.log(
+            `[dualFaceSwap] per-face: ${conflictPF}${
+              conflictEnforced() ? ' — re-render' : ' (shadow)'
+            }`
+          );
+          if (conflictEnforced()) {
+            return { swappedUrl: null, faceCount, reason: conflictPF };
+          }
+        }
         const gL = genderOverride?.left ?? fL.gender;
         const gR = genderOverride?.right ?? fR.gender;
         let lSrc = leftSourceUrl;
@@ -903,7 +1009,9 @@ export async function dualFaceSwap(
         if (mixed) {
           if (!(gL && gR && gL !== gR)) {
             console.log(
-              `[dualFaceSwap] per-face: mixed cast but detected genders ${gL}/${gR}${genderOverride ? ' (override)' : ''} — re-render`
+              `[dualFaceSwap] per-face: mixed cast but detected genders ${gL}/${gR}${
+                genderOverride ? ' (override)' : ''
+              } — re-render`
             );
             return {
               swappedUrl: null,
@@ -931,7 +1039,9 @@ export async function dualFaceSwap(
           perFaceBudgetMs,
           skipPrimary
         );
-        if (!composedUrl) return { swappedUrl: null, faceCount, reason: 'perface_swap_failed' };
+        if (!composedUrl) {
+          return { swappedUrl: null, faceCount, reason: 'perface_swap_failed' };
+        }
         console.log(`[dualFaceSwap] per-face composite complete faces=${faceCount}`);
         return {
           swappedUrl: composedUrl,
@@ -941,6 +1051,15 @@ export async function dualFaceSwap(
       }
       const fL = split.leftBox as GenderedFace;
       const fR = split.rightBox as GenderedFace;
+      const conflict = genderRouteConflict(genderOverride, fL, fR);
+      if (conflict) {
+        console.log(
+          `[dualFaceSwap] ${conflict}${conflictEnforced() ? ' — re-render' : ' (shadow)'}`
+        );
+        if (conflictEnforced()) {
+          return { swappedUrl: null, faceCount, reason: conflict };
+        }
+      }
       const gL = genderOverride?.left ?? fL.gender;
       const gR = genderOverride?.right ?? fR.gender;
       const mixedCast =
@@ -951,7 +1070,9 @@ export async function dualFaceSwap(
         // (genderage misread, or the render produced two same-gender bodies) → re-render.
         if (!(gL && gR && gL !== gR)) {
           console.log(
-            `[dualFaceSwap] mixed cast but detected genders ${gL}/${gR}${genderOverride ? ' (override)' : ''} — re-render`
+            `[dualFaceSwap] mixed cast but detected genders ${gL}/${gR}${
+              genderOverride ? ' (override)' : ''
+            } — re-render`
           );
           return {
             swappedUrl: null,
@@ -1009,8 +1130,12 @@ export async function dualFaceSwap(
       cacheControl: '2592000',
     }),
   ]);
-  if (leftUp.error) throw new Error(`Upload left crop failed: ${leftUp.error.message}`);
-  if (rightUp.error) throw new Error(`Upload right crop failed: ${rightUp.error.message}`);
+  if (leftUp.error) {
+    throw new Error(`Upload left crop failed: ${leftUp.error.message}`);
+  }
+  if (rightUp.error) {
+    throw new Error(`Upload right crop failed: ${rightUp.error.message}`);
+  }
   const leftCropUrl = supabase.storage.from('uploads').getPublicUrl(leftPath).data.publicUrl;
   const rightCropUrl = supabase.storage.from('uploads').getPublicUrl(rightPath).data.publicUrl;
   console.log(`[dualFaceSwap] Crops uploaded: ${leftPath}, ${rightPath}`);
@@ -1082,7 +1207,14 @@ export async function dualFaceSwap(
   leftSwapData = null;
   rightSwapData = null;
 
-  const stitchedBytes = await encodeJpeg({ data: stitched, width: W, height: H }, 92);
+  const stitchedBytes = await encodeJpeg(
+    {
+      data: stitched,
+      width: W,
+      height: H,
+    },
+    92
+  );
   const tempFile = `temp/${userId}/stitched-${Date.now()}.jpg`;
   const { error: upErr } = await supabase.storage.from('uploads').upload(tempFile, stitchedBytes, {
     contentType: 'image/jpeg',
