@@ -98,14 +98,16 @@ describe('unescapeLiteral', () => {
 });
 
 describe('real pool files parse clean (no garbage)', () => {
+  // Parity loop round 6 (2026-09-12): the DYNAMIC arrays were curated by eye to 13 / 12 entries (the heroic
+  // bodybuilding register retired), so their truncation floor is 10, not 20.
   const POOLS: Array<[string, string, number]> = [
     ['dual_actions.ts', 'DUAL_ACTIONS_COMPANION', 40],
     ['dual_actions.ts', 'DUAL_ACTIONS_PARTNER', 100],
     ['dual_actions.ts', 'DUAL_ACTIONS_PLAYFUL', 15],
-    ['dual_actions.ts', 'DUAL_ACTIONS_DYNAMIC', 20],
+    ['dual_actions.ts', 'DUAL_ACTIONS_DYNAMIC', 10],
     ['single_actions.ts', 'CANDID_ACTIONS', 90],
     ['single_actions.ts', 'PORTRAIT_ACTIONS', 100],
-    ['single_actions.ts', 'DYNAMIC_ACTIONS', 20],
+    ['single_actions.ts', 'DYNAMIC_ACTIONS', 10],
   ];
 
   it.each(POOLS)('%s / %s has zero malformed entries', (file, name, minCount) => {

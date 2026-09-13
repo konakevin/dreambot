@@ -36,23 +36,23 @@ parallel and the cutover waits for it.
 
 ## 1. Today — where style and model are decided (the code map, `nightly-dreams/index.ts`, 4,671 lines)
 
-| # | Site (line) | What it decides | Notes |
-|---|---|---|---|
-| 1 | 667-739 chaos-tier pre-roll | dream type → medium TOKEN (`dream_eligible_face_swap` / `_scene` / `_scene_natural` / embodied list) | tier-gated embodied 0/10/15 % |
-| 2 | 770-791 `resolveMediumFromDb(token, recent, _, firstDreamAllow)` | the roll from the APP pool (`is_dream_eligible` + flags), minus the user's last 7 | `force_medium` re-resolves |
-| 3 | 939-956 realistic ban | character + hyperreal/render/photography → re-roll from the swap pool | re-roll #1 |
-| 4 | 965-986 scene gate | pure_scene / epic_tiny + not `is_scene_eligible` → re-roll from the scene pool | re-roll #2 |
-| 5 | 992-1010 day-of medium ban (scene) | re-roll up to 6× until not banned | re-roll #3 |
-| 6 | 1015-1021 capture | `resolvedMediumAllowedModels / SceneModels / SmartModels`, `isEmbodiedMedium` | three copies of medium state, re-synced by hand at every later re-roll |
-| 7 | 1140-1147 `applyFaceSwapOverride` | swaps `flux_fragment` → `face_swap_flux_fragment` | fragment swap #1 |
-| 8 | 1148-1260 model pre-pick | `nightlyModelPool` (smart ∩ allowed − bans, ≤2✦) → ultra clamp → dual steer → flex clamp → policy shadow/on | the 8 legacy layers the policy replaces |
-| 9 | 1262-1275 **`pickFaceSwapModelOverride`** | on 1.1-pro replaces the fragment with 1 of 4 library fragments | **the dishonest step**: label stays, style changes; `realMediumFragment` kept for the rebuild |
-| 10 | 1665-1685 scenario row | `dualSceneMediumKey` / `dualSceneMediumBan` from `dual_scenarios` | pin source #1 |
-| 11 | 1739-1745 holiday scene pin | `holiday_scenes.medium_key` → `resolveMediumFromDb` | pin source #2 |
-| 12 | 2054-2066 day-of look pin | `pickDayOfLook` → rides `dualSceneMediumKey`; merges the day-of ban | pin source #3 (the pilot) |
-| 13 | 2069-2180 pin apply + bans | `IMAGINED_BIOME_MEDIUM_BAN` (hardcoded), scenario pin → re-resolve + override swap + model re-pick + library again; banned → re-roll + the same three again | re-rolls #4/#5; sites 7-9 repeated twice |
-| 14 | 3198-3310 scene model | `nightlyModelPool` again → policy shadow/on → scene gate re-pick (`scene_eligible_models`) → per-medium bans/pins (empty maps) → ban-gate backstop | model decided a second time for scenes |
-| 15 | 4301-4430 persist | `model_used`, `rolled_axes.medium`, `uploads.dream_medium = resolvedMediumKey` | writes the PRE-override key |
+| #   | Site (line)                                                      | What it decides                                                                                                                                             | Notes                                                                                         |
+| --- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| 1   | 667-739 chaos-tier pre-roll                                      | dream type → medium TOKEN (`dream_eligible_face_swap` / `_scene` / `_scene_natural` / embodied list)                                                        | tier-gated embodied 0/10/15 %                                                                 |
+| 2   | 770-791 `resolveMediumFromDb(token, recent, _, firstDreamAllow)` | the roll from the APP pool (`is_dream_eligible` + flags), minus the user's last 7                                                                           | `force_medium` re-resolves                                                                    |
+| 3   | 939-956 realistic ban                                            | character + hyperreal/render/photography → re-roll from the swap pool                                                                                       | re-roll #1                                                                                    |
+| 4   | 965-986 scene gate                                               | pure_scene / epic_tiny + not `is_scene_eligible` → re-roll from the scene pool                                                                              | re-roll #2                                                                                    |
+| 5   | 992-1010 day-of medium ban (scene)                               | re-roll up to 6× until not banned                                                                                                                           | re-roll #3                                                                                    |
+| 6   | 1015-1021 capture                                                | `resolvedMediumAllowedModels / SceneModels / SmartModels`, `isEmbodiedMedium`                                                                               | three copies of medium state, re-synced by hand at every later re-roll                        |
+| 7   | 1140-1147 `applyFaceSwapOverride`                                | swaps `flux_fragment` → `face_swap_flux_fragment`                                                                                                           | fragment swap #1                                                                              |
+| 8   | 1148-1260 model pre-pick                                         | `nightlyModelPool` (smart ∩ allowed − bans, ≤2✦) → ultra clamp → dual steer → flex clamp → policy shadow/on                                                 | the 8 legacy layers the policy replaces                                                       |
+| 9   | 1262-1275 **`pickFaceSwapModelOverride`**                        | on 1.1-pro replaces the fragment with 1 of 4 library fragments                                                                                              | **the dishonest step**: label stays, style changes; `realMediumFragment` kept for the rebuild |
+| 10  | 1665-1685 scenario row                                           | `dualSceneMediumKey` / `dualSceneMediumBan` from `dual_scenarios`                                                                                           | pin source #1                                                                                 |
+| 11  | 1739-1745 holiday scene pin                                      | `holiday_scenes.medium_key` → `resolveMediumFromDb`                                                                                                         | pin source #2                                                                                 |
+| 12  | 2054-2066 day-of look pin                                        | `pickDayOfLook` → rides `dualSceneMediumKey`; merges the day-of ban                                                                                         | pin source #3 (the pilot)                                                                     |
+| 13  | 2069-2180 pin apply + bans                                       | `IMAGINED_BIOME_MEDIUM_BAN` (hardcoded), scenario pin → re-resolve + override swap + model re-pick + library again; banned → re-roll + the same three again | re-rolls #4/#5; sites 7-9 repeated twice                                                      |
+| 14  | 3198-3310 scene model                                            | `nightlyModelPool` again → policy shadow/on → scene gate re-pick (`scene_eligible_models`) → per-medium bans/pins (empty maps) → ban-gate backstop          | model decided a second time for scenes                                                        |
+| 15  | 4301-4430 persist                                                | `model_used`, `rolled_axes.medium`, `uploads.dream_medium = resolvedMediumKey`                                                                              | writes the PRE-override key                                                                   |
 
 Fifteen sites, five re-rolls, three fragment swaps, two model pickers, three hand-synced state copies. Plus
 `first-dream-render` → HTTP → `nightly-dreams` with `force_face_swap_eligible` / `strict_face_swap` /
@@ -101,7 +101,7 @@ surface), then a look inside it by `weight`, then applies per-user recency over 
 Create-day consolidation shortlist.
 
 > **Built 2026-09-12:** `_shared/nightlyLooks.ts` — `resolveLook({surface, model, looks, approvals, recentLookKeys,
-> recencyWindow, familyMix, forcedLook, rng})` — pure, locked by `__tests__/lib/nightlyLooks.test.ts` (equal family
+recencyWindow, familyMix, forcedLook, rng})` — pure, locked by `__tests__/lib/nightlyLooks.test.ts` (equal family
 > shares regardless of cluster size, familyMix + look weights, recency with the never-empty floor, approvals filter
 > per model × surface, force_look short-circuit, null when nothing is approved). `dream_mediums.nightly_family` tagged
 > on all 43 rows (mig 499). NOT yet called by the render — Phase 2 wires it behind `nightly_looks_mode`.
@@ -125,6 +125,7 @@ candidates; if none, it takes the surface's **default look for that model** (`dr
 text[]`, one per model, authored once). No loops, no re-rolls.
 
 **The render consumes the contract and nothing else:**
+
 - `characterSlotPrompt` receives `contract.look.swapFragment` (cast) — position 2 is unchanged.
 - The scene brief receives `contract.look.fragment` as `MEDIUM:` and `contract.look.directive` as the style guide.
 - Couple retry uses `contract.attempt(2)`; the solo rebuild uses `contract.rebuild`; the F2 `model_used`
@@ -150,14 +151,14 @@ Estimate: ≈ 800 lines of `index.ts` → ≈ 120 lines of contract consumption;
 ## 3. Data model (the catalog is rows; the constraints are the fence)
 
 > **Implemented 2026-09-12 (mig 498):** `nightly_look_approvals (look_key, model, surface, approved, source, note,
-> graded_at)` seeded from rounds 1-3 (213 rows, 171 approved; flux couples 12 / solos 33, grok 27 / 37, gemini 26 /
+graded_at)` seeded from rounds 1-3 (213 rows, 171 approved; flux couples 12 / solos 33, grok 27 / 37, gemini 26 /
 > 36 of the looks each rendered). `nightly_surfaces` refreshed as the union. Open decision: the couple PRIMARY model
 > in `nightly_model_policy` (grok or gemini → 26-27 couple looks; flux → 12).
 >
 > **Implemented 2026-09-11 (mig 495):** `dream_mediums.nightly_look boolean`, `nightly_surfaces text[]` (⊆ {couple,
 > solo}; empty = parked), `weight numeric`, CHECK `nightly_look → NOT is_public AND NOT is_dream_eligible AND NOT
-> is_scene_eligible`, CHECK surfaces ⊆ {couple, solo}. Round-1 verdicts applied: 8 looks both surfaces, 12 solo-only,
-> 1 couple-only (kodachrome), 5 parked; the 6 halloween_* cast looks flagged both. Scene-only renders draw from any
+is_scene_eligible`, CHECK surfaces ⊆ {couple, solo}. Round-1 verdicts applied: 8 looks both surfaces, 12 solo-only,
+> 1 couple-only (kodachrome), 5 parked; the 6 halloween\_\* cast looks flagged both. Scene-only renders draw from any
 > active look (no swap constraint). `nightly_default_for` and the `nightly_surface_mix` config land with the resolver.
 
 `dream_mediums` gains (one migration): `nightly_look boolean default false`, `nightly_surfaces text[]`
@@ -181,36 +182,36 @@ text[]`. A dbspec asserts every pin key resolves to an active look.
 
 ## 4. Enforcement (what makes it stay clean)
 
-| Layer | Mechanism | Fails when |
-|---|---|---|
-| DB | CHECK constraint on `dream_mediums` | a dashboard edit makes a look public / an app medium a look |
-| DB (CI db-tests) | `nightlyLooks.dbspec.ts`: every active look has fragment + directive (+ swapFragment if couple/solo) + ≥1 model that appears in the policy chain; every pin resolves; each surface with a non-zero `nightly_surface_mix` share × policy model has a default look | a row is half-authored; a pin dangles; a surface is switched on with no looks |
-| CI | `nightlyStyleSingleSource.test.ts`: greps `nightly-dreams/index.ts` — the only style/model imports allowed are `nightlyStyle.ts` + `nightlyModelPolicy.ts`; forbidden: `resolveMediumFromDb`, `applyFaceSwapOverride`, `pickFaceSwapModelOverride`, `nightlyModelPool`, `pickFromPool`, `steerDualModel`, `fetchSceneEligibleModels`, `smartDreamModels`, any `black-forest-labs/`/`google/`/`openai/`/`xai/` literal | someone re-adds a second decision site |
-| CI | `nightlyLooksDisjoint.test.ts`: catalog keys ∩ app-eligible keys = ∅ (from the migrations' seed rows) | a look leaks into Create's pool or vice versa |
-| CI | `nightlyStyle.equivalence.test.ts` (Phase 1): fixtures from real `ai_generation_log` rows → the resolver reproduces the legacy medium / fragment / model | the extraction changes behavior |
-| CI | `nightlyStyle.test.ts`: precedence table, recency floor, unknown-pin fallback, default-look fallback, `attempt(n)` / `rebuild` keep-or-default | resolver logic drifts |
-| Runtime | honesty assertion at persist → `style_contract_violation` stamp + Sentry | the prompt and the label disagree |
-| Monitor | `check-nightly-looks-night.js` (cron, fail-loud): per look renders / first-try swap / degrade / quality-gate pass / violations; thresholds derived from `engine_config` per the hard rule | a look regresses; any violation |
+| Layer            | Mechanism                                                                                                                                                                                                                                                                                                                                                                                                             | Fails when                                                                    |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| DB               | CHECK constraint on `dream_mediums`                                                                                                                                                                                                                                                                                                                                                                                   | a dashboard edit makes a look public / an app medium a look                   |
+| DB (CI db-tests) | `nightlyLooks.dbspec.ts`: every active look has fragment + directive (+ swapFragment if couple/solo) + ≥1 model that appears in the policy chain; every pin resolves; each surface with a non-zero `nightly_surface_mix` share × policy model has a default look                                                                                                                                                      | a row is half-authored; a pin dangles; a surface is switched on with no looks |
+| CI               | `nightlyStyleSingleSource.test.ts`: greps `nightly-dreams/index.ts` — the only style/model imports allowed are `nightlyStyle.ts` + `nightlyModelPolicy.ts`; forbidden: `resolveMediumFromDb`, `applyFaceSwapOverride`, `pickFaceSwapModelOverride`, `nightlyModelPool`, `pickFromPool`, `steerDualModel`, `fetchSceneEligibleModels`, `smartDreamModels`, any `black-forest-labs/`/`google/`/`openai/`/`xai/` literal | someone re-adds a second decision site                                        |
+| CI               | `nightlyLooksDisjoint.test.ts`: catalog keys ∩ app-eligible keys = ∅ (from the migrations' seed rows)                                                                                                                                                                                                                                                                                                                 | a look leaks into Create's pool or vice versa                                 |
+| CI               | `nightlyStyle.equivalence.test.ts` (Phase 1): fixtures from real `ai_generation_log` rows → the resolver reproduces the legacy medium / fragment / model                                                                                                                                                                                                                                                              | the extraction changes behavior                                               |
+| CI               | `nightlyStyle.test.ts`: precedence table, recency floor, unknown-pin fallback, default-look fallback, `attempt(n)` / `rebuild` keep-or-default                                                                                                                                                                                                                                                                        | resolver logic drifts                                                         |
+| Runtime          | honesty assertion at persist → `style_contract_violation` stamp + Sentry                                                                                                                                                                                                                                                                                                                                              | the prompt and the label disagree                                             |
+| Monitor          | `check-nightly-looks-night.js` (cron, fail-loud): per look renders / first-try swap / degrade / quality-gate pass / violations; thresholds derived from `engine_config` per the hard rule                                                                                                                                                                                                                             | a look regresses; any violation                                               |
 
 ---
 
 ## 5. Phases (each shippable alone, each with a flag or a revert)
 
-**Kevin 2026-09-11, two things to build the sequence around:** (1) *test carefully as we move forward* —
+**Kevin 2026-09-11, two things to build the sequence around:** (1) _test carefully as we move forward_ —
 every phase below has an explicit EXIT CRITERION and nothing advances on a green build alone; renders and
-stamps decide. (2) *Nail the final list of looks first so we know the destination* — hence **Phase A**
+stamps decide. (2) _Nail the final list of looks first so we know the destination_ — hence **Phase A**
 (curation) runs BEFORE the cutover and its output, the frozen v1 tally, is the fixed point nightly converges
 to. Phases 0-1 (behavior-neutral) can proceed in parallel with A; Phase 2+ waits for the tally.
 
 ### Phase A — nail the list (the destination; ≈ 80 renders, ≈ $7, Kevin's Dreams album)
 
-| Step | What | Exit criterion |
-|---|---|---|
-| A1 | **Candidate rows** (migration): the catalog-plan §3a/§3b looks as `nightly_*` rows in `dream_mediums` (`is_public=false`, `is_dream_eligible=false`, `is_scene_eligible=false`, `nightly_skip=true`, `client_meta.smart_dream_models=['flux-1.1-pro']`, both fragments + directive). Inert: the app never lists them and nightly never rolls them — exactly how the `halloween_*` rows were staged. | dbspec: every candidate row fully authored; catalog ∩ app = ∅ |
-| A2 | **`force_look` QA flag** in `nightly-dreams` (≈ 15 lines): pins the key through the existing scenario-pin route AND exempts the 1.1-pro override library (today `force_medium` alone is repainted at site 9 — line 1268 fires unconditionally; only the day-of pin is exempt). Also stamps `look:<key>` + `look_source:force`. This is the first brick of the contract, not throwaway. | unit test on the pin helper; one forced couple render whose `ai_prompt` opens with the look's fragment and whose `fallback_reasons` has NO `applied curated medium override` |
-| A3 | **The matrix**: `scripts/qa-nightly-looks-matrix.js` (clone of `qa-medium-face-swap-matrix.js`): cast looks × {couple, self} × 2 fixed seeds + scene looks × pure_scene × 2, all `force_model=flux-1.1-pro`, `persist:true` to Kevin's PRIVATE album, captions `✨ LOOK <key> <surface> #<n>`, sequential, `waitForHeadroom` gated, off the :00 / 08:00 UTC windows; writes the grid page (rows = looks, columns = surfaces) | every cell filled; `_report.json` with per-render stamps |
-| A4 | **The gate** (read from stamps, never by eye): per cast look — first-try dual swap ≥ 3/4, `identity_sim` ≥ 0.50 median, 0 faceless; failing looks → solo/scene only or cut | `NIGHTLY_LOOK_TALLY.md` gate table |
-| A5 | **Kevin's grid**: heart = ban; labels chosen; weights (equal v1) | Kevin's sign-off → **v1 FROZEN** in the tally (keys, labels, surfaces, fragments by row id) |
+| Step | What                                                                                                                                                                                                                                                                                                                                                                                                                         | Exit criterion                                                                                                                                                               |
+| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A1   | **Candidate rows** (migration): the catalog-plan §3a/§3b looks as `nightly_*` rows in `dream_mediums` (`is_public=false`, `is_dream_eligible=false`, `is_scene_eligible=false`, `nightly_skip=true`, `client_meta.smart_dream_models=['flux-1.1-pro']`, both fragments + directive). Inert: the app never lists them and nightly never rolls them — exactly how the `halloween_*` rows were staged.                          | dbspec: every candidate row fully authored; catalog ∩ app = ∅                                                                                                                |
+| A2   | **`force_look` QA flag** in `nightly-dreams` (≈ 15 lines): pins the key through the existing scenario-pin route AND exempts the 1.1-pro override library (today `force_medium` alone is repainted at site 9 — line 1268 fires unconditionally; only the day-of pin is exempt). Also stamps `look:<key>` + `look_source:force`. This is the first brick of the contract, not throwaway.                                       | unit test on the pin helper; one forced couple render whose `ai_prompt` opens with the look's fragment and whose `fallback_reasons` has NO `applied curated medium override` |
+| A3   | **The matrix**: `scripts/qa-nightly-looks-matrix.js` (clone of `qa-medium-face-swap-matrix.js`): cast looks × {couple, self} × 2 fixed seeds + scene looks × pure_scene × 2, all `force_model=flux-1.1-pro`, `persist:true` to Kevin's PRIVATE album, captions `✨ LOOK <key> <surface> #<n>`, sequential, `waitForHeadroom` gated, off the :00 / 08:00 UTC windows; writes the grid page (rows = looks, columns = surfaces) | every cell filled; `_report.json` with per-render stamps                                                                                                                     |
+| A4   | **The gate** (read from stamps, never by eye): per cast look — first-try dual swap ≥ 3/4, `identity_sim` ≥ 0.50 median, 0 faceless; failing looks → solo/scene only or cut                                                                                                                                                                                                                                                   | `NIGHTLY_LOOK_TALLY.md` gate table                                                                                                                                           |
+| A5   | **Kevin's grid**: heart = ban; labels chosen; weights (equal v1)                                                                                                                                                                                                                                                                                                                                                             | Kevin's sign-off → **v1 FROZEN** in the tally (keys, labels, surfaces, fragments by row id)                                                                                  |
 
 **Status 2026-09-11:** A1-A4 DONE (mig 494 rows, `force_look` + `force_single_slots` deployed, 104-render matrix,
 stamp gate + Claude's visual grade) → `NIGHTLY_LOOK_TALLY.md`: 8 pass / 7 review / 11 fail; the stamp gate alone
@@ -244,6 +245,7 @@ before any user sees it, (d) 30 % → 100 % with the per-look monitor, (e) delet
 keeps calling the render with its force flags (List A → look keys, Phase 5).
 
 ### Exit criteria per engineering phase (nothing advances without them)
+
 - **P0:** `check-model-policy-shadow.js --hours 96` clean → mode `on` → one soak night with the same script
   clean → delete the legacy layers → `nightlyNoHardcodedModels` green → a second clean night.
 - **P1:** equivalence fixtures (≥ 50 real rows: couple / solo / scene / scenario-pin / holiday-pin / day-of /
@@ -257,16 +259,15 @@ keeps calling the render with its force flags (List A → look keys, Phase 5).
   reviewed before the legacy delete.
 - **P5:** the first-dream QA cascade script passes on every tier with look keys.
 
-
-| Phase | Work | Proof | Rollback |
-|---|---|---|---|
-| **0. Model policy ON + delete its legacy layers** (this week; `NIGHTLY_MODEL_POLICY_PLAN.md` Phase 3-4). **Rows decided 2026-09-12 (mig 501):** couples / solos / scenes roll flux-1.1-pro 50 % · gemini 25 % · grok 25 % (weighted primaries; retry = gemini 45 / grok 45 / flux-2-pro 10); `resolveModel` is weight-aware (`primary_weights`, `fallback_weights`). The shadow check now expects DIFFS by design (legacy always picks 1.1-pro; the policy set is three models): the Phase 0 exit criterion becomes one QA night on Kevin's account with mode `on`, not a clean shadow. | `model_policy_mode = on`; delete pool/clamps/steer/bans/scene-gate/ban-gate/`solo_rebuild_model`; Kevin's final rows; `nightlyNoHardcodedModels.test.ts` | `check-model-policy-shadow.js --hours 96` clean (it has matched since 09-07); one soak night | `mode = legacy` (code kept until the soak passes) |
-| **1. Extract the style contract — behavior-neutral** | `_shared/nightlyStyle.ts` in `source = legacy` mode: it performs today's roll + re-rolls + pins + bans + override library + first-dream allow-list + forces and returns the contract; `index.ts` sites 1-15 collapse to one call + consumption; `realMediumFragment` etc. removed; persist writes from the contract; honesty assertion added (in legacy mode it reports the override-library dishonesty as `style_contract_note:override_library` rather than a violation) | equivalence fixtures (50 real rows across couple / solo / scene / pinned / day-of / first-dream); golden prompt fixture byte-identical; a shadow night with `style_contract_note` counts = today's override rate | git revert (one commit) |
-| **2. Catalog source behind a flag** | migration (§3 columns + constraint + `halloween_*` back-fill + v1 rows from the catalog plan + pin remap + config); `nightly_looks_mode = shadow` makes the resolver compute the catalog contract alongside legacy and stamp `look_shadow:<surface>:<key>`; `force_look` QA flag | shadow night: every render has a look for its surface × model (coverage, not equality); dbspecs green | `mode = off` |
-| **3. Curation** (Kevin; parallel with 1-2) | reliability gate (cast looks × 4 fixed couples, stamps decide) → Kevin's grid in the Dreams album → weights / bans / labels | `NIGHTLY_LOOK_TALLY.md` | rows are data |
-| **4. Cutover + delete legacy** | `mode = on` → 30 % (per-user hash) → 100 % → two weeks; then delete the legacy source branch, the override-library import, `faceSwapFluxOverrides` use, `force_medium`; the honesty assertion becomes a hard violation; the chaos-tier embodied sub-roll + `embodied_mediums_mid/_high` deleted (`nightly_surface_mix.embodied = 0`, brief branch kept dormant) | `check-nightly-looks-night.js` per look vs the legacy baseline; `nightlyStyleSingleSource.test.ts` green | percentage down; `mode = shadow` |
-| **5. First-dream on looks** | `first_dream_look_keys` (List A → look keys); `firstDreamMediums.ts` medium logic deleted; the cascade unchanged | first-dream QA cascade (existing script) | config |
-| ~~6. Create's override library~~ | **Retracted 2026-09-11 (I was wrong):** Create's override (`createFaceSwapOverrides.ts`, DB table `face_swap_model_overrides`, mig 266) is keyed by (model × medium) and must render THAT medium's look — a per-medium fragment a stubborn model obeys, label honest. It is the precedent for the looks catalog, not a defect. Nothing to do in Create. | — | — |
+| Phase                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | Work                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Proof                                                                                                                                                                                                            | Rollback                                          |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| **0. Model policy ON + delete its legacy layers** (this week; `NIGHTLY_MODEL_POLICY_PLAN.md` Phase 3-4). **Rows decided 2026-09-12 (mig 501):** couples / solos / scenes roll flux-1.1-pro 50 % · gemini 25 % · grok 25 % (weighted primaries; retry = gemini 45 / grok 45 / flux-2-pro 10); `resolveModel` is weight-aware (`primary_weights`, `fallback_weights`). The shadow check now expects DIFFS by design (legacy always picks 1.1-pro; the policy set is three models): the Phase 0 exit criterion becomes one QA night on Kevin's account with mode `on`, not a clean shadow. | `model_policy_mode = on`; delete pool/clamps/steer/bans/scene-gate/ban-gate/`solo_rebuild_model`; Kevin's final rows; `nightlyNoHardcodedModels.test.ts`                                                                                                                                                                                                                                                                                                                   | `check-model-policy-shadow.js --hours 96` clean (it has matched since 09-07); one soak night                                                                                                                     | `mode = legacy` (code kept until the soak passes) |
+| **1. Extract the style contract — behavior-neutral**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | `_shared/nightlyStyle.ts` in `source = legacy` mode: it performs today's roll + re-rolls + pins + bans + override library + first-dream allow-list + forces and returns the contract; `index.ts` sites 1-15 collapse to one call + consumption; `realMediumFragment` etc. removed; persist writes from the contract; honesty assertion added (in legacy mode it reports the override-library dishonesty as `style_contract_note:override_library` rather than a violation) | equivalence fixtures (50 real rows across couple / solo / scene / pinned / day-of / first-dream); golden prompt fixture byte-identical; a shadow night with `style_contract_note` counts = today's override rate | git revert (one commit)                           |
+| **2. Catalog source behind a flag**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | migration (§3 columns + constraint + `halloween_*` back-fill + v1 rows from the catalog plan + pin remap + config); `nightly_looks_mode = shadow` makes the resolver compute the catalog contract alongside legacy and stamp `look_shadow:<surface>:<key>`; `force_look` QA flag                                                                                                                                                                                           | shadow night: every render has a look for its surface × model (coverage, not equality); dbspecs green                                                                                                            | `mode = off`                                      |
+| **3. Curation** (Kevin; parallel with 1-2)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | reliability gate (cast looks × 4 fixed couples, stamps decide) → Kevin's grid in the Dreams album → weights / bans / labels                                                                                                                                                                                                                                                                                                                                                | `NIGHTLY_LOOK_TALLY.md`                                                                                                                                                                                          | rows are data                                     |
+| **4. Cutover + delete legacy**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | `mode = on` → 30 % (per-user hash) → 100 % → two weeks; then delete the legacy source branch, the override-library import, `faceSwapFluxOverrides` use, `force_medium`; the honesty assertion becomes a hard violation; the chaos-tier embodied sub-roll + `embodied_mediums_mid/_high` deleted (`nightly_surface_mix.embodied = 0`, brief branch kept dormant)                                                                                                            | `check-nightly-looks-night.js` per look vs the legacy baseline; `nightlyStyleSingleSource.test.ts` green                                                                                                         | percentage down; `mode = shadow`                  |
+| **5. First-dream on looks**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | `first_dream_look_keys` (List A → look keys); `firstDreamMediums.ts` medium logic deleted; the cascade unchanged                                                                                                                                                                                                                                                                                                                                                           | first-dream QA cascade (existing script)                                                                                                                                                                         | config                                            |
+| ~~6. Create's override library~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | **Retracted 2026-09-11 (I was wrong):** Create's override (`createFaceSwapOverrides.ts`, DB table `face_swap_model_overrides`, mig 266) is keyed by (model × medium) and must render THAT medium's look — a per-medium fragment a stubborn model obeys, label honest. It is the precedent for the looks catalog, not a defect. Nothing to do in Create.                                                                                                                    | —                                                                                                                                                                                                                | —                                                 |
 
 **Effort:** P0 ½ day · P1 1-1.5 days · P2 1 day · P3 Kevin + ≈ 200 renders (≈ $16) · P4 ½ day + 2 weeks of
 nights · P5 ½ day. P1 is the one that pays for itself immediately: it deletes the hand-synced state and the
@@ -275,11 +276,13 @@ repeated re-roll/override blocks even before a single catalog row exists.
 ---
 
 ## 6. What stays exactly as it is
+
 Scene seeds, holiday pools, action registers, stances, costume lock, the couple prompt order (look at
 position 2), the swap pipeline and its degrade cascade, the quality gate, hair variation, the vibe roll
 (v1), notifications, analytics keys (`dream_medium` now carries an honest key), Create / DLT / restyle.
 
 ## 7. Risks
+
 - **Equivalence fixtures miss a branch** → fixtures are sampled per `style_source` × surface × force flag, and
   the shadow night in P1 counts `style_contract_note` stamps against the known override rate.
 - **A pin remap is wrong** → the dbspec fails before apply; unknown pins fail open with a stamp.
@@ -288,6 +291,7 @@ position 2), the swap pipeline and its degrade cascade, the quality gate, hair v
   `FOLLOWUP.md` before starting.
 
 ## 8. Decisions Kevin owns for THIS plan (the catalog decisions are in the catalog plan §7)
+
 1. ~~Embodied~~ — DECIDED 2026-09-11: out of nightly at cutover (`nightly_surface_mix.embodied = 0`, no rows), architected as a declared surface so it plugs back in as rows + a percent (§2b).
 2. ~~`force_medium` alias~~ — DECIDED 2026-09-11: KEEP (the QA scripts depend on it). `force_look` is added alongside; `force_medium` keeps resolving any key for at least one release and is only retired once every `scripts/qa-*` caller is moved.
 3. ~~Create's override library~~ — retracted; Create is honest today (§5 row 6).
@@ -312,6 +316,7 @@ stamps at persist (`style_contract_violation:*`). QA: `scripts/qa-nightly-looks-
 `engine_config` (production untouched); QA uses `force_looks_path`.
 
 **What the natural renders taught us (verify + qa1 + qa2, ~30 renders):**
+
 1. The path is honest: every render carried `looks_path:on`, the look fragment, the vibe fragment (cast renders), the
    contract's model, no violations. The couple degrade rate on flux-1.1-pro is high (3 of 5, then 2 of 4) and goes to
    the solo rebuild on flux-2-flex rather than to the policy fallback model, because the legacy dual pipeline's cascade
@@ -375,3 +380,121 @@ land (`look_set:new:only`). Per-look banned vibe families (`client_meta.banned_v
 **Still open:** scene-only renders on the looks path have had one verify render (Kevin: character only for tests);
 the legacy looks on gemini / grok (matrix running); the subject-matter register of the pools (director mode,
 parked); the QA runner's honesty flag on one gemini couple (`vibe_fragment_missing` after a retry) to trace.
+
+## Swap geometry A/B: natural vs strict couple language (2026-09-12)
+
+Kevin's framing (memory `feedback_swap_safety_is_engine_not_prompt`): the strict couple language (one plane, one
+height, clear gap between heads, no contact, hands at chest level or lower, repeated in the anchor tail, the gap
+line, the brief and the proximity validator) was written before the engine had fault tolerance. Today a failed
+split re-renders the couple (≤2), the identity gate blocks a wrong face, and the last resort is a gender-safe SOLO
+rebuild of the same scene. So the prompt only sets first-try odds; the cost of relaxing it is a couple dream that
+ships as a solo, plus retry time, never a wrong face.
+
+**Build** (branch, default strict, QA `force_swap_geometry`, runner `--geometry=natural|strict`):
+`swapGeometry` on the composer input; NATURAL = "two people together" anchor + a single visibility clause
+("neither face hidden behind or pressed against the other"), the brief allows real-couple contact and motion
+(never a kiss / cheek to cheek / hidden), hands up to shoulder height; `DUAL_STANCES_NATURAL` (13 authored
+contact + motion + geometry stances); `validateActionBeat(…, 'natural')` lifts ONLY the proximity rule. The dual
+`rerender()` swaps to `strictRetryPrompt()` (strict anchor + pool pose, same scene / wardrobe / props) before any
+degrade. Strict / unset is byte-identical (`__tests__/lib/swapGeometry.test.ts`).
+
+**Result** (6 couples per arm, Kevin's account, page `~/Desktop/nightly-geometry-ab.html`):
+
+| model              | mode    | first-try dual | strict retries | degraded → solo | shipped dual (min-side identity, mean / min) |
+| ------------------ | ------- | -------------- | -------------- | --------------- | -------------------------------------------- |
+| flux-1.1-pro       | natural | 1/6            | 5              | **4**           | 2/6 (0.57 / 0.54)                            |
+| flux-1.1-pro       | strict  | 3/6            | 0              | 1               | 5/6 (0.60 / 0.29)                            |
+| gemini-2-image     | natural | 6/6            | 0              | 0               | 6/6 (0.73 / 0.70)                            |
+| gemini-2-image     | strict  | 6/6            | 0              | 0               | 6/6 (0.68 / 0.62)                            |
+| grok-imagine-image | natural | 6/6            | 0              | 0               | 6/6 (0.70 / 0.64)                            |
+| grok-imagine-image | strict  | 6/6            | 0              | 0               | 6/6 (0.73 / 0.70)                            |
+
+- **gemini + grok: natural is free.** 12/12 first-try duals, identity equal or better than strict. The renders that
+  rolled a natural stance (walking, dance_step, linked_arms_stroll) are exactly the lively couples the strict
+  arm never produces (strict gemini/grok = "standing side by side" catalog stills in 8 of 12).
+- **flux-1.1-pro cannot split natural couples**: lean_in_laugh → faces=0, depth_stagger → faces=1,
+  linked_arms_stroll → attempt-1 identity 0.33/0.03 (rescued by the strict retry). Two more flux failures were NOT
+  geometry: `nightly_pulp_cover` → `giant_face` on both attempts (the fragment names faces), and the
+  `full_figure` frame → faces=0. And flux STRICT is itself fragile on the looks path: 3/6 first-try, one weak
+  identity shipped (0.29), one degrade (watercolor_portrait knees_up: faces=0 three times).
+- **The strict-retry net is thin on flux.** `RENDER_DEADLINE_MS` 140 s − solo reserve 50 s − recover reserve 40 s
+  leaves room for ONE re-render (`recover_budget_exhausted` after attempt 2 in 3 of 5), and one retry died on a
+  Fly `face-swap-dual` timeout. On gemini/grok the net was never needed.
+- **Stance coverage gap:** plain-location couples take the Option B beat (`location_action`,
+  `sceneActionLocationCouples` false → `location_couple_held`), active rows the fixed anchor — so 15 of 24
+  gemini/grok renders rolled NO stance and only the anchor differed. Option B's own Sonnet prompt still carries the
+  strict no-contact rule (`locationActionBeat.ts`), so natural does not yet reach the majority of couples.
+- **Bug found + fixed:** WIDE stance texts ran 25-42 words; Sonnet builds the beat around the stance, the couple
+  beat blew the 56-word cap and was silently dropped to the pool pose (`scene_action_fallback:too_long`, 3 of 10
+  flux renders). Texts shortened to ≤ 26 words; word-cap guard in `dualStances.test.ts`.
+
+**Recommendation (Kevin's call):** make the default MODEL-DEPENDENT — natural on gemini and grok, strict on
+flux-1.1-pro — and extend natural to Option B (the location beat prompt + validator) so it reaches location
+couples. Separately reconsider the couple policy weight on flux-1.1-pro (50% today): on the looks path it is the
+least reliable couple model in this sample, even strict. Frame roll: drop `full_figure` for flux couples.
+`nightly_pulp_cover`: the "lifelike adult faces / true-to-life eyes" fragment fights knees-up framing on flux.
+
+### Kevin's verdict on the A/B + the cross it surfaced (2026-09-12, evening)
+
+- "These don't necessarily seem better. I disagree about natural on grok and gemini." → natural stays behind the
+  QA flag; no default change. Open, per Kevin: **framing is very static for both couples and singles in this
+  batch; 1.2.0 still beats the looks path here.** Not a geometry effect (both arms show it). Suspects: the
+  subject-first anchor's "from the knees up in a three-quarter length composition … faces toward the viewer"
+  dominates whatever the stance says; Option B location beats (no stance) on most couples; the solo anchor +
+  candid pool. Next: pull 30 of 1.2.0's recent couple/solo renders and stamp their frame / pose distribution
+  against the looks path's, then decide what the frame axis should actually vary (distance, angle, level,
+  subject placement) instead of only the crop.
+- **A gender CROSS shipped** in the gemini natural arm (#2 aquarelle_graphite · dreamy\_\_bold): Kevin's face on
+  the woman, his wife's on the man. Root cause + fix: memory `project_dual_faceswap_gender_guarantee` (2026-09-12
+  update) — the Haiku gender pre-read alone routed the swap; a confident misread is invisible to the identity
+  gate (each pasted face matches its own source) and to the broken-only quality gate. Fix deployed in SHADOW:
+  a second independent read (which side wears the LEFT-locked outfit, `_shared/wardrobeSides.ts`) must agree;
+  `engine_config.dual_side_check_mode` off | shadow | enforce (mig 514). Replay on the 30-day audit set: the
+  cross → conflict (caught); two harmless side-swaps → false conflict (cost a re-render); two → unresolved.
+  Flip to enforce once shadow shows the unresolved rate on real renders.
+
+**Cross, root cause (2026-09-12 late):** a third painted figure (the brief's mural) made Haiku's left/right describe the
+mural; the engine's own genderage on the two faces it swaps was right and got overridden. Fixes: face-count guard
+(edge, deployed) + engine-side `genderRouteConflict` (Haiku may confirm, never override, a confident engine read;
+needs `fly deploy`). Resemblance routing calibrated on 45 base renders and scrapped (noise). Details: memory
+`project_dual_faceswap_gender_guarantee`.
+
+## Framing axis (2026-09-12, evening) — "1.2.0 still beats us on framing"
+
+**Diagnosis from the 30 public posts (the taste reference):** about a third are FULL figures; about a third are
+FRAMED BY something in the scene (an archway, doorway, trellis, window, tunnel of branches); about a third put the
+subject OFF-CENTRE with the environment opening on the other side; several are seated (steps, bench, porch,
+tavern table); a few use a slightly low camera (heroic) or a step-above camera (intimate); nearly every solo has a
+strong prop or action in hand. The looks path rolled only the crop distance, so every render was the same centred,
+eye-level, frontal shot at a different zoom. (Note: many of those posts are Create renders with user-typed scenes,
+which is where the prop/action richness comes from; the framing lesson still stands.)
+
+**Build:** `_shared/pools/nightly_framings.ts` — 13 couple + 12 solo AUTHORED recipes (≤ 26 words each: distance +
+device + camera + placement, weighted, ~⅓ full figure), each mapped to an existing frame distance so the brief's
+near-field rule and the anchors behave as before for that crop. `frameFields` rolls a recipe (stamps
+`frame:<surface>:<distance>` as before + `framing:<key>`); the composer's `framingClause` REPLACES the fixed
+distance line in the couple anchor / solo framing block; `framingSeated` drops "standing". Face clauses stay
+code-owned; no recipe names scene content or dominance. QA `force_framing=<key>`, runner `--framing`. Legacy
+path byte-identical (no clause). Tests: `__tests__/lib/nightlyFramings.test.ts`.
+
+**Next:** proof batch (2 couples + 2 solos × 3 models, round `framing1`) → Kevin grades against the posts →
+prune / reweight recipes → matrix per recipe → then `engine_config` weights. Still open after this: body
+orientation (frontal vs turned, parked with natural geometry), the energy ban (`too_energetic`) vs the posts'
+raised-arm moments, and Option B beats carrying no stance.
+
+## Prompt ORDER on flux-1.1-pro (2026-09-13, parity loop rounds 15-16) — position beats length
+
+Direct fixed-seed Replicate renders (same seed, one change at a time; scratchpad `grey-probe/`, `len-probe/`,
+`solo-probe/`; full narrative in `NIGHTLY_PARITY_QA_LOOP.md`) established three facts the composer now encodes:
+
+1. **Couples:** the subject-first v3 order (120-160-word scene paragraph right behind the people line, pose after
+   the identity blocks) lost the couple entirely, floated two heads, or rendered the man in greyscale, seed by seed.
+   The album's LEGACY order (gender lock → look → "set at place — hook" → ENVIRONMENTAL TWO-SHOT anchor → pose →
+   identities → framing restatement → scene LAST) rendered the same content cleanly 3/3, and the late scene's length
+   made no difference. `LOOKS_COUPLE_PROMPT_STYLE = 'legacy'`; the framing recipe rides the anchor's distance slot.
+2. **Solos:** nothing past word ~160 moves the composition — truncating at 370/450 words, capping the scene, moving
+   the framing block ahead of the scene, or placing the distance line right after the face clause all rendered the
+   identical portrait. The distance line counts only when it sits INSIDE the anchor BEFORE "face clearly visible and
+   turned naturally toward the viewer…" (`LOOKS_SOLO_FRAMING_IN_ANCHOR`, `framingInAnchor`).
+3. **Method:** any "does this clause matter?" question gets 3 fixed seeds × the variants on Replicate directly
+   (~$0.04 a render, no DB pool) before the engine is touched; an identical picture means the model never read it.

@@ -9,6 +9,7 @@ import {
   looksPathBans,
   looksSlotInputFields,
   frameFields,
+  fieldsForFrame,
   rollFrame,
   FRAME_WEIGHTS,
   provisionalLooksMedium,
@@ -226,7 +227,7 @@ describe('slot input fields, retry, after-scene, honesty, shadow', () => {
     const c = contractFor('couple');
     const o = applyStyleContract(c, legacyMedium(), vibesByKey);
     const prompt = `a man, ${o.active.fragment}, set at the glasshouse, the scene`;
-    const pick = c.forAttempt(2); // gemini → chromo
+    const pick = c.forAttempt(3); // the fallback model (attempt 2 stays on the same model since 2026-09-13): gemini → chromo
     const r = retryPromptFor(prompt, o.active, pick);
     expect(pick.look.key).toBe('nightly_chromo');
     expect(r.prompt).toContain('nightly_chromo swap fragment');
@@ -385,52 +386,58 @@ describe('looksPathBans', () => {
 });
 
 describe('frame roll (solos and couples both vary)', () => {
-  it('rolls every frame for both surfaces over the weights, and each frame maps to the right slot fields', () => {
+  it('rolls every frame for both surfaces over the weights, and each distance maps to the right slot fields', () => {
     const seq = (n: number) => () => (n % 100) / 100;
     const solos = new Set(Array.from({ length: 100 }, (_, i) => rollFrame('solo', seq(i))));
     const couples = new Set(Array.from({ length: 100 }, (_, i) => rollFrame('couple', seq(i))));
     expect([...solos].sort()).toEqual(FRAME_WEIGHTS.solo.map((r) => r.key).sort());
     expect([...couples].sort()).toEqual(FRAME_WEIGHTS.couple.map((r) => r.key).sort());
-    // solo: enviro_wide first 25%, three_quarter next 45%, waist_up last 30%
-    expect(frameFields('solo', () => 0.1)).toMatchObject({
+    // FRAMING AXIS (2026-09-12): frameFields now rolls a recipe whose `distance` drives these fields — over a
+    // sweep every distance still appears for both surfaces, and the mapping itself is fieldsForFrame.
+    const soloStamps = new Set(
+      Array.from({ length: 100 }, (_, i) => frameFields('solo', seq(i)).frameStamp)
+    );
+    const coupleStamps = new Set(
+      Array.from({ length: 100 }, (_, i) => frameFields('couple', seq(i)).frameStamp)
+    );
+    expect([...soloStamps].sort()).toEqual(
+      FRAME_WEIGHTS.solo.map((r) => `frame:solo:${r.key}`).sort()
+    );
+    expect([...coupleStamps].sort()).toEqual(
+      FRAME_WEIGHTS.couple.map((r) => `frame:couple:${r.key}`).sort()
+    );
+    expect(fieldsForFrame('solo', 'enviro_wide')).toMatchObject({
       soloComposition: 'enviro_wide',
       frameInterest: 'wide',
       frameStamp: 'frame:solo:enviro_wide',
     });
-    expect(frameFields('solo', () => 0.5)).toMatchObject({
-      soloComposition: 'three_quarter',
-      frameInterest: 'wide',
-    });
-    expect(frameFields('solo', () => 0.9)).toMatchObject({
+    expect(fieldsForFrame('solo', 'waist_up')).toMatchObject({
       soloComposition: 'waist_up',
       frameInterest: 'close',
       frameStamp: 'frame:solo:waist_up',
     });
-    // couple: full_figure 15%, knees_up 40%, mid_thigh 15%, waist_up 30%
-    expect(frameFields('couple', () => 0.05)).toMatchObject({
+    expect(fieldsForFrame('couple', 'full_figure')).toMatchObject({
       wideFraming: true,
       dualComposition: 'full_figure',
       frameInterest: 'wide',
       frameStamp: 'frame:couple:full_figure',
     });
-    expect(frameFields('couple', () => 0.3)).toMatchObject({
+    expect(fieldsForFrame('couple', 'knees_up')).toMatchObject({
       wideFraming: true,
       dualComposition: null,
       frameInterest: 'wide',
       frameStamp: 'frame:couple:knees_up',
     });
-    expect(frameFields('couple', () => 0.62)).toMatchObject({
-      wideFraming: false,
-      dualComposition: null,
-      frameInterest: 'wide',
-      frameStamp: 'frame:couple:mid_thigh',
-    });
-    expect(frameFields('couple', () => 0.9)).toMatchObject({
+    expect(fieldsForFrame('couple', 'waist_up')).toMatchObject({
       wideFraming: false,
       dualComposition: 'waist_up',
       frameInterest: 'close',
       frameStamp: 'frame:couple:waist_up',
     });
+    // every frameFields result carries a recipe clause + stamp
+    const f = frameFields('couple', () => 0.42);
+    expect(f.framingClause).toBeTruthy();
+    expect(f.framingStamp).toMatch(/^framing:/);
   });
 });
 
@@ -464,5 +471,41 @@ describe('subtle vibes keep the engine atmosphere axes', () => {
       axes
     );
     expect(special).toMatchObject({ timeAxis: 'candlelit', weatherAxis: 'light rain' });
+  });
+});
+
+describe('looksModeFor — allowlist (mig 515, staged rollout)', () => {
+  it('an allowlisted user is on whatever the mode; others follow the mode; force still wins', () => {
+    expect(looksModeFor(false, 'off', true)).toBe('on');
+    expect(looksModeFor(false, 'shadow', true)).toBe('on');
+    expect(looksModeFor(false, 'off', false)).toBe('off');
+    expect(looksModeFor(false, 'shadow', false)).toBe('shadow');
+    expect(looksModeFor(true, 'off', false)).toBe('on');
+    expect(looksModeFor(false, 'off')).toBe('off');
+  });
+});
+
+describe('couple vibe exclusion (parity loop round 2)', () => {
+  it('a kawaii vibe never resolves for a couple (stamped as a ban); a solo may still roll it', () => {
+    const vibes = toVibeRows([vibe('kawaii__soft'), vibe('kawaii__bold'), vibe('cozy__soft')]);
+    for (const x of [0.01, 0.3, 0.6, 0.99]) {
+      const couple = contractFor('couple', { vibes, rng: () => x });
+      expect(couple.stamps.some((s) => /^vibe_bans:.*kawaii/.test(s))).toBe(true);
+      expect(couple.stamps.some((s) => /^vibe:kawaii/.test(s))).toBe(false);
+      expect(couple.stamps.some((s) => /^vibe:cozy__soft$/.test(s))).toBe(true);
+    }
+    const solo = contractFor('solo', { vibes, rng: () => 0.01 });
+    expect(solo.stamps).toContain('vibe:kawaii__soft');
+    expect(solo.stamps.some((s) => /^vibe_bans:/.test(s))).toBe(false);
+  });
+
+  it('the struck frames (knees_up, three_quarter) are no longer the heaviest on their surface (bookmark reweight)', () => {
+    const heaviest = (rows: readonly { key: string; weight: number }[]) =>
+      [...rows].sort((a, b) => b.weight - a.weight)[0].key;
+    expect(heaviest(FRAME_WEIGHTS.couple)).not.toBe('knees_up');
+    expect(heaviest(FRAME_WEIGHTS.solo)).not.toBe('three_quarter');
+    // both stay in the roll — Kevin asked for that range on 09-12, they are just not the default
+    expect(FRAME_WEIGHTS.couple.find((r) => r.key === 'knees_up')!.weight).toBeGreaterThan(0);
+    expect(FRAME_WEIGHTS.solo.find((r) => r.key === 'three_quarter')!.weight).toBeGreaterThan(0);
   });
 });

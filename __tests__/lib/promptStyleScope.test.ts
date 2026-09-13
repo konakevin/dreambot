@@ -4,7 +4,13 @@ import fs from 'fs';
 import path from 'path';
 
 const ROOT = path.join(__dirname, '..', '..', 'supabase', 'functions');
-const ALLOWED = new Set(['_shared/characterSlotPrompt.ts', 'nightly-dreams/index.ts']);
+// _shared/nightlyLooksPath.ts is the nightly LOOKS-PATH module (reassembleForModel re-orders a couple re-render for
+// the new model, parity loop round 19) — nightly-only by construction, never imported by Create / DLT / first-dream.
+const ALLOWED = new Set([
+  '_shared/characterSlotPrompt.ts',
+  'nightly-dreams/index.ts',
+  '_shared/nightlyLooksPath.ts',
+]);
 
 function walk(dir: string, out: string[] = []): string[] {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {

@@ -7,6 +7,8 @@ import {
 } from '@engine/castActionResolver';
 import type { CastActionInputs } from '@engine/castActionResolver';
 import { DUAL_STANCES, DUAL_STANCES_WIDE } from '@engine/dualStances';
+import { DUAL_STANCES_LOOKS, DUAL_STANCES_LOOKS_FLUX } from '@engine/castActionResolver';
+import { DUAL_STANCES_WIDE_FLUX_SAFE } from '@engine/dualStances';
 
 const pools = {
   companion: ['companion A'],
@@ -246,7 +248,9 @@ describe('wideStances (looks path, 2026-09-12)', () => {
       rng: () => 0,
     });
     expect(wide.dualStance).not.toBeNull();
-    expect(DUAL_STANCES_WIDE.some((s) => s.key === wide.dualStance!.key)).toBe(true);
+    // 1.2.0-parity: the looks path rolls the generic set + the wide set as ONE list
+    expect(DUAL_STANCES_LOOKS.some((s) => s.key === wide.dualStance!.key)).toBe(true);
+    expect(DUAL_STANCES_LOOKS.length).toBe(DUAL_STANCES.length + DUAL_STANCES_WIDE.length);
     expect(wide.stamps).toContain('wide_stances');
     const legacy = resolveCastAction({
       ...base,
@@ -255,7 +259,90 @@ describe('wideStances (looks path, 2026-09-12)', () => {
       rollRegisters: false,
       rng: () => 0,
     });
-    expect(DUAL_STANCES_WIDE.some((s) => s.key === legacy.dualStance!.key)).toBe(false);
+    expect(DUAL_STANCES.some((s) => s.key === legacy.dualStance!.key)).toBe(true);
     expect(legacy.stamps).not.toContain('wide_stances');
+  });
+});
+
+describe('elegant-row solos → portrait pool (parity loop round 7)', () => {
+  const solo: CastActionInputs = {
+    ...base,
+    castCount: 1,
+    sceneKind: 'elegant',
+    hasSpecialScene: true,
+    hasSpecialWardrobe: true,
+    classicSoloPortrait: ['portrait A', 'portrait B'],
+  };
+  it('70% of elegant solos take a portrait pose and stamp it; the rest keep the pre-picked classic pose', () => {
+    const r = resolveCastAction({ ...solo, rng: () => 0.1 });
+    expect(['portrait A', 'portrait B']).toContain(r.action);
+    expect(r.stamps).toContain('elegant_portrait_pool');
+    const miss = resolveCastAction({ ...solo, rng: () => 0.9 });
+    expect(miss.action).toBe('classic single');
+    expect(miss.stamps).not.toContain('elegant_portrait_pool');
+  });
+  it('goofy rows, plain locations and the legacy path (no portrait pool) are untouched', () => {
+    expect(resolveCastAction({ ...solo, sceneKind: 'goofy', rng: () => 0.1 }).action).toBe(
+      'classic single'
+    );
+    expect(resolveCastAction({ ...solo, hasSpecialScene: false, rng: () => 0.1 }).action).toBe(
+      'classic single'
+    );
+    expect(
+      resolveCastAction({ ...solo, classicSoloPortrait: undefined, rng: () => 0.1 }).action
+    ).toBe('classic single');
+  });
+});
+
+describe('flux-safe wide stances (flux couple parity, 2026-09-13)', () => {
+  it('the subset is the symmetric feet-on-the-ground five; fluxWideStances rolls generic + subset and stamps it', () => {
+    expect(DUAL_STANCES_WIDE_FLUX_SAFE.map((s) => s.key).sort()).toEqual([
+      'mid_laugh_open',
+      'paused_path',
+      'rail_pair',
+      'seated_steps',
+      'stand_open',
+    ]);
+    expect(DUAL_STANCES_LOOKS_FLUX.length).toBe(5); // the mid-shot symmetric list
+    const keys = new Set<string>();
+    for (let i = 0; i < 200; i++) {
+      const r = resolveCastAction({
+        ...base,
+        castCount: 2,
+        sfaRoll: true,
+        rollRegisters: false,
+        wideStances: true,
+        fluxWideStances: true,
+        rng: () => (i % 100) / 100,
+      });
+      keys.add(r.dualStance!.key);
+      expect(r.stamps).toContain('flux_wide_stances');
+      expect(r.stamps).not.toContain('wide_stances');
+    }
+    expect(keys.has('step_up')).toBe(false);
+    expect(keys.has('bench_ends')).toBe(false);
+    expect(keys.has('column_lean')).toBe(false);
+    expect(keys.has('rail_pair')).toBe(true);
+    expect(keys.has('seated_steps')).toBe(false);
+  });
+});
+
+describe('flux couple stances on active rows and pool renders (arm H)', () => {
+  it('an active row takes a symmetric stance instead of the generic anchor; pool renders take one at the share', () => {
+    const active = resolveCastAction({
+      ...base,
+      dualActiveScene: true,
+      fluxStanceShare: 0.5,
+      rng: () => 0.1,
+    });
+    expect(active.action).not.toBe(DUAL_ACTIVE_ANCHOR);
+    expect(active.stamps.some((s) => s.startsWith('flux_stance:active:'))).toBe(true);
+    const pool = resolveCastAction({ ...base, fluxStanceShare: 0.5, rng: () => 0.2 });
+    expect(pool.stamps.some((s) => s.startsWith('flux_stance:pool:'))).toBe(true);
+    expect(pool.action).not.toBe('classic dual');
+    const miss = resolveCastAction({ ...base, fluxStanceShare: 0.5, rng: () => 0.9 });
+    expect(miss.action).toBe('classic dual');
+    const off = resolveCastAction({ ...base, dualActiveScene: true, rng: () => 0.1 });
+    expect(off.action).toBe(DUAL_ACTIVE_ANCHOR);
   });
 });

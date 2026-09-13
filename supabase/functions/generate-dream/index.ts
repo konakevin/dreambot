@@ -18,7 +18,13 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import { buildReimaginePrompt } from '../_shared/photoPrompts.ts';
-import { describeWithVision, VISION_PROMPTS, classifyDualGenders } from '../_shared/vision.ts';
+import {
+  describeWithVision,
+  VISION_PROMPTS,
+  classifyDualGenders,
+  classifyWardrobeSides,
+} from '../_shared/vision.ts';
+import { asGender, sidesToGenders, sideCheckModeOf } from '../_shared/wardrobeSides.ts';
 import { shouldSendCompletionNotification } from '../_shared/notify.ts';
 import { genderFromLock } from '../_shared/genderLock.ts';
 import { restoreFace } from '../_shared/faceRestore.ts';
@@ -1862,6 +1868,31 @@ Output ONLY the prompt.`;
       // window — self-only never loses to a budget-starved scene/refund.
       const renderDeadlineMs = t0 + RENDER_DEADLINE_MS;
       const dualDeadlineMs = renderDeadlineMs - SOLO_FALLBACK_RESERVE_MS;
+      // SECOND SIGNAL for the dual swap (2026-09-12, _shared/wardrobeSides.ts): which side wears the LEFT-locked
+      // outfit, mapped through the cast genders — offered only when the slots and both genders are known (the
+      // pipeline stamps side_check:none otherwise and keeps the single read). Mode: engine_config (mig 514).
+      const sideWardrobes = soloFallbackCtx
+        ? {
+            a: soloFallbackCtx.dualSlots.left_wardrobe,
+            b: soloFallbackCtx.dualSlots.right_wardrobe,
+          }
+        : null;
+      const sideG0 = asGender(genderFromLock(s0.genderLock));
+      const sideG1 = asGender(genderFromLock(s1.genderLock));
+      const sideGenders =
+        sideG0 && sideG1 && sideG0 !== sideG1 ? { left: sideG0, right: sideG1 } : null;
+      const confirmSides =
+        sideWardrobes && sideGenders
+          ? async (target: string) => {
+              const r = await classifyWardrobeSides(
+                target,
+                sideWardrobes.a,
+                sideWardrobes.b,
+                REPLICATE_TOKEN
+              );
+              return r.aSide ? sidesToGenders(r.aSide, sideGenders.left, sideGenders.right) : null;
+            }
+          : undefined;
       const result = await genderSafeDualSwap(
         tempUrl,
         {
@@ -1881,8 +1912,9 @@ Output ONLY the prompt.`;
             ),
           confirmGenders: async (target) => {
             const r = await classifyDualGenders(target, REPLICATE_TOKEN);
-            return { left: r.left, right: r.right };
+            return { left: r.left, right: r.right, faceCount: r.faceCount };
           },
+          ...(confirmSides ? { confirmSides } : {}),
           singleSwap: async (source, target) => {
             // GENDER-SAFE degrade + SOLO re-render (#1 + #3 — sunnysteph 2026-08-05
             // "face on the man"): the single-swap model is FACE-BLIND and pastes
@@ -1977,6 +2009,7 @@ Output ONLY the prompt.`;
           degradeToSingle: true,
           // Live-tunable wrong-person floor (engine_config, audit L3; cached fetch).
           identityDegradeFloor: (await fetchEngineConfig(supabase)).identityDegradeFloor,
+          sideCheckMode: sideCheckModeOf((await fetchEngineConfig(supabase)).dualSideCheckMode),
         }
       );
       tempUrl = result.url;

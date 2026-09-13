@@ -1639,6 +1639,7 @@ export type Database = {
           dual_scene_active_pct: number;
           dual_scene_elegant_pct: number;
           dual_scene_goofy_pct: number;
+          dual_side_check_mode: string;
           embodied_mediums_high: string[];
           embodied_mediums_mid: string[];
           extra_models_high: string[];
@@ -1674,6 +1675,7 @@ export type Database = {
           nightly_enabled: boolean;
           nightly_legacy_look_pct: number;
           nightly_look_recency: number;
+          nightly_looks_allowlist: string[];
           nightly_looks_mode: string;
           nightly_max_jobs: number;
           nightly_require_ai_enabled: boolean;
@@ -1737,6 +1739,7 @@ export type Database = {
           dual_scene_active_pct?: number;
           dual_scene_elegant_pct?: number;
           dual_scene_goofy_pct?: number;
+          dual_side_check_mode?: string;
           embodied_mediums_high?: string[];
           embodied_mediums_mid?: string[];
           extra_models_high?: string[];
@@ -1772,6 +1775,7 @@ export type Database = {
           nightly_enabled?: boolean;
           nightly_legacy_look_pct?: number;
           nightly_look_recency?: number;
+          nightly_looks_allowlist?: string[];
           nightly_looks_mode?: string;
           nightly_max_jobs?: number;
           nightly_require_ai_enabled?: boolean;
@@ -1835,6 +1839,7 @@ export type Database = {
           dual_scene_active_pct?: number;
           dual_scene_elegant_pct?: number;
           dual_scene_goofy_pct?: number;
+          dual_side_check_mode?: string;
           embodied_mediums_high?: string[];
           embodied_mediums_mid?: string[];
           extra_models_high?: string[];
@@ -1870,6 +1875,7 @@ export type Database = {
           nightly_enabled?: boolean;
           nightly_legacy_look_pct?: number;
           nightly_look_recency?: number;
+          nightly_looks_allowlist?: string[];
           nightly_looks_mode?: string;
           nightly_max_jobs?: number;
           nightly_require_ai_enabled?: boolean;

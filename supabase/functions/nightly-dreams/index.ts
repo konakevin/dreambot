@@ -31,6 +31,24 @@ import {
   looksModeFor,
   looksPathBans,
   looksSlotInputFields,
+  strictRetryPrompt,
+  LOOKS_SCENE_ACTION_PCT,
+  LOOKS_SCENE_ACTION_PCT_COUPLE,
+  LOOKS_FRAMING_PCT,
+  LOOKS_SCENE_PCTS,
+  LOOKS_SOLO_IDENTITY_MIN,
+  LOOKS_DUAL_IDENTITY_MIN,
+  LOOKS_PHOTO_PRIORS,
+  LOOKS_LOCATION_ACTION_PCT_COUPLE,
+  LOOKS_LOCATION_ACTION_PCT_SOLO,
+  looksCouplePromptStyle,
+  reassembleForModel,
+  isFluxCoupleAlbum,
+  LOOKS_FLUX_WIDE_STANCES,
+  LOOKS_FLUX_STANCE_POOL_SHARE,
+  LOOKS_FLUX_COUPLE_OVERRIDE_LIBRARY,
+  LOOKS_SOLO_POOL_MIX,
+  LOOKS_DUAL_POOL_MIX,
   provisionalLooksMedium,
   retryPromptFor,
   shadowStamp,
@@ -110,7 +128,8 @@ import {
   soloIdentityThreshold,
 } from '../_shared/singleSwapGuard.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
-import { classifyDualGenders } from '../_shared/vision.ts';
+import { classifyDualGenders, classifyWardrobeSides } from '../_shared/vision.ts';
+import { asGender, sidesToGenders, sideCheckModeOf } from '../_shared/wardrobeSides.ts';
 import { hydrateCastSources } from '../_shared/castPhotoUrl.ts';
 import { orderDualSides, shouldFlipDualSide } from '../_shared/dualSideOrder.ts';
 import { genderSafeDualSwap, identityThreshold } from '../_shared/dualSwapPipeline.ts';
@@ -336,6 +355,9 @@ Deno.serve(async (req) => {
     force_vibe,
     force_looks_path,
     force_plain_brief,
+    force_swap_geometry,
+    force_framing,
+    force_photo_priors,
     force_nightly_path,
     force_model,
     force_female_hair_pct,
@@ -419,7 +441,13 @@ Deno.serve(async (req) => {
   // LOOKS PATH (NIGHTLY_LOOKS_REFACTOR_PLAN.md Phase 2, _shared/nightlyLooksPath.ts): 'on' = the style contract
   // decides model + look + vibe; 'shadow' = legacy renders, the contract is stamped; 'off' = legacy. QA:
   // force_looks_path. The contract needs the model policy even when policy mode is off.
-  const looksMode = looksModeFor(force_looks_path, engineCfg0.nightlyLooksMode);
+  const looksMode = looksModeFor(
+    force_looks_path,
+    engineCfg0.nightlyLooksMode,
+    engineCfg0.nightlyLooksAllowlist.includes(userId)
+  );
+  if (looksMode === 'on' && !force_looks_path && engineCfg0.nightlyLooksMode !== 'on')
+    fallbackReasons.push('looks_path:allowlist');
   const looksPath = looksMode === 'on';
   const modelPolicy: NightlyModelPolicy | null =
     policyMode === 'off' && looksMode === 'off' ? null : await loadNightlyModelPolicy(supabase);
@@ -427,6 +455,7 @@ Deno.serve(async (req) => {
   let activeStyle: ActiveStyle | null = null;
   let looksVibeFragment: string | null = null;
   let looksVibePosition: 'early' | 'after_scene' | null = null;
+  let looksModel: string | null = null;
   let looksSceneModel: string | null = null;
   /** The cast slots + input of this render, kept for the after-scene vibe retry (nightlyLooksPath.afterScenePrompt). */
   let castSlotsCtx: { slots: CharacterSlots; input: CharacterSlotPipelineInput } | null = null;
@@ -1336,11 +1365,17 @@ Deno.serve(async (req) => {
         ? pickDualAction(
             selectedCast.find((c) => c.role === 'plus_one')?.relationship,
             force_dual_pool,
-            (await loadClassicPools(supabase)).dual
+            (await loadClassicPools(supabase)).dual,
+            // Parity loop round 5: candid / partner-leaning pool mix on the looks path.
+            looksPath ? LOOKS_DUAL_POOL_MIX : undefined
           )
         : null;
     const singleActionObj = isSingleCharacter
-      ? pickSingleAction(force_single_pool, (await loadClassicPools(supabase)).single)
+      ? pickSingleAction(
+          force_single_pool,
+          (await loadClassicPools(supabase)).single,
+          looksPath ? LOOKS_SOLO_POOL_MIX : undefined
+        )
       : null;
     const singleAction = singleActionObj?.pose ?? null;
     const needsEpicBackdrop = singleActionObj?.needsEpicBackdrop ?? false;
@@ -1926,11 +1961,13 @@ Deno.serve(async (req) => {
         const holidayPct = combineHolidayPct(usableHol);
         const { holidayCut, goofyCut, elegantCut, activeCut } = sceneTypeCuts(
           adaptiveScenePcts(
-            {
-              goofy: splitCfg.dualSceneGoofyPct,
-              elegant: splitCfg.dualSceneElegantPct,
-              active: splitCfg.dualSceneActivePct,
-            },
+            looksPath
+              ? LOOKS_SCENE_PCTS
+              : {
+                  goofy: splitCfg.dualSceneGoofyPct,
+                  elegant: splitCfg.dualSceneElegantPct,
+                  active: splitCfg.dualSceneActivePct,
+                },
             pickedCount
           ),
           { activeEnabled: pools.active.length >= 10, holidayPct }
@@ -2003,11 +2040,13 @@ Deno.serve(async (req) => {
         const holidayPct = combineHolidayPct(usableHolSolo);
         const { holidayCut, goofyCut, elegantCut, activeCut } = sceneTypeCuts(
           adaptiveScenePcts(
-            {
-              goofy: splitCfg.singleSceneGoofyPct,
-              elegant: splitCfg.singleSceneElegantPct,
-              active: splitCfg.singleSceneActivePct,
-            },
+            looksPath
+              ? LOOKS_SCENE_PCTS
+              : {
+                  goofy: splitCfg.singleSceneGoofyPct,
+                  elegant: splitCfg.singleSceneElegantPct,
+                  active: splitCfg.singleSceneActivePct,
+                },
             pickedCount
           ),
           {
@@ -2292,6 +2331,7 @@ Deno.serve(async (req) => {
         }
         looksVibeFragment = o.vibeFragment;
         looksVibePosition = o.vibePosition;
+        looksModel = o.model;
         styleContract = contract;
         activeStyle = o.active;
         fallbackReasons.push(...o.stamps);
@@ -2411,19 +2451,37 @@ Deno.serve(async (req) => {
           bespokePool: !!dualScenePosePool,
           forceAction: !!force_action,
           forceSceneAction: force_scene_action,
-          pctScenario: sfaCfg.sceneActionPct,
-          pctLocation: sfaCfg.sceneActionLocationPct,
+          // 1.2.0-parity (2026-09-12): on the looks path scene-first beats are a MINORITY so the authored pool
+          // poses (the album's poses) lead again; the legacy path keeps its config.
+          pctScenario: looksPath
+            ? selectedCast.length === 2
+              ? LOOKS_SCENE_ACTION_PCT_COUPLE
+              : LOOKS_SCENE_ACTION_PCT
+            : sfaCfg.sceneActionPct,
+          pctLocation: looksPath
+            ? selectedCast.length === 2
+              ? LOOKS_SCENE_ACTION_PCT_COUPLE
+              : LOOKS_SCENE_ACTION_PCT
+            : sfaCfg.sceneActionLocationPct,
           castCount: selectedCast.length === 2 ? 2 : 1,
-          allowLocationCouples: sfaCfg.sceneActionLocationCouples,
+          // Parity loop round 4 (2026-09-12): on the looks path, LOCATION couples may take a scene-first beat
+          // (and so a rolled stance: seated, leaning, wide) — the September 5 dark-launch hold kept them on
+          // the standing side-by-side pool poses, the one class still grading 3 in rounds 1-3.
+          allowLocationCouples: looksPath ? true : sfaCfg.sceneActionLocationCouples,
         });
         const sfaRoll = sfaDecision.roll;
+        // Forensics (parity loop): why scene-first did or did not roll (rounds 3-4 rolled 0/28 with no trace).
+        fallbackReasons.push(`sfa:${sfaDecision.reason}`);
         let locationAction: string | null = null;
         const plainLocation = !dualSpecialScene && !dualSpecialWardrobe;
         if (plainLocation && !sfaRoll && !force_active_pose && !activePose && !activeSinglePose) {
           const locCfg = await fetchEngineConfig(supabase);
-          const rollLoc =
-            force_location_action ||
-            (locCfg.locationActionPct > 0 && Math.random() * 100 < locCfg.locationActionPct);
+          const locPct = looksPath
+            ? selectedCast.length === 2
+              ? LOOKS_LOCATION_ACTION_PCT_COUPLE
+              : LOOKS_LOCATION_ACTION_PCT_SOLO
+            : locCfg.locationActionPct;
+          const rollLoc = force_location_action || (locPct > 0 && Math.random() * 100 < locPct);
           if (rollLoc) {
             locationAction = await generateLocationActionBeat(
               iconicAnchor || userPlace || '',
@@ -2442,6 +2500,14 @@ Deno.serve(async (req) => {
         //   elegant scenario → refined partner pool
         //   plain location → the pre-rolled active/classic pose
         const classicPools = await loadClassicPools(supabase);
+        // SWAP GEOMETRY (looks path, 2026-09-12): 'natural' lets the couple touch / move and relaxes the hands
+        // rule; a failed dual split re-renders with the STRICT geometry (see the dual rerender below) before the
+        // pipeline ever degrades to a solo. Default strict until the A/B (QA force_swap_geometry) settles it —
+        // then an engine_config field. Legacy path: always strict (byte-identical).
+        const swapGeometry: 'strict' | 'natural' = looksPath
+          ? (force_swap_geometry ?? 'strict')
+          : 'strict';
+        if (swapGeometry === 'natural') fallbackReasons.push('swap_geometry:natural');
         // The precedence table lives in _shared/castActionResolver.ts (SCENE_FIRST_ACTION_PLAN.md §11.3,
         // test-locked). This handler only loads the inputs and applies the result.
         const resolved = resolveCastAction({
@@ -2466,9 +2532,26 @@ Deno.serve(async (req) => {
           singleAction,
           classicDualPools: classicPools.dual,
           classicSoloCandid: classicPools.single.candid,
+          // Parity loop round 7: elegant-row solos lean on the portrait pool (looks path only).
+          classicSoloPortrait: looksPath ? classicPools.single.portrait : undefined,
           sfaRoll,
           sfaKind,
-          wideStances: looksPath,
+          // Flux couples on the album skeleton roll the GENERIC stances only: the wide, geometry-changing ones broke
+          // the flux split (arm E, 2026-09-13 — the 2026-09-06 finding again).
+          wideStances:
+            looksPath &&
+            !isFluxCoupleAlbum(selectedCast.length === 2 ? 'couple' : 'solo', looksModel),
+          fluxWideStances:
+            looksPath &&
+            LOOKS_FLUX_WIDE_STANCES &&
+            isFluxCoupleAlbum(selectedCast.length === 2 ? 'couple' : 'solo', looksModel),
+          fluxStanceShare:
+            looksPath &&
+            LOOKS_FLUX_WIDE_STANCES &&
+            isFluxCoupleAlbum(selectedCast.length === 2 ? 'couple' : 'solo', looksModel)
+              ? LOOKS_FLUX_STANCE_POOL_SHARE
+              : 0,
+          naturalStances: looksPath && swapGeometry === 'natural',
           holidayCategory: holidayCategory ?? null,
           holidayPool: holidaySubTheme ? holidayPoolOf(holidaySubTheme) : null,
           registerKey: holidayCategory
@@ -2528,10 +2611,30 @@ Deno.serve(async (req) => {
               !force_plain_brief,
               selectedCast.length === 2 ? 'couple' : 'solo',
               Math.random,
-              { timeAxis, weatherAxis, phenomenaAxis }
+              { timeAxis, weatherAxis, phenomenaAxis },
+              swapGeometry,
+              force_framing,
+              force_photo_priors || LOOKS_PHOTO_PRIORS,
+              {
+                pct: LOOKS_FRAMING_PCT,
+                model: looksModel,
+                albumCouple: isFluxCoupleAlbum(
+                  selectedCast.length === 2 ? 'couple' : 'solo',
+                  looksModel
+                ),
+              }
             )
           : null;
-        if (looksFields) fallbackReasons.push(looksFields.frameStamp);
+        if (looksFields) fallbackReasons.push(looksFields.frameStamp, looksFields.framingStamp);
+        if (looksFields && looksFields.anchorStanceKey)
+          fallbackReasons.push(`anchor_stance:${looksFields.anchorStanceKey}`);
+        if (looksFields && looksFields.coupleSceneAfterAction) {
+          // The album skeleton carries no vibe fragment: the contract's honesty check and the retry ladder must
+          // agree with the prompt (the vibe still shaped the brief through its directive).
+          looksVibeFragment = null;
+          looksVibePosition = null;
+          if (activeStyle) activeStyle = { ...activeStyle, vibeFragment: null, vibePosition: null };
+        }
         const slotInput: CharacterSlotPipelineInput = {
           cast: resolvedCast.map((rc, i) => ({
             role: rc.role,
@@ -2607,7 +2710,9 @@ Deno.serve(async (req) => {
               : null,
           femaleHairVariationPct: force_female_hair_pct ?? hairCfg.femaleHairVariationPct,
           // Couple prompt order (mig 470): QA flag wins, else engine_config.couple_prompt_style.
-          promptStyle: force_prompt_style ?? sfaCfgCloser.couplePromptStyle,
+          promptStyle:
+            force_prompt_style ??
+            (looksPath ? looksCouplePromptStyle(looksModel) : sfaCfgCloser.couplePromptStyle),
           costumeLock: costumePicks ? costumePicks.map((p) => p.attire) : null,
           sceneRegister,
           // Stage 5c: expanded solo compositions (three-quarter / enviro-wide)
@@ -2639,6 +2744,20 @@ Deno.serve(async (req) => {
               : null,
           ...(looksFields ?? {}),
         };
+        // Flux parity arm G: flux couples on the album skeleton render with the 1.2.0 flux override fragment.
+        if (
+          looksFields &&
+          looksFields.coupleSceneAfterAction &&
+          LOOKS_FLUX_COUPLE_OVERRIDE_LIBRARY &&
+          looksModel
+        ) {
+          const ov = pickFaceSwapModelOverride(looksModel, resolvedVibeKey ?? null);
+          if (ov) {
+            slotInput.mediumFluxFragment = ov;
+            if (activeStyle) activeStyle = { ...activeStyle, fragment: ov };
+            fallbackReasons.push('look_override_library:flux_couple');
+          }
+        }
         // Parity QA (COUPLE_PROMPT_PARITY_PLAN.md §2): a forced slot INPUT + forced Sonnet SLOTS make
         // the prompt a pure function of (input, slots, promptStyle) — the paired A/B differs only in order.
         // Phase A2: solos accept the same forced input + forced slots (force_single_slots), so a look
@@ -2647,7 +2766,9 @@ Deno.serve(async (req) => {
           force_slot_input && (isDualFaceSwap || isSingleHumanFaceSwap)
             ? {
                 ...force_slot_input,
-                promptStyle: force_prompt_style ?? sfaCfgCloser.couplePromptStyle,
+                promptStyle:
+                  force_prompt_style ??
+                  (looksPath ? looksCouplePromptStyle(looksModel) : sfaCfgCloser.couplePromptStyle),
               }
             : slotInput;
         if (slotInputUsed !== slotInput) fallbackReasons.push('qa:force_slot_input');
@@ -3597,6 +3718,29 @@ Output ONLY the prompt.`;
       // SOLO_FALLBACK_RESERVE_MS left to run to completion (never scene-only).
       const renderDeadlineMs = t0 + RENDER_DEADLINE_MS;
       const dualDeadlineMs = renderDeadlineMs - SOLO_FALLBACK_RESERVE_MS;
+      // SECOND SIGNAL for the dual swap (2026-09-12, _shared/wardrobeSides.ts): which side wears the LEFT-locked
+      // outfit, mapped through the cast genders — offered only when the slots and both genders are known (the
+      // pipeline stamps side_check:none otherwise and keeps the single read). Mode: engine_config (mig 514).
+      const sideWardrobes =
+        castSlotsCtx && 'left_wardrobe' in castSlotsCtx.slots
+          ? { a: castSlotsCtx.slots.left_wardrobe, b: castSlotsCtx.slots.right_wardrobe }
+          : null;
+      const sideG0 = asGender(s0.gender);
+      const sideG1 = asGender(s1.gender);
+      const sideGenders =
+        sideG0 && sideG1 && sideG0 !== sideG1 ? { left: sideG0, right: sideG1 } : null;
+      const confirmSides =
+        sideWardrobes && sideGenders
+          ? async (target: string) => {
+              const r = await classifyWardrobeSides(
+                target,
+                sideWardrobes.a,
+                sideWardrobes.b,
+                REPLICATE_TOKEN
+              );
+              return r.aSide ? sidesToGenders(r.aSide, sideGenders.left, sideGenders.right) : null;
+            }
+          : undefined;
       const result = await genderSafeDualSwap(
         tempUrl,
         {
@@ -3616,8 +3760,9 @@ Output ONLY the prompt.`;
             ),
           confirmGenders: async (target) => {
             const r = await classifyDualGenders(target, REPLICATE_TOKEN);
-            return { left: r.left, right: r.right };
+            return { left: r.left, right: r.right, faceCount: r.faceCount };
           },
+          ...(confirmSides ? { confirmSides } : {}),
           singleSwap: async (source, target) => {
             // GENDER-SAFE degrade + SOLO re-render (#1 + #3 — sunnysteph 2026-08-05
             // "face on the man"): the single-swap models are FACE-BLIND — they paste
@@ -3773,10 +3918,28 @@ Output ONLY the prompt.`;
             let rerenderModel = pickedModel;
             if (styleContract && activeStyle) {
               const pick = styleContract.forAttempt(attempt + 1);
-              const r = retryPromptFor(finalPrompt, activeStyle, pick);
-              finalPrompt = r.prompt;
-              activeStyle = r.active;
-              fallbackReasons.push(...r.stamps);
+              // Round 19: a model move across the flux ↔ others order boundary re-assembles the slots in the new
+              // model's order (r18 #5/#7 rendered grok in the legacy order and both needed a re-render).
+              const reordered =
+                looksPath && castSlotsCtx
+                  ? reassembleForModel(castSlotsCtx.slots, castSlotsCtx.input, pick)
+                  : null;
+              if (reordered && castSlotsCtx) {
+                finalPrompt = reordered.prompt;
+                castSlotsCtx = { slots: castSlotsCtx.slots, input: reordered.input };
+                activeStyle = {
+                  ...activeStyle,
+                  model: pick.model,
+                  lookKey: pick.look.key,
+                  fragment: pick.fragment,
+                };
+                fallbackReasons.push(...pick.stamps, ...reordered.stamps);
+              } else {
+                const r = retryPromptFor(finalPrompt, activeStyle, pick);
+                finalPrompt = r.prompt;
+                activeStyle = r.active;
+                fallbackReasons.push(...r.stamps);
+              }
               rerenderModel = pick.model;
               if (pick.model !== pickedModel) modelUsedOverride = pick.model;
               if (pick.look.key !== resolvedMediumKey) resolvedMediumKey = pick.look.key;
@@ -3811,6 +3974,23 @@ Output ONLY the prompt.`;
                 rerenderModel = pick.model;
               }
             }
+            // NATURAL → STRICT geometry on the re-render (2026-09-12): a natural first render that broke the
+            // split is retried with the proven strict anchor + the pool pose (same scene / wardrobe / props), so
+            // the relaxed language costs one retry, never the partner. The strict ctx is carried forward so the
+            // attempt-2 after-scene re-assembly above stays strict too.
+            if (castSlotsCtx && castSlotsCtx.input.swapGeometry === 'natural') {
+              const strict = strictRetryPrompt(castSlotsCtx.slots, {
+                ...castSlotsCtx.input,
+                mediumFluxFragment: activeStyle
+                  ? activeStyle.fragment
+                  : castSlotsCtx.input.mediumFluxFragment,
+              });
+              if (strict) {
+                finalPrompt = strict.prompt;
+                castSlotsCtx = { slots: strict.slots, input: strict.input };
+                fallbackReasons.push(`swap_geometry_retry:strict:${attempt}`);
+              }
+            }
             const rr = await generateImage(
               'flux-dev',
               // Stage 5a: final retry mutates — see generate-dream twin.
@@ -3840,6 +4020,9 @@ Output ONLY the prompt.`;
           recoverBudgetMs: DUAL_RECOVER_MS,
           // Live-tunable wrong-person floor (engine_config, audit L3; cached fetch).
           identityDegradeFloor: (await fetchEngineConfig(supabase)).identityDegradeFloor,
+          sideCheckMode: sideCheckModeOf((await fetchEngineConfig(supabase)).dualSideCheckMode),
+          // Parity loop round 7: the looks path never ships a couple below 0.5 likeness without a re-render try.
+          ...(looksPath ? { identityMinSim: LOOKS_DUAL_IDENTITY_MIN } : {}),
         }
       );
       tempUrl = result.url;
@@ -3967,7 +4150,11 @@ Output ONLY the prompt.`;
         // the dual gate. Below threshold → ONE re-swap via the fallback model
         // chain, ship the better take. Measurement absent → fail-open.
         if (swapSuccessSingle) {
-          const soloThr = soloIdentityThreshold();
+          // Looks path (parity loop round 3): a higher solo likeness bar — the same one-shot re-swap, just
+          // triggered earlier, so a 0.48 chromolithograph likeness gets a second try before it ships.
+          const soloThr = looksPath
+            ? Math.max(soloIdentityThreshold() ?? 0, LOOKS_SOLO_IDENTITY_MIN)
+            : soloIdentityThreshold();
           if (soloThr !== null) {
             const v1 = await verifySoloIdentity(tempUrl, faceSwapSource);
             if (v1) {
@@ -4017,6 +4204,71 @@ Output ONLY the prompt.`;
     // render full of random people posing as the user, re-render the SAME place +
     // medium as a beautiful EMPTY scene. Live kill-switch: pure_scene_on_swap_fail.
     // strict (onboarding first-dream) already hard-fails to its own cascade above.
+    // Parity loop round 10 (looks path): a solo whose swap scored below the identity floor gets ONE fresh
+    // re-render through the same gender-safe guard + swap before the pure-scene fallback — a cast dream should
+    // never ship faceless (round 9 #6 shipped a landscape triptych after identity 0).
+    if (
+      swapUnusable &&
+      looksPath &&
+      !strict_face_swap &&
+      faceSwapSource &&
+      !(faceSwapSources && faceSwapSources.length === 2) &&
+      Date.now() - t0 < 80_000
+    ) {
+      try {
+        fallbackReasons.push('solo_floor_rerender');
+        const soloNoun =
+          faceSwapGender === 'female' ? 'woman' : faceSwapGender === 'male' ? 'man' : 'person';
+        const rr = await generateImage(
+          'flux-dev',
+          `exactly one person, a solo portrait of a single ${soloNoun} alone, ${finalPrompt}`,
+          undefined,
+          {
+            replicateToken: REPLICATE_TOKEN,
+            openaiKey: Deno.env.get('OPENAI_API_KEY'),
+            geminiKey: Deno.env.get('GEMINI_API_KEY'),
+            xaiKey: Deno.env.get('XAI_API_KEY'),
+          },
+          pickedModel,
+          'png'
+        );
+        const guard2 = await ensureSoloSwapTarget(
+          rr.url,
+          {
+            castGender: faceSwapGender,
+            replicateToken: REPLICATE_TOKEN,
+            rerender: async () => ({ url: rr.url, predictionId: rr.predictionId }),
+            log: (m) => console.log(`[nightly-dreams] ${m}`),
+          },
+          { maxRerenders: 0, deadlineMs: t0 + 140_000, mediumKey: resolvedMediumKey }
+        );
+        if (guard2.safe) {
+          const swapped = await faceSwap(
+            faceSwapSource,
+            guard2.url,
+            REPLICATE_TOKEN,
+            supabase,
+            userId,
+            {
+              retry: false,
+            }
+          );
+          const v = await verifySoloIdentity(swapped, faceSwapSource);
+          if (v && v.sim >= 0.35) {
+            tempUrl = swapped;
+            replicatePredictionId = rr.predictionId;
+            observability.replicateRawUrl = rr.url;
+            observability.replicatePredictionId = rr.predictionId;
+            swapUnusable = false;
+            logAxes.faceSwapResult = 'single-fallback-success';
+            fallbackReasons.push(`solo_floor_rerender_ok:${v.sim}`);
+          } else fallbackReasons.push(`solo_floor_rerender_low:${v ? v.sim : 'null'}`);
+        } else fallbackReasons.push('solo_floor_rerender_unsafe');
+      } catch (e) {
+        fallbackReasons.push(`solo_floor_rerender_failed:${(e as Error).message.slice(0, 60)}`);
+      }
+    }
+
     if (swapUnusable && !strict_face_swap && sceneFallbackPrompt) {
       const scfg = await fetchEngineConfig(supabase);
       if (scfg.pureSceneOnSwapFail) {

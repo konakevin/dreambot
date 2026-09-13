@@ -90,6 +90,15 @@ async function renderOne(surface, n) {
     ...(ARGS.model ? { force_model: String(ARGS.model) } : {}),
     ...(ARGS.look ? { force_look: String(ARGS.look) } : {}),
     ...(ARGS.vibe ? { force_vibe: String(ARGS.vibe) } : {}),
+    // --geometry=natural|strict (2026-09-12 A/B): natural lets the couple touch / move; a failed split
+    // re-renders with the strict geometry (stamped swap_geometry_retry:strict:<attempt>).
+    ...(ARGS.geometry ? { force_swap_geometry: String(ARGS.geometry) } : {}),
+    // --framing=<key> (2026-09-12): pin a framing recipe (pools/nightly_framings.ts) for a matrix.
+    ...(ARGS.framing ? { force_framing: String(ARGS.framing) } : {}),
+    // --priors (1.2.0-parity A/B): the photograph-free editorial prior line back in the integration lines.
+    ...(ARGS.priors ? { force_photo_priors: true } : {}),
+    // --place=<location card name>: mandate the place (force_place) — a test of one saved place / imagined world.
+    ...(ARGS.place ? { force_place: String(ARGS.place) } : {}),
   };
   const start = Date.now();
   let res;
@@ -229,6 +238,12 @@ async function renderOne(surface, n) {
     vibe: vibeKey,
     vibe_family: stampVal(stamps, 'vibe_family:'),
     frame: stampVal(stamps, 'frame:'),
+    framing: stampVal(stamps, 'framing:'),
+    geometry: stamps.includes('swap_geometry:natural') ? 'natural' : 'strict',
+    stance: stampVal(stamps, 'dual_stance:'),
+    dual_attempts: Number(stampVal(stamps, 'dual_attempts:') || 0) || null,
+    strict_retry: stamps.some((s) => s.startsWith('swap_geometry_retry:strict')),
+    action_fallback: stampVal(stamps, 'scene_action_fallback:'),
     vibe_version: stampVal(stamps, 'vibe_version:'),
     identity_sims: sims,
     degraded,
@@ -265,7 +280,7 @@ function buildHtml(report) {
       const sim = r.identity_sims.map((x) => x.toFixed(2)).join('/') || '—';
       return `<section class="card"><header><h2>${esc(r.surface)} #${r.n}</h2><code>${esc((r.model_used || '').replace(/^.*\//, ''))} · ${esc(r.look)} (${esc(r.look_family)}) · ${esc(r.vibe)} (${esc(r.vibe_family)}${r.vibe_version ? ' · ' + esc(r.vibe_version) : ''})</code></header>
 <a href="${esc(r.image_url)}" target="_blank"><img src="${esc(r.image_url)}" loading="lazy"></a>
-<div class="meta">${r.frame ? `<span class="ok">frame ${esc(r.frame)}</span> · ` : ''}${r.composer === 'legacy-priors' ? '<b class="bad">composer: legacy photo priors</b>' : '<span class="ok">composer: look-neutral</span>'} · ${r.brief === 'set-dresser' ? '<span class="ok">brief: set dresser</span>' : '<b class="bad">brief: legacy</b>'} · id ${sim} · ${r.degraded ? '<b class="bad">degraded</b>' : '<span class="ok">clean</span>'} · ${esc(r.face_swap_result || '')} · ${r.elapsed_s}s</div>
+<div class="meta">${r.frame ? `<span class="ok">frame ${esc(r.frame)}</span> · ` : ''}${r.framing ? `<span class="ok">framing ${esc(r.framing)}</span> · ` : ''}${r.surface === 'couple' ? `<span class="${r.geometry === 'natural' ? 'ok' : 'na'}">geometry ${esc(r.geometry)}</span> · stance ${esc(r.stance || '—')} · attempts ${r.dual_attempts ?? '?'}${r.strict_retry ? ' <b class="bad">(strict retry)</b>' : ''}${r.action_fallback ? ` · <b class="bad">beat dropped: ${esc(r.action_fallback)}</b>` : ''} · ` : ''}${r.composer === 'legacy-priors' ? '<b class="bad">composer: legacy photo priors</b>' : '<span class="ok">composer: look-neutral</span>'} · ${r.brief === 'set-dresser' ? '<span class="ok">brief: set dresser</span>' : '<b class="bad">brief: legacy</b>'} · id ${sim} · ${r.degraded ? '<b class="bad">degraded</b>' : '<span class="ok">clean</span>'} · ${esc(r.face_swap_result || '')} · ${r.elapsed_s}s</div>
 <div class="checks">${badge(c.looks_path_on, 'looks path')} ${badge(c.look_fragment_in_prompt, 'look fragment')} ${badge(c.vibe_fragment_in_prompt, 'vibe fragment')} ${badge(c.no_photo_prior, 'no photo prior')} ${badge(c.no_violation, 'honest')}</div>
 <details><summary>stamps</summary><p>${esc(r.stamps.join(' · '))}</p></details><details><summary>prompt</summary><p>${esc(r.prompt)}</p></details></section>`;
     })
@@ -300,7 +315,7 @@ async function main() {
       if (r.ok) {
         const c = r.checks;
         console.log(
-          `ok ${r.elapsed_s}s · ${(r.model_used || '').replace(/^.*\//, '')} · ${r.look} · ${r.vibe} · id ${r.identity_sims.map((v) => v.toFixed(2)).join('/') || '—'} · ${r.degraded ? 'DEGRADED' : 'clean'} · looks ${c.looks_path_on ? '✓' : '✗'} lookfrag ${c.look_fragment_in_prompt} vibefrag ${c.vibe_fragment_in_prompt} nophoto ${c.no_photo_prior} honest ${c.no_violation}`
+          `ok ${r.elapsed_s}s · ${(r.model_used || '').replace(/^.*\//, '')} · ${r.look} · ${r.vibe} · id ${r.identity_sims.map((v) => v.toFixed(2)).join('/') || '—'} · ${r.degraded ? 'DEGRADED' : 'clean'}${r.framing ? ` · framing ${r.framing}` : ''}${r.surface === 'couple' ? ` · ${r.geometry} · ${r.stance || '—'} · attempts ${r.dual_attempts ?? '?'}${r.strict_retry ? ' STRICT-RETRY' : ''}${r.action_fallback ? ` · beat dropped:${r.action_fallback}` : ''}` : ''} · looks ${c.looks_path_on ? '✓' : '✗'} lookfrag ${c.look_fragment_in_prompt} vibefrag ${c.vibe_fragment_in_prompt} nophoto ${c.no_photo_prior} honest ${c.no_violation}`
         );
       } else console.log(`FAILED ${r.status ?? ''} ${r.error}`);
     }
@@ -323,6 +338,19 @@ async function main() {
     );
   if (!LEGACY && ok.length >= 8 && Object.keys(lookFams).length < 2)
     console.log('⚠ DISTRIBUTION: every render rolled the same look family');
+  // Geometry A/B readout (2026-09-12): first-try dual rate, strict-retry rate, degrade rate, mean identity.
+  const couples = ok.filter((r) => r.surface === 'couple');
+  if (couples.length) {
+    const firstTry = couples.filter((r) => r.dual_attempts === 1 && !r.degraded).length;
+    const retried = couples.filter((r) => r.strict_retry).length;
+    const degraded = couples.filter((r) => r.degraded).length;
+    const beatDropped = couples.filter((r) => r.action_fallback).length;
+    const sims = couples.flatMap((r) => r.identity_sims);
+    const mean = sims.length ? (sims.reduce((a, b) => a + b, 0) / sims.length).toFixed(3) : '—';
+    console.log(
+      `couples (${couples[0].geometry}): ${couples.length} · first-try dual ${firstTry} · strict retries ${retried} · degraded ${degraded} · beats dropped ${beatDropped} · mean identity ${mean} · stances ${JSON.stringify(hist('stance'))}`
+    );
+  }
   console.log(`page: ${DESKTOP_HTML}`);
 }
 main().catch((e) => {

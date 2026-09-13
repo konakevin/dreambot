@@ -119,3 +119,35 @@ describe('pickSceneCluster semantics (locked)', () => {
     expect(pickSceneCluster(undefined)).toBeNull();
   });
 });
+
+describe('pool MIX parameter (parity loop round 5, looks path)', () => {
+  it('pickSingleAction honours a custom mix with a seeded rng; the legacy default is unchanged', () => {
+    const pools = { candid: ['c'], portrait: ['p'], dynamic: ['d'] };
+    const at = (r: number, mix?: { dynamic: number; portrait: number }) =>
+      pickSingleAction(undefined, pools, mix, () => r).pose;
+    // looks mix: 15% dynamic, 30% portrait, 55% candid
+    const looks = { dynamic: 0.15, portrait: 0.3 };
+    expect(at(0.1, looks)).toBe('d');
+    expect(at(0.2, looks)).toBe('p');
+    expect(at(0.5, looks)).toBe('c');
+    expect(at(0.99, looks)).toBe('c');
+    // legacy default: 40 / 30 / 30
+    expect(at(0.39)).toBe('d');
+    expect(at(0.69)).toBe('p');
+    expect(at(0.71)).toBe('c');
+  });
+  it('pickDualAction honours a custom mix with a seeded rng; the legacy default is unchanged', () => {
+    const pools = { companion: ['co'], partner: ['pa'], playful: ['pl'], dynamic: ['dy'] };
+    const at = (r: number, mix?: { playful: number; dynamic: number; partnerShare: number }) =>
+      pickDualAction('partner', undefined, pools, mix, () => r);
+    const looks = { playful: 0.1, dynamic: 0.15, partnerShare: 0.6 };
+    expect(at(0.05, looks)).toBe('pl');
+    expect(at(0.2, looks)).toBe('dy');
+    expect(at(0.5, looks)).toBe('pa'); // second draw 0.5 < 0.6 → partner
+    expect(at(0.7, looks)).toBe('co'); // second draw 0.7 ≥ 0.6 → companion
+    expect(at(0.1)).toBe('pl');
+    expect(at(0.5)).toBe('dy');
+    expect(at(0.6)).toBe('co'); // legacy partnerShare 0.3: 0.6 ≥ 0.3 → companion
+    expect(at(0.2 + 0.4)).toBe('co');
+  });
+});

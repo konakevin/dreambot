@@ -98,37 +98,28 @@ export const DUAL_ACTIONS_PARTNER: string[] = [
   'sitting apart on a low wall, one with hands folded in lap, the other with palms resting on the wall',
   'both leaning back against a fence with a clear gap between them, arms hanging naturally at their sides',
   'sitting together on a bench, one with ankle crossed over knee, the other with feet planted on ground',
-  'standing a step apart, one brushing something off their own shirt, the other with arms folded loosely',
   'sitting side by side with a gap between them, one with hands pressed between their knees, the other with arms wrapped around their own waist',
   'both standing near a post, one with elbow resting on it, the other a step apart with hands behind back',
   'one sitting cross-legged, the other kneeling beside them with hands resting on their own thighs',
-  'both standing quietly, one rolling up their sleeves, the other with arms crossed loosely over their chest',
   'sitting together on grass, one with legs stretched out, the other sitting with knees bent to one side',
   'both leaning against a low barrier, one with hands gripping the edge, the other with arms folded',
-  "standing a comfortable arm's length apart, one adjusting their collar, the other with thumbs tucked into their waistband",
   'sitting side by side on steps, one with hands flat on the step, the other with fingers interlaced',
   'both standing near a pillar, one with shoulder against it, the other a step apart with arms at sides',
   'sitting together on a log, one with hands resting on their ankles, the other with palms on their knees',
   'both leaning against a wall, one with arms crossed, the other with hands tucked into jacket pockets',
-  'both standing side by side, one smoothing down their shirt, the other with hands clasped behind their back',
   'sitting apart on a curb, one with elbows on knees, the other with hands flat beside their legs',
   'both standing near a fence post, one with hand resting on it, the other a step apart with arms folded',
-  'both standing quietly, one fastening a button, the other with thumbs hooked in their front pockets',
   'sitting together on a blanket, one with legs crossed, the other sitting with legs stretched to one side',
   'both leaning against a railing, one with both hands gripping it, the other with arms hanging loose',
-  'standing side by side with a clear gap between them, one zipping up their jacket, the other with arms wrapped loosely around their own waist',
   'sitting side by side on a bench, one with hands tucked under their legs, the other with arms at sides',
   'both standing near a tree trunk, one with palm flat against it, the other a step apart with arms crossed',
   'one sitting on ground with legs straight, the other kneeling beside them with hands on their own knees',
   'sitting together on rocks, one with hands gripping the edges, the other with arms resting on their knees',
   'both leaning on a low wall, one with both forearms resting on top, the other with both hands flat on the surface',
-  'both standing side by side, one stretching their neck, the other with arms folded across their chest',
   'sitting apart on a step, one with hands between their knees, the other with palms flat on the step',
   'both standing near a post, one with back against it, the other a step apart with weight on one foot',
-  'both standing quietly, one loosening their scarf, the other with thumbs in belt loops',
   'sitting together on grass, one with hands supporting them behind, the other with arms around their own shins',
   'both leaning against a barrier, one with elbows on top, the other a step apart with arms at sides',
-  'standing a comfortable arm-length apart, one brushing something off their own sleeve, the other with hands in pockets',
   'sitting side by side on a ledge, one with legs swinging, the other with feet firmly planted',
   'both standing near a column, one with shoulder against it, the other a step apart with arms loosely folded',
   'sitting together on a wall, one with hands gripping the edge, the other with arms wrapped around waist',
@@ -138,32 +129,25 @@ export const DUAL_ACTIONS_PARTNER: string[] = [
   'both leaning against a wall, one with hands pressed flat against it, the other with arms crossed',
   'sitting side by side on a curb, one with arms around their own knees, the other with hands beside legs',
   'both standing near a lamppost, one with elbow against it, the other a step apart with arms folded',
-  'both standing quietly, one smoothing their shirt front, the other with hands deep in jacket pockets',
   'sitting together on a log, one with hands on their ankles, the other with arms crossed loosely',
   'both leaning on a bridge rail, one with fingers drumming, the other standing still beside them',
-  'both standing side by side, one stretching their shoulders, the other with arms wrapped around themselves',
   'sitting apart on a bench, one with legs tucked up, the other with feet planted wide',
   'both standing near a pillar, one with back to it, the other a step apart with slight angle',
   'both leaning against a low fence, one with arms draped over, the other a step apart with arms folded',
-  'standing side by side with a clear gap between them, one buttoning their coat, the other with hands tucked into back pockets',
   'sitting side by side on rocks, one with hands gripping sides, the other with arms around their shins',
   'both standing near a tree, one with palm against bark, the other a step apart with arms crossed',
   'sitting together on a wall, one with hands tucked under legs, the other with palms flat down',
   'both leaning on a railing, one with forearms resting along the top, the other a step apart with hands free',
-  'standing a step apart, one rolling their shoulders, the other with thumbs in front pockets',
   'sitting side by side on a step, one with hands between knees, the other with arms at sides',
   'both standing near a fence, one with shoulder blade against it, the other a step apart with arms loose',
   'sitting together on ground, one with legs straight out, the other with knees pulled up slightly',
   'both leaning against a barrier, one with both hands on top, the other a step apart with arms folded',
-  'standing with clear space between them, one untangling their earphones, the other with hands deep in pockets',
   'sitting side by side on a curb, one with elbows on thighs, the other with hands flat beside them',
   'both standing near a post, one with forearm against it, the other a step apart with arms crossed',
-  'both standing quietly, one straightening their shirt hem, the other with thumbs hooked in belt',
   'sitting together on a bench, one with ankle on opposite knee, the other with both feet down',
   'both leaning on a wall, one with hands spread flat, the other a step apart with arms at sides',
   'sitting side by side on grass, one with hands supporting behind, the other with arms around knees',
   'both standing near a column, one with elbow resting on it, the other a step apart with hands clasped',
-  'standing a comfortable arm-length apart, one retying their shoelace while crouched, the other with thumbs in back pockets',
   'sitting side by side on steps, one with hands flat on thighs, the other with arms crossing chest',
   'both standing near a rail, one with both hands gripping it, the other a step apart with arms loose',
   'sitting together on a wall, one with legs hanging freely, the other with feet touching ground',
@@ -171,7 +155,6 @@ export const DUAL_ACTIONS_PARTNER: string[] = [
   'sitting side by side on a bench, one with hands tucked under thighs, the other with arms at sides',
   'both standing near a tree trunk, one with shoulder against it, the other a step apart with arms folded',
   'both leaning against a low wall, one with hands behind them, the other a step apart with arms crossed',
-  'standing side by side with a clear gap between them, one adjusting their hood, the other with arms wrapped loosely around themselves',
   'sitting side by side on a curb, one with hands on their ankles, the other with palms beside legs',
   'both standing near a lamppost, one with back to it, the other a step apart with arms folded',
   'sitting together on a log, one with hands gripping the bark, the other with arms around their shins',
@@ -197,35 +180,20 @@ export const DUAL_ACTIONS_PARTNER: string[] = [
   'both leaning on a railing, one with hands resting on the top rail, the other a step apart with arms free',
   'sitting side by side on grass, one with palms flat for support, the other with arms around their shins',
   'sitting together on a bench, one with fingers drumming on their knee, the other with arms crossed at their chest',
-  'both standing near a mailbox, one with hand resting on top, the other a step apart with thumbs in loops',
   'one sitting on grass with legs straight ahead, the other kneeling beside them with hands on their own thighs',
   'both leaning on a dock railing, one with wrists crossed, the other a step apart with arms hanging loose',
-  'sitting side by side on a step, one picking at their shoelaces, the other with hands folded in lap',
-  'standing a step apart, one wiping their hands on their pants, the other with arms wrapped around their middle',
   'sitting together on a wall, one with hands gripping their ankles, the other with palms pressed down',
   'both leaning against a car hood, one with arms spread wide, the other a step apart with hands free',
   'sitting side by side on a curb, one with fingers interlaced behind neck, the other with hands beside legs',
-  'standing with clear space between them, one pulling up their socks, the other with thumbs hooked in back pockets',
   'sitting together on a log, one with hands pressed into bark, the other with arms around their calves',
-  'both standing near a trash can, one with elbow resting on rim, the other a step apart with arms crossed',
   'both leaning on a bridge rail, one with palms flat down, the other a step apart with arms at sides',
   'sitting side by side on grass, one with hands resting on their knees, the other with arms loose',
-  'sitting together on steps, one with hands rubbing their knees, the other with arms crossed over chest',
-  'both standing near a bike rack, one with hand on the metal, the other a step apart with arms folded',
   'both leaning against a storefront, one with back flat against glass, the other a step apart with arms loose',
   'sitting side by side on a bench, one stretching their arms overhead, the other with hands on their thighs',
-  'standing side by side with a clear gap between them, one rubbing their hands together down low, the other with thumbs tucked into front pockets',
-  'sitting together on a wall, one with palms rubbing together, the other with hands flat beside them',
   'both standing near a water fountain, one with hand touching the edge, the other a step apart with arms crossed',
-  'sitting side by side on a curb, one with hands clapping together softly, the other with arms around waist',
-  'standing a comfortable arm-length apart, one flexing their fingers, the other with hands deep in jacket pockets',
   'sitting together on a step, one with hands resting flat on the step, the other with arms at their sides',
-  'both standing near a parking meter, one with palm against it, the other a step apart with arms folded',
   'both leaning against a fence gate, one with hands gripping the bars, the other a step apart with arms loose',
   'sitting side by side on a bench, one with hands resting on their thighs, the other with palms on knees',
-  'standing with clear space between them, one cracking their knuckles, the other with arms wrapped around their own shoulders',
-  'sitting together on grass, one with hands scratching their arm, the other with arms around their knees',
-  'both standing near a telephone pole, one with a hand flat against it, the other a step apart with arms crossed',
   'both leaning on a concrete barrier, one with elbows wide apart, the other a step apart with arms at sides',
   'sitting side by side on steps, one with hands warming under their legs, the other with arms loose',
   'standing a comfortable arm-length apart, one shaking out their hands, the other with thumbs hooked in belt loops',
@@ -256,7 +224,6 @@ export const DUAL_ACTIONS_PLAYFUL: string[] = [
   'both doing a cheesy synchronized double-point up toward the sky, leaning slightly outward',
   'both standing crisply at attention side by side with arms straight at their sides and mock seriousness, a gap between their heads',
   'both holding up matching shaka signs (thumb and pinky out, three fingers curled into the palm), heads apart',
-  'both striking a confident catalog-model pose with hands in pockets and chins up, a clear gap between them',
   'both pretending to lean an elbow casually on thin air, mirrored, kept apart with heads separated',
   'both holding an invisible tiny object up to inspect with mock concentration, a gap between them',
   'both giving an exaggerated over-the-top wink with finger-guns, leaning slightly apart',
@@ -293,6 +260,7 @@ export const DUAL_ACTIONS_PLAYFUL: string[] = [
   'standing with gap between heads, both doing excited claps at chest level facing camera',
   'side by side separately, both looking at camera doing exaggerated surprised expressions with hands out',
   'standing with space between, both mid-laugh holding stomachs, heads clearly separated and visible forward',
+  'both striking a confident catalog-model pose with hands in pockets and chins up, a clear gap between them',
 ];
 
 // DYNAMIC pool — cinematic, powerful, energetic stances for HERO-grade cast
@@ -306,36 +274,19 @@ export const DUAL_ACTIONS_PLAYFUL: string[] = [
 // stance reads as a warlord in Viking gear and a hero on a rooftop. This is the
 // pool that kills the "posed costume-rental photo" look. (2026-08-25, Kevin)
 export const DUAL_ACTIONS_DYNAMIC: string[] = [
-  'both planted in a wide, grounded power stance squared to the camera, shoulders back and chins raised, arms crossed with quiet authority, a clear gap between their heads',
   'one with a boot planted up on a raised rock or ledge and a forearm resting across the knee, the other standing tall beside them with hands on hips, heads kept well apart',
   'both leaning back with easy confidence, arms loosely folded and mid-laugh with faces to the camera, a clear gap between them',
-  'both standing with feet planted wide and fists loosely clenched at their sides like they own the ground, chests out, heads clearly apart',
   'one throwing an arm out in a broad sweeping gesture across the view while the other stands firm with arms crossed, both faces to the camera, a gap between their heads',
   'both windswept and leaning slightly into a strong gust, cloaks and hair streaming to one side, jaws set and eyes forward, a clear gap between their heads',
   'both mid-turn toward the camera as if just called, weight shifting onto the back foot, arms swinging naturally out to their own sides, heads apart',
-  'one with a single fist raised high in triumph, the other with both arms flung wide in victory, both facing forward, a clear gap between their heads',
   'both with arms spread wide and open as if taking in a vast view, chests lifted, faces to the camera, heads kept well apart',
   'one standing with weight cocked to one hip and a hand raised in a confident beckon, the other with arms crossed and chin up, heads apart',
-  'both squared to the camera with arms folded and feet set, radiating calm command, a clear gap between their heads',
-  'one with hands on hips and elbows out, the other with arms crossed and a boot forward, both squared off and commanding, a gap between their heads',
-  'both raising open hands toward the sky as if calling down the storm, chests lifted, faces forward, a clear gap between their heads',
-  'one leaning forward with fists set on a rail or ledge glaring boldly ahead, the other standing tall beside them with arms crossed, heads clearly apart',
   'both striding forward toward the camera side by side with a wide gap between them, confident purposeful gait, arms swinging, heads clearly apart',
-  'one flinging an arm skyward in a rallying cry, the other with a fist pressed to the chest, both fierce and forward, heads clearly apart',
-  'both standing broad and still like carved warrior statues, arms crossed and jaws set, faces to the camera, a clear gap between them',
   'one gesturing grandly outward with an open hand presenting the scene, the other standing proud with hands clasped behind the back, heads apart',
-  'both mid-cheer with arms thrown up and mouths open in a shout of triumph, a clear gap between their heads',
-  'one arm raised and flexed in a triumphant strongman pose, the other with hands on hips and a fierce grin, heads kept apart',
-  'both bracing low with weight set and arms out as if against motion, eyes blazing forward, a clear gap between their heads',
   'one striking a confident contrapposto with a hand on the hip, the other mirrored on the opposite hip, both proud and forward, heads apart',
   'both throwing their heads back mid-laugh with hands on their own hips, joyful and open, a clear gap between their heads',
   'one with an arm extended pointing boldly off to the side, the other tracking the gesture with a firm confident stance, heads apart',
-  'both planted with legs apart and hands clasped in front at the waist like commanders at ease, chests out, a clear gap between them',
   'one leaning a shoulder back in a cocky half-turn to the camera, the other standing straight and proud, a clear gap between them',
-  'both standing tall with one arm raised overhead in a bold hail to the camera, feet planted wide, heads clearly apart',
-  'one pressing a fist into an open palm in front of the chest, the other with arms crossed high, both resolute and facing forward, a gap between their heads',
-  'both crouched in low athletic ready stances with hands braced on the knees, chins up and eyes locked to the camera, a clear gap between their heads',
-  'one with both arms raised wide and fists clenched in exultation, the other pumping a single fist, both triumphant and forward, heads apart',
 ];
 
 /**
@@ -358,6 +309,13 @@ export interface DualActionPools {
   dynamic: string[];
 }
 
+export interface DualPoolMix {
+  playful: number;
+  dynamic: number;
+  partnerShare: number;
+}
+export const DUAL_POOL_MIX_LEGACY: DualPoolMix = { playful: 0.15, dynamic: 0.4, partnerShare: 0.3 };
+
 export function pickDualAction(
   relationship: string | undefined,
   forcePool?: 'partner' | 'companion' | 'playful' | 'dynamic',
@@ -368,19 +326,23 @@ export function pickDualAction(
     partner: DUAL_ACTIONS_PARTNER,
     playful: DUAL_ACTIONS_PLAYFUL,
     dynamic: DUAL_ACTIONS_DYNAMIC,
-  }
+  },
+  /** Pool shares: playful, then dynamic, then partner at `partnerShare` of the classic slice for a partner, else
+   *  companion. Legacy 15% / 40% / 30%; the looks path passes its own (nightlyLooksPath.ts). */
+  mix: DualPoolMix = DUAL_POOL_MIX_LEGACY,
+  rng: () => number = Math.random
 ): string {
-  const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
+  const pick = (arr: string[]) => arr[Math.floor(rng() * arr.length)];
   if (forcePool === 'playful') return pick(pools.playful);
   if (forcePool === 'partner') return pick(pools.partner);
   if (forcePool === 'companion') return pick(pools.companion);
   if (forcePool === 'dynamic') return pick(pools.dynamic);
 
-  const r = Math.random();
-  if (r < 0.15) return pick(pools.playful); // 15% fun/goofy
-  if (r < 0.55) return pick(pools.dynamic); // 40% hero-grade cinematic
-  // 45% CLASSIC slice (pruned of chores): partners get a 30/70 romantic/companion split.
+  const r = rng();
+  if (r < mix.playful) return pick(pools.playful); // fun/goofy
+  if (r < mix.playful + mix.dynamic) return pick(pools.dynamic); // hero-grade cinematic
+  // CLASSIC slice (pruned of chores): partners get a romantic/companion split at partnerShare.
   const isPartner = relationship === 'partner' || relationship === 'significant_other';
-  if (isPartner && Math.random() < 0.3) return pick(pools.partner);
+  if (isPartner && rng() < mix.partnerShare) return pick(pools.partner);
   return pick(pools.companion);
 }

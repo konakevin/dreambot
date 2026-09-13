@@ -57,7 +57,7 @@ function clampInboxBody(msg: string | null): string {
 }
 
 export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<string> {
-  const { supabase, supabaseUrl, workerToken, anthropicKey, userId, queueJobId } = args;
+  const { supabase, supabaseUrl, workerToken, anthropicKey, userId, queueJobId, payload } = args;
 
   // 1. Render in its own isolate via the worker-token branch of nightly-dreams.
   // Forward the queue job id so the render stamps stage breadcrumbs onto the
@@ -103,6 +103,14 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
   // touch a client screen, so this server emit is the ONLY signal for them.
   // (create/dlt/first_dream flow through completeQueueJob; nightly does not.)
   // Best-effort; captureServer never throws. dedupKey mirrors completeQueueJob.
+  // QA (2026-09-12, the parity loop): a job enqueued with payload.qa_silent renders EXACTLY like a user's
+  // nightly (same worker, same render, same finalize + bot message) but skips the analytics event and the
+  // dreamer notification. The cron enqueues payload {} so production is untouched.
+  if (payload && payload.qa_silent === true) {
+    console.log('[nightly] qa_silent job — skipping dream_created + notification');
+    return uploadId;
+  }
+
   try {
     const { data: up } = await supabase
       .from('uploads')

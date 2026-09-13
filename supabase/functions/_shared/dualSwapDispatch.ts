@@ -124,8 +124,17 @@ export async function dispatchDualFaceSwap(
     const authToken = useFly && flyToken ? flyToken : serviceRoleKey;
 
     const t0 = Date.now();
+    // BOUNDED CALL (2026-09-12): this fetch had no timeout. When the Fly machine hung under two concurrent swaps
+    // (health check failed, no "Done" line) the edge request sat until the gateway's 150 s idle cutoff and the
+    // dream was LOST — no log row, no upload. The engine already gets `deadlineMs` as its budget; the call now
+    // aborts shortly after that budget so a hung engine becomes a dual_swap_error → re-render / gender-safe solo.
+    const fetchBudgetMs = Math.max(
+      15_000,
+      Math.min(120_000, (deadlineMs ?? t0 + 120_000) - t0 + 5_000)
+    );
     const res = await fetch(endpoint, {
       method: 'POST',
+      signal: AbortSignal.timeout(fetchBudgetMs),
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${authToken}`,

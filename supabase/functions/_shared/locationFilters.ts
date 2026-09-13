@@ -27,41 +27,24 @@
  *  case-insensitive, trimmed; covers the 5 hidden picker entries plus
  *  common free-text variants we've seen in the field. */
 export const BANNED_LOCATION_NAMES = new Set<string>([
-  // The 5 cards hidden 2026-06-03
-  'sci-fi worlds',
+  // 2026-09-13 (Kevin: "i don't really see many whimsical, fantasy, or sci-fi renders, but i think i have all those
+  // locations saved"): the 19 imagined-world picker cards this list used to name (sci-fi worlds, high fantasy, fairy
+  // cottage, dragons keep, cyberpunk megacity, mars colony, …) were re-approved with real spot pools in August, yet
+  // this June safety net still stripped them from every user's place pool before the roll — ~24 of Kevin's 163
+  // saved places never rendered. Only the free-text / trademark junk that never became a picker card stays banned.
   'gothic realm',
-  'fairy cottage',
-  'high fantasy',
-  'princess garden castle',
-  // Other fantasy/sci-fi cards that exist in the DB unapproved — listed
-  // here as belt+suspenders in case is_approved gets flipped back.
   'cherry blossom temple',
-  'ancient elven city',
-  'floating sky islands',
-  'dragons keep',
   "dragon's keep",
   'pirate ship',
-  'rose garden palace',
   'rose palace',
   'hogwarts',
   'disneyland',
-  'cloud kingdom',
-  'crystal caverns',
-  'dwarven fortress',
-  'enchanted forest',
   'fairy tale kingdom',
-  'wizard academy',
   'cherry blossoms',
-  'mermaid lagoon',
   'sea world',
   'aquarium',
   'underwater city',
-  'underwater city atlantis',
   'atlantis',
-  'cyberpunk megacity',
-  'mars colony',
-  'space station',
-  'alien planet',
   'paris cafe',
   'parisian cafe',
   'cozy mountain cabin',
@@ -72,9 +55,9 @@ export const BANNED_LOCATION_NAMES = new Set<string>([
  *  with these biomes is refused at resolution time regardless of the
  *  is_approved flag. */
 export const BANNED_LOCATION_BIOMES = new Set<string>([
-  'fantasy_imagined',
-  'scifi_cosmic',
-  'aquatic_underwater', // underwater cities / mermaid lagoons / atlantis
+  // 2026-09-13: emptied — fantasy_imagined / scifi_cosmic / aquatic_underwater are live picker categories
+  // (high_fantasy, scifi_space, whimsical_fun, heroes_adventure) with seeded spot pools; refusing them at card
+  // resolution silently degraded those dreams to place-less renders.
 ]);
 
 /** Case-insensitive trimmed lookup against BANNED_LOCATION_NAMES. */

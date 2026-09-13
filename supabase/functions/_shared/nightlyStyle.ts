@@ -16,7 +16,20 @@
  */
 import { resolveModel, type NightlyModelPolicy, type PolicySurface } from './nightlyModelPolicy.ts';
 import { resolveLook, type LookApproval, type LookRow, type LookSurface } from './nightlyLooks.ts';
-import { resolveVibe, type ResolvedVibeChoice, type VibeRow } from './nightlyVibes.ts';
+import {
+  resolveVibe,
+  type ResolvedVibeChoice,
+  type VibeRow,
+  LOOKS_EXCLUDED_VIBE_VERSIONS,
+} from './nightlyVibes.ts';
+import {
+  COUPLE_EXCLUDED_VIBE_FAMILIES,
+  FLUX_COUPLE_EXCLUDED_VIBE_FAMILIES,
+} from './nightlyVibes.ts';
+
+/** The first couple re-render stays on the attempt-1 model (see forAttempt). `false` = every re-render moves to the
+ *  policy's fallback model (the r5-r20 behaviour). */
+export const RETRY_SAME_MODEL_FIRST = true;
 
 export type StyleSurface = 'couple' | 'solo' | 'scene';
 
@@ -135,7 +148,14 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
         recentVibeKeys: input.recentVibeKeys,
         recencyWindow: input.vibeRecency,
         forcedVibe: input.forcedVibe,
-        excludeFamilies: resolved.look.bannedVibes ?? [],
+        excludeFamilies: [
+          ...(resolved.look.bannedVibes ?? []),
+          ...(input.surface === 'couple' ? COUPLE_EXCLUDED_VIBE_FAMILIES : []),
+          ...(input.surface === 'couple' && /flux/i.test(pick.model)
+            ? FLUX_COUPLE_EXCLUDED_VIBE_FAMILIES
+            : []),
+        ],
+        excludeVersions: LOOKS_EXCLUDED_VIBE_VERSIONS,
         rng,
       })
     : null;
@@ -205,9 +225,19 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
   return {
     ...base,
     forAttempt(attempt: number): StylePick {
+      // 1.2.0 parity (parity loop, 2026-09-13): the FIRST re-render stays on the attempt-1 model with the same
+      // look — flux-1.1-pro fails its first dual swap ~1/3 of the time in production too, and 1.2.0 (policy in
+      // shadow) simply renders it again on flux, which is why its couples land on flux. Moving attempt 2 to the
+      // fallback model shipped almost every flux couple on gemini / grok (r15-r20: 14 of 21). The fallback model is
+      // now attempt 3 (the pipeline's last re-render) — the same ladder as 1.2.0 plus one last-resort model move.
+      if (attempt === 2 && RETRY_SAME_MODEL_FIRST && !input.forceModel) {
+        const p = pickFor(base.model, lookSurface, input.surface, `look_retry:${attempt}`);
+        p.stamps.unshift(`policy:${policySurface}:${attempt}:${short(base.model)}:same`);
+        return p;
+      }
       const next = resolveModel({
         surface: policySurface,
-        attempt: Math.max(2, attempt),
+        attempt: Math.max(2, RETRY_SAME_MODEL_FIRST ? attempt - 1 : attempt),
         policy: input.policy,
         bans: input.bans ?? null,
         forceModel: input.forceModel ?? null,
@@ -215,7 +245,7 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
         rng,
       });
       const p = pickFor(next.model, lookSurface, input.surface, `look_retry:${attempt}`);
-      p.stamps.unshift(next.stamp);
+      p.stamps.unshift(next.stamp.replace(/^(policy:[a-z_]+:)\d+:/, `$1${attempt}:`));
       return p;
     },
     forRebuild(): StylePick {
@@ -229,6 +259,20 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
       });
       const p = pickFor(next.model, 'solo', 'solo', 'look_rebuild');
       p.stamps.unshift(next.stamp);
+      // Round 19 (2026-09-13, parity loop r18 #10): the policy's solo_rebuild model (flux-2-flex) approves NO solo
+      // look on the looks path, so the rebuild kept the couple's look on a model it was never graded on and shipped
+      // identity 0.02 (r6 #1: 0.09). When the rebuild model approves nothing, rebuild on the COUPLE's model instead
+      // (its solo approvals are the graded matrix); if even that approves nothing, the policy pick stands as before.
+      if (
+        next.model !== base.model &&
+        p.stamps.some((st) => st.startsWith('look_rebuild:no_look:'))
+      ) {
+        const onCouple = pickFor(base.model, 'solo', 'solo', 'look_rebuild');
+        if (!onCouple.stamps.some((st) => st.startsWith('look_rebuild:no_look:'))) {
+          onCouple.stamps.unshift(next.stamp, `look_rebuild:model_fallback:${short(base.model)}`);
+          return onCouple;
+        }
+      }
       return p;
     },
   };

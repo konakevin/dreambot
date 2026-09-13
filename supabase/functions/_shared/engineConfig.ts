@@ -30,6 +30,8 @@ export interface EngineConfig {
   // retries, ship-first-pass, ship-original on exhaustion). Live-tunable —
   // set 'off' to kill judge cost instantly.
   qualityGateMode: string;
+  /** mig 514: dual swap second-signal side check — off | shadow | enforce (wardrobeSides.ts). */
+  dualSideCheckMode: string;
   qualityGateMaxRetries: number;
   selfRefRegex: string | null;
   relationshipRegex: string | null;
@@ -127,6 +129,8 @@ export interface EngineConfig {
   /** Nightly LOOKS path (mig 502, NIGHTLY_LOOKS_REFACTOR_PLAN.md): 'off' = legacy medium chain, 'shadow' =
    *  legacy renders + `style_shadow:` stamps, 'on' = the style contract decides model + look. */
   nightlyLooksMode: NightlyLooksMode;
+  /** mig 515: users rendered on the looks path regardless of the mode (staged rollout / QA loop). */
+  nightlyLooksAllowlist: string[];
   /** Per-user recency window over look keys for the looks roll (default 7). */
   nightlyLookRecency: number;
   /** Looks path: chance (0-100) that a render draws its look from the LEGACY family (the 1.2.0 mediums) before the
@@ -155,6 +159,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   photoPreprocessQuality: 0.8,
   nightlyMaxJobs: 5000,
   qualityGateMode: 'enforce',
+  dualSideCheckMode: 'shadow',
   qualityGateMaxRetries: 2,
   selfRefRegex: null,
   relationshipRegex: null,
@@ -200,6 +205,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   soloRebuildModel: 'black-forest-labs/flux-2-flex',
   modelPolicyMode: 'off',
   nightlyLooksMode: 'off',
+  nightlyLooksAllowlist: [],
   nightlyLookRecency: 7,
   nightlyLegacyLookPct: 35,
   couplePromptStyle: 'legacy',
@@ -243,6 +249,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     ),
     nightlyMaxJobs: Number(data.nightly_max_jobs ?? DEFAULT_ENGINE_CONFIG.nightlyMaxJobs),
     qualityGateMode: String(data.quality_gate_mode ?? DEFAULT_ENGINE_CONFIG.qualityGateMode),
+    dualSideCheckMode: String(data.dual_side_check_mode ?? DEFAULT_ENGINE_CONFIG.dualSideCheckMode),
     qualityGateMaxRetries: Number(
       data.quality_gate_max_retries ?? DEFAULT_ENGINE_CONFIG.qualityGateMaxRetries
     ),
@@ -329,6 +336,11 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
       data.nightly_looks_mode === 'on' || data.nightly_looks_mode === 'shadow'
         ? data.nightly_looks_mode
         : 'off',
+    nightlyLooksAllowlist: Array.isArray(data.nightly_looks_allowlist)
+      ? (data.nightly_looks_allowlist as unknown[]).filter(
+          (x): x is string => typeof x === 'string'
+        )
+      : [],
     nightlyLookRecency: Math.max(0, Math.floor(Number(data.nightly_look_recency ?? 7) || 7)),
     nightlyLegacyLookPct: Math.min(
       100,

@@ -9,6 +9,7 @@ import { HAIKU, SONNET } from './models.ts';
 import { sanitizeUserText } from './sanitizeUserText.ts';
 import { jitter } from './jitter.ts';
 import { RETRY_DELAYS_MS, RETRYABLE_STATUSES } from './llm.ts';
+import { buildWardrobeSidesPrompt, parseWardrobeSidesReply } from './wardrobeSides.ts';
 
 // Vision retries fewer times than the brief path (llm.ts, 4): the callers here
 // (cast description, dual-gender classification) degrade gracefully on failure,
@@ -420,3 +421,32 @@ export const VISION_PROMPTS = {
   castPet:
     'Describe this animal for an AI artist. Include: species, breed, coat color/pattern, fur texture (curly/straight/wiry/fluffy), eye color, ear shape, size, build, age (puppy/young/adult/senior), distinguishing features. 2-3 sentences.\n\nAfter the description, add a NEW LINE starting with "TRAITS:" followed by a single concise sentence listing the key physical traits: species, breed, coat color/pattern, size, and any distinguishing features. Example: "TRAITS: Medium golden retriever, wavy cream coat, brown eyes, floppy ears." Output ONLY the description and TRAITS line.',
 } as const;
+
+/**
+ * SECOND SIGNAL for the dual swap (2026-09-12, _shared/wardrobeSides.ts): which side wears Outfit A, the prompt's
+ * LEFT-locked wardrobe. Double-read agreement like classifyDualGenders; null when the two reads disagree or either
+ * is unsure — the pipeline then treats the side check as unresolved (enforce: no dispatch).
+ */
+export async function classifyWardrobeSides(
+  imageInput: string,
+  outfitA: string,
+  outfitB: string,
+  replicateToken: string
+): Promise<{ aSide: 'left' | 'right' | null }> {
+  const prompt = buildWardrobeSidesPrompt(outfitA, outfitB);
+  const once = async () =>
+    parseWardrobeSidesReply(
+      (
+        await describeWithVision(
+          imageInput,
+          prompt,
+          replicateToken,
+          20,
+          RENDER_ANALYSIS_SYSTEM_PROMPT
+        )
+      ).trim()
+    );
+  const r1 = await once();
+  const r2 = await once();
+  return { aSide: r1 !== null && r1 === r2 ? r1 : null };
+}

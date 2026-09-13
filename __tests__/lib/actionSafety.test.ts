@@ -96,7 +96,7 @@ describe('validateActionBeat — every swap-breaking class is rejected with a re
       'passive',
     ],
     [
-      'one stirs the cauldron with a long spoon while lifting the iron lid and steadying the pot, the other a step apart pours a green potion from a tall bottle into small jars on the crooked shelf under the herbs and candles by the door of the old cottage near the moonlit gate while a black cat watches from the sill above the basin',
+      'one stirs the cauldron with a long spoon while lifting the iron lid and steadying the pot, the other a step apart pours a green potion from a tall bottle into small jars on the crooked shelf under the herbs and candles by the door of the old cottage near the moonlit gate while a black cat watches from the sill above the basin and a lantern swings from the rail as leaves scatter across the wet stone path under the moon',
       2,
       'too_long',
     ],

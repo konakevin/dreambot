@@ -24,6 +24,13 @@ export interface NightlyQaFlags {
   force_looks_path: boolean;
   /** QA: turn the SET DRESSER + COSTUME DESIGNER brief OFF on the looks path (it is on by default) for an A/B. */
   force_plain_brief: boolean;
+  /** Looks path swap geometry A/B (2026-09-12): 'natural' lets the couple touch / move (strict re-render on a
+   *  failed split); 'strict' pins the legacy geometry. Null = the path's default. */
+  force_swap_geometry: 'strict' | 'natural' | null;
+  /** Looks path FRAMING axis (2026-09-12, pools/nightly_framings.ts): pin a recipe by key for a matrix. */
+  force_framing: string | null;
+  /** 1.2.0-parity photo-prior line on the looks path (see CharacterSlotPipelineInput.photoPriors). */
+  force_photo_priors: boolean;
   force_moods: MoodAxes | undefined;
   /** A string forces that exact beat, `true` forces the roll on. */
   force_awe_beat: string | boolean | undefined;
@@ -147,6 +154,12 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
     force_look: (body.force_look as string) || undefined,
     force_looks_path: body.force_looks_path === true,
     force_plain_brief: body.force_plain_brief === true,
+    force_swap_geometry:
+      body.force_swap_geometry === 'natural' || body.force_swap_geometry === 'strict'
+        ? body.force_swap_geometry
+        : null,
+    force_framing: typeof body.force_framing === 'string' ? body.force_framing : null,
+    force_photo_priors: body.force_photo_priors === true,
     force_moods:
       body.force_moods && typeof body.force_moods === 'object'
         ? (body.force_moods as MoodAxes)

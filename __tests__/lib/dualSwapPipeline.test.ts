@@ -19,6 +19,17 @@ const makeDeps = (over: Partial<Record<string, jest.Mock>> = {}) => ({
   selfSource: 'self.jpg',
 });
 
+it('stamps the base render of every attempt (dual_target:<attempt>:<url>) for forensics', async () => {
+  let n = 0;
+  const dispatchDual = jest.fn(async () =>
+    n++ === 0 ? { ok: false, reason: 'no_split', faces: 1 } : { ok: true, url: 'swapped.png' }
+  );
+  const deps = makeDeps({ dispatchDual, rerender: async () => ({ url: 'render-2.png' }) });
+  const r = await genderSafeDualSwap('render-1.png', deps, { strict: false });
+  expect(r.reasons).toContain('dual_target:0:render-1.png');
+  expect(r.reasons).toContain('dual_target:1:render-2.png');
+});
+
 it('HAPPY PATH — engine returns a swapped url → dual, no re-render', async () => {
   const deps = makeDeps();
   const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
@@ -423,5 +434,220 @@ describe('proactive Haiku gender routing (#2)', () => {
     expect(r.outcome).toBe('dual');
     expect(dispatchDual).toHaveBeenCalledWith('render.jpg');
     expect(r.reasons.some((x) => x.startsWith('gender_haiku'))).toBe(false);
+  });
+});
+
+describe('side check — a dual needs TWO agreeing reads (2026-09-12, wardrobeSides.ts)', () => {
+  const read = (left: 'male' | 'female' | null, right: 'male' | 'female' | null) =>
+    jest.fn().mockResolvedValue({ left, right });
+  const MF = { left: 'male', right: 'female' } as const;
+  it('off / unset: byte-identical — the gender read alone becomes the override, no side stamps', async () => {
+    const deps = {
+      ...makeDeps(),
+      confirmGenders: read('male', 'female'),
+      confirmSides: read('female', 'male'),
+    };
+    const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
+    expect(r.outcome).toBe('dual');
+    expect(deps.dispatchDual).toHaveBeenCalledWith('render.jpg', MF);
+    expect(deps.confirmSides).not.toHaveBeenCalled();
+    expect(r.reasons.some((x) => /^side_|gender_side/.test(x))).toBe(false);
+  });
+  it('shadow: a conflict is stamped and the swap STILL dispatches on the gender read', async () => {
+    const deps = {
+      ...makeDeps(),
+      confirmGenders: read('male', 'female'),
+      confirmSides: read('female', 'male'),
+    };
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      sideCheckMode: 'shadow',
+    });
+    expect(r.outcome).toBe('dual');
+    expect(deps.dispatchDual).toHaveBeenCalledWith('render.jpg', MF);
+    expect(r.reasons).toContain('side_haiku:female/male');
+    expect(r.reasons).toContain('gender_side_conflict:g=male/female,s=female/male');
+    expect(r.reasons.some((x) => x.startsWith('side_check_reject'))).toBe(false);
+  });
+  it('enforce + agree: dispatches with the override and stamps gender_side_agree', async () => {
+    const deps = {
+      ...makeDeps(),
+      confirmGenders: read('male', 'female'),
+      confirmSides: read('male', 'female'),
+    };
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      sideCheckMode: 'enforce',
+    });
+    expect(r.outcome).toBe('dual');
+    expect(deps.dispatchDual).toHaveBeenCalledWith('render.jpg', MF);
+    expect(r.reasons).toContain('gender_side_agree');
+  });
+  it('enforce + conflict on the first render → NO dispatch, re-render; agree on the second → dual on the re-render', async () => {
+    const confirmSides = jest
+      .fn()
+      .mockResolvedValueOnce({ left: 'female', right: 'male' })
+      .mockResolvedValueOnce({ left: 'male', right: 'female' });
+    const deps = { ...makeDeps(), confirmGenders: read('male', 'female'), confirmSides };
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      sideCheckMode: 'enforce',
+    });
+    expect(r.outcome).toBe('dual');
+    expect(deps.rerender).toHaveBeenCalledTimes(1);
+    expect(deps.dispatchDual).toHaveBeenCalledTimes(1);
+    expect(deps.dispatchDual).toHaveBeenCalledWith('RERENDER.jpg', MF);
+    expect(r.reasons).toContain('side_check_reject:conflict');
+    expect(r.reasons).toContain('gender_side_agree');
+  });
+  it('enforce + conflict on every render → never dispatched → gender-safe single (non-strict)', async () => {
+    const deps = {
+      ...makeDeps(),
+      confirmGenders: read('male', 'female'),
+      confirmSides: read('female', 'male'),
+    };
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      sideCheckMode: 'enforce',
+      maxRerenders: 2,
+    });
+    expect(r.outcome).toBe('single');
+    expect(deps.dispatchDual).not.toHaveBeenCalled();
+    expect(deps.rerender).toHaveBeenCalledTimes(2);
+    expect(r.reasons.filter((x) => x === 'side_check_reject:conflict').length).toBe(3);
+  });
+  it('enforce + an unresolved wardrobe read → reject (a lone gender read never routes a dual)', async () => {
+    const deps = {
+      ...makeDeps(),
+      confirmGenders: read('male', 'female'),
+      confirmSides: jest.fn().mockResolvedValue(null),
+    };
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      sideCheckMode: 'enforce',
+      maxRerenders: 0,
+    });
+    expect(r.outcome).toBe('single');
+    expect(deps.dispatchDual).not.toHaveBeenCalled();
+    expect(r.reasons).toContain('side_haiku_unresolved');
+    expect(r.reasons).toContain('side_check_reject:unresolved');
+  });
+  it('enforce + an unresolved gender read → reject even with a confident wardrobe read (no engine-only routing)', async () => {
+    const deps = {
+      ...makeDeps(),
+      confirmGenders: read(null, null),
+      confirmSides: read('male', 'female'),
+    };
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      sideCheckMode: 'enforce',
+      maxRerenders: 0,
+    });
+    expect(r.outcome).toBe('single');
+    expect(deps.dispatchDual).not.toHaveBeenCalled();
+    expect(r.reasons).toContain('side_check_reject:unresolved');
+  });
+  it('enforce without a confirmSides dep (no wardrobes) → single read kept, stamped side_check:none', async () => {
+    const deps = { ...makeDeps(), confirmGenders: read('male', 'female') };
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      sideCheckMode: 'enforce',
+    });
+    expect(r.outcome).toBe('dual');
+    expect(deps.dispatchDual).toHaveBeenCalledWith('render.jpg', MF);
+    expect(r.reasons).toContain('side_check:none');
+  });
+  it('enforce + the probe throws → stamped, treated as unresolved → reject', async () => {
+    const deps = {
+      ...makeDeps(),
+      confirmGenders: read('male', 'female'),
+      confirmSides: jest.fn().mockRejectedValue(new Error('vision down')),
+    };
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      sideCheckMode: 'enforce',
+      maxRerenders: 0,
+    });
+    expect(r.outcome).toBe('single');
+    expect(r.reasons).toContain('side_haiku_error');
+    expect(r.reasons).toContain('side_check_reject:unresolved');
+  });
+});
+
+describe('gender read face count (2026-09-12, the mural cross)', () => {
+  it('a read that counted 3 faces is NOT an override — the engine routes on its own detection (no override arg)', async () => {
+    const deps = {
+      ...makeDeps(),
+      confirmGenders: jest.fn().mockResolvedValue({ left: 'female', right: 'male', faceCount: 3 }),
+    };
+    const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
+    expect(r.outcome).toBe('dual');
+    expect(deps.dispatchDual).toHaveBeenCalledWith('render.jpg');
+    expect(r.reasons).toContain('gender_haiku_facecount:3');
+    expect(r.reasons).toContain('gender_haiku_unresolved');
+    expect(r.reasons.some((x) => x.startsWith('gender_haiku:'))).toBe(false);
+  });
+  it('faceCount 2 or absent keeps the override exactly as before', async () => {
+    for (const faceCount of [2, null, undefined]) {
+      const deps = {
+        ...makeDeps(),
+        confirmGenders: jest.fn().mockResolvedValue({ left: 'male', right: 'female', faceCount }),
+      };
+      const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
+      expect(deps.dispatchDual).toHaveBeenCalledWith('render.jpg', {
+        left: 'male',
+        right: 'female',
+      });
+      expect(r.reasons).toContain('gender_haiku:male/female');
+    }
+  });
+  it('enforce: a 3-face read is unresolved → rejected even when the wardrobe read is confident', async () => {
+    const deps = {
+      ...makeDeps(),
+      confirmGenders: jest.fn().mockResolvedValue({ left: 'female', right: 'male', faceCount: 3 }),
+      confirmSides: jest.fn().mockResolvedValue({ left: 'female', right: 'male' }),
+    };
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      sideCheckMode: 'enforce',
+      maxRerenders: 0,
+    });
+    expect(r.outcome).toBe('single');
+    expect(deps.dispatchDual).not.toHaveBeenCalled();
+    expect(r.reasons).toContain('side_check_reject:unresolved');
+  });
+});
+
+describe('identityMinSim override (parity loop round 7)', () => {
+  it('a 0.45 dual re-renders under a 0.5 bar and ships when the re-render clears it; without the override it ships as-is', async () => {
+    const dispatchDual = jest
+      .fn()
+      .mockResolvedValueOnce({
+        swappedUrl: 'WEAK.jpg',
+        faceCount: 2,
+        identity: { left: 0.45, right: 0.49, ms: 1 },
+      })
+      .mockResolvedValueOnce({
+        swappedUrl: 'GOOD.jpg',
+        faceCount: 2,
+        identity: { left: 0.7, right: 0.72, ms: 1 },
+      });
+    const deps = makeDeps({ dispatchDual });
+    const r = await genderSafeDualSwap('render.jpg', deps, { strict: false, identityMinSim: 0.5 });
+    expect(r.outcome).toBe('dual');
+    expect(r.url).toBe('GOOD.jpg');
+    expect(deps.rerender).toHaveBeenCalledTimes(1);
+    expect(r.reasons).toContain('identity_below_threshold:0.45<0.5');
+    // default (no env in jest → shadow, null threshold): the weak swap ships first try
+    const deps2 = makeDeps({
+      dispatchDual: jest.fn().mockResolvedValue({
+        swappedUrl: 'WEAK.jpg',
+        faceCount: 2,
+        identity: { left: 0.45, right: 0.49, ms: 1 },
+      }),
+    });
+    const r2 = await genderSafeDualSwap('render.jpg', deps2, { strict: false });
+    expect(r2.url).toBe('WEAK.jpg');
+    expect(deps2.rerender).not.toHaveBeenCalled();
   });
 });

@@ -1,5 +1,5 @@
 /** The vibe roll (NIGHTLY_VIBES_AUDIT.md §9): family-first over versions, recency by family, force, floor. */
-import { resolveVibe, versionTag } from '@engine/nightlyVibes';
+import { resolveVibe, versionTag, LOOKS_EXCLUDED_VIBE_VERSIONS } from '@engine/nightlyVibes';
 import type { VibeRow } from '@engine/nightlyVibes';
 import { buildStyleContract } from '@engine/nightlyStyle';
 import type { NightlyModelPolicy } from '@engine/nightlyModelPolicy';
@@ -76,6 +76,32 @@ describe('resolveVibe', () => {
     const soft = resolveVibe({ vibes: POOL, forcedVibe: 'cozy__soft' })!;
     expect(soft.position).toBe('after_scene');
   });
+  it('excludeVersions drops those versions from the roll (subtle = the fragment-less route) and stamps it; a force still wins', () => {
+    const rng = seq(0.01, 0.99);
+    const r = resolveVibe({ vibes: POOL, excludeVersions: ['subtle'], rng });
+    expect(r).not.toBeNull();
+    expect(r!.version).not.toBe('subtle');
+    expect(r!.fragment).toBeTruthy();
+    expect(r!.stamps).toContain('vibe_version_bans:subtle');
+    const many = new Set<string>();
+    for (let i = 0; i < 40; i++) {
+      const x = resolveVibe({
+        vibes: POOL,
+        excludeVersions: ['subtle'],
+        rng: seq(i / 40, ((i * 7) % 40) / 40),
+      });
+      if (x) many.add(x.version);
+    }
+    expect(many.has('subtle')).toBe(false);
+    const forced = resolveVibe({
+      vibes: POOL,
+      excludeVersions: ['subtle'],
+      forcedVibe: POOL.find((v) => v.key.endsWith('__subtle'))!.key,
+      rng,
+    });
+    expect(forced!.version).toBe('subtle');
+  });
+
   it('force reaches any active row, pool or not; an unknown key falls to the roll with a stamp', () => {
     const base = resolveVibe({ vibes: POOL, forcedVibe: 'cozy', rng: seq(0.01) })!;
     expect(base.vibe.key).toBe('cozy');
@@ -153,6 +179,10 @@ describe('per-look banned vibe families', () => {
     expect(forced.vibe.key).toBe('cozy__bold');
     expect(resolveVibe({ vibes: POOL, excludeFamilies: ['cozy', 'aurora', 'festive'] })).toBeNull();
   });
+  it('round 20: the contract excludes the subtle versions from the looks-path roll and stamps it', () => {
+    expect(LOOKS_EXCLUDED_VIBE_VERSIONS).toEqual(['subtle']);
+  });
+
   it("the contract passes the rolled look's banned vibes to the vibe roll", () => {
     const PRO = 'black-forest-labs/flux-1.1-pro';
     const policy: NightlyModelPolicy = {

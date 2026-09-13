@@ -109,7 +109,6 @@ export const CANDID_ACTIONS: string[] = [
   'walking away then looking back mid-step, one hand in pocket, inviting smile',
   'standing with arms at sides, head tilted slightly, genuine smile and open posture',
   'leaning forward with forearms resting on a railing, relaxed shoulders, calm expression',
-  'standing with one hand adjusting their cuff, the other relaxed, confident demeanor',
   'sitting with legs crossed, hands resting in lap, turned slightly toward the camera smiling',
   'standing in mid-stride, arms swinging naturally, candid laugh captured while moving forward',
   'leaning one shoulder against a surface, hands in pockets, thoughtful gaze toward the camera',
@@ -129,7 +128,6 @@ export const CANDID_ACTIONS: string[] = [
   'standing with both hands running through hair, elbows out, carefree joyful expression',
   'turning while standing with arms beginning to cross, caught mid-motion with a smile',
   'leaning to one side with hand resting on a surface, other arm hanging free, easy grin',
-  'standing with one hand in pocket, other adjusting sleeve, looking slightly off-camera smiling',
   'sitting on edge of a surface with both feet on ground, hands on knees, forward lean',
   'standing with arms hanging naturally, mid-laugh with head tilted back slightly',
   'walking toward camera with one hand brushing hair back, confident stride and smile',
@@ -140,7 +138,6 @@ export const CANDID_ACTIONS: string[] = [
   'walking with thumbs in pockets, shoulders loose, captured looking toward the camera smiling',
   'standing with one foot resting on a low surface, arms crossed gently, calm look',
   'sitting upright with hands resting on either side, face turned three-quarters with a smile',
-  'standing with one hand adjusting collar, other resting at waist, confident relaxed energy',
   'leaning casually with one elbow propped on a surface, other hand in pocket, genuine smile',
   'Standing with weight on one hip, hand resting in pocket, slight smile',
   'Walking slowly forward with both hands tucked into pockets, relaxed shoulders',
@@ -148,14 +145,12 @@ export const CANDID_ACTIONS: string[] = [
   'Mid-laugh with one hand brushing hair back, head tilted slightly',
   'Turning to glance back over shoulder, one hand at side, gentle expression',
   'Standing with thumbs hooked in pockets, chin slightly down, easy smile',
-  'Adjusting sleeve with one hand while standing casually, weight shifted',
   'Sitting with one ankle crossed over knee, arm draped along surface edge',
   'Walking with hand running through hair, other arm swinging naturally at side',
   'Leaning sideways against surface, one hand in pocket, looking toward camera',
   'Standing with arms crossed loosely at waist, head turned in candid moment',
   'Mid-turn with hand sliding into pocket, relaxed shoulders, natural movement',
   'Sitting forward with elbows on knees, hands loosely clasped, attentive expression',
-  'Standing with one hand adjusting collar, other hand resting at side casually',
   'Walking toward camera with slight smile, hands both in pockets, confident stride',
   'Leaning with shoulder against surface, one hand through hair, looking away',
   'Standing with hand resting on hip, other arm relaxed, weight on one leg',
@@ -167,11 +162,16 @@ export const CANDID_ACTIONS: string[] = [
   'Standing with fingers hooked in belt loops, shoulders relaxed, subtle smile',
   'Mid-stride turning back with hand lifting toward hair, natural caught moment',
   'Sitting sideways with one arm along surface back, looking over shoulder casually',
-  'Standing with one hand adjusting watch, other at side, moment of distraction',
   'Walking forward laughing with one hand coming out of pocket, genuine joy',
   'Leaning with back against surface, ankles crossed, both hands in pockets',
   'Standing in three-quarter turn, hand brushing through hair, relaxed authentic moment',
   'Sitting with legs stretched out, one hand on thigh, easy comfortable posture',
+  'standing with one hand adjusting their cuff, the other relaxed, confident demeanor',
+  'standing with one hand in pocket, other adjusting sleeve, looking slightly off-camera smiling',
+  'standing with one hand adjusting collar, other resting at waist, confident relaxed energy',
+  'Adjusting sleeve with one hand while standing casually, weight shifted',
+  'Standing with one hand adjusting collar, other hand resting at side casually',
+  'Standing with one hand adjusting watch, other at side, moment of distraction',
 ];
 
 export const PORTRAIT_ACTIONS: string[] = [
@@ -211,7 +211,6 @@ export const PORTRAIT_ACTIONS: string[] = [
   'standing with weight on back foot, front toe pointed, graceful smile',
   'holding small flower or leaf out at chest level, gentle contemplative smile',
   'sitting cross-legged with hands pressed together in front, peaceful expression',
-  'one hand adjusting collar, other relaxed at side, polished smile',
   'leaning against doorframe with one shoulder, arms loosely crossed, inviting smile',
   'sitting on edge with both hands planted behind for support, carefree smile',
   'standing with one hand on lower back stretch, content relieved smile',
@@ -320,13 +319,11 @@ export const PORTRAIT_ACTIONS: string[] = [
   'leaning against a surface with arms crossed loosely, weight on one leg, face toward the camera',
   'sitting upright with hands resting gently on the knee, shoulders back, eyes engaging the camera warmly',
   'standing with both hands clasped low in front, weight shifted to one leg, smiling softly',
-  'positioned with one hand adjusting a collar, the other relaxed at the side, expression confident',
   'leaning sideways against a surface with one hand resting near the waist, gentle smile showing',
   'standing with arms crossed softly at the waist, head tilted slightly, warm inviting expression',
   'sitting on a surface with one hand on the edge, the other in lap, face forward',
   'standing with one hand lightly touching the hair, the other at the hip, relaxed posture',
   'leaning back against a surface with hands resting on either side, shoulders relaxed and smiling',
-  'standing with one hand adjusting a cuff, weight on one leg, confident friendly expression',
   'positioned with both hands resting at the waist, torso turned slightly, face toward the camera',
   'sitting with one arm resting along a surface behind, the other in lap, warm smile',
   'standing with one hand at the collarbone, the other hanging naturally, chin slightly raised',
@@ -336,7 +333,6 @@ export const PORTRAIT_ACTIONS: string[] = [
   'standing with one hand smoothing hair back, the other relaxed at the side, confident expression',
   'positioned with one hand resting on a railing, the other at the hip, warm demeanor',
   'leaning against a surface with one hand near the shoulder, the other at the side, smiling',
-  'standing with both hands adjusting a lapel, weight shifted to one leg, friendly expression',
   'sitting with one hand resting on a thigh, the other beside, shoulders back and smiling',
   'standing with arms loosely crossed below the chest, head straight, eyes warm and inviting',
   'leaning with one shoulder against a surface, both hands relaxed low, gentle confident smile',
@@ -347,17 +343,21 @@ export const PORTRAIT_ACTIONS: string[] = [
   'leaning against a low wall with one hand on the hip, the other hanging, confident look',
   'standing with both hands resting lightly at the sides, shoulders relaxed, warm friendly expression',
   'sitting sideways on a surface with torso turned toward the camera, hands in lap, smiling',
-  'standing with one hand adjusting a neckline, the other at the side, gentle expression',
   'positioned with one hand resting on a surface beside, the other at the waist, engaging',
   'leaning with one hand on a railing, the other touching the hair lightly, warm smile',
   'standing with arms crossed gently at the ribs, weight shifted, confident inviting expression',
   'sitting with one hand draped over a knee, the other resting beside, relaxed and smiling',
   'standing with one hand at the side of the neck, the other at the hip, poised',
   'leaning against a surface with both hands resting on it beside the body, warm demeanor',
-  'standing with one hand adjusting a watch or bracelet, the other relaxed, friendly expression',
   'positioned with one hand resting on the opposite elbow low, the other hanging, gentle smile',
   'sitting on a surface edge with hands clasped together in lap, shoulders back, warm gaze',
   'standing with one hand lightly touching the collarbone, the other at the waist, confident smile',
+  'one hand adjusting collar, other relaxed at side, polished smile',
+  'positioned with one hand adjusting a collar, the other relaxed at the side, expression confident',
+  'standing with one hand adjusting a cuff, weight on one leg, confident friendly expression',
+  'standing with both hands adjusting a lapel, weight shifted to one leg, friendly expression',
+  'standing with one hand adjusting a neckline, the other at the side, gentle expression',
+  'standing with one hand adjusting a watch or bracelet, the other relaxed, friendly expression',
 ];
 
 // DYNAMIC pool — cinematic, powerful, energetic SOLO stances for hero-grade
@@ -367,36 +367,18 @@ export const PORTRAIT_ACTIONS: string[] = [
 // the moment. This is the pool that kills the "posed for a costume photo" look.
 // (2026-08-25, Kevin)
 export const DYNAMIC_ACTIONS: string[] = [
-  'standing in a wide, grounded power stance with arms crossed and chin raised, squared to the camera, radiating quiet command',
   'one boot planted up on a rock with a forearm resting across the knee, leaning toward the camera with an easy confident grin',
-  'arms flung wide in triumph, chin lifted in a mid-shout of victory, face toward the camera',
   'windswept and leaning into a strong gust, cloak and hair streaming to one side, jaw set and eyes forward',
-  'standing tall with fists loosely clenched at the sides and shoulders squared, chest out, owning the frame',
-  'a single fist raised high in triumph, the other hand on the hip, fierce grin to the camera',
   'mid-turn toward the camera as if just called, weight on the back foot, coat swinging',
   'arms spread wide and open as if taking in a vast view, chest lifted, face to the camera',
-  'one hand raised in a bold hail to the camera, feet planted wide, commanding presence',
   'standing with weight cocked to one hip and a confident half-smirk, thumbs hooked in the belt',
-  'both arms flexed in a triumphant strongman pose with a broad grin to the camera',
-  'flinging an arm skyward in a rallying cry, chest out, fierce and forward',
-  'crouched in a low athletic ready stance with a hand braced on the knee, chin up and eyes locked to the camera',
-  'leaning forward with fists set on a ledge, glaring boldly ahead at the camera',
-  'arms folded high across the chest with a slight swagger, jaw set, unshakeable',
   'one arm thrown wide presenting the scene with a showman flourish, proud stance',
-  'standing broad and still like a carved hero, arms crossed and gaze steady to the camera',
-  'raising open hands toward the sky as if calling down the storm, chest lifted, face forward',
   'hands on hips with elbows out and boots planted wide, a triumphant grin to the camera',
   'mid-laugh with chin up and hands on the hips, open and joyful and radiant, face toward the camera',
   'striding forward toward the camera with a confident purposeful gait, arms swinging',
-  'pressing a fist into an open palm at the chest, resolute and squared to the camera',
-  'a hand pressed to the chest and the other arm sweeping out in an inspired heroic flourish',
-  'weight low and knees bent bracing as if against motion, arms out, eyes blazing forward',
   'chin lifted and arms crossed, a slow confident smile spreading, utterly self-assured',
-  'one fist raised to the sky and the other planted on the hip, a champion victory stance',
   'leaning a shoulder back in a cocky half-turn to the camera, hands loose and ready',
-  'arms raised wide and triumphant with fists clenched, head high in exultation',
   'standing tall at the edge of a height with the wind pulling at the clothes, arms folded, gaze to the camera',
-  'one hand raised palm-out in a bold command to the camera, feet set wide, unflinching',
 ];
 
 export interface SingleActionPools {
@@ -404,6 +386,12 @@ export interface SingleActionPools {
   portrait: string[];
   dynamic: string[];
 }
+
+export interface SinglePoolMix {
+  dynamic: number;
+  portrait: number;
+}
+export const SINGLE_POOL_MIX_LEGACY: SinglePoolMix = { dynamic: 0.4, portrait: 0.3 };
 
 export function pickSingleAction(
   forcePool?: 'portrait' | 'candid' | 'dynamic',
@@ -415,15 +403,19 @@ export function pickSingleAction(
     candid: CANDID_ACTIONS,
     portrait: PORTRAIT_ACTIONS,
     dynamic: DYNAMIC_ACTIONS,
-  }
+  },
+  /** Pool shares (remainder = candid). Legacy 40/30/30; the looks path passes its own (nightlyLooksPath.ts). */
+  mix: SinglePoolMix = SINGLE_POOL_MIX_LEGACY,
+  rng: () => number = Math.random
 ): SingleAction {
-  const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
+  const pick = (arr: string[]) => arr[Math.floor(rng() * arr.length)];
   if (forcePool === 'dynamic') return { pose: pick(pools.dynamic), needsEpicBackdrop: true };
   if (forcePool === 'portrait') return { pose: pick(pools.portrait), needsEpicBackdrop: true };
   if (forcePool === 'candid') return { pose: pick(pools.candid), needsEpicBackdrop: false };
 
-  const r = Math.random();
-  if (r < 0.4) return { pose: pick(pools.dynamic), needsEpicBackdrop: true }; // 40% hero-grade
-  if (r < 0.7) return { pose: pick(pools.portrait), needsEpicBackdrop: true }; // 30% portrait
-  return { pose: pick(pools.candid), needsEpicBackdrop: false }; // 30% candid (pruned of chores)
+  const r = rng();
+  if (r < mix.dynamic) return { pose: pick(pools.dynamic), needsEpicBackdrop: true }; // hero-grade
+  if (r < mix.dynamic + mix.portrait)
+    return { pose: pick(pools.portrait), needsEpicBackdrop: true }; // portrait
+  return { pose: pick(pools.candid), needsEpicBackdrop: false }; // candid (pruned of chores)
 }

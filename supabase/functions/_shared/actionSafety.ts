@@ -99,11 +99,21 @@ export function normalizeActionBeat(raw: string): string {
  * Validate one (already normalized) action beat against the swap-safe envelope.
  * `castCount` 2 adds the dual proximity + standing rules.
  */
-export function validateActionBeat(beat: string, castCount: 1 | 2): ActionBeatVerdict {
+export function validateActionBeat(
+  beat: string,
+  castCount: 1 | 2,
+  /** 'natural' (looks path, 2026-09-12): the couple may touch / stand close — the PROXIMITY rule is lifted and
+   *  nothing else (a kiss, cheek to cheek, faces, direction, gaze, pronouns and above-the-head energy stay
+   *  banned in both modes). The dual re-render falls back to the strict geometry, so a natural beat that
+   *  breaks the split costs one retry. Default 'strict' = byte-identical to before. */
+  geometry: 'strict' | 'natural' = 'strict'
+): ActionBeatVerdict {
   const b = (beat || '').trim();
   // Couple beats carry one clause per person + the gap → wider caps (44 words / 320 chars).
   // Stance-driven couple beats (dualStances.ts) legitimately run 40-50 words → 56 words / 400 chars.
-  const maxChars = castCount === 2 ? 400 : 220;
+  // Parity loop round 13 (2026-09-13): couple beats built around a rolled stance ran 57-70 words and were dropped
+  // to a pool pose (`too_long` was the top drop reason, 2 of 12 rolled couple beats) → 72 words / 520 chars.
+  const maxChars = castCount === 2 ? 520 : 220;
   if (b.length < 6 || b.length > maxChars || /\n/.test(b)) return { ok: false, reason: 'length' };
   if (UNSAFE_WORDS.test(b)) return { ok: false, reason: 'unsafe_word' };
   if (TOO_ENERGETIC.test(b)) return { ok: false, reason: 'too_energetic' };
@@ -112,8 +122,8 @@ export function validateActionBeat(beat: string, castCount: 1 | 2): ActionBeatVe
   if (GAZE_WORDS.test(b)) return { ok: false, reason: 'gaze' };
   if (PASSIVE_WORDS.test(b)) return { ok: false, reason: 'passive' };
   // Solo beats are one clause; couple beats carry one clause per person + the gap → a wider cap.
-  if (b.split(/\s+/).length > (castCount === 2 ? 56 : 26)) return { ok: false, reason: 'too_long' };
-  if (castCount === 2) {
+  if (b.split(/\s+/).length > (castCount === 2 ? 72 : 26)) return { ok: false, reason: 'too_long' };
+  if (castCount === 2 && geometry !== 'natural') {
     const stripped = b.replace(DUAL_PROXIMITY_ALLOW, '');
     if (DUAL_PROXIMITY_VIOLATION.test(stripped) && !DUAL_PROXIMITY_MITIGATED.test(b)) {
       return { ok: false, reason: 'proximity' };

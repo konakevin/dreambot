@@ -45,6 +45,8 @@ export function resolveVibe(input: {
   forcedVibe?: string | null;
   /** Vibe FAMILIES excluded for this render (the rolled look's banned vibes). A force still wins. */
   excludeFamilies?: readonly string[];
+  /** Vibe VERSIONS (subtle / soft / bold / wild) excluded from the roll. A force still wins. */
+  excludeVersions?: readonly string[];
   rng?: () => number;
 }): ResolvedVibeChoice | null {
   const rng = input.rng ?? Math.random;
@@ -76,8 +78,12 @@ export function resolveVibe(input: {
   }
 
   const banned = new Set(input.excludeFamilies ?? []);
-  const pool = active.filter((v) => v.nightlyPool && !banned.has(v.family));
+  const bannedVersions = new Set(input.excludeVersions ?? []);
+  const pool = active.filter(
+    (v) => v.nightlyPool && !banned.has(v.family) && !bannedVersions.has(versionTag(v.key))
+  );
   if (banned.size > 0) stamps.push(`vibe_bans:${[...banned].join('+')}`);
+  if (bannedVersions.size > 0) stamps.push(`vibe_version_bans:${[...bannedVersions].join('+')}`);
   if (pool.length === 0) {
     stamps.push('vibe_pool_empty');
     return null;
@@ -95,3 +101,27 @@ export function resolveVibe(input: {
   stamps.push(`vibe_pool:${pool.length}/${families.length}`);
   return finish(vibe, 'roll');
 }
+
+/** Round 2 of the parity loop (2026-09-12): kawaii__subtle turned a grok soft-brush couple into bobblehead
+ *  caricatures. Kawaii is a chibi register by definition — kept for solos, never rolled for a couple
+ *  (nightlyStyle.ts passes it as an excluded family for the couple surface). */
+export const COUPLE_EXCLUDED_VIBE_FAMILIES: readonly string[] = ['kawaii'];
+
+/** Round 20 of the parity loop (staged 2026-09-13, OFF until its round): Kevin's strikes by vibe VERSION — subtle
+ *  6✗/73 (8%) vs soft 3/75 (4%) and bold 1/67 (1.5%). A subtle version carries NO flux fragment (mig 506), so the
+ *  render gets no light instruction and reads plain. Excluded from the looks-path roll; a force still reaches it. */
+/** Flux-1.1-pro COUPLE guard (parity drill arms F-I, 2026-09-13): a low-light vibe renders both faces small and
+ *  under-exposed, so the dual detector cannot split them — night vibes passed the first dual swap 1/10 (10%) on
+ *  flux couples vs 16/28 (57%) for brighter ones, while the SAME vibes swap 7/7 on flux SOLOS and 40/40 on
+ *  gemini / grok couples. So the ban is per (model x surface), not a vibe retirement: these families still roll on
+ *  every solo, every scene, and on gemini / grok couples. Watchlist (one failure or untested, kept in the pool):
+ *  macabre, noir, ominous, fog, candlelit. */
+export const FLUX_COUPLE_EXCLUDED_VIBE_FAMILIES: readonly string[] = [
+  'moonlit',
+  'starlit',
+  'nightshade',
+  'stormlight',
+  'dark',
+];
+
+export const LOOKS_EXCLUDED_VIBE_VERSIONS: readonly string[] = ['subtle'];

@@ -185,7 +185,7 @@ describe('SET DRESSER + COSTUME DESIGNER brief (richBrief) and knees-up couples'
     expect(rich).toContain('at least SIX concrete, specific things');
     expect(rich).toContain('wardrobe (18-28 words)');
     expect(rich).toContain('You are the COSTUME DESIGNER');
-    expect(rich).toContain('props (3-12 words)');
+    expect(rich).toContain('props (6-15 words)');
     expect(rich).toContain('no whimsical, novelty, oversized, comic'); // the safety rules survive
     expect(rich).not.toContain('scene_description (25-40 words)');
     const legacy = buildSlotBrief(base());

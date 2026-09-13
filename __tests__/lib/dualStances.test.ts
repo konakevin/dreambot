@@ -3,6 +3,7 @@ import {
   DUAL_STANCES,
   DUAL_STANCES_GEOMETRY,
   DUAL_STANCES_WIDE,
+  DUAL_STANCES_NATURAL,
   pickDualStance,
 } from '@engine/dualStances';
 import { validateActionBeat } from '@engine/actionSafety';
@@ -65,5 +66,20 @@ describe('DUAL_STANCES_WIDE (looks path, 2026-09-12)', () => {
     ).toBe(true);
     expect(DUAL_STANCES_WIDE.some((s) => s.seated)).toBe(true);
     expect(DUAL_STANCES_WIDE.some((s) => /nothing held/.test(s.text))).toBe(true);
+  });
+});
+
+describe('stance word cap (2026-09-12)', () => {
+  it('every stance in every set is ≤ 28 words, so Sonnet has room under the 56-word couple beat cap', () => {
+    for (const set of [
+      DUAL_STANCES,
+      DUAL_STANCES_GEOMETRY,
+      DUAL_STANCES_WIDE,
+      DUAL_STANCES_NATURAL,
+    ]) {
+      for (const s of set)
+        expect([s.key, s.text.split(/\s+/).length]).toEqual([s.key, expect.any(Number)]);
+      expect(set.filter((s) => s.text.split(/\s+/).length > 28).map((s) => s.key)).toEqual([]);
+    }
   });
 });

@@ -78,6 +78,19 @@ export interface DualSwapDeps {
   confirmGenders?: (target: string) => Promise<{
     left: 'male' | 'female' | null;
     right: 'male' | 'female' | null;
+    /** How many faces the reader counted. A read that did not count EXACTLY two is never an override:
+     *  with a third figure in frame (a mural, a statue, a background passer-by) "the person on the LEFT" is
+     *  not one of the two faces the engine will swap — Kevin's aquarelle couple crossed exactly this way
+     *  (2026-09-12: Haiku read "3 | woman | man", the leftmost "woman" being a painted mural). */
+    faceCount?: number | null;
+  } | null>;
+  /** SECOND SIGNAL (2026-09-12, _shared/wardrobeSides.ts): an INDEPENDENT read of the sides' genders derived from
+   *  which side wears the LEFT-locked outfit (mapped through the cast genders). Consulted per attempt when
+   *  opts.sideCheckMode is shadow / enforce; a dual dispatches under enforce ONLY when this agrees with
+   *  confirmGenders. Callers without wardrobes omit it (stamped side_check:none, single read kept). */
+  confirmSides?: (target: string) => Promise<{
+    left: 'male' | 'female' | null;
+    right: 'male' | 'female' | null;
   } | null>;
   log?: (msg: string) => void;
 }
@@ -169,6 +182,13 @@ export async function genderSafeDualSwap(
      *  audit 2026-09-03 L3). Defaults to the hardcoded IDENTITY_DEGRADE_FLOOR so
      *  existing callers/tests are unchanged. */
     identityDegradeFloor?: number;
+    /** engine_config.dual_side_check_mode (mig 514). 'off' (default) = byte-identical single-read routing;
+     *  'shadow' = both reads stamped, nothing changes; 'enforce' = no dispatch without two agreeing reads
+     *  (conflict / unresolved side read / unresolved gender read → re-render → degrade, never a possible cross). */
+    sideCheckMode?: 'off' | 'shadow' | 'enforce';
+    /** Per-call likeness bar for a delivered dual (parity loop round 7, the looks path passes 0.5): a swap whose
+     *  min per-face sim is below it takes the re-render ladder instead of shipping. Default = IDENTITY_MIN_SIM. */
+    identityMinSim?: number;
   }
 ): Promise<DualSwapOutcome> {
   const log = deps.log ?? (() => {});
@@ -209,6 +229,10 @@ export async function genderSafeDualSwap(
       }
     }
 
+    // Forensics (2026-09-13, the flux first-swap drill): the base render each attempt swapped against, so a failed
+    // attempt's image can be pulled and looked at (the swap result alone only says "one face ≈ 0").
+    reasons.push(`dual_target:${attempt}:${target}`);
+
     // #2 (2026-08-05, sunnysteph): PROACTIVELY read the rendered faces' genders
     // with Haiku and route the engine by it — the engine's in-process genderage
     // misreads painterly faces (oil-on-canvas, the exact mis-route we're fixing),
@@ -226,15 +250,61 @@ export async function genderSafeDualSwap(
     if (deps.confirmGenders) {
       try {
         const read = await deps.confirmGenders(target);
-        if (read && read.left && read.right && read.left !== read.right) {
+        const countOk = read == null || read.faceCount == null || read.faceCount === 2;
+        if (read && read.left && read.right && read.left !== read.right && countOk) {
           override = { left: read.left, right: read.right };
           reasons.push(`gender_haiku:${read.left}/${read.right}`);
+        } else if (read && !countOk) {
+          // The reader's LEFT / RIGHT are relative to ALL the figures it saw, not to the two faces the engine
+          // detects — so a confident-looking read over 3+ figures is unusable as a swap order.
+          reasons.push(`gender_haiku_facecount:${read.faceCount}`);
+          reasons.push('gender_haiku_unresolved');
         } else {
           reasons.push('gender_haiku_unresolved');
         }
       } catch (e) {
         reasons.push('gender_haiku_error');
         log(`gender pre-read failed: ${(e as Error).message}`);
+      }
+    }
+
+    // SECOND SIGNAL (2026-09-12, Kevin's aquarelle couple: his face on the woman, hers on the man). The gender
+    // read above ALONE routed the swap, and a confident misread of a sketchy painted couple became a guaranteed
+    // cross that the identity gate cannot see (each pasted face matches its own source) and the broken-only
+    // quality gate does not look for. A dual now needs two independent reads of "which side is the man" that
+    // AGREE: the gender read and the wardrobe read (which side wears the LEFT-locked outfit). shadow = stamp only;
+    // enforce = refuse to dispatch on conflict, an unresolved wardrobe read, or an unresolved gender read
+    // (→ re-render → degrade to solo). A caller without wardrobes keeps the single read and is stamped.
+    const sideMode = opts.sideCheckMode ?? 'off';
+    if (sideMode !== 'off') {
+      if (!deps.confirmSides) {
+        reasons.push('side_check:none');
+      } else {
+        let side: { left: 'male' | 'female' | null; right: 'male' | 'female' | null } | null = null;
+        try {
+          side = await deps.confirmSides(target);
+        } catch (e) {
+          reasons.push('side_haiku_error');
+          log(`side read failed: ${(e as Error).message}`);
+        }
+        const sideOk = !!(side && side.left && side.right && side.left !== side.right);
+        reasons.push(sideOk ? `side_haiku:${side!.left}/${side!.right}` : 'side_haiku_unresolved');
+        const verdict: 'agree' | 'conflict' | 'unresolved' =
+          override && sideOk
+            ? override.left === side!.left && override.right === side!.right
+              ? 'agree'
+              : 'conflict'
+            : 'unresolved';
+        if (verdict === 'agree') reasons.push('gender_side_agree');
+        else if (verdict === 'conflict')
+          reasons.push(
+            `gender_side_conflict:g=${override!.left}/${override!.right},s=${side!.left}/${side!.right}`
+          );
+        if (sideMode === 'enforce' && verdict !== 'agree') {
+          reasons.push(`side_check_reject:${verdict}`);
+          log(`side check ${verdict} — refusing to dispatch this render, re-rendering`);
+          continue;
+        }
       }
     }
 
@@ -273,7 +343,7 @@ export async function genderSafeDualSwap(
       // sub-threshold dual and ship it at exhaustion: a weak dual still beats
       // a degrade (never worse than pre-enforcement behavior). Fail-open when
       // the measurement itself is absent (infra error / shadow off).
-      const thr = identityThreshold();
+      const thr = opts.identityMinSim ?? identityThreshold();
       const min = res.identity ? minIdentity(res.identity) : null;
       if (thr !== null && min !== null && min < thr) {
         reasons.push(`identity_below_threshold:${min}<${thr}`);

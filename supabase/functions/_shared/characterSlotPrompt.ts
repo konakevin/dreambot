@@ -170,6 +170,45 @@ export interface CharacterSlotPipelineInput {
   /** FRAME ROLL (looks path, 2026-09-12): 'close' frames (waist up) tell the SET DRESSER to put the interest
    *  within arm's reach so a closer frame is never a plain portrait; 'wide' = full or three-quarter. */
   frameInterest?: 'wide' | 'close' | null;
+  /** SWAP GEOMETRY (looks path, 2026-09-12). 'strict' (default, byte-identical to before) = the couple stands
+   *  side by side on one plane at one height with a clear gap between their heads, no contact, hands at chest
+   *  level or lower — the language that guaranteed a swappable base before the engine had fault tolerance.
+   *  'natural' = the couple may touch and move like a real couple (arm around, arms linked, leaning in, a dance
+   *  hold, one seated one standing, walking) and hands may rise; the only physical rule left is that neither
+   *  face is hidden or pressed to the other. The dual pipeline re-renders on a failed split with the STRICT
+   *  geometry (nightlyLooksPath.ts strictRetryPrompt) before it ever degrades to a solo, so natural costs at
+   *  most one retry. Solo renders: only the brief's hands / energy rule relaxes (the solo anchor was never stiff). */
+  swapGeometry?: 'strict' | 'natural' | null;
+  /** FRAMING AXIS (looks path, 2026-09-12, pools/nightly_framings.ts): one authored composition clause (distance +
+   *  device + camera + placement) that REPLACES the fixed distance clause in the framing line. The face clauses
+   *  stay code-owned. Null / undefined = the fixed clause (byte-identical). */
+  framingClause?: string | null;
+  /** Round 16 (looks path): the solo DISTANCE line (framingClause or the composition default) rides the anchor
+   *  BEFORE the face-visibility clause instead of the late framing block — flux-1.1-pro only obeys it there. */
+  framingInAnchor?: boolean;
+  /** Flux couples on the looks path (2026-09-13, "the album skeleton"): the subject-first parts in the ORDER Kevin's
+   *  1.2.0 album couples were rendered with — identities, then the pose, then the (short) scene, then the gap line —
+   *  with no early vibe fragment. The looks-path v3 order (100-word scene in the look's voice before the identities)
+   *  collapsed flux couples into head-and-shoulders two-shots (fixed-seed ablation, scratchpad frame-probe: only the
+   *  short album skeleton opened the frame). Inert unless set; production prompts stay byte-identical. */
+  coupleSceneAfterAction?: boolean;
+  /** Flux parity arm H: a symmetric body stance (dualStances.ts DUAL_STANCES_FLUX_ANCHOR text) that replaces the
+   *  "standing side by side from mid-thigh up" distance line INSIDE the couple anchor — the one slot flux obeys. */
+  anchorStance?: string | null;
+  /** Flux parity arm I: positive-only framing language on the legacy couple anchor + framing block — the negated
+   *  "NOT a tight face close-up" / "rather than a stiff studio couple portrait" tokens leak (feedback_negative_prompt_leak)
+   *  and are literally the words for a bust shot. Production stays byte-identical while unset. */
+  positiveFraming?: boolean;
+  /** Round 17 (looks path): every cast member's HAIR COLOUR echoes in the position-1 gender lock
+   *  ("BROWN-HAIRED MAN on the LEFT", "a DARK BROWN-HAIRED FEMALE woman —"), the way the senior echo already does
+   *  for 55+. Six fixed seeds on flux-1.1-pro: 2/6 salt-and-pepper men + 4/6 blonde wives without it, 0/6 with. */
+  hairEcho?: boolean;
+  /** The framing recipe seats the couple / person — the couple anchor drops "standing". */
+  framingSeated?: boolean;
+  /** 1.2.0-parity (2026-09-12): the album's renders carried "a relaxed warm editorial photograph … filmic colour";
+   *  look-neutral framing dropped it. This puts a photograph-free version back ("a relaxed warm editorial feel,
+   *  filmic colour") in the integration lines. Only read under lookNeutralFraming. */
+  photoPriors?: boolean;
   /** NIGHTLY female-hairstyle variation (2026-08-31). When > 0, a FEMALE cast
    *  member's hair is re-styled with this % chance (preserving color/length/
    *  bangs/coily texture). Only the nightly path sets this; Create leaves it
@@ -513,6 +552,7 @@ function buildActionFieldSpec(input: CharacterSlotPipelineInput): string {
   const spec = input.authorAction;
   if (!spec) return '';
   const dual = input.cast.length === 2;
+  const natural = input.swapGeometry === 'natural';
   const exemplars = spec.exemplars
     .slice(0, 3)
     .map((e) => `"${e.replace(/"/g, '')}"`)
@@ -546,13 +586,24 @@ ${
   simply natural (pockets, folded arms, hands on hips, resting on something). A well-composed still pose
   is welcome — weight on one hip, hands in pockets, leaning on something, arms folded. The goal is VARIETY
   across renders, not constant action.`
-} Never merely waiting or contemplating. Hands, props and gestures stay at
-  CHEST LEVEL OR LOWER (no running, jumping, climbing). A held prop ONLY if it obviously belongs here.
+} Never merely waiting or contemplating.${
+    natural
+      ? ` Motion is welcome (walking, a dance step, a slow twirl,
+  carrying something together, a toast) and hands may be up to shoulder height; keep it grounded — no jumping,
+  no climbing, nothing raised above the head.`
+      : ` Hands, props and gestures stay at
+  CHEST LEVEL OR LOWER (no running, jumping, climbing).`
+  } A held prop ONLY if it obviously belongs here.
   NEVER mention the head, chin, face, or where anyone looks, and no reading / studying / examining /
   consulting (that turns the face down) — faces stay toward the camera by code.
   Refer to people by role, never by pronoun.${
     dual
-      ? `
+      ? natural
+        ? `
+  Give EACH person their own beat ("one …, the other …"). They may touch the way a real couple does — an arm
+  around the shoulders, a hand on the back, arms linked, leaning in mid-laugh, a dance hold, seated shoulder to
+  shoulder — never a kiss, never cheek to cheek, never one person hidden behind the other.`
+        : `
   Give EACH person their own small beat ("one …, the other …") with a clear gap between them —
   they do NOT touch, hug, kiss, lean together, or face each other.`
       : ''
@@ -715,10 +766,11 @@ mood (1-3 short phrases)
 
 ${
   input.richBrief
-    ? `props (3-12 words)
-  ONE tasteful, believable prop that belongs to this exact place, register and action and
-  gives the shot a story (a champagne flute at a gala, a brass lantern in an alley, a paper
-  map on a harbor wall, a bouquet, a vintage camera). Empty string only if nothing fits.
+    ? `props (6-15 words)
+  ONE or TWO believable, NAMED objects that belong to this exact place, register and action and
+  give the shot a story — the hero object in hand or within reach, and one more resting in the
+  set (a champagne flute and a brass lantern on the ledge; a paper map and a leather satchel;
+  a vintage camera on its strap and a ticket stub). Empty string only if nothing fits.
   NEVER whimsical, novelty, oversized, comic, organic-oddity, or out-of-place objects.`
     : `props (0-10 words — STRONGLY PREFER an empty string "")
   Usually leave EMPTY. Only if a prop genuinely elevates the shot, a single TASTEFUL,
@@ -1009,6 +1061,19 @@ export function assembleCharacterPrompt(
     ? { pct: input.femaleHairVariationPct, register: input.sceneRegister ?? null }
     : undefined;
 
+  // HAIR ECHO (round 17, looks path): "<COLOUR>-HAIRED " for cast under 55 with a hair colour and hair (the senior
+  // echo below carries the colour for 55+). Position-1 tokens are what flux-1.1-pro obeys most; the mid-prompt
+  // "full head of brown hair" anchor alone still let the 43-with-a-beard prior grey him and a stylized prior blonde
+  // her. Empty string when off — production prompts stay byte-identical.
+  const hairEcho = (m: ResolvedIdentity): string => {
+    if (!input.hairEcho) return '';
+    const a = (m.age || '').match(/\d+/);
+    if (a && parseInt(a[0], 10) >= 55) return '';
+    if (/\b(bald|balding|shaved head|hairless|receding)\b/i.test(m.identity)) return '';
+    const hc = extractHairColor(m.identity);
+    return hc ? `${hc.toUpperCase()}-HAIRED ` : '';
+  };
+
   // Cast-count branches
   if (input.cast.length === 1) {
     const m = resolveIdentity(input.cast[0]);
@@ -1018,7 +1083,15 @@ export function assembleCharacterPrompt(
     // Gender lock SHOUTED at position 1 — non-negotiable, mirrors the dual
     // path. This is what stops a male cast photo from rendering on a female
     // body (and vice-versa) on the single-cast nightly path.
-    const genderLock = m.castGender ? genderLockShout(m.castGender) : '';
+    const soloEcho = m.castGender ? hairEcho(m) : '';
+    const genderLock = m.castGender
+      ? soloEcho
+        ? genderLockShout(m.castGender).replace(
+            /^a /,
+            `${/^[aeiou]/i.test(soloEcho) ? 'an' : 'a'} ${soloEcho}`
+          )
+        : genderLockShout(m.castGender)
+      : '';
 
     // Single anchor — positive phrasing, no L/R. Relaxed 2026-08-24 (Kevin): the
     // old triple-hammered "frontal portrait, face to camera" was defensive
@@ -1027,8 +1100,24 @@ export function assembleCharacterPrompt(
     // clearly VISIBLE, LARGE and roughly toward camera — a natural three-quarter
     // angle satisfies that (proven by Kevin's hearted Create renders). So frame it
     // as a candid, cinematic subject instead of a posed ID-photo.
+    // Round 16 (looks path, 2026-09-13): the DISTANCE line (a rolled framing recipe or the composition's default)
+    // rides the anchor, BEFORE the face-visibility clause. Direct fixed-seed probes of r13 #2 on flux-1.1-pro
+    // (scratchpad solo-probe): the same clause after the identity block (word ~350), ahead of the scene, or even
+    // right AFTER the face clause (word ~171) changed nothing — every seed stayed a waist-up portrait; placed
+    // before the face clause (S6/S7) all three seeds opened to knees-up shots at the doorway / bar the recipe
+    // named, hair colour intact. The face clause stays (swap safety); only its order vs the distance line moves.
+    const distanceLine = input.framingInAnchor
+      ? (input.framingClause ??
+        (input.soloComposition === 'enviro_wide'
+          ? 'full figure visible, standing prominent in the foreground third of a sweeping environment'
+          : input.soloComposition === 'waist_up'
+            ? "shown from the waist up, the dressed set within arm's reach beside and behind them"
+            : 'shown from the knees up in a three-quarter length composition, fully visible, generous open space around them showing the scene'))
+      : null;
     const singleAnchor = input.lookNeutralFraming
-      ? 'ONE person alone in the scene, the only person in the image, the clear subject of the scene, face clearly visible and turned naturally toward the viewer at an easy three-quarter angle'
+      ? `ONE person alone in the scene, the only person in the image, the clear subject of the scene, ${
+          distanceLine ? `${distanceLine}, ` : ''
+        }face clearly visible and turned naturally toward the viewer at an easy three-quarter angle`
       : 'ONE person alone in the scene, the only person in the image, the clear subject of a candid cinematic photograph, face clearly visible and turned naturally toward the viewer at an easy three-quarter angle';
 
     // Framing — single doesn't need the L/R clear-gap line. Stage 5c presets
@@ -1067,24 +1156,41 @@ export function assembleCharacterPrompt(
     // (was waist-up). A 3/4-length face is ~15-20% of frame height — squarely
     // inside the healthy swap band, and the giant-face guard floors the other
     // extreme.
+    const priorsLite = input.photoPriors ? 'a relaxed warm editorial feel, filmic colour, ' : '';
     const integrationLine = input.lookNeutralFraming
-      ? 'the subject naturally lit by the scene itself (soft rim light and ambient colour from the environment on them), rendered in the same medium and finish as the scene, comfortable and natural — looking toward the camera or gently off into the scene, at ease, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, the wall or sky behind the subject full of specific detail, any visible sky alive with colour, cloud form, or weather'
+      ? `the subject naturally lit by the scene itself (soft rim light and ambient colour from the environment on them), ${priorsLite}rendered in the same medium and finish as the scene, comfortable and natural — looking toward the camera or gently off into the scene, at ease, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, the wall or sky behind the subject full of specific detail, any visible sky alive with colour, cloud form, or weather`
       : 'the subject naturally lit by the scene itself (soft rim light and ambient colour from the environment on them), a relaxed warm editorial photograph, comfortable and natural — looking toward the camera or gently off into the scene, at ease, photographic realism, filmic colour, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, the wall or sky behind the subject full of specific detail, any visible sky alive with colour, cloud form, or weather';
     const framingBlock = (
       input.soloComposition === 'enviro_wide'
         ? [
-            'full figure visible, standing prominent in the foreground third of a sweeping environment',
+            // The distance line already rode the anchor when framingInAnchor is set (round 16).
+            ...(distanceLine
+              ? []
+              : [
+                  input.framingClause ??
+                    'full figure visible, standing prominent in the foreground third of a sweeping environment',
+                ]),
             'the person is the unmistakable subject, face large enough to read clearly',
             integrationLine,
           ]
         : input.soloComposition === 'waist_up'
           ? [
-              "shown from the waist up, the dressed set within arm's reach filling the frame beside and behind them, the costume detail and a prop at hand carrying the shot",
+              ...(distanceLine
+                ? []
+                : [
+                    input.framingClause ??
+                      "shown from the waist up, the dressed set within arm's reach filling the frame beside and behind them, the costume detail and a prop at hand carrying the shot",
+                  ]),
               'face unobstructed and clearly visible to the viewer',
               integrationLine,
             ]
           : [
-              'shown from the knees up in a three-quarter length composition, fully visible, generous open space around them showing the scene',
+              ...(distanceLine
+                ? []
+                : [
+                    input.framingClause ??
+                      'shown from the knees up in a three-quarter length composition, fully visible, generous open space around them showing the scene',
+                  ]),
               'face unobstructed and clearly visible to the viewer',
               integrationLine,
             ]
@@ -1146,7 +1252,7 @@ export function assembleCharacterPrompt(
     const hc = extractHairColor(m.identity);
     return hc ? `${hc.toUpperCase()}-HAIRED OLDER ` : 'OLDER ';
   };
-  const genderLock = `${seniorEcho(left)}${left.gender.toUpperCase()} on the LEFT, ${seniorEcho(right)}${right.gender.toUpperCase()} on the RIGHT`;
+  const genderLock = `${seniorEcho(left)}${hairEcho(left)}${left.gender.toUpperCase()} on the LEFT, ${seniorEcho(right)}${hairEcho(right)}${right.gender.toUpperCase()} on the RIGHT`;
 
   // Dual anchor — positive phrasing. Head separation stated EARLY (this lands at
   // assembly position 4, ahead of the framing block) so it can counter the
@@ -1172,12 +1278,20 @@ export function assembleCharacterPrompt(
   // to appear at random on 1.1-pro) and, for seated / perched / crouched stances, "side by side"
   // instead of "stand side by side" so the anchor stops contradicting the beat.
   const closer = input.dualComposition === 'waist_up';
-  const seatedStance = !!(input.dualStance && input.dualStance.seated);
+  const seatedStance = !!(input.dualStance && input.dualStance.seated) || !!input.framingSeated;
+  // Looks path round 15 (2026-09-13): a rolled framing recipe (pools/nightly_framings.ts) rides the anchor's
+  // distance slot — production (no clause) stays byte-identical.
   const dualAnchor = `an ENVIRONMENTAL TWO-SHOT of two people together, ${
-    closer
-      ? 'shown from the waist up in a closer two-shot with the setting clearly visible around and above them'
-      : 'shown from at least mid-thigh in a three-quarter length composition with the setting sweeping clearly around and above them at a natural editorial distance'
-  }, NOT a tight face close-up — their faces are a normal-sized part of the frame, never filling it; the two ${
+    input.framingClause
+      ? input.framingClause
+      : closer
+        ? 'shown from the waist up in a closer two-shot with the setting clearly visible around and above them'
+        : 'shown from at least mid-thigh in a three-quarter length composition with the setting sweeping clearly around and above them at a natural editorial distance'
+  }, ${
+    input.positiveFraming
+      ? 'their faces a normal-sized part of the frame with the setting open around them'
+      : 'NOT a tight face close-up — their faces are a normal-sized part of the frame, never filling it'
+  }; the two ${
     seatedStance ? '' : 'stand '
   }side by side with a clear gap between their two heads, both facing toward the camera in a natural, unforced three-quarter view, each face clearly visible and turned toward the viewer, each head on its own side of the frame`;
 
@@ -1194,14 +1308,19 @@ export function assembleCharacterPrompt(
   const framingBlock = [
     closer
       ? 'both shown from the waist up, faces large and clear, open space around them showing the scene'
-      : 'both shown from the knees up in a three-quarter length composition, fully visible, generous open space around them showing the scene',
+      : input.dualComposition === 'full_figure'
+        ? // Looks path only (a full-figure framing recipe); production never sets full_figure here.
+          'both shown in full figure from head to shoes, fully visible, generous open space around them showing the scene'
+        : 'both shown from the knees up in a three-quarter length composition, fully visible, generous open space around them showing the scene',
     'both faces unobstructed, clearly visible and turned toward the camera, easy to read',
     // Detail-not-size background cue (2026-09-02): the visible setting must be
     // specific and recognizable, never a blank sky/wall. SIZE/dominance cues
     // remain forbidden (2026-06-19 hard rule) — this asks for DETAIL only.
     input.lookNeutralFraming
-      ? 'naturally lit by the scene with soft rim light and ambient colour from the environment, a natural candid feel rather than a stiff studio couple portrait, rendered in the same medium and finish as the scene, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, never a blank wall or featureless sky behind the couple, any visible sky alive with colour, cloud form, or weather — never flat white'
-      : 'naturally lit by the scene with soft rim light and ambient colour from the environment, an editorial cinematic photograph feel rather than a stiff studio couple portrait, filmic colour grade, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, never a blank wall or featureless sky behind the couple, any visible sky alive with colour, cloud form, or weather — never flat white',
+      ? `naturally lit by the scene with soft rim light and ambient colour from the environment, a natural candid feel rather than a stiff studio couple portrait, ${input.photoPriors ? 'a relaxed warm editorial feel, filmic colour, ' : ''}rendered in the same medium and finish as the scene, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, never a blank wall or featureless sky behind the couple, any visible sky alive with colour, cloud form, or weather — never flat white`
+      : input.positiveFraming
+        ? 'naturally lit by the scene with soft rim light and ambient colour from the environment, an editorial cinematic photograph feel, relaxed and candid, filmic colour grade, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, a specific detailed wall or a colourful sky behind the couple, any visible sky alive with colour, cloud form, or weather'
+        : 'naturally lit by the scene with soft rim light and ambient colour from the environment, an editorial cinematic photograph feel rather than a stiff studio couple portrait, filmic colour grade, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, never a blank wall or featureless sky behind the couple, any visible sky alive with colour, cloud form, or weather — never flat white',
     'a clear gap between their two heads, faces apart and not touching, each head on its own side of the frame, not cheek to cheek, heads not leaning together',
     // Omitted for a height-contrast stance (one seated, one standing) — dualStances.ts.
     ...(input.dualStance && input.dualStance.heightContrast
@@ -1222,23 +1341,72 @@ export function assembleCharacterPrompt(
     // catalog photograph (round 1: 10/10 swaps, 0/10 medium-faithful). The PLACE rides inside the people
     // sentence so the scene is never a separate leading clause the model can turn into a landscape.
     const place = location || '';
-    const compactAnchor = `two people ${seatedStance ? 'seated' : 'standing'} side by side ${
-      input.dualComposition === 'full_figure'
-        ? 'with full figures visible from head to shoes, standing prominent in the foreground of the scene'
-        : closer
-          ? input.frameInterest === 'close'
-            ? "from the waist up, the dressed set within arm's reach beside and behind them and their costumes carrying the shot"
-            : 'from the waist up'
-          : input.wideFraming || input.richBrief
-            ? 'from the knees up in a three-quarter length composition with generous open space around them showing the scene'
-            : 'from mid-thigh up'
-    }${place ? ` at ${place}` : ''}, both facing the camera with large clearly visible faces and a clear gap between their heads, each head on its own side of the frame`;
-    const gapLine = [
-      'a clear gap between their two heads, faces apart and not touching, not cheek to cheek',
-      ...(input.dualStance && input.dualStance.heightContrast
-        ? []
-        : ['both at the same vertical height']),
-    ].join(', ');
+    const natural = input.swapGeometry === 'natural';
+    // NATURAL geometry (2026-09-12): the stance may be walking, dancing or one seated one standing, so the anchor
+    // says "together" instead of "standing side by side", and the tail keeps only the face-VISIBILITY clause
+    // (large, toward the viewer) — the head-gap / own-side clauses that froze every couple into a two-shot go.
+    const compactAnchor = input.anchorStance
+      ? `two people${place ? ` at ${place}` : ''}, ${input.anchorStance}, ${
+          input.lookNeutralFraming
+            ? 'both facing the camera with clearly visible faces at a natural size, natural head-to-body proportions, a clear gap between their heads, each head on its own side of the frame'
+            : 'both facing the camera with large clearly visible faces and a clear gap between their heads, each head on its own side of the frame'
+        }`
+      : `two people ${
+          natural ? 'together' : `${seatedStance ? 'seated' : 'standing'} side by side`
+        } ${
+          input.framingClause
+            ? input.framingClause
+            : input.dualComposition === 'full_figure'
+              ? 'with full figures visible from head to shoes, standing prominent in the foreground of the scene'
+              : closer
+                ? input.frameInterest === 'close'
+                  ? "from the waist up, the dressed set within arm's reach beside and behind them and their costumes carrying the shot"
+                  : 'from the waist up'
+                : input.wideFraming || input.richBrief
+                  ? 'from the knees up in a three-quarter length composition with generous open space around them showing the scene'
+                  : 'from mid-thigh up'
+        }${place ? ` at ${place}` : ''}, ${
+          // Round 3 of the parity loop (2026-09-12): "LARGE clearly visible faces" read literally under illustration
+          // looks with a knees-up frame — the model enlarged the HEADS to comply (bobblehead couples r1 #3, r2 #13).
+          // The album's legacy anchor said "faces a normal-sized part of the frame". Looks path: natural size +
+          // head-to-body proportions; legacy path keeps its text byte-for-byte.
+          input.lookNeutralFraming
+            ? natural
+              ? 'both with clearly visible faces toward the viewer at a natural size, natural head-to-body proportions'
+              : 'both facing the camera with clearly visible faces at a natural size, natural head-to-body proportions, a clear gap between their heads, each head on its own side of the frame'
+            : natural
+              ? 'both with large clearly visible faces toward the viewer'
+              : 'both facing the camera with large clearly visible faces and a clear gap between their heads, each head on its own side of the frame'
+        }`;
+    const gapLine = natural
+      ? 'both faces fully visible and unobstructed, neither face hidden behind or pressed against the other'
+      : [
+          'a clear gap between their two heads, faces apart and not touching, not cheek to cheek',
+          ...(input.dualStance && input.dualStance.heightContrast
+            ? []
+            : ['both at the same vertical height']),
+        ].join(', ');
+    if (input.coupleSceneAfterAction) {
+      return [
+        genderLock,
+        mediumSignal,
+        compactAnchor,
+        leftBlock,
+        rightBlock,
+        slots.action || input.action || '',
+        slots.scene_description,
+        vibeAfterScene,
+        gapLine,
+        slots.mood,
+        slots.props,
+        ...(input.lookNeutralFraming
+          ? ['foreground midground background stacked top to bottom, layered depth']
+          : []),
+        'no text, no words, no letters, no watermarks, ultra detailed',
+      ]
+        .filter((p) => p && p.trim().length > 0)
+        .join(', ');
+    }
     return [
       genderLock,
       mediumSignal,
@@ -1257,6 +1425,11 @@ export function assembleCharacterPrompt(
       gapLine,
       slots.mood,
       slots.props,
+      // 1.2.0-parity (2026-09-12): the album's couples (legacy order) all carried this depth cue; subject-first
+      // never had it. Looks path only, so the production prompt stays byte-identical.
+      ...(input.lookNeutralFraming
+        ? ['foreground midground background stacked top to bottom, layered depth']
+        : []),
       'no text, no words, no letters, no watermarks, ultra detailed',
     ]
       .filter((p) => p && p.trim().length > 0)
@@ -1425,7 +1598,11 @@ export async function runCharacterSlotPipeline(
     if (!beat) {
       fallbackReasons.push('scene_action_fallback:missing');
     } else {
-      const verdict = validateActionBeat(beat, castCount);
+      const verdict = validateActionBeat(
+        beat,
+        castCount,
+        input.swapGeometry === 'natural' ? 'natural' : 'strict'
+      );
       if (verdict.ok) {
         fallbackReasons.push('scene_action');
       } else {
