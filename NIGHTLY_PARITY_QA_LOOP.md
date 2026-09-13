@@ -986,3 +986,16 @@ EVERY user's nightly place pool is fixed and deployed. Four forced-place renders
 dragon's keep → "spiraling bone-white towers of the Skaeld citadel", cyberpunk megacity → "autonomous construction
 frame frozen mid-build above the skyline", unicorn meadow → "Rainbow Bridge arching over the silver stream",
 underwater city atlantis → "the Coral Labyrinth of the Sea Priests". Locked by `__tests__/lib/locationFilters.test.ts`.
+
+## BOOKMARK RULE OF RECORD (Kevin, 2026-09-13 evening)
+
+A bookmark bans the LOOK, catalog-wide: `dream_mediums.nightly_enabled = false` for that look key, every model and
+every surface. The approvals table is left intact so the grading history survives and a restore is one row.
+`scratchpad/strike-looks.js <SCR> <round...> [--apply]` reports the strikes and applies them. The framing reweight
+above stands as a one-off for the bookmarks made before this rule returned; poses are never struck from bookmarks.
+
+## LOOKS APPROVED 2026-09-13 (Kevin)
+
+Colored pencil and watercolor paper, on gemini-2-image and grok-imagine-image, both surfaces — the two mediums from
+the sunnysteph posts he liked. Colored pencil also needed `dream_mediums.nightly_enabled = true`: it was disabled at
+the catalog level, so the approvals alone would never have put it in rotation. Catalog gate first, approvals second.
