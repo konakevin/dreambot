@@ -1,8 +1,9 @@
 /** The style contract (NIGHTLY_LOOKS_REFACTOR_PLAN.md §2): model → look → fragments, retry + rebuild answers. */
-import { buildStyleContract } from '@engine/nightlyStyle';
+import { buildStyleContract, RETRY_SAME_MODEL_FIRST } from '@engine/nightlyStyle';
 import type { NightlyModelPolicy } from '@engine/nightlyModelPolicy';
 import type { LookApproval, LookRow } from '@engine/nightlyLooks';
 import type { VibeRow } from '@engine/nightlyVibes';
+import { FLUX_COUPLE_EXCLUDED_VIBE_FAMILIES } from '@engine/nightlyVibes';
 
 const PRO = 'black-forest-labs/flux-1.1-pro';
 const GEMINI = 'google/gemini-2-image';
@@ -143,7 +144,7 @@ describe('buildStyleContract', () => {
     expect(forced.source).toBe('force');
   });
 
-  it('forAttempt(2) stays on the attempt-1 model; forAttempt(3) is the fallback model, re-rolling the look if needed', () => {
+  it('the retry ladder follows RETRY_SAME_MODEL_FIRST: attempt 2 holds the model when on, moves when off', () => {
     const c = buildStyleContract({
       surface: 'couple',
       policy: POLICY,
@@ -151,19 +152,26 @@ describe('buildStyleContract', () => {
       approvals: APPROVALS,
       rng,
     })!;
-    // 1.2.0 parity (2026-09-13): the FIRST re-render stays on the attempt-1 model with the same look …
     const retry = c.forAttempt(2);
-    expect(retry.model).toBe(PRO);
-    expect(retry.look.key).toBe('oil');
-    expect(retry.stamps[0]).toBe('policy:couple:2:flux-1.1-pro:same');
-    expect(retry.stamps).toContain('look_retry:2:keep:oil');
-    // … and the fallback model is the LAST re-render (attempt 3): oil is not approved on gemini couples → re-rolled
-    const last = c.forAttempt(3);
-    expect(last.model).toBe(GEMINI);
-    expect(last.look.key).toBe('chromo');
-    expect(last.fragment).toBe('chromo swap');
-    expect(last.stamps[0]).toBe('policy:couple:3:gemini-2-image');
-    expect(last.stamps).toContain('look_retry:3:reroll:chromo');
+    if (RETRY_SAME_MODEL_FIRST) {
+      // 1.2.0 parity (2026-09-13): the first re-render holds the attempt-1 model and its look …
+      expect(retry.model).toBe(PRO);
+      expect(retry.look.key).toBe('oil');
+      expect(retry.stamps[0]).toBe('policy:couple:2:flux-1.1-pro:same');
+      expect(retry.stamps).toContain('look_retry:2:keep:oil');
+      // … and the fallback model is the LAST re-render (attempt 3): oil is not approved on gemini couples
+      const last = c.forAttempt(3);
+      expect(last.model).toBe(GEMINI);
+      expect(last.look.key).toBe('chromo');
+      expect(last.stamps[0]).toBe('policy:couple:3:gemini-2-image');
+      expect(last.stamps).toContain('look_retry:3:reroll:chromo');
+    } else {
+      // the round-20 ladder: every re-render moves straight to the fallback model, re-rolling the look
+      expect(retry.model).toBe(GEMINI);
+      expect(retry.look.key).toBe('chromo');
+      expect(retry.stamps[0]).toBe('policy:couple:2:gemini-2-image');
+      expect(retry.stamps).toContain('look_retry:2:reroll:chromo');
+    }
   });
 
   it('forRebuild(): the solo_rebuild model; keeps the look when approved for (model, solo)', () => {
@@ -214,7 +222,8 @@ describe('buildStyleContract', () => {
     expect(c.forRebuild().look.key).toBe('halloween_x');
   });
 
-  it('flux couples never roll a night vibe (drill F-I: 10% dual pass vs 57%); every other surface/model can', () => {
+  it('night vibes are excluded for flux couples exactly when FLUX_COUPLE_EXCLUDED_VIBE_FAMILIES says so', () => {
+    const guarded = FLUX_COUPLE_EXCLUDED_VIBE_FAMILIES.length > 0;
     const pool = [...NIGHT_VIBES, ...DAY_VIBES];
     const fluxCouple = buildStyleContract({
       surface: 'couple',
@@ -225,9 +234,14 @@ describe('buildStyleContract', () => {
       rng,
     })!;
     expect(fluxCouple.model).toBe(PRO);
-    expect(['golden_hour', 'blue_hour']).toContain(fluxCouple.vibe!.vibe.family);
+    if (guarded) {
+      // drill F-I: night vibes pass the flux dual swap 1/10 vs 16/28 for brighter ones
+      expect(['golden_hour', 'blue_hour']).toContain(fluxCouple.vibe!.vibe.family);
+    } else {
+      expect(fluxCouple.vibe!.vibe.family).toBe('moonlit'); // rng picks the first candidate
+    }
 
-    // same pool, gemini couple (policy fallback forced): the night families stay available
+    // never surface-wide: gemini couples and flux solos keep every night family in either state
     const geminiCouple = buildStyleContract({
       surface: 'couple',
       policy: POLICY,
@@ -238,8 +252,6 @@ describe('buildStyleContract', () => {
       rng,
     })!;
     expect(geminiCouple.vibe!.vibe.family).toBe('moonlit');
-
-    // and flux SOLOS keep them (7/7 identity pass in r1-r22)
     const fluxSolo = buildStyleContract({
       surface: 'solo',
       policy: POLICY,

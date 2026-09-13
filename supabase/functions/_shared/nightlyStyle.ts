@@ -29,7 +29,7 @@ import {
 
 /** The first couple re-render stays on the attempt-1 model (see forAttempt). `false` = every re-render moves to the
  *  policy's fallback model (the r5-r20 behaviour). */
-export const RETRY_SAME_MODEL_FIRST = true;
+export const RETRY_SAME_MODEL_FIRST = false;
 
 export type StyleSurface = 'couple' | 'solo' | 'scene';
 

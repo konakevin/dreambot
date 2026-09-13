@@ -310,18 +310,18 @@ export const LOOKS_FLUX_COUPLE_ALBUM_SKELETON = true;
 /** Flux parity round F2 (staged OFF): flux couples roll the generic stances + the symmetric wide subset
  *  (DUAL_STANCES_WIDE_FLUX_SAFE) at scene-first rolls, so a beat can seat or stand them full-length without the
  *  asymmetric geometry that breaks the split. */
-export const LOOKS_FLUX_WIDE_STANCES = true;
+export const LOOKS_FLUX_WIDE_STANCES = false;
 /** Arm H: share of flux couple pool-pose renders that take a symmetric full-body stance instead of the pool pose. */
-export const LOOKS_FLUX_STANCE_POOL_SHARE = 0.5;
+export const LOOKS_FLUX_STANCE_POOL_SHARE = 0;
 /** Flux parity arm I (staged OFF): positive-only framing language on the flux couple prompt (no negated "close-up" /
  *  "portrait" tokens — Kevin: "are you sure we don't have 'bust up' language or something?"). */
-export const LOOKS_FLUX_POSITIVE_FRAMING = true;
+export const LOOKS_FLUX_POSITIVE_FRAMING = false;
 /** Flux parity arm G (2026-09-13): flux couples render with 1.2.0's flux-1.1-pro OVERRIDE fragments (the five
  *  realism-leaning mediums Kevin's album flux couples were rendered with) instead of the rolled look's swap fragment.
  *  Arm F showed the legacy order obeys the early pose and flux then presses the painterly couple together (one side
  *  ≈ 0, 0/5 first swaps); the override fragments are what kept 1.2.0's faces separable. The rolled look still
  *  drives recency / stamps; the render carries the override (stamped `look_override_library:flux_couple`). */
-export const LOOKS_FLUX_COUPLE_OVERRIDE_LIBRARY = true;
+export const LOOKS_FLUX_COUPLE_OVERRIDE_LIBRARY = false;
 /** Flux parity arm H (staged OFF): on the subject-first album skeleton, a symmetric body stance (DUAL_STANCES_FLUX_ANCHOR)
  *  rides the couple ANCHOR at word ~55 — the slot flux obeys (the seated probe) — instead of the late pose slot. */
 export const LOOKS_FLUX_COUPLE_STANCE_IN_ANCHOR = false;
