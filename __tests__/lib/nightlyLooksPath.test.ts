@@ -499,13 +499,13 @@ describe('couple vibe exclusion (parity loop round 2)', () => {
     expect(solo.stamps.some((s) => /^vibe_bans:/.test(s))).toBe(false);
   });
 
-  it('the struck frames (knees_up, three_quarter) are no longer the heaviest on their surface (bookmark reweight)', () => {
+  it('the open frames stay dominant: knees_up leads couples, three_quarter leads solos (rollback of the bookmark reweight)', () => {
     const heaviest = (rows: readonly { key: string; weight: number }[]) =>
       [...rows].sort((a, b) => b.weight - a.weight)[0].key;
-    expect(heaviest(FRAME_WEIGHTS.couple)).not.toBe('knees_up');
-    expect(heaviest(FRAME_WEIGHTS.solo)).not.toBe('three_quarter');
-    // both stay in the roll — Kevin asked for that range on 09-12, they are just not the default
-    expect(FRAME_WEIGHTS.couple.find((r) => r.key === 'knees_up')!.weight).toBeGreaterThan(0);
-    expect(FRAME_WEIGHTS.solo.find((r) => r.key === 'three_quarter')!.weight).toBeGreaterThan(0);
+    // The 2026-09-13 reweight cut both to a minority share on an 8% strike signal and the next batch read tighter
+    // and worse to Kevin (waist_up 26% -> 40% of renders). Locked back so a future strike pass cannot repeat it
+    // without a deliberate edit here.
+    expect(heaviest(FRAME_WEIGHTS.couple)).toBe('knees_up');
+    expect(heaviest(FRAME_WEIGHTS.solo)).toBe('three_quarter');
   });
 });

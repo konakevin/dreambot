@@ -190,25 +190,25 @@ export function applyStyleContract(
  * Weights are per-surface; a 'close' frame carries frameInterest so the set dresser dresses the near field.
  * One place to edit; move to engine_config when the spread is settled.
  *
- * REWEIGHTED 2026-09-13 from Kevin's in-app bookmarks, which he defined as FRAMING strikes ("bookmarked posts are
- * ones that have framing we don't want — either too close, or just not a desired framing"). Strike rate by frame
- * over the 285 graded renders of the mixed rounds r1-r22 (the real roll, all three models):
- *   couples  knees_up 5/35 (14%) · mid_thigh 1/19 (5%) · full_figure 1/33 (3%) · waist_up 0/32 (0%)
- *   solos    three_quarter 5/71 (7%) · enviro_wide 1/47 (2%) · waist_up 1/48 (2%)
- * knees_up and three_quarter carry the strikes, so their share moves to the frames he keeps; neither is retired
- * (he asked for that range on 09-12), they just stop being the default. Locked by nightlyLooksPath.test.ts.
+ * REWEIGHT TRIED AND ROLLED BACK, 2026-09-13. Kevin's bookmarks (which he defined that afternoon as framing
+ * strikes) put couple `knees_up` at 5/35 struck and solo `three_quarter` at 5/71 vs 0-3% for the other frames, so
+ * both were cut to a minority share. The batch that followed measurably tightened: `waist_up` went 26% -> 40% of
+ * renders and `knees_up` 16% -> 5% against rounds 19-22, and Kevin called the result a step down from round 20.
+ * That is the trap in optimising a 92%-heart pool against its 8% tail: the strike rate said "fewer knees-up" while
+ * the hearts said "this is the open, scenic frame I like". The weights are back at the rounds 19-22 values. A
+ * framing complaint gets fixed in the PROMPT (where the frame is described) before it is fixed in the ROLL.
  */
 export const FRAME_WEIGHTS = {
   solo: [
-    { key: 'enviro_wide', weight: 35 },
-    { key: 'three_quarter', weight: 25 },
-    { key: 'waist_up', weight: 40 },
+    { key: 'enviro_wide', weight: 25 },
+    { key: 'three_quarter', weight: 45 },
+    { key: 'waist_up', weight: 30 },
   ],
   couple: [
-    { key: 'full_figure', weight: 20 },
-    { key: 'knees_up', weight: 10 },
-    { key: 'mid_thigh', weight: 30 },
-    { key: 'waist_up', weight: 40 },
+    { key: 'full_figure', weight: 15 },
+    { key: 'knees_up', weight: 40 },
+    { key: 'mid_thigh', weight: 15 },
+    { key: 'waist_up', weight: 30 },
   ],
 } as const;
 export type SoloFrame = (typeof FRAME_WEIGHTS.solo)[number]['key'];
@@ -312,7 +312,7 @@ export const LOOKS_FLUX_COUPLE_ALBUM_SKELETON = true;
  *  asymmetric geometry that breaks the split. */
 export const LOOKS_FLUX_WIDE_STANCES = true;
 /** Arm H: share of flux couple pool-pose renders that take a symmetric full-body stance instead of the pool pose. */
-export const LOOKS_FLUX_STANCE_POOL_SHARE = 1;
+export const LOOKS_FLUX_STANCE_POOL_SHARE = 0.5;
 /** Flux parity arm I (staged OFF): positive-only framing language on the flux couple prompt (no negated "close-up" /
  *  "portrait" tokens — Kevin: "are you sure we don't have 'bust up' language or something?"). */
 export const LOOKS_FLUX_POSITIVE_FRAMING = true;
