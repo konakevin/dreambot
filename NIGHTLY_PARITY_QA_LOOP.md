@@ -1021,3 +1021,34 @@ stance clause NO. So the delta from today is four switches:
 
 `FRAME_WEIGHTS` is already back at its round 19-22 values. Everything else in the path is unchanged since round 20.
 The location ban fix and the Fly concurrency fix are bug fixes with no aesthetic effect and stay in either way.
+
+## EYE COLOUR IS LOST (Kevin, 2026-09-13) — researched, fix designed, NOT yet applied
+
+> "it seems in the new looks system, eye color is lost … my wife has more green eyes, but they aren't reflected in
+> a lot of these renders"
+
+**The data is there.** Her stored `physical_summary` reads "… warm golden tan skin, early-to-mid 40s, average
+build, hazel-green eyes." His reads "brown eyes".
+
+**The engine drops it on purpose.** `characterSlotPrompt.extractHair` keeps only hair and facial-hair clauses and
+`extractSkin` keeps only the skin clause; the comment on both says eye colour and face shape "get face-swapped away
+anyway" and in the prompt "pull renders toward Disney-princess / stock-photo archetypes". So no nightly prompt has
+ever named a cast member's eye colour. The assumption that the swap restores it is what Kevin's observation
+disproves: in a painterly look the swap refines the face but the base render's default brown eyes survive.
+
+**Probe (flux-1.1-pro, her real couple prompt, seeds 11/22/33):**
+
+| variant                                                                                                | eye colour named   | result                                           |
+| ------------------------------------------------------------------------------------------------------ | ------------------ | ------------------------------------------------ |
+| V0 as shipped                                                                                          | none               | her eyes render BROWN, 3/3                       |
+| V1 eye colour added to her mid-prompt identity clause (word ~150)                                      | "hazel-green eyes" | pixel-identical to V0 — the model never reads it |
+| V3 / V4 eye colour folded into the POSITION-1 lock ("GREEN-EYED DARK BROWN-HAIRED WOMAN on the RIGHT") | both cast          | her eyes render GREEN, 3/3                       |
+
+Same law as the hair echo (round 17) and the framing probes: flux obeys the first ~40-100 words and ignores the
+rest. **Side effect to handle:** naming only one person's eye colour bleeds the colour onto the other figure, so the
+fix must name BOTH, and even then his read greenish on one seed.
+
+**Designed fix (hold until the A/B is decided):** `LOOKS_EYE_ECHO`, mirroring `LOOKS_HAIR_ECHO` — parse the eye
+clause out of `physical_summary` and fold `<COLOUR>-EYED` into each cast member's position-1 lock, both members or
+neither. Verify on a real looks-path render and watch the identity gate, since the lock is the most
+attention-dense part of the prompt and extra tokens there tighten composition.
