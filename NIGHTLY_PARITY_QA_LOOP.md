@@ -1052,3 +1052,33 @@ fix must name BOTH, and even then his read greenish on one seed.
 clause out of `physical_summary` and fold `<COLOUR>-EYED` into each cast member's position-1 lock, both members or
 neither. Verify on a real looks-path render and watch the identity gate, since the lock is the most
 attention-dense part of the prompt and extra tokens there tighten composition.
+
+## A/B: POST-DRILL (r23) vs ROUND 20 (r24) — 20 exact-path renders each
+
+| metric                                         | r23 post-drill    | r24 round-20       |
+| ---------------------------------------------- | ----------------- | ------------------ |
+| my grade, mean / median / floor                | 3.85 / 4 / 2      | **4.00** / 4 / 2.5 |
+| renders at 4+                                  | 15/20             | **16/20**          |
+| couples                                        | 9                 | 11                 |
+| first-try dual swap                            | **8/9 (89%)**     | 5/11 (45%)         |
+| mean shipped identity                          | 0.645             | **0.724**          |
+| degraded to a solo rebuild                     | 1                 | **0**              |
+| **flux couples that actually SHIPPED on flux** | **5 of 5 rolled** | **1 of 7 rolled**  |
+
+**Round 20 scores higher, and the reason is the finding.** It wins by quietly abandoning flux for couples: flux
+rolled first on 7 of its 11 couples and shipped exactly 1, because its retry ladder moves to gemini / grok at
+attempt 2 and those swap cleanly. That IS the "we have almost no flux couples" complaint that started the drill,
+measured. The post-drill state keeps them: 5 rolled on flux, 5 shipped on flux, 8 of 9 couples passing the first
+swap.
+
+**The whole 0.15-point gap is one render.** r23 #13, a flux couple at the pyramids, read 0.053 then 0.001 on one
+face and degraded to a solo bust (graded 2). The ladder never tried another MODEL: `identity_degrade_floor:0.053<0.25`
+sends a sub-0.25 face straight to the solo rebuild, while round 20 reached a different model first and so never
+produced a bust.
+
+**Synthesis worth building:** keep the post-drill state and change the degrade rule to try ONE re-render on the
+fallback model before degrading to a solo. That converts r23 #13 into an r24-style clean couple and keeps flux
+couples flux. Both states are frozen in `nightly-states/` either way.
+
+Also seen in r23 #15: a `snowfall` vibe landed on a summer cliff-jump scenario (swimsuit on snowy rocks). Nothing
+pairs a weather vibe against the activity — a coherence guard for later.
