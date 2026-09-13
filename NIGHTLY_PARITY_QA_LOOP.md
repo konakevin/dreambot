@@ -999,3 +999,25 @@ above stands as a one-off for the bookmarks made before this rule returned; pose
 Colored pencil and watercolor paper, on gemini-2-image and grok-imagine-image, both surfaces — the two mediums from
 the sunnysteph posts he liked. Colored pencil also needed `dream_mediums.nightly_enabled = true`: it was disabled at
 the catalog level, so the approvals alone would never have put it in rotation. Catalog gate first, approvals second.
+
+## HOW TO GET BACK TO ROUND 20 (verified 2026-09-13, exact)
+
+Round 20 is recoverable byte-for-byte, not from memory: `scratchpad/looks/path-r20/report.json` stores the FULL
+emitted prompt for all 14 renders plus the brief, composer, stamps, look, vibe, frame, framing and model. Any
+revert is verified by rebuilding one flux couple prompt and diffing it against the stored r20 text — if the diff is
+empty, the engine is back.
+
+Marker test on the stored r20 flux couple prompt says what r20 actually had: legacy identity-first order YES,
+album mid-thigh anchor YES, hair echo YES, `NOT a tight face close-up` negation YES, 1.2.0 override fragment NO,
+stance clause NO. So the delta from today is four switches:
+
+| switch                                                     | today            | round 20                                       |
+| ---------------------------------------------------------- | ---------------- | ---------------------------------------------- |
+| `LOOKS_FLUX_COUPLE_OVERRIDE_LIBRARY`                       | true             | **false**                                      |
+| `LOOKS_FLUX_WIDE_STANCES` / `LOOKS_FLUX_STANCE_POOL_SHARE` | true / 0.5       | **false / 0**                                  |
+| `LOOKS_FLUX_POSITIVE_FRAMING`                              | true             | **false** (restores the negated close-up line) |
+| `FLUX_COUPLE_EXCLUDED_VIBE_FAMILIES`                       | 5 night families | **[]**                                         |
+| `nightly_model_policy.couple` weights                      | 34/33/33         | **50/25/25**                                   |
+
+`FRAME_WEIGHTS` is already back at its round 19-22 values. Everything else in the path is unchanged since round 20.
+The location ban fix and the Fly concurrency fix are bug fixes with no aesthetic effect and stay in either way.
