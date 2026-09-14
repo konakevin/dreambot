@@ -555,3 +555,162 @@ describe('lockLook — minimal retries keep the look so the stamps stay honest',
     expect(c.forRebuild().look.key).toBe(c.look.key);
   });
 });
+
+/**
+ * EVEN MODEL SPLIT — scene-only renders (Kevin, 2026-09-14: "all 25% for scene only").
+ *
+ * The look-first roll normally sends PRIMARY_DIRECT_SHARE of renders STRAIGHT to the surface's first primary, and
+ * `primary_weights` are NOT consulted on this path at all. On a 4-model pool that lands the primary at 62.5% and
+ * the rest at 12.5% each — so setting the policy row to 25/25/25/25 alone would NOT produce an even split.
+ */
+describe('evenModelSplit', () => {
+  const ULTRA = 'black-forest-labs/flux-1.1-pro-ultra';
+  const FOUR = [PRO, GEMINI, GROK, ULTRA];
+  const SCENE_POLICY: NightlyModelPolicy = {
+    couple: { primaryModels: [PRO], fallbackModels: [] },
+    solo: { primaryModels: [PRO], fallbackModels: [] },
+    solo_rebuild: { primaryModels: [FLEX], fallbackModels: [] },
+    scene: { primaryModels: FOUR, fallbackModels: [] },
+  };
+  // A CONSTANT rng makes every branch deterministic without depending on how many draws resolveLook makes:
+  // the direct check is `v < PRIMARY_DIRECT_SHARE` and the pool draw is `floor(v * poolSize)`.
+  const build = (even: boolean, v: number, surface: 'scene' | 'couple' = 'scene') =>
+    buildStyleContract({
+      surface,
+      policy:
+        surface === 'couple'
+          ? { ...SCENE_POLICY, couple: { primaryModels: FOUR, fallbackModels: [] } }
+          : SCENE_POLICY,
+      modelFromLook: true,
+      evenModelSplit: even,
+      looks: LOOKS,
+      approvals: APPROVALS,
+      rng: () => v,
+    });
+
+  it('OFF: a draw under the direct share jumps straight to the first primary (the 62.5% skew)', () => {
+    const c = build(false, 0.1)!;
+    expect(c.model).toBe(PRO);
+    expect(c.stamps.some((s) => s.startsWith('model_roll:direct:'))).toBe(true);
+  });
+
+  it('ON: the same draw no longer jumps — it comes from the pool', () => {
+    const c = build(true, 0.1)!;
+    expect(c.stamps.some((s) => s.startsWith('model_roll:direct:'))).toBe(false);
+    expect(c.stamps).toContain(`model_roll:even:${FOUR.length}`);
+  });
+
+  it('ON: each quarter of the roll maps to a different model, ultra included', () => {
+    expect(build(true, 0.1)!.model).toBe(FOUR[0]);
+    expect(build(true, 0.3)!.model).toBe(FOUR[1]);
+    expect(build(true, 0.6)!.model).toBe(FOUR[2]);
+    expect(build(true, 0.9)!.model).toBe(FOUR[3]);
+  });
+
+  it('ON: the split is EVEN across a uniform sweep — every model lands within 20-30%', () => {
+    const counts: Record<string, number> = {};
+    const N = 4000;
+    for (let i = 0; i < N; i++) {
+      const c = build(true, (i + 0.5) / N);
+      if (c) counts[c.model] = (counts[c.model] ?? 0) + 1;
+    }
+    for (const m of FOUR) {
+      const share = (counts[m] ?? 0) / N;
+      expect(share).toBeGreaterThan(0.2);
+      expect(share).toBeLessThan(0.3);
+    }
+  });
+
+  it('OFF skews hard to the primary over the same sweep — the behaviour scene opts out of', () => {
+    const counts: Record<string, number> = {};
+    const N = 4000;
+    for (let i = 0; i < N; i++) {
+      const c = build(false, (i + 0.5) / N);
+      if (c) counts[c.model] = (counts[c.model] ?? 0) + 1;
+    }
+    // A constant rng correlates the direct check with the pool draw, so the primary lands at exactly the direct
+    // share here; in production the two draws are independent and it reaches ~62.5% on a 4-model pool. The point
+    // this locks is simply that OFF is NOT an even split: the primary takes at least half and some model is
+    // starved, which is exactly why a 25/25/25/25 policy row alone would not have delivered what was asked for.
+    const share = (m: string) => (counts[m] ?? 0) / N;
+    expect(share(PRO)).toBeGreaterThanOrEqual(0.5);
+    expect(Math.min(...FOUR.map(share))).toBeLessThan(0.2);
+  });
+
+  it('OFF is the default — cast surfaces keep the direct-to-primary jump', () => {
+    const c = build(false, 0.1, 'couple')!;
+    expect(c.stamps.some((s) => s.startsWith('model_roll:direct:'))).toBe(true);
+  });
+});
+
+/**
+ * SCENE IGNORES PER-LOOK MODEL REJECTIONS (Kevin, 2026-09-14: "we shouldn't have any looks banned on any models
+ * for scene only — it doesn't have to worry about a face swap").
+ *
+ * Every `approved = false` row is a FACE-SWAP judgement: whether that look carries a swapped likeness on that
+ * model. A personless scene has no face to carry, so the rejection has nothing to say about it. Applying it
+ * anyway also skewed the roll — the only ungraded model survived every pool and took 58% of scene renders.
+ */
+describe('scene surface and look-model rejections', () => {
+  const ULTRA2 = 'black-forest-labs/flux-1.1-pro-ultra';
+  const POOL4 = [PRO, GEMINI, GROK, ULTRA2];
+  const POLICY4: NightlyModelPolicy = {
+    couple: { primaryModels: POOL4, fallbackModels: [] },
+    solo: { primaryModels: POOL4, fallbackModels: [] },
+    solo_rebuild: { primaryModels: [FLEX], fallbackModels: [] },
+    scene: { primaryModels: POOL4, fallbackModels: [] },
+  };
+  // 'oil' is REJECTED on flux for solo — a face-swap judgement
+  const WITH_REJECT: LookApproval[] = [
+    ...APPROVALS,
+    { lookKey: 'oil', model: PRO, surface: 'solo', approved: false },
+  ];
+  const build = (surface: 'scene' | 'solo', v: number) =>
+    buildStyleContract({
+      surface,
+      policy: POLICY4,
+      modelFromLook: true,
+      evenModelSplit: surface === 'scene',
+      looks: [look('oil')],
+      approvals: WITH_REJECT,
+      rng: () => v,
+    });
+
+  it('SOLO still honours the rejection — the face-swap grade stands where a face exists', () => {
+    const seen = new Set<string>();
+    for (let i = 0; i < 200; i++) {
+      const c = build('solo', (i + 0.5) / 200);
+      if (c) seen.add(c.model);
+    }
+    expect(seen.has(PRO)).toBe(false);
+  });
+
+  it('SCENE ignores it — every model in the row stays available', () => {
+    const seen = new Set<string>();
+    for (let i = 0; i < 400; i++) {
+      const c = build('scene', (i + 0.5) / 400);
+      if (c) seen.add(c.model);
+    }
+    expect(seen.size).toBe(POOL4.length);
+    expect(seen.has(PRO)).toBe(true);
+  });
+
+  it('SCENE says so in the stamps', () => {
+    expect(build('scene', 0.3)!.stamps).toContain('scene_ignores_look_model_bans');
+    expect(build('solo', 0.3)!.stamps).not.toContain('scene_ignores_look_model_bans');
+  });
+
+  it('with the filter gone the scene split is genuinely even — no ungraded-model skew', () => {
+    const counts: Record<string, number> = {};
+    const N = 4000;
+    for (let i = 0; i < N; i++) {
+      const c = build('scene', (i + 0.5) / N);
+      if (c) counts[c.model] = (counts[c.model] ?? 0) + 1;
+    }
+    for (const m of POOL4) {
+      const share = (counts[m] ?? 0) / N;
+      expect(share).toBeGreaterThan(0.2);
+      expect(share).toBeLessThan(0.3);
+    }
+  });
+});

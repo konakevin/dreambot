@@ -805,6 +805,15 @@ Deno.serve(async (req) => {
       preRolledComposition = inputs.forceComposition;
       fallbackReasons.push(`holiday_day_of_preroll:${dayOfHoliday.key}:${preRolledType}`);
     }
+    // QA `force_pure_scene` applies at the PRE-ROLL as well as downstream (2026-09-14). It used to take effect
+    // only at effectiveComposition (~line 1100), which is AFTER the minimal style contract is built — so a batch
+    // passing the flag still built a couple/solo contract and could never exercise the scene surface. Same class
+    // of trap as force_look implying force_medium: the flag looked like it worked and silently tested the wrong
+    // path. Production is unaffected (nothing sets this flag); it only makes the QA flag honest.
+    if (force_pure_scene) {
+      preRolledComposition = 'pure_scene';
+      preRolledCastRole = null;
+    }
     // A forced scenario bucket must render as a CHARACTER composition — a rolled
     // pure_scene would skip the bucket block downstream (gated on
     // isDualFaceSwap/isSingleHumanFaceSwap) and emit an unpopulated scene.
@@ -882,8 +891,43 @@ Deno.serve(async (req) => {
       fallbackReasons.push('looks_path:provisional_medium');
     }
     // MINIMAL surface: the cast role was pre-rolled above, so the look is graded for the surface that renders.
-    const minimalSurface: 'couple' | 'solo' =
-      preRolledCastRole === 'dual' || preRolledCastRole === 'face_swap_dual' ? 'couple' : 'solo';
+    // SCENE IS ITS OWN SURFACE (Kevin, 2026-09-14). A personless nightly used to build a SOLO contract and take the
+    // solo policy row's model, which left `nightly_model_policy.scene` dead — every scene render stamped
+    // `policy:solo:1:...`. It now builds a real scene contract, so the scene row decides the model. The LOOK roll is
+    // unchanged: buildStyleContract maps surface 'scene' to lookSurface 'solo', so scene renders keep drawing from
+    // the same solo-graded approvals they always did. Only `pure_scene` qualifies — epic_tiny still carries a cast
+    // and can face-swap, so it stays on the cast surfaces.
+    const minimalSurface: 'couple' | 'solo' | 'scene' =
+      preRolledComposition === 'pure_scene'
+        ? 'scene'
+        : preRolledCastRole === 'dual' || preRolledCastRole === 'face_swap_dual'
+          ? 'couple'
+          : 'solo';
+    /**
+     * The ban set the contract rolls against. `NIGHTLY_BANNED_MODELS` is a CAST-render list: flux-1.1-pro-ultra is
+     * on it because its 4MP output defeats the dual face-swap detector ~50% of the time and starves the
+     * solo-degrade budget (Kevin, 2026-08-28). That reasoning is entirely about the SWAP — the same note records
+     * 0% faceless on non-swap nightlies — so a personless scene render has nothing to break and ultra is allowed
+     * there (Kevin, 2026-09-14: "just enable for scene only renders"). Stamped, so a scene render says so.
+     */
+    const SCENE_ONLY_UNBANNED: ReadonlySet<string> = new Set([
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ]);
+    const contractBans = (policy: NightlyModelPolicy): ReadonlySet<string> => {
+      const base = looksPathBans(
+        nightlyBans,
+        policy,
+        dayOfHoliday ? dayOfHoliday.dayOfModelBan : []
+      );
+      if (minimalSurface !== 'scene') return base;
+      const lifted = new Set(base);
+      let any = false;
+      for (const m of SCENE_ONLY_UNBANNED) {
+        if (lifted.delete(m)) any = true;
+      }
+      if (any) fallbackReasons.push('scene_model_unban:ultra');
+      return lifted;
+    };
     /**
      * ONE way to build the minimal contract, so the two later re-runs (a scenario/day-of LOOK PIN that carries its
      * own allowed_models, and a scenario MEDIUM BAN that rules the rolled look out) go through exactly the same
@@ -912,11 +956,8 @@ Deno.serve(async (req) => {
         // MINIMAL re-renders WITHOUT re-assembling the prompt, so the look cannot change between attempts; lock it
         // so the stamps and ai_generation_log describe the look that is actually in the pixels.
         lockLook: true,
-        bans: looksPathBans(
-          nightlyBans,
-          modelPolicy,
-          dayOfHoliday ? dayOfHoliday.dayOfModelBan : []
-        ),
+        bans: contractBans(modelPolicy),
+        evenModelSplit: minimalSurface === 'scene',
         forceModel: force_model ?? null,
         looks,
         approvals: catalog.approvals,
@@ -3760,6 +3801,7 @@ Output ONLY the prompt.`;
   // overrides still work.
   if (
     !force_model &&
+    !minimalModel && // the looks contract already chose, from the SCENE policy row — do not re-pick over it
     policyMode !== 'on' && // policy 'on': the scene row IS the list (mig 468)
     !looksPath &&
     (resolvedComposition === 'pure_scene' || resolvedComposition === 'epic_tiny')

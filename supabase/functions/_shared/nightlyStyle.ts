@@ -99,6 +99,11 @@ export interface StyleContractInput {
    *  allows, for the FIRST pick and for every retry in the chain. Empty intersection = fail open (the pool stands)
    *  with a stamp, because a day-of render must never fail to render. Omitted = no clipping (the normal roll). */
   restrictModels?: readonly string[] | null;
+  /** EVEN SPLIT across the surface's model pool (Kevin, 2026-09-14: "all 25% for scene only"). The look-first roll
+   *  normally sends `PRIMARY_DIRECT_SHARE` of renders STRAIGHT to the surface's first primary, which on a 4-model
+   *  pool lands that model at 62.5% and the rest at 12.5% each — `primary_weights` are not consulted on this path
+   *  at all. `true` skips the direct-to-primary jump so every model in the pool is equally likely. */
+  evenModelSplit?: boolean;
   /** MINIMAL retries re-render WITHOUT re-assembling the prompt, so the look cannot change between attempts —
    *  the prompt still carries the original look's fragment. `true` makes every retry KEEP the look, so the stamps
    *  and `ai_generation_log` describe what actually rendered instead of a re-roll that never reached the pixels. */
@@ -222,7 +227,17 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
     // THE MODEL POOL. Opened to every model the surface's policy row names (Kevin: "all looks enabled for all
     // models, i think that makes 3 total?"), minus two exclusions: models he explicitly graded NO for this look and
     // surface ("keep the rejections, that's right"), and the day-of / nightly bans.
-    const rejected = rejectedModelsFor(input.approvals, resolved.look.key, lookSurface);
+    // SCENE IGNORES THE PER-LOOK MODEL REJECTIONS (Kevin, 2026-09-14: "we shouldn't have any looks banned on any
+    // models for scene only — it doesn't have to worry about a face swap"). Every `approved = false` row is a
+    // FACE-SWAP judgement: whether that look carries a swapped likeness on that model. A personless scene has no
+    // face to carry, so the rejection has nothing to say about it. Keeping the filter also skewed the roll — the
+    // only model with NO grades (flux-1.1-pro-ultra, 0 rows) survived every pool while flux-1.1-pro was filtered
+    // out of the 14 looks it was rejected on, handing the ungraded model 58% of scene renders instead of 25%.
+    const rejected =
+      input.surface === 'scene'
+        ? new Set<string>()
+        : rejectedModelsFor(input.approvals, resolved.look.key, lookSurface);
+    if (input.surface === 'scene') stamps.push('scene_ignores_look_model_bans');
     const approvedOn = LOOKS_ALL_MODELS
       ? [...(input.policy[policySurface]?.primaryModels ?? [])].filter((m) => !rejected.has(m))
       : approvedModelsFor(input.approvals, resolved.look.key, lookSurface);
@@ -242,14 +257,22 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
     // pool, so it simply rolls.
     const pinModel = primaryFor(input.policy, policySurface);
     const directToPrimary =
-      lookModels.includes(pinModel) && rng() < PRIMARY_DIRECT_SHARE ? pinModel : null;
+      input.evenModelSplit !== true && lookModels.includes(pinModel) && rng() < PRIMARY_DIRECT_SHARE
+        ? pinModel
+        : null;
     modelId =
       input.forceModel ?? directToPrimary ?? lookModels[Math.floor(rng() * lookModels.length)];
     stamps.push(
       `policy:${policySurface}:1:${short(modelId)}`,
       `model_source:look:${lookModels.length}`
     );
-    stamps.push(directToPrimary ? `model_roll:direct:${short(pinModel)}` : 'model_roll:pool');
+    stamps.push(
+      directToPrimary
+        ? `model_roll:direct:${short(pinModel)}`
+        : input.evenModelSplit === true
+          ? `model_roll:even:${lookModels.length}`
+          : 'model_roll:pool'
+    );
   }
   const source: StyleContract['source'] =
     input.forcedLook && pinKnown ? 'force' : input.pinnedLook && pinKnown ? 'pin' : 'roll';
