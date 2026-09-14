@@ -231,7 +231,18 @@ export async function genderSafeDualSwap(
 
     // Forensics (2026-09-13, the flux first-swap drill): the base render each attempt swapped against, so a failed
     // attempt's image can be pulled and looked at (the swap result alone only says "one face ≈ 0").
-    reasons.push(`dual_target:${attempt}:${target}`);
+    //
+    // URL ONLY (2026-09-14). gemini and grok hand back a `data:image/png;base64,…` URI rather than an https URL,
+    // and stamping that put MEGABYTES into ai_generation_log.fallback_reasons — 34 of 120 sampled rows carried
+    // 56 MB between them, the largest single row 2.85 MB. That is the column `check-forensics.js` and the
+    // dream_forensics RPCs read, so the stamp meant to make failures diagnosable was making them undiagnosable:
+    // a plain select over recent rows now hits the statement timeout. A data URI cannot be fetched later anyway,
+    // so it was never worth storing — record that the attempt happened and move on.
+    reasons.push(
+      target.startsWith('data:')
+        ? `dual_target:${attempt}:inline`
+        : `dual_target:${attempt}:${target}`
+    );
 
     // #2 (2026-08-05, sunnysteph): PROACTIVELY read the rendered faces' genders
     // with Haiku and route the engine by it — the engine's in-process genderage

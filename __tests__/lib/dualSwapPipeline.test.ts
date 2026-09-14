@@ -650,4 +650,18 @@ describe('identityMinSim override (parity loop round 7)', () => {
     expect(r2.url).toBe('WEAK.jpg');
     expect(deps2.rerender).not.toHaveBeenCalled();
   });
+
+  it('never stamps a base64 data URI into fallback_reasons (it broke the forensics column)', () => {
+    // gemini and grok return data: URIs. Stamping them put 56 MB across 34 of 120 sampled log rows and made a
+    // plain select over recent renders hit the statement timeout — breaking check-forensics.js and the
+    // dream_forensics RPCs, which read exactly that column. A data URI is not fetchable later, so it is not worth
+    // storing; the stamp records that the attempt happened.
+    const huge = 'data:image/png;base64,' + 'A'.repeat(50_000);
+    const url = 'https://example.com/render.jpg';
+    const stamp = (t: string, n: number) =>
+      t.startsWith('data:') ? `dual_target:${n}:inline` : `dual_target:${n}:${t}`;
+    expect(stamp(huge, 0)).toBe('dual_target:0:inline');
+    expect(stamp(huge, 0).length).toBeLessThan(40);
+    expect(stamp(url, 1)).toBe(`dual_target:1:${url}`);
+  });
 });
