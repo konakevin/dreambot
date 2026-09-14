@@ -116,6 +116,12 @@ export const COUPLE_EXCLUDED_VIBE_FAMILIES: readonly string[] = ['kawaii'];
  *  gemini / grok couples. So the ban is per (model x surface), not a vibe retirement: these families still roll on
  *  every solo, every scene, and on gemini / grok couples. Watchlist (one failure or untested, kept in the pool):
  *  macabre, noir, ominous, fog, candlelit. */
-export const FLUX_COUPLE_EXCLUDED_VIBE_FAMILIES: readonly string[] = [];
+export const FLUX_COUPLE_EXCLUDED_VIBE_FAMILIES: readonly string[] = [
+  'moonlit',
+  'starlit',
+  'nightshade',
+  'stormlight',
+  'dark',
+];
 
 export const LOOKS_EXCLUDED_VIBE_VERSIONS: readonly string[] = ['subtle'];
