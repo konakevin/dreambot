@@ -203,3 +203,45 @@ assignments in this document are provisional.
 **Still open:** the 35% legacy-family bias (`engine_config.nightly_legacy_look_pct`) ends when the legacy family is
 distributed — see §7. And the Classic card disappears, which is the point: it named our history rather than the
 picture.
+
+---
+
+## 10. VIBES — re-architected as groups, decided 2026-09-14
+
+**Kevin:** _"fold the new ones in where it makes sense … if we truly have groups of vibes that fall out to a new,
+unique vibe label, then let's add it."_
+
+So a user-facing vibe is a GROUP, not a family. Three tiers, one pick: **group → family → intensity version**. The
+22 labels users already know stay exactly as they are, and each gains three to six times the range behind it. Two
+new labels earn their place: **Golden Hour** (the most recognisable lighting word there is, wasted buried inside
+Nostalgic) and **Noir** (instantly understood, and it was hiding under Macabre). Dreamy folds into Ethereal,
+Festive into Whimsical. **24 labels, 56 families, 231 versions.**
+
+| label                                                                                                                   | families it rolls                                                              |
+| ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Cozy                                                                                                                    | cozy, candlelit, autumnal, blossom                                             |
+| Peaceful                                                                                                                | peaceful, overcast, rainfall, snowfall, blue_hour, after_rain                  |
+| Ethereal                                                                                                                | ethereal, aurora, bioluminescent, caustics, prism, stained_glass, aura, dreamy |
+| Cinematic                                                                                                               | cinematic, godrays, spotlight                                                  |
+| Epic                                                                                                                    | epic, majestic, stormlight, opulent                                            |
+| **Golden Hour** _(new)_                                                                                                 | golden_hour, sun_drenched, sunrise                                             |
+| **Noir** _(new)_                                                                                                        | noir, fog                                                                      |
+| Dark                                                                                                                    | dark, ominous                                                                  |
+| Nightshade                                                                                                              | nightshade, moonlit, starlit                                                   |
+| Whimsical                                                                                                               | whimsical, cotton_candy, carnival, festive                                     |
+| Voltage                                                                                                                 | voltage, fireworks, synthwave                                                  |
+| Psychedelic                                                                                                             | psychedelic, chaos                                                             |
+| Nostalgic · Minimal · Arcane · Ancient · Enchanted · Fierce · Coquette · Surreal · Shimmer · Macabre · Kawaii · Fantasy | themselves only                                                                |
+
+**Two conditions on this working.**
+
+1. **Folding only works if members share a feeling.** Picking Cozy can hand you an autumn scene; that must read as
+   a good answer, never a wrong one. Any member that surprises gets moved, not explained.
+2. **It is invisible without the fragment work.** Create ignores vibe render fragments entirely today (§4), so the
+   whole fold changes nothing on its own. The grouping and the fragment plumbing ship together or not at all.
+
+**Inherited from nightly:** the `__subtle` versions stay out of the roll — they carry no fragment and render plain,
+which is the same reason nightly excludes them. A group therefore rolls one of three versions per family.
+
+**Still to build:** the group tier does not exist in the schema. `dream_vibes.version_of` means "intensity version
+of", and overloading it for semantic grouping would conflate two axes. This needs its own column.
