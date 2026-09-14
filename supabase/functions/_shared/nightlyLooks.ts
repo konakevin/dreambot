@@ -138,6 +138,21 @@ export function approvedModelsFor(
   ].sort();
 }
 
+/** Models this look was explicitly graded as a NO for on this surface. Distinct from "never tested": an untested
+ *  combination is merely unknown, a rejected one is a judgment Kevin made and must stay shut even when the model
+ *  pool is otherwise opened to every look. */
+export function rejectedModelsFor(
+  approvals: readonly LookApproval[],
+  lookKey: string,
+  surface: LookSurface
+): Set<string> {
+  return new Set(
+    approvals
+      .filter((a) => a.approved === false && a.lookKey === lookKey && a.surface === surface)
+      .map((a) => a.model)
+  );
+}
+
 export function resolveLook(input: ResolveLookInput): ResolvedLook | null {
   const stamps: string[] = [];
   const fragmentFor = (l: LookRow): string =>

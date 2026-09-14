@@ -264,48 +264,136 @@ describe('buildStyleContract', () => {
     expect(fluxSolo.vibe!.vibe.family).toBe('moonlit');
   });
 
-  it('LOOK-FIRST: the look decides the model from its own approvals, and a retry moves to another of them', () => {
-    // oil is approved on flux couples; chromo on gemini couples. With modelFromLook the roll is look-first, so the
-    // model must be one the CHOSEN look is approved on, never a policy weight.
-    const approvals = [
-      ok('oil', PRO, 'couple'),
-      ok('oil', GEMINI, 'couple'),
-      ok('oil', PRO, 'solo'),
-    ];
-    const c = buildStyleContract({
-      surface: 'couple',
-      policy: { ...POLICY, couple: { primaryModels: [GROK], fallbackModels: [GROK] } },
-      looks: LOOKS,
-      approvals,
-      modelFromLook: true,
-      rng,
-    })!;
-    expect(c.look.key).toBe('oil');
-    expect([PRO, GEMINI]).toContain(c.model); // never GROK, which the policy would have picked
-    expect(c.stamps).toContain('model_source:look:2');
+  // ── MODEL SELECTION AND THE DUAL FAILURE LADDER ────────────────────────────────────────────────────────────
+  // Kevin, 2026-09-13, in his words:
+  //   "all looks enabled for all models, i think that makes 3 total?"
+  //   "keep the rejections, that's right"
+  //   "hardcode 50% to go direct to flux 1.1pro, and the other 50% random roll from all models in the pool. same
+  //    thing with singles"
+  //   "try a 2nd model if the first char render fails, and so on … if we get through all models then we resolve to
+  //    a single and start over on the model chain"
+  describe('model selection (look-first)', () => {
+    const POLICY3: NightlyModelPolicy = {
+      couple: { primaryModels: [PRO, GEMINI, GROK], fallbackModels: [GEMINI] },
+      solo: { primaryModels: [PRO, GEMINI, GROK], fallbackModels: [] },
+      solo_rebuild: { primaryModels: [FLEX], fallbackModels: [] },
+      scene: { primaryModels: [PRO], fallbackModels: [] },
+    };
+    const APPR = [ok('oil', PRO, 'couple'), ok('oil', PRO, 'solo')]; // graded on flux only — the pool opens anyway
+    const build = (over: Record<string, unknown> = {}, rngFn = rng) =>
+      buildStyleContract({
+        surface: 'couple',
+        policy: POLICY3,
+        looks: LOOKS,
+        approvals: APPR,
+        modelFromLook: true,
+        rng: rngFn,
+        ...over,
+      })!;
 
-    // the retry keeps the look and moves to the other model it is approved on
-    const retry = c.forAttempt(2);
-    expect(retry.look.key).toBe('oil');
-    expect(retry.model).not.toBe(c.model);
-    expect([PRO, GEMINI]).toContain(retry.model);
-    expect(retry.stamps.some((st) => st.includes(':look_model'))).toBe(true);
+    it('opens the pool to every model the policy names, even when the look is graded on one', () => {
+      const c = build({}, () => 0.99); // 0.99 skips the direct-to-primary branch and rolls the pool
+      expect(c.stamps).toContain('model_source:look:3');
+      expect([PRO, GEMINI, GROK]).toContain(c.model);
+    });
+
+    it('goes DIRECT to the primary half the time and rolls the pool the other half', () => {
+      const direct = build({}, () => 0.1); // < 0.5
+      expect(direct.model).toBe(PRO);
+      expect(direct.stamps).toContain('model_roll:direct:flux-1.1-pro');
+
+      const rolled = build({}, () => 0.99); // >= 0.5 → pool roll, last index
+      expect(rolled.stamps).toContain('model_roll:pool');
+      expect(rolled.model).toBe(GROK);
+    });
+
+    it('a model Kevin graded NO for this look and surface never enters the pool', () => {
+      const rejectsFlux = [
+        ok('oil', GEMINI, 'couple'),
+        { lookKey: 'oil', model: PRO, surface: 'couple' as const, approved: false },
+      ];
+      const c = build({ approvals: rejectsFlux }, () => 0.1); // would go direct to flux if allowed
+      expect(c.model).not.toBe(PRO);
+      expect(c.stamps).toContain('model_source:look:2');
+      expect([c.model, c.forAttempt(2).model, c.forAttempt(3).model]).not.toContain(PRO);
+    });
+
+    it('a banned model never enters the pool either', () => {
+      const c = build({ bans: new Set([GROK]) }, () => 0.99);
+      expect([c.model, c.forAttempt(2).model]).not.toContain(GROK);
+    });
+
+    it('the same rules apply to solos', () => {
+      const direct = build({ surface: 'solo', approvals: [ok('oil', PRO, 'solo')] }, () => 0.1);
+      expect(direct.model).toBe(PRO);
+      expect(direct.stamps).toContain('model_roll:direct:flux-1.1-pro');
+      const rolled = build({ surface: 'solo', approvals: [ok('oil', PRO, 'solo')] }, () => 0.99);
+      expect(rolled.stamps).toContain('model_roll:pool');
+    });
   });
 
-  it('LOOK-FIRST: a look approved on only one model stays there rather than moving off its graded model', () => {
-    const c = buildStyleContract({
-      surface: 'couple',
-      policy: POLICY,
-      looks: LOOKS,
-      approvals: [ok('oil', PRO, 'couple')],
-      modelFromLook: true,
-      rng,
-    })!;
-    expect(c.model).toBe(PRO);
-    // Kevin: a failed couple must move models rather than degrade to a solo, so even a single-model look moves —
-    // to the policy fallback, keeping the look where it is approved and re-rolling where it is not.
-    const retry = c.forAttempt(2);
-    expect(retry.model).not.toBe(PRO);
-    expect(retry.stamps.some((st) => st.includes(':look_model_exhausted'))).toBe(true);
+  describe('dual failure ladder (look-first)', () => {
+    const POLICY3: NightlyModelPolicy = {
+      couple: { primaryModels: [PRO, GEMINI, GROK], fallbackModels: [GEMINI] },
+      solo: { primaryModels: [PRO, GEMINI, GROK], fallbackModels: [] },
+      solo_rebuild: { primaryModels: [FLEX], fallbackModels: [] },
+      scene: { primaryModels: [PRO], fallbackModels: [] },
+    };
+    const build = (over: Record<string, unknown> = {}) =>
+      buildStyleContract({
+        surface: 'couple',
+        policy: POLICY3,
+        looks: LOOKS,
+        approvals: [ok('oil', PRO, 'couple'), ok('oil', PRO, 'solo')],
+        modelFromLook: true,
+        rng: () => 0.1, // direct to the primary, so the chain starts at flux
+        ...over,
+      })!;
+
+    it('round-robins every model in the pool, once each, starting from the one that failed', () => {
+      const c = build();
+      const seen = [c.model, c.forAttempt(2).model, c.forAttempt(3).model];
+      expect(seen[0]).toBe(PRO);
+      expect(new Set(seen).size).toBe(3);
+      expect(seen).toEqual(expect.arrayContaining([PRO, GEMINI, GROK]));
+    });
+
+    it('keeps the look across every step of the chain', () => {
+      const c = build();
+      expect(c.forAttempt(2).look.key).toBe('oil');
+      expect(c.forAttempt(3).look.key).toBe('oil');
+    });
+
+    it('stamps each step as chain N of M so a failed dream can be read back', () => {
+      const c = build();
+      expect(c.forAttempt(2).stamps.some((st) => st.includes(':chain_2of3'))).toBe(true);
+      expect(c.forAttempt(3).stamps.some((st) => st.includes(':chain_3of3'))).toBe(true);
+    });
+
+    it('past the end of the chain it holds the last model rather than repeating the failed first', () => {
+      const c = build();
+      expect(c.forAttempt(4).model).toBe(c.forAttempt(3).model);
+    });
+
+    it('when the chain is exhausted the SINGLE starts over at the solo primary, not the rebuild model', () => {
+      const rebuild = build().forRebuild();
+      expect(rebuild.model).toBe(PRO);
+      expect(rebuild.look.key).toBe('oil');
+      expect(rebuild.stamps.some((st) => st.includes(':chain_restart'))).toBe(true);
+      expect(rebuild.stamps.some((st) => st.startsWith('policy:solo_rebuild:1:flux-2-flex'))).toBe(
+        false
+      );
+    });
+
+    it('the single skips a model the look was graded NO on for solos', () => {
+      const rebuild = build({
+        approvals: [
+          ok('oil', PRO, 'couple'),
+          ok('oil', GEMINI, 'solo'),
+          { lookKey: 'oil', model: PRO, surface: 'solo' as const, approved: false },
+        ],
+      }).forRebuild();
+      expect(rebuild.model).not.toBe(PRO);
+    });
   });
 });

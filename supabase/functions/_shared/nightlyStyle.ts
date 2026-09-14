@@ -18,6 +18,7 @@ import { resolveModel, type NightlyModelPolicy, type PolicySurface } from './nig
 import {
   resolveLook,
   approvedModelsFor,
+  rejectedModelsFor,
   type LookApproval,
   type LookRow,
   type LookSurface,
@@ -36,6 +37,32 @@ import {
 /** The first couple re-render stays on the attempt-1 model (see forAttempt). `false` = every re-render moves to the
  *  policy's fallback model (the r5-r20 behaviour). */
 export const RETRY_SAME_MODEL_FIRST = true;
+
+/** Fallback pin for a SOLO when the policy row names no primary. The live pin DERIVES from
+ *  `nightly_model_policy.solo.primary_models[0]` (see soloPinFor) so "our primary model" is one row in the database,
+ *  not a constant that drifts the day the primary changes — the same rule the bot-cadence monitor follows. */
+export const SOLO_PINNED_MODEL_FALLBACK = 'black-forest-labs/flux-1.1-pro';
+
+/** EVERY LOOK ON EVERY MODEL (Kevin, 2026-09-13: "all looks enabled for all models, i think that makes 3 total?").
+ *  The per-(look x model) approvals stop deciding WHICH MODEL renders a look — the model pool becomes the surface's
+ *  policy primaries, all three of them, so a failed couple always has two more to round-robin through. Approvals
+ *  still decide which looks may roll on a SURFACE at all, so his couple/solo grading is not discarded.
+ *  `false` restores the graded-model-only pool. */
+export const LOOKS_ALL_MODELS = true;
+
+/** How often a render goes STRAIGHT to the surface's primary model instead of rolling the pool (Kevin, 2026-09-13:
+ *  "hardcode 50% to go direct to flux 1.1pro, and the other 50% random roll from all models in the pool. same thing
+ *  with singles"). The roll includes the primary, so flux's real share is this plus its share of the remainder. */
+export const PRIMARY_DIRECT_SHARE = 0.5;
+
+/** The model a surface STARTS on: that policy row's FIRST primary (Kevin 2026-09-13, "whatever our primary/1st
+ *  model is" for solos; "couples always first try on flux 1.1pro" for couples). Applied only where the rolled look
+ *  is GRADED on it — a look he marked no for that model never renders there, whatever the row says. */
+export function primaryFor(policy: NightlyModelPolicy, surface: PolicySurface): string {
+  const row = policy[surface];
+  const first = row && row.primaryModels ? row.primaryModels[0] : null;
+  return first || SOLO_PINNED_MODEL_FALLBACK;
+}
 
 export type StyleSurface = 'couple' | 'solo' | 'scene';
 
@@ -162,14 +189,36 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
   let modelId = pick.model;
   let lookModels: readonly string[] = [];
   if (lookFirst) {
-    const approvedOn = approvedModelsFor(input.approvals, resolved.look.key, lookSurface);
+    // THE MODEL POOL. Opened to every model the surface's policy row names (Kevin: "all looks enabled for all
+    // models, i think that makes 3 total?"), minus two exclusions: models he explicitly graded NO for this look and
+    // surface ("keep the rejections, that's right"), and the day-of / nightly bans.
+    const rejected = rejectedModelsFor(input.approvals, resolved.look.key, lookSurface);
+    const approvedOn = LOOKS_ALL_MODELS
+      ? [...(input.policy[policySurface]?.primaryModels ?? [])].filter((m) => !rejected.has(m))
+      : approvedModelsFor(input.approvals, resolved.look.key, lookSurface);
     const allowed = approvedOn.filter((m) => !(input.bans && input.bans.has(m)));
     lookModels = allowed.length > 0 ? allowed : approvedOn;
-    modelId = input.forceModel ?? lookModels[Math.floor(rng() * lookModels.length)];
+    // SOLO PIN (Kevin, 2026-09-13): "i feel like we should be pinning flux 1.1pro for all singles renders … i think
+    // it does a better job at the looks". Measured reliability is a wash (flux 97% identity over 112 solos vs 100%
+    // on the other two), so this is his taste call about how the STYLES render, and it applies only where the look
+    // is approved on flux — the five solo looks graded elsewhere (hand_tinted_photo, painted_comic_cover,
+    // painted_animation, aquarelle_graphite, colored_pencil) keep the model that earned them. Couples are untouched:
+    // that is the surface where flux actually fails, so they keep rolling across the look's approved set.
+    // WHERE A RENDER STARTS (Kevin, 2026-09-13): "hardcode 50% to go direct to flux 1.1pro, and the other 50%
+    // random roll from all models in the pool. same thing with singles." So half of every surface's renders go
+    // straight to the policy primary and half roll the pool (the primary included), which lands flux at roughly
+    // two thirds overall while every model still gets real time. A look that REJECTED the primary is not in the
+    // pool, so it simply rolls.
+    const pinModel = primaryFor(input.policy, policySurface);
+    const directToPrimary =
+      lookModels.includes(pinModel) && rng() < PRIMARY_DIRECT_SHARE ? pinModel : null;
+    modelId =
+      input.forceModel ?? directToPrimary ?? lookModels[Math.floor(rng() * lookModels.length)];
     stamps.push(
       `policy:${policySurface}:1:${short(modelId)}`,
       `model_source:look:${lookModels.length}`
     );
+    stamps.push(directToPrimary ? `model_roll:direct:${short(pinModel)}` : 'model_roll:pool');
   }
   const source: StyleContract['source'] =
     input.forcedLook && pinKnown ? 'force' : input.pinnedLook && pinKnown ? 'pin' : 'roll';
@@ -258,15 +307,22 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
   return {
     ...base,
     forAttempt(attempt: number): StylePick {
-      // LOOK-FIRST: keep the look and move to another model IT is approved on (Kevin 2026-09-13, "allow the move").
-      // 1.2.0 would re-render the same model and then drop the +1 to a generic figure; moving instead is what keeps
-      // a failed couple a couple. Falls through to the policy ladder when the look has only the one model.
+      // LOOK-FIRST MODEL CHAIN (Kevin, 2026-09-13): "try a 2nd model if the first char render fails, and so on …
+      // if we get through all models then we resolve to a single and start over on the model chain". So the retry
+      // walks a DETERMINISTIC chain of the models this look is graded on — the model that rendered first, then the
+      // rest with flux ahead of the others — visiting each once, never repeating. Attempt n takes chain[n-1], so a
+      // look graded on three models gets three distinct models before the pipeline gives up and degrades.
       if (lookFirst && !input.forceModel) {
-        const others = lookModels.filter((m) => m !== base.model);
-        if (others.length > 0) {
-          const next = others[Math.floor(rng() * others.length)];
+        // Round robin: the model that just failed, then every OTHER model this look is graded on, each once.
+        // A couple that started on flux without a flux grade simply has the whole graded pool ahead of it.
+        const rest = lookModels.filter((m) => m !== base.model);
+        const chain = [base.model, ...rest];
+        if (chain.length > 1) {
+          const next = chain[Math.min(attempt - 1, chain.length - 1)];
           const p = pickFor(next, lookSurface, input.surface, `look_retry:${attempt}`);
-          p.stamps.unshift(`policy:${policySurface}:${attempt}:${short(next)}:look_model`);
+          p.stamps.unshift(
+            `policy:${policySurface}:${attempt}:${short(next)}:chain_${Math.min(attempt - 1, chain.length - 1) + 1}of${chain.length}`
+          );
           return p;
         }
         // The look is graded on ONE model only. Kevin 2026-09-13: "falls back to a new model instead of a single
@@ -312,6 +368,30 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
       return p;
     },
     forRebuild(): StylePick {
+      // CHAIN RESTART (Kevin, 2026-09-13): "if we get through all models then we resolve to a single and start over
+      // on the model chain". The single is a fresh start, so it takes the TOP of the chain for the solo surface —
+      // the solo row's primary where this look is graded on it, otherwise the look's first graded solo
+      // model. Without this the rebuild used the policy's solo_rebuild model, which approves no look at all.
+      if (lookFirst) {
+        // The rebuild pool obeys the same two exclusions as the first render: the models Kevin graded NO for this
+        // look on SOLOS, and the bans. A single is still a render of that look and his judgment applies to it.
+        const soloRejected = rejectedModelsFor(input.approvals, base.look.key, 'solo');
+        const soloModels = (
+          LOOKS_ALL_MODELS
+            ? [...(input.policy.solo?.primaryModels ?? [])]
+            : approvedModelsFor(input.approvals, base.look.key, 'solo')
+        ).filter((m) => !soloRejected.has(m) && !(input.bans && input.bans.has(m)));
+        const pin = primaryFor(input.policy, 'solo');
+        const restart = soloModels.includes(pin) ? pin : soloModels[0];
+        if (restart) {
+          const p = pickFor(restart, 'solo', 'solo', 'look_rebuild');
+          p.stamps.unshift(
+            `policy:solo_rebuild:1:${short(restart)}:chain_restart`,
+            `look_rebuild:chain:${soloModels.length}`
+          );
+          return p;
+        }
+      }
       const next = resolveModel({
         surface: 'solo_rebuild',
         attempt: 1,
