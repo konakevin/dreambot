@@ -186,3 +186,46 @@ describe('QA flags that silently change which engine runs', () => {
     );
   });
 });
+
+/**
+ * THE LOOK'S FRAGMENT REACHES THE PROMPT (2026-09-14).
+ *
+ * The gap that let the override library repaint 45 of 100 production renders for a week: every test asserted the
+ * look was PINNED AS THE MEDIUM (it was), and none asserted the look's own fragment survived into the prompt.
+ * The 1.2.0 override library replaced it right before render, unstamped. These guards close that hole.
+ */
+describe('nothing may silently repaint the look', () => {
+  it('the override library is reachable ONLY through the guard', () => {
+    // A bare call site is how this regressed: four of them accumulated, each added for a good local reason,
+    // none aware the looks catalogue had made the library an overwrite rather than a substitute.
+    const calls = SRC.split('pickFaceSwapModelOverride(').length - 1;
+    // 1 = inside lookFragmentOverrideFor, 1 = the dead looksPath branch (gated on LOOKS_FLUX_COUPLE_OVERRIDE_LIBRARY)
+    expect(calls).toBe(2);
+  });
+
+  it('the guard turns the library OFF for every looks-engine render', () => {
+    expect(strip(SRC)).toContain('if (looksMinimal && minimalModel) {');
+    expect(strip(SRC)).toContain("fallbackReasons.push('look_override_library:off:looks_engine');");
+  });
+
+  it('every outcome is STAMPED — a silent substitution is the actual bug', () => {
+    for (const stamp of [
+      'look_override_library:off:looks_engine',
+      'look_override_library:exempt:force_look',
+      'look_override_library:applied:',
+      'look_override_library:no_entry',
+    ]) {
+      expect(strip(SRC)).toContain(stamp);
+    }
+  });
+
+  it('the guard is declared before every site that repaints baseMedium.fluxFragment', () => {
+    const guardAt = SRC.indexOf('const lookFragmentOverrideFor =');
+    expect(guardAt).toBeGreaterThan(-1);
+    const repaints = [...SRC.matchAll(/fluxFragment: (\w+)/g)].filter(
+      (m) => m[1] !== 'nightlyMedium' && m[1] !== 'medium'
+    );
+    expect(repaints.length).toBeGreaterThan(0);
+    for (const m of repaints) expect(m.index).toBeGreaterThan(guardAt);
+  });
+});

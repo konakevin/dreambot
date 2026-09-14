@@ -1425,6 +1425,40 @@ Deno.serve(async (req) => {
       }
       return pick.model;
     };
+    /**
+     * THE LOOK'S FRAGMENT *IS* THE LOOK (Kevin, 2026-09-14: "no more flags like this silently overriding it").
+     *
+     * The 1.2.0 override library (`faceSwapModelOverrides.ts`) exists because flux-1.1-pro ignored the ~12 legacy
+     * medium fragments and rendered photoreal regardless, so it was pinned to 4 curated art styles. THE LOOKS
+     * CATALOGUE IS THAT CURATED SET NOW — 54 looks, graded per model x surface — so the library stopped being a
+     * substitute for a missing style and became an OVERWRITE of a chosen one.
+     *
+     * Measured on production 2026-09-14: it repainted 45 of 100 looks-engine renders (85% of flux-1.1-pro),
+     * rendering `nightly_kodachrome` and `nightly_vintage_film` (photographic looks) as ink illustrations while
+     * `uploads.dream_medium` still recorded the look the user never actually got. It fired with NO stamp — only a
+     * console.log — which is why it survived a week of QA and a full parity grading loop. Michele's 2026-09-14
+     * dream is the case that surfaced it: `nightly_hand_drawn_illustration` shipped as FRAG_CRISP_ORNATE_ILLUSTRATION.
+     *
+     * Looks-engine renders are now EXEMPT, and EVERY outcome is stamped — a silent substitution is the actual bug.
+     */
+    const lookFragmentOverrideFor = (model: string | null): string | null => {
+      if (force_look) {
+        fallbackReasons.push('look_override_library:exempt:force_look');
+        return null;
+      }
+      if (looksMinimal && minimalModel) {
+        fallbackReasons.push('look_override_library:off:looks_engine');
+        return null;
+      }
+      if (!model) return null;
+      const frag = pickFaceSwapModelOverride(model, nightlyVibe?.key ?? null);
+      fallbackReasons.push(
+        frag
+          ? `look_override_library:applied:${model.split('/').pop()}`
+          : 'look_override_library:no_entry'
+      );
+      return frag;
+    };
     if (isFaceSwapCharacter && !looksPath) {
       // DreamSmart pool (2026-07-22): a model proven to render THIS style, ≤2✦,
       // minus nightly bans. Replaces the old hardcoded FACE_SWAP_MODELS /
@@ -1437,10 +1471,7 @@ Deno.serve(async (req) => {
       // Per-model curated medium-fragment override library. Same library
       // serves single and dual — fragments are subject-agnostic.
       // force_look (Phase A2): the pinned look IS the curated fragment — the library must not repaint it.
-      const modelOverride = force_look
-        ? null
-        : pickFaceSwapModelOverride(faceSwapPrePickedModel, nightlyVibe?.key ?? null);
-      if (force_look) fallbackReasons.push('look_override_library:exempt');
+      const modelOverride = lookFragmentOverrideFor(faceSwapPrePickedModel);
       if (modelOverride) {
         realMediumFragment = baseMedium.fluxFragment;
         baseMedium = { ...baseMedium, fluxFragment: modelOverride };
@@ -2346,10 +2377,7 @@ Deno.serve(async (req) => {
             }
           }
           if (faceSwapPrePickedModel && !dayOfLookKey) {
-            const modelOverride = pickFaceSwapModelOverride(
-              faceSwapPrePickedModel,
-              nightlyVibe?.key ?? null
-            );
+            const modelOverride = lookFragmentOverrideFor(faceSwapPrePickedModel);
             if (modelOverride) {
               realMediumFragment = baseMedium.fluxFragment;
               baseMedium = { ...baseMedium, fluxFragment: modelOverride };
@@ -2402,13 +2430,11 @@ Deno.serve(async (req) => {
           resolvedMediumSceneModels = nightlyMedium.sceneEligibleModels;
           resolvedMediumSmartModels = nightlyMedium.smartDreamModels;
           // Re-apply the per-model curated fragment for the NEW look + model, exactly as the pin and legacy-ban
-          // routes do — without this the re-roll would silently drop an override the first roll had applied.
-          if (!force_look) {
-            const modelOverride = pickFaceSwapModelOverride(refit.model, nightlyVibe?.key ?? null);
-            if (modelOverride) {
-              realMediumFragment = baseMedium.fluxFragment;
-              baseMedium = { ...baseMedium, fluxFragment: modelOverride };
-            }
+          // routes do. On a looks-engine render the guard returns null, so the re-rolled LOOK keeps its own fragment.
+          const banOverride = lookFragmentOverrideFor(refit.model);
+          if (banOverride) {
+            realMediumFragment = baseMedium.fluxFragment;
+            baseMedium = { ...baseMedium, fluxFragment: banOverride };
           }
           fallbackReasons.push(`look_medium_ban:${was}->${refit.look.key}`);
           console.log(`[nightly] scenario banned look ${was}; re-rolled ${refit.look.key}`);
@@ -2458,15 +2484,10 @@ Deno.serve(async (req) => {
             // so the model still matches the style we're actually rendering.
             faceSwapPrePickedModel = pickFaceSwapModelFor(nightlyMedium);
           }
-          if (faceSwapPrePickedModel) {
-            const modelOverride = pickFaceSwapModelOverride(
-              faceSwapPrePickedModel,
-              nightlyVibe?.key ?? null
-            );
-            if (modelOverride) {
-              realMediumFragment = baseMedium.fluxFragment;
-              baseMedium = { ...baseMedium, fluxFragment: modelOverride };
-            }
+          const rerollOverride = lookFragmentOverrideFor(faceSwapPrePickedModel);
+          if (rerollOverride) {
+            realMediumFragment = baseMedium.fluxFragment;
+            baseMedium = { ...baseMedium, fluxFragment: rerollOverride };
           }
           fallbackReasons.push(`scene_medium_ban:${dualSceneMediumBan}->${rerolled.key}`);
           console.log(
