@@ -1082,3 +1082,47 @@ couples flux. Both states are frozen in `nightly-states/` either way.
 
 Also seen in r23 #15: a `snowfall` vibe landed on a summer cliff-jump scenario (swimsuit on snowy rocks). Nothing
 pairs a weather vibe against the activity — a coherence guard for later.
+
+## NEXT UP (Kevin, 2026-09-13, after the 3-way state sheet): the LOOK LADDER
+
+> "render the same seed/prompt across all looks — 1 render per look so i can compare the same seed/prompt across
+> different looks and only the look differs. put all these in my dreams album, and i will go through and purple x
+> (quarantine) the ones i want removed."
+
+**Shape of the run.** One scene, one cast, one vibe, one fixed seed. Then one render per ENABLED nightly look (56
+today), with the look fragment as the ONLY thing that changes between renders. Everything else — place, pose,
+framing, vibe fragment, prompt order, model — held constant, so the sheet isolates the look and nothing else.
+
+**Gotchas to honour when building it:**
+
+- **Model.** Holding the model constant is what makes it a fair look comparison, but 5 solo looks are not graded on
+  flux. Either render every look on flux and mark those 5 as off-grade, or render each on its graded model and say
+  so on the tile. Pick one and state it; do not mix silently.
+- **Throttle.** 56 renders is a heavy batch: cap concurrency at 3 and gate on `waitForHeadroom({ min: 25 })` per the
+  hard rule, and avoid the :00 and 08:00 UTC windows.
+- **Destination.** Kevin's PRIVATE Dreams album (not the public feed, not a /tmp HTML sheet) so the purple
+  quarantine button is available on every tile — that button is now the look-retirement signal.
+- **Then.** `node scripts/apply-look-quarantine.js` (dry) → review → `--apply`. It resolves the look from the
+  medium column or the render's log stamp, so a hidden render still names its look.
+
+## LIVE — 2026-09-14 (Kevin: "let's finalize this and switch the engine to live now")
+
+`engine_config.nightly_looks_mode` **off → on**. The 1.2.0-with-looks engine now renders every eligible user's
+nightly dream, 10 users on the first night. **Rollback is that same row back to `off`**, effective on the next
+render, no deploy.
+
+What is live, in one line each:
+
+- The 1.2.0 engine builds the dream — location-fit action at 75%, its scene mix, its pose pools, its prompt order.
+- The new catalogue picks the LOOK (pinned as the medium) and the VIBE. 54 looks enabled; comics and pop_art
+  retired at Kevin's word.
+- Model: the surface's three policy primaries minus his explicit rejections; 50% go direct to the primary, 50%
+  roll the pool. A failed couple round-robins the pool once each, then the single restarts at the solo primary.
+- Cast split 50 / 25 / 25 (couple / self / plus-one).
+- Every cast dream reaches the model with something to DO: the row's own action (mig 516, 2691 couple rows), a
+  solo's scene sentence passed through unrewritten, or a generated place-fitting beat.
+
+Guards standing behind it: `check-nightly-catalog.js`, `scan-scenario-actions.js`, `scan-dual-faceswap-proximity.js`,
+and 3154 tests including the wiring guards over the render path itself.
+
+Snapshots for restore: `nightly-states/v1.2.0-looks.json` (this engine), `round20.json`, `postdrill.json`.

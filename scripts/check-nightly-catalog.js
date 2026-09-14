@@ -48,7 +48,12 @@ const note = [];
     const row = byKey.get(a.look_key);
     // A look deliberately held back records WHY in client_meta.reserved_for (mig 500, Big Head → Create). That is
     // the intent living next to the switch, so it is a note; an unexplained disagreement is the bug.
-    const reserved = row && row.client_meta && row.client_meta.reserved_for;
+    // Two spellings of "deliberately out": `reserved_for` (mig 500, Big Head held for Create) and `retired`
+    // (Kevin retiring a look he dislikes, or the quarantine tool). Either is stated intent sitting next to the
+    // switch, which is the property this check actually cares about — an UNEXPLAINED disagreement is the bug.
+    const held =
+      row && row.client_meta && (row.client_meta.reserved_for || row.client_meta.retired);
+    const reserved = held && (typeof held === 'string' ? held : held.reason || 'retired');
     if (!row) problems.push(`approval for a look with no catalog row: ${a.look_key}`);
     else if (row.nightly_enabled === false && reserved) {
       if (!note.some((n) => n.startsWith(a.look_key)))
