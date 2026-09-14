@@ -115,6 +115,10 @@ Locked by source guards in `__tests__/lib/minimalEngineWiring.test.ts`.
 | Halloween day-of forcing `halloween_digital_painting` | model re-fitted off flux on 2 of 3, pin held |
 | Halloween in-window, 3 surfaces | holiday scenes + catalogue look + catalogue vibe |
 | Fall in-window, 3 surfaces | same |
+| `winter_wonder` (a fully-banned fantastical category), 10 renders | 1 rolled a photographic look and the translated ban re-rolled it: `look_medium_ban:nightly_vintage_film->nightly_digital_painting` |
+
+Two day-of renders were also opened and inspected, not just read from stamps: the look rendered, both cast
+faces swapped cleanly, and the "Happy Halloween / DreamBot 2026" overlay composited at the bottom.
 
 The **postcard overlay** composites on every day-of render (`postcard:halloween:ok:~2s`) and correctly does
 **not** run in-window — `engine_config.holiday_postcard_scope = 'day_of'`. Halloween has an overlay asset;
