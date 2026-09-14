@@ -1767,6 +1767,8 @@ Deno.serve(async (req) => {
     // location / 20% goofy / 20% elegant. Single draws from the single_scenarios
     // pools by the cast's gender (any ∪ gender), so attire matches the locked body.
     let dualSpecialScene: string | null = null as string | null; // assigned inside applySceneRow (closure) — keep the declared type
+    /** The ACTIVE scenario's own people clause (mig 516), fed to the action slot. */
+    let dualScenarioAction: string | null = null;
     let dualSpecialWardrobe: string | null = null as string | null; // assigned inside applySceneRow (closure) — keep the declared type // the scene's attire (costume/formal/normal)
     // Which special pool the scene came from — the pose pick branches on THIS,
     // not on wardrobe truthiness (goofy rows carry a literal 'normal…clothes'
@@ -1799,7 +1801,19 @@ Deno.serve(async (req) => {
       kind: 'goofy' | 'elegant' | 'active',
       holidayKey: string | null = null
     ) => {
-      dualSpecialScene = s.scene;
+      // mig 516: the row's people clause rides its own column. The engine spends `scene` as the PLACE, so any
+      // action left inside it is read as scenery — strip it here and hand it to the action slot instead. `action`
+      // is a verbatim slice of `scene`, so this is an exact cut with no pattern matching.
+      const rowAction = (s as { action?: string | null }).action ?? null;
+      const cut = rowAction && s.scene.includes(rowAction) ? s.scene.indexOf(rowAction) : -1;
+      dualSpecialScene =
+        cut > 0
+          ? s.scene
+              .slice(0, cut)
+              .replace(/[,;]\s*$/, '')
+              .trim()
+          : s.scene;
+      dualScenarioAction = rowAction;
       dualSpecialWardrobe = s.attire;
       dualSceneMediumKey = s.mediumKey ?? null;
       dualSceneMediumBan = s.mediumBan ?? null;
@@ -2568,6 +2582,7 @@ Deno.serve(async (req) => {
         const resolved = resolveCastAction({
           castCount: selectedCast.length === 2 ? 2 : 1,
           forceAction: force_action,
+          scenarioAction: dualScenarioAction,
           dualActiveScene,
           soloActiveScene,
           bespokePoolName: dualScenePosePool,

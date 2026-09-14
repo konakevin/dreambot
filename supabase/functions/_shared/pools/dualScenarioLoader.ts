@@ -15,6 +15,11 @@ import { DUAL_SCENARIOS_PLAYFUL, DUAL_SCENARIOS_ELEGANT } from './dual_scenarios
 export interface DualScenario {
   scene: string;
   attire: string;
+  /** The people clause split out of `scene` (mig 516). The engine feeds this to the ACTION slot; without it an
+   *  active scene only gets the generic "caught mid-action exactly as the scene describes" pointer, which aims at
+   *  text the prompt has already spent as the PLACE — that is what rendered a couple standing at attention on a
+   *  seabed. Null = no clean split; the pose fallback covers it. */
+  action?: string | null;
   /** Bespoke pose pool this scenario's renders draw from (migration 353) —
    *  e.g. 'glamour' for the glamour_shot_retro seeds. Null/undefined = the
    *  default pose behavior for the scenario's kind. */
@@ -95,6 +100,7 @@ async function fetchPool(supabase: SupabaseClient, pool: string): Promise<DualSc
   // fallback. Each rung pages through the full pool (fetchAllRows).
   let rows: Record<string, unknown>[] = [];
   for (const select of [
+    'scene,attire,action,pose_pool,medium_key,medium_ban,category',
     'scene,attire,pose_pool,medium_key,medium_ban,category',
     'scene,attire,pose_pool,medium_key,medium_ban',
     'scene,attire,pose_pool',
@@ -109,6 +115,7 @@ async function fetchPool(supabase: SupabaseClient, pool: string): Promise<DualSc
   return rows.map((r) => ({
     scene: r.scene as string,
     attire: r.attire as string,
+    action: (r.action as string | null | undefined) ?? null,
     posePool: (r.pose_pool as string | null | undefined) ?? null,
     category: (r.category as string | null | undefined) ?? null,
     mediumKey: (r.medium_key as string | null | undefined) ?? null,

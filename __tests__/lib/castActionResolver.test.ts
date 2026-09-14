@@ -54,10 +54,12 @@ describe('resolveCastAction — precedence (couples)', () => {
       }).action
     ).toBe('forced');
   });
-  it('active row → the fixed mid-action anchor, no stamps', () => {
+  it('active row with no split action → the generic anchor, and it SAYS so', () => {
     const r = resolveCastAction({ ...base, dualActiveScene: true, bespokePoses: ['b'] });
     expect(r.action).toBe(DUAL_ACTIVE_ANCHOR);
-    expect(r.stamps).toEqual([]);
+    // The stamp is the diagnostic that was missing when a couple rendered standing at attention: the anchor only
+    // points at the scene, so knowing a render fell back to it is what makes that failure findable (mig 516).
+    expect(r.stamps).toEqual(['active_anchor:generic']);
   });
   it('bespoke pose_pool beats the kind pools and stamps the pool name', () => {
     const r = resolveCastAction({
@@ -344,5 +346,86 @@ describe('flux couple stances on active rows and pool renders (arm H)', () => {
     expect(miss.action).toBe('classic dual');
     const off = resolveCastAction({ ...base, dualActiveScene: true, rng: () => 0.1 });
     expect(off.action).toBe(DUAL_ACTIVE_ANCHOR);
+  });
+
+  // mig 516 — an ACTIVE scenario's own people clause beats the generic anchor. The anchor only POINTS at the scene
+  // ("caught mid-action exactly as the scene describes"), and the scene text has already been spent as the PLACE,
+  // so on its own it leaves the cast posed by the face-swap framing block alone: two people standing at attention
+  // on a seabed under the line "Soaring above a lost city of submerged pillars" (Kevin, 2026-09-13).
+  describe('scenario action (mig 516)', () => {
+    const base = {
+      forceAction: null,
+      bespokePoolName: null,
+      bespokePoses: [],
+      sceneKind: null,
+      hasSpecialScene: true,
+      hasSpecialWardrobe: false,
+      plusOneRelationship: null,
+      activePose: null,
+      locationAction: null,
+      dualAction: 'fallback dual action',
+      soloAction: 'fallback solo action',
+      classicDualPools: undefined,
+      classicSoloPools: undefined,
+      rng: () => 0.5,
+    } as unknown as Parameters<typeof resolveCastAction>[0];
+
+    it('a DUAL active scene uses the row action instead of the generic anchor', () => {
+      const r = resolveCastAction({
+        ...base,
+        castCount: 2,
+        dualActiveScene: true,
+        scenarioAction:
+          'she holds a glowing sea lantern at hip level, he floats beside her arms spread',
+      });
+      expect(r.action).toBe(
+        'she holds a glowing sea lantern at hip level, he floats beside her arms spread'
+      );
+      expect(r.action).not.toBe(DUAL_ACTIVE_ANCHOR);
+      expect(r.stamps).toContain('scenario_action:dual');
+    });
+
+    it('falls back to the generic anchor when the row has no clean split', () => {
+      const r = resolveCastAction({
+        ...base,
+        castCount: 2,
+        dualActiveScene: true,
+        scenarioAction: null,
+      });
+      expect(r.action).toBe(DUAL_ACTIVE_ANCHOR);
+      expect(r.stamps).toContain('active_anchor:generic');
+    });
+
+    it('an empty string is treated as absent, never as an empty pose', () => {
+      const r = resolveCastAction({
+        ...base,
+        castCount: 2,
+        dualActiveScene: true,
+        scenarioAction: '',
+      });
+      expect(r.action).toBe(DUAL_ACTIVE_ANCHOR);
+    });
+
+    it('the same rule applies to a SOLO active scene', () => {
+      const r = resolveCastAction({
+        ...base,
+        castCount: 1,
+        soloActiveScene: true,
+        scenarioAction: 'both arms extended upward at the moment of release',
+      });
+      expect(r.action).toBe('both arms extended upward at the moment of release');
+      expect(r.stamps).toContain('scenario_action:solo');
+    });
+
+    it('an explicit force_action still outranks the row action (QA keeps the wheel)', () => {
+      const r = resolveCastAction({
+        ...base,
+        castCount: 2,
+        dualActiveScene: true,
+        forceAction: 'forced pose from QA',
+        scenarioAction: 'she holds a lantern',
+      });
+      expect(r.action).toBe('forced pose from QA');
+    });
   });
 });

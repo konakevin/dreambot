@@ -37,6 +37,11 @@ export const SOLO_ACTIVE_ANCHOR =
 
 export interface CastActionInputs {
   castCount: 1 | 2;
+  /** The ACTIVE scenario's own people clause (mig 516 `action`). When present it replaces DUAL/SOLO_ACTIVE_ANCHOR,
+   *  which only POINTS at the scene ("caught mid-action exactly as the scene describes") — and the scene text has
+   *  already been spent as the PLACE, so the pointer aims at scenery and the cast is left posed by the face-swap
+   *  framing block alone. Null = no clean split for that row; the generic anchor still applies. */
+  scenarioAction?: string | null;
   forceAction: string | null;
   dualActiveScene: boolean;
   soloActiveScene: boolean;
@@ -101,7 +106,8 @@ export function resolveCastAction(i: CastActionInputs): CastActionResult {
     action = i.forceAction;
   } else if (i.castCount === 2) {
     if (i.dualActiveScene) {
-      action = DUAL_ACTIVE_ANCHOR;
+      action = i.scenarioAction || DUAL_ACTIVE_ANCHOR;
+      stamps.push(i.scenarioAction ? 'scenario_action:dual' : 'active_anchor:generic');
     } else if (i.bespokePoses.length > 0) {
       action = pick(i.bespokePoses);
       stamps.push(`bespoke_pose:${i.bespokePoolName}`);
@@ -115,7 +121,8 @@ export function resolveCastAction(i: CastActionInputs): CastActionResult {
       action = i.activePose ?? i.locationAction ?? i.dualAction;
     }
   } else if (i.soloActiveScene) {
-    action = SOLO_ACTIVE_ANCHOR;
+    action = i.scenarioAction || SOLO_ACTIVE_ANCHOR;
+    stamps.push(i.scenarioAction ? 'scenario_action:solo' : 'active_anchor:generic');
   } else if (i.bespokePoses.length > 0) {
     action = pick(i.bespokePoses);
     stamps.push(`bespoke_pose_solo:${i.bespokePoolName}`);
