@@ -49,9 +49,18 @@ const pct = (a, b) => (b ? `${Math.round((100 * a) / b)}%` : '—');
   }
 
   // A nightly render is one the engine stamped as such; QA and Create renders carry different stamps.
-  const nightly = (logs || []).filter((r) =>
+  const engineRenders = (logs || []).filter((r) =>
     (r.fallback_reasons || []).some((x) => /^looks_(minimal|path):|^look:/.test(String(x)))
   );
+  // ...but MY OWN QA batches run through the same engine and land in the same table, so they were being counted as
+  // production nightlies. On 2026-09-14 that reported "1 generic anchor" and "1 generator unavailable" as engine
+  // faults when both came from a force_scene_category test batch and NO real user had hit that rung at all.
+  // These stamps are emitted only by QA force flags — production never sets them.
+  const QA_ONLY = /^forced_scene_category:|^qa:force_final_prompt|^look_source:force|:exempt:force_look/;
+  const qaRenders = engineRenders.filter((r) =>
+    (r.fallback_reasons || []).some((x) => QA_ONLY.test(String(x)))
+  );
+  const nightly = engineRenders.filter((r) => !qaRenders.includes(r));
   if (nightly.length === 0) {
     console.log(
       `no nightly renders since ${since.slice(0, 16)} — check the 08:00 UTC cron ran (.github/workflows/nightly-dreams.yml)`
@@ -79,7 +88,9 @@ const pct = (a, b) => (b ? `${Math.round((100 * a) / b)}%` : '—');
   }
 
   console.log(
-    `NIGHTLY — ${nightly.length} renders for ${users.size} users since ${since.slice(0, 16)}\n`
+    `NIGHTLY — ${nightly.length} renders for ${users.size} users since ${since.slice(0, 16)}` +
+      (qaRenders.length ? `   (excluded ${qaRenders.length} QA render${qaRenders.length === 1 ? '' : 's'})` : '') +
+      '\n'
   );
   console.log('DELIVERY');
   console.log(`  couples intended          ${couples.length}`);
