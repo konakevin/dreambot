@@ -1813,7 +1813,12 @@ Deno.serve(async (req) => {
               .replace(/[,;]\s*$/, '')
               .trim()
           : s.scene;
-      dualScenarioAction = rowAction;
+      // Kevin 2026-09-13: a SINGLE scenario is written as one gerund-led sentence ("Pumping hard through a concrete
+      // skate bowl banking the wall at full speed") — the action IS the sentence, with no subject clause to cut at,
+      // so 5,483 of them never split. Rather than rewrite his seeds, hand the sentence itself to the action slot:
+      // his vision goes through exactly as authored, into the slot the model actually reads for people. Couples
+      // keep the split, because there the trailing clause is separable and the place half matters.
+      dualScenarioAction = rowAction ?? (kind === 'active' && !isDualFaceSwap ? s.scene : null);
       dualSpecialWardrobe = s.attire;
       dualSceneMediumKey = s.mediumKey ?? null;
       dualSceneMediumBan = s.mediumBan ?? null;
@@ -2579,6 +2584,29 @@ Deno.serve(async (req) => {
         if (swapGeometry === 'natural') fallbackReasons.push('swap_geometry:natural');
         // The precedence table lives in _shared/castActionResolver.ts (SCENE_FIRST_ACTION_PLAN.md §11.3,
         // test-locked). This handler only loads the inputs and applies the result.
+        // NO ACTION AT ALL → generate one that fits THIS scene (Kevin 2026-09-13). 260 couple rows are pure scene
+        // descriptions with no action ever written ("Courtyard with stone columns wrapped in amber lights"), and
+        // without this they fall to DUAL_ACTIVE_ANCHOR, which only points at the scene and leaves the cast posed by
+        // the face-swap framing block — two people standing at attention. The generic pose pools would not mismatch
+        // the scene, but they only ever say "standing", which is the plainness we are trying to kill. The
+        // location-beat generator already writes a place-fitting beat for 75% of plain-location dreams, so point it
+        // at the scenario's place text and let it do the same job here. Fail-open: null keeps the old anchor.
+        if ((dualActiveScene || soloActiveScene) && !dualScenarioAction && dualSpecialScene) {
+          const beatKey = Deno.env.get('ANTHROPIC_API_KEY');
+          if (beatKey) {
+            const generated = await generateLocationActionBeat(
+              dualSpecialScene,
+              selectedCast.length === 2 ? 2 : 1,
+              beatKey
+            );
+            if (generated) {
+              dualScenarioAction = generated;
+              fallbackReasons.push('scenario_action:generated');
+            } else {
+              fallbackReasons.push('scenario_action:generate_failed');
+            }
+          }
+        }
         const resolved = resolveCastAction({
           castCount: selectedCast.length === 2 ? 2 : 1,
           forceAction: force_action,

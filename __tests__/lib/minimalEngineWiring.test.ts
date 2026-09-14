@@ -56,3 +56,38 @@ describe('the locked engine is wired the way the summary says', () => {
     expect(strip(SRC)).toContain('if (looksMinimal && modelPolicy && !force_medium) {');
   });
 });
+
+/**
+ * THE ACTION CHAIN (mig 516 + the 2026-09-13 fallbacks). Three rungs, each covering what the one above cannot:
+ *   1. the row's own split action        — 2,691 couple rows
+ *   2. the solo scene sentence itself    — 5,483 single rows whose action is not detachable
+ *   3. a generated place-fitting beat    — the 260 couple rows that never had an action written
+ * Only if all three are absent does the generic anchor apply. Source guards, because this wiring lives in the edge
+ * handler; the resolver's own precedence is covered by castActionResolver.test.ts.
+ */
+describe('every cast dream reaches the model with something to DO', () => {
+  it('rung 1: the row action is trimmed off the place text and handed to the resolver', () => {
+    expect(strip(SRC)).toContain('dualScenarioAction = rowAction ??');
+    expect(strip(SRC)).toContain('scenarioAction: dualScenarioAction');
+    // the cut is exact because `action` is a verbatim slice of `scene` — no pattern matching at render time
+    expect(strip(SRC)).toContain('s.scene.includes(rowAction) ? s.scene.indexOf(rowAction) : -1');
+  });
+
+  it('rung 2: a SOLO active row with no split action passes its scene sentence through, unrewritten', () => {
+    expect(strip(SRC)).toContain("kind === 'active' && !isDualFaceSwap ? s.scene : null");
+  });
+
+  it('rung 3: with no action at all, a place-fitting beat is generated rather than falling to the anchor', () => {
+    expect(strip(SRC)).toContain(
+      '(dualActiveScene || soloActiveScene) && !dualScenarioAction && dualSpecialScene'
+    );
+    expect(strip(SRC)).toContain("fallbackReasons.push('scenario_action:generated')");
+  });
+
+  it('rung 3 fails OPEN — a generator outage keeps the old anchor instead of breaking the dream', () => {
+    expect(strip(SRC)).toContain("fallbackReasons.push('scenario_action:generate_failed')");
+    expect(strip(SRC)).toContain(
+      "const beatKey = Deno.env.get('ANTHROPIC_API_KEY'); if (beatKey) {"
+    );
+  });
+});

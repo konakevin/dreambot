@@ -99,6 +99,12 @@ async function renderOne(surface, n) {
     ...(ARGS.priors ? { force_photo_priors: true } : {}),
     // --place=<location card name>: mandate the place (force_place) — a test of one saved place / imagined world.
     ...(ARGS.place ? { force_place: String(ARGS.place) } : {}),
+    // --active: force an ACTIVE scenario, the scene kind whose pose comes from the row's own action clause
+    // (mig 516). Without it an active scene rolls at ~20%, so verifying the action chain means rendering a
+    // dozen dreams and hoping. The engine already accepts force_active; the harness just never passed it.
+    ...(ARGS.active ? { force_active: true } : {}),
+    // --single-active: the solo equivalent, for the rung where a single's scene sentence IS its action.
+    ...(ARGS['single-active'] ? { force_single_active: true } : {}),
   };
   const start = Date.now();
   let res;
