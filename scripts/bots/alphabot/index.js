@@ -23,6 +23,32 @@
 
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
+// FarmBot-destined candidates (2026-09-09 AlphaBot proving-ground QA) — the
+// path files + their bespoke pools live under farmbot/ (not moved/duplicated,
+// per ALPHABOT.md's "no need to move files" note); Node resolves each path
+// file's own internal require('../seeds/...')/require('../shared-blocks')
+// relative to ITS OWN location, so this still pulls FarmBot's real content.
+// Config below (medium/prefix/suffix/model) is cloned byte-identical from
+// scripts/bots/farmbot/index.js so each candidate is proven under FarmBot's
+// real destination config, not AlphaBot's own.
+const farmbotBlocks = require('../farmbot/shared-blocks');
+const farmbotPools = require('../farmbot/pools');
+
+// Paths whose real destination bot (FarmBot) rolls its OWN dedicated look
+// register (5 curated anime/cel-shaded entries) instead of AlphaBot's
+// inherited Chibi one below — keeps each FarmBot candidate's art-style roll
+// byte-identical to FarmBot's real rollSharedDNA (proving a path under the
+// wrong look register proves nothing). If you're wiring in another FarmBot
+// candidate, add its path key here too.
+const FARMBOT_DESTINED_PATHS = [
+  'farm-fair-festival',
+  'duck-pond',
+  'evening-chores',
+  'market-town-square',
+  'deliveries',
+  'laundry-day',
+  'waterfall-glade',
+];
 
 // Where each candidate is headed. 'ex-dreambot' = split refugee, destination
 // undecided; update when Kevin assigns one (feeds the caption + the
@@ -74,6 +100,16 @@ const pathBuilders = {
   // superseded BloomBot rejects — gothic-harvest-florals, pumpkin-patch-blooms,
   // witchs-garden-blooms — deleted, replaced by moonlit-flower-garden /
   // overgrown-pumpkin-blooms / haunted-mansion-florals / nightshade-forest-path.)
+  // ── FarmBot-destined candidates (2026-09-09) — 6 already-built-but-never-
+  // registered FarmBot path files, proving out here before registration into
+  // farmbot/index.js. Required directly from farmbot/paths/ (not moved).
+  'farm-fair-festival': require('../farmbot/paths/farm-fair-festival'),
+  'duck-pond': require('../farmbot/paths/duck-pond'),
+  'market-town-square': require('../farmbot/paths/market-town-square'),
+  deliveries: require('../farmbot/paths/deliveries'),
+  'evening-chores': require('../farmbot/paths/evening-chores'),
+  'laundry-day': require('../farmbot/paths/laundry-day'),
+  'waterfall-glade': require('../farmbot/paths/waterfall-glade'),
 };
 
 // Look-enabled paths — same derivation DreamBot used (bubble exclusions moot
@@ -129,12 +165,23 @@ module.exports = {
     // their full look; this just reinforces the painterly-dream register).
     dreambot_cosmic_dream:
       'luminous painterly dream-illustration, storybook-cosmic wonder, dreamy soft light, richly detailed, deep atmospheric depth, magical and serene',
+    // FarmBot candidate — byte-identical clone of farmbot/index.js's
+    // mediumStyles.farmbot_cozy_neutral (the bot's ONLY medium/tone-lock).
+    farmbot_cozy_neutral: farmbotBlocks.FARMBOT_COZY_NEUTRAL,
   },
 
   cleanMediumByModel: {},
 
   mediumByPath: {
     ...Object.fromEntries(CHIBI_LOOK_PATHS.map((p) => [p, 'chibibot_neutral'])),
+    // FarmBot candidate — locked to its own medium (never chibibot_neutral).
+    'farm-fair-festival': 'farmbot_cozy_neutral',
+    'duck-pond': 'farmbot_cozy_neutral',
+    'market-town-square': 'farmbot_cozy_neutral',
+    deliveries: 'farmbot_cozy_neutral',
+    'evening-chores': 'farmbot_cozy_neutral',
+    'laundry-day': 'farmbot_cozy_neutral',
+    'waterfall-glade': 'farmbot_cozy_neutral',
     'creature-world': 'chibibot_creature',
     dreamscape: 'dreambot_dreamscape',
     'butterfly-realm': 'dreambot_butterfly',
@@ -180,11 +227,16 @@ module.exports = {
     chibibot_neutral: 'cute chibi',
     dreambot_cosmic_dream:
       'a breathtaking luminous painterly dream-illustration, storybook-cosmic wonder, dreamy and magical, rich saturated color, deep atmospheric depth',
+    // Byte-identical clone of farmbot/index.js's promptPrefixByMedium.
+    farmbot_cozy_neutral: 'cozy farm scene',
   },
 
   promptSuffixByMedium: {
     chibibot_neutral:
       'adorable wholesome charm, every character is a creature, no humans, no text no watermarks',
+    // Byte-identical clone of farmbot/index.js's promptSuffixByMedium.
+    farmbot_cozy_neutral:
+      'no text, no words, no letters, no numbers, no watermark, no signature, no artist tag, no logo, no stylized mark of any kind anywhere in the frame, gallery quality',
   },
 
   promptPrefixByPath: {
@@ -224,6 +276,16 @@ module.exports = {
     'sky-bazaar',
     'dream-orchard',
     'starlight-carnival',
+    // FarmBot candidate (2026-09-09) — safe to list despite AlphaBot's
+    // cycleAllPaths shuffle-bag: no bot_schedules row exists for alphabot,
+    // so this can never auto-post; only reachable via explicit --mode.
+    'farm-fair-festival',
+    'duck-pond',
+    'deliveries',
+    'market-town-square',
+    'evening-chores',
+    'laundry-day',
+    'waterfall-glade',
   ],
 
   cycleAllPaths: true,
@@ -265,11 +327,31 @@ module.exports = {
     'sky-bazaar': 'black-forest-labs/flux-1.1-pro-ultra',
     'dream-orchard': 'black-forest-labs/flux-1.1-pro-ultra',
     'starlight-carnival': 'black-forest-labs/flux-1.1-pro-ultra',
+    // FarmBot candidate — locked to flux-2-flex only, matching
+    // farmbot/index.js's allowedModels lock exactly (modelByPath takes
+    // priority over AlphaBot's own useModelPicker/allowedModels above, so
+    // this alone is sufficient — no need to touch AlphaBot's global list).
+    'farm-fair-festival': 'black-forest-labs/flux-2-flex',
+    'duck-pond': 'black-forest-labs/flux-2-flex',
+    'market-town-square': 'black-forest-labs/flux-2-flex',
+    deliveries: 'black-forest-labs/flux-2-flex',
+    'evening-chores': 'black-forest-labs/flux-2-flex',
+    'laundry-day': 'black-forest-labs/flux-2-flex',
+    'waterfall-glade': 'black-forest-labs/flux-2-flex',
   },
 
   chaos: {
     enabled: true,
     skipPaths: [
+      // FarmBot candidate — FarmBot's real production config has no chaos
+      // layer at all; skip it here so the test render matches production.
+      'farm-fair-festival',
+      'duck-pond',
+      'market-town-square',
+      'deliveries',
+      'evening-chores',
+      'laundry-day',
+      'waterfall-glade',
       'bath-time',
       'dreamscape',
       'butterfly-realm',
@@ -309,6 +391,16 @@ module.exports = {
     polishedWords: '65-90',
     preservePhrasesByPath: {},
     skipPaths: [
+      // FarmBot candidate — FarmBot's real production config has no
+      // twoPassPolish layer at all; skip it here so the test render matches
+      // production (this bot composes its own brief directly).
+      'farm-fair-festival',
+      'duck-pond',
+      'market-town-square',
+      'deliveries',
+      'evening-chores',
+      'laundry-day',
+      'waterfall-glade',
       'bath-time',
       'dreamscape',
       'butterfly-realm',
@@ -348,6 +440,18 @@ module.exports = {
   sensoryAnchors: {
     enabled: true,
     requiredChannels: ['lightcolor'],
+    // FarmBot candidates — FarmBot's real production config has no
+    // sensoryAnchors layer at all; skip them here so the test render
+    // matches production exactly.
+    skipPaths: [
+      'farm-fair-festival',
+      'duck-pond',
+      'market-town-square',
+      'deliveries',
+      'evening-chores',
+      'laundry-day',
+      'waterfall-glade',
+    ],
     pathContext: {
       'creature-portrait': 'creature',
       'creature-world': 'creature',
@@ -391,7 +495,23 @@ module.exports = {
     return pools[name];
   },
 
-  rollSharedDNA({ vibeKey, picker }) {
+  rollSharedDNA({ vibeKey, path, picker }) {
+    // FarmBot candidates — byte-identical clone of farmbot/index.js's own
+    // rollSharedDNA (its 5-entry anime/cel-shaded FARMBOT_LOOK_REGISTER,
+    // NOT AlphaBot's inherited CHIBIBOT_LOOK_REGISTER below — a path proven
+    // under the wrong look register proves nothing). Distinct dedup axis key
+    // ('farmbot_look_register') so recency-tracking doesn't bleed between
+    // the two unrelated pools under AlphaBot's shared 'look_register' axis.
+    if (path && FARMBOT_DESTINED_PATHS.includes(path)) {
+      const lookRegister =
+        (picker
+          ? picker.pickWithRecency(farmbotPools.FARMBOT_LOOK_REGISTER, 'farmbot_look_register')
+          : farmbotPools.FARMBOT_LOOK_REGISTER[0]) || farmbotPools.FARMBOT_LOOK_REGISTER[0];
+      return {
+        lookRegister,
+        scenePalette: lookRegister.split('—')[0].trim(),
+      };
+    }
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cozy,
