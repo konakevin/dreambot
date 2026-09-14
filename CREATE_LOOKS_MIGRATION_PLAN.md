@@ -171,3 +171,35 @@ to survive that constraint, so:
 
 **Definition of done:** three or more genuinely playful looks approved on at least two models for both surfaces,
 so the Real Face side has a fun register rather than an illustrated one.
+
+---
+
+## 9. FAMILY NAMES — decided 2026-09-14
+
+**Comic · Drawn · Painted · Film · Poster · Watercolor**
+
+All singular, all one word, all describing what the RENDER looks like rather than what the artist used.
+
+**Why the first attempt was wrong, and it matters for the assignment work.** The original six families
+(`painted_realism`, `comic_print`, `photographic`, `covers_posters`, `watercolor`, `legacy`) group by MATERIAL, and
+material is invisible in the output. Kevin found this by looking at two of his own renders:
+
+- `nightly_colored_pencil` rendered a pair of divers in a glowing ice cave that reads FUN and illustrated. I had
+  just proposed filing it under Painted with the pastels, correct about the pigment, wrong about the feeling.
+- `nightly_digital_watercolor` rendered polished, saturated superheroes against a galaxy. Nothing about it says
+  watercolor to a normal person; it reads as comic-book character art.
+
+Kevin: _"we have classified these under some other category… 'Inked' sounds like no color… we need more
+descriptive names."_ Inked failed the same way: the family holds chromolithograph, marker and soft pop art, all in
+colour.
+
+**So families are grouped by OUTPUT REGISTER, not by medium.** A card has to predict what the user gets.
+
+**Consequence: `nightly_family` values will be reassigned by eye, not by fragment text.** Assigning from the
+fragment is exactly how digital watercolor ended up beside aquarelle. The method is to pull the existing render for
+each of the 54 looks, lay them out, and sort them into the six piles visually. Until that happens the family
+assignments in this document are provisional.
+
+**Still open:** the 35% legacy-family bias (`engine_config.nightly_legacy_look_pct`) ends when the legacy family is
+distributed — see §7. And the Classic card disappears, which is the point: it named our history rather than the
+picture.
