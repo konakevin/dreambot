@@ -3,7 +3,13 @@
  * inside the family by weight, filtered by the (model × surface) approvals table, with per-user recency and the
  * never-empty floor. Pure resolver, seeded rng.
  */
-import { resolveLook, approvedLooks, type LookRow, type LookApproval } from '@engine/nightlyLooks';
+import {
+  resolveLook,
+  approvedLooks,
+  type LookRow,
+  type LookApproval,
+  rejectedModelsFor,
+} from '@engine/nightlyLooks';
 
 const FLUX = 'black-forest-labs/flux-1.1-pro';
 const GROK = 'xai/grok-imagine-image';
@@ -312,5 +318,19 @@ describe('legacy family split (mig 513)', () => {
       rng: seq(0.01),
     })!;
     expect(off.stamps.some((s) => s.startsWith('look_set:'))).toBe(false);
+  });
+
+  it('rejectedModelsFor returns only the explicit NOs for that look and surface (never the untested blanks)', () => {
+    // Kevin 2026-09-13: "keep the rejections, that's right". A blank is "never tested" and opens up when the pool
+    // is widened; an explicit false is a judgment and must stay shut on every path, including the fallback single.
+    const approvals: LookApproval[] = [
+      { lookKey: 'oil', model: 'flux', surface: 'couple', approved: false },
+      { lookKey: 'oil', model: 'gemini', surface: 'couple', approved: true },
+      { lookKey: 'oil', model: 'flux', surface: 'solo', approved: true },
+      { lookKey: 'wc', model: 'flux', surface: 'couple', approved: false },
+    ];
+    expect([...rejectedModelsFor(approvals, 'oil', 'couple')]).toEqual(['flux']);
+    expect([...rejectedModelsFor(approvals, 'oil', 'solo')]).toEqual([]); // approved there, not rejected
+    expect([...rejectedModelsFor(approvals, 'chromo', 'couple')]).toEqual([]); // untested is not rejected
   });
 });
