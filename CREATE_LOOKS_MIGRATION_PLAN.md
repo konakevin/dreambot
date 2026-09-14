@@ -139,3 +139,35 @@ family ships with the three graded models and the ungraded surfaces keep today's
 3. **Six families or seven?** Painted Realism holds 16 of the 54 looks. Splitting it would change nightly's
    family roll weighting, which was tuned this week.
 4. **Restyle vibes.** Accept the frozen 22 for restyle, or author restyle fragments for the families?
+
+---
+
+## 8. Backlog: the missing FUN face-swap looks (Kevin, 2026-09-14)
+
+**The gap.** Every playful style in the app is on the Dream Art side — Anime, Animation, Claymation, Fairytale,
+Bricks, Vinyl — and **Dream Art is not a face swap at all**. It renders a character from a written description of
+the cast photo, which is why it can be as stylised as it likes. The real-face catalogue has eleven
+cartoon-adjacent looks (soft comic, soft pop art, marker, ink wash comic, rotoscope, ink illustration, storybook
+gouache, painted comic cover, painted animation, soft brush illustration, hand drawn illustration, adult cartoon)
+and all of them are _illustrated_ rather than _playful_. A user who wants to look fun **as themselves** has almost
+nothing; a user willing to become a character has eight options.
+
+Retiring comics and pop art did not cause this — both were graded on flux only, and pop art had no solo grade at
+all. They stay retired for now.
+
+**Why this is hard, and the brief for whoever picks it up.** A face swap needs the render to show a BIG, clearly
+separated, frontal face for the detector to work with, and the swapped face has to sit in the picture rather than
+read pasted-on. That is the whole reason the playful styles live on the non-swap side. Anything authored here has
+to survive that constraint, so:
+
+- The catalogue's own round-3 hypothesis (mig 496) is the starting point: HARD EDGES — ink outlines, halftone,
+  crisp strokes, flat cel fills — are what make a swapped face read pasted-on, and every cast fragment in that
+  round LEADS with the swap-safety clause for exactly this reason.
+- `nightly_big_head` is already reserved for Create (mig 500) with approvals intact: gemini and grok on both
+  surfaces, flux on couples. Oversized head, realistic face, swap-friendly by design. It is the most playful
+  real-face look that exists and it is sitting unused — start there.
+- Grade any new look the usual way: the matrix, both axes (style fidelity AND face integration), PASS only.
+  A look that renders beautifully and swaps badly is worse than no look, because it fails on a paid surface.
+
+**Definition of done:** three or more genuinely playful looks approved on at least two models for both surfaces,
+so the Real Face side has a fun register rather than an illustrated one.
