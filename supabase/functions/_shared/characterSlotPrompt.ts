@@ -292,6 +292,27 @@ export function extractSkin(physicalSummary: string | null | undefined): string 
   return skinParts.join(', ');
 }
 
+// Pull JUST the eye-colour word out of physical_summary. Eye colour was deliberately dropped from the prompt
+// alongside face-shape ("those get face-swapped away anyway" — extractHair's note). Half of that is wrong: the swap
+// refines the FACE but does NOT repaint the iris, so with nothing in the prompt Flux picks, and its default for a
+// dark-haired woman is brown. Kevin's wife is hazel-green and rendered brown most nights (2026-09-14; 8 of 8 recent
+// dual prompts carried no eye colour at all). This is the same shape as the skin-tone fix above — a trait the swap
+// does not restore has to be stated — and it is used ONLY in the position-1 lock, never in the descriptive block,
+// which is where the Disney-princess pull the original note worried about actually comes from.
+// Returns null when the summary says nothing; the caller must never invent a colour.
+export function extractEyeColor(physicalSummary: string | null | undefined): string | null {
+  if (!physicalSummary) return null;
+  const part = physicalSummary
+    .split(/[,;]/)
+    .map((p) => p.trim())
+    .find((p) => /\beyes?\b/i.test(p));
+  if (!part) return null;
+  const m = part.match(
+    /\b(hazel[- ]?green|hazel[- ]?brown|blue[- ]?green|blue[- ]?gr[ae]y|green[- ]?gr[ae]y|steel[- ]?blue|ice[- ]?blue|dark brown|light brown|deep brown|hazel|amber|emerald|olive|green|blue|brown|gr[ae]y|black)\b/i
+  );
+  return m ? m[1].toLowerCase().replace(/\s+/g, '-') : null;
+}
+
 // Pull the build word from physical_summary. Constrained to the SAME three
 // buckets the describer now emits — thin / athletic / average — so no one ever
 // gets a heavy/unkind body label. Any other (legacy) word like "curvy" or
@@ -367,6 +388,7 @@ type ResolvedIdentity = {
   skin: string | null; // skin-tone / complexion clause — race-critical, always kept
   ethnicity: string | null; // broad race bucket (strongest race anchor) or null
   identity: string; // hair / facial-hair string
+  eyes: string | null; // eye colour — position-1 lock only; the swap does not repaint the iris
 };
 
 // Map a race bucket to its prompt adjective (Hispanic/Latino → "Hispanic" to
@@ -398,7 +420,8 @@ export function resolveIdentity(member: CastSlotMember): ResolvedIdentity {
   const skin = extractSkin(member.physicalSummary);
   const ethnicity = member.ethnicity ?? null;
   const identity = extractHair(member.physicalSummary) || extractIdentityPhrase(member.promptDesc);
-  return { gender, castGender, age, build, skin, ethnicity, identity };
+  const eyes = extractEyeColor(member.physicalSummary);
+  return { gender, castGender, age, build, skin, ethnicity, identity, eyes };
 }
 
 function stripIdentity(s: string): string {
@@ -1065,6 +1088,12 @@ export function assembleCharacterPrompt(
   // echo below carries the colour for 55+). Position-1 tokens are what flux-1.1-pro obeys most; the mid-prompt
   // "full head of brown hair" anchor alone still let the 43-with-a-beard prior grey him and a stylized prior blonde
   // her. Empty string when off — production prompts stay byte-identical.
+  // EYE ECHO (2026-09-14). Position-1 only — the same slot the hair and senior echoes use, where flux-1.1-pro
+  // actually obeys a token. Emitted ONLY when the cast description states a colour; never invented.
+  // BOTH PEOPLE OR NEITHER on a couple: flux tends to apply one iris colour across the scene, so locking one side
+  // and leaving the other free hands it a single cue to spread. Stating both gives each side its own target.
+  const eyeEcho = (m: ResolvedIdentity): string => (m.eyes ? `${m.eyes.toUpperCase()}-EYED ` : '');
+
   const hairEcho = (m: ResolvedIdentity): string => {
     if (!input.hairEcho) return '';
     const a = (m.age || '').match(/\d+/);
@@ -1083,7 +1112,8 @@ export function assembleCharacterPrompt(
     // Gender lock SHOUTED at position 1 — non-negotiable, mirrors the dual
     // path. This is what stops a male cast photo from rendering on a female
     // body (and vice-versa) on the single-cast nightly path.
-    const soloEcho = m.castGender ? hairEcho(m) : '';
+    const soloEye = m.castGender ? eyeEcho(m) : '';
+    const soloEcho = m.castGender ? `${soloEye}${hairEcho(m)}` : '';
     const genderLock = m.castGender
       ? soloEcho
         ? genderLockShout(m.castGender).replace(
@@ -1252,7 +1282,11 @@ export function assembleCharacterPrompt(
     const hc = extractHairColor(m.identity);
     return hc ? `${hc.toUpperCase()}-HAIRED OLDER ` : 'OLDER ';
   };
-  const genderLock = `${seniorEcho(left)}${hairEcho(left)}${left.gender.toUpperCase()} on the LEFT, ${seniorEcho(right)}${hairEcho(right)}${right.gender.toUpperCase()} on the RIGHT`;
+  // Both-or-neither: a lone colour cue spreads across the couple, so only state eyes when BOTH sides have one.
+  const bothEyes = !!left.eyes && !!right.eyes;
+  const leftEye = bothEyes ? eyeEcho(left) : '';
+  const rightEye = bothEyes ? eyeEcho(right) : '';
+  const genderLock = `${leftEye}${seniorEcho(left)}${hairEcho(left)}${left.gender.toUpperCase()} on the LEFT, ${rightEye}${seniorEcho(right)}${hairEcho(right)}${right.gender.toUpperCase()} on the RIGHT`;
 
   // Dual anchor — positive phrasing. Head separation stated EARLY (this lands at
   // assembly position 4, ahead of the framing block) so it can counter the
