@@ -1139,7 +1139,24 @@ Deno.serve(async (req) => {
     // `dream_eligible_scene_natural` (natural-only — embodied can't render a
     // recognizable cast at tiny-figure scale).
     const isSceneComposition = composition === 'pure_scene' || composition === 'epic_tiny';
-    if (isSceneComposition && !force_medium && !nightlyMedium.isSceneEligible) {
+    // SCENE-ONLY NIGHTLIES USE THE LOOKS CATALOGUE (Kevin, 2026-09-14: "i want the nightly scene only dreams to
+    // use the new looks"). Every nightly look is `is_scene_eligible = false` BY CONSTRAINT (mig 495's
+    // dream_mediums_nightly_look_isolated keeps looks out of the Create picker and the generic pools), and this
+    // re-roll tested exactly that flag — so a pure_scene nightly threw the rolled look away and replaced it with
+    // a legacy medium (illustration / canvas). The DB cannot be the fix: flipping the flag violates the
+    // constraint. So the render keeps a look the looks engine already chose, and only an UNPINNED medium
+    // re-rolls. (The full looks path never had this bug — it sets isSceneEligible: true on its provisional
+    // medium; the minimal path inherited 1.2.0's re-roll unchanged.)
+    const looksPinnedMedium = looksMinimal && !!minimalModel;
+    if (isSceneComposition && looksPinnedMedium) {
+      fallbackReasons.push(`scene_look_kept:${nightlyMedium.key}`);
+    }
+    if (
+      isSceneComposition &&
+      !force_medium &&
+      !looksPinnedMedium &&
+      !nightlyMedium.isSceneEligible
+    ) {
       const oldKey = nightlyMedium.key;
       const sceneToken =
         composition === 'pure_scene' ? 'dream_eligible_scene' : 'dream_eligible_scene_natural';

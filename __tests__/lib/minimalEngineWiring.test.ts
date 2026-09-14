@@ -229,3 +229,52 @@ describe('nothing may silently repaint the look', () => {
     for (const m of repaints) expect(m.index).toBeGreaterThan(guardAt);
   });
 });
+
+/**
+ * SCENE-ONLY NIGHTLIES USE THE LOOKS CATALOGUE (Kevin, 2026-09-14: "i want the nightly scene only dreams to use
+ * the new looks").
+ *
+ * Every nightly look is `is_scene_eligible = false` BY CONSTRAINT — mig 495's dream_mediums_nightly_look_isolated
+ * keeps looks out of the Create picker and the generic pools. The 1.2.0 scene re-roll tested exactly that flag, so
+ * a pure_scene nightly discarded the rolled look and replaced it with a legacy medium. The DB cannot be the fix
+ * (flipping the flag violates the constraint), so the render keeps a look the engine already chose.
+ */
+describe('scene-only nightlies keep their catalogue look', () => {
+  const stripped = strip(SRC);
+
+  it('a look the engine already pinned is NOT re-rolled away on a scene render', () => {
+    expect(stripped).toContain('const looksPinnedMedium = looksMinimal && !!minimalModel;');
+    expect(stripped).toContain(
+      'if ( isSceneComposition && !force_medium && !looksPinnedMedium && !nightlyMedium.isSceneEligible ) {'
+    );
+  });
+
+  it('keeping the look is STAMPED, so the log names the look a scene render actually used', () => {
+    expect(stripped).toContain('fallbackReasons.push(`scene_look_kept:${nightlyMedium.key}`);');
+  });
+
+  it('the re-roll still runs for NON-looks renders — an addition, not a removal', () => {
+    // force_medium and the legacy path must be untouched: a legacy medium that cannot render a scene still
+    // re-rolls exactly as it did before.
+    expect(stripped).toContain('!force_medium && !looksPinnedMedium');
+    expect(stripped).toContain("composition === 'pure_scene' ? 'dream_eligible_scene'");
+  });
+
+  it('the guard is computed before the branch that reads it', () => {
+    const declared = SRC.indexOf('const looksPinnedMedium =');
+    const used = SRC.indexOf('!looksPinnedMedium &&');
+    expect(declared).toBeGreaterThan(-1);
+    expect(used).toBeGreaterThan(declared);
+  });
+
+  it('the DB route stays closed — looks must remain isolated from Create', () => {
+    // mig 495: CHECK (NOT nightly_look OR (is_public=false AND is_dream_eligible=false AND is_scene_eligible=false))
+    const mig = fs.readFileSync(
+      path.join(__dirname, '..', '..', 'supabase', 'migrations', '495_nightly_look_surfaces.sql'),
+      'utf8'
+    );
+    expect(strip(mig)).toContain(
+      'CHECK (NOT nightly_look OR (is_public = false AND is_dream_eligible = false AND is_scene_eligible = false))'
+    );
+  });
+});
