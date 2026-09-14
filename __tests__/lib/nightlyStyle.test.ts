@@ -397,3 +397,161 @@ describe('buildStyleContract', () => {
     });
   });
 });
+
+/**
+ * DAY-OF MODEL FIT (2026-09-13). A curated holiday look is pinned over the rolled one and carries its OWN
+ * `dream_mediums.allowed_models`. `halloween_digital_painting` names three models and flux-1.1-pro is not one of
+ * them, while the other five halloween looks do include it — so before this fix a day-of cast render could ship a
+ * look on a model that look's own row forbids, on the one night of the year that is guaranteed to be a holiday.
+ */
+describe('restrictModels — the pinned look clips the model pool', () => {
+  const HOL_POLICY: NightlyModelPolicy = {
+    couple: { primaryModels: [PRO, GEMINI, GROK], fallbackModels: [GEMINI] },
+    solo: { primaryModels: [PRO, GEMINI, GROK], fallbackModels: [GEMINI] },
+    solo_rebuild: { primaryModels: [FLEX], fallbackModels: [] },
+    scene: { primaryModels: [PRO], fallbackModels: [] },
+  };
+  // the live row: flux-2-flex + gemini + grok, NO flux-1.1-pro
+  const DIGITAL_PAINTING_MODELS = [FLEX, GEMINI, GROK];
+  const HOL_LOOKS = [...LOOKS, look('halloween_digital_painting', 'unfiled')];
+
+  const build = (restrict: readonly string[] | null, rngFn = () => 0.01) =>
+    buildStyleContract({
+      surface: 'solo',
+      policy: HOL_POLICY,
+      modelFromLook: true,
+      looks: HOL_LOOKS,
+      approvals: APPROVALS,
+      pinnedLook: 'halloween_digital_painting',
+      restrictModels: restrict,
+      rng: rngFn,
+    });
+
+  it('without the clip the pin can land on a model the look forbids (the bug)', () => {
+    const c = build(null);
+    expect(c).not.toBeNull();
+    expect(c!.look.key).toBe('halloween_digital_painting');
+    expect(c!.model).toBe(PRO); // the surface primary — exactly what the row excludes
+  });
+
+  it('with the clip the first pick is always one of the row’s own models', () => {
+    for (const r of [0.01, 0.3, 0.49, 0.51, 0.7, 0.99]) {
+      const c = build(DIGITAL_PAINTING_MODELS, () => r);
+      expect(c).not.toBeNull();
+      expect(DIGITAL_PAINTING_MODELS).toContain(c!.model);
+      expect(c!.model).not.toBe(PRO);
+    }
+  });
+
+  it('clips EVERY retry in the chain, not just the first pick', () => {
+    const c = build(DIGITAL_PAINTING_MODELS)!;
+    const seen = [c.model];
+    for (let attempt = 2; attempt <= 6; attempt++) {
+      const p = c.forAttempt(attempt);
+      expect(DIGITAL_PAINTING_MODELS).toContain(p.model);
+      expect(p.model).not.toBe(PRO);
+      seen.push(p.model);
+    }
+    // the pin survives every attempt — a day-of render never silently loses its holiday look
+    expect(c.forAttempt(3).look.key).toBe('halloween_digital_painting');
+    expect(seen.length).toBe(6);
+  });
+
+  it('clips the couple→solo rebuild too', () => {
+    const c = buildStyleContract({
+      surface: 'couple',
+      policy: HOL_POLICY,
+      modelFromLook: true,
+      looks: HOL_LOOKS,
+      approvals: APPROVALS,
+      pinnedLook: 'halloween_digital_painting',
+      restrictModels: DIGITAL_PAINTING_MODELS,
+      rng: () => 0.01,
+    })!;
+    const r = c.forRebuild();
+    expect(DIGITAL_PAINTING_MODELS).toContain(r.model);
+    expect(r.look.key).toBe('halloween_digital_painting');
+  });
+
+  it('stamps the clip so a render says which pool it drew from', () => {
+    const c = build(DIGITAL_PAINTING_MODELS)!;
+    expect(c.stamps.some((s) => s.startsWith('model_restrict:'))).toBe(true);
+  });
+
+  it('fails OPEN when the row allows nothing this surface runs — a day-of render must ship', () => {
+    const c = build(['some/model-nobody-runs'])!;
+    expect([PRO, GEMINI, GROK]).toContain(c.model);
+    expect(c.stamps).toContain('model_restrict:empty:3');
+  });
+
+  it('no restriction = the unclipped pool (every other look is untouched)', () => {
+    const c = buildStyleContract({
+      surface: 'solo',
+      policy: HOL_POLICY,
+      modelFromLook: true,
+      looks: HOL_LOOKS,
+      approvals: APPROVALS,
+      rng: () => 0.01,
+    })!;
+    expect(c.stamps.some((s) => s.startsWith('model_restrict:'))).toBe(false);
+  });
+});
+
+/**
+ * LOCK LOOK (2026-09-13). The minimal engine re-renders a failed couple WITHOUT re-assembling the prompt, so the
+ * look cannot change between attempts — the pixels always carry the original fragment. Before this flag a retry
+ * could stamp `look_retry:2:reroll:<other>` and rewrite the logged look, describing a render that never happened.
+ */
+describe('lockLook — minimal retries keep the look so the stamps stay honest', () => {
+  const MIN_POLICY: NightlyModelPolicy = {
+    couple: { primaryModels: [PRO, GEMINI, GROK], fallbackModels: [GEMINI] },
+    solo: { primaryModels: [PRO, GEMINI, GROK], fallbackModels: [GEMINI] },
+    solo_rebuild: { primaryModels: [FLEX], fallbackModels: [] },
+    scene: { primaryModels: [PRO], fallbackModels: [] },
+  };
+  // 'pinned_oil' is graded on PRO for couple; 'other_wc' is graded on GEMINI. The chain's second rung is GEMINI,
+  // so an unlocked retry swaps the look — exactly the silent substitution being fixed.
+  const MIN_LOOKS = [look('pinned_oil', 'painted_realism'), look('other_wc', 'watercolor')];
+  const MIN_APPROVALS = [
+    ok('pinned_oil', PRO, 'couple'),
+    ok('pinned_oil', PRO, 'solo'),
+    ok('other_wc', GEMINI, 'couple'),
+    ok('other_wc', GEMINI, 'solo'),
+  ];
+  const mk = (lock: boolean) =>
+    buildStyleContract({
+      surface: 'couple',
+      policy: MIN_POLICY,
+      modelFromLook: true,
+      lockLook: lock,
+      looks: MIN_LOOKS,
+      approvals: MIN_APPROVALS,
+      rng: () => 0.01,
+    })!;
+
+  it('unlocked, a model move can re-roll the look (what made the stamps lie)', () => {
+    const c = mk(false);
+    const rerolled = [2, 3, 4].map((a) => c.forAttempt(a)).some((p) => p.look.key !== c.look.key);
+    expect(rerolled).toBe(true);
+  });
+
+  it('locked, every attempt keeps the look that is actually in the prompt', () => {
+    const c = mk(true);
+    for (let a = 2; a <= 5; a++) {
+      const p = c.forAttempt(a);
+      expect(p.look.key).toBe(c.look.key);
+      expect(p.stamps.some((s) => s.includes(':reroll:'))).toBe(false);
+    }
+  });
+
+  it('locked still MOVES THE MODEL — the whole point of the retry ladder', () => {
+    const c = mk(true);
+    const models = new Set([c.model, c.forAttempt(3).model, c.forAttempt(4).model]);
+    expect(models.size).toBeGreaterThan(1);
+  });
+
+  it('locked keeps the look through the solo rebuild as well', () => {
+    const c = mk(true);
+    expect(c.forRebuild().look.key).toBe(c.look.key);
+  });
+});

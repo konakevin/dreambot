@@ -91,3 +91,98 @@ describe('every cast dream reaches the model with something to DO', () => {
     );
   });
 });
+
+/**
+ * HOLIDAY WIRING (2026-09-13). Two defects the Fall/Halloween audit found, both invisible to the unit lane because
+ * they live in the edge function's control flow rather than in a pure module.
+ */
+describe('holiday wiring: the day-of pin and the scenario medium bans', () => {
+  it('a LOOK PIN re-fits the model to that look own allowed_models, first pick AND retry chain', () => {
+    // Without this the day-of look renders on whatever model the ROLLED look chose — on Oct 31,
+    // halloween_digital_painting (three models, flux-1.1-pro not among them) could ship on flux-1.1-pro.
+    expect(strip(SRC)).toContain('const pinAllowed = nightlyMedium.allowedModels ?? [];');
+    expect(strip(SRC)).toContain('pinAllowed.length > 0 && !pinAllowed.includes(minimalModel)');
+    expect(strip(SRC)).toContain('restrictModels: pinAllowed');
+    // the refit must replace the contract, or only the first attempt is clipped
+    expect(strip(SRC)).toContain('styleContract = refit;');
+    // and it must not quietly re-roll the vibe while fixing a model
+    expect(strip(SRC)).toContain(
+      'pinnedLook: dualSceneMediumKey, restrictModels: pinAllowed, withVibes: false,'
+    );
+  });
+
+  it('the pin re-fit fails OPEN and says so — a day-of render must ship', () => {
+    expect(strip(SRC)).toContain('pin_model_fit_miss:');
+  });
+
+  it('a pin that does not resolve is STAMPED, never a silent fall-back to the rolled look', () => {
+    // resolveMediumFromDb returns `canvas` for a key it cannot see, so without this stamp a mistyped or
+    // de-activated day-of look drops the holiday style with no trace. (Found 2026-09-13 when a QA flag
+    // restricted the medium pool and three day-of renders silently shipped the rolled look.)
+    expect(strip(SRC)).toContain('scene_medium_unresolved:');
+    expect(strip(SRC)).toContain('scene_medium_threw:');
+  });
+
+  it('scenario medium bans are TRANSLATED into look keys instead of compared to them', () => {
+    expect(strip(SRC)).toContain(
+      "import { expandMediumBans } from '../_shared/legacyMediumBans.ts';"
+    );
+    expect(strip(SRC)).toContain(
+      'const bannedLooks = expandMediumBans(bannedMediums, catalog.looks);'
+    );
+    expect(strip(SRC)).toContain('if (bannedLooks.has(nightlyMedium.key)) {');
+  });
+
+  it('a banned look RE-ROLLS THE LOOK, never the legacy random face-swap medium', () => {
+    // The legacy branch calls resolveMediumFromDb('dream_eligible_face_swap', …), which would throw the whole
+    // style contract away. The minimal branch must re-run the contract with the banned keys excluded.
+    expect(strip(SRC)).toContain('excludeLookKeys: bannedLooks,');
+    expect(strip(SRC)).toContain('look_medium_ban:');
+    expect(strip(SRC)).toContain('look_medium_ban_nofit:');
+  });
+
+  it('the minimal branch is ordered BEFORE the legacy ban branch so it actually runs', () => {
+    const minimalAt = SRC.indexOf('looksMinimal && minimalModel && bannedMediums.length > 0');
+    const legacyAt = SRC.indexOf('bannedMediums.includes(nightlyMedium.key)');
+    expect(minimalAt).toBeGreaterThan(-1);
+    expect(legacyAt).toBeGreaterThan(-1);
+    expect(minimalAt).toBeLessThan(legacyAt);
+  });
+
+  it('retries KEEP the look, because the minimal path never re-assembles the prompt', () => {
+    expect(strip(SRC)).toContain('lockLook: true,');
+  });
+
+  it('both re-runs go through ONE contract builder, so the roll cannot drift between them', () => {
+    expect(strip(SRC)).toContain('const buildMinimalContract = async (opts?: {');
+    // exactly three call sites: the first roll, the pin re-fit, the ban re-roll
+    expect(SRC.split('await buildMinimalContract(').length - 1).toBe(3);
+  });
+});
+
+/**
+ * QA FLAG TRAPS (2026-09-13). Two flags silently switch the engine into a DIFFERENT mode, so a QA batch that
+ * passes them proves nothing about production. Both cost a wasted render batch during the holiday audit; these
+ * guards make the coupling visible in the test output instead of in a confusing set of stamps.
+ */
+describe('QA flags that silently change which engine runs', () => {
+  it('force_look IS force_medium — so it turns the minimal looks engine OFF entirely', () => {
+    // `const force_medium = force_look ?? force_medium_raw` and the minimal block is gated on `!force_medium`.
+    // A QA batch passing force_look therefore renders on the 1.2.0 legacy chain with no contract at all.
+    expect(strip(SRC)).toContain(
+      'const force_medium: string | undefined = force_look ?? force_medium_raw;'
+    );
+    expect(strip(SRC)).toContain('if (looksMinimal && modelPolicy && !force_medium) {');
+  });
+
+  it('force_face_swap_eligible makes the render a FIRST DREAM and curates the medium pool', () => {
+    // firstDreamMediumMode returns 'cast' for it, which restricts every medium resolution to the 7 curated
+    // first-dream styles — that silently defeats a day-of look pin (it resolves to canvas instead).
+    expect(strip(SRC)).toContain(
+      'const fdMode = firstDreamMediumMode({ forceFaceSwapEligible: force_face_swap_eligible,'
+    );
+    expect(strip(SRC)).toContain(
+      'const firstDreamAllow = fdMode ? firstDreamAllowedMediums(fdMode, await fetchMediums()) : undefined;'
+    );
+  });
+});

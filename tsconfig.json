@@ -28,6 +28,8 @@
     "__tests__/lib/nightlyLooks.test.ts",
     "__tests__/lib/nightlyStyle.test.ts",
     "__tests__/lib/minimalEngineWiring.test.ts",
+    "__tests__/lib/legacyMediumBans.test.ts",
+    "__tests__/lib/holidaySeason2026.test.ts",
     "__tests__/lib/vibeFragment.test.ts",
     "__tests__/lib/nightlyVibes.test.ts",
     "__tests__/lib/nightlyLooksPath.test.ts",

@@ -93,6 +93,16 @@ export interface StyleContractInput {
   vibeRecency?: number;
   /** QA `force_vibe` — any active row, pool or not. */
   forcedVibe?: string | null;
+  /** THE PINNED LOOK'S OWN `dream_mediums.allowed_models` (2026-09-13, day-of fix). A curated holiday look is a
+   *  real medium row with its own model list — `halloween_digital_painting` names three models and flux-1.1-pro is
+   *  not one of them — so when a pin overrides the rolled look, the model pool must be clipped to what that row
+   *  allows, for the FIRST pick and for every retry in the chain. Empty intersection = fail open (the pool stands)
+   *  with a stamp, because a day-of render must never fail to render. Omitted = no clipping (the normal roll). */
+  restrictModels?: readonly string[] | null;
+  /** MINIMAL retries re-render WITHOUT re-assembling the prompt, so the look cannot change between attempts —
+   *  the prompt still carries the original look's fragment. `true` makes every retry KEEP the look, so the stamps
+   *  and `ai_generation_log` describe what actually rendered instead of a re-roll that never reached the pixels. */
+  lockLook?: boolean;
   rng?: () => number;
 }
 
@@ -121,6 +131,26 @@ export interface StyleContract extends StylePick {
 }
 
 const short = (m: string) => m.replace(/^.*\//, '');
+
+/** Intersect a model pool with a pinned medium row's `allowed_models`. Fails OPEN (returns the pool unchanged, with
+ *  a stamp) when the row names nothing this surface can run — a day-of render must ship, and a model the row did not
+ *  list beats no render at all. */
+export function clipToRestrict(
+  pool: readonly string[],
+  restrict: readonly string[] | null | undefined,
+  stamps: string[],
+  tag: string
+): readonly string[] {
+  if (!restrict || restrict.length === 0) return pool;
+  const allow = new Set(restrict);
+  const kept = pool.filter((m) => allow.has(m));
+  if (kept.length === 0) {
+    stamps.push(`${tag}:empty:${pool.length}`);
+    return pool;
+  }
+  if (kept.length !== pool.length) stamps.push(`${tag}:${kept.length}of${pool.length}`);
+  return kept;
+}
 
 function fragmentFor(look: LookRow, lookSurface: LookSurface, surface: StyleSurface): string {
   if (surface === 'scene') return look.fragment;
@@ -198,6 +228,7 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
       : approvedModelsFor(input.approvals, resolved.look.key, lookSurface);
     const allowed = approvedOn.filter((m) => !(input.bans && input.bans.has(m)));
     lookModels = allowed.length > 0 ? allowed : approvedOn;
+    lookModels = clipToRestrict(lookModels, input.restrictModels, stamps, 'model_restrict');
     // SOLO PIN (Kevin, 2026-09-13): "i feel like we should be pinning flux 1.1pro for all singles renders … i think
     // it does a better job at the looks". Measured reliability is a wash (flux 97% identity over 112 solos vs 100%
     // on the other two), so this is his taste call about how the STYLES render, and it applies only where the look
@@ -267,7 +298,13 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
   ): StylePick => {
     const out: string[] = [];
     // Keep the contract's look when the new model approves it (or it was pinned / forced); else re-roll.
-    if (source !== 'roll' || isApproved(input.approvals, base.look.key, model, surfaceForLook)) {
+    // `lockLook` (minimal engine) also keeps it: that path re-renders without rebuilding the prompt, so a re-rolled
+    // look would be stamped and logged but never actually rendered.
+    if (
+      input.lockLook === true ||
+      source !== 'roll' ||
+      isApproved(input.approvals, base.look.key, model, surfaceForLook)
+    ) {
       out.push(`${tag}:keep:${base.look.key}`);
       return {
         model,
@@ -376,11 +413,15 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
         // The rebuild pool obeys the same two exclusions as the first render: the models Kevin graded NO for this
         // look on SOLOS, and the bans. A single is still a render of that look and his judgment applies to it.
         const soloRejected = rejectedModelsFor(input.approvals, base.look.key, 'solo');
-        const soloModels = (
-          LOOKS_ALL_MODELS
+        const soloModels = clipToRestrict(
+          (LOOKS_ALL_MODELS
             ? [...(input.policy.solo?.primaryModels ?? [])]
             : approvedModelsFor(input.approvals, base.look.key, 'solo')
-        ).filter((m) => !soloRejected.has(m) && !(input.bans && input.bans.has(m)));
+          ).filter((m) => !soloRejected.has(m) && !(input.bans && input.bans.has(m))),
+          input.restrictModels,
+          [],
+          'rebuild_restrict'
+        );
         const pin = primaryFor(input.policy, 'solo');
         const restart = soloModels.includes(pin) ? pin : soloModels[0];
         if (restart) {

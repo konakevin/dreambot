@@ -24,6 +24,7 @@ import {
 } from '../_shared/dreamStyles.ts';
 import { loadNightlyLooks } from '../_shared/pools/nightlyLooksLoader.ts';
 import { buildStyleContract, type StyleContract } from '../_shared/nightlyStyle.ts';
+import { expandMediumBans } from '../_shared/legacyMediumBans.ts';
 import {
   afterScenePrompt,
   applyStyleContract,
@@ -880,46 +881,84 @@ Deno.serve(async (req) => {
       nightlyMedium = provisionalLooksMedium(nightlyMedium);
       fallbackReasons.push('looks_path:provisional_medium');
     }
-    if (looksMinimal && modelPolicy && !force_medium) {
-      // Roll the look and the vibe from the new catalogue, then hand BOTH to the 1.2.0 engine as a pinned medium
-      // and a pinned vibe. The surface comes from the cast role that was pre-rolled above, so the look is graded
-      // for the right surface. Look-first: the look's own approvals pick the model (modelFromLook), never the
-      // policy weights — 1.2.0's rule that the medium decides, with Kevin's grades replacing the inherited pin.
-      const minimalSurface: 'couple' | 'solo' =
-        preRolledCastRole === 'dual' || preRolledCastRole === 'face_swap_dual' ? 'couple' : 'solo';
+    // MINIMAL surface: the cast role was pre-rolled above, so the look is graded for the surface that renders.
+    const minimalSurface: 'couple' | 'solo' =
+      preRolledCastRole === 'dual' || preRolledCastRole === 'face_swap_dual' ? 'couple' : 'solo';
+    /**
+     * ONE way to build the minimal contract, so the two later re-runs (a scenario/day-of LOOK PIN that carries its
+     * own allowed_models, and a scenario MEDIUM BAN that rules the rolled look out) go through exactly the same
+     * roll as the first build instead of a second, drifting copy of it.
+     *  - `excludeLookKeys` drops looks from the catalog BEFORE the roll (the ban route).
+     *  - `pinnedLook` + `restrictModels` pin a curated holiday look and clip the model pool to that row's own
+     *    `allowed_models` (the day-of route).
+     *  - `withVibes: false` makes NO vibe decision — a re-run must never re-roll an axis it was not asked about.
+     */
+    const buildMinimalContract = async (opts?: {
+      excludeLookKeys?: ReadonlySet<string>;
+      pinnedLook?: string | null;
+      restrictModels?: readonly string[] | null;
+      withVibes?: boolean;
+    }): Promise<StyleContract | null> => {
+      if (!modelPolicy) return null;
       const catalog = await loadNightlyLooks(supabase);
-      const vibeRowsAll = await fetchVibes();
-      const contract = buildStyleContract({
+      const exclude = opts && opts.excludeLookKeys ? opts.excludeLookKeys : null;
+      const looks = exclude ? catalog.looks.filter((l) => !exclude.has(l.key)) : catalog.looks;
+      const wantVibes = !opts || opts.withVibes !== false;
+      const vibeRowsAll = wantVibes ? await fetchVibes() : null;
+      return buildStyleContract({
         surface: minimalSurface,
         policy: modelPolicy,
         modelFromLook: true,
+        // MINIMAL re-renders WITHOUT re-assembling the prompt, so the look cannot change between attempts; lock it
+        // so the stamps and ai_generation_log describe the look that is actually in the pixels.
+        lockLook: true,
         bans: looksPathBans(
           nightlyBans,
           modelPolicy,
           dayOfHoliday ? dayOfHoliday.dayOfModelBan : []
         ),
         forceModel: force_model ?? null,
-        looks: catalog.looks,
+        looks,
         approvals: catalog.approvals,
         recentLookKeys: recentMediums,
         recencyWindow: engineCfg0.nightlyLookRecency,
         legacyPct: engineCfg0.nightlyLegacyLookPct,
         forcedLook: force_look ?? null,
-        vibes: toVibeRows(vibeRowsAll),
+        pinnedLook: opts ? (opts.pinnedLook ?? null) : null,
+        restrictModels: opts ? (opts.restrictModels ?? null) : null,
+        vibes: vibeRowsAll ? toVibeRows(vibeRowsAll) : undefined,
         recentVibeKeys: recentVibes,
         forcedVibe: force_vibe ?? null,
       });
+    };
+    /** Apply a minimal contract's MEDIUM pin (and optionally its vibe pin) to the 1.2.0 engine's variables. */
+    const applyMinimalLook = async (
+      contract: StyleContract,
+      withVibe: boolean
+    ): Promise<boolean> => {
+      const pinned = await resolveMediumFromDb(contract.look.key);
+      if (pinned.key !== contract.look.key) {
+        fallbackReasons.push(`looks_minimal_medium_miss:${contract.look.key}`);
+        return false;
+      }
+      nightlyMedium = pinned;
+      if (withVibe && contract.vibe) {
+        const pinnedVibe = await resolveVibeFromDb(contract.vibe.vibe.key);
+        if (pinnedVibe) nightlyVibe = pinnedVibe;
+      }
+      return true;
+    };
+    if (looksMinimal && modelPolicy && !force_medium) {
+      // Roll the look and the vibe from the new catalogue, then hand BOTH to the 1.2.0 engine as a pinned medium
+      // and a pinned vibe. The surface comes from the cast role that was pre-rolled above, so the look is graded
+      // for the right surface. Look-first: the look's own approvals pick the model (modelFromLook), never the
+      // policy weights — 1.2.0's rule that the medium decides, with Kevin's grades replacing the inherited pin.
+      const contract = await buildMinimalContract();
       if (contract) {
         styleContract = contract;
         minimalModel = contract.model;
         fallbackReasons.push('looks_minimal:on', ...contract.stamps);
-        const pinned = await resolveMediumFromDb(contract.look.key);
-        if (pinned.key === contract.look.key) nightlyMedium = pinned;
-        else fallbackReasons.push(`looks_minimal_medium_miss:${contract.look.key}`);
-        if (contract.vibe) {
-          const pinnedVibe = await resolveVibeFromDb(contract.vibe.vibe.key);
-          if (pinnedVibe) nightlyVibe = pinnedVibe;
-        }
+        await applyMinimalLook(contract, true);
       } else {
         fallbackReasons.push('looks_minimal:no_contract');
       }
@@ -2274,6 +2313,38 @@ Deno.serve(async (req) => {
             // so the model still matches the style we're actually rendering.
             faceSwapPrePickedModel = pickFaceSwapModelFor(nightlyMedium);
           }
+          // ── DAY-OF / PIN MODEL FIT (2026-09-13) ────────────────────────────────────────────────
+          // Under MINIMAL the line above is a no-op: pickFaceSwapModelFor short-circuits on `minimalModel`, which
+          // was chosen for the look the contract ROLLED, not the one just pinned over it. A curated holiday look
+          // carries its own allowed_models — `halloween_digital_painting` names three models and flux-1.1-pro is
+          // NOT one of them, while the other five halloween looks do include it — so on Oct 31 a cast render could
+          // ship the pinned look on a model that look's own row forbids. Re-build the contract AROUND the pin with
+          // the pool clipped to that row, which fixes the first pick AND every rung of the retry chain. The vibe is
+          // deliberately left alone (withVibes: false) — this is a model decision, not a restyle.
+          if (looksMinimal && minimalModel && !force_model) {
+            const pinAllowed = nightlyMedium.allowedModels ?? [];
+            if (pinAllowed.length > 0 && !pinAllowed.includes(minimalModel)) {
+              const refit = await buildMinimalContract({
+                pinnedLook: dualSceneMediumKey,
+                restrictModels: pinAllowed,
+                withVibes: false,
+              });
+              if (refit && refit.look.key === dualSceneMediumKey) {
+                fallbackReasons.push(
+                  `pin_model_fit:${minimalModel.split('/').pop()}->${refit.model.split('/').pop()}`,
+                  ...refit.stamps.filter((st) => st.startsWith('model_restrict:'))
+                );
+                minimalModel = refit.model;
+                faceSwapPrePickedModel = refit.model;
+                styleContract = refit;
+              } else {
+                // Fail OPEN, loudly: a day-of render must ship even when the pin is not a catalog look.
+                fallbackReasons.push(`pin_model_fit_miss:${dualSceneMediumKey}`);
+              }
+            } else {
+              fallbackReasons.push('pin_model_fit:ok');
+            }
+          }
           if (faceSwapPrePickedModel && !dayOfLookKey) {
             const modelOverride = pickFaceSwapModelOverride(
               faceSwapPrePickedModel,
@@ -2289,9 +2360,62 @@ Deno.serve(async (req) => {
           }
           fallbackReasons.push(`scene_medium:${dualSceneMediumKey}`);
           console.log(`[nightly] scenario forced medium: ${dualSceneMediumKey}`);
+        } else {
+          // The pin did NOT take. Fail-open is right (never break a dream), but SILENT fail-open is not:
+          // resolveMediumFromDb falls back to canvas for a key it cannot see, so a mistyped / de-activated /
+          // pool-restricted day-of look would drop the holiday style with no trace in the log at all.
+          fallbackReasons.push(
+            `scene_medium_unresolved:${dualSceneMediumKey}:${forced ? forced.key : 'none'}`
+          );
         }
       } catch (_e) {
-        // keep the rolled medium
+        fallbackReasons.push(`scene_medium_threw:${dualSceneMediumKey}`);
+      }
+    } else if (looksMinimal && minimalModel && bannedMediums.length > 0 && !force_medium) {
+      // ── SCENARIO MEDIUM BAN, TRANSLATED (2026-09-13) ───────────────────────────────────────────
+      // 6,175 enabled scenario rows carry a `medium_ban` written in the 1.2.0 MEDIUM vocabulary
+      // ('photography', 'film_noir', 'heirloom', …). They are the guard that keeps a PHOTO-REAL person out of a
+      // fantastical scene — a photoreal couple in a dwarven hall reads as bad compositing (Kevin, 2026-08-24).
+      // Under the looks engine the rolled style is always a `nightly_*` look, so the legacy branch below
+      // ('is the rolled key in the ban list?') can never be true and the guard has been silently OFF since the
+      // engine went live. (Verified 2026-09-13: the rows carrying bans are the fantastical categories —
+      // giant_critter, underwater_wonders, winter_wonder, cozy_magic, mermaid_f … — NOT halloween or fall,
+      // whose 4,383 rows carry no medium_ban at all.) Translate the tokens to look keys, and when the
+      // rolled look is one of them, RE-ROLL THE LOOK from the same contract minus the banned set — never the
+      // legacy re-roll below, which would throw the whole style contract away for a random face-swap medium.
+      const catalog = await loadNightlyLooks(supabase);
+      const bannedLooks = expandMediumBans(bannedMediums, catalog.looks);
+      if (bannedLooks.has(nightlyMedium.key)) {
+        const was = nightlyMedium.key;
+        const refit = await buildMinimalContract({
+          excludeLookKeys: bannedLooks,
+          withVibes: false,
+        });
+        if (refit && !bannedLooks.has(refit.look.key) && (await applyMinimalLook(refit, false))) {
+          styleContract = refit;
+          minimalModel = refit.model;
+          if (faceSwapPrePickedModel) faceSwapPrePickedModel = refit.model;
+          resolvedMediumKey = nightlyMedium.key;
+          baseMedium = applyFaceSwapOverride(nightlyMedium);
+          realMediumFragment = baseMedium.fluxFragment;
+          resolvedMediumAllowedModels = nightlyMedium.allowedModels;
+          resolvedMediumSceneModels = nightlyMedium.sceneEligibleModels;
+          resolvedMediumSmartModels = nightlyMedium.smartDreamModels;
+          // Re-apply the per-model curated fragment for the NEW look + model, exactly as the pin and legacy-ban
+          // routes do — without this the re-roll would silently drop an override the first roll had applied.
+          if (!force_look) {
+            const modelOverride = pickFaceSwapModelOverride(refit.model, nightlyVibe?.key ?? null);
+            if (modelOverride) {
+              realMediumFragment = baseMedium.fluxFragment;
+              baseMedium = { ...baseMedium, fluxFragment: modelOverride };
+            }
+          }
+          fallbackReasons.push(`look_medium_ban:${was}->${refit.look.key}`);
+          console.log(`[nightly] scenario banned look ${was}; re-rolled ${refit.look.key}`);
+        } else {
+          // Fail OPEN (the 1.2.0 contract): a bad ban can never break a dream.
+          fallbackReasons.push(`look_medium_ban_nofit:${was}`);
+        }
       }
     } else if (
       bannedMediums.length &&
