@@ -263,4 +263,49 @@ describe('buildStyleContract', () => {
     })!;
     expect(fluxSolo.vibe!.vibe.family).toBe('moonlit');
   });
+
+  it('LOOK-FIRST: the look decides the model from its own approvals, and a retry moves to another of them', () => {
+    // oil is approved on flux couples; chromo on gemini couples. With modelFromLook the roll is look-first, so the
+    // model must be one the CHOSEN look is approved on, never a policy weight.
+    const approvals = [
+      ok('oil', PRO, 'couple'),
+      ok('oil', GEMINI, 'couple'),
+      ok('oil', PRO, 'solo'),
+    ];
+    const c = buildStyleContract({
+      surface: 'couple',
+      policy: { ...POLICY, couple: { primaryModels: [GROK], fallbackModels: [GROK] } },
+      looks: LOOKS,
+      approvals,
+      modelFromLook: true,
+      rng,
+    })!;
+    expect(c.look.key).toBe('oil');
+    expect([PRO, GEMINI]).toContain(c.model); // never GROK, which the policy would have picked
+    expect(c.stamps).toContain('model_source:look:2');
+
+    // the retry keeps the look and moves to the other model it is approved on
+    const retry = c.forAttempt(2);
+    expect(retry.look.key).toBe('oil');
+    expect(retry.model).not.toBe(c.model);
+    expect([PRO, GEMINI]).toContain(retry.model);
+    expect(retry.stamps.some((st) => st.includes(':look_model'))).toBe(true);
+  });
+
+  it('LOOK-FIRST: a look approved on only one model stays there rather than moving off its graded model', () => {
+    const c = buildStyleContract({
+      surface: 'couple',
+      policy: POLICY,
+      looks: LOOKS,
+      approvals: [ok('oil', PRO, 'couple')],
+      modelFromLook: true,
+      rng,
+    })!;
+    expect(c.model).toBe(PRO);
+    // Kevin: a failed couple must move models rather than degrade to a solo, so even a single-model look moves —
+    // to the policy fallback, keeping the look where it is approved and re-rolling where it is not.
+    const retry = c.forAttempt(2);
+    expect(retry.model).not.toBe(PRO);
+    expect(retry.stamps.some((st) => st.includes(':look_model_exhausted'))).toBe(true);
+  });
 });

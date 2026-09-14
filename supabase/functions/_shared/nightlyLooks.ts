@@ -59,6 +59,11 @@ export interface LookApproval {
 export interface ResolveLookInput {
   surface: LookSurface;
   model: string;
+  /** LOOK-FIRST (the minimal state, 2026-09-13): ignore `model` when matching approvals, so the roll draws from
+   *  every look approved for this SURFACE on ANY model. The caller then picks the model from the chosen look's own
+   *  approved set — 1.2.0's rule that the medium decides the model, driven by Kevin's grades instead of the
+   *  inherited Create-screen model pin. */
+  anyModel?: boolean;
   looks: readonly LookRow[];
   approvals: readonly LookApproval[];
   /** The user's most recent look keys, newest first (from ai_generation_log). */
@@ -101,14 +106,36 @@ function weightedPick<T>(items: readonly T[], weightOf: (t: T) => number, rng: (
 }
 
 export function approvedLooks(
-  input: Pick<ResolveLookInput, 'surface' | 'model' | 'looks' | 'approvals'>
+  input: Pick<ResolveLookInput, 'surface' | 'model' | 'looks' | 'approvals'> & {
+    anyModel?: boolean;
+  }
 ): LookRow[] {
   const ok = new Set(
     input.approvals
-      .filter((a) => a.approved && a.model === input.model && a.surface === input.surface)
+      .filter(
+        (a) =>
+          a.approved &&
+          (input.anyModel === true || a.model === input.model) &&
+          a.surface === input.surface
+      )
       .map((a) => a.lookKey)
   );
   return input.looks.filter((l) => l.active && l.nightlyEnabled !== false && ok.has(l.key));
+}
+
+/** Every model this look is approved on for this surface, in a stable order (the look-first model pick). */
+export function approvedModelsFor(
+  approvals: readonly LookApproval[],
+  lookKey: string,
+  surface: LookSurface
+): string[] {
+  return [
+    ...new Set(
+      approvals
+        .filter((a) => a.approved && a.lookKey === lookKey && a.surface === surface)
+        .map((a) => a.model)
+    ),
+  ].sort();
 }
 
 export function resolveLook(input: ResolveLookInput): ResolvedLook | null {
@@ -137,7 +164,9 @@ export function resolveLook(input: ResolveLookInput): ResolvedLook | null {
 
   const candidates = approvedLooks(input);
   if (candidates.length === 0) {
-    stamps.push(`look_pool_empty:${input.model.split('/').pop()}:${input.surface}`);
+    stamps.push(
+      `look_pool_empty:${input.anyModel ? 'any' : input.model.split('/').pop()}:${input.surface}`
+    );
     return null;
   }
 

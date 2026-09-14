@@ -15,7 +15,13 @@
  * can be added on the row when the vibe axis test says so.
  */
 import { resolveModel, type NightlyModelPolicy, type PolicySurface } from './nightlyModelPolicy.ts';
-import { resolveLook, type LookApproval, type LookRow, type LookSurface } from './nightlyLooks.ts';
+import {
+  resolveLook,
+  approvedModelsFor,
+  type LookApproval,
+  type LookRow,
+  type LookSurface,
+} from './nightlyLooks.ts';
 import {
   resolveVibe,
   type ResolvedVibeChoice,
@@ -38,6 +44,11 @@ export interface StyleContractInput {
   policy: NightlyModelPolicy;
   bans?: ReadonlySet<string> | null;
   forceModel?: string | null;
+  /** LOOK-FIRST (the minimal state, 2026-09-13). 1.2.0's rule is that the MEDIUM decides the model, so roll the
+   *  look from everything approved for this surface on ANY model, then pick the model from that look's own approved
+   *  set. The policy weights are not consulted. A retry moves to another model the SAME look is approved on (Kevin:
+   *  "allow the move"), which is what keeps a failed couple from degrading to a solo. */
+  modelFromLook?: boolean;
   looks: readonly LookRow[];
   approvals: readonly LookApproval[];
   recentLookKeys?: readonly string[];
@@ -108,15 +119,20 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
   const policySurface: PolicySurface = input.surface === 'scene' ? 'scene' : input.surface;
   const lookSurface: LookSurface = input.surface === 'scene' ? 'solo' : input.surface;
 
-  const pick = resolveModel({
-    surface: policySurface,
-    attempt: 1,
-    policy: input.policy,
-    bans: input.bans ?? null,
-    forceModel: input.forceModel ?? null,
-    rng,
-  });
-  stamps.push(pick.stamp);
+  const lookFirst = input.modelFromLook === true;
+  // LOOK-FIRST: the look is rolled before any model, so the policy roll is skipped entirely and the model comes
+  // from the look's own approved set below. A QA force_model still wins.
+  const pick = lookFirst
+    ? { model: input.forceModel ?? '', stamp: 'model_source:look' }
+    : resolveModel({
+        surface: policySurface,
+        attempt: 1,
+        policy: input.policy,
+        bans: input.bans ?? null,
+        forceModel: input.forceModel ?? null,
+        rng,
+      });
+  if (!lookFirst) stamps.push(pick.stamp);
 
   // A pin is a forced look unless the key is unknown (then the roll decides and we say so).
   const pinKey = input.forcedLook ?? input.pinnedLook ?? null;
@@ -125,6 +141,7 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
   const resolved = resolveLook({
     surface: lookSurface,
     model: pick.model,
+    anyModel: lookFirst,
     looks: input.looks,
     approvals: input.approvals,
     recentLookKeys: input.recentLookKeys ?? [],
@@ -138,6 +155,22 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
     return null;
   }
   stamps.push(...resolved.stamps.filter((s) => !s.startsWith('look_pin_unknown')));
+
+  // LOOK-FIRST: the look Kevin's catalog just rolled now decides the model, uniformly among the models HE approved
+  // it on for this surface. That is 1.2.0's rule (the medium picks the model) with his grades standing in for the
+  // inherited Create-screen pin, which said flux for 48 of 49 looks while the grades say all three models work.
+  let modelId = pick.model;
+  let lookModels: readonly string[] = [];
+  if (lookFirst) {
+    const approvedOn = approvedModelsFor(input.approvals, resolved.look.key, lookSurface);
+    const allowed = approvedOn.filter((m) => !(input.bans && input.bans.has(m)));
+    lookModels = allowed.length > 0 ? allowed : approvedOn;
+    modelId = input.forceModel ?? lookModels[Math.floor(rng() * lookModels.length)];
+    stamps.push(
+      `policy:${policySurface}:1:${short(modelId)}`,
+      `model_source:look:${lookModels.length}`
+    );
+  }
   const source: StyleContract['source'] =
     input.forcedLook && pinKnown ? 'force' : input.pinnedLook && pinKnown ? 'pin' : 'roll';
   if (source === 'pin') stamps.push(`look_source:pin:${pinKey}`);
@@ -151,7 +184,7 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
         excludeFamilies: [
           ...(resolved.look.bannedVibes ?? []),
           ...(input.surface === 'couple' ? COUPLE_EXCLUDED_VIBE_FAMILIES : []),
-          ...(input.surface === 'couple' && /flux/i.test(pick.model)
+          ...(input.surface === 'couple' && /flux/i.test(modelId)
             ? FLUX_COUPLE_EXCLUDED_VIBE_FAMILIES
             : []),
         ],
@@ -165,7 +198,7 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
   const base = {
     surface: input.surface,
     lookSurface,
-    model: pick.model,
+    model: modelId,
     look: resolved.look,
     fragment: fragmentFor(resolved.look, lookSurface, input.surface),
     sceneFragment: resolved.look.fragment,
@@ -225,6 +258,36 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
   return {
     ...base,
     forAttempt(attempt: number): StylePick {
+      // LOOK-FIRST: keep the look and move to another model IT is approved on (Kevin 2026-09-13, "allow the move").
+      // 1.2.0 would re-render the same model and then drop the +1 to a generic figure; moving instead is what keeps
+      // a failed couple a couple. Falls through to the policy ladder when the look has only the one model.
+      if (lookFirst && !input.forceModel) {
+        const others = lookModels.filter((m) => m !== base.model);
+        if (others.length > 0) {
+          const next = others[Math.floor(rng() * others.length)];
+          const p = pickFor(next, lookSurface, input.surface, `look_retry:${attempt}`);
+          p.stamps.unshift(`policy:${policySurface}:${attempt}:${short(next)}:look_model`);
+          return p;
+        }
+        // The look is graded on ONE model only. Kevin 2026-09-13: "falls back to a new model instead of a single
+        // when the first couple render fails" — so rather than re-rendering the same model until the swap gives up
+        // and drops the +1, move to the policy's fallback model and let pickFor keep the look if it is approved
+        // there or re-roll one that is. A model move always beats degrading to a solo.
+        const next = resolveModel({
+          surface: policySurface,
+          attempt: Math.max(2, attempt),
+          policy: input.policy,
+          bans: input.bans ?? null,
+          forceModel: null,
+          previousModel: base.model,
+          rng,
+        });
+        const p = pickFor(next.model, lookSurface, input.surface, `look_retry:${attempt}`);
+        p.stamps.unshift(
+          `policy:${policySurface}:${attempt}:${short(next.model)}:look_model_exhausted`
+        );
+        return p;
+      }
       // 1.2.0 parity (parity loop, 2026-09-13): the FIRST re-render stays on the attempt-1 model with the same
       // look — flux-1.1-pro fails its first dual swap ~1/3 of the time in production too, and 1.2.0 (policy in
       // shadow) simply renders it again on flux, which is why its couples land on flux. Moving attempt 2 to the

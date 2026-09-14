@@ -35,6 +35,7 @@ import {
   LOOKS_SCENE_ACTION_PCT,
   LOOKS_SCENE_ACTION_PCT_COUPLE,
   LOOKS_FRAMING_PCT,
+  LOOKS_MINIMAL,
   LOOKS_SCENE_PCTS,
   LOOKS_SOLO_IDENTITY_MIN,
   LOOKS_DUAL_IDENTITY_MIN,
@@ -448,7 +449,15 @@ Deno.serve(async (req) => {
   );
   if (looksMode === 'on' && !force_looks_path && engineCfg0.nightlyLooksMode !== 'on')
     fallbackReasons.push('looks_path:allowlist');
-  const looksPath = looksMode === 'on';
+  // MINIMAL STATE (Kevin, 2026-09-13): "i want literally the old 1.2.0 engine with just the new looks and vibes
+  // determining the medium". So `looksPath` — which gates ~25 substitutions for scene mix, location-action share,
+  // pose pools, framing, prompt order, retry ladder and identity floors — goes FALSE, and the new catalog reaches
+  // the render the way 1.2.0 already accepts one: the rolled look is pinned as the MEDIUM (the force_look
+  // mechanism) and its own approvals pick the model. Everything downstream is the 1.2.0 engine, untouched.
+  const looksMinimal = looksMode === 'on' && LOOKS_MINIMAL;
+  const looksPath = looksMode === 'on' && !LOOKS_MINIMAL;
+  /** The model the rolled look is graded on — overrides the medium's inherited flux pin in the minimal state. */
+  let minimalModel: string | null = null;
   const modelPolicy: NightlyModelPolicy | null =
     policyMode === 'off' && looksMode === 'off' ? null : await loadNightlyModelPolicy(supabase);
   let styleContract: StyleContract | null = null;
@@ -870,6 +879,50 @@ Deno.serve(async (req) => {
       // before dualSpecialLighting).
       nightlyMedium = provisionalLooksMedium(nightlyMedium);
       fallbackReasons.push('looks_path:provisional_medium');
+    }
+    if (looksMinimal && modelPolicy && !force_medium) {
+      // Roll the look and the vibe from the new catalogue, then hand BOTH to the 1.2.0 engine as a pinned medium
+      // and a pinned vibe. The surface comes from the cast role that was pre-rolled above, so the look is graded
+      // for the right surface. Look-first: the look's own approvals pick the model (modelFromLook), never the
+      // policy weights — 1.2.0's rule that the medium decides, with Kevin's grades replacing the inherited pin.
+      const minimalSurface: 'couple' | 'solo' =
+        preRolledCastRole === 'dual' || preRolledCastRole === 'face_swap_dual' ? 'couple' : 'solo';
+      const catalog = await loadNightlyLooks(supabase);
+      const vibeRowsAll = await fetchVibes();
+      const contract = buildStyleContract({
+        surface: minimalSurface,
+        policy: modelPolicy,
+        modelFromLook: true,
+        bans: looksPathBans(
+          nightlyBans,
+          modelPolicy,
+          dayOfHoliday ? dayOfHoliday.dayOfModelBan : []
+        ),
+        forceModel: force_model ?? null,
+        looks: catalog.looks,
+        approvals: catalog.approvals,
+        recentLookKeys: recentMediums,
+        recencyWindow: engineCfg0.nightlyLookRecency,
+        legacyPct: engineCfg0.nightlyLegacyLookPct,
+        forcedLook: force_look ?? null,
+        vibes: toVibeRows(vibeRowsAll),
+        recentVibeKeys: recentVibes,
+        forcedVibe: force_vibe ?? null,
+      });
+      if (contract) {
+        styleContract = contract;
+        minimalModel = contract.model;
+        fallbackReasons.push('looks_minimal:on', ...contract.stamps);
+        const pinned = await resolveMediumFromDb(contract.look.key);
+        if (pinned.key === contract.look.key) nightlyMedium = pinned;
+        else fallbackReasons.push(`looks_minimal_medium_miss:${contract.look.key}`);
+        if (contract.vibe) {
+          const pinnedVibe = await resolveVibeFromDb(contract.vibe.vibe.key);
+          if (pinnedVibe) nightlyVibe = pinnedVibe;
+        }
+      } else {
+        fallbackReasons.push('looks_minimal:no_contract');
+      }
     }
     resolvedMediumKey = nightlyMedium.key;
     resolvedVibeKey = nightlyVibe.key;
@@ -1305,6 +1358,8 @@ Deno.serve(async (req) => {
     };
     // Policy site: face-swap attempt 1 (couple / solo). Shadow compares; 'on' decides.
     const pickFaceSwapModelFor = (medium: typeof baseMedium): string => {
+      // MINIMAL: the look already chose its model from Kevin's approvals; the medium's inherited flux pin loses.
+      if (minimalModel) return minimalModel;
       const legacy = legacyPickFaceSwapModelFor(medium);
       if (!modelPolicy) return legacy;
       const pick = resolveModel({
@@ -3484,7 +3539,9 @@ Output ONLY the prompt.`;
     }
   }
   if (looksPath && looksSceneModel && !force_model) sceneBaseModelResolved = looksSceneModel;
-  let pickedModel = force_model ? force_model : faceSwapPrePickedModel || sceneBaseModelResolved;
+  let pickedModel = force_model
+    ? force_model
+    : faceSwapPrePickedModel || minimalModel || sceneBaseModelResolved;
   // Set when the couple-degrade solo rebuild renders on a different model (F2): the
   // shipped pixels came from THIS model, so ai_generation_log.model_used must say so.
   let modelUsedOverride: string | null = null;
@@ -3564,7 +3621,20 @@ Output ONLY the prompt.`;
   const perMediumBans =
     NIGHTLY_BANNED_MODELS_BY_MEDIUM[resolvedMediumKey || ''] || new Set<string>();
   const effectiveBans = new Set<string>([...NIGHTLY_BANNED_MODELS, ...perMediumBans]);
-  if (!force_model && policyMode !== 'on' && !looksPath && effectiveBans.has(pickedModel)) {
+  // MINIMAL (Kevin 2026-09-13): "if the looks system enables a model, then it should be enabled for this test."
+  // The legacy nightly list bans gemini-2-image and grok (August, on cast-dream quality); the looks matrix then
+  // graded 37 and 39 looks on them in September and he hearted those renders, and the looks path already lifts the
+  // ban for its primaries. So the model the look was GRADED on wins here and the legacy ban gate stands aside.
+  // Stamped, never silent. Without this every look falls back to the medium's inherited flux pin.
+  if (minimalModel && effectiveBans.has(minimalModel))
+    fallbackReasons.push(`minimal_model_unban:${minimalModel.split('/').pop()}`);
+  if (
+    !force_model &&
+    !minimalModel &&
+    policyMode !== 'on' &&
+    !looksPath &&
+    effectiveBans.has(pickedModel)
+  ) {
     const allowedMinusBanned = resolvedMediumAllowedModels.filter((m) => !effectiveBans.has(m));
     if (allowedMinusBanned.length > 0) {
       const oldModel = pickedModel;
@@ -3593,7 +3663,7 @@ Output ONLY the prompt.`;
   // Per-medium pin override — last word on which model renders this nightly.
   // Runs after the ban gate so the pin can override any default pick. Skips
   // when force_model is set (QA wins).
-  if (!force_model && policyMode !== 'on' && !looksPath) {
+  if (!force_model && !minimalModel && policyMode !== 'on' && !looksPath) {
     const pin = NIGHTLY_PINNED_MODELS_BY_MEDIUM[resolvedMediumKey || ''];
     if (pin && pickedModel !== pin) {
       console.log(
@@ -3954,6 +4024,14 @@ Output ONLY the prompt.`;
                   fallbackReasons.push('vibe_retry:after_scene');
                 }
               }
+            } else if (looksMinimal && styleContract) {
+              // Kevin 2026-09-13 "allow the move": keep the look, re-render on another model IT is graded on
+              // rather than letting 1.2.0 drop the +1 to a generic figure. The look is unchanged, so the legacy
+              // prompt still describes the right medium and needs no surgery.
+              const pick = styleContract.forAttempt(attempt + 1);
+              rerenderModel = pick.model;
+              if (pick.model !== pickedModel) modelUsedOverride = pick.model;
+              fallbackReasons.push(...pick.stamps);
             } else if (modelPolicy) {
               const pick = resolveModel({
                 surface: 'couple',

@@ -279,6 +279,23 @@ export const LOOKS_LOCATION_ACTION_PCT_SOLO = 40;
  *  seed, floating head-and-shoulders on another and the man in greyscale on the third, and nobody on the log the
  *  pose asked for — the same content in the legacy order rendered the couple in colour on the log's shelf 3/3, and
  *  the late scene's LENGTH changed nothing (capped vs full: same picture). QA force_prompt_style still wins. */
+/**
+ * MINIMAL STATE (Kevin, 2026-09-13): "i want literally the old 1.2.0 engine with just the new looks and vibes
+ * determining the medium … and ONLY that."
+ *
+ * true  = the new catalogue chooses the LOOK (pinned as the medium) and the VIBE, and the 1.2.0 engine renders it.
+ *         Every other looks-path substitution below is inert, because `looksPath` itself goes false in
+ *         nightly-dreams: scene mix, location-action share (30/40 vs 1.2.0's 75), scene-first action, pose pool
+ *         mixes, the framing axis, the frame roll, prompt order, the flux couple work and the identity floors all
+ *         revert to engine_config. The model comes from the look's own approvals rather than the policy weights.
+ * false = the full looks path (the state the r23 batch rendered on).
+ *
+ * The two deliberate exceptions, both because they ARE the rework: the look is chosen from the new catalogue by
+ * Kevin's per-model grades, and a couple whose swap fails moves to another model the same look is graded on instead
+ * of 1.2.0's degrade-to-solo (his call: "allow the move").
+ */
+export const LOOKS_MINIMAL = true;
+
 export const LOOKS_COUPLE_PROMPT_STYLE = 'legacy' as const;
 /** Round 18 (2026-09-13): the legacy order is probe-proven on flux-1.1-pro only. Gemini couples needed a re-render
  *  7 of 11 times under it (one side's identity near zero on the first attempt) against 6 of 19 under subject-first
