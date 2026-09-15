@@ -214,7 +214,9 @@ export function DreamCastRoster() {
     // last one that can go. The button stays live and explains itself rather than
     // sitting there disabled with no reason given.
     if (partners.length > 0) {
-      Toast.show('Your cast needs you. Remove them first.', 'people-outline');
+      // A second longer than the 3s default: this one is a rule the user did not know
+      // about, not a confirmation of something they just did, so it needs reading time.
+      Toast.show('Your cast needs you. Remove them first.', 'people-outline', 4000);
       return;
     }
     if (self) await removeCastFile(self).catch(() => {});
