@@ -62,10 +62,34 @@ export function isPartnerEnabled(p: DreamPartner, activeId: string | null | unde
   return p.enabled ?? p.id === activeId;
 }
 
+/**
+ * The photo that IS the user — whatever the `self` cast member points at.
+ * MIRROR OF `_shared/partnerRoll.ts:selfPhotoKey`.
+ */
+export function selfPhotoKey(profile: VibeProfile): string | null {
+  const self = profile.dream_cast.find((m) => m.role === 'self');
+  if (!self) return null;
+  return self.storage_path || self.thumb_url || null;
+}
+
+/**
+ * Is this roster member the user's OWN cast photo? Uploading yourself is allowed,
+ * you just never get cast beside yourself (Kevin, 2026-09-15: "we should never roll
+ * a self with self render"), so such a member is never eligible here OR in the
+ * engine (`_shared/partnerRoll.ts`).
+ */
+export function isSelfPhoto(p: DreamPartner, profile: VibeProfile): boolean {
+  const key = selfPhotoKey(profile);
+  if (!key) return false;
+  return p.storage_path === key || p.thumb_url === key;
+}
+
 /** The roster members eligible to be rolled as the +1 (stable roster order). */
 export function enabledPartners(profile: VibeProfile): DreamPartner[] {
   const lib = profile.partner_library ?? [];
-  return lib.filter((p) => isPartnerEnabled(p, profile.active_partner_id));
+  return lib.filter(
+    (p) => isPartnerEnabled(p, profile.active_partner_id) && !isSelfPhoto(p, profile)
+  );
 }
 
 /**

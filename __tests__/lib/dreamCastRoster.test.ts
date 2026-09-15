@@ -18,6 +18,8 @@ import {
   newPartnerId,
   isPartnerEnabled,
   enabledPartners,
+  isSelfPhoto,
+  selfPhotoKey,
 } from '@/lib/dreamCastRoster';
 import { DEFAULT_VIBE_PROFILE, MAX_DREAM_PARTNERS } from '@/types/vibeProfile';
 import type { VibeProfile, DreamPartner } from '@/types/vibeProfile';
@@ -225,6 +227,51 @@ describe('the mirror follows the ticks', () => {
     );
     expect(plusOne(out)?.storage_path).toBe('p-b.jpg');
     expect(out.active_partner_id).toBe('b');
+  });
+});
+
+describe('you are never your own +1 (client half)', () => {
+  // Uploading your own photo as a cast member is ALLOWED (Kevin: "let them"); it just
+  // never gets mirrored into the plus_one slot, so Create can't render you beside you.
+  const SELF = 'p-self.jpg';
+  const withSelf = (over: Partial<VibeProfile> = {}) =>
+    base({ dream_cast: [{ role: 'self', description: 'me', storage_path: SELF }], ...over });
+  const me = (id: string): DreamPartner => ({ ...partner(id, 'friend', true), storage_path: SELF });
+
+  it('spots a roster entry that is the self photo', () => {
+    const profile = withSelf({ partner_library: [me('mine')], active_partner_id: 'mine' });
+    expect(selfPhotoKey(profile)).toBe(SELF);
+    expect(isSelfPhoto(me('mine'), profile)).toBe(true);
+    expect(isSelfPhoto(partner('other', 'friend', true), profile)).toBe(false);
+  });
+
+  it('is never eligible, so it is never mirrored — the real partner is', () => {
+    const out = syncActivePartnerMirror(
+      withSelf({
+        partner_library: [me('mine'), partner('her', 'partner', true)],
+        active_partner_id: 'mine',
+      })
+    );
+    expect(plusOne(out)?.storage_path).toBe('p-her.jpg');
+    expect(out.active_partner_id).toBe('her');
+  });
+
+  it('only the self photo ticked → no plus_one at all (solo dreams)', () => {
+    const out = syncActivePartnerMirror(
+      withSelf({ partner_library: [me('mine')], active_partner_id: 'mine' })
+    );
+    expect(plusOne(out)).toBeUndefined();
+    expect(enabledPartners(out)).toEqual([]);
+  });
+
+  it('with no self photo on file, nothing is excluded', () => {
+    const profile = base({
+      dream_cast: [],
+      partner_library: [partner('a', 'friend', true)],
+      active_partner_id: 'a',
+    });
+    expect(selfPhotoKey(profile)).toBeNull();
+    expect(enabledPartners(profile).map((p) => p.id)).toEqual(['a']);
   });
 });
 
