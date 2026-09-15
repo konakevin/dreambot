@@ -271,6 +271,23 @@ describe('roster names', () => {
     expect(finalizePartnerName('Mom')).toBe('Mom');
   });
 
+  it('duplicate names are fine — the roster is keyed by id, never by name', () => {
+    // Kevin 2026-09-15: "i can have multiple friends named 'steph' or whatever."
+    // Nothing dedupes names anywhere, and this locks that in: a uniqueness check
+    // added later would start silently rejecting or renaming real people.
+    const st = useOnboardingStore.getState();
+    st.reset();
+    st.loadProfile(base({ dream_cast: [{ role: 'self', description: 'me' }] }));
+    st.addPartner(partner('a'));
+    st.addPartner(partner('b'));
+    st.updatePartner('a', { name: 'Steph' });
+    st.updatePartner('b', { name: 'Steph' });
+    const lib = useOnboardingStore.getState().profile.partner_library ?? [];
+    expect(lib.map((x) => x.name)).toEqual(['Steph', 'Steph']);
+    expect(lib.map((x) => x.id)).toEqual(['a', 'b']);
+    expect(finalizePartnerName('Steph')).toBe('Steph');
+  });
+
   it('blank on blur means "no name", so the card falls back to the relationship', () => {
     expect(finalizePartnerName('   ')).toBeUndefined();
     expect(finalizePartnerName('')).toBeUndefined();

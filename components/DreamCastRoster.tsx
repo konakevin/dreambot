@@ -70,6 +70,13 @@ const EMPTY_PARTNERS: DreamPartner[] = [];
  *  time, so decorating "on" decorates everything. The two groups carry the state. */
 const IN_DREAMS = MEDIUM_BADGE.face;
 
+/** One size for both row icons. iOS's UISwitch is a fixed 51x31pt with NO size prop,
+ *  so a transform scale (see s.switch) is the only lever on it; at full size it towered
+ *  over 20-22pt icons and made them read as afterthoughts. Scaled to 0.85 it lands at
+ *  ~43x26, which sits right beside these. The X also drops its filled disc for an
+ *  outline, so the two icons share one stroke weight as well as one size. */
+const ICON = 22;
+
 /** Resolves a private cast photo to a signed URL for the 48×48 thumbnail. A
  *  `uriOverride` (a just-picked LOCAL image) takes precedence so the photo shows
  *  instantly during the upload+analyze, before the signed URL exists. */
@@ -130,6 +137,11 @@ export function DreamCastRoster() {
   const endCastUpload = useOnboardingStore((st) => st.endCastUpload);
 
   const [busy, setBusy] = useState<string | null>(null); // 'self' | partner id | 'new'
+  // Which card's name is being typed. A permanently-live TextInput as the title
+  // looked exactly like static text, so nothing said "you can name this person";
+  // display/edit mode gives us a pencil that HUGS the name (a flex input would push
+  // any adjacent icon to the far right) and a natural place to land after an upload.
+  const [editingId, setEditingId] = useState<string | null>(null);
   // The just-picked local photo, shown immediately (with an analyzing spinner)
   // while the upload+describe runs — so a photo appears the instant you pick it.
   const [pending, setPending] = useState<{ key: string; uri: string } | null>(null);
@@ -216,6 +228,11 @@ export function DreamCastRoster() {
         relationship: 'friend',
       })
     );
+    // Ask for the name at the one moment the user is definitely thinking about who
+    // this is: the card appears with its name field focused and the keyboard up.
+    // Typing names them, tapping away keeps the Friend/Partner fallback. No modal,
+    // and nothing to dismiss for people who do not care.
+    setEditingId(id);
   };
 
   const replacePartner = (p: DreamPartner) =>
@@ -261,6 +278,12 @@ export function DreamCastRoster() {
     persist();
   };
 
+  /** Leave edit mode, tidying and saving whatever was typed. */
+  const stopEditing = (p: DreamPartner) => {
+    commitName(p);
+    setEditingId(null);
+  };
+
   const setRelationship = (p: DreamPartner, rel: 'friend' | 'partner') => {
     if (p.relationship === rel) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -291,22 +314,38 @@ export function DreamCastRoster() {
             busy={isBusy}
           />
           <View style={s.info}>
-            {/* The title identifies the PERSON. With up to 5 in the cast, showing
-                the relationship here would print "Friend" on three cards in a row AND
-                repeat the pills below, so it is an editable name that falls back to
-                the relationship word as its placeholder. */}
-            <TextInput
-              style={s.nameInput}
-              value={p.name ?? ''}
-              onChangeText={(t) => setName(p, t)}
-              onBlur={() => commitName(p)}
-              placeholder={p.relationship === 'partner' ? 'Partner' : 'Friend'}
-              placeholderTextColor={colors.textMuted}
-              maxLength={PARTNER_NAME_MAX}
-              autoCorrect={false}
-              returnKeyType="done"
-              editable={!isBusy}
-            />
+            {/* The title identifies the PERSON. With up to 5 in the cast, printing the
+                relationship here would put "Friend" on three cards in a row AND repeat
+                the pills below, so it is a name that falls back to the relationship
+                word when the user has not given one. */}
+            {editingId === p.id ? (
+              <TextInput
+                style={s.nameInput}
+                value={p.name ?? ''}
+                onChangeText={(t) => setName(p, t)}
+                onBlur={() => stopEditing(p)}
+                onSubmitEditing={() => stopEditing(p)}
+                placeholder="Add a name"
+                placeholderTextColor={colors.textMuted}
+                maxLength={PARTNER_NAME_MAX}
+                autoFocus
+                autoCorrect={false}
+                returnKeyType="done"
+              />
+            ) : (
+              <TouchableOpacity
+                style={s.nameBtn}
+                onPress={() => setEditingId(p.id)}
+                hitSlop={8}
+                activeOpacity={0.7}
+                disabled={isBusy}
+              >
+                <Text style={[s.name, !p.name && s.namePlaceholder]} numberOfLines={1}>
+                  {p.name || (p.relationship === 'partner' ? 'Partner' : 'Friend')}
+                </Text>
+                <Ionicons name="pencil" size={13} color={colors.textMuted} />
+              </TouchableOpacity>
+            )}
             {/* No idle status line: "Ready for dreams" was true of every member in
                 every state, so it taught nothing. */}
             {isBusy && <Text style={s.status}>Analyzing…</Text>}
@@ -321,6 +360,7 @@ export function DreamCastRoster() {
                   onValueChange={(on) => toggleEnabled(p, on)}
                   trackColor={{ false: colors.border, true: IN_DREAMS.color }}
                   ios_backgroundColor={colors.border}
+                  style={s.switch}
                 />
               </View>
               <TouchableOpacity
@@ -329,7 +369,7 @@ export function DreamCastRoster() {
                 hitSlop={8}
                 disabled={anyBusy}
               >
-                <Ionicons name="sync" size={20} color={colors.textSecondary} />
+                <Ionicons name="sync" size={ICON} color={colors.textSecondary} />
               </TouchableOpacity>
               <TouchableOpacity
                 style={s.ctrl}
@@ -337,7 +377,7 @@ export function DreamCastRoster() {
                 hitSlop={8}
                 disabled={anyBusy}
               >
-                <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
+                <Ionicons name="close-circle-outline" size={ICON} color={colors.textSecondary} />
               </TouchableOpacity>
             </>
           )}
@@ -367,7 +407,15 @@ export function DreamCastRoster() {
   const notInDreams = partners.filter((p) => !isPartnerEnabled(p, activeId));
 
   return (
-    <ScrollView contentContainerStyle={s.container} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      contentContainerStyle={s.container}
+      showsVerticalScrollIndicator={false}
+      // Without this, the first tap anywhere while the keyboard is up only dismisses
+      // it, so every pill and switch needs two taps mid-rename.
+      keyboardShouldPersistTaps="handled"
+      // Keeps a focused name field above the keyboard when the card is near the fold.
+      automaticallyAdjustKeyboardInsets
+    >
       {/* Plain (non-gradient) here: the gradient wordmark on this settings screen
           is the "Dream Cast" nav-bar title (app/settings/dream-cast.tsx). Onboarding
           uses a SEPARATE component (DreamCastStep), which keeps its gradient title. */}
@@ -408,7 +456,7 @@ export function DreamCastRoster() {
                   hitSlop={8}
                   disabled={anyBusy}
                 >
-                  <Ionicons name="sync" size={20} color={colors.textSecondary} />
+                  <Ionicons name="sync" size={ICON} color={colors.textSecondary} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={s.ctrl}
@@ -416,7 +464,7 @@ export function DreamCastRoster() {
                   hitSlop={8}
                   disabled={anyBusy}
                 >
-                  <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
+                  <Ionicons name="close-circle-outline" size={ICON} color={colors.textSecondary} />
                 </TouchableOpacity>
               </>
             )}
@@ -554,6 +602,8 @@ const s = StyleSheet.create({
   // baseline-positioned glyph and a Switch is a fixed 31pt box, so without this they
   // centre against different things and visibly drift apart.
   ctrl: { height: 34, alignItems: 'center', justifyContent: 'center' },
+  // UISwitch has no size prop; a transform is the only way down to the icons' weight.
+  switch: { transform: [{ scale: 0.85 }] },
   // Only the transient "analyzing a new photo" card, which sits outside the panels.
   card: {
     backgroundColor: colors.surface,
@@ -566,7 +616,12 @@ const s = StyleSheet.create({
   cardActive: { borderColor: colors.accent }, // only the 'analyzing a new photo' card
   row: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   info: { flex: 1 },
-  name: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
+  name: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700', flexShrink: 1 },
+  // Muted when it is standing in for a name, so "Friend" reads as a label rather than
+  // as someone who is actually called Friend.
+  namePlaceholder: { color: colors.textMuted },
+  // alignSelf keeps the pencil beside the word instead of at the column's far edge.
+  nameBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start' },
   // Reads as the card's title until tapped. padding:0 so it sits on the same
   // baseline the plain Text did; flex:1 pushes the badge to the column's edge.
   nameInput: {
