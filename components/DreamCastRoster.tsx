@@ -274,11 +274,11 @@ export function DreamCastRoster() {
 
   /** One roster card. Rendered by both groups, identical in each — which is the
    *  point: what changes is WHICH LIST the person is in, not how the card looks. */
-  const renderPartner = (p: DreamPartner, i: number) => {
+  const renderPartner = (p: DreamPartner, i: number, arr: DreamPartner[]) => {
     const isOn = isPartnerEnabled(p, activeId);
     const isBusy = busy === p.id;
     return (
-      <View key={p.id} style={[s.member, i > 0 && s.memberDivided]}>
+      <View key={p.id} style={[s.member, i < arr.length - 1 && s.memberDivided]}>
         <View style={s.row}>
           <CastThumb
             storage_path={p.storage_path}
@@ -375,11 +375,15 @@ export function DreamCastRoster() {
         with, and one of them joins you each night.
       </Text>
 
-      {/* YOU */}
-      <Text style={s.sectionLabel}>YOU</Text>
-      <View style={s.card}>
+      {/* Three panels, one shape. Each section's heading lives INSIDE its panel,
+          above a divider, so the label is visibly attached to the rows it names
+          instead of floating over them. The coloured left rail is the section's
+          identity: purple for you, teal for the cast that appears in dreams,
+          neutral for the ones sitting out. */}
+      <View style={s.panel}>
+        <Text style={[s.panelHead, s.panelHeadSelf]}>YOU</Text>
         {self ? (
-          <View style={s.row}>
+          <View style={[s.member, s.row]}>
             <CastThumb
               storage_path={self.storage_path}
               thumb_url={self.thumb_url}
@@ -394,10 +398,20 @@ export function DreamCastRoster() {
             </View>
             {busy !== 'self' && (
               <>
-                <TouchableOpacity onPress={uploadSelf} hitSlop={8} disabled={anyBusy}>
+                <TouchableOpacity
+                  style={s.ctrl}
+                  onPress={uploadSelf}
+                  hitSlop={8}
+                  disabled={anyBusy}
+                >
                   <Ionicons name="sync" size={20} color={colors.textSecondary} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={removeSelf} hitSlop={8} disabled={anyBusy}>
+                <TouchableOpacity
+                  style={s.ctrl}
+                  onPress={removeSelf}
+                  hitSlop={8}
+                  disabled={anyBusy}
+                >
                   <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
                 </TouchableOpacity>
               </>
@@ -405,7 +419,7 @@ export function DreamCastRoster() {
           </View>
         ) : (
           <TouchableOpacity
-            style={[s.uploadButton, anyBusy && { opacity: 0.4 }]}
+            style={[s.member, s.uploadButton, anyBusy && { opacity: 0.4 }]}
             onPress={uploadSelf}
             disabled={anyBusy}
             activeOpacity={0.7}
@@ -422,16 +436,10 @@ export function DreamCastRoster() {
         )}
       </View>
 
-      {/* Each group is ONE container with its members as rows inside it, rather than
-          a run of separate cards under a label. A heading plus floating cards left
-          "YOUR CAST" and "IN YOUR DREAMS" competing as two labels of the same weight;
-          containment says "these belong together" without a second label, so the
-          section label is gone entirely. The grouping IS the state, which is why a
-          member row looks identical in both groups. */}
       {partners.length > 0 && (
         <>
-          <Text style={[s.groupLabel, s.groupLabelOn]}>IN YOUR DREAMS</Text>
-          <View style={s.group}>
+          <View style={s.panel}>
+            <Text style={[s.panelHead, s.panelHeadOn]}>IN YOUR DREAMS</Text>
             {inDreams.length > 0 ? (
               inDreams.map(renderPartner)
             ) : (
@@ -440,10 +448,10 @@ export function DreamCastRoster() {
           </View>
 
           {notInDreams.length > 0 && (
-            <>
-              <Text style={s.groupLabel}>IN THE WINGS</Text>
-              <View style={s.group}>{notInDreams.map(renderPartner)}</View>
-            </>
+            <View style={s.panel}>
+              <Text style={s.panelHead}>IN THE WINGS</Text>
+              {notInDreams.map(renderPartner)}
+            </View>
           )}
         </>
       )}
@@ -501,40 +509,42 @@ const s = StyleSheet.create({
     marginTop: verticalScale(8),
     marginBottom: verticalScale(20),
   },
-  sectionLabel: {
-    color: colors.textSecondary,
-    fontSize: fontScale(12),
-    fontWeight: '700',
-    letterSpacing: 0.5,
-    marginBottom: verticalScale(8),
-    marginTop: verticalScale(8),
-  },
-  // The two group headings do the work the per-card "In dreams" label used to. The
-  // active one takes the switch's teal so there is no doubt which group is the cast
-  // that actually appears in dreams.
-  groupLabel: {
-    color: colors.textMuted,
-    fontSize: fontScale(12),
-    fontWeight: '700',
-    letterSpacing: 0.6,
-    marginTop: verticalScale(18),
-    marginBottom: verticalScale(8),
-  },
-  groupLabelOn: { color: IN_DREAMS.color },
-  // One surface per group, members divided by hairlines inside it.
-  group: {
+  // One panel per section: the app's own surface, a plain 1pt outline, nothing else.
+  // What makes it read as a container is the STRUCTURE (heading inside, above a
+  // divider, rows beneath) rather than a lifted fill or a coloured rail, both of
+  // which were tried and both of which drew more attention than the content.
+  // Section identity is carried by the heading colour alone.
+  panel: {
     backgroundColor: colors.surface,
-    borderRadius: 14,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: colors.border,
     overflow: 'hidden',
+    marginBottom: verticalScale(18),
   },
+  // The heading sits INSIDE the panel, above a divider, so it is visibly attached to
+  // the rows it names instead of floating above them competing with other labels.
+  panelHead: {
+    color: colors.textMuted,
+    fontSize: fontScale(11),
+    fontWeight: '800',
+    letterSpacing: 0.8,
+    paddingHorizontal: verticalScale(12),
+    paddingTop: verticalScale(11),
+    paddingBottom: verticalScale(10),
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  panelHeadSelf: { color: colors.accentLight },
+  panelHeadOn: { color: IN_DREAMS.color },
+  // Members are rows inside the panel, divided by the same hairline as the heading.
   member: { padding: verticalScale(12) },
-  memberDivided: { borderTopWidth: 1, borderTopColor: colors.border },
+  memberDivided: { borderBottomWidth: 1, borderBottomColor: colors.border },
   // Every head-row control sits in an identical fixed-height box. An Ionicon is a
   // baseline-positioned glyph and a Switch is a fixed 31pt box, so without this they
   // centre against different things and visibly drift apart.
   ctrl: { height: 34, alignItems: 'center', justifyContent: 'center' },
+  // Only the transient "analyzing a new photo" card, which sits outside the panels.
   card: {
     backgroundColor: colors.surface,
     borderRadius: 14,
