@@ -41,7 +41,22 @@ const SETTINGS_PARENT: Record<string, string> = {
   '/settings/mood': '/settings/edit-profile',
 };
 
+/** Splits a trailing emoji off a title so it can render un-masked.
+ *  Deliberately boring: the last space-separated token counts as the emoji when it
+ *  holds no ASCII letter or digit. No Unicode property escapes, which Hermes support
+ *  for varies and which would throw at render time rather than at build time. */
+function splitTitleEmoji(title: string): { titleText: string; titleEmoji: string | null } {
+  const parts = title.trim().split(' ');
+  const last = parts[parts.length - 1];
+  if (parts.length > 1 && last && !/[a-zA-Z0-9]/.test(last)) {
+    return { titleText: parts.slice(0, -1).join(' '), titleEmoji: last };
+  }
+  return { titleText: title, titleEmoji: null };
+}
+
 export function AnnouncementSheet({ announcement, onClose }: Props) {
+  const { titleText, titleEmoji } = splitTitleEmoji(announcement.title);
+
   const handleCta = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onClose();
@@ -72,7 +87,11 @@ export function AnnouncementSheet({ announcement, onClose }: Props) {
       <View style={s.overlay}>
         <View style={s.card}>
           <View style={s.titleWrap}>
-            <AnimatedGradientTitle size={22}>{announcement.title}</AnimatedGradientTitle>
+            <AnimatedGradientTitle size={22}>{titleText}</AnimatedGradientTitle>
+            {/* A trailing emoji renders OUTSIDE the gradient mask. Masked, it gets
+                repainted in the gradient and loses its own colours entirely, so a
+                clapper came out teal instead of the grey and white it actually is. */}
+            {titleEmoji ? <Text style={s.titleEmoji}>{titleEmoji}</Text> : null}
           </View>
 
           {announcement.image_url ? (
@@ -106,8 +125,12 @@ export function AnnouncementSheet({ announcement, onClose }: Props) {
 
 const s = StyleSheet.create({
   titleWrap: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
   },
+  titleEmoji: { fontSize: fontScale(22) },
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.72)',
