@@ -380,7 +380,7 @@ export function DreamCastRoster() {
           instead of floating over them. The coloured left rail is the section's
           identity: purple for you, teal for the cast that appears in dreams,
           neutral for the ones sitting out. */}
-      <View style={s.panel}>
+      <View style={[s.panel, s.panelSelf]}>
         <Text style={[s.panelHead, s.panelHeadSelf]}>YOU</Text>
         {self ? (
           <View style={[s.member, s.row]}>
@@ -438,7 +438,7 @@ export function DreamCastRoster() {
 
       {partners.length > 0 && (
         <>
-          <View style={s.panel}>
+          <View style={[s.panel, s.panelOn]}>
             <Text style={[s.panelHead, s.panelHeadOn]}>IN YOUR DREAMS</Text>
             {inDreams.length > 0 ? (
               inDreams.map(renderPartner)
@@ -509,11 +509,11 @@ const s = StyleSheet.create({
     marginTop: verticalScale(8),
     marginBottom: verticalScale(20),
   },
-  // One panel per section: the app's own surface, a plain 1pt outline, nothing else.
-  // What makes it read as a container is the STRUCTURE (heading inside, above a
-  // divider, rows beneath) rather than a lifted fill or a coloured rail, both of
-  // which were tried and both of which drew more attention than the content.
-  // Section identity is carried by the heading colour alone.
+  // One panel per section: the app's own surface and a 1pt outline, tinted to the
+  // section's colour. At 1pt around a whole panel this is a fraction of the ink a
+  // 4pt rail or a per-card outline cost, and there are only two coloured edges on
+  // the screen instead of one per member. The fill stays quiet and the internal
+  // dividers stay neutral, so the colour lands only on the outside edge.
   panel: {
     backgroundColor: colors.surface,
     borderRadius: 16,
@@ -522,6 +522,8 @@ const s = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: verticalScale(18),
   },
+  panelSelf: { borderColor: colors.accent },
+  panelOn: { borderColor: IN_DREAMS.color },
   // The heading sits INSIDE the panel, above a divider, so it is visibly attached to
   // the rows it names instead of floating above them competing with other labels.
   panelHead: {
