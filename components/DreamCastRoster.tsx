@@ -60,8 +60,18 @@ import { MAX_DREAM_PARTNERS, type DreamPartner } from '@/types/vibeProfile';
 // be cached" → infinite render loop. Default to this constant OUTSIDE the selector.
 const EMPTY_PARTNERS: DreamPartner[] = [];
 
-/** The switch's "on" track: the Real Face teal from Create (MEDIUM_BADGE.face). It is
- *  now the ONLY coloured state marker on a card — outlines, tints and badges all got
+/** COLOUR SYSTEM (Kevin, 2026-09-15 — "all over the place... make it sane"):
+ *  every colour on this screen has exactly ONE job.
+ *    teal   = this person is in your dreams  (the switch + its panel heading)
+ *    purple = the relationship you picked    (the selected pill, and nothing else)
+ *    pink   = warning                        (the photo tip, CastPhotoTip)
+ *    neutral= all structure                  (panel outlines, headings, photo rings)
+ *  The screen previously had purple doing three unrelated jobs at once (brand chrome,
+ *  section identity, selected state), which is what read as noise: a colour that means
+ *  three things means nothing. Do not let an accent back onto structure.
+ *
+ *  The switch's "on" track: the Real Face teal from Create (MEDIUM_BADGE.face). It is
+ *  the ONLY coloured state marker on a card — outlines, tints and badges all got
  *  tried and all had the same problem, that most members are switched on most of the
  *  time, so decorating "on" decorates everything. The two groups carry the state. */
 const IN_DREAMS = MEDIUM_BADGE.face;
@@ -459,7 +469,7 @@ export function DreamCastRoster() {
           instead of floating over them. The coloured left rail is the section's
           identity: purple for you, teal for the cast that appears in dreams,
           neutral for the ones sitting out. */}
-          <View style={[s.panel, s.panelSelf]}>
+          <View style={s.panel}>
             <Text style={[s.panelHead, s.panelHeadSelf]}>YOU</Text>
             {self ? (
               <View style={[s.member, s.row]}>
@@ -523,7 +533,7 @@ export function DreamCastRoster() {
 
           {partners.length > 0 && (
             <>
-              <View style={[s.panel, s.panelOn]}>
+              <View style={s.panel}>
                 <Text style={[s.panelHead, s.panelHeadOn]}>IN YOUR DREAMS</Text>
                 {inDreams.length > 0 ? (
                   inDreams.map(renderPartner)
@@ -615,8 +625,6 @@ const s = StyleSheet.create({
   // black the teal composites about a third brighter at the same alpha. Matching them
   // by eye puts the purple near 0.55 where the teal sits at 0.4. Levelling these to
   // one number would make the YOU panel look dulled again.
-  panelSelf: { borderColor: 'rgba(167,139,250,0.55)' },
-  panelOn: { borderColor: 'rgba(94,234,212,0.4)' },
   // The heading sits INSIDE the panel, above a divider, so it is visibly attached to
   // the rows it names instead of floating above them competing with other labels.
   panelHead: {
@@ -630,7 +638,12 @@ const s = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: DIVIDER,
   },
+  // Light lavender, the left stop of the brand gradient. The one deliberate exception
+  // to "no accent on structure": YOU is the subject of the whole screen, so it gets
+  // the brand's own colour while the parked BACKSTAGE heading stays muted. Headings
+  // read teal (the active list) > lavender (you) > muted neutral (parked).
   panelHeadSelf: { color: colors.accentLight },
+  // The ONLY teal besides the switch, and it means the same thing the switch does.
   panelHeadOn: { color: IN_DREAMS.color },
   // Members are rows inside the panel, divided by the same hairline as the heading.
   member: { padding: verticalScale(12) },
@@ -669,7 +682,9 @@ const s = StyleSheet.create({
     padding: 0,
   },
   status: { color: colors.textSecondary, fontSize: fontScale(13), marginTop: verticalScale(2) },
-  thumb: { width: 48, height: 48, borderRadius: 24, borderWidth: 2, borderColor: colors.accent },
+  // Neutral, not accent. Six purple rings were spending the accent on the one thing
+  // on the card nobody can interact with, which was most of the screen's noise.
+  thumb: { width: 48, height: 48, borderRadius: 24, borderWidth: 2, borderColor: colors.border },
   thumbSpinner: {
     ...StyleSheet.absoluteFillObject,
     borderRadius: 24,
