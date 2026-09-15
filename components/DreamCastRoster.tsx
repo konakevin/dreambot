@@ -506,7 +506,7 @@ export function DreamCastRoster() {
 
           {notInDreams.length > 0 && (
             <View style={s.panel}>
-              <Text style={s.panelHead}>NOT DREAMING</Text>
+              <Text style={s.panelHead}>BACKSTAGE</Text>
               {notInDreams.map(renderPartner)}
             </View>
           )}
