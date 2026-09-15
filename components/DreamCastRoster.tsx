@@ -507,10 +507,13 @@ const s = StyleSheet.create({
     borderColor: colors.border,
   },
   cardActive: { borderColor: colors.accent }, // only the 'analyzing a new photo' card
-  // Kevin's call: the same brand purple the selected relationship pill uses, so the
-  // card outline and the pill inside it are one weight. The teal checkbox stays the
-  // state signal.
-  cardOn: { borderColor: colors.accent },
+  // Active state is a lit SURFACE, not an outline (Kevin: "maybe we could make the
+  // background a subtle highlighted color instead of the outline"). This is
+  // colors.surface (#0F0F14) lifted ~13% toward the brand purple (#A78BFA) and
+  // flattened to an opaque hex, because an rgba background would composite over the
+  // black page instead of over the card and come out darker than the surface it
+  // replaced. Border stays neutral on every card.
+  cardOn: { backgroundColor: '#231F32' },
   row: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   info: { flex: 1 },
   name: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
