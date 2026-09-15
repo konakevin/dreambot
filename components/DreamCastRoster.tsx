@@ -16,10 +16,12 @@ import { useEffect, useState } from 'react';
 import {
   View,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   StyleSheet,
   ActivityIndicator,
   ScrollView,
   Switch,
+  Keyboard,
 } from 'react-native';
 import { Text, TextInput } from '@/components/AppText';
 import { Image } from 'expo-image';
@@ -424,144 +426,159 @@ export function DreamCastRoster() {
     <ScrollView
       contentContainerStyle={s.container}
       showsVerticalScrollIndicator={false}
-      // Without this, the first tap anywhere while the keyboard is up only dismisses
-      // it, so every pill and switch needs two taps mid-rename.
+      // Lets a tap mid-rename reach a pill or switch directly instead of being spent
+      // dismissing the keyboard. It does NOT make inert space dismissable, which is
+      // what the wrapper below is for.
       keyboardShouldPersistTaps="handled"
       // Keeps a focused name field above the keyboard when the card is near the fold.
       automaticallyAdjustKeyboardInsets
+      keyboardDismissMode="on-drag"
     >
-      {/* Plain (non-gradient) here: the gradient wordmark on this settings screen
+      {/* Tapping any empty space ends a rename. Real controls claim the tap first, so
+          this only catches the gaps; without it the only way out of the name field was
+          to hit an actual button, which is not where people tap to escape. Dismissing
+          the keyboard blurs the field, and onBlur is what saves the name (or clears it
+          back to the Friend/Partner fallback when it was left empty). */}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View>
+          {/* Plain (non-gradient) here: the gradient wordmark on this settings screen
           is the "Dream Cast" nav-bar title (app/settings/dream-cast.tsx). Onboarding
           uses a SEPARATE component (DreamCastStep), which keeps its gradient title. */}
-      <TitleText size={18} color="rgba(255,255,255,0.92)">
-        Who do you want to dream with?
-      </TitleText>
-      <Text style={s.subtitle}>
-        Add yourself, then up to {MAX_DREAM_PARTNERS} loved ones. Switch on anyone you want to dream
-        with, and one of them joins you each night.
-      </Text>
+          <TitleText size={18} color="rgba(255,255,255,0.92)">
+            Who do you want to dream with?
+          </TitleText>
+          <Text style={s.subtitle}>
+            Add yourself, then up to {MAX_DREAM_PARTNERS} loved ones. Switch on anyone you want to
+            dream with, and one of them joins you each night.
+          </Text>
 
-      {/* Three panels, one shape. Each section's heading lives INSIDE its panel,
+          {/* Three panels, one shape. Each section's heading lives INSIDE its panel,
           above a divider, so the label is visibly attached to the rows it names
           instead of floating over them. The coloured left rail is the section's
           identity: purple for you, teal for the cast that appears in dreams,
           neutral for the ones sitting out. */}
-      <View style={[s.panel, s.panelSelf]}>
-        <Text style={[s.panelHead, s.panelHeadSelf]}>YOU</Text>
-        {self ? (
-          <View style={[s.member, s.row]}>
-            <CastThumb
-              storage_path={self.storage_path}
-              thumb_url={self.thumb_url}
-              uriOverride={pending?.key === 'self' ? pending.uri : undefined}
-              busy={busy === 'self'}
-            />
-            <View style={s.info}>
-              <Text style={s.name}>You</Text>
-              <Text style={s.status}>
-                {busy === 'self' ? 'Analyzing…' : 'The face that stars in your dreams'}
-              </Text>
-            </View>
-            {busy !== 'self' && (
-              <>
-                <TouchableOpacity
-                  style={s.ctrl}
-                  onPress={uploadSelf}
-                  hitSlop={8}
-                  disabled={anyBusy}
-                >
-                  <Ionicons name="sync" size={ICON} color={colors.textSecondary} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={s.ctrl}
-                  onPress={removeSelf}
-                  hitSlop={8}
-                  disabled={anyBusy}
-                >
-                  <Ionicons name="close-circle-outline" size={ICON} color={colors.textSecondary} />
-                </TouchableOpacity>
-              </>
-            )}
-          </View>
-        ) : (
-          <TouchableOpacity
-            style={[s.member, s.uploadButton, anyBusy && { opacity: 0.4 }]}
-            onPress={uploadSelf}
-            disabled={anyBusy}
-            activeOpacity={0.7}
-          >
-            {busy === 'self' ? (
-              <ActivityIndicator size="small" color={colors.accent} />
+          <View style={[s.panel, s.panelSelf]}>
+            <Text style={[s.panelHead, s.panelHeadSelf]}>YOU</Text>
+            {self ? (
+              <View style={[s.member, s.row]}>
+                <CastThumb
+                  storage_path={self.storage_path}
+                  thumb_url={self.thumb_url}
+                  uriOverride={pending?.key === 'self' ? pending.uri : undefined}
+                  busy={busy === 'self'}
+                />
+                <View style={s.info}>
+                  <Text style={s.name}>You</Text>
+                  <Text style={s.status}>
+                    {busy === 'self' ? 'Analyzing…' : 'The face that stars in your dreams'}
+                  </Text>
+                </View>
+                {busy !== 'self' && (
+                  <>
+                    <TouchableOpacity
+                      style={s.ctrl}
+                      onPress={uploadSelf}
+                      hitSlop={8}
+                      disabled={anyBusy}
+                    >
+                      <Ionicons name="sync" size={ICON} color={colors.textSecondary} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={s.ctrl}
+                      onPress={removeSelf}
+                      hitSlop={8}
+                      disabled={anyBusy}
+                    >
+                      <Ionicons
+                        name="close-circle-outline"
+                        size={ICON}
+                        color={colors.textSecondary}
+                      />
+                    </TouchableOpacity>
+                  </>
+                )}
+              </View>
             ) : (
-              <>
-                <Ionicons name="camera" size={18} color={colors.accent} />
-                <Text style={s.uploadButtonText}>Upload your photo</Text>
-              </>
-            )}
-          </TouchableOpacity>
-        )}
-      </View>
-
-      {partners.length > 0 && (
-        <>
-          <View style={[s.panel, s.panelOn]}>
-            <Text style={[s.panelHead, s.panelHeadOn]}>IN YOUR DREAMS</Text>
-            {inDreams.length > 0 ? (
-              inDreams.map(renderPartner)
-            ) : (
-              <Text style={s.hint}>Nobody yet, so tonight it is just you.</Text>
+              <TouchableOpacity
+                style={[s.member, s.uploadButton, anyBusy && { opacity: 0.4 }]}
+                onPress={uploadSelf}
+                disabled={anyBusy}
+                activeOpacity={0.7}
+              >
+                {busy === 'self' ? (
+                  <ActivityIndicator size="small" color={colors.accent} />
+                ) : (
+                  <>
+                    <Ionicons name="camera" size={18} color={colors.accent} />
+                    <Text style={s.uploadButtonText}>Upload your photo</Text>
+                  </>
+                )}
+              </TouchableOpacity>
             )}
           </View>
 
-          {notInDreams.length > 0 && (
-            <View style={s.panel}>
-              <Text style={s.panelHead}>BACKSTAGE</Text>
-              {notInDreams.map(renderPartner)}
-            </View>
+          {partners.length > 0 && (
+            <>
+              <View style={[s.panel, s.panelOn]}>
+                <Text style={[s.panelHead, s.panelHeadOn]}>IN YOUR DREAMS</Text>
+                {inDreams.length > 0 ? (
+                  inDreams.map(renderPartner)
+                ) : (
+                  <Text style={s.hint}>Nobody yet, so tonight it is just you.</Text>
+                )}
+              </View>
+
+              {notInDreams.length > 0 && (
+                <View style={s.panel}>
+                  <Text style={s.panelHead}>BACKSTAGE</Text>
+                  {notInDreams.map(renderPartner)}
+                </View>
+              )}
+            </>
           )}
-        </>
-      )}
 
-      {/* Adding a new loved one: once a photo is picked, show a live card with
+          {/* Adding a new loved one: once a photo is picked, show a live card with
           that photo + an analyzing spinner (matches the You/replace cards) so it
           clearly reads as working. Before the pick (picker open) show the
           spinner add-card. */}
-      {busy === 'new' ? (
-        pending?.key === 'new' ? (
-          <View style={[s.card, s.cardActive]}>
-            <View style={s.row}>
-              <CastThumb uriOverride={pending.uri} busy />
-              <View style={s.info}>
-                <Text style={s.name}>New loved one</Text>
-                <Text style={s.status}>Analyzing your photo…</Text>
+          {busy === 'new' ? (
+            pending?.key === 'new' ? (
+              <View style={[s.card, s.cardActive]}>
+                <View style={s.row}>
+                  <CastThumb uriOverride={pending.uri} busy />
+                  <View style={s.info}>
+                    <Text style={s.name}>New loved one</Text>
+                    <Text style={s.status}>Analyzing your photo…</Text>
+                  </View>
+                </View>
               </View>
-            </View>
-          </View>
-        ) : (
-          <View style={[s.addCard, s.addCardBusy]}>
-            <View style={s.addBusyRow}>
-              <ActivityIndicator size="small" color={colors.accent} />
-              <Text style={s.uploadButtonText}>Opening your photos…</Text>
-            </View>
-          </View>
-        )
-      ) : (
-        partners.length < MAX_DREAM_PARTNERS && (
-          <TouchableOpacity
-            style={[s.addCard, anyBusy && { opacity: 0.4 }]}
-            onPress={addNewPartner}
-            disabled={anyBusy}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="add-circle-outline" size={20} color={colors.accent} />
-            <Text style={s.uploadButtonText}>Add a loved one</Text>
-          </TouchableOpacity>
-        )
-      )}
+            ) : (
+              <View style={[s.addCard, s.addCardBusy]}>
+                <View style={s.addBusyRow}>
+                  <ActivityIndicator size="small" color={colors.accent} />
+                  <Text style={s.uploadButtonText}>Opening your photos…</Text>
+                </View>
+              </View>
+            )
+          ) : (
+            partners.length < MAX_DREAM_PARTNERS && (
+              <TouchableOpacity
+                style={[s.addCard, anyBusy && { opacity: 0.4 }]}
+                onPress={addNewPartner}
+                disabled={anyBusy}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="add-circle-outline" size={20} color={colors.accent} />
+                <Text style={s.uploadButtonText}>Add a loved one</Text>
+              </TouchableOpacity>
+            )
+          )}
 
-      <Text style={s.footnote}>
-        Your photos are private and only used to paint you into your own dreams.
-      </Text>
+          <Text style={s.footnote}>
+            Your photos are private and only used to paint you into your own dreams.
+          </Text>
+        </View>
+      </TouchableWithoutFeedback>
     </ScrollView>
   );
 }
