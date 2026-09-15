@@ -54,9 +54,9 @@ interface DrillRow {
 // swap face photos directly on this screen instead of pushing a separate
 // route.
 const DREAM_IDENTITY_ROWS: DrillRow[] = [
-  // Dream Cast is now a drill-in to the roster screen (up to 5 loved ones +
-  // current partner) — the single place cast photos are managed, so editing it
-  // here can't desync from the roster's active-partner mirror.
+  // Dream Cast is now a drill-in to the roster screen (up to 5 loved ones, each
+  // ticked in or out of dreams) — the single place cast photos are managed, so
+  // editing it here can't desync from the roster's plus_one mirror.
   { icon: 'people-outline', label: 'Dream Cast', route: '/settings/dream-cast' },
   { icon: 'location-outline', label: 'Locations', route: '/settings/locations' },
   { icon: 'options-outline', label: 'Mood', route: '/settings/mood' },
