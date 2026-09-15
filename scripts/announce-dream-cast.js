@@ -44,7 +44,12 @@ async function upsert() {
     .upsert(
       {
         id: ID,
-        title: 'Bring the whole cast 🎬',
+        // "Now casting" is the real film-world phrase for exactly this change, so the
+        // title lands the reveal AND describes it in three words, and the body's first
+        // line then explains what it means mechanically. Kept to 21 characters: the
+        // gradient title runs ~310pt at size 22, so past ~23 it wraps to two lines and
+        // a ta-da headline loses its punch.
+        title: 'Now casting: everyone 🎬',
         // Leads with what CHANGED, which is what an existing user needs, then the
         // three actions in order. "Take turns" rather than "randomly": the roll is a
         // round robin, so nobody repeats until everyone switched on has had a turn.
