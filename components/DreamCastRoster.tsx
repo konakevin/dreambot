@@ -226,7 +226,7 @@ export function DreamCastRoster() {
     if (partners.length > 0) {
       // A second longer than the 3s default: this one is a rule the user did not know
       // about, not a confirmation of something they just did, so it needs reading time.
-      Toast.show('Your cast needs you. Remove them first.', 'people-outline', 4000);
+      Toast.show("Your cast can't dream without you. Remove them first.", 'people-outline', 4000);
       return;
     }
     if (self) await removeCastFile(self).catch(() => {});
