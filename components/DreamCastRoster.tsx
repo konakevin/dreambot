@@ -219,14 +219,23 @@ export function DreamCastRoster() {
     );
 
   const removeSelf = async () => {
-    // Every dream is built around the user's own face; a cast member with nobody to
-    // appear beside is not a dream the engine can render. So the self photo is the
-    // last one that can go. The button stays live and explains itself rather than
-    // sitting there disabled with no reason given.
-    if (partners.length > 0) {
-      // A second longer than the 3s default: this one is a rule the user did not know
-      // about, not a confirmation of something they just did, so it needs reading time.
-      Toast.show("Your cast can't dream without you. Remove them first.", 'people-outline', 4000);
+    // THE INVARIANT: nobody is in your dreams without a self photo. Without one the
+    // engine drops to scene territory (chaosTier's `if (!hasSelf)`) and silently stops
+    // casting ANYONE, so a switched-on cast would just quietly never show up.
+    //
+    // Gated on who is IN DREAMS, not on roster size. Someone can park their whole cast
+    // backstage and still remove their own photo, keeping all that setup work; the old
+    // roster-size check made them delete every cast member to do it. The toast points
+    // at the reversible action (move backstage), not the destructive one.
+    //
+    // 4s rather than the 3s default: a rule the user did not know about needs reading
+    // time, unlike a confirmation of something they just did.
+    if (partners.some((p) => isPartnerEnabled(p, activeId))) {
+      Toast.show(
+        "Your cast can't dream without you. Move them backstage first.",
+        'people-outline',
+        4000
+      );
       return;
     }
     if (self) await removeCastFile(self).catch(() => {});
@@ -247,6 +256,10 @@ export function DreamCastRoster() {
         ...(r.physical_summary ? { physical_summary: r.physical_summary } : {}),
         ...(r.ethnicity ? { ethnicity: r.ethnicity } : {}),
         relationship: 'friend',
+        // Normally a new member goes straight into your dreams. With no self photo
+        // that would be the broken state, so they land BACKSTAGE instead of the upload
+        // being refused: nothing is lost, and switching them on later is one tap.
+        enabled: !!self,
       })
     );
     // Ask for the name at the one moment the user is definitely thinking about who
@@ -313,6 +326,13 @@ export function DreamCastRoster() {
   };
 
   const toggleEnabled = (p: DreamPartner, on: boolean) => {
+    // The same invariant from the other side. Without this you could remove your photo
+    // while the cast was parked (legal), then switch someone back on and land in the
+    // state where the engine quietly ignores them.
+    if (on && !self) {
+      Toast.show('Add your photo first. Every dream stars you.', 'camera-outline', 4000);
+      return;
+    }
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setPartnerEnabled(p.id, on);
     persist();
