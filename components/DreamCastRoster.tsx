@@ -507,10 +507,10 @@ const s = StyleSheet.create({
     borderColor: colors.border,
   },
   cardActive: { borderColor: colors.accent }, // only the 'analyzing a new photo' card
-  // Brand purple at partial strength. Full colors.accent on every card was too
-  // loud at 5 of 5, and teal here fought the checkbox; softening the brand colour
-  // gives the card definition while the teal checkbox stays the actual signal.
-  cardOn: { borderColor: 'rgba(167,139,250,0.45)' },
+  // Kevin's call: the same brand purple the selected relationship pill uses, so the
+  // card outline and the pill inside it are one weight. The teal checkbox stays the
+  // state signal.
+  cardOn: { borderColor: colors.accent },
   row: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   info: { flex: 1 },
   name: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
