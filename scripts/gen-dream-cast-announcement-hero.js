@@ -17,6 +17,13 @@
  * (aspectRatio 4/3, backgroundColor colors.surface), so it seats seamlessly instead of
  * sitting on a mismatched card.
  *
+ * RESPONSIVENESS: the image scales as one unit, so nothing can bleed out of the card
+ * at any width -- the bubbles sit 43px inside a 1200px frame, and that 3.6% margin
+ * scales with everything else. The card itself is width:100% capped at 400 inside a
+ * 24pt overlay inset, so the hero runs ~283pt on an SE and ~356pt on a Pro Max, i.e.
+ * 59-74pt bubbles. The sheet renders this with contentFit="contain", so even a hero
+ * authored at the wrong ratio letterboxes rather than cropping faces off the sides.
+ *
  *   node scripts/gen-dream-cast-announcement-hero.js            # render + composite
  *   node scripts/gen-dream-cast-announcement-hero.js --publish  # ...and set image_url
  */
@@ -42,7 +49,10 @@ const CHARACTERS = [
   { name: '2-grandpa', who: 'a kindly older man with a fluffy white beard and round glasses' },
   { name: '3-kid', who: 'a small happy child with pigtails and rosy cheeks' },
   { name: '4-redhead', who: 'a freckled young woman with wavy red hair' },
-  { name: '5-beanie', who: 'a friendly young man with black hair, light stubble and a knit beanie' },
+  {
+    name: '5-beanie',
+    who: 'a friendly young man with black hair, light stubble and a knit beanie',
+  },
 ];
 
 // Matches DreamCastRoster's thumbnails: a circle inside a 2pt accent ring.

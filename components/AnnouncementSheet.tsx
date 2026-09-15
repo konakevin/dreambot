@@ -98,7 +98,15 @@ export function AnnouncementSheet({ announcement, onClose }: Props) {
             <Image
               source={{ uri: announcement.image_url }}
               style={s.hero}
-              contentFit="cover"
+              // contain, NOT cover. The box is a fixed 4:3 and every hero we author is
+              // 4:3, so today the two are identical -- but cover CROPS whatever does
+              // not fit, so a hero authored at any other ratio would silently lose its
+              // left and right edges, which for the cast-bubble hero means losing the
+              // outer two faces. contain letterboxes instead, and since the box's own
+              // background is colors.surface (what the heroes are composed on) the
+              // letterboxing is invisible. Safe by construction rather than by the
+              // ratios happening to agree.
+              contentFit="contain"
               cachePolicy="memory-disk"
             />
           ) : (
