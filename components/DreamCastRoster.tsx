@@ -588,10 +588,13 @@ const s = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: verticalScale(18),
   },
-  // Both at 40%. A 1pt edge running a panel's whole height reads brighter than the
-  // same colour on a small control, so the outlines have to sit well under full
-  // strength or the panels out-shout the switches they contain.
-  panelSelf: { borderColor: 'rgba(167,139,250,0.4)' },
+  // NOT the same alpha on purpose. Equal opacity is not equal brightness: teal
+  // (#5EEAD4) carries most of its weight in the green channel, which the eye is far
+  // more sensitive to than the blue that dominates the purple (#A78BFA), so over
+  // black the teal composites about a third brighter at the same alpha. Matching them
+  // by eye puts the purple near 0.55 where the teal sits at 0.4. Levelling these to
+  // one number would make the YOU panel look dulled again.
+  panelSelf: { borderColor: 'rgba(167,139,250,0.55)' },
   panelOn: { borderColor: 'rgba(94,234,212,0.4)' },
   // The heading sits INSIDE the panel, above a divider, so it is visibly attached to
   // the rows it names instead of floating above them competing with other labels.
