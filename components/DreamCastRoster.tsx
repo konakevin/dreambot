@@ -49,8 +49,12 @@ import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { MAX_DREAM_PARTNERS, type DreamPartner } from '@/types/vibeProfile';
 
+// Two hearts in different colours was a weak pair: both glyphs mean "love", the only
+// difference was hue (so it disappeared entirely for a colour-blind user), and a
+// yellow heart does not say "platonic" to anyone. A handshake differs from a heart in
+// SILHOUETTE, which is what makes a binary readable at pill size.
 const RELATIONSHIPS: { key: 'friend' | 'partner'; label: string }[] = [
-  { key: 'friend', label: '💛 Friend' },
+  { key: 'friend', label: '🤝 Friend' },
   { key: 'partner', label: '❤️ Partner' },
 ];
 
