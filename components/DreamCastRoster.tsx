@@ -46,21 +46,13 @@ import {
   PARTNER_NAME_MAX,
 } from '@/lib/dreamCastRoster';
 import { showAlert } from '@/components/CustomAlert';
+import { CastPhotoTip } from '@/components/CastPhotoTip';
 import { Toast } from '@/components/Toast';
 import { TitleText } from '@/components/TitleText';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
+import { CAST_RELATIONSHIPS, castRelationshipLabel } from '@/constants/castRelationships';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { MAX_DREAM_PARTNERS, type DreamPartner } from '@/types/vibeProfile';
-
-// The pair has to differ in SILHOUETTE, not hue: two hearts in different colours
-// separated only by colour, which is no separation at all for a colour-blind user, and
-// a yellow heart does not say "platonic" to anyone. A handshake fixed the shape but
-// read as a business deal. A hugging face is warm, obviously platonic, and still a
-// completely different shape from a heart at pill size.
-const RELATIONSHIPS: { key: 'friend' | 'partner'; label: string }[] = [
-  { key: 'friend', label: '🤗 Friend' },
-  { key: 'partner', label: '❤️ Partner' },
-];
 
 // Stable empty-array reference for the partner_library selector. Defaulting with
 // `?? []` INSIDE the Zustand selector mints a new array every render, so
@@ -358,7 +350,7 @@ export function DreamCastRoster() {
                 disabled={isBusy}
               >
                 <Text style={[s.name, !p.name && s.namePlaceholder]} numberOfLines={1}>
-                  {p.name || (p.relationship === 'partner' ? 'Partner' : 'Friend')}
+                  {p.name || castRelationshipLabel(p.relationship)}
                 </Text>
                 <Ionicons name="pencil" size={13} color={colors.textMuted} />
               </TouchableOpacity>
@@ -402,7 +394,7 @@ export function DreamCastRoster() {
 
         {/* Second line is the relationship and nothing else. */}
         <View style={s.relRow}>
-          {RELATIONSHIPS.map((rel) => {
+          {CAST_RELATIONSHIPS.map((rel) => {
             const on = p.relationship === rel.key;
             return (
               <TouchableOpacity
@@ -411,7 +403,9 @@ export function DreamCastRoster() {
                 onPress={() => setRelationship(p, rel.key)}
                 activeOpacity={0.7}
               >
-                <Text style={[s.relPillText, on && s.relPillTextActive]}>{rel.label}</Text>
+                <Text style={[s.relPillText, on && s.relPillTextActive]}>
+                  {rel.emoji} {rel.label}
+                </Text>
               </TouchableOpacity>
             );
           })}
@@ -452,6 +446,11 @@ export function DreamCastRoster() {
             Add yourself, then up to {MAX_DREAM_PARTNERS} loved ones. Switch on anyone you want to
             dream with, and one of them joins you each night.
           </Text>
+
+          {/* Same guidance onboarding leads with, for the same reason: a straight-on,
+          well-lit shot is the biggest lever on face-swap quality, and every upload
+          on this screen is subject to it. */}
+          <CastPhotoTip />
 
           {/* Three panels, one shape. Each section's heading lives INSIDE its panel,
           above a divider, so the label is visibly attached to the rows it names

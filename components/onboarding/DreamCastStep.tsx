@@ -12,6 +12,8 @@ import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as Haptics from 'expo-haptics';
 import { normalizeImageToJpeg } from '@/lib/normalizeImageToJpeg';
+import { CastPhotoTip } from '@/components/CastPhotoTip';
+import { CAST_RELATIONSHIPS } from '@/constants/castRelationships';
 import { useOnboardingStore } from '@/store/onboarding';
 import { supabase } from '@/lib/supabase';
 import { fetchEdge } from '@/lib/edgeFunction';
@@ -79,11 +81,6 @@ const SLOTS: SlotConfig[] = [
     icon: 'heart',
     tip: '',
   },
-];
-
-const RELATIONSHIPS: { key: CastRelationship; label: string }[] = [
-  { key: 'friend', label: 'Friend' },
-  { key: 'partner', label: 'Partner' },
 ];
 
 const CAST_BUCKET = 'cast-photos';
@@ -229,7 +226,7 @@ function CastSlot({
                   {!member.relationship && <Text style={s.relRequired}>(Choose one)</Text>}
                 </View>
                 <View style={s.relRow}>
-                  {RELATIONSHIPS.map((rel) => {
+                  {CAST_RELATIONSHIPS.map((rel) => {
                     const active = member.relationship === rel.key;
                     return (
                       <TouchableOpacity
@@ -574,19 +571,9 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
     <>
       {/* Photo guidance gets top billing — a straight-on, well-lit shot is the
           single biggest lever on face-swap quality, and it applies to both
-          slots (so it lives above the cards, not buried inside one). */}
-      <View style={s.photoTipRow}>
-        {/* The mascot posing for its own passport photo — demonstrates the
-            straight-on framing instead of describing it. */}
-        <Image
-          source={require('@/assets/images/onboarding/mascot-passport.png')}
-          style={s.photoTipImage}
-          contentFit="cover"
-        />
-        <Text style={s.photoTipText}>
-          A straight-on, well-lit photo works best, like a passport photo.
-        </Text>
-      </View>
+          slots (so it lives above the cards, not buried inside one). Shared with
+          the Settings roster so the two cannot drift. */}
+      <CastPhotoTip />
       {SLOTS.map((slot) => (
         <CastSlot
           key={slot.role}
@@ -692,34 +679,6 @@ const s = StyleSheet.create({
     marginTop: verticalScale(10),
     marginBottom: verticalScale(16),
     lineHeight: fontScale(20),
-  },
-  // Contained pill (subtle accent tint) so the tip reads as its own element
-  // instead of bleeding into the hero text above. The mascot's passport
-  // photo sits where an icon would — it demonstrates the framing.
-  photoTipRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'center',
-    gap: 10,
-    backgroundColor: 'rgba(167,139,250,0.08)',
-    borderWidth: 1,
-    borderColor: 'rgba(167,139,250,0.25)',
-    borderRadius: 12,
-    paddingVertical: verticalScale(8),
-    paddingHorizontal: 10,
-    marginBottom: verticalScale(14),
-  },
-  photoTipImage: {
-    width: 44,
-    height: 44,
-    borderRadius: 8,
-  },
-  photoTipText: {
-    flexShrink: 1,
-    color: colors.textPrimary,
-    opacity: 0.92,
-    fontSize: fontScale(13),
-    fontWeight: '600',
   },
   nudgeRow: {
     flexDirection: 'row',
