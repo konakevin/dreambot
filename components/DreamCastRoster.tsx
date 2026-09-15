@@ -54,9 +54,9 @@ const RELATIONSHIPS: { key: 'friend' | 'partner'; label: string }[] = [
 const EMPTY_PARTNERS: DreamPartner[] = [];
 
 /** "In your dreams" is its own state, so it gets its own colour: the Real Face teal
- *  from Create (MEDIUM_BADGE.face), not another purple. Purple stays the app's
- *  chrome (titles, add button, photo rings); teal means "this one is live tonight",
- *  which is what the badge, the checkbox and the card outline are all saying. */
+ *  from Create (MEDIUM_BADGE.face), not another purple. It is carried by exactly TWO
+ *  things — the card's checkbox and the counter that totals them. Outlining every
+ *  card in it as well just made the screen shout, since most members are usually on. */
 const IN_DREAMS = MEDIUM_BADGE.face;
 
 /** Resolves a private cast photo to a signed URL for the 48×48 thumbnail. A
@@ -339,7 +339,7 @@ export function DreamCastRoster() {
         const isOn = isPartnerEnabled(p, activeId);
         const isBusy = busy === p.id;
         return (
-          <View key={p.id} style={[s.card, isOn && s.cardActive]}>
+          <View key={p.id} style={s.card}>
             <View style={s.row}>
               <CastThumb
                 storage_path={p.storage_path}
@@ -352,31 +352,39 @@ export function DreamCastRoster() {
                     the relationship here would print "Friend" on three cards in a row
                     AND repeat the pills below, so it is an editable name that falls
                     back to the relationship word as its placeholder. */}
-                <View style={s.nameRow}>
-                  <TextInput
-                    style={s.nameInput}
-                    value={p.name ?? ''}
-                    onChangeText={(t) => setName(p, t)}
-                    onBlur={() => commitName(p)}
-                    placeholder={p.relationship === 'partner' ? 'Partner' : 'Friend'}
-                    placeholderTextColor={colors.textMuted}
-                    maxLength={PARTNER_NAME_MAX}
-                    autoCorrect={false}
-                    returnKeyType="done"
-                    editable={!isBusy}
-                  />
-                  {isOn && (
-                    <View style={s.inBadge}>
-                      <Text style={s.inBadgeText}>IN DREAMS</Text>
-                    </View>
-                  )}
-                </View>
+                <TextInput
+                  style={s.nameInput}
+                  value={p.name ?? ''}
+                  onChangeText={(t) => setName(p, t)}
+                  onBlur={() => commitName(p)}
+                  placeholder={p.relationship === 'partner' ? 'Partner' : 'Friend'}
+                  placeholderTextColor={colors.textMuted}
+                  maxLength={PARTNER_NAME_MAX}
+                  autoCorrect={false}
+                  returnKeyType="done"
+                  editable={!isBusy}
+                />
                 {/* No idle status line: "Ready for dreams" was true of every member in
                     every state, so it taught nothing. */}
                 {isBusy && <Text style={s.status}>Analyzing…</Text>}
               </View>
               {!isBusy && (
                 <>
+                  {/* The ONE signal that this person is in your dreams. It sits where
+                      the badge used to, so the card says it once instead of three
+                      times, and the second line is left to the relationship. */}
+                  <TouchableOpacity
+                    onPress={() => toggleEnabled(p, !isOn)}
+                    hitSlop={10}
+                    style={s.checkHit}
+                    activeOpacity={0.7}
+                  >
+                    <Ionicons
+                      name={isOn ? 'checkbox' : 'square-outline'}
+                      size={26}
+                      color={isOn ? IN_DREAMS.color : colors.textMuted}
+                    />
+                  </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => replacePartner(p)}
                     hitSlop={8}
@@ -395,23 +403,8 @@ export function DreamCastRoster() {
               )}
             </View>
 
-            {/* ONE control row, no divider: at five members the stacked version put
-                only two cards on screen. The include control keeps the lead position
-                and its own teal state, so it still reads first without a row of its
-                own. Wraps on narrow devices rather than squeezing the pills. */}
+            {/* Second line is the relationship and nothing else. */}
             <View style={s.relRow}>
-              <TouchableOpacity
-                style={[s.includeBtn, isOn && s.includeBtnOn]}
-                onPress={() => toggleEnabled(p, !isOn)}
-                activeOpacity={0.7}
-              >
-                <Ionicons
-                  name={isOn ? 'checkbox' : 'square-outline'}
-                  size={20}
-                  color={isOn ? IN_DREAMS.color : colors.bodyOnDark}
-                />
-                <Text style={[s.includeText, isOn && s.includeTextOn]}>In dreams</Text>
-              </TouchableOpacity>
               {RELATIONSHIPS.map((rel) => {
                 const on = p.relationship === rel.key;
                 return (
@@ -512,10 +505,9 @@ const s = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-  cardActive: { borderColor: IN_DREAMS.color },
+  cardActive: { borderColor: colors.accent }, // only the 'analyzing a new photo' card
   row: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   info: { flex: 1 },
-  nameRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   name: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
   // Reads as the card's title until tapped. padding:0 so it sits on the same
   // baseline the plain Text did; flex:1 pushes the badge to the column's edge.
@@ -527,20 +519,9 @@ const s = StyleSheet.create({
     padding: 0,
   },
   status: { color: colors.textSecondary, fontSize: fontScale(13), marginTop: verticalScale(2) },
-  // Tonal teal, matching how Create paints the Real Face badge (colour in the text
-  // over a translucent wash, never a solid fill) so the two screens read as one app.
-  inBadge: {
-    backgroundColor: IN_DREAMS.bg,
-    borderRadius: 8,
-    paddingHorizontal: 7,
-    paddingVertical: verticalScale(3),
-  },
-  inBadgeText: {
-    color: IN_DREAMS.color,
-    fontSize: fontScale(9),
-    fontWeight: '800',
-    letterSpacing: 0.5,
-  },
+  // A little breathing room so the checkbox is never mistaken for, or fat-fingered
+  // into, the remove button two slots along.
+  checkHit: { paddingRight: 4 },
   thumb: { width: 48, height: 48, borderRadius: 24, borderWidth: 2, borderColor: colors.accent },
   thumbSpinner: {
     ...StyleSheet.absoluteFillObject,
@@ -600,24 +581,6 @@ const s = StyleSheet.create({
   relPillActive: { backgroundColor: colors.accentBg, borderColor: colors.accent },
   relPillText: { color: colors.textSecondary, fontSize: fontScale(13), fontWeight: '600' },
   relPillTextActive: { color: colors.accentLight },
-  // Shares the row with the relationship pills but stays the one that reads first:
-  // a real checkbox, brighter label than the pills when off, and its own teal when
-  // on. Off deliberately is NOT greyed out, or the control people need to find
-  // looks disabled.
-  includeBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 7,
-    paddingVertical: verticalScale(6),
-    paddingHorizontal: 10,
-    borderRadius: 16,
-    backgroundColor: colors.background,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  includeBtnOn: { backgroundColor: IN_DREAMS.bg, borderColor: IN_DREAMS.color },
-  includeText: { color: colors.bodyOnDark, fontSize: fontScale(13), fontWeight: '700' },
-  includeTextOn: { color: IN_DREAMS.color },
   hint: {
     color: colors.textSecondary,
     fontSize: fontScale(13),
