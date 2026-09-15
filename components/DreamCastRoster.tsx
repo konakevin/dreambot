@@ -77,6 +77,11 @@ const IN_DREAMS = MEDIUM_BADGE.face;
  *  outline, so the two icons share one stroke weight as well as one size. */
 const ICON = 22;
 
+/** The lines INSIDE a panel (under the heading, between members). A touch brighter
+ *  than colors.border, which disappeared against the panel fill and left the rows
+ *  reading as one block. */
+const DIVIDER = '#34343F';
+
 /** Resolves a private cast photo to a signed URL for the 48×48 thumbnail. A
  *  `uriOverride` (a just-picked LOCAL image) takes precedence so the photo shows
  *  instantly during the upload+analyze, before the signed URL exists. */
@@ -574,12 +579,11 @@ const s = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: verticalScale(18),
   },
-  // Both at ~55%, which over the black page lands a good step below the full brand
-  // colours. At full strength a 1pt edge running the whole height of a panel reads
-  // brighter than the same colour on a small control, so the panels were out-shouting
-  // the switches they contain.
-  panelSelf: { borderColor: 'rgba(167,139,250,0.55)' },
-  panelOn: { borderColor: 'rgba(94,234,212,0.55)' },
+  // Both at 40%. A 1pt edge running a panel's whole height reads brighter than the
+  // same colour on a small control, so the outlines have to sit well under full
+  // strength or the panels out-shout the switches they contain.
+  panelSelf: { borderColor: 'rgba(167,139,250,0.4)' },
+  panelOn: { borderColor: 'rgba(94,234,212,0.4)' },
   // The heading sits INSIDE the panel, above a divider, so it is visibly attached to
   // the rows it names instead of floating above them competing with other labels.
   panelHead: {
@@ -591,13 +595,13 @@ const s = StyleSheet.create({
     paddingTop: verticalScale(11),
     paddingBottom: verticalScale(10),
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: DIVIDER,
   },
   panelHeadSelf: { color: colors.accentLight },
   panelHeadOn: { color: IN_DREAMS.color },
   // Members are rows inside the panel, divided by the same hairline as the heading.
   member: { padding: verticalScale(12) },
-  memberDivided: { borderBottomWidth: 1, borderBottomColor: colors.border },
+  memberDivided: { borderBottomWidth: 1, borderBottomColor: DIVIDER },
   // Every head-row control sits in an identical fixed-height box. An Ionicon is a
   // baseline-positioned glyph and a Switch is a fixed 31pt box, so without this they
   // centre against different things and visibly drift apart.
