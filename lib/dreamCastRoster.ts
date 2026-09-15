@@ -2,9 +2,15 @@
  * Dream Cast roster helpers (client).
  *
  * The roster (`partner_library`, up to 5) is the source of truth for a user's
- * loved ones; the ACTIVE one is MIRRORED into `dream_cast`'s `plus_one` slot so
+ * loved ones; ONE of them is MIRRORED into `dream_cast`'s `plus_one` slot so
  * the render pipeline (nightly / create / dual swap) keeps reading `plus_one`
  * with zero engine change (Phase 1 — DREAM_PARTNERS_PLAN.md).
+ *
+ * Multi-cast (MULTI_CAST_PLUS_ONE_PLAN.md): several members can be `enabled` at
+ * once. The NIGHTLY engine rolls among them per render, server-side
+ * (`_shared/partnerRoll.ts`). The client mirror below is the deterministic
+ * default the Create path reads — the active member if it is still enabled,
+ * otherwise the first enabled one.
  *
  * These are pure transforms over a VibeProfile — used by the onboarding store's
  * roster setters + the lazy legacy migration on load.
@@ -42,16 +48,39 @@ function partnerToPlusOne(p: DreamPartner): DreamCastMember {
 }
 
 /**
- * Sync `dream_cast`'s `plus_one` slot to the active partner (the render mirror).
- * No active partner → no plus_one member (self-only dreams). `self` + `pet` are
- * left untouched. Call after any roster/active change, before persisting.
+ * Is this roster member eligible to star as the +1?
+ *
+ * MIRROR OF `supabase/functions/_shared/partnerRoll.ts:isPartnerEnabled` — the
+ * engine and the app must agree on who is eligible, so change both together
+ * (`__tests__/lib/partnerRoll.test.ts` asserts they match on a shared matrix).
+ *
+ * `enabled` absent means the profile predates multi-cast, so the one member the
+ * user had picked (`active_partner_id`) is the only eligible one — a legacy
+ * roster keeps behaving exactly as it does today, with no migration.
+ */
+export function isPartnerEnabled(p: DreamPartner, activeId: string | null | undefined): boolean {
+  return p.enabled ?? p.id === activeId;
+}
+
+/** The roster members eligible to be rolled as the +1 (stable roster order). */
+export function enabledPartners(profile: VibeProfile): DreamPartner[] {
+  const lib = profile.partner_library ?? [];
+  return lib.filter((p) => isPartnerEnabled(p, profile.active_partner_id));
+}
+
+/**
+ * Sync `dream_cast`'s `plus_one` slot (the render mirror) + re-point
+ * `active_partner_id` at whoever is mirrored, so the pointer never names a
+ * member the user has switched off. Nobody enabled → no plus_one member
+ * (self-only dreams). `self` + `pet` are left untouched. Call after any
+ * roster/enabled change, before persisting.
  */
 export function syncActivePartnerMirror(profile: VibeProfile): VibeProfile {
-  const lib = profile.partner_library ?? [];
-  const active = lib.find((p) => p.id === profile.active_partner_id) ?? null;
+  const eligible = enabledPartners(profile);
+  const mirrored = eligible.find((p) => p.id === profile.active_partner_id) ?? eligible[0] ?? null;
   const others = profile.dream_cast.filter((m) => m.role !== 'plus_one');
-  const dream_cast = active ? [...others, partnerToPlusOne(active)] : others;
-  return { ...profile, dream_cast };
+  const dream_cast = mirrored ? [...others, partnerToPlusOne(mirrored)] : others;
+  return { ...profile, dream_cast, active_partner_id: mirrored?.id ?? null };
 }
 
 /**
@@ -80,6 +109,8 @@ export function migrateLegacyPlusOne(profile: VibeProfile): VibeProfile {
     ...(plusOne.physical_summary ? { physical_summary: plusOne.physical_summary } : {}),
     ...(plusOne.ethnicity ? { ethnicity: plusOne.ethnicity } : {}),
     relationship: plusOne.relationship === 'partner' ? 'partner' : 'friend',
+    // Explicitly eligible: this IS the +1 they dream with today.
+    enabled: true,
   };
   // Rebuild the plus_one mirror from the (mapped) partner so the two agree.
   return syncActivePartnerMirror({

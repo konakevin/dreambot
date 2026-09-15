@@ -191,6 +191,7 @@ import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
 import { applyFaceSwapOverride } from '../_shared/faceSwapFluxOverrides.ts';
 import { pickFaceSwapModelOverride } from '../_shared/faceSwapModelOverrides.ts';
 import { isMonumentalFaceSpot } from '../_shared/monumentalFaceSpot.ts';
+import { enabledPartners, rollPartner, mirrorPartnerIntoCast } from '../_shared/partnerRoll.ts';
 
 // Models nightly must never render. flux-2-dev over-smooths under the nightly
 // slot pipeline (banned 2026-06-01). Module-scoped so BOTH the DreamSmart pool
@@ -573,6 +574,10 @@ Deno.serve(async (req) => {
   // fetchSceneEligibleModels. Resolved inside the try block from the user's
   // mood slider; defaults preserve pre-mig-239 behavior when missing.
   let chaosTierOuter: 'low' | 'mid' | 'high' = 'low';
+  // Which roster member was rolled as tonight's +1 (multi-cast). Stamped into
+  // rolled_axes so the NEXT render's recency window can avoid repeating them —
+  // and so forensics shows exactly who was cast.
+  let rolledPartnerId: string | null = null;
 
   // Budget tracking
   const today = new Date().toISOString().slice(0, 10);
@@ -589,15 +594,6 @@ Deno.serve(async (req) => {
     // ══ NIGHTLY DREAMBOT PATH — fully isolated, no shared templates ══
     // ══════════════════════════════════════════════════════════════════
     const nightlyProfile = vibe_profile as VibeProfile;
-
-    // Cast photos live in the PRIVATE `cast-photos` bucket (migration 292).
-    // Resolve each member's storage_path to a fresh signed URL up front so ALL
-    // downstream face-swap + describe logic (which gates on
-    // thumb_url.startsWith('http')) works unchanged. No-op for legacy members
-    // that already carry a public thumb_url.
-    if (Array.isArray(nightlyProfile.dream_cast) && nightlyProfile.dream_cast.length > 0) {
-      nightlyProfile.dream_cast = await hydrateCastSources(nightlyProfile.dream_cast, supabase);
-    }
 
     // Recency: exclude the last 7 nightly mediums + vibes + locations from
     // the pool so the user doesn't see the same choices repeat in a row.
@@ -637,6 +633,53 @@ Deno.serve(async (req) => {
       '| recent places:',
       recentPlaces.slice(0, 5).join(', ')
     );
+
+    // ── Multi-cast +1 roll (MULTI_CAST_PLUS_ONE_PLAN.md) ───────────────────
+    // The user's roster can mark SEVERAL loved ones eligible (Settings → Dream
+    // Cast). Pick one for tonight and mirror it into the `plus_one` slot, so
+    // every downstream reader — castResolver, dualBriefBuilder, the swap
+    // pipeline, the relationship gate — is unchanged. Recency-avoiding: nobody
+    // repeats until everyone eligible has had a turn, matching how mediums /
+    // vibes / locations above already de-dupe.
+    //
+    // ORDER MATTERS: this rewrites dream_cast, so it MUST run BEFORE
+    // hydrateCastSources — otherwise the rolled member's private storage_path
+    // never becomes a signed URL and the face swap silently drops them. Locked
+    // by __tests__/lib/partnerRoll.test.ts.
+    const recentPartnerIds = (recentLogs ?? [])
+      .map((l) => (l.rolled_axes as Record<string, unknown>)?.partnerId)
+      .filter((p): p is string => typeof p === 'string' && p.length > 0);
+    const eligiblePartners = enabledPartners(
+      nightlyProfile.partner_library,
+      nightlyProfile.active_partner_id
+    );
+    if ((nightlyProfile.partner_library?.length ?? 0) > 0) {
+      const roll = rollPartner(eligiblePartners, recentPartnerIds, Math.random);
+      nightlyProfile.dream_cast = mirrorPartnerIntoCast(
+        nightlyProfile.dream_cast,
+        roll.partner
+      ) as DreamCastMember[];
+      rolledPartnerId = roll.partner?.id ?? null;
+      console.log(
+        `[nightly-dreams] +1 roll: ${roll.reason} pool=${roll.poolSize} picked=${
+          roll.partner ? `${roll.partner.id.slice(0, 8)}/${roll.partner.relationship}` : 'none'
+        } recent=${
+          recentPartnerIds
+            .slice(0, 3)
+            .map((r) => r.slice(0, 8))
+            .join(',') || '-'
+        }`
+      );
+    }
+
+    // Cast photos live in the PRIVATE `cast-photos` bucket (migration 292).
+    // Resolve each member's storage_path to a fresh signed URL up front so ALL
+    // downstream face-swap + describe logic (which gates on
+    // thumb_url.startsWith('http')) works unchanged. No-op for legacy members
+    // that already carry a public thumb_url.
+    if (Array.isArray(nightlyProfile.dream_cast) && nightlyProfile.dream_cast.length > 0) {
+      nightlyProfile.dream_cast = await hydrateCastSources(nightlyProfile.dream_cast, supabase);
+    }
 
     // ── Chaos-tier dream-type pre-roll (mig 239) ───────────────────────
     // Compute the user's chaos tier from their onboarding mood slider, then
@@ -3961,6 +4004,7 @@ Output ONLY the prompt.`;
     pickedModel = fallback;
   }
   logAxes.model = pickedModel;
+  if (rolledPartnerId) logAxes.partnerId = rolledPartnerId;
 
   // ── GPT-Image-2 cleanup ──────────────────────────────────────────────
   // GPT-Image-2 reads most of our personalized-dream prompts (medium

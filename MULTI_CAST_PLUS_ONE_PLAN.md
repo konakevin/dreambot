@@ -6,17 +6,59 @@ captures exactly one +1.
 
 ---
 
+## 0. STATUS — SHIPPED 2026-09-15
+
+Built end to end. What actually landed:
+
+| piece                                                      | where                                                                                                                              |
+| ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `DreamPartner.enabled?: boolean`                           | `types/vibeProfile.ts` + `_shared/partnerRoll.ts` (server mirror)                                                                  |
+| eligibility rule `p.enabled ?? p.id === active_partner_id` | `_shared/partnerRoll.ts` + `lib/dreamCastRoster.ts` (two runtimes, one rule, asserted equal in tests)                              |
+| the roll                                                   | `_shared/partnerRoll.ts` — `enabledPartners` / `rollPartner` / `mirrorPartnerIntoCast`                                             |
+| nightly wiring                                             | `nightly-dreams/index.ts`, immediately after the recency read and BEFORE `hydrateCastSources`                                      |
+| forensics                                                  | `rolled_axes.partnerId` — the roll's own output AND the next night's recency input                                                 |
+| UI                                                         | `components/DreamCastRoster.tsx` — a checkbox per row, an "N OF 5 IN DREAMS" counter, per-row relationship pills (already existed) |
+| store                                                      | `store/onboarding.ts` — `setPartnerEnabled` replaces `setActivePartner`; new members default ticked                                |
+| tests                                                      | `__tests__/lib/partnerRoll.test.ts` (43) + `dreamCastRoster.test.ts` (22)                                                          |
+
+**Decisions made while building** (the §7 open questions):
+
+1. **Selection rule → recency-avoiding round robin.** Nobody repeats until everyone ticked has had a turn:
+   the window is the last `N-1` partners rolled, read from `rolled_axes.partnerId`. N=2 strictly alternates,
+   N=5 completes a full rotation before cycling. Same idiom the engine already uses for mediums, vibes and
+   locations, and it is what makes the feature _feel_ like it is rotating (uniform random at N=2 repeats half
+   the time). Verified: 200 seeds x 100 nights for every roster size 1-5, everyone lands exactly the same
+   number of turns.
+2. **`active_partner_id` is now a POINTER, not the rule.** It records who is mirrored into `plus_one` for the
+   Create path, and `syncActivePartnerMirror` re-homes it whenever the person it names is unticked — so it can
+   never dangle on someone the user switched off. It is also the back-compat fallback (below).
+3. **New roster members default ticked.** Adding someone's photo _is_ the intent to dream with them; making
+   them find a second control to turn it on is a chore. The checkbox is right there to untick.
+4. **Ticking someone does not steal the mirror** from an already-ticked member — otherwise adding a friend
+   would silently change who the Create path uses.
+5. **Create is untouched.** It keeps reading the mirror, so it stays deterministic. Rolling there (or letting
+   the user pick per render) is a separate UX decision.
+
+**Back-compat, no migration:** `enabled` absent means the recipe predates this, so the one member
+`active_partner_id` names is the only eligible one — a legacy roster rolls exactly what it rolls today. A
+recipe with NO `partner_library` at all (just onboarded, never opened the roster screen) is skipped entirely,
+so the roll can never erase the `plus_one` onboarding wrote.
+
+**Still open:** §7 questions 3 (several photos of one person occupy several of the 5 slots) and 4 (pets).
+
+---
+
 ## 1. Most of this already exists
 
 `types/vibeProfile.ts` already models the roster. The feature is a **selection-model change, not a new subsystem**.
 
-| already there | state |
-| --- | --- |
-| `partner_library: DreamPartner[]` | up to `MAX_DREAM_PARTNERS = 5` |
-| `DreamPartner.relationship` | `'partner' \| 'friend'` — **per member, required** |
-| `DreamPartner.id` | stable id (roster is id-keyed) |
-| `active_partner_id` | **the constraint** — exactly ONE is live |
-| `dream_cast.plus_one` | a MIRROR of the active partner, so the engine needs no change to read it |
+| already there                     | state                                                                    |
+| --------------------------------- | ------------------------------------------------------------------------ |
+| `partner_library: DreamPartner[]` | up to `MAX_DREAM_PARTNERS = 5`                                           |
+| `DreamPartner.relationship`       | `'partner' \| 'friend'` — **per member, required**                       |
+| `DreamPartner.id`                 | stable id (roster is id-keyed)                                           |
+| `active_partner_id`               | **the constraint** — exactly ONE is live                                 |
+| `dream_cast.plus_one`             | a MIRROR of the active partner, so the engine needs no change to read it |
 
 So a user can already store 5 people with individual relationships. Only one can be dreamed at a time.
 
@@ -71,47 +113,55 @@ returns a new array each render and blew the getSnapshot cache. Default outside 
 
 ## 5. The relationship audit — the actual risk
 
-Kevin's ask: *"make sure it honors friend vs partner and doesn't pose friends in romantic positions."*
+Kevin's ask: _"make sure it honors friend vs partner and doesn't pose friends in romantic positions."_
 I audited the three layers. **One is solid, one is fine, one is the real gap.**
 
 ### ✅ Pose pools — already correct
+
 `pickDualAction` gates on relationship:
+
 ```ts
 const isPartner = relationship === 'partner' || relationship === 'significant_other';
 if (isPartner && rng() < mix.partnerShare) return pick(pools.partner);
 return pick(pools.companion);
 ```
+
 A non-partner can never draw `DUAL_ACTIONS_PARTNER`. Relationship already flows from
 `dream_cast.plus_one.relationship`, so a rolled friend gets the companion pool automatically.
 
 ### ✅ Playful / dynamic pools — relationship-blind but clean
+
 Both are drawn BEFORE the partner check, so a friend can get them. Audited all 69 entries: the only "kiss"
-entries are *blown toward the camera*, not at each other. `DUAL_ACTIONS_DYNAMIC` has zero romantic content.
+entries are _blown toward the camera_, not at each other. `DUAL_ACTIONS_DYNAMIC` has zero romantic content.
 **No change needed** — but they must stay relationship-safe, so this needs a locking test.
 
 ### ❌ Scenario scene text — THE GAP
+
 Pose is gated. **Scene text is not.**
 
-| in 7,388 enabled dual scenario rows | count |
-| --- | --- |
-| say "couple" | **931 (13%)** |
-| explicitly romantic (kiss / lovers / honeymoon / anniversary / bride / proposal) | **138 (1.9%)** |
-| whole categories that are inherently romantic | `romantic_gardens`, `sky_romance` |
+| in 7,388 enabled dual scenario rows                                              | count                             |
+| -------------------------------------------------------------------------------- | --------------------------------- |
+| say "couple"                                                                     | **931 (13%)**                     |
+| explicitly romantic (kiss / lovers / honeymoon / anniversary / bride / proposal) | **138 (1.9%)**                    |
+| whole categories that are inherently romantic                                    | `romantic_gardens`, `sky_romance` |
 
-A friend rolled into one of these is framed as a romantic partner by the *scene*, whatever the pose does. The
+A friend rolled into one of these is framed as a romantic partner by the _scene_, whatever the pose does. The
 scene text also reaches the prompt ahead of the pose, so it wins.
 
 **Proposed fix — a relationship tag on the scenario row:**
+
 ```sql
 ALTER TABLE dual_scenarios ADD COLUMN relationship_scope text
   CHECK (relationship_scope IN ('partner_only','any'));  -- NULL = any
 ```
+
 - Backfill `partner_only` for the 138 explicitly romantic rows + all of `romantic_gardens` / `sky_romance`.
 - The 931 "couple" rows are **wording**, not content — cheaper to reword "Couple" → "The two of them" than to
   gate 13% of the pool away from friends. Worth a pass either way since "couple" also biases the render.
 - Filter at scenario load: a non-partner +1 never draws `partner_only`.
 
 ### Also to check before shipping
+
 - `dual_closer` pools and the holiday scene pools (`holiday_scenes`, the day-of pools) — same audit, not yet run.
 - The dual anchor text in `characterSlotPrompt.ts` says "couple" in several places; a friend render should use
   neutral wording.
@@ -124,12 +174,12 @@ reword the seeds so the prefix is the only thing asserting the relationship. Aud
 
 ### The rewording surface is small and mechanical
 
-| relational surface form in 7,388 enabled dual rows | count |
-| --- | --- |
-| `couple` (bare) | 870 |
-| `the couple` / `a couple` / `couples` | 70 |
-| already neutral (`the pair`, `the two of them`, `both of them`) | 26 |
-| `lovers` / `boyfriend` / `partner` | 3 |
+| relational surface form in 7,388 enabled dual rows              | count |
+| --------------------------------------------------------------- | ----- |
+| `couple` (bare)                                                 | 870   |
+| `the couple` / `a couple` / `couples`                           | 70    |
+| already neutral (`the pair`, `the two of them`, `both of them`) | 26    |
+| `lovers` / `boyfriend` / `partner`                              | 3     |
 
 **806 rows START with `Couple <word>`**, and the grammar works out: 525 of those next-words are third-person
 singular verbs (`stands` 206, `rides` 37, `celebrates` 18, `sits`, `floats`, `presides`…), ~130 are prepositions
@@ -159,8 +209,9 @@ after   scene:  "a Roman imperial throne dais"
 ```
 
 This fixes three things at once:
+
 1. **Grammar** — `set at a Roman imperial throne dais` reads correctly.
-2. **Relationship neutrality** — the scene names no subject at all, so the position-1 prefix is the *only* thing
+2. **Relationship neutrality** — the scene names no subject at all, so the position-1 prefix is the _only_ thing
    asserting the relationship. That is precisely what makes Kevin's prefix idea work.
 3. **Pose quality** — the action lands in the slot the model actually reads for people (the mig-516 win).
 
@@ -172,15 +223,15 @@ romantic** (honeymoon, anniversary, proposal) and the two inherently romantic ca
 
 Ran it 2026-09-14: one real nightly prompt, flux-1.1-pro, 3 matched seeds, 4 arms.
 
-| arm | scene | prefix | result |
-| --- | --- | --- | --- |
-| a0 | `at Couple occupies a Roman imperial throne dais` | none | reads as lovers |
-| a1 | original | `TWO FRIENDS` | reads as lovers |
-| a2 | subject stripped, place-only | `TWO FRIENDS` | reads as lovers |
-| a3 | subject stripped, place-only | `PARTNERS` | reads as lovers |
+| arm | scene                                             | prefix        | result          |
+| --- | ------------------------------------------------- | ------------- | --------------- |
+| a0  | `at Couple occupies a Roman imperial throne dais` | none          | reads as lovers |
+| a1  | original                                          | `TWO FRIENDS` | reads as lovers |
+| a2  | subject stripped, place-only                      | `TWO FRIENDS` | reads as lovers |
+| a3  | subject stripped, place-only                      | `PARTNERS`    | reads as lovers |
 
 All four are near-identical at the same seed — heads touching, shoulders overlapping, intimate framing.
-`TWO FRIENDS` and `PARTNERS` produce the SAME posing. Kevin: *"they all look like lovers to me."*
+`TWO FRIENDS` and `PARTNERS` produce the SAME posing. Kevin: _"they all look like lovers to me."_
 
 **Why.** Same failure mode as the clean-shaven probe earlier that day: `friends` is an abstract relational claim
 with no visual signature, fighting a strong prior — a man and a woman in a tight two-shot reads as a couple in
@@ -188,7 +239,7 @@ the training data, and an adjective at position 1 does not move it. Compare the 
 because iris colour is a concrete visual attribute with no competing prior. **Position-1 tokens set visual
 attributes; they do not set relationships.**
 
-Telling detail: the probe prompt already contained *"a clear gap between their heads"* and the renders still came
+Telling detail: the probe prompt already contained _"a clear gap between their heads"_ and the renders still came
 back cheek-to-cheek. If an explicit geometric instruction is being overridden, no relational noun will survive
 either. The intimacy is coming from the composition block, not from the word "couple".
 
@@ -215,15 +266,15 @@ pose quality). Scope it as its own item, NOT as relationship work.
 
 ### Original proof-of-concept design (kept for the record)
 
-Kevin: *"try it on a small subset first to prove out the concept… I'd rather fix it the right way."*
+Kevin: _"try it on a small subset first to prove out the concept… I'd rather fix it the right way."_
 
 Take ~12 representative `Couple`-led rows, convert to place + action, then a fixed-seed probe with 3 arms:
 
-| arm | scene | prefix | question |
-| --- | --- | --- | --- |
-| 1 | original (`Couple stands…`) | `TWO FRIENDS` | does the scene's "Couple" beat the prefix? |
-| 2 | rewritten (place-only) | `TWO FRIENDS` | does the prefix now control the reading? |
-| 3 | rewritten (place-only) | `PARTNERS` | does it work in the other direction (control)? |
+| arm | scene                       | prefix        | question                                       |
+| --- | --------------------------- | ------------- | ---------------------------------------------- |
+| 1   | original (`Couple stands…`) | `TWO FRIENDS` | does the scene's "Couple" beat the prefix?     |
+| 2   | rewritten (place-only)      | `TWO FRIENDS` | does the prefix now control the reading?       |
+| 3   | rewritten (place-only)      | `PARTNERS`    | does it work in the other direction (control)? |
 
 Same seeds across arms, one variable. If arm 2 reads platonic and arm 3 reads romantic, the concept is proven
 and the full sweep is justified. If arm 1 already reads platonic, the prefix alone is enough and the sweep is
@@ -233,6 +284,7 @@ unnecessary — worth knowing before rewriting 800 rows.
 unscoped update; re-run the proximity scan; spot-check that no row lost its safety wording.
 
 ## 6. Tests to add
+
 - `enabled` roll: only enabled members are eligible; zero enabled → self-only; ceiling 5 enforced.
 - Back-compat: legacy recipe with `active_partner_id` and no `enabled` → exactly that member eligible.
 - **Relationship safety (the important one):** a `friend` +1 never draws `DUAL_ACTIONS_PARTNER`, never draws a
@@ -241,10 +293,10 @@ unscoped update; re-run the proximity scan; spot-check that no row lost its safe
 - Mirror integrity: whoever is rolled is what `dream_cast.plus_one` holds at render time.
 
 ## 7. Open questions for Kevin
-1. **Selection rule** — uniform random among enabled, or recency-avoiding so the same person does not repeat
-   several nights running? (Recency matches how looks/vibes already behave.)
-2. **Subject-stripping sweep** (§5b) — confirmed as the approach, pending the proof-of-concept probe. Open
-   sub-question: convert ALL 806 subject-led rows, or only the ones that actually reach the place slot?
+
+1. ~~**Selection rule**~~ — ANSWERED while building: recency-avoiding round robin (see §0).
+2. ~~**Subject-stripping sweep**~~ (§5b) — CANCELLED, the probe disproved the mechanism. The place-slot
+   grammar break survives as its own (non-relationship) item.
 3. **Multiple photos of the same person** (Kevin: "several different pics of their partner to have different
    looks") — these are separate roster entries today, so a partner with 3 photos occupies 3 of the 5 slots and
    is 3× as likely to be rolled. Is that intended, or should entries group under one person?

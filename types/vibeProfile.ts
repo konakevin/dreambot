@@ -66,6 +66,11 @@ export interface DreamPartner {
   /** Broad race bucket (render anchor only) — White/Black/East Asian/South Asian/Hispanic-Latino/Middle Eastern. */
   ethnicity?: string;
   relationship: 'partner' | 'friend';
+  /** Eligible to be rolled as the +1 in a dream (Settings checkbox). Several can
+   *  be enabled at once — the engine picks one per render. Absent on recipes that
+   *  predate multi-cast, where the ONE `active_partner_id` member is the only
+   *  eligible one (see isPartnerEnabled in lib/dreamCastRoster.ts). */
+  enabled?: boolean;
 }
 
 /** A person or pet the user uploads — photo gets described once, description used in dreams */
@@ -124,8 +129,11 @@ export interface VibeProfile {
    *  slot above. Absent on legacy recipes → migrated lazily from the existing
    *  plus_one on load (see lib/dreamCastRoster.ts). */
   partner_library?: DreamPartner[];
-  /** id (into `partner_library`) of the current Dream Partner — the one mirrored
-   *  to `plus_one`. null = no current partner (self-only dreams). */
+  /** id (into `partner_library`) of the partner currently mirrored into the
+   *  `plus_one` slot. Since multi-cast this is a POINTER, not the eligibility
+   *  rule (`enabled` is) — it keeps the Create path deterministic, and it is the
+   *  back-compat fallback for recipes written before `enabled` existed.
+   *  null = nobody mirrored (self-only dreams). */
   active_partner_id?: string | null;
   avoid: string[];
 }

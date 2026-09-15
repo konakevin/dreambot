@@ -50,13 +50,17 @@ interface OnboardingStore {
   setCastMember: (member: DreamCastMember) => void;
   removeCastMember: (role: DreamCastMember['role']) => void;
 
-  // Dream Cast roster (Settings — up to 5 loved ones). The ACTIVE partner is
-  // mirrored into dream_cast's plus_one slot (see lib/dreamCastRoster.ts), so
-  // every setter re-syncs that mirror.
+  // Dream Cast roster (Settings — up to 5 loved ones). Each member carries its
+  // own relationship + an `enabled` flag; the nightly engine rolls among the
+  // enabled ones per dream. One of them is mirrored into dream_cast's plus_one
+  // slot (see lib/dreamCastRoster.ts) as the Create-path default, so every
+  // setter re-syncs that mirror.
   addPartner: (partner: DreamPartner) => void;
   updatePartner: (id: string, patch: Partial<DreamPartner>) => void;
   removePartner: (id: string) => void;
-  setActivePartner: (id: string | null) => void;
+  /** Tick/untick a roster member for dreams. Several can be on at once — the
+   *  nightly engine rolls among them (MULTI_CAST_PLUS_ONE_PLAN.md). */
+  setPartnerEnabled: (id: string, enabled: boolean) => void;
 
   /** Number of cast-photo uploads (storage upload + describe) currently in
    *  flight. The first-dream cutoff (SaveContinueStep) waits for this to reach 0
@@ -173,12 +177,15 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
     set((s) => {
       const lib = s.profile.partner_library ?? [];
       if (lib.length >= MAX_DREAM_PARTNERS) return s;
-      // The first partner added auto-becomes the current Dream Partner.
+      // The first partner added auto-becomes the mirrored one.
       const active = s.profile.active_partner_id ?? partner.id;
+      // Someone you just added a photo of is someone you want to dream with —
+      // default them ON rather than making the user hunt for a second control.
+      const added: DreamPartner = { ...partner, enabled: partner.enabled ?? true };
       return {
         profile: syncActivePartnerMirror({
           ...s.profile,
-          partner_library: [...lib, partner],
+          partner_library: [...lib, added],
           active_partner_id: active,
         }),
       };
@@ -197,7 +204,8 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   removePartner: (id) =>
     set((s) => {
       const lib = (s.profile.partner_library ?? []).filter((p) => p.id !== id);
-      // Removing the current partner promotes the first remaining one (or none).
+      // Removing the mirrored partner promotes the first remaining one (or none);
+      // syncActivePartnerMirror then narrows that to an ENABLED member.
       let active = s.profile.active_partner_id ?? null;
       if (active === id) active = lib[0]?.id ?? null;
       return {
@@ -209,10 +217,22 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
       };
     }),
 
-  setActivePartner: (id) =>
-    set((s) => ({
-      profile: syncActivePartnerMirror({ ...s.profile, active_partner_id: id }),
-    })),
+  setPartnerEnabled: (id, enabled) =>
+    set((s) => {
+      const lib = s.profile.partner_library ?? [];
+      // Ticking someone does NOT steal the mirror from an already-enabled member
+      // (that would silently change who the Create path uses); it only claims it
+      // when nobody holds it. Unticking lets syncActivePartnerMirror fall through
+      // to whoever is still enabled — or to nobody, which means self-only dreams.
+      const active = s.profile.active_partner_id ?? (enabled ? id : null);
+      return {
+        profile: syncActivePartnerMirror({
+          ...s.profile,
+          partner_library: lib.map((p) => (p.id === id ? { ...p, enabled } : p)),
+          active_partner_id: active,
+        }),
+      };
+    }),
 
   castUploadsInFlight: 0,
   beginCastUpload: () => set((s) => ({ castUploadsInFlight: s.castUploadsInFlight + 1 })),

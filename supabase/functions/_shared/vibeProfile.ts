@@ -14,6 +14,8 @@
  * feature — see project_objects_removed_2026-06-02 memory + migration 216.
  */
 
+import type { RosterPartner } from './partnerRoll.ts';
+
 /** 4 bipolar mood sliders, each 0.0–1.0 */
 export interface MoodAxes {
   /** 0 = peaceful, 1 = chaotic */
@@ -73,8 +75,16 @@ export interface VibeProfile {
   moods: MoodAxes;
   /** Locations + vestigial characters slot */
   dream_seeds: DreamSeeds;
-  /** Photos described as text — randomly appear in dreams as stylized characters */
+  /** Photos described as text — randomly appear in dreams as stylized characters.
+   *  The `plus_one` slot is a MIRROR: the render path rolls one eligible member
+   *  of `partner_library` into it per dream (_shared/partnerRoll.ts). */
   dream_cast: DreamCastMember[];
+  /** Dream Cast roster — up to 5 loved ones managed in Settings, each with its own
+   *  relationship and an `enabled` flag. Client mirror: types/vibeProfile.ts. */
+  partner_library?: RosterPartner[];
+  /** Pointer to the member currently mirrored into `plus_one` (and the
+   *  back-compat eligibility fallback for recipes written before `enabled`). */
+  active_partner_id?: string | null;
   avoid: string[];
   /**
    * Legacy V1 fields — still present on some user_recipes.recipe JSON blobs.

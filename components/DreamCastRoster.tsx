@@ -4,9 +4,12 @@
  * Onboarding stays the simple self + one-+1 DreamCastStep. HERE (Settings only)
  * the user grows their roster to up to 5 loved ones: the onboarding +1 is
  * partner #1 (migrated on load), and they can add up to 4 more, tag each
- * Partner/Friend, and pick their current Dream Partner. Dreams still render
- * "you + a +1" — the +1 is just whichever partner is current (mirrored into the
- * dream_cast plus_one slot by the store). No render-engine change.
+ * Partner/Friend, and tick who is eligible to star alongside them.
+ *
+ * Multi-cast (MULTI_CAST_PLUS_ONE_PLAN.md): SEVERAL members can be ticked at
+ * once. A dream still renders "you + a +1" — the nightly engine rolls which
+ * ticked member gets the slot each night (round-robin, server-side in
+ * _shared/partnerRoll.ts). Nobody ticked = dreams of just you.
  */
 
 import { useEffect, useState } from 'react';
@@ -26,7 +29,7 @@ import {
 } from '@/lib/castUpload';
 import { castRejectCopy } from '@/lib/castRejectCopy';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
-import { newPartnerId } from '@/lib/dreamCastRoster';
+import { newPartnerId, isPartnerEnabled } from '@/lib/dreamCastRoster';
 import { showAlert } from '@/components/CustomAlert';
 import { TitleText } from '@/components/TitleText';
 import { colors } from '@/constants/theme';
@@ -99,7 +102,7 @@ export function DreamCastRoster() {
   const addPartner = useOnboardingStore((st) => st.addPartner);
   const updatePartner = useOnboardingStore((st) => st.updatePartner);
   const removePartner = useOnboardingStore((st) => st.removePartner);
-  const setActivePartner = useOnboardingStore((st) => st.setActivePartner);
+  const setPartnerEnabled = useOnboardingStore((st) => st.setPartnerEnabled);
   const beginCastUpload = useOnboardingStore((st) => st.beginCastUpload);
   const endCastUpload = useOnboardingStore((st) => st.endCastUpload);
 
@@ -233,14 +236,14 @@ export function DreamCastRoster() {
     persist();
   };
 
-  const makeActive = (p: DreamPartner) => {
-    if (activeId === p.id) return;
+  const toggleEnabled = (p: DreamPartner, on: boolean) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    setActivePartner(p.id);
+    setPartnerEnabled(p.id, on);
     persist();
   };
 
   const anyBusy = busy !== null;
+  const enabledCount = partners.filter((p) => isPartnerEnabled(p, activeId)).length;
 
   return (
     <ScrollView contentContainerStyle={s.container} showsVerticalScrollIndicator={false}>
@@ -251,8 +254,8 @@ export function DreamCastRoster() {
         Who do you want to dream with?
       </TitleText>
       <Text style={s.subtitle}>
-        Add yourself, then build a cast of up to {MAX_DREAM_PARTNERS} loved ones. Pick your current
-        Dream Partner to star alongside you in your dreams.
+        Add yourself, then build a cast of up to {MAX_DREAM_PARTNERS} loved ones. Tick everyone you
+        want in your dreams — each night we pick one of them to star alongside you.
       </Text>
 
       {/* YOU */}
@@ -303,12 +306,19 @@ export function DreamCastRoster() {
       </View>
 
       {/* YOUR CAST */}
-      <Text style={s.sectionLabel}>YOUR CAST</Text>
+      <View style={s.sectionHeader}>
+        <Text style={s.sectionLabel}>YOUR CAST</Text>
+        {partners.length > 0 && (
+          <Text style={s.sectionCount}>
+            {enabledCount} OF {MAX_DREAM_PARTNERS} IN DREAMS
+          </Text>
+        )}
+      </View>
       {partners.map((p) => {
-        const isActive = activeId === p.id;
+        const isOn = isPartnerEnabled(p, activeId);
         const isBusy = busy === p.id;
         return (
-          <View key={p.id} style={[s.card, isActive && s.cardActive]}>
+          <View key={p.id} style={[s.card, isOn && s.cardActive]}>
             <View style={s.row}>
               <CastThumb
                 storage_path={p.storage_path}
@@ -321,9 +331,9 @@ export function DreamCastRoster() {
                   <Text style={s.name} numberOfLines={1}>
                     {p.relationship === 'partner' ? 'Partner' : 'Friend'}
                   </Text>
-                  {isActive && (
+                  {isOn && (
                     <View style={s.currentBadge}>
-                      <Text style={s.currentBadgeText}>CURRENT</Text>
+                      <Text style={s.currentBadgeText}>IN DREAMS</Text>
                     </View>
                   )}
                 </View>
@@ -366,20 +376,20 @@ export function DreamCastRoster() {
                   );
                 })}
               </View>
-              {/* current selector */}
+              {/* eligibility checkbox — several can be on at once */}
               <TouchableOpacity
-                style={[s.currentBtn, isActive && s.currentBtnActive]}
-                onPress={() => makeActive(p)}
-                disabled={isActive}
+                style={s.currentBtn}
+                onPress={() => toggleEnabled(p, !isOn)}
+                hitSlop={8}
                 activeOpacity={0.7}
               >
                 <Ionicons
-                  name={isActive ? 'checkmark-circle' : 'ellipse-outline'}
-                  size={16}
-                  color={isActive ? colors.accent : colors.textSecondary}
+                  name={isOn ? 'checkbox' : 'square-outline'}
+                  size={18}
+                  color={isOn ? colors.accent : colors.textSecondary}
                 />
-                <Text style={[s.currentBtnText, isActive && s.currentBtnTextActive]}>
-                  {isActive ? 'Current Dream Partner' : 'Set as current'}
+                <Text style={[s.currentBtnText, isOn && s.currentBtnTextActive]}>
+                  Include in my dreams
                 </Text>
               </TouchableOpacity>
             </View>
@@ -424,6 +434,10 @@ export function DreamCastRoster() {
         )
       )}
 
+      {partners.length > 0 && enabledCount === 0 && (
+        <Text style={s.hint}>Nobody ticked, so your dreams will star just you.</Text>
+      )}
+
       <Text style={s.footnote}>
         Your photos are private and only used to paint you into your own dreams.
       </Text>
@@ -443,6 +457,15 @@ const s = StyleSheet.create({
   sectionLabel: {
     color: colors.textSecondary,
     fontSize: fontScale(12),
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    marginBottom: verticalScale(8),
+    marginTop: verticalScale(8),
+  },
+  sectionHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  sectionCount: {
+    color: colors.accent,
+    fontSize: fontScale(11),
     fontWeight: '700',
     letterSpacing: 0.5,
     marginBottom: verticalScale(8),
@@ -534,10 +557,15 @@ const s = StyleSheet.create({
   relPillActive: { backgroundColor: colors.accentBg, borderColor: colors.accent },
   relPillText: { color: colors.textSecondary, fontSize: fontScale(13), fontWeight: '600' },
   relPillTextActive: { color: colors.accentLight },
-  currentBtn: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  currentBtnActive: {},
+  currentBtn: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   currentBtnText: { color: colors.textSecondary, fontSize: fontScale(13), fontWeight: '600' },
   currentBtnTextActive: { color: colors.accent },
+  hint: {
+    color: colors.textSecondary,
+    fontSize: fontScale(13),
+    textAlign: 'center',
+    marginTop: verticalScale(4),
+  },
   footnote: {
     color: colors.textSecondary,
     fontSize: fontScale(12),
