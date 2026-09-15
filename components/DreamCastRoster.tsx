@@ -274,11 +274,11 @@ export function DreamCastRoster() {
 
   /** One roster card. Rendered by both groups, identical in each — which is the
    *  point: what changes is WHICH LIST the person is in, not how the card looks. */
-  const renderPartner = (p: DreamPartner) => {
+  const renderPartner = (p: DreamPartner, i: number) => {
     const isOn = isPartnerEnabled(p, activeId);
     const isBusy = busy === p.id;
     return (
-      <View key={p.id} style={s.card}>
+      <View key={p.id} style={[s.member, i > 0 && s.memberDivided]}>
         <View style={s.row}>
           <CastThumb
             storage_path={p.storage_path}
@@ -311,16 +311,24 @@ export function DreamCastRoster() {
             <>
               {/* The switch IS the state, so the card needs no outline, tint or
                   dimming, and the group heading above supplies the words. */}
-              <Switch
-                value={isOn}
-                onValueChange={(on) => toggleEnabled(p, on)}
-                trackColor={{ false: colors.border, true: IN_DREAMS.color }}
-                ios_backgroundColor={colors.border}
-              />
-              <TouchableOpacity onPress={() => replacePartner(p)} hitSlop={8} disabled={anyBusy}>
+              <View style={s.ctrl}>
+                <Switch
+                  value={isOn}
+                  onValueChange={(on) => toggleEnabled(p, on)}
+                  trackColor={{ false: colors.border, true: IN_DREAMS.color }}
+                  ios_backgroundColor={colors.border}
+                />
+              </View>
+              <TouchableOpacity
+                style={s.ctrl}
+                onPress={() => replacePartner(p)}
+                hitSlop={8}
+                disabled={anyBusy}
+              >
                 <Ionicons name="sync" size={20} color={colors.textSecondary} />
               </TouchableOpacity>
               <TouchableOpacity
+                style={s.ctrl}
                 onPress={() => confirmRemovePartner(p)}
                 hitSlop={8}
                 disabled={anyBusy}
@@ -414,25 +422,27 @@ export function DreamCastRoster() {
         )}
       </View>
 
-      {/* YOUR CAST — split into the two groups, because with most members switched
-          on, styling the "on" state lands on every card and stops being a highlight.
-          The grouping IS the state, so the card itself never changes appearance and
-          the per-card label moves up into the group heading. */}
-      <Text style={s.sectionLabel}>YOUR CAST</Text>
-
+      {/* Each group is ONE container with its members as rows inside it, rather than
+          a run of separate cards under a label. A heading plus floating cards left
+          "YOUR CAST" and "IN YOUR DREAMS" competing as two labels of the same weight;
+          containment says "these belong together" without a second label, so the
+          section label is gone entirely. The grouping IS the state, which is why a
+          member row looks identical in both groups. */}
       {partners.length > 0 && (
         <>
-          <Text style={s.groupLabel}>IN YOUR DREAMS</Text>
-          {inDreams.length > 0 ? (
-            inDreams.map(renderPartner)
-          ) : (
-            <Text style={s.hint}>Nobody yet, so tonight it is just you.</Text>
-          )}
+          <Text style={[s.groupLabel, s.groupLabelOn]}>IN YOUR DREAMS</Text>
+          <View style={s.group}>
+            {inDreams.length > 0 ? (
+              inDreams.map(renderPartner)
+            ) : (
+              <Text style={s.hint}>Nobody yet, so tonight it is just you.</Text>
+            )}
+          </View>
 
           {notInDreams.length > 0 && (
             <>
-              <Text style={s.groupLabel}>NOT RIGHT NOW</Text>
-              {notInDreams.map(renderPartner)}
+              <Text style={s.groupLabel}>IN THE WINGS</Text>
+              <View style={s.group}>{notInDreams.map(renderPartner)}</View>
             </>
           )}
         </>
@@ -499,15 +509,32 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(8),
     marginTop: verticalScale(8),
   },
-  // The two group headings do the work the per-card "In dreams" label used to.
+  // The two group headings do the work the per-card "In dreams" label used to. The
+  // active one takes the switch's teal so there is no doubt which group is the cast
+  // that actually appears in dreams.
   groupLabel: {
     color: colors.textMuted,
-    fontSize: fontScale(11),
+    fontSize: fontScale(12),
     fontWeight: '700',
     letterSpacing: 0.6,
-    marginTop: verticalScale(6),
+    marginTop: verticalScale(18),
     marginBottom: verticalScale(8),
   },
+  groupLabelOn: { color: IN_DREAMS.color },
+  // One surface per group, members divided by hairlines inside it.
+  group: {
+    backgroundColor: colors.surface,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
+    overflow: 'hidden',
+  },
+  member: { padding: verticalScale(12) },
+  memberDivided: { borderTopWidth: 1, borderTopColor: colors.border },
+  // Every head-row control sits in an identical fixed-height box. An Ionicon is a
+  // baseline-positioned glyph and a Switch is a fixed 31pt box, so without this they
+  // centre against different things and visibly drift apart.
+  ctrl: { height: 34, alignItems: 'center', justifyContent: 'center' },
   card: {
     backgroundColor: colors.surface,
     borderRadius: 14,
@@ -591,11 +618,7 @@ const s = StyleSheet.create({
   relPillTextActive: { color: colors.accentLight },
   // Sits inside an empty "IN YOUR DREAMS" group, where it reads as that group's
   // state rather than as a warning tacked on the bottom of the screen.
-  hint: {
-    color: colors.textMuted,
-    fontSize: fontScale(13),
-    marginBottom: verticalScale(14),
-  },
+  hint: { color: colors.textMuted, fontSize: fontScale(13), padding: verticalScale(14) },
   footnote: {
     color: colors.textSecondary,
     fontSize: fontScale(12),
