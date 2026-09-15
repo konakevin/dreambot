@@ -339,7 +339,7 @@ export function DreamCastRoster() {
         const isOn = isPartnerEnabled(p, activeId);
         const isBusy = busy === p.id;
         return (
-          <View key={p.id} style={s.card}>
+          <View key={p.id} style={[s.card, isOn && s.cardOn]}>
             <View style={s.row}>
               <CastThumb
                 storage_path={p.storage_path}
@@ -381,9 +381,10 @@ export function DreamCastRoster() {
                   >
                     <Ionicons
                       name={isOn ? 'checkbox' : 'square-outline'}
-                      size={26}
+                      size={24}
                       color={isOn ? IN_DREAMS.color : colors.textMuted}
                     />
+                    <Text style={[s.checkLabel, isOn && s.checkLabelOn]}>In dreams</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => replacePartner(p)}
@@ -506,7 +507,11 @@ const s = StyleSheet.create({
     borderColor: colors.border,
   },
   cardActive: { borderColor: colors.accent }, // only the 'analyzing a new photo' card
-  row: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  // Definition without shouting: at 5 of 5, a full-strength teal border on every
+  // card highlights everything, which highlights nothing. The checkbox keeps the
+  // saturated colour; the outline just says "this card is live".
+  cardOn: { borderColor: 'rgba(94,234,212,0.38)' },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   info: { flex: 1 },
   name: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
   // Reads as the card's title until tapped. padding:0 so it sits on the same
@@ -519,9 +524,12 @@ const s = StyleSheet.create({
     padding: 0,
   },
   status: { color: colors.textSecondary, fontSize: fontScale(13), marginTop: verticalScale(2) },
-  // A little breathing room so the checkbox is never mistaken for, or fat-fingered
-  // into, the remove button two slots along.
-  checkHit: { paddingRight: 4 },
+  // Checkbox + label as one target. No chip or fill around it: the card's own
+  // outline already marks the state, and a third boxed control on the card was
+  // what made the last pass shout.
+  checkHit: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingRight: 2 },
+  checkLabel: { color: colors.textMuted, fontSize: fontScale(12), fontWeight: '700' },
+  checkLabelOn: { color: IN_DREAMS.color },
   thumb: { width: 48, height: 48, borderRadius: 24, borderWidth: 2, borderColor: colors.accent },
   thumbSpinner: {
     ...StyleSheet.absoluteFillObject,
