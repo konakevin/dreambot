@@ -470,7 +470,9 @@ export function DreamCastRoster() {
                   busy={busy === 'self'}
                 />
                 <View style={s.info}>
-                  <Text style={s.name}>You</Text>
+                  {/* No "You" title here: the panel heading above already says it, and
+                      the row was printing the word twice within 40pt. The description
+                      is the only line carrying information. */}
                   <Text style={s.status}>
                     {busy === 'self' ? 'Analyzing…' : 'The face that stars in your dreams'}
                   </Text>

@@ -15,6 +15,7 @@
 
 import { View, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
+import { Ionicons } from '@expo/vector-icons';
 import { Text } from '@/components/AppText';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -28,12 +29,16 @@ export function CastPhotoTip() {
         style={s.image}
         contentFit="cover"
       />
+      {/* The copy is its own flex column BETWEEN the mascot and the warning, so the
+          title and the body wrap against the same right edge instead of the title
+          running long under the icon. */}
       <View style={s.copy}>
         <Text style={s.title}>Use a passport-style photo</Text>
         <Text style={s.body}>
           Close-up, straight-on, well lit. A bad photo follows you into every dream.
         </Text>
       </View>
+      <Ionicons name="warning" size={23} color={MEDIUM_BADGE.art.color} />
     </View>
   );
 }
@@ -49,17 +54,21 @@ const s = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    // Tighter than the usual 12 on both sides of the copy. The copy column is the only
+    // flexible thing in the row, so every point spent on the gaps and on the two fixed
+    // columns comes straight out of the text and makes it wrap sooner, which is what
+    // left the dead space beside the warning.
+    gap: 10,
     backgroundColor: MEDIUM_BADGE.art.bg,
     borderWidth: 1,
     borderColor: 'rgba(249,168,212,0.45)',
     borderRadius: 14,
-    paddingVertical: verticalScale(12),
-    paddingHorizontal: 12,
+    paddingVertical: verticalScale(11),
+    paddingHorizontal: 11,
     marginBottom: verticalScale(18),
   },
-  image: { width: 58, height: 58, borderRadius: 10 },
-  copy: { flex: 1, gap: verticalScale(3) },
+  image: { width: 52, height: 52, borderRadius: 10 },
+  copy: { flex: 1, gap: verticalScale(2) },
   title: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '800' },
   body: {
     color: colors.bodyOnDark,
