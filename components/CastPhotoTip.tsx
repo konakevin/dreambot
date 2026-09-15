@@ -31,7 +31,7 @@ export function CastPhotoTip() {
       <View style={s.copy}>
         <Text style={s.title}>Use a passport-style photo</Text>
         <Text style={s.body}>
-          Close-up, straight-on, well lit. Nothing matters more for how you look in every dream.
+          Close-up, straight-on, well lit. A bad photo follows you into every dream.
         </Text>
       </View>
     </View>
