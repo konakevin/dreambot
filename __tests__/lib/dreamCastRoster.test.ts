@@ -338,6 +338,29 @@ describe('store — ticking members on and off', () => {
     expect(cast().find((m) => m.role === 'plus_one')?.storage_path).toBe('p-b.jpg');
   });
 
+  it('a toggled member moves to the END of the roster, so they land at the bottom of the panel they joined', () => {
+    for (const id of ['a', 'b', 'c']) st().addPartner(partner(id));
+    expect(lib().map((p) => p.id)).toEqual(['a', 'b', 'c']);
+
+    // switching 'a' off should drop it to the bottom of the NOT DREAMING panel...
+    st().setPartnerEnabled('a', false);
+    expect(lib().map((p) => p.id)).toEqual(['b', 'c', 'a']);
+    expect(enabledPartners(st().profile).map((p) => p.id)).toEqual(['b', 'c']);
+
+    // ...and switching it back on should drop it to the bottom of IN YOUR DREAMS,
+    // not back to where it started.
+    st().setPartnerEnabled('a', true);
+    expect(lib().map((p) => p.id)).toEqual(['b', 'c', 'a']);
+    expect(enabledPartners(st().profile).map((p) => p.id)).toEqual(['b', 'c', 'a']);
+  });
+
+  it('toggling an id that is not on the roster is a no-op', () => {
+    st().addPartner(partner('a'));
+    const before = st().profile;
+    st().setPartnerEnabled('nope', false);
+    expect(st().profile).toBe(before);
+  });
+
   it('each member keeps its OWN relationship (that is what gates romantic poses)', () => {
     st().addPartner(partner('a', 'partner'));
     st().addPartner(partner('b', 'friend'));

@@ -220,15 +220,21 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   setPartnerEnabled: (id, enabled) =>
     set((s) => {
       const lib = s.profile.partner_library ?? [];
+      const target = lib.find((p) => p.id === id);
+      if (!target) return s;
       // Ticking someone does NOT steal the mirror from an already-enabled member
       // (that would silently change who the Create path uses); it only claims it
       // when nobody holds it. Unticking lets syncActivePartnerMirror fall through
       // to whoever is still enabled — or to nobody, which means self-only dreams.
       const active = s.profile.active_partner_id ?? (enabled ? id : null);
+      // Move them to the END of the roster. Both Dream Cast panels render in
+      // partner_library order, so this is what lands a toggled member at the BOTTOM
+      // of the panel they just moved into instead of wherever their old index
+      // happened to put them (usually the top, which read as a shuffle).
       return {
         profile: syncActivePartnerMirror({
           ...s.profile,
-          partner_library: lib.map((p) => (p.id === id ? { ...p, enabled } : p)),
+          partner_library: [...lib.filter((p) => p.id !== id), { ...target, enabled }],
           active_partner_id: active,
         }),
       };
