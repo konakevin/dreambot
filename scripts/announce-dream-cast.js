@@ -43,7 +43,10 @@ async function upsert() {
       {
         id: ID,
         title: 'Bring the whole cast 🎬',
-        body: 'Your Dream Cast holds up to 5 loved ones now. Switch on everyone you want in your dreams, give them names, and each night one of them stars alongside you.',
+        // Theatrical, to pay off the title in the first six words (all most people
+        // read on a sheet), and it names the OLD thing (+1) so an existing user sees
+        // instantly what changed.
+        body: "You've got a whole cast now, not just a +1. Add up to 5 loved ones, name them, keep whoever you like in your dreams, and each night one of them stars alongside you.",
         // No hero yet. The obvious image is a dream starring two people, and every
         // real one of those is somebody's actual face, so this needs a purpose-made
         // render rather than a borrowed post.
@@ -121,7 +124,9 @@ async function golive() {
     .eq('is_active', true);
   console.log('✅ Live. Active announcements (the unique index caps this at 1):');
   console.log(JSON.stringify(live, null, 2));
-  console.log('\nAdmin seen row cleared. Force-quit the app (not background) to re-check eligibility.');
+  console.log(
+    '\nAdmin seen row cleared. Force-quit the app (not background) to re-check eligibility.'
+  );
 }
 
 (GOLIVE ? golive() : upsert()).catch((e) => {
