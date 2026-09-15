@@ -149,7 +149,11 @@ import { markStage, shouldForceSafeScene } from '../_shared/dreamQueueLifecycle.
 import { captureRenderError } from '../_shared/sentry.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { pickSpecialLighting } from '../_shared/pools/dual_scenarios.ts';
-import { loadDualScenarios, pickDualScenario } from '../_shared/pools/dualScenarioLoader.ts';
+import {
+  loadDualScenarios,
+  pickDualScenario,
+  scenariosForRelationship,
+} from '../_shared/pools/dualScenarioLoader.ts';
 import {
   loadSingleScenarios,
   pickSingleScenario,
@@ -2148,7 +2152,26 @@ Deno.serve(async (req) => {
       if (dualSpecialScene) {
         // forced above — skip the roll
       } else if (isDualFaceSwap) {
-        const pools = await loadDualScenarios(supabase);
+        const loadedPools = await loadDualScenarios(supabase);
+        // RELATIONSHIP GATE (mig 518). A FRIEND +1 never draws a scenario whose CONTENT is romance between the
+        // pair — wedding attire, "two disco-era lovers", a kissing bough over them. Asymmetric by design (Kevin,
+        // 2026-09-14): a PARTNER keeps the whole pool and still draws plenty of platonic scenes, so partners get
+        // both registers and friends only lose the romantic slice. Poses are gated separately, and correctly
+        // already, by pickDualAction. This is the layer no prompt wording can cover — the prefix probe that same
+        // day rendered "TWO FRIENDS" and "PARTNERS" identically.
+        const plusOneRel = selectedCast.find((c) => c.role === 'plus_one')?.relationship ?? null;
+        const pools = {
+          goofy: scenariosForRelationship(loadedPools.goofy, plusOneRel),
+          elegant: scenariosForRelationship(loadedPools.elegant, plusOneRel),
+          active: scenariosForRelationship(loadedPools.active, plusOneRel),
+        };
+        const gatedOut =
+          loadedPools.goofy.length +
+          loadedPools.elegant.length +
+          loadedPools.active.length -
+          (pools.goofy.length + pools.elegant.length + pools.active.length);
+        if (gatedOut > 0)
+          fallbackReasons.push(`relationship_gate:${plusOneRel ?? 'unknown'}:${gatedOut}`);
         const splitCfg = await fetchEngineConfig(supabase);
         // Holiday (HOLIDAY_DREAMS_PLAN.md §3.4 Path 1): load each active season's
         // dual pool; only seasons with >=1 usable row contribute (N2 empty-pool

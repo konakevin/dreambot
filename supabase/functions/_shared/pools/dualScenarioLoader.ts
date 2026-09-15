@@ -20,6 +20,12 @@ export interface DualScenario {
    *  text the prompt has already spent as the PLACE — that is what rendered a couple standing at attention on a
    *  seabed. Null = no clean split; the pose fallback covers it. */
   action?: string | null;
+  /** Who may draw this scenario (mig 518). 'partner_only' = romance BETWEEN THE PAIR (wedding attire, "lovers",
+   *  a kissing bough over them), so a FRIEND +1 must never land here. null/'any' = everyone, which is almost
+   *  everything: after review only 3 of 7,388 rows qualified. Poses are gated separately and already correctly by
+   *  pickDualAction; this covers scene CONTENT, which no prompt wording can neutralise (the 2026-09-14 prefix
+   *  probe: "TWO FRIENDS" and "PARTNERS" rendered identically). */
+  relationshipScope?: 'any' | 'partner_only' | null;
   /** Bespoke pose pool this scenario's renders draw from (migration 353) —
    *  e.g. 'glamour' for the glamour_shot_retro seeds. Null/undefined = the
    *  default pose behavior for the scenario's kind. */
@@ -100,6 +106,7 @@ async function fetchPool(supabase: SupabaseClient, pool: string): Promise<DualSc
   // fallback. Each rung pages through the full pool (fetchAllRows).
   let rows: Record<string, unknown>[] = [];
   for (const select of [
+    'scene,attire,action,pose_pool,medium_key,medium_ban,category,relationship_scope',
     'scene,attire,action,pose_pool,medium_key,medium_ban,category',
     'scene,attire,pose_pool,medium_key,medium_ban,category',
     'scene,attire,pose_pool,medium_key,medium_ban',
@@ -120,7 +127,25 @@ async function fetchPool(supabase: SupabaseClient, pool: string): Promise<DualSc
     category: (r.category as string | null | undefined) ?? null,
     mediumKey: (r.medium_key as string | null | undefined) ?? null,
     mediumBan: (r.medium_ban as string | null | undefined) ?? null,
+    relationshipScope: (r.relationship_scope as 'any' | 'partner_only' | null | undefined) ?? null,
   }));
+}
+
+/**
+ * Drop the scenarios a FRIEND +1 must never draw (mig 518). Asymmetric on purpose (Kevin, 2026-09-14: "it's ok
+ * for partners to pose as friends, just not the other way around — in fact partners SHOULD show both friends and
+ * partners poses"): a partner keeps the WHOLE pool, a friend loses only the romance-between-the-pair slice.
+ * Unknown / missing relationship is treated as NOT a partner — a wrong guess toward platonic is the safe one.
+ * Fails OPEN on an empty result: a filter must never leave a render with no scenario to draw.
+ */
+export function scenariosForRelationship(
+  rows: DualScenario[],
+  relationship: string | null | undefined
+): DualScenario[] {
+  const isPartner = relationship === 'partner' || relationship === 'significant_other';
+  if (isPartner) return rows;
+  const open = rows.filter((r) => r.relationshipScope !== 'partner_only');
+  return open.length > 0 ? open : rows;
 }
 
 export async function loadDualScenarios(supabase: SupabaseClient): Promise<DualScenarioPools> {
