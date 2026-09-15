@@ -29,16 +29,21 @@ export function CastPhotoTip() {
         style={s.image}
         contentFit="cover"
       />
-      {/* The copy is its own flex column BETWEEN the mascot and the warning, so the
-          title and the body wrap against the same right edge instead of the title
-          running long under the icon. */}
       <View style={s.copy}>
-        <Text style={s.title}>Use a passport-style photo</Text>
+        {/* The warning is pinned to the RIGHT of the title's own row, not to the right
+            of the whole block. As its own column it sat vertically centred against the
+            body's ragged second line, which opened a void beside it that no amount of
+            padding could close. On the title row the title runs almost into it, so
+            there is no gap at the icon's height, and the body gets the full column
+            width back instead of being squeezed by a third column. */}
+        <View style={s.titleRow}>
+          <Text style={s.title}>Use a passport-style photo</Text>
+          <Ionicons name="warning" size={23} color={MEDIUM_BADGE.art.color} />
+        </View>
         <Text style={s.body}>
           Close-up, straight-on, well lit. A bad photo follows you into every dream.
         </Text>
       </View>
-      <Ionicons name="warning" size={23} color={MEDIUM_BADGE.art.color} />
     </View>
   );
 }
@@ -54,22 +59,19 @@ const s = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    // Tighter than the usual 12 on both sides of the copy. The copy column is the only
-    // flexible thing in the row, so every point spent on the gaps and on the two fixed
-    // columns comes straight out of the text and makes it wrap sooner, which is what
-    // left the dead space beside the warning.
-    gap: 10,
+    gap: 12,
     backgroundColor: MEDIUM_BADGE.art.bg,
     borderWidth: 1,
     borderColor: 'rgba(249,168,212,0.45)',
     borderRadius: 14,
-    paddingVertical: verticalScale(11),
-    paddingHorizontal: 11,
+    paddingVertical: verticalScale(12),
+    paddingHorizontal: 12,
     marginBottom: verticalScale(18),
   },
-  image: { width: 52, height: 52, borderRadius: 10 },
-  copy: { flex: 1, gap: verticalScale(2) },
-  title: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '800' },
+  image: { width: 56, height: 56, borderRadius: 10 },
+  copy: { flex: 1, gap: verticalScale(3) },
+  titleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
+  title: { flexShrink: 1, color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '800' },
   body: {
     color: colors.bodyOnDark,
     fontSize: fontScale(13),
