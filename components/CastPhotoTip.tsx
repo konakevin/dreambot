@@ -30,12 +30,12 @@ export function CastPhotoTip() {
         contentFit="cover"
       />
       <View style={s.copy}>
-        {/* The warning is pinned to the RIGHT of the title's own row, not to the right
-            of the whole block. As its own column it sat vertically centred against the
-            body's ragged second line, which opened a void beside it that no amount of
-            padding could close. On the title row the title runs almost into it, so
-            there is no gap at the icon's height, and the body gets the full column
-            width back instead of being squeezed by a third column. */}
+        {/* The warning HUGS the end of the title, rather than being pushed to the
+            container's right edge. Two earlier placements both left it stranded in
+            space: as its own column it sat centred against the body's ragged second
+            line, and with space-between on this row it floated off the end of a title
+            that does not reach the edge. Hugging the text removes the gap entirely,
+            and the body still gets the full column width. */}
         <View style={s.titleRow}>
           <Text style={s.title}>Use a passport-style photo</Text>
           <Ionicons name="warning" size={23} color={MEDIUM_BADGE.art.color} />
@@ -70,7 +70,7 @@ const s = StyleSheet.create({
   },
   image: { width: 56, height: 56, borderRadius: 10 },
   copy: { flex: 1, gap: verticalScale(3) },
-  titleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: 7 },
   title: { flexShrink: 1, color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '800' },
   body: {
     color: colors.bodyOnDark,
