@@ -44,6 +44,7 @@ import {
   PARTNER_NAME_MAX,
 } from '@/lib/dreamCastRoster';
 import { showAlert } from '@/components/CustomAlert';
+import { Toast } from '@/components/Toast';
 import { TitleText } from '@/components/TitleText';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -213,6 +214,14 @@ export function DreamCastRoster() {
     );
 
   const removeSelf = async () => {
+    // Every dream is built around the user's own face; a cast member with nobody to
+    // appear beside is not a dream the engine can render. So the self photo is the
+    // last one that can go. The button stays live and explains itself rather than
+    // sitting there disabled with no reason given.
+    if (partners.length > 0) {
+      Toast.show('Your cast needs you. Remove them first.', 'people-outline');
+      return;
+    }
     if (self) await removeCastFile(self).catch(() => {});
     removeCastMember('self');
     await persist();
