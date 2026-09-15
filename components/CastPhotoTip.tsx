@@ -30,15 +30,14 @@ export function CastPhotoTip() {
         contentFit="cover"
       />
       <View style={s.copy}>
-        {/* The warning HUGS the end of the title, rather than being pushed to the
-            container's right edge. Two earlier placements both left it stranded in
-            space: as its own column it sat centred against the body's ragged second
-            line, and with space-between on this row it floated off the end of a title
-            that does not reach the edge. Hugging the text removes the gap entirely,
-            and the body still gets the full column width. */}
+        {/* The warning leads the title and hugs it. Every version that put an icon on
+            the RIGHT left it stranded: in its own column it sat centred against the
+            body's ragged second line, and pushed to the row's edge it floated off the
+            end of a title that never reaches that edge. On the left there is no ragged
+            edge to sit against, so there is no gap to fix. */}
         <View style={s.titleRow}>
+          <Ionicons name="warning" size={22} color={MEDIUM_BADGE.art.color} />
           <Text style={s.title}>Use a passport-style photo</Text>
-          <Ionicons name="warning" size={23} color={MEDIUM_BADGE.art.color} />
         </View>
         <Text style={s.body}>
           Close-up, straight-on, well lit. A bad photo follows you into every dream.
@@ -70,7 +69,11 @@ const s = StyleSheet.create({
   },
   image: { width: 56, height: 56, borderRadius: 10 },
   copy: { flex: 1, gap: verticalScale(3) },
-  titleRow: { flexDirection: 'row', alignItems: 'center', gap: 7 },
+  // Left-aligned and hugging, NOT space-between: with one icon there is nothing to
+  // push it away from, and pinning it to an edge is what stranded it before.
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  // flexShrink lets a long title wrap on a narrow phone instead of shoving the icon
+  // out of the row; no flex:1, which would stretch it and re-open a gap.
   title: { flexShrink: 1, color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '800' },
   body: {
     color: colors.bodyOnDark,
