@@ -522,8 +522,12 @@ const s = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: verticalScale(18),
   },
-  panelSelf: { borderColor: colors.accent },
-  panelOn: { borderColor: IN_DREAMS.color },
+  // Both at ~55%, which over the black page lands a good step below the full brand
+  // colours. At full strength a 1pt edge running the whole height of a panel reads
+  // brighter than the same colour on a small control, so the panels were out-shouting
+  // the switches they contain.
+  panelSelf: { borderColor: 'rgba(167,139,250,0.55)' },
+  panelOn: { borderColor: 'rgba(94,234,212,0.55)' },
   // The heading sits INSIDE the panel, above a divider, so it is visibly attached to
   // the rows it names instead of floating above them competing with other labels.
   panelHead: {
