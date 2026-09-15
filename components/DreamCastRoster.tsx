@@ -13,7 +13,14 @@
  */
 
 import { useEffect, useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+  ScrollView,
+  Switch,
+} from 'react-native';
 import { Text, TextInput } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
@@ -53,10 +60,10 @@ const RELATIONSHIPS: { key: 'friend' | 'partner'; label: string }[] = [
 // be cached" → infinite render loop. Default to this constant OUTSIDE the selector.
 const EMPTY_PARTNERS: DreamPartner[] = [];
 
-/** "In your dreams" is its own state, so it gets its own colour: the Real Face teal
- *  from Create (MEDIUM_BADGE.face), not another purple. It is carried by exactly TWO
- *  things — the card's checkbox and the counter that totals them. Outlining every
- *  card in it as well just made the screen shout, since most members are usually on. */
+/** The switch's "on" track: the Real Face teal from Create (MEDIUM_BADGE.face). It is
+ *  now the ONLY coloured state marker on a card — outlines, tints and badges all got
+ *  tried and all had the same problem, that most members are switched on most of the
+ *  time, so decorating "on" decorates everything. The two groups carry the state. */
 const IN_DREAMS = MEDIUM_BADGE.face;
 
 /** Resolves a private cast photo to a signed URL for the 48×48 thumbnail. A
@@ -264,7 +271,88 @@ export function DreamCastRoster() {
   };
 
   const anyBusy = busy !== null;
-  const enabledCount = partners.filter((p) => isPartnerEnabled(p, activeId)).length;
+
+  /** One roster card. Rendered by both groups, identical in each — which is the
+   *  point: what changes is WHICH LIST the person is in, not how the card looks. */
+  const renderPartner = (p: DreamPartner) => {
+    const isOn = isPartnerEnabled(p, activeId);
+    const isBusy = busy === p.id;
+    return (
+      <View key={p.id} style={s.card}>
+        <View style={s.row}>
+          <CastThumb
+            storage_path={p.storage_path}
+            thumb_url={p.thumb_url}
+            uriOverride={pending?.key === p.id ? pending.uri : undefined}
+            busy={isBusy}
+          />
+          <View style={s.info}>
+            {/* The title identifies the PERSON. With up to 5 in the cast, showing
+                the relationship here would print "Friend" on three cards in a row AND
+                repeat the pills below, so it is an editable name that falls back to
+                the relationship word as its placeholder. */}
+            <TextInput
+              style={s.nameInput}
+              value={p.name ?? ''}
+              onChangeText={(t) => setName(p, t)}
+              onBlur={() => commitName(p)}
+              placeholder={p.relationship === 'partner' ? 'Partner' : 'Friend'}
+              placeholderTextColor={colors.textMuted}
+              maxLength={PARTNER_NAME_MAX}
+              autoCorrect={false}
+              returnKeyType="done"
+              editable={!isBusy}
+            />
+            {/* No idle status line: "Ready for dreams" was true of every member in
+                every state, so it taught nothing. */}
+            {isBusy && <Text style={s.status}>Analyzing…</Text>}
+          </View>
+          {!isBusy && (
+            <>
+              {/* The switch IS the state, so the card needs no outline, tint or
+                  dimming, and the group heading above supplies the words. */}
+              <Switch
+                value={isOn}
+                onValueChange={(on) => toggleEnabled(p, on)}
+                trackColor={{ false: colors.border, true: IN_DREAMS.color }}
+                ios_backgroundColor={colors.border}
+              />
+              <TouchableOpacity onPress={() => replacePartner(p)} hitSlop={8} disabled={anyBusy}>
+                <Ionicons name="sync" size={20} color={colors.textSecondary} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => confirmRemovePartner(p)}
+                hitSlop={8}
+                disabled={anyBusy}
+              >
+                <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
+
+        {/* Second line is the relationship and nothing else. */}
+        <View style={s.relRow}>
+          {RELATIONSHIPS.map((rel) => {
+            const on = p.relationship === rel.key;
+            return (
+              <TouchableOpacity
+                key={rel.key}
+                style={[s.relPill, on && s.relPillActive]}
+                onPress={() => setRelationship(p, rel.key)}
+                activeOpacity={0.7}
+              >
+                <Text style={[s.relPillText, on && s.relPillTextActive]}>{rel.label}</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
+    );
+  };
+
+  const inDreams = partners.filter((p) => isPartnerEnabled(p, activeId));
+  const notInDreams = partners.filter((p) => !isPartnerEnabled(p, activeId));
 
   return (
     <ScrollView contentContainerStyle={s.container} showsVerticalScrollIndicator={false}>
@@ -275,7 +363,7 @@ export function DreamCastRoster() {
         Who do you want to dream with?
       </TitleText>
       <Text style={s.subtitle}>
-        Add yourself, then up to {MAX_DREAM_PARTNERS} loved ones. Check anyone you want to dream
+        Add yourself, then up to {MAX_DREAM_PARTNERS} loved ones. Switch on anyone you want to dream
         with, and one of them joins you each night.
       </Text>
 
@@ -326,103 +414,29 @@ export function DreamCastRoster() {
         )}
       </View>
 
-      {/* YOUR CAST */}
-      <View style={s.sectionHeader}>
-        <Text style={s.sectionLabel}>YOUR CAST</Text>
-        {partners.length > 0 && (
-          <Text style={s.sectionCount}>
-            {enabledCount} OF {MAX_DREAM_PARTNERS} IN DREAMS
-          </Text>
-        )}
-      </View>
-      {partners.map((p) => {
-        const isOn = isPartnerEnabled(p, activeId);
-        const isBusy = busy === p.id;
-        return (
-          <View key={p.id} style={[s.card, isOn && s.cardOn]}>
-            <View style={s.row}>
-              <CastThumb
-                storage_path={p.storage_path}
-                thumb_url={p.thumb_url}
-                uriOverride={pending?.key === p.id ? pending.uri : undefined}
-                busy={isBusy}
-              />
-              <View style={s.info}>
-                {/* The title identifies the PERSON. With up to 5 in the cast, showing
-                    the relationship here would print "Friend" on three cards in a row
-                    AND repeat the pills below, so it is an editable name that falls
-                    back to the relationship word as its placeholder. */}
-                <TextInput
-                  style={s.nameInput}
-                  value={p.name ?? ''}
-                  onChangeText={(t) => setName(p, t)}
-                  onBlur={() => commitName(p)}
-                  placeholder={p.relationship === 'partner' ? 'Partner' : 'Friend'}
-                  placeholderTextColor={colors.textMuted}
-                  maxLength={PARTNER_NAME_MAX}
-                  autoCorrect={false}
-                  returnKeyType="done"
-                  editable={!isBusy}
-                />
-                {/* No idle status line: "Ready for dreams" was true of every member in
-                    every state, so it taught nothing. */}
-                {isBusy && <Text style={s.status}>Analyzing…</Text>}
-              </View>
-              {!isBusy && (
-                <>
-                  {/* The ONE signal that this person is in your dreams. It sits where
-                      the badge used to, so the card says it once instead of three
-                      times, and the second line is left to the relationship. */}
-                  <TouchableOpacity
-                    onPress={() => toggleEnabled(p, !isOn)}
-                    hitSlop={10}
-                    style={s.checkHit}
-                    activeOpacity={0.7}
-                  >
-                    <Ionicons
-                      name={isOn ? 'checkbox' : 'square-outline'}
-                      size={24}
-                      color={isOn ? IN_DREAMS.color : colors.textMuted}
-                    />
-                    <Text style={[s.checkLabel, isOn && s.checkLabelOn]}>In dreams</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => replacePartner(p)}
-                    hitSlop={8}
-                    disabled={anyBusy}
-                  >
-                    <Ionicons name="sync" size={20} color={colors.textSecondary} />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => confirmRemovePartner(p)}
-                    hitSlop={8}
-                    disabled={anyBusy}
-                  >
-                    <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
-                  </TouchableOpacity>
-                </>
-              )}
-            </View>
+      {/* YOUR CAST — split into the two groups, because with most members switched
+          on, styling the "on" state lands on every card and stops being a highlight.
+          The grouping IS the state, so the card itself never changes appearance and
+          the per-card label moves up into the group heading. */}
+      <Text style={s.sectionLabel}>YOUR CAST</Text>
 
-            {/* Second line is the relationship and nothing else. */}
-            <View style={s.relRow}>
-              {RELATIONSHIPS.map((rel) => {
-                const on = p.relationship === rel.key;
-                return (
-                  <TouchableOpacity
-                    key={rel.key}
-                    style={[s.relPill, on && s.relPillActive]}
-                    onPress={() => setRelationship(p, rel.key)}
-                    activeOpacity={0.7}
-                  >
-                    <Text style={[s.relPillText, on && s.relPillTextActive]}>{rel.label}</Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          </View>
-        );
-      })}
+      {partners.length > 0 && (
+        <>
+          <Text style={s.groupLabel}>IN YOUR DREAMS</Text>
+          {inDreams.length > 0 ? (
+            inDreams.map(renderPartner)
+          ) : (
+            <Text style={s.hint}>Nobody yet, so tonight it is just you.</Text>
+          )}
+
+          {notInDreams.length > 0 && (
+            <>
+              <Text style={s.groupLabel}>NOT RIGHT NOW</Text>
+              {notInDreams.map(renderPartner)}
+            </>
+          )}
+        </>
+      )}
 
       {/* Adding a new loved one: once a photo is picked, show a live card with
           that photo + an analyzing spinner (matches the You/replace cards) so it
@@ -461,10 +475,6 @@ export function DreamCastRoster() {
         )
       )}
 
-      {partners.length > 0 && enabledCount === 0 && (
-        <Text style={s.hint}>Nobody checked yet, so tonight it is just you.</Text>
-      )}
-
       <Text style={s.footnote}>
         Your photos are private and only used to paint you into your own dreams.
       </Text>
@@ -489,14 +499,14 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(8),
     marginTop: verticalScale(8),
   },
-  sectionHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  sectionCount: {
-    color: IN_DREAMS.color,
+  // The two group headings do the work the per-card "In dreams" label used to.
+  groupLabel: {
+    color: colors.textMuted,
     fontSize: fontScale(11),
     fontWeight: '700',
-    letterSpacing: 0.5,
+    letterSpacing: 0.6,
+    marginTop: verticalScale(6),
     marginBottom: verticalScale(8),
-    marginTop: verticalScale(8),
   },
   card: {
     backgroundColor: colors.surface,
@@ -507,13 +517,6 @@ const s = StyleSheet.create({
     borderColor: colors.border,
   },
   cardActive: { borderColor: colors.accent }, // only the 'analyzing a new photo' card
-  // Active state is a lit SURFACE, not an outline (Kevin: "maybe we could make the
-  // background a subtle highlighted color instead of the outline"). This is
-  // colors.surface (#0F0F14) lifted ~13% toward the brand purple (#A78BFA) and
-  // flattened to an opaque hex, because an rgba background would composite over the
-  // black page instead of over the card and come out darker than the surface it
-  // replaced. Border stays neutral on every card.
-  cardOn: { backgroundColor: '#231F32' },
   row: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   info: { flex: 1 },
   name: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
@@ -527,12 +530,6 @@ const s = StyleSheet.create({
     padding: 0,
   },
   status: { color: colors.textSecondary, fontSize: fontScale(13), marginTop: verticalScale(2) },
-  // Checkbox + label as one target. No chip or fill around it: the card's own
-  // outline already marks the state, and a third boxed control on the card was
-  // what made the last pass shout.
-  checkHit: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingRight: 2 },
-  checkLabel: { color: colors.textMuted, fontSize: fontScale(12), fontWeight: '700' },
-  checkLabelOn: { color: IN_DREAMS.color },
   thumb: { width: 48, height: 48, borderRadius: 24, borderWidth: 2, borderColor: colors.accent },
   thumbSpinner: {
     ...StyleSheet.absoluteFillObject,
@@ -592,11 +589,12 @@ const s = StyleSheet.create({
   relPillActive: { backgroundColor: colors.accentBg, borderColor: colors.accent },
   relPillText: { color: colors.textSecondary, fontSize: fontScale(13), fontWeight: '600' },
   relPillTextActive: { color: colors.accentLight },
+  // Sits inside an empty "IN YOUR DREAMS" group, where it reads as that group's
+  // state rather than as a warning tacked on the bottom of the screen.
   hint: {
-    color: colors.textSecondary,
+    color: colors.textMuted,
     fontSize: fontScale(13),
-    textAlign: 'center',
-    marginTop: verticalScale(4),
+    marginBottom: verticalScale(14),
   },
   footnote: {
     color: colors.textSecondary,
