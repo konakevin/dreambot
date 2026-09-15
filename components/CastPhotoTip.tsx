@@ -16,7 +16,7 @@
 import { View, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import { Text } from '@/components/AppText';
-import { colors } from '@/constants/theme';
+import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 
 export function CastPhotoTip() {
@@ -41,13 +41,18 @@ export function CastPhotoTip() {
 const s = StyleSheet.create({
   // Full width and a stronger tint than a normal helper: this is the one piece of
   // advice on the screen that changes the output, so it is allowed to be loud.
+  //
+  // The pink is Create's Dream Art badge colour (MEDIUM_BADGE.art), imported rather
+  // than pasted so it tracks that palette. It also happens to carry further than the
+  // brand purple did: pink is a much lighter colour, so at the same opacity it
+  // composites noticeably brighter over black, which is the point here.
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    backgroundColor: 'rgba(167,139,250,0.14)',
+    backgroundColor: MEDIUM_BADGE.art.bg,
     borderWidth: 1,
-    borderColor: 'rgba(167,139,250,0.45)',
+    borderColor: 'rgba(249,168,212,0.45)',
     borderRadius: 14,
     paddingVertical: verticalScale(12),
     paddingHorizontal: 12,
