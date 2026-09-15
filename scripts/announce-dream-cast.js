@@ -28,6 +28,8 @@ require('dotenv').config({ path: '.env.local' });
 const { createClient } = require('@supabase/supabase-js');
 
 const ID = 'dream-cast-launch';
+const HERO =
+  'https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/dream-cast-announcement-hero.jpg';
 const KEVIN = 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
 const GOLIVE = process.argv.includes('--golive');
 
@@ -43,14 +45,20 @@ async function upsert() {
       {
         id: ID,
         title: 'Bring the whole cast 🎬',
-        // Theatrical, to pay off the title in the first six words (all most people
-        // read on a sheet), and it names the OLD thing (+1) so an existing user sees
-        // instantly what changed.
-        body: "You've got a whole cast now, not just a +1. Add up to 5 loved ones, name them, keep whoever you like in your dreams, and each night one of them stars alongside you.",
-        // No hero yet. The obvious image is a dream starring two people, and every
-        // real one of those is somebody's actual face, so this needs a purpose-made
-        // render rather than a borrowed post.
-        image_url: null,
+        // Leads with what CHANGED, which is what an existing user needs, then the
+        // three actions in order. "Take turns" rather than "randomly": the roll is a
+        // round robin, so nobody repeats until everyone switched on has had a turn.
+        // Random would mean the same person three nights running, which is precisely
+        // what the rotation was built to avoid, so saying it would undersell the
+        // feature AND be wrong. "Choose who's in" rather than "set your active cast"
+        // because the screen says IN YOUR DREAMS / BACKSTAGE and never "active cast".
+        body: "We've changed how nightly dreams pick your +1. Add up to 5 loved ones, choose who's in, and they'll take turns starring alongside you.",
+        // The cast-bubble hero, produced by scripts/gen-dream-cast-announcement-hero.js
+        // (five cartoon characters in the same circles the roster uses). Named HERE
+        // rather than left null, because this script upserts the whole row: leaving it
+        // null meant every copy tweak silently wiped the hero that the generator had
+        // just published.
+        image_url: HERO,
         cta_label: 'Set up your cast',
         cta_route: '/settings/dream-cast',
         style: 'sheet',
