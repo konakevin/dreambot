@@ -14,7 +14,7 @@
 
 import { useEffect, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
-import { Text } from '@/components/AppText';
+import { Text, TextInput } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -29,10 +29,16 @@ import {
 } from '@/lib/castUpload';
 import { castRejectCopy } from '@/lib/castRejectCopy';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
-import { newPartnerId, isPartnerEnabled } from '@/lib/dreamCastRoster';
+import {
+  newPartnerId,
+  isPartnerEnabled,
+  cleanPartnerNameInput,
+  finalizePartnerName,
+  PARTNER_NAME_MAX,
+} from '@/lib/dreamCastRoster';
 import { showAlert } from '@/components/CustomAlert';
 import { TitleText } from '@/components/TitleText';
-import { colors } from '@/constants/theme';
+import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { MAX_DREAM_PARTNERS, type DreamPartner } from '@/types/vibeProfile';
 
@@ -46,6 +52,12 @@ const RELATIONSHIPS: { key: 'friend' | 'partner'; label: string }[] = [
 // useSyncExternalStore sees the snapshot "change" each time → "getSnapshot should
 // be cached" → infinite render loop. Default to this constant OUTSIDE the selector.
 const EMPTY_PARTNERS: DreamPartner[] = [];
+
+/** "In your dreams" is its own state, so it gets its own colour: the Real Face teal
+ *  from Create (MEDIUM_BADGE.face), not another purple. Purple stays the app's
+ *  chrome (titles, add button, photo rings); teal means "this one is live tonight",
+ *  which is what the badge, the checkbox and the card outline are all saying. */
+const IN_DREAMS = MEDIUM_BADGE.face;
 
 /** Resolves a private cast photo to a signed URL for the 48×48 thumbnail. A
  *  `uriOverride` (a just-picked LOCAL image) takes precedence so the photo shows
@@ -229,6 +241,15 @@ export function DreamCastRoster() {
     ]);
   };
 
+  /** Typing only touches the store (cheap); the tidy + save happen on blur. */
+  const setName = (p: DreamPartner, raw: string) =>
+    updatePartner(p.id, { name: cleanPartnerNameInput(raw) });
+
+  const commitName = (p: DreamPartner) => {
+    updatePartner(p.id, { name: finalizePartnerName(p.name) });
+    persist();
+  };
+
   const setRelationship = (p: DreamPartner, rel: 'friend' | 'partner') => {
     if (p.relationship === rel) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -327,17 +348,32 @@ export function DreamCastRoster() {
                 busy={isBusy}
               />
               <View style={s.info}>
+                {/* The title identifies the PERSON. With up to 5 in the cast, showing
+                    the relationship here would print "Friend" on three cards in a row
+                    AND repeat the pills below, so it is an editable name that falls
+                    back to the relationship word as its placeholder. */}
                 <View style={s.nameRow}>
-                  <Text style={s.name} numberOfLines={1}>
-                    {p.relationship === 'partner' ? 'Partner' : 'Friend'}
-                  </Text>
+                  <TextInput
+                    style={s.nameInput}
+                    value={p.name ?? ''}
+                    onChangeText={(t) => setName(p, t)}
+                    onBlur={() => commitName(p)}
+                    placeholder={p.relationship === 'partner' ? 'Partner' : 'Friend'}
+                    placeholderTextColor={colors.textMuted}
+                    maxLength={PARTNER_NAME_MAX}
+                    autoCorrect={false}
+                    returnKeyType="done"
+                    editable={!isBusy}
+                  />
                   {isOn && (
-                    <View style={s.currentBadge}>
-                      <Text style={s.currentBadgeText}>IN DREAMS</Text>
+                    <View style={s.inBadge}>
+                      <Text style={s.inBadgeText}>IN DREAMS</Text>
                     </View>
                   )}
                 </View>
-                <Text style={s.status}>{isBusy ? 'Analyzing…' : 'Ready for dreams'}</Text>
+                {/* No idle status line: "Ready for dreams" was true of every member in
+                    every state, so it taught nothing. */}
+                {isBusy && <Text style={s.status}>Analyzing…</Text>}
               </View>
               {!isBusy && (
                 <>
@@ -359,11 +395,11 @@ export function DreamCastRoster() {
               )}
             </View>
 
-            <View style={s.relSection}>
-              {/* The eligibility control leads: it decides whether this person shows
-                  up at all, so it is a full-width tonal row (not a third small pill)
-                  and sits ABOVE the relationship pills, which are the finer detail.
-                  Several members can be on at once. */}
+            {/* ONE control row, no divider: at five members the stacked version put
+                only two cards on screen. The include control keeps the lead position
+                and its own teal state, so it still reads first without a row of its
+                own. Wraps on narrow devices rather than squeezing the pills. */}
+            <View style={s.relRow}>
               <TouchableOpacity
                 style={[s.includeBtn, isOn && s.includeBtnOn]}
                 onPress={() => toggleEnabled(p, !isOn)}
@@ -371,27 +407,24 @@ export function DreamCastRoster() {
               >
                 <Ionicons
                   name={isOn ? 'checkbox' : 'square-outline'}
-                  size={22}
-                  color={isOn ? colors.accent : colors.textSecondary}
+                  size={20}
+                  color={isOn ? IN_DREAMS.color : colors.bodyOnDark}
                 />
-                <Text style={[s.includeText, isOn && s.includeTextOn]}>Include in my dreams</Text>
+                <Text style={[s.includeText, isOn && s.includeTextOn]}>In dreams</Text>
               </TouchableOpacity>
-              {/* relationship pills */}
-              <View style={s.relRow}>
-                {RELATIONSHIPS.map((rel) => {
-                  const on = p.relationship === rel.key;
-                  return (
-                    <TouchableOpacity
-                      key={rel.key}
-                      style={[s.relPill, on && s.relPillActive]}
-                      onPress={() => setRelationship(p, rel.key)}
-                      activeOpacity={0.7}
-                    >
-                      <Text style={[s.relPillText, on && s.relPillTextActive]}>{rel.label}</Text>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
+              {RELATIONSHIPS.map((rel) => {
+                const on = p.relationship === rel.key;
+                return (
+                  <TouchableOpacity
+                    key={rel.key}
+                    style={[s.relPill, on && s.relPillActive]}
+                    onPress={() => setRelationship(p, rel.key)}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={[s.relPillText, on && s.relPillTextActive]}>{rel.label}</Text>
+                  </TouchableOpacity>
+                );
+              })}
             </View>
           </View>
         );
@@ -464,7 +497,7 @@ const s = StyleSheet.create({
   },
   sectionHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   sectionCount: {
-    color: colors.accent,
+    color: IN_DREAMS.color,
     fontSize: fontScale(11),
     fontWeight: '700',
     letterSpacing: 0.5,
@@ -474,25 +507,36 @@ const s = StyleSheet.create({
   card: {
     backgroundColor: colors.surface,
     borderRadius: 14,
-    padding: verticalScale(14),
-    marginBottom: verticalScale(12),
+    padding: verticalScale(12),
+    marginBottom: verticalScale(10),
     borderWidth: 1,
     borderColor: colors.border,
   },
-  cardActive: { borderColor: colors.accent },
+  cardActive: { borderColor: IN_DREAMS.color },
   row: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   info: { flex: 1 },
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   name: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
-  status: { color: colors.textSecondary, fontSize: fontScale(13), marginTop: verticalScale(2) },
-  currentBadge: {
-    backgroundColor: colors.accent,
-    borderRadius: 8,
-    paddingHorizontal: 6,
-    paddingVertical: verticalScale(2),
+  // Reads as the card's title until tapped. padding:0 so it sits on the same
+  // baseline the plain Text did; flex:1 pushes the badge to the column's edge.
+  nameInput: {
+    flex: 1,
+    color: colors.textPrimary,
+    fontSize: fontScale(15),
+    fontWeight: '700',
+    padding: 0,
   },
-  currentBadgeText: {
-    color: '#FFFFFF',
+  status: { color: colors.textSecondary, fontSize: fontScale(13), marginTop: verticalScale(2) },
+  // Tonal teal, matching how Create paints the Real Face badge (colour in the text
+  // over a translucent wash, never a solid fill) so the two screens read as one app.
+  inBadge: {
+    backgroundColor: IN_DREAMS.bg,
+    borderRadius: 8,
+    paddingHorizontal: 7,
+    paddingVertical: verticalScale(3),
+  },
+  inBadgeText: {
+    color: IN_DREAMS.color,
     fontSize: fontScale(9),
     fontWeight: '800',
     letterSpacing: 0.5,
@@ -536,14 +580,13 @@ const s = StyleSheet.create({
     backgroundColor: colors.surface,
   },
   addBusyRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  relSection: {
-    marginTop: verticalScale(12),
-    paddingTop: verticalScale(12),
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    gap: verticalScale(10),
+  relRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: verticalScale(10),
   },
-  relRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   relPill: {
     paddingHorizontal: 12,
     paddingVertical: verticalScale(7),
@@ -557,23 +600,24 @@ const s = StyleSheet.create({
   relPillActive: { backgroundColor: colors.accentBg, borderColor: colors.accent },
   relPillText: { color: colors.textSecondary, fontSize: fontScale(13), fontWeight: '600' },
   relPillTextActive: { color: colors.accentLight },
-  // Full-width and tonal so it reads as THE decision on the card, not a footnote
-  // under the pills. Off = the card's own recessed surface; on = the same accent
-  // tint the selected relationship pill uses, so the card has one visual language.
+  // Shares the row with the relationship pills but stays the one that reads first:
+  // a real checkbox, brighter label than the pills when off, and its own teal when
+  // on. Off deliberately is NOT greyed out, or the control people need to find
+  // looks disabled.
   includeBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    paddingVertical: verticalScale(11),
-    paddingHorizontal: 12,
-    borderRadius: 12,
+    gap: 7,
+    paddingVertical: verticalScale(6),
+    paddingHorizontal: 10,
+    borderRadius: 16,
     backgroundColor: colors.background,
     borderWidth: 1,
     borderColor: colors.border,
   },
-  includeBtnOn: { backgroundColor: colors.accentBg, borderColor: colors.accent },
-  includeText: { color: colors.textSecondary, fontSize: fontScale(14), fontWeight: '700' },
-  includeTextOn: { color: colors.accentLight },
+  includeBtnOn: { backgroundColor: IN_DREAMS.bg, borderColor: IN_DREAMS.color },
+  includeText: { color: colors.bodyOnDark, fontSize: fontScale(13), fontWeight: '700' },
+  includeTextOn: { color: IN_DREAMS.color },
   hint: {
     color: colors.textSecondary,
     fontSize: fontScale(13),

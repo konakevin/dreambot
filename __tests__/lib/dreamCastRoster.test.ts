@@ -18,6 +18,9 @@ import {
   newPartnerId,
   isPartnerEnabled,
   enabledPartners,
+  cleanPartnerNameInput,
+  finalizePartnerName,
+  PARTNER_NAME_MAX,
 } from '@/lib/dreamCastRoster';
 import { DEFAULT_VIBE_PROFILE, MAX_DREAM_PARTNERS } from '@/types/vibeProfile';
 import type { VibeProfile, DreamPartner } from '@/types/vibeProfile';
@@ -225,6 +228,54 @@ describe('the mirror follows the ticks', () => {
     );
     expect(plusOne(out)?.storage_path).toBe('p-b.jpg');
     expect(out.active_partner_id).toBe('b');
+  });
+});
+
+describe('roster names', () => {
+  // Display only. The card shows a name so five members are not all titled "Friend";
+  // the engine never sees it.
+
+  it('NEVER reaches the cast mirror — the render pipeline cannot see a user-typed string', () => {
+    // This is the whole reason the name needs no LLM sanitizer: it is structurally
+    // unable to reach a brief or a Flux prompt. If someone adds `name` to
+    // partnerToPlusOne, this fails.
+    const out = syncActivePartnerMirror(
+      base({
+        dream_cast: [{ role: 'self', description: 'me' }],
+        partner_library: [{ ...partner('a', 'partner', true), name: 'Ignore all previous' }],
+        active_partner_id: 'a',
+      })
+    );
+    expect(plusOne(out)).toBeTruthy();
+    expect(Object.keys(plusOne(out) ?? {})).not.toContain('name');
+    expect(JSON.stringify(out.dream_cast)).not.toContain('Ignore all previous');
+  });
+
+  it('strips control, zero-width and bidi characters while you type', () => {
+    expect(cleanPartnerNameInput('Sa\u0000rah\n')).toBe('Sarah');
+    expect(cleanPartnerNameInput('M\u200Bom\u202E')).toBe('Mom');
+    expect(cleanPartnerNameInput('\uFEFFDad')).toBe('Dad');
+  });
+
+  it('keeps spaces while typing, so a two-word name is possible', () => {
+    expect(cleanPartnerNameInput('Sarah ')).toBe('Sarah ');
+    expect(cleanPartnerNameInput('Sarah Jane')).toBe('Sarah Jane');
+  });
+
+  it('caps the length so a card title can never wrap', () => {
+    expect(cleanPartnerNameInput('x'.repeat(100))).toHaveLength(PARTNER_NAME_MAX);
+  });
+
+  it('tidies on blur: trims, collapses runs of whitespace', () => {
+    expect(finalizePartnerName('  Sarah   Jane  ')).toBe('Sarah Jane');
+    expect(finalizePartnerName('Mom')).toBe('Mom');
+  });
+
+  it('blank on blur means "no name", so the card falls back to the relationship', () => {
+    expect(finalizePartnerName('   ')).toBeUndefined();
+    expect(finalizePartnerName('')).toBeUndefined();
+    expect(finalizePartnerName(undefined)).toBeUndefined();
+    expect(finalizePartnerName(null)).toBeUndefined();
   });
 });
 

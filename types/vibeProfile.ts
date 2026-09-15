@@ -66,6 +66,11 @@ export interface DreamPartner {
   /** Broad race bucket (render anchor only) — White/Black/East Asian/South Asian/Hispanic-Latino/Middle Eastern. */
   ethnicity?: string;
   relationship: 'partner' | 'friend';
+  /** What the user calls this person. DISPLAY ONLY — deliberately never mirrored
+   *  into `dream_cast` (see partnerToPlusOne), so a user-typed string can never
+   *  reach an LLM or Flux prompt. Blank/absent → the card falls back to the
+   *  relationship word. Locked by __tests__/lib/dreamCastRoster.test.ts. */
+  name?: string;
   /** Eligible to be rolled as the +1 in a dream (Settings checkbox). Several can
    *  be enabled at once — the engine picks one per render. Absent on recipes that
    *  predate multi-cast, where the ONE `active_partner_id` member is the only

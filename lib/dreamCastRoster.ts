@@ -32,7 +32,38 @@ export function newPartnerId(): string {
   });
 }
 
-/** The plus_one cast member that mirrors a partner (drops the roster-only id). */
+/** Longest name we keep. Long enough for "Mom" or "Sarah Jane", short enough that
+ *  a roster card's title never wraps. */
+export const PARTNER_NAME_MAX = 24;
+
+/**
+ * As-you-type clean for a roster name: strip control, zero-width and bidi
+ * characters plus line breaks, and cap the length. Spaces survive so the user can
+ * keep typing; `finalizePartnerName` tidies them when the field loses focus.
+ *
+ * NOT `_shared/sanitizeUserText.ts` — that is a Deno edge module the app cannot
+ * import, and it is aimed at text that reaches an LLM. This name never does: it is
+ * display-only and `partnerToPlusOne` omits it from the cast mirror by
+ * construction, which is the real guarantee (and what the test asserts).
+ */
+export function cleanPartnerNameInput(raw: string): string {
+  return raw
+    .replace(/[\u0000-\u001F\u007F]/g, '')
+    .replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, '')
+    .slice(0, PARTNER_NAME_MAX);
+}
+
+/** On blur: trim, collapse whitespace runs, and treat an empty result as "no name"
+ *  so the card falls back to the relationship word. */
+export function finalizePartnerName(raw: string | null | undefined): string | undefined {
+  const cleaned = cleanPartnerNameInput(raw ?? '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return cleaned.length > 0 ? cleaned : undefined;
+}
+
+/** The plus_one cast member that mirrors a partner (drops the roster-only id AND
+ *  the user-typed `name` — the render pipeline must never see either). */
 function partnerToPlusOne(p: DreamPartner): DreamCastMember {
   return {
     role: 'plus_one',

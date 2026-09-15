@@ -27,6 +27,10 @@ export interface RosterPartner {
   physical_summary?: string;
   ethnicity?: string;
   relationship: 'partner' | 'friend';
+  /** The user's own label for this person. Carried on the recipe but DISPLAY
+   *  ONLY: `mirrorPartnerIntoCast` copies fields explicitly and deliberately
+   *  omits it, so a user-typed string never reaches a brief or a Flux prompt. */
+  name?: string;
   /** Eligible to be rolled as the +1. Absent → fall back to the legacy
    *  single-active model (see isPartnerEnabled). */
   enabled?: boolean;
