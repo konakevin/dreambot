@@ -7,7 +7,7 @@
  * Partner/Friend, and tick who is eligible to star alongside them.
  *
  * Multi-cast (MULTI_CAST_PLUS_ONE_PLAN.md): SEVERAL members can be ticked at
- * once. A dream still renders "you + a +1" — the nightly engine rolls which
+ * once. A dream still renders "you + a +1"; the nightly engine rolls which
  * ticked member gets the slot each night (round-robin, server-side in
  * _shared/partnerRoll.ts). Nobody ticked = dreams of just you.
  */
@@ -254,8 +254,8 @@ export function DreamCastRoster() {
         Who do you want to dream with?
       </TitleText>
       <Text style={s.subtitle}>
-        Add yourself, then build a cast of up to {MAX_DREAM_PARTNERS} loved ones. Tick everyone you
-        want in your dreams — each night we pick one of them to star alongside you.
+        Add yourself, then up to {MAX_DREAM_PARTNERS} loved ones. Check anyone you want to dream
+        with, and one of them joins you each night.
       </Text>
 
       {/* YOU */}
@@ -359,8 +359,24 @@ export function DreamCastRoster() {
               )}
             </View>
 
-            {/* relationship pills */}
             <View style={s.relSection}>
+              {/* The eligibility control leads: it decides whether this person shows
+                  up at all, so it is a full-width tonal row (not a third small pill)
+                  and sits ABOVE the relationship pills, which are the finer detail.
+                  Several members can be on at once. */}
+              <TouchableOpacity
+                style={[s.includeBtn, isOn && s.includeBtnOn]}
+                onPress={() => toggleEnabled(p, !isOn)}
+                activeOpacity={0.7}
+              >
+                <Ionicons
+                  name={isOn ? 'checkbox' : 'square-outline'}
+                  size={22}
+                  color={isOn ? colors.accent : colors.textSecondary}
+                />
+                <Text style={[s.includeText, isOn && s.includeTextOn]}>Include in my dreams</Text>
+              </TouchableOpacity>
+              {/* relationship pills */}
               <View style={s.relRow}>
                 {RELATIONSHIPS.map((rel) => {
                   const on = p.relationship === rel.key;
@@ -376,22 +392,6 @@ export function DreamCastRoster() {
                   );
                 })}
               </View>
-              {/* eligibility checkbox — several can be on at once */}
-              <TouchableOpacity
-                style={s.currentBtn}
-                onPress={() => toggleEnabled(p, !isOn)}
-                hitSlop={8}
-                activeOpacity={0.7}
-              >
-                <Ionicons
-                  name={isOn ? 'checkbox' : 'square-outline'}
-                  size={18}
-                  color={isOn ? colors.accent : colors.textSecondary}
-                />
-                <Text style={[s.currentBtnText, isOn && s.currentBtnTextActive]}>
-                  Include in my dreams
-                </Text>
-              </TouchableOpacity>
             </View>
           </View>
         );
@@ -435,7 +435,7 @@ export function DreamCastRoster() {
       )}
 
       {partners.length > 0 && enabledCount === 0 && (
-        <Text style={s.hint}>Nobody ticked, so your dreams will star just you.</Text>
+        <Text style={s.hint}>Nobody checked yet, so tonight it is just you.</Text>
       )}
 
       <Text style={s.footnote}>
@@ -557,9 +557,23 @@ const s = StyleSheet.create({
   relPillActive: { backgroundColor: colors.accentBg, borderColor: colors.accent },
   relPillText: { color: colors.textSecondary, fontSize: fontScale(13), fontWeight: '600' },
   relPillTextActive: { color: colors.accentLight },
-  currentBtn: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  currentBtnText: { color: colors.textSecondary, fontSize: fontScale(13), fontWeight: '600' },
-  currentBtnTextActive: { color: colors.accent },
+  // Full-width and tonal so it reads as THE decision on the card, not a footnote
+  // under the pills. Off = the card's own recessed surface; on = the same accent
+  // tint the selected relationship pill uses, so the card has one visual language.
+  includeBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingVertical: verticalScale(11),
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  includeBtnOn: { backgroundColor: colors.accentBg, borderColor: colors.accent },
+  includeText: { color: colors.textSecondary, fontSize: fontScale(14), fontWeight: '700' },
+  includeTextOn: { color: colors.accentLight },
   hint: {
     color: colors.textSecondary,
     fontSize: fontScale(13),
