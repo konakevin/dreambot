@@ -39,27 +39,12 @@ Built end to end. What actually landed:
 5. **Create is untouched.** It keeps reading the mirror, so it stays deterministic. Rolling there (or letting
    the user pick per render) is a separate UX decision.
 
-**Never a self-with-self dream (Kevin, 2026-09-15).** After the first build he caught a render with him as
-his own +1: _"if someone wants to purposely upload their same pic as a cast pic, i don't care, let them. but we
-should never roll a self with self render."_ So the UPLOAD stays open and the RENDER is what is guaranteed,
-in two places:
-
-1. **At eligibility** — `enabledPartners(library, activeId, selfKey)` drops any member whose photo IS the
-   `self` cast photo (`storage_path`, or `thumb_url` for legacy members). Everyone ticked being the self photo
-   therefore resolves to zero eligible, which already means a self-only dream.
-2. **An unconditional net after the roll** — `dropSelfDuplicatePlusOne` removes a `plus_one` that is literally
-   the self photo, _whatever put it there_. This sits OUTSIDE the has-a-roster branch on purpose: a recipe with
-   no `partner_library` skips the roll entirely but still carries whatever `plus_one` onboarding wrote, so the
-   guarantee must not depend on the roster's state. Stamped `plus_one_is_self:dropped`.
-
-The client mirrors rule 1, so Create never puts you beside yourself either, and the roster row swaps its
-checkbox for "That is you, so we dream you solo instead" rather than offering a tick that silently does nothing.
-
-Deliberately NOT done: a face-match check that would catch a _different_ photo of the same person. It costs a
-Fly `/verify` call per render (Fly is the heavy-cap bottleneck) or a stored verdict, and at any threshold low
-enough to catch a second selfie it starts rejecting siblings — a false positive that silently drops a real
-loved one from the rotation. The photo-identity check is exact and free; the face check is a follow-up only if
-the looser case ever actually shows up.
+**A photo of YOURSELF is a normal cast photo — do not add a self-check (Kevin, 2026-09-15).** A guard was
+built and reverted the same day. His call, verbatim: _"we don't test if it's them or not, we just treat it as
+any other cast photo and honor whatever relationship type they say. some people may want to do this on purpose
+to be funny or stupid, or whatever, we don't care if they do it."_ So there is deliberately **no** self-photo
+detection anywhere — not by `storage_path`, not by face matching. Tick yourself and you can be your own +1; the
+render shows two of you and that is fine. Do not re-add this.
 
 **Back-compat, no migration:** `enabled` absent means the recipe predates this, so the one member
 `active_partner_id` names is the only eligible one — a legacy roster rolls exactly what it rolls today. A

@@ -29,7 +29,7 @@ import {
 } from '@/lib/castUpload';
 import { castRejectCopy } from '@/lib/castRejectCopy';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
-import { newPartnerId, isPartnerEnabled, isSelfPhoto } from '@/lib/dreamCastRoster';
+import { newPartnerId, isPartnerEnabled } from '@/lib/dreamCastRoster';
 import { showAlert } from '@/components/CustomAlert';
 import { TitleText } from '@/components/TitleText';
 import { colors } from '@/constants/theme';
@@ -95,7 +95,6 @@ function CastThumb({
 export function DreamCastRoster() {
   const user = useAuthStore((st) => st.user);
   const self = useOnboardingStore((st) => st.profile.dream_cast.find((m) => m.role === 'self'));
-  const selfKey = self?.storage_path || self?.thumb_url || null;
   const partners = useOnboardingStore((st) => st.profile.partner_library) ?? EMPTY_PARTNERS;
   const activeId = useOnboardingStore((st) => st.profile.active_partner_id);
   const setCastMember = useOnboardingStore((st) => st.setCastMember);
@@ -244,11 +243,7 @@ export function DreamCastRoster() {
   };
 
   const anyBusy = busy !== null;
-  /** A member that is the user's OWN photo can be kept, but is never cast beside
-   *  them — the row says so instead of offering a checkbox that does nothing. */
-  const isYou = (p: DreamPartner) =>
-    !!selfKey && (p.storage_path === selfKey || p.thumb_url === selfKey);
-  const enabledCount = partners.filter((p) => isPartnerEnabled(p, activeId) && !isYou(p)).length;
+  const enabledCount = partners.filter((p) => isPartnerEnabled(p, activeId)).length;
 
   return (
     <ScrollView contentContainerStyle={s.container} showsVerticalScrollIndicator={false}>
@@ -320,8 +315,7 @@ export function DreamCastRoster() {
         )}
       </View>
       {partners.map((p) => {
-        const you = isYou(p);
-        const isOn = isPartnerEnabled(p, activeId) && !you;
+        const isOn = isPartnerEnabled(p, activeId);
         const isBusy = busy === p.id;
         return (
           <View key={p.id} style={[s.card, isOn && s.cardActive]}>
@@ -382,31 +376,22 @@ export function DreamCastRoster() {
                   );
                 })}
               </View>
-              {/* eligibility checkbox — several can be on at once. A photo of the
-                  user themselves gets an explanation instead: it can stay in the
-                  roster, it just never stars beside them. */}
-              {you ? (
-                <View style={s.currentBtn}>
-                  <Ionicons name="information-circle" size={18} color={colors.textSecondary} />
-                  <Text style={s.currentBtnText}>That is you, so we dream you solo instead</Text>
-                </View>
-              ) : (
-                <TouchableOpacity
-                  style={s.currentBtn}
-                  onPress={() => toggleEnabled(p, !isOn)}
-                  hitSlop={8}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons
-                    name={isOn ? 'checkbox' : 'square-outline'}
-                    size={18}
-                    color={isOn ? colors.accent : colors.textSecondary}
-                  />
-                  <Text style={[s.currentBtnText, isOn && s.currentBtnTextActive]}>
-                    Include in my dreams
-                  </Text>
-                </TouchableOpacity>
-              )}
+              {/* eligibility checkbox — several can be on at once */}
+              <TouchableOpacity
+                style={s.currentBtn}
+                onPress={() => toggleEnabled(p, !isOn)}
+                hitSlop={8}
+                activeOpacity={0.7}
+              >
+                <Ionicons
+                  name={isOn ? 'checkbox' : 'square-outline'}
+                  size={18}
+                  color={isOn ? colors.accent : colors.textSecondary}
+                />
+                <Text style={[s.currentBtnText, isOn && s.currentBtnTextActive]}>
+                  Include in my dreams
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         );

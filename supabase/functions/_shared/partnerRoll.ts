@@ -57,41 +57,13 @@ export function isPartnerEnabled(p: RosterPartner, activeId: string | null | und
   return p.enabled ?? p.id === activeId;
 }
 
-/**
- * The photo that IS the user — whatever the `self` cast member points at.
- * `storage_path` for current uploads, `thumb_url` for un-migrated legacy members.
- */
-export function selfPhotoKey(cast: MirrorCastMember[] | null | undefined): string | null {
-  const self = (cast ?? []).find((m) => m && m.role === 'self');
-  if (!self) return null;
-  return self.storage_path || self.thumb_url || null;
-}
-
-/** Is this roster member the user's OWN cast photo? */
-export function isSelfPhoto(
-  p: Pick<RosterPartner, 'storage_path' | 'thumb_url'>,
-  selfKey: string | null | undefined
-): boolean {
-  if (!selfKey) return false;
-  return p.storage_path === selfKey || p.thumb_url === selfKey;
-}
-
-/**
- * The eligible roster members, capped at MAX_ENABLED_PARTNERS (stable order).
- *
- * Pass `selfKey` (from `selfPhotoKey`) and a member that is the user's OWN photo is
- * dropped: uploading yourself as a cast member is allowed, but you never get cast
- * beside yourself (Kevin, 2026-09-15: "we should never roll a self with self
- * render"). Everyone ticked being the self photo therefore means a self-only dream.
- */
+/** The eligible roster members, capped at MAX_ENABLED_PARTNERS (stable order). */
 export function enabledPartners(
   library: RosterPartner[] | null | undefined,
-  activeId: string | null | undefined,
-  selfKey?: string | null
+  activeId: string | null | undefined
 ): RosterPartner[] {
   return (library ?? [])
     .filter((p) => p && typeof p.id === 'string' && isPartnerEnabled(p, activeId))
-    .filter((p) => !isSelfPhoto(p, selfKey))
     .slice(0, MAX_ENABLED_PARTNERS);
 }
 
@@ -160,22 +132,4 @@ export function mirrorPartnerIntoCast(
       relationship: partner.relationship,
     },
   ];
-}
-
-/**
- * Last line of defence for the self-with-self rule: drop a `plus_one` that is
- * literally the user's own cast photo, whatever put it there. Runs on EVERY render,
- * including the ones where the roll is skipped entirely (a recipe with no roster
- * still carries whatever plus_one onboarding wrote), so the guarantee does not
- * depend on the roster being in any particular state.
- */
-export function dropSelfDuplicatePlusOne(cast: MirrorCastMember[] | null | undefined): {
-  cast: MirrorCastMember[];
-  dropped: boolean;
-} {
-  const list = (cast ?? []).filter(Boolean);
-  const selfKey = selfPhotoKey(list);
-  if (!selfKey) return { cast: list, dropped: false };
-  const kept = list.filter((m) => m.role !== 'plus_one' || !isSelfPhoto(m, selfKey));
-  return { cast: kept, dropped: kept.length !== list.length };
 }

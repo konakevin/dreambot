@@ -17,9 +17,6 @@ import {
   enabledPartners,
   rollPartner,
   mirrorPartnerIntoCast,
-  selfPhotoKey,
-  isSelfPhoto,
-  dropSelfDuplicatePlusOne,
   MAX_ENABLED_PARTNERS,
   type RosterPartner,
   type MirrorCastMember,
@@ -299,95 +296,6 @@ describe('the mirror — what lands in the plus_one slot', () => {
   });
 });
 
-describe('never a self-with-self dream', () => {
-  // Kevin, 2026-09-15: "if someone wants to purposely upload their same pic as a cast pic, i don't
-  // care, let them. but we should never roll a self with self render." So the UPLOAD is allowed and
-  // the RENDER is what is guaranteed — at the roll, and again unconditionally after it.
-  const SELF = 'u/cast-self-1.jpg';
-  const selfCast: MirrorCastMember = { role: 'self', description: 'me', storage_path: SELF };
-
-  it('reads the self photo from storage_path, falling back to a legacy thumb_url', () => {
-    expect(selfPhotoKey([selfCast])).toBe(SELF);
-    expect(
-      selfPhotoKey([{ role: 'self', description: 'me', thumb_url: 'https://old/me.jpg' }])
-    ).toBe('https://old/me.jpg');
-    expect(selfPhotoKey([{ role: 'pet', description: 'dog' }])).toBeNull();
-    expect(selfPhotoKey([])).toBeNull();
-    expect(selfPhotoKey(undefined)).toBeNull();
-  });
-
-  it('a roster member that IS the self photo is never eligible', () => {
-    const lib = [
-      P('me-again', { enabled: true, storage_path: SELF }),
-      P('real', { enabled: true, storage_path: 'u/cast-plus_one-2.jpg' }),
-    ];
-    expect(enabledPartners(lib, null, SELF).map((p) => p.id)).toEqual(['real']);
-    // ...and without the self key (an older caller) nothing is dropped
-    expect(enabledPartners(lib, null).map((p) => p.id)).toEqual(['me-again', 'real']);
-  });
-
-  it('matches a legacy member by thumb_url too', () => {
-    const url = 'https://old/me.jpg';
-    expect(isSelfPhoto({ thumb_url: url }, url)).toBe(true);
-    expect(enabledPartners([P('a', { enabled: true, thumb_url: url })], null, url)).toEqual([]);
-  });
-
-  it('if the ONLY ticked member is the user themselves, the dream is self-only', () => {
-    const lib = [P('me-again', { enabled: true, storage_path: SELF })];
-    const eligible = enabledPartners(lib, 'me-again', SELF);
-    expect(eligible).toEqual([]);
-    expect(rollPartner(eligible, [], mulberry32(1)).partner).toBeNull();
-  });
-
-  it('rotation with a self photo among the ticked: the OTHER two still cycle evenly', () => {
-    const lib = [
-      P('a', { enabled: true, storage_path: 'u/a.jpg' }),
-      P('me-again', { enabled: true, storage_path: SELF }),
-      P('b', { enabled: true, storage_path: 'u/b.jpg' }),
-    ];
-    const eligible = enabledPartners(lib, null, SELF);
-    expect(eligible.map((p) => p.id)).toEqual(['a', 'b']);
-    const { picks } = simulate(eligible, 20, mulberry32(4));
-    expect(picks).not.toContain('me-again');
-    expect(picks.filter((x) => x === 'a')).toHaveLength(10);
-    expect(picks.filter((x) => x === 'b')).toHaveLength(10);
-  });
-
-  it('the unconditional net drops a plus_one that is literally the self photo', () => {
-    const out = dropSelfDuplicatePlusOne([
-      selfCast,
-      { role: 'plus_one', description: 'me too', storage_path: SELF },
-    ]);
-    expect(out.dropped).toBe(true);
-    expect(out.cast.map((m) => m.role)).toEqual(['self']);
-  });
-
-  it('the net leaves a REAL plus_one alone', () => {
-    const out = dropSelfDuplicatePlusOne([
-      selfCast,
-      { role: 'plus_one', description: 'her', storage_path: 'u/cast-plus_one-2.jpg' },
-      { role: 'pet', description: 'dog' },
-    ]);
-    expect(out.dropped).toBe(false);
-    expect(out.cast.map((m) => m.role)).toEqual(['self', 'plus_one', 'pet']);
-  });
-
-  it('the net is a no-op with no self member, an empty cast, or no cast at all', () => {
-    expect(dropSelfDuplicatePlusOne([{ role: 'plus_one', description: 'x' }]).dropped).toBe(false);
-    expect(dropSelfDuplicatePlusOne([]).cast).toEqual([]);
-    expect(dropSelfDuplicatePlusOne(undefined).cast).toEqual([]);
-  });
-
-  it('catches the no-roster case the roll skips entirely (legacy recipe)', () => {
-    // partner_library absent → the roll never runs → this net is the ONLY guard.
-    const out = dropSelfDuplicatePlusOne([
-      selfCast,
-      { role: 'plus_one', description: 'me too', storage_path: SELF },
-    ]);
-    expect(out.cast.some((m) => m.role === 'plus_one')).toBe(false);
-  });
-});
-
 describe('the nightly engine is actually wired to the roll', () => {
   // Source guards: the wiring lives in an edge function the unit lane cannot execute, and every
   // part of it below has a silent failure mode — a wrong order or a missing stamp does not throw,
@@ -428,34 +336,6 @@ describe('the nightly engine is actually wired to the roll', () => {
   it('reads eligibility from the roster, not from the active pointer alone', () => {
     expect(NIGHTLY_SRC).toContain('const eligiblePartners = enabledPartners(');
     expect(NIGHTLY_SRC).toContain('nightlyProfile.active_partner_id');
-  });
-
-  it('passes the self photo into the roll, so the user is never their own +1', () => {
-    expect(NIGHTLY_SRC).toContain('const selfKey = selfPhotoKey(nightlyProfile.dream_cast);');
-    expect(NIGHTLY_SRC).toMatch(/enabledPartners\([^)]*selfKey/s);
-  });
-
-  it('runs the self-with-self net UNCONDITIONALLY — outside the has-a-roster branch', () => {
-    // A recipe with no partner_library skips the roll but still carries onboarding's
-    // plus_one, so this net must not sit inside that `if`.
-    const net = NIGHTLY_SRC.indexOf('dropSelfDuplicatePlusOne(nightlyProfile.dream_cast)');
-    const guard = NIGHTLY_SRC.indexOf('if ((nightlyProfile.partner_library?.length ?? 0) > 0) {');
-    expect(net).toBeGreaterThan(-1);
-    // the roster branch closes before the net starts
-    const branchBody = NIGHTLY_SRC.slice(guard, net);
-    let depth = 0;
-    for (const ch of branchBody) {
-      if (ch === '{') depth++;
-      else if (ch === '}') depth--;
-    }
-    expect(depth).toBe(0); // balanced → the net is outside the branch
-  });
-
-  it('runs the net BEFORE hydration, and stamps it for forensics', () => {
-    expect(NIGHTLY_SRC.indexOf('dropSelfDuplicatePlusOne(nightlyProfile.dream_cast)')).toBeLessThan(
-      NIGHTLY_SRC.indexOf('hydrateCastSources(nightlyProfile.dream_cast')
-    );
-    expect(NIGHTLY_SRC).toContain("fallbackReasons.push('plus_one_is_self:dropped')");
   });
 });
 

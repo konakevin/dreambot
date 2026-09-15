@@ -191,13 +191,7 @@ import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
 import { applyFaceSwapOverride } from '../_shared/faceSwapFluxOverrides.ts';
 import { pickFaceSwapModelOverride } from '../_shared/faceSwapModelOverrides.ts';
 import { isMonumentalFaceSpot } from '../_shared/monumentalFaceSpot.ts';
-import {
-  enabledPartners,
-  rollPartner,
-  mirrorPartnerIntoCast,
-  selfPhotoKey,
-  dropSelfDuplicatePlusOne,
-} from '../_shared/partnerRoll.ts';
+import { enabledPartners, rollPartner, mirrorPartnerIntoCast } from '../_shared/partnerRoll.ts';
 
 // Models nightly must never render. flux-2-dev over-smooths under the nightly
 // slot pipeline (banned 2026-06-01). Module-scoped so BOTH the DreamSmart pool
@@ -655,13 +649,9 @@ Deno.serve(async (req) => {
     const recentPartnerIds = (recentLogs ?? [])
       .map((l) => (l.rolled_axes as Record<string, unknown>)?.partnerId)
       .filter((p): p is string => typeof p === 'string' && p.length > 0);
-    // A roster member that is the user's OWN cast photo is never eligible — you may
-    // upload yourself, you just never get cast beside yourself.
-    const selfKey = selfPhotoKey(nightlyProfile.dream_cast);
     const eligiblePartners = enabledPartners(
       nightlyProfile.partner_library,
-      nightlyProfile.active_partner_id,
-      selfKey
+      nightlyProfile.active_partner_id
     );
     if ((nightlyProfile.partner_library?.length ?? 0) > 0) {
       const roll = rollPartner(eligiblePartners, recentPartnerIds, Math.random);
@@ -680,17 +670,6 @@ Deno.serve(async (req) => {
             .join(',') || '-'
         }`
       );
-    }
-
-    // NEVER a self-with-self dream: drop a plus_one that is literally the user's own
-    // photo, whatever put it there. Unconditional — a recipe with no roster skips the
-    // roll above entirely but still carries whatever plus_one onboarding wrote, so the
-    // guarantee cannot depend on the roster's state.
-    const selfDupe = dropSelfDuplicatePlusOne(nightlyProfile.dream_cast);
-    if (selfDupe.dropped) {
-      nightlyProfile.dream_cast = selfDupe.cast as DreamCastMember[];
-      fallbackReasons.push('plus_one_is_self:dropped');
-      console.log("[nightly-dreams] +1 was the user's own photo — dropped, dreaming solo");
     }
 
     // Cast photos live in the PRIVATE `cast-photos` bucket (migration 292).
