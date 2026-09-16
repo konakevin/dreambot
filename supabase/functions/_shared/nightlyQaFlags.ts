@@ -31,11 +31,12 @@ export interface NightlyQaFlags {
    *   'geometry' flux_fragment + the geometric constraint the swap detector needs, with every word that asserts
    *              "photograph" removed. The candidate fix. */
   qa_fragment_mode: 'default' | 'plain' | 'geometry';
-  /** QA ONLY: set `lookNeutralFraming` on the MINIMAL path. That flag drops the legacy integration line's
-   *  photography prior — "the clear subject of a candid cinematic photograph", "a relaxed warm editorial
-   *  photograph", "photographic realism, filmic colour" — which follow the look in the prompt and outnumber it
-   *  3 to 1. It is set today only inside looksSlotInputFields, i.e. only on the full looks path. */
-  qa_look_neutral_framing: boolean;
+  /** QA ONLY — the CONTROL arm. Look-neutral framing is now ON for every nightly cast render, so this flag
+   *  puts the LEGACY integration line back: "the clear subject of a candid cinematic photograph", "a relaxed
+   *  warm editorial photograph", "photographic realism, filmic colour". Those follow the look in the prompt
+   *  and outnumber it 3 to 1, which is why a pinned classical_oil rendered as an oil painting only 2 of 9
+   *  times. Use this to re-measure that baseline, not to ship. */
+  qa_legacy_framing: boolean;
   /** Pin a catalog LOOK by key (NIGHTLY_LOOKS_REFACTOR_PLAN.md Phase A2): resolves like force_medium AND
    *  exempts the flux-1.1-pro override library so the prompt carries THIS look's fragment; the render
    *  stamps `look:<key>` + `look_source:force`. */
@@ -178,7 +179,7 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
       body.qa_fragment_mode === 'plain' || body.qa_fragment_mode === 'geometry'
         ? body.qa_fragment_mode
         : 'default',
-    qa_look_neutral_framing: body.qa_look_neutral_framing === true,
+    qa_legacy_framing: body.qa_legacy_framing === true,
     force_looks_path: body.force_looks_path === true,
     force_plain_brief: body.force_plain_brief === true,
     force_swap_geometry:

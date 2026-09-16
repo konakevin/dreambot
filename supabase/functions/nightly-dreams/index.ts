@@ -364,7 +364,7 @@ Deno.serve(async (req) => {
     qa_pin_look,
     qa_blank_axes,
     qa_fragment_mode,
-    qa_look_neutral_framing,
+    qa_legacy_framing,
     force_moods,
     force_awe_beat,
     force_season_month,
@@ -469,6 +469,18 @@ Deno.serve(async (req) => {
   // pose pools, framing, prompt order, retry ladder and identity floors — goes FALSE, and the new catalog reaches
   // the render the way 1.2.0 already accepts one: the rolled look is pinned as the MEDIUM (the force_look
   // mechanism) and its own approvals pick the model. Everything downstream is the 1.2.0 engine, untouched.
+  /**
+   * THE COUPLE PROMPT, KEPT (2026-09-16). `ai_generation_log.enhanced_prompt` holds ONE prompt and every
+   * degrade path overwrites it — "honesty: persist what rendered". Correct, but it means a failed couple
+   * leaves NO record of the prompt that failed: the row ends up holding the SOLO REBUILD's prompt, which
+   * is singular and carries no couple head-geometry at all.
+   *
+   * That destroyed a day of analysis. Comparing logged prompts of passed vs degraded couples showed the
+   * geometry clause "missing" from every failure and present in every success — a perfect correlation that
+   * was pure tautology, because the failures were solo prompts. Any future diagnosis of couple failure
+   * would hit the same trap, so the original is captured at assembly time and logged alongside.
+   */
+  let couplePromptOriginal: string | null = null;
   const looksMinimal = looksMode === 'on' && LOOKS_MINIMAL;
   const looksPath = looksMode === 'on' && !LOOKS_MINIMAL;
   /** The model the rolled look is graded on — overrides the medium's inherited flux pin in the minimal state. */
@@ -3184,12 +3196,21 @@ Deno.serve(async (req) => {
                 // (inert under minimal), the atmospheric axes (within-arm variance exceeded the effect),
                 // and the face-realism clause in the fragment (0/3 with it removed).
                 //
-                // SOLO ONLY, deliberately. Couples carry the parity-loop framing work and are untested
-                // here; extending this to them needs its own run. `qa_look_neutral_framing` forces it on
-                // for QA regardless of surface.
-                ...(qa_look_neutral_framing || selectedCast.length === 1
-                  ? { lookNeutralFraming: true }
-                  : {}),
+                // ALL SURFACES, including couples — Kevin's call 2026-09-16 after seeing the couple run.
+                // The couple data is real and it is a deliberate trade, not an oversight: with this on,
+                // 5 of 9 couples degraded (vs a 26% production baseline over 97 couples) and two showed an
+                // identity COLLAPSE on one side (0.006 and 0.04), because a painterly render is exactly what
+                // the dual-swap detector cannot split. The photography prior was protecting the swap.
+                //
+                // He chose the look anyway: "i'd rather let it fall back to single. i hate that
+                // pseudo-realistic oil painting look." That trade only works because the degrade is clean —
+                // verified on all four degraded renders that the solo_rebuild KEEPS the look ("oil painting"
+                // present) and carries ZERO photography-prior phrases. So a failed couple becomes a solo in
+                // the right medium, not a photograph of one person.
+                //
+                // If couple degrades become a problem, this is the line to revert (back to
+                // `selectedCast.length === 1`), NOT the vibe fix above.
+                ...(qa_legacy_framing ? {} : { lookNeutralFraming: true }),
               }),
         };
         // Flux parity arm G: flux couples on the album skeleton render with the 1.2.0 flux override fragment.
@@ -3233,6 +3254,8 @@ Deno.serve(async (req) => {
         sonnetBrief = slotResult.briefUsed;
         sonnetRawResponse = slotResult.rawResponse;
         finalPrompt = slotResult.assembledPrompt;
+        // Captured BEFORE any retry or degrade can overwrite finalPrompt (see the declaration).
+        if (selectedCast.length === 2) couplePromptOriginal = slotResult.assembledPrompt;
         slotPipelineFallbacks = slotResult.fallbackReasons;
         slotPipelineHandled = true;
         castSlotsCtx = { slots: slotResult.slots, input: slotInputUsed };
@@ -4120,6 +4143,9 @@ Output ONLY the prompt.`;
     // Capture for duplicate-bug observability
     const observability: Record<string, unknown> = {};
     if (slotInputLogged) observability.slotInput = slotInputLogged;
+    // Only differs from enhanced_prompt when the couple failed and a rebuild replaced it — which is
+    // exactly the case worth investigating.
+    if (couplePromptOriginal) observability.couplePrompt = couplePromptOriginal;
 
     // NOTE: the auto-generated "Place, Region" location geotag (uploads.description)
     // was ripped out 2026-06-15 — it was buggy on no-location / direct renders
