@@ -4,8 +4,22 @@
  * "app goes non-responsive" incidents; see DB_CONNECTION_SATURATION_PLAN.md).
  *
  * Reads the newest db_health_log snapshot (migration 372, written every minute by
- * pg_cron) — a cheap single-row read. FAIL-SAFE: a stale (> STALE_MIN) or errored
- * read counts as "assume tight, back off", so we never burst blind.
+ * pg_cron) — a cheap single-row read.
+ *
+ * ⚠️ THE SNAPSHOT IS BLIND EXACTLY WHEN IT MATTERS, so a stale read does NOT simply
+ * mean "assume tight" any more. The snapshot is written BY pg_cron: when the database
+ * is in trouble the cron stops, the snapshot goes stale, and the guard that exists to
+ * stop a burst during a DB problem is the one thing guaranteed to be uninformed during
+ * a DB problem — and `waitForHeadroom` then FAILS OPEN and proceeds anyway. Seen for
+ * real on 2026-09-16: a ~7-minute Postgres restart (04:38-04:45 UTC) left the newest
+ * snapshot 8 minutes old while the pool was in fact fine at 34/90.
+ *
+ * So on a stale/missing snapshot we now FORCE a fresh one — `capture_db_health()` is
+ * the same SECURITY DEFINER function the cron calls (migration 372, granted to
+ * service_role), reading live pg_stat_activity — and re-read. That turns "unknown"
+ * into a real number in one extra round trip, AND self-heals the snapshot for every
+ * other consumer. If that RPC itself fails, the database genuinely is unreachable and
+ * backing off is the correct answer rather than a guess.
  *
  * Usage in a producer, before a concurrent render/seed batch:
  *   const { waitForHeadroom } = require('./lib/poolHeadroom');
@@ -30,7 +44,9 @@ function envVal(name) {
 }
 
 const SUPABASE_URL =
-  envVal('SUPABASE_URL') || envVal('EXPO_PUBLIC_SUPABASE_URL') || 'https://jimftynwrinwenonjrlj.supabase.co';
+  envVal('SUPABASE_URL') ||
+  envVal('EXPO_PUBLIC_SUPABASE_URL') ||
+  'https://jimftynwrinwenonjrlj.supabase.co';
 const SUPABASE_KEY = envVal('SUPABASE_SERVICE_ROLE_KEY');
 const STALE_MIN = 2; // a snapshot older than this means the cron stalled — treat as saturated
 
@@ -45,23 +61,73 @@ function client() {
  *   max:number|null, ageMin:number|null, reason?:string}>}
  * headroom = free connections (max - total). 0 when stale/unknown (fail-safe).
  */
+/** Newest snapshot row, shaped. `null` when there is nothing readable. */
+async function readSnapshot() {
+  const { data, error } = await client()
+    .from('db_health_log')
+    .select('total_conn, max_connections, captured_at')
+    .order('captured_at', { ascending: false })
+    .limit(1)
+    .single();
+  if (error || !data) return { row: null, reason: error?.message || 'no snapshot row' };
+  const max = data.max_connections || 90;
+  const ageMin = (Date.now() - new Date(data.captured_at).getTime()) / 60000;
+  return {
+    row: {
+      ok: true,
+      stale: ageMin > STALE_MIN,
+      headroom: max - data.total_conn,
+      total: data.total_conn,
+      max,
+      ageMin,
+    },
+    reason: null,
+  };
+}
+
 async function getHeadroom() {
   try {
-    const { data, error } = await client()
-      .from('db_health_log')
-      .select('total_conn, max_connections, captured_at')
-      .order('captured_at', { ascending: false })
-      .limit(1)
-      .single();
-    if (error || !data) {
-      return { ok: false, stale: true, headroom: 0, total: null, max: null, ageMin: null, reason: error?.message || 'no snapshot row' };
+    const first = await readSnapshot();
+    if (first.row && !first.row.stale) return first.row;
+
+    // Stale or missing. Do NOT guess — the snapshot's own writer is a casualty of the
+    // conditions we are trying to measure. Force a live capture and re-read.
+    const { error: rpcErr } = await client().rpc('capture_db_health');
+    if (rpcErr) {
+      // The DB is genuinely unreachable (or the grant is gone) — backing off is right.
+      return {
+        ok: false,
+        stale: true,
+        headroom: 0,
+        total: null,
+        max: null,
+        ageMin: null,
+        reason: `snapshot ${first.reason || 'stale'}; live capture failed: ${rpcErr.message}`,
+      };
     }
-    const max = data.max_connections || 90;
-    const ageMin = (Date.now() - new Date(data.captured_at).getTime()) / 60000;
-    const stale = ageMin > STALE_MIN;
-    return { ok: true, stale, headroom: stale ? 0 : max - data.total_conn, total: data.total_conn, max, ageMin };
+    const fresh = await readSnapshot();
+    if (!fresh.row || fresh.row.stale) {
+      return {
+        ok: false,
+        stale: true,
+        headroom: 0,
+        total: null,
+        max: null,
+        ageMin: null,
+        reason: `live capture returned nothing usable (${fresh.reason || 'still stale'})`,
+      };
+    }
+    return { ...fresh.row, refreshed: true };
   } catch (e) {
-    return { ok: false, stale: true, headroom: 0, total: null, max: null, ageMin: null, reason: e.message };
+    return {
+      ok: false,
+      stale: true,
+      headroom: 0,
+      total: null,
+      max: null,
+      ageMin: null,
+      reason: e.message,
+    };
   }
 }
 
@@ -72,7 +138,12 @@ async function getHeadroom() {
  *
  * @param {{min?:number, timeoutMs?:number, pollMs?:number, label?:string}} opts
  */
-async function waitForHeadroom({ min = 25, timeoutMs = 180000, pollMs = 8000, label = 'burst' } = {}) {
+async function waitForHeadroom({
+  min = 25,
+  timeoutMs = 180000,
+  pollMs = 8000,
+  label = 'burst',
+} = {}) {
   const start = Date.now();
   let h = await getHeadroom();
   while ((h.stale || h.headroom < min) && Date.now() - start < timeoutMs) {
@@ -86,7 +157,7 @@ async function waitForHeadroom({ min = 25, timeoutMs = 180000, pollMs = 8000, la
   if (h.stale || h.headroom < min) {
     console.warn(
       `[poolHeadroom] ${label}: PROCEEDING after ${Math.round((Date.now() - start) / 1000)}s despite low headroom ` +
-        `(${h.stale ? 'stale snapshot' : h.headroom + ' free'}) — keep concurrency low.`,
+        `(${h.stale ? 'stale snapshot' : h.headroom + ' free'}) — keep concurrency low.`
     );
   } else {
     console.log(`[poolHeadroom] ${label}: clear — ${h.headroom}/${h.max} free.`);
