@@ -33,6 +33,7 @@
     "__tests__/lib/eyeColour.test.ts",
     "__tests__/lib/relationshipGate.test.ts",
     "__tests__/lib/partnerRoll.test.ts",
+    "__tests__/lib/surpriseScene.test.ts",
     "__tests__/lib/sceneVsCastDivergence.test.ts",
     "__tests__/lib/vibeFragment.test.ts",
     "__tests__/lib/nightlyVibes.test.ts",

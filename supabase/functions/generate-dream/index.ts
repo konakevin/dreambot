@@ -30,6 +30,7 @@ import { genderFromLock } from '../_shared/genderLock.ts';
 import { restoreFace } from '../_shared/faceRestore.ts';
 import { genderSafeDualSwap } from '../_shared/dualSwapPipeline.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
+import { pickSurpriseScene } from '../_shared/surpriseScene.ts';
 import { applyCleanMedium, fetchCleanMedium } from '../_shared/cleanMedium.ts';
 import {
   routeNewSceneSubject,
@@ -1574,7 +1575,36 @@ Output ONLY the prompt.`;
         lap('direct-pass-thru-done');
       } else {
         // ── V2 COMPILER PATHS: style transfer, text directive, surprise ──
-        const sanitizedPrompt = userSubject ? sanitizeUserPrompt(userSubject) : '';
+        // SURPRISE DREAM (no prompt, no photo, no style reference): anchor it to an
+        // AUTHORED people-free spot instead of handing Sonnet a blank canvas, which
+        // is the one input the engine has repeatedly proved it should never get --
+        // with nothing to vary against it pigeonholes and rhymes, so every surprise
+        // lands on the same handful of ideas. Same pool nightly's scene-only dreams
+        // use (_shared/surpriseScene.ts).
+        //
+        // Injected HERE rather than at userSubject on purpose: further up, the text
+        // path runs detectSelfInsert over the prompt, and a spot that happened to
+        // contain a relationship word would cast someone into a dream that is
+        // supposed to be strictly people-free.
+        let surprise: Awaited<ReturnType<typeof pickSurpriseScene>> = null;
+        if (!userSubject.trim() && !style_prompt) {
+          // This branch is the no-photo path, so the people-free pool.
+          surprise = await pickSurpriseScene(supabase, 'pure_scene');
+          if (surprise) {
+            fallbackReasons.push(`surprise_seed:${surprise.kind}:${surprise.place}`);
+            console.log(`[generate-dream] surprise seed (${surprise.kind}): ${surprise.prompt}`);
+          } else {
+            // No authored spot available at all — keep the old behaviour rather than
+            // failing a render the user already paid for.
+            fallbackReasons.push('surprise_seed:none');
+          }
+        }
+        // Authored text, not user input: sanitizeUserPrompt is for defending against
+        // what a user typed, and running it over our own pool text would only risk
+        // mangling it.
+        const sanitizedPrompt = userSubject
+          ? sanitizeUserPrompt(userSubject)
+          : (surprise?.prompt ?? '');
         const inputType = style_prompt
           ? 'style_transfer'
           : sanitizedPrompt
