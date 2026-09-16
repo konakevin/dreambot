@@ -63,6 +63,14 @@ const RING = 7;
 const STEP = 216; // < D, so the bubbles overlap slightly and read as one lineup
 const ARC = [46, 0, -28, 0, 46]; // shallow arc, middle bubble highest
 const SURFACE = '#0F0F14'; // colors.surface — AnnouncementSheet's hero background
+
+// A dreamy backdrop instead of a flat panel. Rendered once, then pushed WAY back
+// (darkened and blurred) so it reads as atmosphere and never competes with the faces,
+// plus a centre glow that lights the lineup like a stage and a vignette that keeps the
+// eye off the edges. No people and no text in it, or the model starts drawing its own
+// cast behind ours.
+const BACKDROP =
+  'dreamy night sky with soft billowing clouds and distant stars, deep purple and teal, gentle bokeh lights, ethereal and calm, empty scene, no people, no text, no letters';
 const ACCENT = '#A78BFA'; // colors.accent — the same ring the cast thumbnails use
 
 async function bubble(file) {
@@ -111,6 +119,20 @@ async function main() {
     console.log(`  saved ${dest}`);
   }
 
+  // Backdrop (cached like the characters, so copy tweaks do not re-render it).
+  const backdropPath = path.join(OUT, '0-backdrop.jpg');
+  if (!fs.existsSync(backdropPath)) {
+    console.log('→ rendering backdrop…');
+    const url = await flux({
+      prompt: BACKDROP,
+      aspectRatio: '4:3',
+      model: 'black-forest-labs/flux-2-pro',
+    });
+    await download(url, backdropPath);
+  } else {
+    console.log('· reusing backdrop');
+  }
+
   const bubbles = await Promise.all(files.map(bubble));
   const span = STEP * (bubbles.length - 1) + D;
   const left0 = Math.round((W - span) / 2);
@@ -122,9 +144,35 @@ async function main() {
     top: top0 + ARC[i],
   }));
 
+  // Stage glow behind the lineup + a vignette so the edges fall away.
+  const light = Buffer.from(
+    `<svg width="${W}" height="${H}">
+      <defs>
+        <radialGradient id="glow" cx="50%" cy="50%" r="58%">
+          <stop offset="0%" stop-color="#C4B5FD" stop-opacity="0.34"/>
+          <stop offset="55%" stop-color="#A78BFA" stop-opacity="0.08"/>
+          <stop offset="100%" stop-color="#A78BFA" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="vig" cx="50%" cy="50%" r="78%">
+          <stop offset="50%" stop-color="#000000" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#000000" stop-opacity="0.8"/>
+        </radialGradient>
+      </defs>
+      <rect width="${W}" height="${H}" fill="url(#glow)"/>
+      <rect width="${W}" height="${H}" fill="url(#vig)"/>
+    </svg>`
+  );
+
+  // Backdrop pushed back hard: darkened and blurred so the faces stay the subject.
+  const bg = await sharp(backdropPath)
+    .resize(W, H, { fit: 'cover' })
+    .modulate({ brightness: 0.5, saturation: 0.85 })
+    .blur(7)
+    .toBuffer();
+
   const heroPath = path.join(OUT, 'hero.jpg');
   await sharp({ create: { width: W, height: H, channels: 3, background: SURFACE } })
-    .composite(composite)
+    .composite([{ input: bg }, { input: light }, ...composite])
     .jpeg({ quality: 92 })
     .toFile(heroPath);
   console.log(`\n✅ hero: ${heroPath}`);
