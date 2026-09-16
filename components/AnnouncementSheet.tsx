@@ -23,6 +23,7 @@ import type { Announcement } from '@/hooks/useAnnouncement';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { GradientTitle } from '@/components/GradientTitle';
+import { TitleText } from '@/components/TitleText';
 import { GradientButton } from '@/components/GradientButton';
 
 interface Props {
@@ -41,21 +42,39 @@ const SETTINGS_PARENT: Record<string, string> = {
   '/settings/mood': '/settings/edit-profile',
 };
 
-/** Splits a trailing emoji off a title so it can render un-masked.
- *  Deliberately boring: the last space-separated token counts as the emoji when it
- *  holds no ASCII letter or digit. No Unicode property escapes, which Hermes support
+/** Breaks a title into the three pieces the sheet paints differently.
+ *
+ *  `lead`  — everything up to and including a colon ("Now casting:"), rendered plain
+ *            white, because in a "label: thing" headline the THING is the news and the
+ *            label is scaffolding. Null when the title has no colon, in which case the
+ *            whole headline takes the gradient.
+ *  `accent`— what the gradient lands on.
+ *  `emoji` — a trailing emoji, kept OUT of the gradient: masked, it gets repainted and
+ *            loses its own colours entirely (a clapper came out teal).
+ *
+ *  Deliberately boring string work. The emoji test is "last space-separated token with
+ *  no ASCII alphanumeric" rather than a Unicode property escape, which Hermes support
  *  for varies and which would throw at render time rather than at build time. */
-function splitTitleEmoji(title: string): { titleText: string; titleEmoji: string | null } {
+function splitTitle(title: string): {
+  lead: string | null;
+  accent: string;
+  emoji: string | null;
+} {
   const parts = title.trim().split(' ');
   const last = parts[parts.length - 1];
-  if (parts.length > 1 && last && !/[a-zA-Z0-9]/.test(last)) {
-    return { titleText: parts.slice(0, -1).join(' '), titleEmoji: last };
+  const hasEmoji = parts.length > 1 && !!last && !/[a-zA-Z0-9]/.test(last);
+  const emoji = hasEmoji ? last : null;
+  const text = hasEmoji ? parts.slice(0, -1).join(' ') : title.trim();
+
+  const colon = text.indexOf(':');
+  if (colon > 0 && colon < text.length - 1) {
+    return { lead: text.slice(0, colon + 1), accent: text.slice(colon + 1).trim(), emoji };
   }
-  return { titleText: title, titleEmoji: null };
+  return { lead: null, accent: text, emoji };
 }
 
 export function AnnouncementSheet({ announcement, onClose }: Props) {
-  const { titleText, titleEmoji } = splitTitleEmoji(announcement.title);
+  const { lead, accent, emoji } = splitTitle(announcement.title);
 
   const handleCta = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -87,18 +106,15 @@ export function AnnouncementSheet({ announcement, onClose }: Props) {
       <View style={s.overlay}>
         <View style={s.card}>
           <View style={s.titleWrap}>
-            {/* The STATIC brand gradient, not the animated one. The rotating version
-                made the headline shimmer against an already-gradient CTA; the fixed
-                gradient keeps the brand identity without anything moving.
-                numberOfLines 2 because GradientTitle defaults to 1 and would silently
-                truncate a longer announcement title rather than wrap it. */}
+            {/* Plain white lead, gradient on the payoff. The STATIC brand gradient,
+                not the animated one: the rotating version made the headline shimmer
+                against an already-gradient CTA. numberOfLines 2 because GradientTitle
+                defaults to 1 with no auto-shrink and would silently truncate. */}
+            {lead ? <TitleText size={22}>{lead}</TitleText> : null}
             <GradientTitle size={22} numberOfLines={2}>
-              {titleText}
+              {accent}
             </GradientTitle>
-            {/* A trailing emoji renders OUTSIDE the gradient mask. Masked, it gets
-                repainted in the gradient and loses its own colours entirely, so a
-                clapper came out teal instead of the grey and white it actually is. */}
-            {titleEmoji ? <Text style={s.titleEmoji}>{titleEmoji}</Text> : null}
+            {emoji ? <Text style={s.titleEmoji}>{emoji}</Text> : null}
           </View>
 
           {announcement.image_url ? (
@@ -141,6 +157,7 @@ export function AnnouncementSheet({ announcement, onClose }: Props) {
 const s = StyleSheet.create({
   titleWrap: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
