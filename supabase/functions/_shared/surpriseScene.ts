@@ -12,9 +12,13 @@
  *     stand on their own with no subject. The table also holds mundane backdrops (a
  *     concrete river channel, gym equipment) that read fine with a person in frame
  *     and as a random building photo without one; this flag is what excludes them.
+ *     The STYLE has to be people-free too — generate-dream re-rolls a portrait-shaped
+ *     medium here, because a people-free anchor through `glamour` still renders a
+ *     person.
  *   • has photo → character_eligible (16,758 active rows) — backdrops authored to
  *     take a figure. The parallel flag exists because ~50% of cast rolls had quality
- *     issues off the unfiltered pool (migration 222).
+ *     issues off the unfiltered pool (migration 222). Pass `reject:
+ *     isMonumentalFaceSpot` on this kind — the swap is live on that path.
  *
  * Drawn from the WHOLE pool of 174 places, deliberately NOT the user's saved ones
  * (Kevin 2026-09-16): a surprise should be able to land somewhere they would never
@@ -67,9 +71,29 @@ export function surprisePromptFor(spotText: string): string {
  *  16k rows on every surprise dream would be a pointless round trip. */
 const totals: Partial<Record<SurpriseKind, number>> = {};
 
+export interface PickSurpriseOptions {
+  /**
+   * Veto a candidate spot. The pick RE-ROLLS rather than failing, so a rejected
+   * spot just means a different one from the same pool.
+   *
+   * The 'character' kind needs this: the pool is authored for backdrops that take
+   * a figure, but ~1% of those rows depict a MONUMENTAL human face (a giant
+   * Buddha, the Sphinx, Mount Rushmore). Flux renders the colossal face, YuNet
+   * picks the largest face in the frame — the STATUE'S — and the swap pastes the
+   * user onto the monument. Nightly filters its own cast anchors through exactly
+   * this gate (`isMonumentalFaceSpot`); a photo dream runs the same swap and
+   * needs the same protection.
+   */
+  reject?: (spotText: string) => boolean;
+  /** How many times to re-roll past `reject` before giving up. Default 4, which at
+   *  the measured ~1% rejection rate fails about once in 10^8 picks. */
+  attempts?: number;
+}
+
 export async function pickSurpriseScene(
   supabase: SupabaseClient,
-  kind: SurpriseKind
+  kind: SurpriseKind,
+  opts: PickSurpriseOptions = {}
 ): Promise<SurpriseScene | null> {
   const flag = kind === 'pure_scene' ? 'pure_scene_eligible' : 'character_eligible';
   const q = () =>
@@ -91,12 +115,21 @@ export async function pickSurpriseScene(
     const total = totals[kind] ?? 0;
     if (total === 0) return null;
 
-    const at = randomOffset(total);
-    const { data } = await q().range(at, at);
-    const row = data?.[0];
-    if (!row) return null;
-    const place = row.location_key as string;
-    return { prompt: surprisePromptFor(row.spot_text as string), place, kind };
+    const attempts = Math.max(1, opts.attempts ?? 4);
+    for (let i = 0; i < attempts; i++) {
+      const at = randomOffset(total);
+      const { data } = await q().range(at, at);
+      const row = data?.[0];
+      if (!row) return null;
+      const spotText = row.spot_text as string;
+      if (opts.reject && opts.reject(spotText)) continue;
+      const place = row.location_key as string;
+      return { prompt: surprisePromptFor(spotText), place, kind };
+    }
+    // Every candidate was vetoed. Returning null hands the caller its old
+    // unanchored behaviour, which is merely bland — returning a vetoed spot
+    // would paste the user's face onto a monument.
+    return null;
   } catch {
     // Never fail a render the user already paid for over a seed lookup.
     return null;

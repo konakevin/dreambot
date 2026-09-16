@@ -31,6 +31,7 @@ import { restoreFace } from '../_shared/faceRestore.ts';
 import { genderSafeDualSwap } from '../_shared/dualSwapPipeline.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
 import { pickSurpriseScene } from '../_shared/surpriseScene.ts';
+import { isMonumentalFaceSpot } from '../_shared/monumentalFaceSpot.ts';
 import { applyCleanMedium, fetchCleanMedium } from '../_shared/cleanMedium.ts';
 import {
   routeNewSceneSubject,
@@ -853,6 +854,41 @@ async function handleRequest(req: Request): Promise<Response> {
       !!input_image
     );
 
+    // ── SURPRISE DREAM (photo): anchor the invented scene ────────────────
+    // Photo + New Scene + no prompt. Every branch below reads the scene from
+    // `hint`, so an empty one left the engine inventing a setting from nothing —
+    // the same blank canvas the no-photo route just stopped handing Sonnet, and
+    // the same consequence: it pigeonholes and rhymes, so "surprise me with my
+    // photo" converged on a few stock settings.
+    //
+    // Anchored to the CHARACTER half of the pool (backdrops authored to take a
+    // figure), not the people-free half, because this dream has a subject.
+    //
+    // ⚠️ `isMonumentalFaceSpot` is not optional here. ~1% of character_eligible
+    // rows depict a COLOSSAL human face (a giant Buddha, the Sphinx, Mount
+    // Rushmore). Flux renders the huge face, YuNet picks the largest face in the
+    // frame — the STATUE'S — and the swap pastes the user onto the monument. This
+    // is the same gate nightly runs on its own cast anchors, and this path does
+    // the same swap. It only ever re-rolls to another spot.
+    let photoSurprise: Awaited<ReturnType<typeof pickSurpriseScene>> = null;
+    if (isPhoto && photo_style === 'new_scene' && !(hint ?? '').trim()) {
+      photoSurprise = await pickSurpriseScene(supabase, 'character', {
+        reject: isMonumentalFaceSpot,
+      });
+      if (photoSurprise) {
+        fallbackReasons.push(`surprise_seed:${photoSurprise.kind}:${photoSurprise.place}`);
+        console.log(`[generate-dream] surprise seed (character): ${photoSurprise.prompt}`);
+      } else {
+        // Keep the old unanchored behaviour rather than failing a paid render.
+        fallbackReasons.push('surprise_seed:none');
+      }
+    }
+    // The scene every photo branch below composes against. Authored pool text, not
+    // user input: sanitizeUserPrompt defends against what a user typed, and running
+    // it over our own copy would only risk mangling it. `hint` is already sanitized
+    // upstream.
+    const photoScene = (hint ?? '').trim() || photoSurprise?.prompt || '';
+
     // ── New Scene REFERENCE route ────────────────────────────────────────────
     // Uploaded photo → reimagined into a NEW scene via a reference model (no
     // face swap). Gated on the client sending classify-photo's structured
@@ -881,7 +917,7 @@ async function handleRequest(req: Request): Promise<Response> {
       finalPrompt = buildNewScenePrompt({
         kind,
         subjectDescription: subject_description ?? '',
-        scene: hint ?? '',
+        scene: photoScene,
         mediumProse: medium.directive ?? '',
         vibeProse: vibe.directive ?? '',
       });
@@ -1043,27 +1079,27 @@ async function handleRequest(req: Request): Promise<Response> {
         });
         const isFaceSwapEligible = medium.characterRenderMode === 'natural';
 
-        // Scene expansion + chaos (same as self-insert)
+        // Scene expansion + chaos (same as self-insert). `photoScene` is the user's
+        // prompt, or the authored anchor when they left it blank — the chaos seed
+        // included, so a surprise photo dream varies with its anchor instead of
+        // hashing the same empty string every time.
         const expanded = expandScene({
-          userPrompt: hint ?? '',
+          userPrompt: photoScene,
           userId,
           mediumKey: medium.key,
           vibeKey: vibe.key,
           hasCharacter: true,
         });
         const chaosProfile = rollChaos(
-          Array.from(userId + (hint ?? '')).reduce(
-            (h, c) => ((h << 5) - h + c.charCodeAt(0)) | 0,
-            0
-          ),
+          Array.from(userId + photoScene).reduce((h, c) => ((h << 5) - h + c.charCodeAt(0)) | 0, 0),
           {
-            userPrompt: hint ?? '',
+            userPrompt: photoScene,
             mediumRenderMode: medium.characterRenderMode,
             faceSwapEligible: isFaceSwapEligible,
           }
         );
         const finalExpansion = applyChaos(expanded.expansion, chaosProfile);
-        const focalAnchor = deriveFocalAnchor(resolvedCast, { userPrompt: hint ?? '' });
+        const focalAnchor = deriveFocalAnchor(resolvedCast, { userPrompt: photoScene });
 
         const compiled = compilePrompt({
           inputType: 'self_insert',
@@ -1086,7 +1122,7 @@ async function handleRequest(req: Request): Promise<Response> {
             faceSwapDirective: vibe.faceSwapDirective ?? null,
           },
           scene: {
-            userPrompt: hint || undefined,
+            userPrompt: photoScene || undefined,
             sceneExpansion: isDLT ? undefined : finalExpansion || undefined,
             styleReference: style_prompt || undefined,
           },
@@ -1130,7 +1166,7 @@ async function handleRequest(req: Request): Promise<Response> {
       } catch (err) {
         console.error('[generate-dream] NEW SCENE FAILED:', (err as Error).message);
         fallbackReasons.push(`new_scene_failed:${(err as Error).message}`);
-        finalPrompt = `${medium.fluxFragment}, ${hint ?? 'a creative scene'}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed`;
+        finalPrompt = `${medium.fluxFragment}, ${photoScene || 'a creative scene'}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed`;
         photoOverrideMode = 'flux-dev';
         logAxes = {
           medium: medium.key,
