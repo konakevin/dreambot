@@ -633,7 +633,7 @@ export function DreamCastRoster() {
                 <View style={s.row}>
                   <CastThumb uriOverride={pending.uri} busy />
                   <View style={s.info}>
-                    <Text style={s.name}>New loved one</Text>
+                    <Text style={s.name}>New cast member</Text>
                     <Text style={s.status}>Analyzing your photo…</Text>
                   </View>
                 </View>
@@ -655,7 +655,7 @@ export function DreamCastRoster() {
                 activeOpacity={0.7}
               >
                 <Ionicons name="add-circle-outline" size={20} color={colors.accent} />
-                <Text style={s.uploadButtonText}>Add a loved one</Text>
+                <Text style={s.uploadButtonText}>Add a cast member</Text>
               </TouchableOpacity>
             )
           )}
