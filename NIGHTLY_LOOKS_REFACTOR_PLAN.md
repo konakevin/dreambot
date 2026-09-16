@@ -523,7 +523,7 @@ range of styles, which is reasonable grounds to doubt the verdict.
   production it would inherit the photography prior and likely do worse, not better.
 
 **The test to run.** The same protocol that settled flux, so the numbers are comparable:
-`node scripts/_tmp-look-reliability.js nightly_classical_oil 9` with `force_model=openai/gpt-image-2.5-sunburst`,
+`node scripts/qa-look-reliability.js nightly_classical_oil 9` with `force_model=openai/gpt-image-2.5-sunburst`,
 solo, `qa_pin_look`, and the framing fix in place. Count how many render as an oil painting.
 
 - lands ~8/9 → the verdict was wrong, 2.5 belongs in the rotation and needs `image_models` + DreamSmart wiring

@@ -128,7 +128,12 @@ BEFORE theorising about models or prompts.** That check would have saved most of
 
 ---
 
-## 7. QA flags added (all QA-only, inert in production)
+## 7. The harness
+
+`node scripts/qa-look-reliability.js <look_key> <n>` — pins a look and renders it n times on the current
+production engine, so "does the look land" has a number. This is what produced the 2/9 and 7/9 figures.
+
+## 8. QA flags added (all QA-only, inert in production)
 
 | flag | what it does |
 |---|---|
@@ -139,7 +144,7 @@ BEFORE theorising about models or prompts.** That check would have saved most of
 
 ---
 
-## 8. Open
+## 9. Open
 
 - **Couples.** The `lookNeutralFraming` fix is solos-only. Couples carry the parity-loop framing work and
   are untested. Run the same 9-render protocol with `force_cast_role: 'dual'` before extending it.
