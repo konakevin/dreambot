@@ -332,6 +332,11 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
   `BOT_AXIS_REFACTOR_PLAN.md`, `BOT_PREFIX_NEED_TO_REVIEW_AND_FIX.md`.
 - **Looks (nightly now, Create's real-face mediums later):** `REAL_FACE_LOOKS_REGISTRY.md` (LIVE registry of
   proven look × model × surface results; generated matrix), `NIGHTLY_LOOKS_REFACTOR_PLAN.md`, `NIGHTLY_LOOK_TALLY.md`.
+- **Couple swap reliability (1 in 5 couples loses the +1):** `COUPLE_SWAP_RELIABILITY_PLAN.md` — measured
+  on 105 production couples: 21% degrade to a solo, 86% of couples render on flux-1.1-pro which degrades
+  23%. ⚠️ The prompt CANNOT enforce head geometry on flux (probed 2026-09-14), so any plan whose mechanism
+  is "add or strengthen a geometry clause" is known to fail — a full day was spent rediscovering this.
+  Diagnosis needs `rolled_axes.observability.couplePrompt`, which only exists after `6f4a1c2a`.
 - **Look/vibe fidelity (READ BEFORE debugging why a nightly ignores its look or vibe):**
   `NIGHTLY_LOOK_FIDELITY_INVESTIGATION.md` — measured 2026-09-16: the vibe fragment reached 0 of 50
   nightlies, and a pinned look rendered correctly only 2 of 9 times because the framing boilerplate says
