@@ -50,10 +50,21 @@ export const SOLO_PINNED_MODEL_FALLBACK = 'black-forest-labs/flux-1.1-pro';
  *  `false` restores the graded-model-only pool. */
 export const LOOKS_ALL_MODELS = true;
 
-/** How often a render goes STRAIGHT to the surface's primary model instead of rolling the pool (Kevin, 2026-09-13:
- *  "hardcode 50% to go direct to flux 1.1pro, and the other 50% random roll from all models in the pool. same thing
- *  with singles"). The roll includes the primary, so flux's real share is this plus its share of the remainder. */
-export const PRIMARY_DIRECT_SHARE = 0.5;
+/**
+ * How often a render goes STRAIGHT to the surface's primary model instead of rolling the pool.
+ *
+ * Kevin 2026-09-16: "70% go straight to flux, and the other is a 50/50 roll for flux or gemini 2."
+ * The remainder rolls UNIFORMLY over the look's model pool, which since grok was removed is exactly
+ * [flux-1.1-pro, gemini-2-image] — so the 50/50 he asked for is what a uniform roll already gives, and
+ * flux's real share is 0.70 + 0.30 x 0.50 = 85%, gemini-2 15%.
+ *
+ * ⚠️ `nightly_model_policy.primary_weights` is NOT consulted on this path (see resolveStyle: the pick is
+ * `forceModel ?? directToPrimary ?? uniform(lookModels)`). Those weights are documentation for the
+ * fallback/legacy paths only — change the split HERE, not there.
+ *
+ * Was 0.5 (Kevin 2026-09-13), which gave flux 75%.
+ */
+export const PRIMARY_DIRECT_SHARE = 0.7;
 
 /** The model a surface STARTS on: that policy row's FIRST primary (Kevin 2026-09-13, "whatever our primary/1st
  *  model is" for solos; "couples always first try on flux 1.1pro" for couples). Applied only where the rolled look

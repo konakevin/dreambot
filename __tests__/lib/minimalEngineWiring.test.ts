@@ -42,14 +42,25 @@ describe('the locked engine is wired the way the summary says', () => {
     );
   });
 
-  it('CLAIM: a failed couple moves model instead of degrading — the rerender consults the chain', () => {
-    expect(strip(SRC)).toContain('} else if (looksMinimal && styleContract) {');
-    expect(strip(SRC)).toContain('const pick = styleContract.forAttempt(attempt + 1);');
+  // REVERSED 2026-09-16 (Kevin: "shift the fallback from a failed couples render directly to a single,
+  // not a couple on a different model"). The chain code still exists and forAttempt is still wired, but the
+  // degrade guard runs with maxRerenders: 0, so it is never reached for a nightly couple — the failed dual
+  // falls straight through to the solo rebuild, which keeps the look.
+  it('CLAIM: a failed couple degrades straight to a solo rather than moving model', () => {
+    expect(strip(SRC)).toContain('maxRerenders: 0,');
+    expect(strip(SRC)).not.toContain('maxRerenders: 2,');
   });
 
-  it('CLAIM: three models, half direct to the primary and half rolled', () => {
+  // 2026-09-16: grok removed from nightly entirely ("consistently makes ugly renders"), so the pool is two
+  // models, and the direct share went 0.5 → 0.7 (Kevin: "70% go straight to flux, and the other is a 50/50
+  // roll for flux or gemini 2"). The remainder rolls UNIFORMLY over the pool, so a 2-model pool IS the 50/50
+  // he asked for. Net flux 0.70 + 0.30 x 0.50 = 85%, gemini-2 15%.
+  it('CLAIM: 70% direct to the primary, the rest rolled evenly over the pool', () => {
     expect(LOOKS_ALL_MODELS).toBe(true);
-    expect(PRIMARY_DIRECT_SHARE).toBe(0.5);
+    expect(PRIMARY_DIRECT_SHARE).toBe(0.7);
+    // The arithmetic Kevin asked for, stated so a future edit to either number is checked against intent.
+    const fluxShare = PRIMARY_DIRECT_SHARE + (1 - PRIMARY_DIRECT_SHARE) * 0.5;
+    expect(Number(fluxShare.toFixed(2))).toBe(0.85);
   });
 
   it('the minimal roll never runs behind a QA force_medium, which would fight the pin', () => {
