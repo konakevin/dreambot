@@ -43,10 +43,24 @@ export function randomOffset(total: number, rnd: () => number = Math.random): nu
   return Math.min(total - 1, Math.floor(rnd() * total));
 }
 
-/** The prompt for a chosen spot. The place rides along because a spot is written as
- *  somewhere WITHIN a location and is ambiguous alone. */
-export function surprisePromptFor(spotText: string, place: string): string {
-  return `${spotText.trim()}, ${place}`;
+/**
+ * The prompt for a chosen spot: the authored spot text, and ONLY that.
+ *
+ * It used to append the location_key too, on the theory that a spot is written as
+ * somewhere WITHIN a place and is ambiguous alone. It is not — the pool's entries
+ * name themselves ("Step Pyramid of Djoser at Saqqara", "Trollfjorden narrow gorge
+ * with sheer cliff walls"), which is why nightly has anchored on `spot_text` alone
+ * for months (nightly-dreams: `iconicAnchor = picked.spot_text`).
+ *
+ * Appending the key actively broke the people-free guarantee, because an imagined
+ * world's key is a NARRATIVE phrase, not a place name. "Bryce Canyon Amphitheater at
+ * blue hour" + ", desert canyon standoff" rendered two gunslingers squaring up (QA
+ * 2026-09-15) — the spot was people-free, the world's name summoned the people. Same
+ * shape for "outlaw hideout", "epic battlefield", "fairy tea party". The place still
+ * rides along in the forensic stamp, where it costs nothing.
+ */
+export function surprisePromptFor(spotText: string): string {
+  return spotText.trim();
 }
 
 /** Cached per isolate: the pool only changes when seeds are added, and re-counting
@@ -82,7 +96,7 @@ export async function pickSurpriseScene(
     const row = data?.[0];
     if (!row) return null;
     const place = row.location_key as string;
-    return { prompt: surprisePromptFor(row.spot_text as string, place), place, kind };
+    return { prompt: surprisePromptFor(row.spot_text as string), place, kind };
   } catch {
     // Never fail a render the user already paid for over a seed lookup.
     return null;

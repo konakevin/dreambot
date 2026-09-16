@@ -42,23 +42,35 @@ describe('sampling the pool', () => {
 });
 
 describe('the prompt it produces', () => {
-  it('carries the place, because a spot alone is ambiguous', () => {
-    expect(surprisePromptFor('Oosterpark rolling lawns and monuments', 'amsterdam')).toBe(
-      'Oosterpark rolling lawns and monuments, amsterdam'
+  it('is the authored spot text, and nothing else', () => {
+    expect(surprisePromptFor('Oosterpark rolling lawns and monuments')).toBe(
+      'Oosterpark rolling lawns and monuments'
     );
   });
 
   it('trims pool text rather than emitting ragged whitespace', () => {
-    expect(surprisePromptFor('  a quiet tide pool  ', 'kauai')).toBe('a quiet tide pool, kauai');
+    expect(surprisePromptFor('  a quiet tide pool  ')).toBe('a quiet tide pool');
+  });
+
+  // THE REGRESSION THIS FILE EXISTS FOR. The prompt used to be `spot, location_key`,
+  // and an imagined world's key is a NARRATIVE phrase rather than a place name — so
+  // a people-free spot arrived at Flux as "…, desert canyon standoff" and rendered
+  // two gunslingers squaring up (QA 2026-09-15). The spot text alone is what nightly
+  // has anchored on for months; the place belongs in the forensic stamp, not the
+  // prompt. If someone re-appends it, these fail.
+  it('does not let a narrative world name leak in and cast people', () => {
+    expect(surprisePromptFor('Bryce Canyon Amphitheater at blue hour')).toBe(
+      'Bryce Canyon Amphitheater at blue hour'
+    );
+    for (const key of ['desert canyon standoff', 'outlaw hideout', 'epic battlefield']) {
+      expect(surprisePromptFor('a quiet sandstone gorge at dawn')).not.toContain(key);
+    }
   });
 
   it('names no people', () => {
     // The no-photo route draws from pure_scene_eligible for exactly this reason:
     // those anchors stand on their own with no subject in frame.
-    const out = surprisePromptFor(
-      'Daintree Rainforest ancient tree canopy seen from below',
-      'australia'
-    );
+    const out = surprisePromptFor('Daintree Rainforest ancient tree canopy seen from below');
     expect(out.toLowerCase()).not.toMatch(
       /\b(me|my|we|us|couple|partner|friend|person|people|man|woman|standing|walking)\b/
     );

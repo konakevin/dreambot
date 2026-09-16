@@ -733,7 +733,42 @@ async function handleRequest(req: Request): Promise<Response> {
     // out use_exact_prompt / restyle / new_scene photo / opt-out.
     const smartRollModel = smartDreamApplies(body) && force_model ? force_model : null;
     let medium = await resolveMediumFromDb(medium_key, undefined, smartRollModel);
+    // Keep the key the REQUEST actually resolved to, before the surprise-scene
+    // override below can move it — the unknown-key forensic stamp further down
+    // exists to catch legacy/typo keys, and must not fire on our own override.
+    const requestedMediumKey = medium.key;
     const vibe = await resolveVibeFromDb(vibe_key);
+
+    // ── SURPRISE DREAM: the STYLE has to be people-free too ──────────────
+    // No prompt, no photo, no style reference → the compiler anchors the dream
+    // to an authored people-free spot (see the surprise seed below). The seed
+    // alone is not enough: a portrait-shaped medium re-introduces the person the
+    // route is supposed to exclude. `glamour` opens its own flux fragment with
+    // "dreamy glamour-shot portrait ... lifelike recognizable face", so a spot
+    // like "Moonpetal Bridge, fairy tea party" rendered a fairy WOMAN on the
+    // bridge (QA 2026-09-15) — a people-free seed, a person in the frame. And it
+    // is not a corner case: the sticky default medium is `surprise_me_face`,
+    // which rolls only face-swap mediums, so the no-input Create lands on a
+    // person-shaped style by default.
+    //
+    // So re-roll from the SAME pool nightly's scene-only dreams use
+    // (`dream_eligible_scene` = dream_mediums.is_scene_eligible). A medium the
+    // user picked that is already scene-eligible is kept as-is — the override is
+    // only ever the difference between a style that needs a person and one that
+    // doesn't. Widen/narrow the pool with SQL, no deploy:
+    //   UPDATE dream_mediums SET is_scene_eligible = true WHERE key = 'comics';
+    const isSurpriseSceneRoute =
+      !input_image && !style_prompt && !dlt_recipe && !(rawPrompt ?? hint ?? '').trim();
+    if (isSurpriseSceneRoute && !medium.isSceneEligible) {
+      const sceneMedium = await resolveMediumFromDb('dream_eligible_scene');
+      if (sceneMedium && sceneMedium.key !== medium.key) {
+        fallbackReasons.push(`surprise_medium:${medium.key}→${sceneMedium.key}`);
+        console.log(
+          `[generate-dream] surprise scene: medium ${medium.key} needs a person → ${sceneMedium.key}`
+        );
+        medium = sceneMedium;
+      }
+    }
 
     // DLT: bot mediums carry scene/cast directives that would replace the
     // user's subject. Swap in the STYLE-ONLY cleaned medium (dlt_clean_mediums)
@@ -797,8 +832,8 @@ async function handleRequest(req: Request): Promise<Response> {
     // the user passed an explicit key (not surprise_me/my_mediums/my_vibes)
     // and the resolver had to fall back to a default.
     const surpriseKeys = new Set(['surprise_me', 'my_mediums', 'my_vibes']);
-    if (medium_key && !surpriseKeys.has(medium_key) && medium.key !== medium_key) {
-      fallbackReasons.push(`unknown_medium_key:${medium_key}→${medium.key}`);
+    if (medium_key && !surpriseKeys.has(medium_key) && requestedMediumKey !== medium_key) {
+      fallbackReasons.push(`unknown_medium_key:${medium_key}→${requestedMediumKey}`);
     }
     if (vibe_key && !surpriseKeys.has(vibe_key) && vibe.key !== vibe_key) {
       fallbackReasons.push(`unknown_vibe_key:${vibe_key}→${vibe.key}`);
