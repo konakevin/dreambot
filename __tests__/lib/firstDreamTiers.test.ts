@@ -98,3 +98,49 @@ describe('buildFirstDreamTiers — cascade shape by cast', () => {
     for (const t of tiers) expect(t.body.force_place).toBeUndefined();
   });
 });
+
+describe('a partner +1 forces the romantic pose pool on the first dream', () => {
+  // Kevin 2026-09-15: "if someone chooses a +1 during onboarding and chooses Partner
+  // as relationship type, we force a romantic seed pool/pose."
+  //
+  // Left to the normal roll a couple lands a partner pose only ~13.5% of the time
+  // (DUAL_POOL_MIX_LEGACY: 15% playful, 40% dynamic, then 45% classic x 30%
+  // partnerShare), so the single most important render a user ever sees would pose
+  // them like acquaintances six times out of seven.
+  const pair = (relationship?: string): CastMemberLike[] => [
+    { role: 'self', storage_path: 'u/self.jpg' },
+    { role: 'plus_one', storage_path: 'u/p1.jpg', ...(relationship ? { relationship } : {}) },
+  ];
+  const dual = (cast: CastMemberLike[]) =>
+    buildFirstDreamTiers(cast).find((t) => t.name === 'dual');
+
+  it('forces it for a partner', () => {
+    expect(dual(pair('partner'))?.body.force_dual_pool).toBe('partner');
+  });
+
+  it('forces it for the legacy significant_other value', () => {
+    expect(dual(pair('significant_other'))?.body.force_dual_pool).toBe('partner');
+  });
+
+  it('does NOT force it for a friend, who must never draw the romantic pool', () => {
+    expect(dual(pair('friend'))?.body.force_dual_pool).toBeUndefined();
+  });
+
+  it('does NOT force it when no relationship was set', () => {
+    expect(dual(pair())?.body.force_dual_pool).toBeUndefined();
+  });
+
+  it('only the DUAL tier is affected — the fallbacks have no couple to pose', () => {
+    const tiers = buildFirstDreamTiers(pair('partner'));
+    for (const t of tiers.filter((x) => x.name !== 'dual')) {
+      expect(t.body.force_dual_pool).toBeUndefined();
+    }
+  });
+
+  it('leaves the rest of the dual tier body intact', () => {
+    const body = dual(pair('partner'))?.body;
+    expect(body?.force_cast_role).toBe('dual');
+    expect(body?.force_face_swap_eligible).toBe(true);
+    expect(body?.strict_face_swap).toBe(true);
+  });
+});

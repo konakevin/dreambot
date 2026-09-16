@@ -29,6 +29,8 @@ export interface CastMemberLike {
   thumb_url?: string;
   /** Object path in the PRIVATE `cast-photos` bucket (migration 292). */
   storage_path?: string;
+  /** plus_one only. Decides whether the dual tier forces the romantic pose pool. */
+  relationship?: string;
 }
 
 export interface FirstDreamTier {
@@ -76,7 +78,18 @@ export function buildFirstDreamTiers(cast: CastMemberLike[], place?: string): Fi
     // (the solo-swap guard rejects an invented 2nd person / wrong gender), so give
     // it a second, fresh-rolled shot. Each tier is its own isolate → a different
     // medium/model/pose, so the retry is a genuine second chance, not a re-run.
-    tiers.push({ name: 'dual', body: swapBody('dual') });
+    // A first dream with a PARTNER forces the romantic pose pool. Left to the normal
+    // roll, a couple lands a partner pose only ~13.5% of the time (15% playful, 40%
+    // dynamic, then 45% classic x 30% partnerShare) -- so the single most important
+    // render a user ever sees would show them posed like acquaintances six times out
+    // of seven. Only the DUAL tier: the self/scene fallbacks have no couple to pose.
+    const plusOne = list.find((m) => m.role === 'plus_one');
+    const isPartner =
+      plusOne?.relationship === 'partner' || plusOne?.relationship === 'significant_other';
+    tiers.push({
+      name: 'dual',
+      body: isPartner ? { ...swapBody('dual'), force_dual_pool: 'partner' } : swapBody('dual'),
+    });
     tiers.push({ name: 'self', body: swapBody('self') });
     tiers.push({ name: 'self_retry', body: swapBody('self') });
   } else if (usable(list, 'self')) {
