@@ -48,8 +48,17 @@ export interface PooledLabels {
   faceSwap: string;
 }
 
-/** Before any pixels exist: the render has been claimed but is still resolving. */
-function isOpeningPhase(stage: string | null): boolean {
+/**
+ * Before any pixels exist for the CURRENT tier.
+ *
+ * `status` matters as much as `stage`: when the cascade advances, the orchestrator
+ * puts the row back to 'queued' and the next tier has not stamped a stage yet. A
+ * queued row is by definition not rendering, so it counts as opening whatever stage
+ * it happens to carry -- otherwise a stale breadcrumb from the tier that just failed
+ * would keep showing "Weaving you in" instead of announcing the retry.
+ */
+function isOpeningPhase(status: string | null, stage: string | null): boolean {
+  if (status === 'queued') return true;
   return !stage || stage === 'claimed' || stage === 'resolve';
 }
 
@@ -62,7 +71,7 @@ function isOpeningPhase(stage: string | null): boolean {
  * both explains the restart and keeps moving afterwards.
  */
 export function firstDreamSubtext(p: FirstDreamProgress, pooled: PooledLabels): string {
-  if (isOpeningPhase(p.stage)) {
+  if (isOpeningPhase(p.status, p.stage)) {
     // tierIndex 0 is NOT a fallback even when its tier is named 'scene' — that is
     // simply what someone with no cast photos gets first. Telling them we are
     // "setting the scene instead" would announce a retreat that never happened.

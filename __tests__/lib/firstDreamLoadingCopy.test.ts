@@ -16,8 +16,12 @@ import {
 } from '@/lib/firstDreamLoadingCopy';
 
 const pooled = { early: 'EARLY', render: 'RENDER', faceSwap: 'SWAP' };
-const at = (tierIndex: number, tierName: string | null, stage: string | null = null) =>
-  firstDreamSubtext({ status: 'in_progress', stage, tierIndex, tierName }, pooled);
+const at = (
+  tierIndex: number,
+  tierName: string | null,
+  stage: string | null = null,
+  status = 'in_progress'
+) => firstDreamSubtext({ status, stage, tierIndex, tierName }, pooled);
 
 describe('the opening line', () => {
   it('greets on the very first tier', () => {
@@ -78,5 +82,27 @@ describe('movement WITHIN one render', () => {
   it('treats claimed/resolve as still opening', () => {
     expect(at(1, 'self', 'claimed')).toBe(FALLBACK_RETRY);
     expect(at(1, 'self', 'resolve')).toBe(FALLBACK_RETRY);
+  });
+});
+
+describe('the moment the cascade advances', () => {
+  // The orchestrator re-queues the SAME row: status back to 'queued', payload
+  // tier_index bumped. This is the exact instant the new wording has to appear, and
+  // it is the one the first cut got wrong -- the row still carried the DEAD tier's
+  // current_stage, so the loader would have shown that tier's render label for a
+  // render that no longer existed. Fixed on both sides: the orchestrator now clears
+  // current_stage, and a queued row counts as opening whatever stage it carries.
+  it('announces the retry even while the dead tier stage lingers', () => {
+    expect(at(1, 'self', 'face_swap', 'queued')).toBe(FALLBACK_RETRY);
+    expect(at(2, 'self_retry', 'flux_render', 'queued')).toBe(FALLBACK_CLOSER);
+    expect(at(3, 'scene', 'upload', 'queued')).toBe(FALLBACK_SCENE);
+  });
+
+  it('a queued FIRST tier still just greets', () => {
+    expect(at(0, 'dual', null, 'queued')).toBe(FIRST_DREAM_OPENER);
+  });
+
+  it('once the new tier starts rendering, movement resumes', () => {
+    expect(at(1, 'self', 'flux_render', 'in_progress')).toBe('RENDER');
   });
 });

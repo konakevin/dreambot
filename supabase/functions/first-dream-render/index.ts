@@ -278,6 +278,12 @@ async function advanceTier(
       payload: nextPayload,
       started_at: null,
       worker_id: null,
+      // Clear the DEAD tier's breadcrumb. Without this the row goes back to
+      // 'queued' still claiming current_stage='face_swap' from the tier that just
+      // failed, which lies to anything reading progress -- the in-flight dream UI,
+      // forensics, and the onboarding loader, which would show "Weaving you in"
+      // for a render that no longer exists instead of announcing the retry.
+      current_stage: null,
       last_error: lastError.slice(0, 1000),
     })
     .eq('id', jobId);
