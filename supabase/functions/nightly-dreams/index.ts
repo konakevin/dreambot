@@ -356,6 +356,13 @@ Deno.serve(async (req) => {
     force_cast_role,
     force_medium: force_medium_raw,
     force_look,
+    // QA ONLY (2026-09-16, A/B of LOOKS_MINIMAL). Pins the CONTRACT's look on BOTH the minimal and the full looks
+    // path, without the side effects of `force_look` — which aliases to `force_medium` and therefore SKIPS the
+    // minimal contract build entirely (`if (looksMinimal && modelPolicy && !force_medium)`), silently turning the
+    // looks engine off and comparing the wrong thing. Feeds the SAME `pinnedLook` input both paths already accept,
+    // so it changes nothing about how a render is assembled — it only removes the roll.
+    qa_pin_look,
+    qa_blank_axes,
     force_moods,
     force_awe_beat,
     force_season_month,
@@ -1041,12 +1048,34 @@ Deno.serve(async (req) => {
       // and a pinned vibe. The surface comes from the cast role that was pre-rolled above, so the look is graded
       // for the right surface. Look-first: the look's own approvals pick the model (modelFromLook), never the
       // policy weights — 1.2.0's rule that the medium decides, with Kevin's grades replacing the inherited pin.
-      const contract = await buildMinimalContract();
+      const contract = await buildMinimalContract(
+        qa_pin_look ? { pinnedLook: String(qa_pin_look) } : undefined
+      );
       if (contract) {
         styleContract = contract;
         minimalModel = contract.model;
         fallbackReasons.push('looks_minimal:on', ...contract.stamps);
         await applyMinimalLook(contract, true);
+        // THE VIBE'S OWN TEXT. Minimal hands the 1.2.0 engine a pinned look and a pinned vibe ROW, and 1.2.0's
+        // only vibe route is three mood words at the very tail of the prompt — the weakest position there is. The
+        // authored `dream_vibes.flux_fragment` + `fragment_position` mechanism (231 active rows, 163 with a
+        // position) lives on the FULL looks path, which minimal switches off, so it reached zero renders: measured
+        // 0 of 50 real nightlies across every surface and model, couples and solos alike (2026-09-16).
+        //
+        // That made "the old engine with the new looks AND VIBES" only half true — the look was pinned as the
+        // medium and survived; the vibe was rolled, stamped and gated on, then spent through a channel that barely
+        // moves the render. Carrying these two fields is the whole fix. Deliberately NOT calling
+        // looksSlotInputFields here: that bundle also brings blank axes, look-neutral framing, the rich brief and
+        // the frame roll, which are exactly the looks-path substitutions minimal exists to keep OFF.
+        if (contract.vibe) {
+          looksVibeFragment = contract.vibe.fragment;
+          looksVibePosition = contract.vibe.position;
+          fallbackReasons.push(
+            looksVibeFragment
+              ? `vibe_fragment:minimal:${looksVibePosition ?? 'after_scene'}`
+              : 'vibe_fragment:none'
+          );
+        }
       } else {
         fallbackReasons.push('looks_minimal:no_contract');
       }
@@ -2643,7 +2672,10 @@ Deno.serve(async (req) => {
         legacyPct: engineCfg0.nightlyLegacyLookPct,
         forcedLook: force_look ?? null,
         pinnedLook:
-          dayOfLookKey ?? (holidayScene ? holidayScene.mediumKey : null) ?? dualSceneMediumKey,
+          (qa_pin_look ? String(qa_pin_look) : null) ??
+          dayOfLookKey ??
+          (holidayScene ? holidayScene.mediumKey : null) ??
+          dualSceneMediumKey,
         vibes: toVibeRows(vibeRowsAll),
         recentVibeKeys: recentVibes,
         forcedVibe: force_vibe ?? null,
@@ -3024,9 +3056,12 @@ Deno.serve(async (req) => {
           // Scenario "set at" diet: full seed → Sonnet brief; only the SETTING
           // clause → the assembled prompt's early slot (camel-render fix).
           setAtOverride: dualSpecialScene ? settingClauseOf(dualSpecialScene) : null,
-          timeAxis: dualSpecialScene ? (dualSpecialLighting ?? '') : timeAxis,
-          weatherAxis: dualSpecialScene ? '' : weatherAxis,
-          phenomenaAxis: dualSpecialScene ? '' : phenomenaAxis,
+          // qa_blank_axes: the full looks path blanks these by design and lets the vibe own the atmosphere; on the
+          // minimal path they survive, so a render can carry BOTH (e.g. "Rialto Bridge sunset — low sun
+          // backlighting" AND an aurora fragment). This flag isolates which of the two is steering the render.
+          timeAxis: qa_blank_axes ? '' : dualSpecialScene ? (dualSpecialLighting ?? '') : timeAxis,
+          weatherAxis: qa_blank_axes || dualSpecialScene ? '' : weatherAxis,
+          phenomenaAxis: qa_blank_axes || dualSpecialScene ? '' : phenomenaAxis,
           // On a REAL-WORLD location the biome's WARDROBE anchor is often the
           // traditional/national dress of that culture (China → hanfu/mandarin
           // jacket, Japan → kimono) — feeding it to Sonnet as "on-location attire"
@@ -3110,6 +3145,11 @@ Deno.serve(async (req) => {
                 })()))
               : null,
           ...(looksFields ?? {}),
+          // Minimal carries the vibe fragment even though `looksFields` is null (that bundle is the full looks
+          // path). Placed AFTER the spread so the looks path keeps owning these when it is the one running.
+          ...(looksFields
+            ? {}
+            : { vibeFragment: looksVibeFragment, vibeFragmentPosition: looksVibePosition }),
         };
         // Flux parity arm G: flux couples on the album skeleton render with the 1.2.0 flux override fragment.
         if (

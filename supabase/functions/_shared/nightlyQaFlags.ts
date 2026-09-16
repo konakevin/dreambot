@@ -16,6 +16,14 @@ export interface NightlyQaFlags {
   /** Preserves an explicit null (= "force scene-only, no cast"); undefined when absent. */
   force_cast_role: string | null | undefined;
   force_medium: string | undefined;
+  /** QA ONLY: pin the CONTRACT's look on BOTH the minimal and the full looks path. Unlike `force_look` this does
+   *  NOT alias to force_medium, so it does not skip the minimal contract build — which is what makes an
+   *  A/B of LOOKS_MINIMAL a like-for-like comparison instead of a comparison against a disabled engine. */
+  qa_pin_look: string | undefined;
+  /** QA ONLY: blank the time/weather/phenomena axes on the minimal path, so the render's atmosphere comes from the
+   *  vibe fragment alone. Isolates whether those axes' camera language ("low sun backlighting", "polished
+   *  mirror-bright") is what overrides a painterly look — the full looks path blanks them by design. */
+  qa_blank_axes: boolean;
   /** Pin a catalog LOOK by key (NIGHTLY_LOOKS_REFACTOR_PLAN.md Phase A2): resolves like force_medium AND
    *  exempts the flux-1.1-pro override library so the prompt carries THIS look's fragment; the render
    *  stamps `look:<key>` + `look_source:force`. */
@@ -152,6 +160,8 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
       'force_cast_role' in body ? (body.force_cast_role as string | null) : undefined,
     force_medium: (body.force_medium as string) || undefined,
     force_look: (body.force_look as string) || undefined,
+    qa_pin_look: (body.qa_pin_look as string) || undefined,
+    qa_blank_axes: body.qa_blank_axes === true,
     force_looks_path: body.force_looks_path === true,
     force_plain_brief: body.force_plain_brief === true,
     force_swap_geometry:
