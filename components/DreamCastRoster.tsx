@@ -238,9 +238,21 @@ export function DreamCastRoster() {
       );
       return;
     }
-    if (self) await removeCastFile(self).catch(() => {});
-    removeCastMember('self');
-    await persist();
+    // Same branded confirm the cast rows get. This one is the more consequential of
+    // the two: without a self photo the engine stops casting anyone at all, so every
+    // dream goes scene-only until a new photo is added.
+    showAlert('Remove your photo?', 'You will not appear in your dreams until you add a new one.', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Remove',
+        style: 'destructive',
+        onPress: async () => {
+          if (self) await removeCastFile(self).catch(() => {});
+          removeCastMember('self');
+          await persist();
+        },
+      },
+    ]);
   };
 
   const addNewPartner = () => {
