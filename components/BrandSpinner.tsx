@@ -100,10 +100,11 @@ export const SPIN_MS = 1540;
 /**
  * For spinners that sit on screen for MINUTES rather than flashing past: the album's
  * pending tile waits out a whole render, and at the normal speed a spinner you stare
- * at that long reads frantic rather than busy (Kevin 2026-09-16, "about half as
- * fast"). A short loading flash still wants the quicker default.
+ * at that long reads frantic rather than busy (Kevin 2026-09-16). Landed at 1.6x
+ * after trying 2x, which he called 25% too slow -- so this is 2464ms a rotation.
+ * A short loading flash still wants the quicker default.
  */
-export const SPIN_MS_PATIENT = SPIN_MS * 2;
+export const SPIN_MS_PATIENT = SPIN_MS * 1.6;
 
 export const BrandSpinner = memo(function BrandSpinner({
   size = BASE_SIZE,
