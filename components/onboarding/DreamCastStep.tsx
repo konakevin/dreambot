@@ -616,13 +616,19 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
             ? 'Update the faces that star in your nightly dreams. Swap your photo or your +1 anytime.'
             : 'Add your face and you’ll star in your own nightly dreams. Bring a +1 and you’ll dream together.'}
         </Text>
-        {/* The playful aside gets the accent treatment (echoes the info-screen
-            footnote cadence) instead of hiding inside the gray paragraph. Also
-            the ONE place onboarding names the feature — "Dream Cast" is used
+        {/* The aside gets the accent treatment (echoes the info-screen footnote
+            cadence) instead of hiding inside the gray paragraph.
+            Also the ONE place onboarding names the feature — "Dream Cast" is used
             cold in the Create tutorial + Settings, so it must be taught here. */}
         {!settingsCopy && (
           <Text style={s.funPart}>
-            Your Dream Cast is optional, but trust us, this is where the magic happens ✨
+            {/* Says the permission, then the consequence, and stops. The old line
+                ("trust us, this is where the magic happens ✨") asked for faith
+                instead of giving a reason, and repeated a benefit the headline above
+                had already stated. The ✨ went with it — it was decorating a claim
+                that now stands on its own, right above a pink warning block already
+                competing for the eye. */}
+            Your Dream Cast is optional, but without a photo, you won&apos;t appear in your dreams.
           </Text>
         )}
         <View style={{ height: verticalScale(18) }} />
