@@ -16,6 +16,7 @@ import { supabase } from '@/lib/supabase';
 import { fetchEdge } from '@/lib/edgeFunction';
 import { getDeviceCheckToken } from '@/lib/deviceCheck';
 import type { VibeProfile } from '@/types/vibeProfile';
+import type { FirstDreamProgress } from '@/lib/firstDreamLoadingCopy';
 
 export interface FirstDreamResult {
   url: string;
@@ -72,6 +73,12 @@ interface AwaitOpts {
   intervalMs?: number;
   /** Abort the poll loop (e.g. on unmount). */
   signal?: AbortSignal;
+  /**
+   * Live render progress, so the loader can say something true while it waits.
+   * Read from `dream_queue` (same UUID as the job), which carries both the stage
+   * breadcrumb and the cascade's `tier_index` — `dream_jobs` has neither.
+   */
+  onProgress?: (p: FirstDreamProgress) => void;
 }
 
 /**
@@ -97,6 +104,30 @@ export async function awaitFirstDream(
       )
       .eq('id', jobId)
       .maybeSingle();
+
+    // Progress is best-effort and never gates completion: a failure to read it
+    // must not stall or fail the dream itself.
+    if (opts.onProgress) {
+      const { data: q } = await supabase
+        .from('dream_queue')
+        .select('status, current_stage, payload')
+        .eq('id', jobId)
+        .maybeSingle();
+      if (q) {
+        const payload = (q.payload ?? {}) as {
+          tier_index?: number;
+          tiers?: { name?: string }[];
+        };
+        const tiers = Array.isArray(payload.tiers) ? payload.tiers : [];
+        const tierIndex = typeof payload.tier_index === 'number' ? payload.tier_index : 0;
+        opts.onProgress({
+          status: q.status ?? null,
+          stage: q.current_stage ?? null,
+          tierIndex,
+          tierName: tiers[tierIndex]?.name ?? null,
+        });
+      }
+    }
 
     if (data) {
       if (data.status === 'done' && data.result_image_url) {

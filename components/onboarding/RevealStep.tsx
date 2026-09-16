@@ -30,6 +30,12 @@ import { colors, ui } from '@/constants/theme';
 import { verticalScale, fontScale, verticalScaleClamped } from '@/lib/responsive';
 import { Toast } from '@/components/Toast';
 import { MagicalLoadingStage } from '@/components/MagicalLoadingStage';
+import {
+  firstDreamSubtext,
+  FIRST_DREAM_OPENER,
+  type FirstDreamProgress,
+} from '@/lib/firstDreamLoadingCopy';
+import { pickEarlyLabel, pickRenderLabel, pickFaceSwapLabel } from '@/lib/dreamStageLabels';
 
 const MASCOT = require('@/assets/images/onboarding/mascot-welcome.png');
 
@@ -101,6 +107,18 @@ export function RevealStep({ onBack, isActive = false }: Props) {
   // first dream) starts idle to show its "Save changes" screen.
   const [phase, setPhase] = useState<Phase>(isEditing ? 'idle' : 'generating');
   const [dreams, setDreams] = useState<Dream[]>([]);
+  // Live render progress, so the loader can say something true for the whole wait
+  // instead of one fixed sentence (see lib/firstDreamLoadingCopy.ts).
+  const [progress, setProgress] = useState<FirstDreamProgress | null>(null);
+  // Pooled labels are re-picked PER TIER, not per tick: held stable inside a tier so
+  // the copy does not reshuffle every 2.5s poll, but refreshed when the cascade
+  // advances so a restarted render does not repeat the same words.
+  const tierRef = useRef(-1);
+  const [pooled, setPooled] = useState(() => ({
+    early: pickEarlyLabel(),
+    render: pickRenderLabel(),
+    faceSwap: pickFaceSwapLabel(),
+  }));
   const [activeIndex, setActiveIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
   // Tap the image hides/shows the HUD (post/skip chrome).
@@ -197,6 +215,19 @@ export function RevealStep({ onBack, isActive = false }: Props) {
     setPhase('reveal');
   }
 
+  /** Re-roll the pooled labels whenever the cascade advances to a new tier. */
+  function handleProgress(p: FirstDreamProgress) {
+    setProgress(p);
+    if (p.tierIndex !== tierRef.current) {
+      tierRef.current = p.tierIndex;
+      setPooled({
+        early: pickEarlyLabel(),
+        render: pickRenderLabel(),
+        faceSwap: pickFaceSwapLabel(),
+      });
+    }
+  }
+
   // Poll the first dream that was already enqueued at the cutoff step.
   async function awaitDream(jobId: string) {
     if (awaiting.current) return;
@@ -206,7 +237,10 @@ export function RevealStep({ onBack, isActive = false }: Props) {
     pollAbort.current?.abort();
     pollAbort.current = new AbortController();
     try {
-      const result = await awaitFirstDream(jobId, { signal: pollAbort.current.signal });
+      const result = await awaitFirstDream(jobId, {
+        signal: pollAbort.current.signal,
+        onProgress: handleProgress,
+      });
       if (__DEV__) console.log('[Reveal] Got URL:', result.url?.slice(0, 80));
       showDream(result);
     } catch (err) {
@@ -234,7 +268,10 @@ export function RevealStep({ onBack, isActive = false }: Props) {
       const jobId = await startFirstDream(profile, user.id, engineConfig.welcomeSparkleBonus);
       setFirstDreamJobId(jobId);
       setFirstDreamStatus('enqueued');
-      const result = await awaitFirstDream(jobId, { signal: pollAbort.current.signal });
+      const result = await awaitFirstDream(jobId, {
+        signal: pollAbort.current.signal,
+        onProgress: handleProgress,
+      });
       showDream(result);
     } catch (err) {
       handleDreamError(err);
@@ -451,7 +488,9 @@ export function RevealStep({ onBack, isActive = false }: Props) {
   if (phase === 'booting' || (phase === 'generating' && dreams.length === 0)) {
     return (
       <View style={s.loadingContainer}>
-        <MagicalLoadingStage subtext="DreamBot is conjuring your first dream, hang tight!" />
+        <MagicalLoadingStage
+          subtext={progress ? firstDreamSubtext(progress, pooled) : FIRST_DREAM_OPENER}
+        />
       </View>
     );
   }
