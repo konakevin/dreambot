@@ -498,3 +498,35 @@ Direct fixed-seed Replicate renders (same seed, one change at a time; scratchpad
    turned naturally toward the viewer…" (`LOOKS_SOLO_FRAMING_IN_ANCHOR`, `framingInAnchor`).
 3. **Method:** any "does this clause matter?" question gets 3 fixed seeds × the variants on Replicate directly
    (~$0.04 a render, no DB pool) before the engine is touched; an identical picture means the model never read it.
+
+---
+
+## FOLLOW-UP (queued 2026-09-16): re-test GPT Image 2.5 at a real sample size
+
+**Why this is open.** The 2026-09-16 verdict — "gpt-image-2.5-sunburst renders one look regardless of what
+you ask for" — rests on **n = 1 per (look × arm)**. Two of those single renders were compared and called
+indistinguishable. That is exactly the sample size that misled us on flux the same day: flux looked like a
+coin flip at n=2 and measured **2/9** at n=9. Kevin: renders circulating publicly show 2.5 producing a wide
+range of styles, which is reasonable grounds to doubt the verdict.
+
+**What WAS fairly established, and does not need re-running:**
+- 2.5's arm-A photographs are explained by OUR text — those prompts carried "lifelike adult faces,
+  realistic human facial proportions, true-to-life eyes". 2.5 obeyed it precisely.
+- Arms B and C were verified CLEAN: zero realism/photography words anywhere in the prompt
+  (chromolithograph, classical_oil, pulp_cover, watercolor_portrait). The only exceptions are legitimate —
+  `cinematic_still` arm A, and `technicolor`, whose own look text is "three-strip Technicolor film
+  photograph".
+- 2.5 renders TRUE 9:16 (1152x2048) and costs ~$0.042 at `high`, measured from `usage` — the same as
+  gpt-image-2 at its production setting.
+- The 2.5 tests ran through the looks-matrix harness, which uses forced slots and therefore BYPASSES the
+  framing integration line. So 2.5 was judged on a CLEANER prompt than production actually sends. In
+  production it would inherit the photography prior and likely do worse, not better.
+
+**The test to run.** The same protocol that settled flux, so the numbers are comparable:
+`node scripts/_tmp-look-reliability.js nightly_classical_oil 9` with `force_model=openai/gpt-image-2.5-sunburst`,
+solo, `qa_pin_look`, and the framing fix in place. Count how many render as an oil painting.
+
+- lands ~8/9 → the verdict was wrong, 2.5 belongs in the rotation and needs `image_models` + DreamSmart wiring
+- lands ~2/9 → confirmed at a sample size that supports the claim
+
+**Blocked on:** nothing. Deliberately queued behind the couples run of the `lookNeutralFraming` fix.

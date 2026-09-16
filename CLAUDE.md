@@ -332,6 +332,12 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
   `BOT_AXIS_REFACTOR_PLAN.md`, `BOT_PREFIX_NEED_TO_REVIEW_AND_FIX.md`.
 - **Looks (nightly now, Create's real-face mediums later):** `REAL_FACE_LOOKS_REGISTRY.md` (LIVE registry of
   proven look × model × surface results; generated matrix), `NIGHTLY_LOOKS_REFACTOR_PLAN.md`, `NIGHTLY_LOOK_TALLY.md`.
+- **Look/vibe fidelity (READ BEFORE debugging why a nightly ignores its look or vibe):**
+  `NIGHTLY_LOOK_FIDELITY_INVESTIGATION.md` — measured 2026-09-16: the vibe fragment reached 0 of 50
+  nightlies, and a pinned look rendered correctly only 2 of 9 times because the framing boilerplate says
+  "photograph" 3× after naming the look. BOTH fixes already existed and were switched off by
+  `LOOKS_MINIMAL`. Five hypotheses tested, three rejected with renders — check the ledger before re-running
+  any of them.
 - **Engine + scaling:** `QUEUE_WORKERS_REFACTOR.md` (queue status of record + Fly scale runbook),
   `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_IMPRESS_PLAN.md` (always-impress backlog: quality gate, legendary dreams, holidays, weather, pets, taste, arcs — each handoff-ready), `NIGHTLY_SEED_POOL_QA.md`, `NIGHTLY_FUN_SCENARIOS_PLAN.md` (fun/fantasy
   scenario buckets + Option B location-fit actions — LIVE, playbook for adding/scaling/tuning),
