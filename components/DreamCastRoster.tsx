@@ -547,6 +547,22 @@ export function DreamCastRoster() {
                   </>
                 )}
               </View>
+            ) : busy === 'self' ? (
+              // A FIRST self photo used to render a lone spinner INSIDE the upload
+              // button, which `anyBusy && opacity 0.4` then faded to 40% -- the one
+              // element reporting progress was the one being dimmed, so it read as
+              // broken. This mirrors what adding a loved one already does: the picked
+              // photo appears instantly with an analysing spinner over it, at full
+              // opacity, with a line of text saying what is happening.
+              <View style={[s.member, s.row]}>
+                <CastThumb uriOverride={pending?.key === 'self' ? pending.uri : undefined} busy />
+                <View style={s.info}>
+                  <Text style={s.name}>You</Text>
+                  <Text style={s.status}>
+                    {pending?.key === 'self' ? 'Analyzing your photo…' : 'Opening your photos…'}
+                  </Text>
+                </View>
+              </View>
             ) : (
               <TouchableOpacity
                 style={[s.member, s.uploadButton, anyBusy && { opacity: 0.4 }]}
@@ -554,14 +570,8 @@ export function DreamCastRoster() {
                 disabled={anyBusy}
                 activeOpacity={0.7}
               >
-                {busy === 'self' ? (
-                  <ActivityIndicator size="small" color={colors.accent} />
-                ) : (
-                  <>
-                    <Ionicons name="camera" size={18} color={colors.accent} />
-                    <Text style={s.uploadButtonText}>Upload your photo</Text>
-                  </>
-                )}
+                <Ionicons name="camera" size={18} color={colors.accent} />
+                <Text style={s.uploadButtonText}>Upload your photo</Text>
               </TouchableOpacity>
             )}
           </View>
