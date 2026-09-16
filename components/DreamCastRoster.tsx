@@ -342,7 +342,10 @@ export function DreamCastRoster() {
     // while the cast was parked (legal), then switch someone back on and land in the
     // state where the engine quietly ignores them.
     if (on && !self) {
-      Toast.show('Add your photo first. Every dream stars you.', 'camera-outline', 4000);
+      // Not "every dream stars you" — a dream can roll face_swap_plus_one and star the
+      // +1 alone. What IS always true is the mechanic: with no self photo chaosTier
+      // drops to scene territory and nobody gets cast at all.
+      Toast.show('Add your photo first. Without it, nobody gets cast.', 'camera-outline', 4000);
       return;
     }
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
