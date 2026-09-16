@@ -285,16 +285,32 @@ export function RevealStep({ onBack, isActive = false }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isActive]);
 
-  // When the background kickoff produces a jobId AFTER we've reached the reveal,
-  // start awaiting it. Gated on isActive so it never polls from the pre-mounted
-  // (off-screen) instance.
+  // Await the job once we've reached the reveal, and KEEP CHECKING that we are.
+  // Gated on isActive so it never polls from the pre-mounted (off-screen) instance.
+  //
+  // This was a one-shot effect keyed on [firstDreamJobId, isActive] while its BODY
+  // read phase / awaiting.current / dreams.length. So it got exactly two chances to
+  // start the poll, and if neither landed -- awaiting.current still true from an
+  // earlier attempt, or phase not yet 'generating' when the jobId arrived -- nothing
+  // ever tried again. With no poll running there is also no 5-minute timeout to fail,
+  // so the loader sat forever on a dream that had ALREADY finished rendering: no
+  // error, no retry, no way out. (Kevin hit exactly this: job done with an image at
+  // 00:47:31, screen still spinning minutes later.)
+  //
+  // Now it re-checks on a short interval, so a missed start heals itself in one tick.
+  // awaitDream is idempotent (it no-ops while a poll is in flight), so the retry can
+  // never stack pollers.
   useEffect(() => {
     if (isEditing || !isActive) return;
-    if (firstDreamJobId && phase === 'generating' && !awaiting.current && dreams.length === 0) {
-      void awaitDream(firstDreamJobId);
-    }
+    if (!firstDreamJobId || phase !== 'generating' || dreams.length > 0) return;
+    const tryStart = () => {
+      if (!awaiting.current) void awaitDream(firstDreamJobId);
+    };
+    tryStart();
+    const t = setInterval(tryStart, 3000);
+    return () => clearInterval(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [firstDreamJobId, isActive]);
+  }, [firstDreamJobId, isActive, isEditing, phase, dreams.length]);
 
   // (End-of-onboarding bookkeeping — welcome sparkles + completion + welcome-gift
   // notification — now runs in lib/firstDreamKickoff.startFirstDream at the cutoff
