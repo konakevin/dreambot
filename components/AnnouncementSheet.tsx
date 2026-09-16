@@ -22,7 +22,7 @@ import * as nav from '@/lib/navigate';
 import type { Announcement } from '@/hooks/useAnnouncement';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
-import { TitleText } from '@/components/TitleText';
+import { GradientTitle } from '@/components/GradientTitle';
 import { GradientButton } from '@/components/GradientButton';
 
 interface Props {
@@ -87,10 +87,14 @@ export function AnnouncementSheet({ announcement, onClose }: Props) {
       <View style={s.overlay}>
         <View style={s.card}>
           <View style={s.titleWrap}>
-            {/* Solid, not the animated gradient. The CTA below is already the full
-                brand gradient, so a gradient headline on top of it made the card two
-                competing rainbows. TitleText keeps the same brand display face. */}
-            <TitleText size={22}>{titleText}</TitleText>
+            {/* The STATIC brand gradient, not the animated one. The rotating version
+                made the headline shimmer against an already-gradient CTA; the fixed
+                gradient keeps the brand identity without anything moving.
+                numberOfLines 2 because GradientTitle defaults to 1 and would silently
+                truncate a longer announcement title rather than wrap it. */}
+            <GradientTitle size={22} numberOfLines={2}>
+              {titleText}
+            </GradientTitle>
             {/* A trailing emoji renders OUTSIDE the gradient mask. Masked, it gets
                 repainted in the gradient and loses its own colours entirely, so a
                 clapper came out teal instead of the grey and white it actually is. */}
