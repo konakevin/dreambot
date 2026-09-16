@@ -198,11 +198,24 @@ import { enabledPartners, rollPartner, mirrorPartnerIntoCast } from '../_shared/
 // pick (face-swap + scene) and the downstream ban-gate backstop share one list.
 const NIGHTLY_BANNED_MODELS: ReadonlySet<string> = new Set([
   'black-forest-labs/flux-2-dev',
-  // TEMPORARILY DISABLED from nightly (Kevin, 2026-08-25): gpt-image-2 renders
-  // WIDE images that don't fit the app's portrait dimensions (seen on solos AND
-  // couple/dual dreams across mediums), and it's slow (150s IDLE_TIMEOUTs). Global
-  // ban covers the general rotation; the lego/pixels pins below are also unpinned.
-  // Re-enable when the wide-aspect behavior is resolved.
+  // PERMANENTLY banned from nightly. Disabled 2026-08-25 (Kevin) because gpt-image-2 renders WIDE images
+  // that don't fit the app's portrait dimensions — seen on solos AND couples, across mediums — and because
+  // it is slow (150s IDLE_TIMEOUTs). That note said "re-enable when the wide-aspect behavior is resolved".
+  //
+  // IT CANNOT BE RESOLVED (root-caused 2026-09-16). It is not the model misbehaving, it is the OpenAI
+  // Images API: gpt-image-1/2 accept `size` only from a fixed enum — 1024x1024 / 1024x1536 / 1536x1024.
+  // The closest portrait is 1024x1536 = 2:3 = 0.667, and the app's cards are 9:16 = 0.563. So EVERY
+  // gpt-image-2 render is genuinely wider than the frame; we pick the least-wrong option and display
+  // crops or letterboxes it. No parameter changes this. Do not spend time trying.
+  //
+  // gpt-image-2.5 is the version that clears this: its API takes ARBITRARY WIDTHxHEIGHT (probed — '9:16'
+  // as a string is rejected, but 1152x2048 and 2160x3840 return 200), so it renders true 9:16 natively.
+  // See providers/openai.ts for the per-model size default. Its SPEED is unmeasured, and 150s timeouts
+  // would be just as fatal here, so measure that before adopting it. Look-catalogue re-test is queued in
+  // NIGHTLY_LOOKS_REFACTOR_PLAN.md.
+  //
+  // (The first-dream ban further down is SEPARATE and about latency only — 60-120s vs the onboarding
+  // loading screen — so it would still apply to any slow model, 2.5 included.)
   'openai/gpt-image-2',
   // BANNED from nightly (Kevin, 2026-08-26): flux-2-pro renders read cheesy /
   // AI-slop on cast dreams (over-impasto on painterly mediums, plasticky on
