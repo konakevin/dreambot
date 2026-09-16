@@ -33,3 +33,17 @@ jobs:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: node scripts/nightly-dreams.js
+
+      # Guards the share of nightlies that render a COMMUNITY SCENARIO instead of one of
+      # the dreamer's own saved places. That split lives in an engine_config ROW, so it
+      # can be changed from the dashboard with no commit and no review — which is exactly
+      # how it reached 50% without anyone deciding it (migration 519). CI guards every
+      # copy in the repo but cannot see the table; this is the half that watches the table.
+      #
+      # `if: always()` so a config breach emails loudly but can NEVER block dreams from
+      # going out — the enqueue above has already run by this point.
+      - name: Check community-scenario share
+        if: always()
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/check-scenario-share.js --quiet

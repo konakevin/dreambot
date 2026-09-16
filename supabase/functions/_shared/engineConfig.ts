@@ -183,13 +183,20 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   faceRestoreFidelity: 0.9,
   identityDegradeFloor: 0.25,
   dualActionPosePct: 0,
-  dualSceneGoofyPct: 20,
-  dualSceneElegantPct: 20,
-  dualSceneActivePct: 0,
+  // COMMUNITY SCENARIO SHARE — goofy + elegant + active must total <= 20 (migration 519,
+  // scripts/lib/scenarioShare.js SCENARIO_SHARE_CEILING_PCT). These three pools REPLACE the
+  // dreamer's own saved place, so their total is the share of nightlies that are NOT about
+  // where the dreamer asked to go. This block is the fallback used when the engine_config
+  // read FAILS — it sat at 20/20/0 (40%) long after the live row moved, which is precisely
+  // how a "safe default" becomes a third divergent copy of a tuned number. Locked by
+  // __tests__/lib/scenarioShare.test.ts.
+  dualSceneGoofyPct: 6,
+  dualSceneElegantPct: 6,
+  dualSceneActivePct: 8,
   singleActionPosePct: 0,
-  singleSceneGoofyPct: 20,
-  singleSceneElegantPct: 20,
-  singleSceneActivePct: 0,
+  singleSceneGoofyPct: 6,
+  singleSceneElegantPct: 6,
+  singleSceneActivePct: 8,
   singleGenderedBoostPct: 0,
   singleCompositionExpandedPct: 0,
   femaleHairVariationPct: 0,

@@ -255,8 +255,20 @@ export const LOOKS_SCENE_ACTION_PCT_COUPLE = 35;
  *  and the recipe average fell to 3.75, so round 10 returns to the 40% rounds 5-8 ran on. */
 export const LOOKS_FRAMING_PCT = 40;
 /** Round 2: the album leans on the COSTUME rows (goofy / elegant carry attire + a dressed scene); active rows gave
- *  static solos in round 1 (the generic "caught mid-action" anchor). Looks-path scene mix vs config 15/15/20. */
-export const LOOKS_SCENE_PCTS = { goofy: 20, elegant: 25, active: 15 } as const;
+ *  static solos in round 1 (the generic "caught mid-action" anchor) — hence elegant highest, active lowest.
+ *
+ *  RESCALED 2026-09-16 from 20/25/15 (=60%) to hold the community-scenario ceiling of 20% (migration 519,
+ *  scripts/lib/scenarioShare.js). The RELATIVE emphasis round 2 measured is preserved exactly — elegant > goofy >
+ *  active, same proportions — only the total moved, because these three pools REPLACE the dreamer's saved place
+ *  and 60% meant a looks-path dreamer would see their own places on just 40% of nights.
+ *
+ *  This constant is DORMANT while LOOKS_MINIMAL is true, which is the reason it needed catching rather than a
+ *  reason to skip it: flipping the looks path on would silently have taken the community share 20% -> 60% with no
+ *  config change and no stamp. Two separate fixes have already been found dead behind that same flag.
+ *
+ *  If the looks path is turned on and album quality regresses against the round-5..7 medians, this is a known
+ *  variable to revisit FIRST — but revisit it by moving the ceiling deliberately, not by editing this line. */
+export const LOOKS_SCENE_PCTS = { goofy: 7, elegant: 8, active: 5 } as const;
 /** Round 3: graphic looks shipped solos at 0.48-0.62 likeness (the engine's floor is 0.35). On the looks path a
  *  solo below this gets the existing one-shot re-swap on the same base render (the better of the two ships). */
 export const LOOKS_SOLO_IDENTITY_MIN = 0.5;
