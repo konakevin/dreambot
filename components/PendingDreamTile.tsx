@@ -9,7 +9,7 @@
 
 import { memo } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { BrandSpinner } from '@/components/BrandSpinner';
+import { BrandSpinner, SPIN_MS_PATIENT } from '@/components/BrandSpinner';
 import { ProgressRing } from '@/components/ProgressRing';
 import { colors } from '@/constants/theme';
 import { TILE_WIDTH, TILE_HEIGHT } from '@/constants/grid';
@@ -53,7 +53,7 @@ export const PendingDreamTile = memo(
           />
           {state === 'active' ? (
             <View style={styles.center} pointerEvents="none">
-              <BrandSpinner size={26} />
+              <BrandSpinner size={26} durationMs={SPIN_MS_PATIENT} />
             </View>
           ) : null}
         </View>

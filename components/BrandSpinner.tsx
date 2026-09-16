@@ -95,11 +95,26 @@ const BASE_SIZE = 44;
 // timer (the album pending tile ticks its progress every 400ms) reconciles all
 // 8 animated dots each tick, re-attaching their worklets mid-spin — which read
 // as a stutter (Kevin 2026-07-23 "very janky, doesn't spin smoothly").
-export const BrandSpinner = memo(function BrandSpinner({ size = BASE_SIZE }: { size?: number }) {
+/** One rotation, ms. 1540 ≈ 10% slower than the original 1400 (Kevin 2026-07-09). */
+export const SPIN_MS = 1540;
+/**
+ * For spinners that sit on screen for MINUTES rather than flashing past: the album's
+ * pending tile waits out a whole render, and at the normal speed a spinner you stare
+ * at that long reads frantic rather than busy (Kevin 2026-09-16, "about half as
+ * fast"). A short loading flash still wants the quicker default.
+ */
+export const SPIN_MS_PATIENT = SPIN_MS * 2;
+
+export const BrandSpinner = memo(function BrandSpinner({
+  size = BASE_SIZE,
+  durationMs = SPIN_MS,
+}: {
+  size?: number;
+  durationMs?: number;
+}) {
   const spin = useSharedValue(0);
   useEffect(() => {
-    // 1540ms ≈ 10% slower than the original 1400 (Kevin 2026-07-09).
-    spin.value = withRepeat(withTiming(1, { duration: 1540, easing: Easing.linear }), -1);
+    spin.value = withRepeat(withTiming(1, { duration: durationMs, easing: Easing.linear }), -1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const ringStyle = useAnimatedStyle(() => ({
