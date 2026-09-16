@@ -335,7 +335,11 @@ describe('the nightly engine is actually wired to the roll', () => {
     // rolled_axes.partnerId is BOTH the input (recentPartnerIds) and the output (logAxes.partnerId).
     // Break either half and the rotation degrades to uniform random without any error.
     expect(NIGHTLY_SRC).toContain('(l.rolled_axes as Record<string, unknown>)?.partnerId');
-    expect(NIGHTLY_SRC).toContain('if (rolledPartnerId) logAxes.partnerId = rolledPartnerId;');
+    // The OUTPUT half moved (2026-09-16): the stamp now sits just before the log insert and is gated on
+    // the +1 actually having rendered, so a solo night or a degraded couple no longer burns a turn.
+    expect(NIGHTLY_SRC).toContain(
+      'if (rolledPartnerId && plusOneReachedPixels) logAxes.partnerId = rolledPartnerId;'
+    );
   });
 
   it('only touches the cast when the user actually has a roster', () => {
@@ -361,5 +365,57 @@ describe('client and engine agree on who is ticked', () => {
         expect(clientIsPartnerEnabled(client, activeId)).toBe(isPartnerEnabled(server, activeId));
       }
     }
+  });
+});
+
+/**
+ * THE ROTATION'S MEMORY MUST RECORD REALITY (2026-09-16).
+ *
+ * `rolled_axes.partnerId` is both the OUTPUT of tonight's roll and the INPUT to tomorrow's recency window,
+ * so stamping it means "this person has had their turn". It used to be stamped right after the model pick —
+ * before couple-vs-solo was decided and long before the swap ran — so a turn was consumed by nights where
+ * the +1 never appeared: a solo night, or a couple that degraded to a solo (21% of production couples).
+ *
+ * On a 5-person roster with solo-heavy nights, someone's turn could be spent on a dream they were not in
+ * and they would wait another full cycle. There is no error to see — just a +1 who never shows up.
+ */
+describe('a turn is only consumed when the +1 actually rendered', () => {
+  const SRC = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'supabase', 'functions', 'nightly-dreams', 'index.ts'),
+    'utf8'
+  );
+
+  it('gates the stamp on the +1 reaching the pixels', () => {
+    expect(SRC).toContain('const plusOneReachedPixels =');
+    expect(SRC).toContain('if (rolledPartnerId && plusOneReachedPixels) logAxes.partnerId');
+  });
+
+  it('counts a dual AND a plus-one solo, since both show the +1', () => {
+    const block = SRC.slice(
+      SRC.indexOf('const plusOneReachedPixels ='),
+      SRC.indexOf('const genLogId')
+    );
+    expect(block).toContain("'face_swap_dual'");
+    expect(block).toContain("'face_swap_plus_one'");
+  });
+
+  it('does NOT count a render that degraded away the +1', () => {
+    const block = SRC.slice(
+      SRC.indexOf('const plusOneReachedPixels ='),
+      SRC.indexOf('const genLogId')
+    );
+    expect(block).toMatch(/dual_degrade_single/);
+    expect(block).toMatch(/solo_rebuild/);
+  });
+
+  it('never stamps at the old site, before the composition and swap are known', () => {
+    // The bug was `logAxes.model = pickedModel; if (rolledPartnerId) logAxes.partnerId = …` — the stamp
+    // sitting next to the model pick, which happens before any of this is decided.
+    expect(SRC).not.toMatch(/logAxes\.model = pickedModel;\s*\n\s*if \(rolledPartnerId\)/);
+  });
+
+  it('leaves a breadcrumb when a turn is deliberately not consumed', () => {
+    // Without this, "the rotation did not advance" is indistinguishable from "the roll never ran".
+    expect(SRC).toContain('partner_turn_not_consumed');
   });
 });

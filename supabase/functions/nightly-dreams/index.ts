@@ -4108,7 +4108,9 @@ Output ONLY the prompt.`;
     pickedModel = fallback;
   }
   logAxes.model = pickedModel;
-  if (rolledPartnerId) logAxes.partnerId = rolledPartnerId;
+  // NOTE: partnerId is deliberately NOT stamped here. It is the rotation's memory, so it must record
+  // whether the +1 actually REACHED THE PIXELS — which is not known until after the swap. Stamped just
+  // before the log insert instead. See there.
 
   // ── GPT-Image-2 cleanup ──────────────────────────────────────────────
   // GPT-Image-2 reads most of our personalized-dream prompts (medium
@@ -5227,6 +5229,28 @@ Output ONLY the prompt.`;
       fallbackReasons.push(
         ...assertStyleHonesty(finalPrompt, modelUsedOverride ?? pickedModel, activeStyle)
       );
+    /**
+     * THE +1 ROTATION'S MEMORY (2026-09-16). `rolled_axes.partnerId` is both the OUTPUT of tonight's roll
+     * and the INPUT to tomorrow's recency window, so stamping it means "this person has had their turn".
+     *
+     * It used to be stamped right after the model pick — before the composition was decided and long before
+     * the swap ran — so a turn was consumed by nights where the +1 never appeared at all:
+     *   • a SOLO night (the roll runs whenever the user has a roster, before couple-vs-solo is chosen), and
+     *   • a couple that DEGRADED to a solo, which is 21% of production couples.
+     * On a roster of 5 with solo-heavy nights, someone's turn could be spent on a dream they were not in,
+     * and they would wait another full cycle. Nobody would see a bug — just a +1 who "never shows up".
+     *
+     * So the turn is now recorded only when the partner actually rendered: a dual or a plus-one-solo that
+     * did NOT degrade. Anything else leaves the rotation untouched and that person stays next in line.
+     */
+    const plusOneReachedPixels =
+      (logAxes.dreamType === 'face_swap_dual' || logAxes.dreamType === 'face_swap_plus_one') &&
+      !fallbackReasons.some((r) =>
+        /dual_degrade_single|degrade_solo_multi_face|solo_rebuild/.test(String(r))
+      );
+    if (rolledPartnerId && plusOneReachedPixels) logAxes.partnerId = rolledPartnerId;
+    else if (rolledPartnerId) fallbackReasons.push('partner_turn_not_consumed');
+
     const genLogId = crypto.randomUUID();
     const persistPromise = outBuf
       ? persistBufferToStorage(outBuf, userId, supabase)
