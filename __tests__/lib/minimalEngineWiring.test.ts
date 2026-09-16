@@ -52,15 +52,15 @@ describe('the locked engine is wired the way the summary says', () => {
   });
 
   // 2026-09-16: grok removed from nightly entirely ("consistently makes ugly renders"), so the pool is two
-  // models, and the direct share went 0.5 → 0.7 (Kevin: "70% go straight to flux, and the other is a 50/50
-  // roll for flux or gemini 2"). The remainder rolls UNIFORMLY over the pool, so a 2-model pool IS the 50/50
-  // he asked for. Net flux 0.70 + 0.30 x 0.50 = 85%, gemini-2 15%.
-  it('CLAIM: 70% direct to the primary, the rest rolled evenly over the pool', () => {
+  // models. Direct share settled at 0.5 (Kevin: "make flux 50% and then from there it's a 50/50 roll"),
+  // having briefly been 0.7. The remainder rolls UNIFORMLY over the pool, so a 2-model pool IS the 50/50.
+  // Net flux 0.50 + 0.50 x 0.50 = 75%, gemini-2 25%.
+  it('CLAIM: 50% direct to the primary, the rest rolled evenly over the pool', () => {
     expect(LOOKS_ALL_MODELS).toBe(true);
-    expect(PRIMARY_DIRECT_SHARE).toBe(0.7);
+    expect(PRIMARY_DIRECT_SHARE).toBe(0.5);
     // The arithmetic Kevin asked for, stated so a future edit to either number is checked against intent.
     const fluxShare = PRIMARY_DIRECT_SHARE + (1 - PRIMARY_DIRECT_SHARE) * 0.5;
-    expect(Number(fluxShare.toFixed(2))).toBe(0.85);
+    expect(Number(fluxShare.toFixed(2))).toBe(0.75);
   });
 
   it('the minimal roll never runs behind a QA force_medium, which would fight the pin', () => {
