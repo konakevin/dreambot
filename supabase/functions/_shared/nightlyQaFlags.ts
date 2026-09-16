@@ -24,6 +24,18 @@ export interface NightlyQaFlags {
    *  vibe fragment alone. Isolates whether those axes' camera language ("low sun backlighting", "polished
    *  mirror-bright") is what overrides a painterly look — the full looks path blanks them by design. */
   qa_blank_axes: boolean;
+  /** QA ONLY: which variant of the look's fragment to send.
+   *   'default'  face_swap_flux_fragment — ships today; wedges "lifelike adult faces, realistic human facial
+   *              proportions with true-to-life eyes" BETWEEN the style noun and the style's own description.
+   *   'plain'    flux_fragment — the style, with no face clause at all.
+   *   'geometry' flux_fragment + the geometric constraint the swap detector needs, with every word that asserts
+   *              "photograph" removed. The candidate fix. */
+  qa_fragment_mode: 'default' | 'plain' | 'geometry';
+  /** QA ONLY: set `lookNeutralFraming` on the MINIMAL path. That flag drops the legacy integration line's
+   *  photography prior — "the clear subject of a candid cinematic photograph", "a relaxed warm editorial
+   *  photograph", "photographic realism, filmic colour" — which follow the look in the prompt and outnumber it
+   *  3 to 1. It is set today only inside looksSlotInputFields, i.e. only on the full looks path. */
+  qa_look_neutral_framing: boolean;
   /** Pin a catalog LOOK by key (NIGHTLY_LOOKS_REFACTOR_PLAN.md Phase A2): resolves like force_medium AND
    *  exempts the flux-1.1-pro override library so the prompt carries THIS look's fragment; the render
    *  stamps `look:<key>` + `look_source:force`. */
@@ -162,6 +174,11 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
     force_look: (body.force_look as string) || undefined,
     qa_pin_look: (body.qa_pin_look as string) || undefined,
     qa_blank_axes: body.qa_blank_axes === true,
+    qa_fragment_mode:
+      body.qa_fragment_mode === 'plain' || body.qa_fragment_mode === 'geometry'
+        ? body.qa_fragment_mode
+        : 'default',
+    qa_look_neutral_framing: body.qa_look_neutral_framing === true,
     force_looks_path: body.force_looks_path === true,
     force_plain_brief: body.force_plain_brief === true,
     force_swap_geometry:

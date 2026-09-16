@@ -363,6 +363,8 @@ Deno.serve(async (req) => {
     // so it changes nothing about how a render is assembled — it only removes the roll.
     qa_pin_look,
     qa_blank_axes,
+    qa_fragment_mode,
+    qa_look_neutral_framing,
     force_moods,
     force_awe_beat,
     force_season_month,
@@ -1037,6 +1039,20 @@ Deno.serve(async (req) => {
         return false;
       }
       nightlyMedium = pinned;
+      // qa_fragment_mode: swap the look's face-swap fragment for a variant. The shipped fragment wedges
+      // "…with lifelike adult faces, realistic human facial proportions with true-to-life eyes at natural size
+      // and spacing…" BETWEEN the style noun and the style's own description, so flux reads "classical oil
+      // painting", then 110 characters of make-it-photoreal, then the brushwork. Measured 2026-09-16: a pinned
+      // classical_oil rendered as a photograph in 7 of 9 production renders.
+      if (qa_fragment_mode !== 'default') {
+        const plain = pinned.fluxFragment;
+        const swapped =
+          qa_fragment_mode === 'geometry'
+            ? `${plain}, adult facial proportions, eyes at natural size and spacing`
+            : plain;
+        nightlyMedium = { ...pinned, faceSwapFluxFragment: swapped };
+        fallbackReasons.push(`qa_fragment_mode:${qa_fragment_mode}`);
+      }
       if (withVibe && contract.vibe) {
         const pinnedVibe = await resolveVibeFromDb(contract.vibe.vibe.key);
         if (pinnedVibe) nightlyVibe = pinnedVibe;
@@ -3149,7 +3165,32 @@ Deno.serve(async (req) => {
           // path). Placed AFTER the spread so the looks path keeps owning these when it is the one running.
           ...(looksFields
             ? {}
-            : { vibeFragment: looksVibeFragment, vibeFragmentPosition: looksVibePosition }),
+            : {
+                vibeFragment: looksVibeFragment,
+                vibeFragmentPosition: looksVibePosition,
+                // LOOK-NEUTRAL FRAMING ON SOLOS (2026-09-16). The legacy integration line says
+                // "photograph" three times AFTER the look — "the clear subject of a candid cinematic
+                // photograph", "a relaxed warm editorial photograph", "photographic realism, filmic
+                // colour" — so a painted look is outnumbered 3:1 in its own prompt and flux obeys the
+                // majority. `lookNeutralFraming` drops that prior and lets the look's own fragment own
+                // the finish; it is set today only inside looksSlotInputFields, i.e. only on the FULL
+                // looks path, which LOOKS_MINIMAL switches off. So the fix existed, was correct, and
+                // shipped disabled — the same shape as the vibe fragment above.
+                //
+                // MEASURED on a pinned nightly_classical_oil, flux-1.1-pro, solo, 9 renders per arm:
+                //   off (production today) → 2/9 rendered as an oil painting
+                //   on                     → 7/9
+                // Three other hypotheses were tested and rejected first: the flux-couple album skeleton
+                // (inert under minimal), the atmospheric axes (within-arm variance exceeded the effect),
+                // and the face-realism clause in the fragment (0/3 with it removed).
+                //
+                // SOLO ONLY, deliberately. Couples carry the parity-loop framing work and are untested
+                // here; extending this to them needs its own run. `qa_look_neutral_framing` forces it on
+                // for QA regardless of surface.
+                ...(qa_look_neutral_framing || selectedCast.length === 1
+                  ? { lookNeutralFraming: true }
+                  : {}),
+              }),
         };
         // Flux parity arm G: flux couples on the album skeleton render with the 1.2.0 flux override fragment.
         if (
