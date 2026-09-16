@@ -52,6 +52,13 @@ export const MODEL_SPARKLE_COSTS: Record<string, number> = {
   'bytedance/seedream-4': 1, // ~$0.030 (2K, restyle editor 2026-07-06)
   'google/gemini-2-image': 1, // Nano Banana ~$0.039
   'xai/grok-imagine-image': 1, // Grok Imagine ~$0.02 (1k)
+  // GPT Image 2.5 (2026-09-16). MEASURED, not estimated: $30/1M output tokens ×
+  // 1413 tokens at our 1152x2048/high default = $0.042 — the same cost as
+  // gpt-image-2 at its 1024x1536/medium (1372 tokens, $0.041), for a larger and
+  // correctly-shaped 9:16 frame. Both variants price identically; they differ in
+  // speed vs edit precision, not rate.
+  'openai/gpt-image-2.5-flare': 1, // ~$0.042 at high
+  'openai/gpt-image-2.5-sunburst': 1, // ~$0.042 at high
   sdxl: 1, // ~$0.020
 
   // ── 2 sparkles — ~$0.05–0.065/img ─────────────────────────────────────
@@ -102,7 +109,12 @@ export const MODEL_COST_CENTS: Record<string, number> = {
 
   // ── OpenAI — gpt-image medium quality, portrait (~$0.05–0.08) ──────────
   'openai/gpt-image-1': 7, // ~$0.07 (deprecating Oct 2026)
-  'openai/gpt-image-2': 6, // ~$0.06
+  // Measured 2026-09-16 at our production call (1024x1536, medium): 1372 output
+  // tokens × $30/1M = $0.041. The old 6¢ was an estimate; this is the invoice.
+  'openai/gpt-image-2': 4, // ~$0.041 (measured; was 6 — over-estimate)
+  // Measured the same way at 1152x2048/high: 1413 tokens = $0.042.
+  'openai/gpt-image-2.5-flare': 4, // ~$0.042 at high ($0.011 at medium)
+  'openai/gpt-image-2.5-sunburst': 4, // ~$0.042 at high ($0.011 at medium)
 
   // ── xAI (Grok) — grok-imagine-image 1k (~$0.02) ───────────────────────
   'xai/grok-imagine-image': 2, // ~$0.02
