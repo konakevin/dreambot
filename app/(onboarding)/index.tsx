@@ -60,9 +60,11 @@ function NightlyInfoStep(p: Parameters<StepComponent>[0]) {
       {...NIGHTLY_INFO}
       // "keep them going for as long as you like" never mentioned that a decision
       // exists at the end, so it read as though the dreams simply continue free. This
-      // names the moment. Dropped "no strings" as well: it set up a reassurance the
-      // old line then never delivered, and "no pressure" does that job once.
-      body={`${NIGHTLY_INFO.body}\n\nYour first ${proTrialDays} nights of dreaming are free. When the trial ends you decide whether to keep going. No pressure.`}
+      // names the moment, and says up front that starting costs nothing -- true: the
+      // trial is granted by the signup trigger (migration 176), nothing touches
+      // RevenueCat until a user chooses to subscribe, so there is no card to take and
+      // nothing to cancel.
+      body={`${NIGHTLY_INFO.body}\n\nYour first ${proTrialDays} nights of dreaming are free. No card, nothing to cancel. When the trial ends you decide whether to keep going. No pressure.`}
       {...p}
     />
   );
