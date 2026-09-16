@@ -64,13 +64,12 @@ export default function WelcomeGiftScreen() {
   const mascot = useMemo(() => MASCOTS[Math.floor(Math.random() * MASCOTS.length)], []);
   const insets = useSafeAreaInsets();
   const { welcomeSparkleBonus, proTrialDays } = useEngineConfig();
-  // Prefer "N WEEKS" framing when the trial is a clean week multiple (Kevin
-  // 2026-07-12: "2 weeks" reads warmer than "14 days"); fall back to days.
-  const trialWeeks = proTrialDays / 7;
-  const trialFree =
-    proTrialDays % 7 === 0
-      ? `${trialWeeks} ${trialWeeks === 1 ? 'WEEK' : 'WEEKS'} FREE`
-      : `${proTrialDays} DAYS FREE`;
+  // Always DAYS (Kevin 2026-09-16), reversing the 2026-07-12 "N WEEKS reads
+  // warmer" preference: a day count reads as more trial, and it matches how the
+  // onboarding info screen already phrases it ("your first N nights"). Still
+  // derived from engine_config.proTrialDays rather than hardcoded, so changing the
+  // trial length can never leave this badge quietly lying about it.
+  const trialFree = `${proTrialDays} ${proTrialDays === 1 ? 'DAY' : 'DAYS'} FREE`;
   // from=onboarding → auto-presented at the end of onboarding (RevealStep):
   // the user has never seen the inbox, so "back" means the feed.
   const { from } = useLocalSearchParams<{ from?: string }>();
