@@ -136,7 +136,7 @@ export default function WelcomeGiftScreen() {
             </View>
           </View>
           <Text style={s.cardBody}>
-            {`A fresh dream waiting each morning. Free during your trial, then yours on ${PLAN_NAME_BASIC} or ${PLAN_NAME_PRO}.`}
+            {`A fresh dream waiting each morning. Free during your trial, then yours on a ${PLAN_NAME_BASIC} or ${PLAN_NAME_PRO} plan.`}
           </Text>
         </View>
 
