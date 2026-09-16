@@ -355,6 +355,13 @@ export function DreamCastRoster() {
 
   const anyBusy = busy !== null;
 
+  /** What an in-flight upload is ACTUALLY doing. `busy` is set before the picker even
+   *  opens, so a flat "Analyzing…" claimed we were reading a photo that did not exist
+   *  yet -- which is what the refresh button showed. `pending` only arrives once one
+   *  has been chosen, and that is the real boundary between the two stages. */
+  const busyLabel = (key: string) =>
+    pending?.key === key ? 'Analyzing your photo…' : 'Opening your photos…';
+
   /** One roster card. Rendered by both groups, identical in each — which is the
    *  point: what changes is WHICH LIST the person is in, not how the card looks. */
   const renderPartner = (p: DreamPartner, i: number, arr: DreamPartner[]) => {
@@ -404,7 +411,7 @@ export function DreamCastRoster() {
             )}
             {/* No idle status line: "Ready for dreams" was true of every member in
                 every state, so it taught nothing. */}
-            {isBusy && <Text style={s.status}>Analyzing…</Text>}
+            {isBusy && <Text style={s.status}>{busyLabel(p.id)}</Text>}
           </View>
           {!isBusy && (
             <>
@@ -519,7 +526,7 @@ export function DreamCastRoster() {
                       the row was printing the word twice within 40pt. The description
                       is the only line carrying information. */}
                   <Text style={s.status}>
-                    {busy === 'self' ? 'Analyzing…' : 'The face that stars in your dreams'}
+                    {busy === 'self' ? busyLabel('self') : 'The face that stars in your dreams'}
                   </Text>
                 </View>
                 {busy !== 'self' && (
@@ -558,9 +565,7 @@ export function DreamCastRoster() {
                 <CastThumb uriOverride={pending?.key === 'self' ? pending.uri : undefined} busy />
                 <View style={s.info}>
                   <Text style={s.name}>You</Text>
-                  <Text style={s.status}>
-                    {pending?.key === 'self' ? 'Analyzing your photo…' : 'Opening your photos…'}
-                  </Text>
+                  <Text style={s.status}>{busyLabel('self')}</Text>
                 </View>
               </View>
             ) : (
@@ -712,9 +717,10 @@ const s = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   info: { flex: 1 },
   name: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700', flexShrink: 1 },
-  // Muted when it is standing in for a name, so "Friend" reads as a label rather than
-  // as someone who is actually called Friend.
-  namePlaceholder: { color: colors.textMuted },
+  // Dimmer than a real name so "Friend" reads as a label rather than as someone
+  // actually called Friend -- but textMuted (#6E6E7E) on black was past legible, so
+  // it sits one step up at textSecondary and the contrast with a set name carries it.
+  namePlaceholder: { color: colors.textSecondary },
   // alignSelf keeps the pencil beside the word instead of at the column's far edge.
   nameBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start' },
   // Reads as the card's title until tapped. padding:0 so it sits on the same
@@ -726,7 +732,9 @@ const s = StyleSheet.create({
     fontWeight: '700',
     padding: 0,
   },
-  status: { color: colors.textSecondary, fontSize: fontScale(13), marginTop: verticalScale(2) },
+  // subtleOnDark, not textSecondary: this is descriptive copy meant to be READ, and
+  // the grey greys were disappearing into the panel.
+  status: { color: colors.subtleOnDark, fontSize: fontScale(13), marginTop: verticalScale(2) },
   // Neutral, not accent. Six purple rings were spending the accent on the one thing
   // on the card nobody can interact with, which was most of the screen's noise.
   thumb: { width: 48, height: 48, borderRadius: 24, borderWidth: 2, borderColor: colors.border },
@@ -790,7 +798,7 @@ const s = StyleSheet.create({
   relPillTextActive: { color: colors.accentLight },
   // Sits inside an empty "IN YOUR DREAMS" group, where it reads as that group's
   // state rather than as a warning tacked on the bottom of the screen.
-  hint: { color: colors.textMuted, fontSize: fontScale(13), padding: verticalScale(14) },
+  hint: { color: colors.subtleOnDark, fontSize: fontScale(13), padding: verticalScale(14) },
   footnote: {
     color: colors.textSecondary,
     fontSize: fontScale(12),
