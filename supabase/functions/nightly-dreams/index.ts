@@ -4383,9 +4383,24 @@ Output ONLY the prompt.`;
                 log: (m) => console.log(`[nightly-dreams] degrade-guard: ${m}`),
               },
               {
-                // 2 = attempt 1 on the configured model + attempt 2 on a different model (never faceless);
-                // each re-render is still gated by the guard's recover-budget floor.
-                maxRerenders: 2,
+                /**
+                 * A FAILED COUPLE GOES STRAIGHT TO A SOLO (Kevin, 2026-09-16: "shift the fallback from a
+                 * failed couples render directly to a single, not a couple on a different model").
+                 *
+                 * This was 2 — attempt 1 on the configured model, attempt 2 on a DIFFERENT one, because on
+                 * 2026-09-13 the call was "allow the move" rather than degrade. Reversed: each re-render
+                 * calls styleContract.forAttempt(), which walks the model chain, so a couple that failed on
+                 * its rolled model was being re-rendered on another one — two extra renders of latency and
+                 * cost to ship a couple in a model the look was not chosen for.
+                 *
+                 * 0 = the original render only. A failed dual split now falls through to the degrade path
+                 * below, which rebuilds a SOLO that keeps the look (verified 2026-09-16: the rebuild retains
+                 * the medium and drops the photography prior). Faster, cheaper, and the +1 is dropped
+                 * deliberately instead of chasing it across models.
+                 *
+                 * To restore the model-move, set this back to 2 — nothing else needs to change.
+                 */
+                maxRerenders: 0,
                 mediumKey: resolvedMediumKey,
                 // FULL render deadline + a SHORT reserve: this is the last-resort
                 // solo fallback, guaranteed its reserved window by the shortened
