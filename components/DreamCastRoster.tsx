@@ -12,7 +12,7 @@
  * _shared/partnerRoll.ts). Nobody ticked = dreams of just you.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -147,6 +147,19 @@ export function DreamCastRoster() {
   const beginCastUpload = useOnboardingStore((st) => st.beginCastUpload);
   const endCastUpload = useOnboardingStore((st) => st.endCastUpload);
 
+  // Picking a photo presents the system picker over this screen. When it dismisses,
+  // iOS remeasures the scroll content (which has also changed height, since the row
+  // swaps into its analysing state) and drops the offset back to the top. Nothing is
+  // remounting -- the ScrollView keeps its identity -- so the fix is simply to put the
+  // user back where they were, once when the picker hands a photo back and again once
+  // the upload settles and the content stops moving.
+  const scrollRef = useRef<ScrollView>(null);
+  const scrollY = useRef(0);
+  const restoreScroll = () =>
+    requestAnimationFrame(() =>
+      scrollRef.current?.scrollTo({ y: scrollY.current, animated: false })
+    );
+
   const [busy, setBusy] = useState<string | null>(null); // 'self' | partner id | 'new'
   // Which card's name is being typed. A permanently-live TextInput as the title
   // looked exactly like static text, so nothing said "you can name this person";
@@ -179,7 +192,10 @@ export function DreamCastRoster() {
     beginCastUpload();
     try {
       const r = await pickUploadDescribeCast(user.id, pathKey, role, {
-        onPicked: (uri) => setPending({ key, uri }),
+        onPicked: (uri) => {
+          setPending({ key, uri });
+          restoreScroll(); // the picker has just dismissed
+        },
       });
       if (!r) return; // cancelled / declined consent
       onResult(r);
@@ -202,6 +218,7 @@ export function DreamCastRoster() {
       setBusy(null);
       setPending(null);
       endCastUpload();
+      restoreScroll(); // content just changed height again as the row settled
     }
   };
 
@@ -473,6 +490,11 @@ export function DreamCastRoster() {
 
   return (
     <ScrollView
+      ref={scrollRef}
+      onScroll={(e) => {
+        scrollY.current = e.nativeEvent.contentOffset.y;
+      }}
+      scrollEventThrottle={16}
       contentContainerStyle={s.container}
       showsVerticalScrollIndicator={false}
       // Lets a tap mid-rename reach a pill or switch directly instead of being spent
