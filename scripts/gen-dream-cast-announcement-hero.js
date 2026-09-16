@@ -192,12 +192,16 @@ async function main() {
     .upload(key, fs.readFileSync(heroPath), { contentType: 'image/jpeg', upsert: true });
   if (upErr) throw upErr;
   const { data: pub } = sb.storage.from('uploads').getPublicUrl(key);
+  // Must match announce-dream-cast.js's HERO. expo-image caches memory-disk by URL,
+  // so without a version suffix a republished hero never reaches anyone who already
+  // saw the old one.
+  const url = `${pub.publicUrl}?v=2`;
   const { error } = await sb
     .from('announcements')
-    .update({ image_url: pub.publicUrl })
+    .update({ image_url: url })
     .eq('id', 'dream-cast-launch');
   if (error) throw error;
-  console.log('✅ published:', pub.publicUrl);
+  console.log('✅ published:', url);
 }
 
 main().catch((e) => {

@@ -28,8 +28,11 @@ require('dotenv').config({ path: '.env.local' });
 const { createClient } = require('@supabase/supabase-js');
 
 const ID = 'dream-cast-launch';
+// ?v= is a CACHE BUSTER, not decoration. expo-image caches memory-disk by URL, so
+// republishing the same storage key serves clients the OLD hero forever. Bump it
+// whenever gen-dream-cast-announcement-hero.js regenerates the image.
 const HERO =
-  'https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/dream-cast-announcement-hero.jpg';
+  'https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/dream-cast-announcement-hero.jpg?v=2';
 const KEVIN = 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
 const GOLIVE = process.argv.includes('--golive');
 
