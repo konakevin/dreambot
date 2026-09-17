@@ -124,6 +124,55 @@ There is no prompt-side fix: order and framing changes were measured tonight to 
 The real lever for flux couple survival is the POSE pools (heads apart, both frontal), one variable per
 batch, judged by first-try success — and that is a daytime job with Kevin grading.
 
+## 5b. Morning additions (2026-09-17, Kevin awake)
+
+**Ultra probe — 10 couples forced to flux-1.1-pro-ultra, 4.2 MP confirmed on the base render.**
+held 3 · → flux single 7 · → gemini 0 · **546s 0** · latency median 60 s / max 90 s. First-try 30%,
+below pro's 56%. The 90-day "77%" for ultra was measured on an earlier engine state and does not
+reproduce. Verdict: ultra does not buy the split; it did not hit the resource ceiling in ten either.
+
+**546s are CPU, not memory.** Supabase logs, 24 h, `nightly-dreams`: 25 of 319 requests (7.8%), every
+limit error "CPU Time exceeded", zero "Memory limit". The isolate decodes the full render to RGBA
+(`imageCodec.ts`, jsquash/upng in wasm), computes a thumbhash and re-encodes a display JPEG
+(`persistence.ts`), and `faceSwap.ts` encodes perturbed source / L/R halves / stitched output — all
+inside a 2 s CPU budget. Limits are platform-fixed (256 MB, 2 s CPU, no dial). The solution is
+architectural: no pixel work in the isolate — one Fly `persist` endpoint (URL in → display JPEG +
+thumbhash → Storage → URLs out). Fixes the 7.8% on pro as well as enabling 4 MP. A day, not a night.
+
+**The "huge face" solos (Kevin hearted 3: ULTRA 1, 6, 9).** All three were failed couples rebuilt as
+singles. Root: every solo prompt carries "shown from the knees up…" in the TAIL (~1,430 chars in), where
+flux-1.1-pro ignores it; the round-16 measured fix (`framingInAnchor`, distance line in the anchor before
+the face clause) was dormant — set only in `looksSlotInputFields`. Sixth casualty. Fixed on the minimal
+hatch for solos AND in `assembleSoloFallbackFromDual` (the rebuild spreads the couple's input, which never
+carries the flag). A behavioural test found and closed a second hole: with the flag set and
+`lookNeutralFraming` off, the clause vanished from both anchor and tail. Commit follows. NOT deployed to
+`generate-dream` (shares the file) — deliberate decision pending.
+
+**Solo framing fix VERIFIED (batch `SOLO`, 10 forced solos on the deployed fix, commit `c35e46b7`).**
+5 rendered, 5 of 5 show the scene — full figure in a cavern, knees-up at an aqueduct, three-quarter at a
+canyon railing, waist-up in a gallery, seated full-length on rocks. Zero headshots. Distance clause now at
+char ~700-850, BEFORE the face clause (was ~1,600-1,975, after it). Identity 0.43-0.72, floor 0.35; the
+0.43 is the widest shot. **5 of 10 died with 546.** The ultra COUPLE probe in the same hour: 0 of 10.
+Couples swap on Fly; solos still run the single face-swap encodes (perturbed source, L/R halves, stitched
+output — `faceSwap.ts` via `encodeJpeg`) inside the isolate. That is the CPU hog and the first target of
+the no-pixels-in-the-isolate plan. It also means the 7.8% production 546 rate is mostly solos.
+
+**The "detached heads" couples (underwater, canyon).** Land on looks that were flux-REJECTED before mig
+523 for exactly this. 23 archived rows carry notes naming it ("giant floating heads", "bobbleheads",
+"tight two-face crop", "profiles facing each other, faces too small"). Restoring them re-creates
+gemini-only pools on those looks (more gemini couples; gemini holds 88% first-try, 2% giant_face).
+Kevin's trade to call — list is one query away: `archived_by = 523 AND note ~* 'giant|floating|bobble|
+tight two|profile|small face|faceless'`.
+
+**Quality gate cannot catch face size** by Kevin's own 2026-09-03 rule (taste is out of scope, no new
+criteria without a labelled calibration run). A measured bbox-fraction gate from the Fly detector
+(`bboxFrac` already exists in `analyzeCastPhoto.ts`) would be a measurement, not a Haiku judgement —
+but it still needs the calibration run first. Not built.
+
+**`flux-2-flex 80.5% couple degrade` in the 7-day table was an attribution artefact**: `model_used` is
+overwritten with the REBUILD model on a degraded couple, so flex (the old rebuild model) inherited every
+flux couple that degraded. flex's own 30-day first render: 73 of 77 held. Same lie as `uploads.model`.
+
 ## 6. State deployed tonight (Kevin: leave it for users)
 
 Commits `31cfa893`, `081ef539`, `621a5847`, `f75651ac`, `a7b1a3c2`, `9654f0f8` — all deployed to
