@@ -10,7 +10,7 @@
  * keychain entry locally (scripts/lib/supabaseAccessToken.js). Reads logs only; writes nothing.
  */
 const { resolveSupabaseAccessToken } = require('./lib/supabaseAccessToken');
-const { SQL, evaluate, formatTable } = require('./lib/edge546');
+const { SQL, evaluate, formatTable, deployClampedStart } = require('./lib/edge546');
 
 const PROJECT_REF = process.env.SUPABASE_PROJECT_REF || 'jimftynwrinwenonjrlj';
 const API = 'https://api.supabase.com/v1/projects/' + PROJECT_REF;
@@ -51,11 +51,39 @@ async function main() {
     ),
   ]);
   const rows = Array.isArray(logs && logs.result) ? logs.result : [];
-  const { table, alarms } = evaluate(rows, functions);
+  const first = evaluate(rows, functions);
   console.log(
     `Edge Function 546 rate, last ${HOURS} h (${start.toISOString()} → ${end.toISOString()})\n`
   );
-  console.log(table.length ? formatTable(table) : '(no edge requests in the window)');
+  console.log(first.table.length ? formatTable(first.table) : '(no edge requests in the window)');
+
+  // Deploy-aware: an alarm must survive on the code deployed NOW. Re-query each alarming function
+  // from its own last deploy; requests before that ran different code and are not this SLO's business.
+  const alarms = [];
+  for (const e of first.table.filter((t) => t.alarm)) {
+    const fn = functions.find((f) => f.slug === e.name);
+    const since = fn ? deployClampedStart(start, fn.updated_at) : null;
+    if (!since) {
+      alarms.push(first.alarms.find((a) => a.startsWith(`${e.name}:`)));
+      continue;
+    }
+    const again = await api(
+      '/analytics/endpoints/logs.all',
+      { sql: SQL, iso_timestamp_start: since.toISOString(), iso_timestamp_end: end.toISOString() },
+      token
+    );
+    const re = evaluate(
+      (Array.isArray(again && again.result) ? again.result : []).filter((r) => r.fid === fn.id),
+      functions
+    );
+    const row = re.table[0];
+    const verdict = !row
+      ? '0 requests'
+      : `${row.limit} of ${row.total} (${(row.rate * 100).toFixed(1)}%)` +
+        (row.alarm ? '  ← ALARM' : row.total < 20 ? '  (too few to judge yet)' : '  ✓');
+    console.log(`\n${e.name}: deployed ${since.toISOString()} — since then ${verdict}`);
+    if (row && row.alarm) alarms.push(re.alarms[0]);
+  }
   if (alarms.length) {
     console.error(
       `\n✗ 546 SLO breached:\n  ${alarms.join('\n  ')}\n\nThe isolate is doing pixel work again — NO_PIXELS_IN_ISOLATE_PLAN.md.`

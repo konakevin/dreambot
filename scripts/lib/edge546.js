@@ -63,4 +63,24 @@ function formatTable(table) {
   return lines.join('\n');
 }
 
-module.exports = { SQL, MAX_546_RATE, MIN_REQUESTS, evaluate, formatTable };
+/**
+ * Deploy-aware window: a 546 rate only describes the code that is deployed NOW, so an alarm must
+ * survive a re-query from the function's own `updated_at` (its last deploy). Returns the later of the
+ * window start and that deploy, or null when the deploy is older than the window (nothing to clamp).
+ * `updated_at` from GET /v1/projects/:ref/functions is epoch milliseconds (a number) or ISO (a string).
+ */
+function deployClampedStart(windowStart, updatedAt) {
+  const deployMs = typeof updatedAt === 'number' ? updatedAt : Date.parse(String(updatedAt ?? ''));
+  if (!Number.isFinite(deployMs)) return null;
+  const startMs = windowStart instanceof Date ? windowStart.getTime() : Number(windowStart);
+  return deployMs > startMs ? new Date(deployMs) : null;
+}
+
+module.exports = {
+  SQL,
+  MAX_546_RATE,
+  MIN_REQUESTS,
+  evaluate,
+  formatTable,
+  deployClampedStart,
+};

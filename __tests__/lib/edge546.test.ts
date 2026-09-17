@@ -3,7 +3,13 @@
  * function; tiny samples are reported, never alarmed. NO_PIXELS_IN_ISOLATE_PLAN.md §5.
  */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { evaluate, formatTable, MAX_546_RATE, MIN_REQUESTS } = require('../../scripts/lib/edge546');
+const {
+  evaluate,
+  formatTable,
+  deployClampedStart,
+  MAX_546_RATE,
+  MIN_REQUESTS,
+} = require('../../scripts/lib/edge546');
 
 const FNS = [
   { id: 'a', slug: 'nightly-dreams' },
@@ -84,5 +90,22 @@ describe('edge546.evaluate', () => {
       FNS
     );
     expect(r.table[0]).toMatchObject({ total: 100, limit: 30 });
+  });
+});
+
+describe('edge546.deployClampedStart — the window never reaches back before the current deploy', () => {
+  const start = new Date('2026-09-16T18:00:00Z');
+  it('a deploy inside the window clamps the start to it (epoch ms or ISO)', () => {
+    expect(deployClampedStart(start, Date.parse('2026-09-17T06:00:00Z'))?.toISOString()).toBe(
+      '2026-09-17T06:00:00.000Z'
+    );
+    expect(deployClampedStart(start, '2026-09-17T06:00:00Z')?.toISOString()).toBe(
+      '2026-09-17T06:00:00.000Z'
+    );
+  });
+  it('a deploy older than the window, or an unknown one, leaves the window alone', () => {
+    expect(deployClampedStart(start, Date.parse('2026-09-10T00:00:00Z'))).toBeNull();
+    expect(deployClampedStart(start, undefined)).toBeNull();
+    expect(deployClampedStart(start, 'not a date')).toBeNull();
   });
 });
