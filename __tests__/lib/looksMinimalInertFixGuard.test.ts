@@ -39,35 +39,31 @@ const LOOKS_SRC = fs.readFileSync(
 );
 const strip = (s: string) => s.replace(/\s+/g, ' ');
 
-describe('the per-model couple ORDER survives LOOKS_MINIMAL', () => {
-  it('the minimal path resolves promptStyle from its own model, not from engine_config alone', () => {
-    // The regression in one assertion. `looksPath ? looksCouplePromptStyle(looksModel) : <config>` sends every
-    // minimal render to the config value — which is one global string and cannot express "flux differs".
-    expect(strip(NIGHTLY_SRC)).toContain('? looksCouplePromptStyle(looksModel) : minimalModel');
-    expect(strip(NIGHTLY_SRC)).toContain('? looksCouplePromptStyle(minimalModel)');
-  });
-
-  it('and engine_config is only the LAST resort, when no model is known', () => {
-    const block = NIGHTLY_SRC.match(/promptStyle:\s*\n\s*force_prompt_style \?\?[\s\S]{0,400}?,\n/);
+describe('flux couples are NOT routed to the album (legacy) order under minimal', () => {
+  // THIS BLOCK USED TO ASSERT THE OPPOSITE. On 2026-09-17 the per-model rule was patched forward so flux
+  // couples got the legacy order for the album's environmental composition, and this test locked it in.
+  // It was reverted the same night on measurement — flux-1.1-pro first-swap success:
+  //
+  //     subject_first, previous 7 days   174 couples   56% first try    0 moved to gemini
+  //     legacy, that night                24 couples    4% first try   19 moved to gemini
+  //
+  // The wider framing shrinks the faces below what the dual split can separate. Nearly every couple
+  // degraded — to a gemini couple at first, then (once the solo rung was fixed) to a single of self alone.
+  // The composition ask stands; the lever is the POSE pools, not the prompt order. A test that locked the
+  // wrong behaviour is worse than none, so this one now locks the revert and carries the number.
+  it('the minimal path reads engine_config.couple_prompt_style, not the per-model rule', () => {
+    const block = NIGHTLY_SRC.match(/promptStyle:\s*\n\s*force_prompt_style \?\?[\s\S]{0,300}?,\n/);
     expect(block).toBeTruthy();
     const b = strip(block![0]);
-    // Presence FIRST: without this, a missing call makes indexOf return -1 and every ordering
-    // assertion below passes vacuously — which is exactly what happened on the first draft of this test.
-    expect(b).toContain('looksCouplePromptStyle(minimalModel)');
-    expect(b).toContain('sfaCfgCloser.couplePromptStyle');
-    // Order matters: QA flag, then looks path, then minimal's model, then config.
-    expect(b.indexOf('force_prompt_style')).toBeLessThan(b.indexOf('looksCouplePromptStyle'));
-    expect(b.indexOf('looksCouplePromptStyle(minimalModel)')).toBeLessThan(
-      b.indexOf('sfaCfgCloser.couplePromptStyle')
+    expect(b).toContain(
+      'looksPath ? looksCouplePromptStyle(looksModel) : sfaCfgCloser.couplePromptStyle'
     );
+    expect(b).not.toContain('looksCouplePromptStyle(minimalModel)');
   });
 
-  it('minimalModel is what actually renders, so reading it here is not a guess', () => {
-    // If this line stops falling back to minimalModel, the order above would be chosen from a model the
-    // render never uses — worse than the bug it replaced, and invisible in the stamps.
-    expect(strip(NIGHTLY_SRC)).toContain(
-      ': faceSwapPrePickedModel || minimalModel || sceneBaseModelResolved'
-    );
+  it('and the reason is written next to the line, so nobody re-applies it from the album screenshots', () => {
+    expect(NIGHTLY_SRC).toContain('DO NOT route flux couples to the LEGACY order here');
+    expect(NIGHTLY_SRC).toMatch(/4% first try/);
   });
 });
 

@@ -3158,32 +3158,21 @@ Deno.serve(async (req) => {
               ? (fallbackReasons.push('dual_comp:waist_up'), 'waist_up' as const)
               : null,
           femaleHairVariationPct: force_female_hair_pct ?? hairCfg.femaleHairVariationPct,
-          // Couple prompt order (mig 470): QA flag wins, then the per-MODEL rule, then engine_config.
+          // Couple prompt order (mig 470): QA flag wins, else engine_config.couple_prompt_style.
           //
-          // 2026-09-17 (Kevin: "flux seems to always render couples from like the bust up ... i wish my nightly
-          // dreams looked more like the public posts album"). `looksCouplePromptStyle` hands FLUX couples the
-          // album's LEGACY order and every other model subject_first. That IS the fix for this exact complaint,
-          // shipped 2026-09-13 as LOOKS_FLUX_COUPLE_ALBUM_SKELETON after the same report ("my last 30 public
-          // posts are flux, yet don't have this constraint") -- but it was gated on `looksPath`, which
-          // LOOKS_MINIMAL forces false. So it reached ZERO renders.
-          //
-          // MEASURED on the 2026-09-17 batch, 22 organic duals: 22/22 rendered subject_first (15 of them flux),
-          // `an ENVIRONMENTAL TWO-SHOT` 0/22, `the setting sweeping ... around and above them` 0/22, and
-          // `standing side by side` 20/22. Both couple renders Kevin picked out of his album as the target
-          // (the Victorian alley and the frontier schoolhouse) are LEGACY-order renders.
-          //
-          // This is the THIRD fix found inert behind LOOKS_MINIMAL -- the vibe fragment (0 of 50 nightlies) and
-          // lookNeutralFraming (look ignored 78% of the time) were the first two, and both were patched forward
-          // exactly like this. Minimal knows its model: `minimalModel` is what the render actually uses (see the
-          // pickedModel resolution below, `faceSwapPrePickedModel || minimalModel || ...`), and any ban-refit has
-          // already rewritten it by this point -- so the per-model rule can be applied here too.
+          // DO NOT route flux couples to the LEGACY order here. It was tried on 2026-09-17 (looksCouplePromptStyle
+          // applied under minimal) to give couples the album's environmental composition, and it was REVERTED the
+          // same night on this measurement of flux-1.1-pro first-swap success:
+          //     subject_first, previous 7 days   174 couples   56% first try   0 moved to gemini
+          //     legacy, that night                24 couples    4% first try  19 moved to gemini
+          // The wider framing shrinks the faces below what the dual split can separate, so nearly every couple
+          // degraded — first to a gemini couple, and once the solo rung was fixed, to a single. Kevin, watching:
+          // "now i'm just getting a bunch of single renders of myself". The composition ask is real; the lever for
+          // it is the POSE pools (dual_stances / scenario actions), not the prompt order. See
+          // memory: dual-framing-width-costs-identity, and __tests__/lib/looksMinimalInertFixGuard.test.ts.
           promptStyle:
             force_prompt_style ??
-            (looksPath
-              ? looksCouplePromptStyle(looksModel)
-              : minimalModel
-                ? looksCouplePromptStyle(minimalModel)
-                : sfaCfgCloser.couplePromptStyle),
+            (looksPath ? looksCouplePromptStyle(looksModel) : sfaCfgCloser.couplePromptStyle),
           costumeLock: costumePicks ? costumePicks.map((p) => p.attire) : null,
           sceneRegister,
           // Stage 5c: expanded solo compositions (three-quarter / enviro-wide)

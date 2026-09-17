@@ -39,7 +39,7 @@ const countIdent = (src: string, ident: string): number =>
 
 describe('the dormant path does not grow without someone noticing', () => {
   it('the number of `looksPath` references is pinned', () => {
-    expect(countIdent(SRC, 'looksPath')).toBe(34);
+    expect(countIdent(SRC, 'looksPath')).toBe(33);
   });
 
   it('the number of `activeStyle` references is pinned', () => {
