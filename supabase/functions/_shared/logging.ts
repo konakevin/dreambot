@@ -55,6 +55,19 @@ export interface GenerationLogEntry {
    *  permanently null and forensics couldn't join log ↔ upload. */
   id?: string;
   upload_id?: string | null;
+  /**
+   * TRUE when this render came from a QA / evaluation request rather than a real user
+   * dream (migration 520). Derived by `_shared/qaRequest.ts` from the presence of any
+   * `force_*` / `qa_*` flag, so callers pass `isQaRequest(body)` and never have to
+   * declare themselves.
+   *
+   * Exists because our own testing was 82% of the render bill over the log's retention
+   * ($174.21 of $212.77) and was indistinguishable from user traffic — every "what are we
+   * spending" answer came back dominated by whatever matrix had been run that week. The
+   * old workaround, excluding one user_id, dropped that user's genuine dreams and missed
+   * QA run anywhere else.
+   */
+  is_qa?: boolean;
 }
 
 /**

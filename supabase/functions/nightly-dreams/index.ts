@@ -145,6 +145,7 @@ import {
 import { decodeImage, type DecodedImage } from '../_shared/imageCodec.ts';
 import { computeThumbhash } from '../_shared/thumbhashGen.ts';
 import { insertGenerationLog, asJsonbObject } from '../_shared/logging.ts';
+import { isQaRequest } from '../_shared/qaRequest.ts';
 import { markStage, shouldForceSafeScene } from '../_shared/dreamQueueLifecycle.ts';
 import { captureRenderError } from '../_shared/sentry.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
@@ -285,6 +286,11 @@ Deno.serve(async (req) => {
       headers: { 'Content-Type': 'application/json' },
     });
   }
+
+  // Is this one of OURS? Computed from the RAW body (which force_*/qa_* keys were
+  // actually sent) before anything destructures it, and stamped on every log row so
+  // testing spend can be separated from user spend. See _shared/qaRequest.ts.
+  const isQa = isQaRequest(body);
 
   // ── Auth — two paths ─────────────────────────────────────────────────────
   // 1. Worker token (server-to-server, from the dream-queue-worker fan-out
@@ -5287,6 +5293,7 @@ Output ONLY the prompt.`;
       persistPromise,
       insertGenerationLog(supabase, {
         id: genLogId,
+        is_qa: isQa,
         user_id: userId,
         job_id: queueJobId,
         recipe_snapshot: asJsonbObject(vibe_profile),
@@ -5543,6 +5550,7 @@ Output ONLY the prompt.`;
     // status='failed' so the cron's idempotency guard (completed-only) keeps
     // this user retryable. insertGenerationLog never throws.
     await insertGenerationLog(supabase, {
+      is_qa: isQa,
       user_id: userId,
       job_id: queueJobId,
       recipe_snapshot: {},

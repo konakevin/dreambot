@@ -96,6 +96,7 @@ import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { smartDreamApplies, coerceSmartDream, type SmartDreamSet } from '../_shared/smartDream.ts';
 import { insertGenerationLog, asJsonbObject } from '../_shared/logging.ts';
+import { isQaRequest } from '../_shared/qaRequest.ts';
 import { classifyFailure } from '../_shared/classifyFailure.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
 import { validateRecipe, resolveRecipeAnchors } from '../_shared/recipeReplay.ts';
@@ -237,6 +238,10 @@ async function handleRequest(req: Request): Promise<Response> {
   } catch {
     return new Response(JSON.stringify({ error: 'Invalid JSON body' }), { status: 400 });
   }
+
+  // Is this one of OURS? Read from the RAW body before sanitizing/destructuring, so the
+  // stamp reflects which force_*/qa_* keys were actually sent. See _shared/qaRequest.ts.
+  const isQa = isQaRequest(body);
 
   // Sanitize EVERY user-supplied text field up front — before any of it reaches
   // the Sonnet brief, Flux, or storage. enqueue-dream forwards the body
@@ -2299,6 +2304,7 @@ Output ONLY the prompt.`;
     const [persistedUrl] = await Promise.all([
       persistToStorage(tempUrl, userId, supabase),
       insertGenerationLog(supabase, {
+        is_qa: isQa,
         user_id: userId,
         job_id: jobId ?? null,
         recipe_snapshot: asJsonbObject(vibe_profile),
@@ -2661,6 +2667,7 @@ Output ONLY the prompt.`;
       // Best-effort audit log (mirrors the synchronous path's failure log).
       try {
         await insertGenerationLog(supabase, {
+          is_qa: isQa,
           user_id: userId,
           job_id: jobId ?? null,
           recipe_snapshot: asJsonbObject(vibe_profile),
@@ -2733,6 +2740,7 @@ Output ONLY the prompt.`;
     // scoped to the try, so use force_model when available.
     try {
       await insertGenerationLog(supabase, {
+        is_qa: isQa,
         user_id: userId,
         job_id: jobId ?? null,
         recipe_snapshot: asJsonbObject(vibe_profile),

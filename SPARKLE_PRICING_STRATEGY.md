@@ -162,10 +162,19 @@ Small Business (15%) is the single biggest margin lever** — see below.
 The doc originally predated Pro; it now exists alongside packs. Source of truth:
 `constants/proPlan.ts`.
 
+There are now TWO paid tiers. Display names: basic = **Dreamer**, pro = **Dreamer+**
+(`PLAN_NAME_BASIC` / `PLAN_NAME_PRO`); product IDs are unchanged (`*.basic.*`, `*.pro.*`).
+
 | Plan | Price | Eff./mo | Sparkles | Perks |
 |---|---|---|---|---|
-| Monthly | $9.99/mo | $9.99 | 75/mo | 30 nightly dreams, 100 HD downloads/mo, 14-day trial |
-| Yearly | $79.99/yr | $6.67 | 900 upfront | same |
+| **Dreamer** monthly | $4.99/mo | $4.99 | 0 | 30 nightly dreams, 14-day trial |
+| **Dreamer** yearly | $39.99/yr | $3.33 | 0 | same |
+| **Dreamer+** monthly | $9.99/mo | $9.99 | 75/mo | 30 nightly dreams, 100 HD downloads/mo |
+| **Dreamer+** yearly | $99.99/yr | $8.33 | 900 upfront | same |
+
+> Yearly Dreamer+ was **$79.99 when this doc was written and is $99.99 today** — the doc
+> said $79.99 for months after the change. Source of truth is `constants/proPlan.ts` and
+> `constants/basicPlan.ts`, not this table; re-check before quoting it.
 
 **Cost to serve** (typical / maxed): ~$3.25 / ~$6.50 per Pro user/month
 (nightly $1.05 + sparkles $2.00 + HD $0.20 typical).
@@ -185,6 +194,87 @@ become common, raise the yearly price or trim the 900-sparkle grant.
 **Popular pack vs Pro collision (intentional):** Popular is 90 sparkles for
 $9.99 one-time; Pro is $9.99/mo for 75 sparkles **+ nightly + HD + recurring**.
 The comparison is designed to push undecided users toward Pro.
+
+---
+
+## MEASURED unit economics — 2026-09-16
+
+Everything above this line was modelled before launch. This section is the same question
+answered from **30 days of production data**: 726 completed renders, 25 active users,
+excluding the QA account. Reproduce with `node scripts/unit-economics.js`.
+
+### A dream costs more than the log says — by 29%
+
+`ai_generation_log.cost_cents` records **the image model only**. Its own header says so,
+but every "what are we spending" answer had been taken from that column alone.
+
+| component | cost | source |
+|---|---|---|
+| Sonnet brief | **$0.0073** | MEASURED — 5,482 input / 861 output chars averaged over 726 renders |
+| ...applied to 97% of dreams | $0.0071 | 701 of 726 renders call Sonnet |
+| Haiku message | $0.0010 | estimate (~500 in / 100 out) |
+| face swap | $0.0130 | estimate — `cdingram/face-swap` measured at **8.7s** median + `codeformer` ~2s, but Replicate's GPU-second rate is not exposed by its API. **Verify against the invoice.** |
+
+| dream type | image model | + other APIs | **all-in** |
+|---|---|---|---|
+| nightly, face swap | $0.0401 | $0.0211 | **$0.0612** |
+| nightly, pure scene | $0.0456 | $0.0081 | **$0.0537** |
+| **nightly blended** | | | **$0.0587** ← what a free nightly really costs |
+| create dream | $0.0695 | $0.0136 | **$0.0831** |
+
+**30-day production spend: logged $38.56 → TRUE $49.85.** Use the true figure.
+
+### Cost per SPARKLE is $0.035 — and per-render is the wrong denominator
+
+The pre-launch model assumed **$0.046/sparkle worst case**. Measured blended is **$0.0351**,
+so the shipped packs are *better* than this doc claimed.
+
+The trap: a pricier model does **not** eat margin, because it charges more sparkles.
+`gemini-3-image-preview` costs $0.130 and bills 5 sparkles = **$0.026/sparkle**;
+`flux-1.1-pro` costs $0.040 and bills 1 = **$0.040/sparkle**. Dividing total cost by render
+COUNT prices every dream as a 1-sparkle dream and overstates the true figure **2.4×** —
+enough to make the Whale pack look like it loses money when it earns 55%.
+
+### Packs and plans at Apple 15%, on measured cost
+
+| pack | price | net | cost if ALL spent | profit | margin |
+|---|---|---|---|---|---|
+| Impulse 15 | $1.99 | $1.69 | $0.53 | +$1.17 | **69%** |
+| Starter 40 | $4.99 | $4.24 | $1.40 | +$2.84 | **67%** |
+| Popular 90 | $9.99 | $8.49 | $3.16 | +$5.33 | **63%** |
+| Best Value 200 | $19.99 | $16.99 | $7.02 | +$9.97 | **59%** |
+| Whale 550 | $49.99 | $42.49 | $19.30 | +$23.19 | **55%** |
+
+| plan | price | net | nightly cost | sparkle cost | profit | margin |
+|---|---|---|---|---|---|---|
+| Dreamer monthly | $4.99 | $4.24 | $1.76 | — | +$2.48 | **58%** |
+| Dreamer yearly | $39.99 | $33.99 | $21.14 | — | +$12.85 | **38%** |
+| Dreamer+ monthly | $9.99 | $8.49 | $1.76 | $2.63 | +$4.10 | **48%** |
+| Dreamer+ yearly | $99.99 | $84.99 | $21.14 | $31.59 | +$32.27 | **38%** |
+
+Worst case throughout: every bundled sparkle spent AND all 30 nightly dreams taken.
+**Yearly Dreamer+ is no longer the thin SKU** — the $79.99 → $99.99 move fixed it, and at
+measured cost it clears 38% even fully maxed.
+
+### Where the business actually stands
+
+```
+net subscription revenue   $59.44   (7 Dreamer+, 0 Dreamer, after Apple 15%)
+variable render cost       $49.85   (all 25 active users, incl. the 18 not paying)
+→ variable margin          +$9.59
+```
+
+**Unit economics are not the problem; subscriber COUNT is.** Every pack and plan clears its
+cost comfortably, and **13 Dreamer+ subscribers covers the entire render bill** for all
+users. Sparkle-pack revenue is pure upside on top of that. Fixed infra (Supabase, Fly,
+Vercel, Expo) is excluded and at this volume almost certainly exceeds the $49.85.
+
+### The real cost driver is us
+
+Of $212.77 spent on renders in 30 days, **$174.21 (82%) was QA and testing**, not users.
+That is a choice rather than a leak, but it means any spend figure pulled without filtering
+is dominated by whatever matrix was run that week. Migration 520 adds
+`ai_generation_log.is_qa` so the two can be split without excluding a user account.
 
 ### Killed packs (historical — don't reintroduce)
 
