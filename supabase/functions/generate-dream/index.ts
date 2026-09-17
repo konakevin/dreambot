@@ -28,6 +28,7 @@ import { asGender, sidesToGenders, sideCheckModeOf } from '../_shared/wardrobeSi
 import { shouldSendCompletionNotification } from '../_shared/notify.ts';
 import { genderFromLock } from '../_shared/genderLock.ts';
 import { restoreFace } from '../_shared/faceRestore.ts';
+import { imageOpsEnabled, persistViaFly } from '../_shared/imageOps.ts';
 import { genderSafeDualSwap } from '../_shared/dualSwapPipeline.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
 import { pickSurpriseScene } from '../_shared/surpriseScene.ts';
@@ -2300,9 +2301,31 @@ Output ONLY the prompt.`;
     markStage(supabase, jobId, 'upload', pickedModel);
 
     // Persist to Storage + log in parallel (log doesn't need the permanent URL)
+    // NO PIXELS IN THE ISOLATE (NO_PIXELS_IN_ISOLATE_PLAN.md, phase 2): original + display JPEG + thumbhash
+    // in ONE Fly call, awaited BEFORE the generation log so its stamp lands in fallback_reasons. FAIL-OPEN:
+    // any failure runs the in-isolate persistToStorage below and the background display build after it.
+    let flyPersisted: { url: string; displayUrl: string | null; thumbhash: string | null } | null =
+      null;
+    if (imageOpsEnabled()) {
+      const p = await persistViaFly({
+        sourceUrl: tempUrl,
+        userId,
+        mode: 'final',
+        traceId: jobId ?? undefined,
+      });
+      fallbackReasons.push(p.stamp);
+      if (p.ok && p.result.url)
+        flyPersisted = {
+          url: p.result.url,
+          displayUrl: p.result.displayUrl,
+          thumbhash: p.result.thumbhash,
+        };
+    }
     timings.total = Date.now() - t0;
     const [persistedUrl] = await Promise.all([
-      persistToStorage(tempUrl, userId, supabase),
+      flyPersisted
+        ? Promise.resolve(flyPersisted.url)
+        : persistToStorage(tempUrl, userId, supabase),
       insertGenerationLog(supabase, {
         is_qa: isQa,
         user_id: userId,
@@ -2415,8 +2438,9 @@ Output ONLY the prompt.`;
           .insert({
             user_id: userId,
             image_url: imageUrl,
-            image_url_display: null,
-            thumbhash: null,
+            // Phase 2: filled inline when Fly persisted; null (patched by the background build) otherwise.
+            image_url_display: flyPersisted ? flyPersisted.displayUrl : null,
+            thumbhash: flyPersisted ? flyPersisted.thumbhash : null,
             caption,
             ai_prompt: finalPrompt,
             ai_concept: conceptJson,
@@ -2470,15 +2494,19 @@ Output ONLY the prompt.`;
       // Background: build the display variant + thumbhash off the render's
       // critical budget, then patch the row. (The 546 fix.)
       const displayUploadId = uploadId;
-      scheduleBackground(
-        buildDisplayVariant(imageUrl, userId, supabase).then(({ url, thumbhash }) => {
-          if (!url && !thumbhash) return undefined;
-          return supabase
-            .from('uploads')
-            .update({ image_url_display: url, thumbhash })
-            .eq('id', displayUploadId);
-        })
-      );
+      // Phase 2: when Fly persisted, the row already carries the display variant + thumbhash and no
+      // background pixel work is scheduled (this scheduleBackground is the waitUntil the platform has
+      // dropped before — 2026-06-17 — which is why display variants went missing until the cron caught up).
+      if (!flyPersisted)
+        scheduleBackground(
+          buildDisplayVariant(imageUrl, userId, supabase).then(({ url, thumbhash }) => {
+            if (!url && !thumbhash) return undefined;
+            return supabase
+              .from('uploads')
+              .update({ image_url_display: url, thumbhash })
+              .eq('id', displayUploadId);
+          })
+        );
     } else {
       // persist:false — no uploads row (caller persists it themselves). uploadId
       // stays undefined; the downstream style/notify/job steps all no-op on it.

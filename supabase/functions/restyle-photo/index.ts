@@ -24,6 +24,7 @@ import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { isXaiModel } from '../_shared/providers/xai.ts';
 import { persistToStorage, buildDisplayVariant } from '../_shared/persistence.ts';
+import { imageOpsEnabled, persistViaFly } from '../_shared/imageOps.ts';
 import {
   completeQueueJob,
   failQueueJob,
@@ -492,9 +493,31 @@ async function handleRequest(req: Request): Promise<Response> {
     markStage(supabase, jobId, 'upload', pickedModel);
 
     // ── Persist to Storage + log in parallel ────────────────────────────
+    // NO PIXELS IN THE ISOLATE (NO_PIXELS_IN_ISOLATE_PLAN.md, phase 2): original + display JPEG + thumbhash
+    // in ONE Fly call, awaited BEFORE the generation log so its stamp lands in fallback_reasons. FAIL-OPEN:
+    // any failure runs the in-isolate persistToStorage below and the background display build after it.
+    let flyPersisted: { url: string; displayUrl: string | null; thumbhash: string | null } | null =
+      null;
+    if (imageOpsEnabled()) {
+      const p = await persistViaFly({
+        sourceUrl: genResult.url,
+        userId,
+        mode: 'final',
+        traceId: jobId ?? undefined,
+      });
+      fallbackReasons.push(p.stamp);
+      if (p.ok && p.result.url)
+        flyPersisted = {
+          url: p.result.url,
+          displayUrl: p.result.displayUrl,
+          thumbhash: p.result.thumbhash,
+        };
+    }
     timings.total = Date.now() - t0;
     const [persistedUrl] = await Promise.all([
-      persistToStorage(genResult.url, userId, supabase),
+      flyPersisted
+        ? Promise.resolve(flyPersisted.url)
+        : persistToStorage(genResult.url, userId, supabase),
       insertGenerationLog(supabase, {
         user_id: userId,
         job_id: jobId ?? null,
@@ -527,8 +550,9 @@ async function handleRequest(req: Request): Promise<Response> {
         .insert({
           user_id: userId,
           image_url: imageUrl,
-          image_url_display: null,
-          thumbhash: null,
+          // Phase 2: filled inline when Fly persisted; null (patched by the background build) otherwise.
+          image_url_display: flyPersisted ? flyPersisted.displayUrl : null,
+          thumbhash: flyPersisted ? flyPersisted.thumbhash : null,
           caption,
           ai_prompt: finalPrompt,
           ai_concept: null,
@@ -570,7 +594,9 @@ async function handleRequest(req: Request): Promise<Response> {
 
     // Background: build the display variant + thumbhash off the render's
     // critical budget, then patch the row. (The 546 fix.)
-    if (uploadId) {
+    // Phase 2: when Fly persisted, the row already carries the display variant + thumbhash and no
+    // background pixel work is scheduled.
+    if (uploadId && !flyPersisted) {
       const displayUploadId = uploadId;
       scheduleBackground(
         buildDisplayVariant(imageUrl, userId, supabase).then(({ url, thumbhash }) => {

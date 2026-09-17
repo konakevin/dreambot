@@ -84,3 +84,40 @@ describe('phase 1 wiring — final persist', () => {
     expect(gates).toBe(2);
   });
 });
+
+describe.each([
+  ['generate-dream', 'supabase/functions/generate-dream/index.ts', 'tempUrl'],
+  ['restyle-photo', 'supabase/functions/restyle-photo/index.ts', 'genResult.url'],
+])('phase 2 wiring — %s', (_name, rel, src) => {
+  const T = strip(fs.readFileSync(path.join(__dirname, '..', '..', rel), 'utf8'));
+
+  it('imports the client', () => {
+    expect(T).toContain("import { imageOpsEnabled, persistViaFly } from '../_shared/imageOps.ts';");
+  });
+
+  it('awaits the Fly persist BEFORE the persist/log Promise.all, so the stamp is in the log row', () => {
+    const fly = T.indexOf("mode: 'final'");
+    const all = T.indexOf(
+      `flyPersisted ? Promise.resolve(flyPersisted.url) : persistToStorage(${src}, userId, supabase)`
+    );
+    expect(fly).toBeGreaterThan(-1);
+    expect(all).toBeGreaterThan(fly);
+  });
+
+  it('the uploads row is inserted with the display variant + thumbhash already filled when Fly delivered', () => {
+    expect(T).toContain(
+      'image_url_display: flyPersisted ? flyPersisted.displayUrl : null, thumbhash: flyPersisted ? flyPersisted.thumbhash : null,'
+    );
+  });
+
+  it('no background pixel work is scheduled when Fly delivered — that scheduleBackground is the dropped waitUntil', () => {
+    expect(T).toMatch(
+      /if \((uploadId && )?!flyPersisted\)( \{ const displayUploadId = uploadId;)?\s*scheduleBackground\( buildDisplayVariant\(/
+    );
+  });
+
+  it('the call is gated on imageOpsEnabled()', () => {
+    expect((T.match(/persistViaFly\(/g) || []).length).toBe(1);
+    expect((T.match(/if \(imageOpsEnabled\(\)\) \{/g) || []).length).toBe(1);
+  });
+});
