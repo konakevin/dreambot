@@ -77,7 +77,7 @@ stamps `image_ops:fallback:<code>`; success stamps `image_ops:fly:<ms>`. Rollout
 | phase | change | measure |
 |---|---|---|
 | 0 | service + tests, deploy, `/healthz`, smoke `/persist` on a real render URL; parity: thumbhash + ahash equal the isolate's for the same image | objects in Storage, parity exact |
-| 1 | `nightly-dreams`: persist + display + dedup hashes via Fly, behind the secret | 20 organic renders: 546 rate (7.8% → target 0), `persist-done` lap, stamps |
+| 1 | `nightly-dreams`: persist + display + dedup hashes via Fly, behind the secret | **DONE 2026-09-17.** 10 organic renders (6 solo, 4 couple): 10/10, **0 × 546**, 0 fallbacks, display + thumbhash + phash inline. Hash 0.3-1.7 s, persist 0.9-1.8 s per render. |
 | 2 | `generate-dream`, `restyle-photo`, `first-dream-render` on the same client | Create-path 546s in the logs query |
 | 3 | `ensureHttpsImageUrl` → `/persist mode:temp` with `sourceBase64` (kills the atob loop) | gemini/gpt renders' CPU |
 | 4 | `/perturb`, holiday-postcard compositing, upscale cache write | remaining `decodeImage(` count → 0 |
