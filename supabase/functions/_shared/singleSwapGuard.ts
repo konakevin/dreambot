@@ -34,7 +34,12 @@ export interface SoloSwapGuardDeps {
   castGender: 'male' | 'female' | null;
   replicateToken: string;
   /** Re-render the SAME prompt to replace an unsafe target. */
-  rerender: () => Promise<{ url: string; predictionId: string | null }>;
+  /**
+   * Re-render the solo scene. Receives the ATTEMPT NUMBER (1-based) so the caller can decide to move to
+   * a different MODEL on a later attempt rather than re-rolling the same one forever — nightly uses the
+   * final attempt as its "try the other model before giving up on a face" rung (Kevin 2026-09-17).
+   */
+  rerender: (attempt: number) => Promise<{ url: string; predictionId: string | null }>;
   log?: (msg: string) => void;
 }
 
@@ -244,7 +249,7 @@ export async function ensureSoloSwapTarget(
       if (!haveBudget()) break;
       reasons.push('rerender_for_solo');
       try {
-        const rr = await deps.rerender();
+        const rr = await deps.rerender(attempt);
         target = rr.url;
         predictionId = rr.predictionId ?? predictionId;
         log(`re-rendered solo scene (attempt ${attempt})`);

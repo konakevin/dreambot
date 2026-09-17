@@ -161,6 +161,12 @@ export async function genderSafeDualSwap(
   opts: {
     strict: boolean;
     maxRerenders?: number;
+    /**
+     * Try a SOLO on the current model after each failed couple, before moving to the next model
+     * (NIGHTLY only — see the ladder note at the call site). Default false keeps the historical order:
+     * exhaust the couple re-renders first, degrade once at the end.
+     */
+    soloBetweenAttempts?: boolean;
     deadlineMs?: number;
     /**
      * Strict callers that would rather DEGRADE to a self-only swap than hard-fail
@@ -213,7 +219,42 @@ export async function genderSafeDualSwap(
     return ok;
   };
 
-  // Attempt 0 = original render; each subsequent attempt re-renders the couple.
+  /**
+   * THE SOLO DEGRADE, as a reusable step (Kevin 2026-09-17).
+   *
+   * The ladder he asked for is: couple on the rolled model → SOLO on that same model → move to the next
+   * model and try a couple there → solo there → pure scene. So the degrade has to be attemptable BETWEEN
+   * model moves, not only once after every attempt is spent. Hence a local rather than a tail block.
+   *
+   * Returns the result to ship, or null to keep descending the ladder. Gender-safety is unchanged: a null
+   * from deps.singleSwap means the guard REFUSED (no same-gender face for self) and we never paste on the
+   * wrong body — that closes the 2026-08-05 "her face on the man" hole.
+   */
+  const tryDegradeSingle = async (from: string, tag: string): Promise<DualSwapOutcome | null> => {
+    if (opts.strict && opts.degradeToSingle !== true) return null;
+    reasons.push(tag);
+    try {
+      const single = await deps.singleSwap(deps.selfSource, from);
+      if (single) {
+        // singleSwap may have re-rendered a fresh SOLO scene, so its predictionId is the one that matches
+        // the delivered url — forensics must point at the render we actually persisted.
+        return {
+          url: single.url,
+          outcome: 'single',
+          faceCount,
+          predictionId: single.predictionId ?? predictionId,
+          reasons,
+        };
+      }
+      reasons.push(`${tag}_refused_gender`);
+    } catch (e) {
+      reasons.push(`single_fallback_failed:${(e as Error).message.slice(0, 80)}`);
+    }
+    return null;
+  };
+
+  // Attempt 0 = original render; each subsequent attempt moves to the NEXT MODEL (deps.rerender walks the
+  // style contract's model chain). A failed dual now tries the solo on THAT model before the move.
   for (let attempt = 0; attempt <= maxRerenders; attempt++) {
     if (attempt > 0) {
       if (!haveBudget()) break;
@@ -381,6 +422,23 @@ export async function genderSafeDualSwap(
     // different fixes (pose wording vs gender-read fallback), so forensics
     // must be able to tell them apart (2026-07-08 action bench lesson).
     if (res.rejectReason) reasons.push(`dual_reject:${res.rejectReason}`);
+
+    // STEP 2 OF THE LADDER: the couple failed on THIS model — try a solo on it before moving models.
+    // OPT-IN (`soloBetweenAttempts`), because it changes what ships: a solo on the CURRENT model now wins
+    // over a couple that a re-render on the NEXT model might have delivered. Kevin chose that trade
+    // deliberately and repeatedly ("i'd rather let it fall back to single"; "a flux couple failure falls
+    // back to a flux single, then to gemini"), but it is the wrong default for Create and onboarding,
+    // which would rather keep chasing the couple.
+    //
+    // Only while a move is still ahead of us; the final attempt falls through to the tail so the
+    // sub-threshold-best check below still gets its say.
+    if (opts.soloBetweenAttempts === true && attempt < maxRerenders) {
+      const onThisModel = await tryDegradeSingle(
+        target,
+        `dual_degrade_single:attempt${attempt + 1}`
+      );
+      if (onThisModel) return onThisModel;
+    }
   }
 
   // ── Could not deliver an above-threshold dual ──
@@ -402,38 +460,10 @@ export async function genderSafeDualSwap(
   // do this; strict callers do it only when they opted in (Create). Strict callers
   // that did NOT opt in (onboarding) keep cascading so the first-dream flow can
   // re-render a solo self scene.
-  const canDegradeSingle = !opts.strict || opts.degradeToSingle === true;
-  if (canDegradeSingle) {
-    reasons.push('dual_degrade_single');
-    try {
-      // GENDER-SAFE degrade: singleSwap places self ONLY on a gender-matching
-      // face (via the solo swap guard). A `null` return means the guard REFUSED
-      // — the render has no safe same-gender face for self (e.g. a couple render
-      // where self would land on the wrong-gender partner). We NEVER paste on the
-      // wrong body: cascade instead (nightly ships the unswapped scene). Closes
-      // the 2026-08-05 "sunnysteph's face on the man" hole, where this degrade
-      // used a raw, face-blind single swap. (Kevin: code-red.)
-      const single = await deps.singleSwap(deps.selfSource, target);
-      if (single) {
-        // #3: singleSwap may have re-rendered a fresh SOLO scene and swapped self
-        // onto it — so the returned predictionId (when present) is the one that
-        // matches the delivered url. Prefer it over the dual-loop's tracked id so
-        // forensics point at the render we actually persisted.
-        return {
-          url: single.url,
-          outcome: 'single',
-          faceCount,
-          predictionId: single.predictionId ?? predictionId,
-          reasons,
-        };
-      }
-      reasons.push('dual_degrade_single_refused_gender');
-      // fall through to cascade — a wrong-gender single is worse than no swap.
-    } catch (e) {
-      reasons.push(`single_fallback_failed:${(e as Error).message.slice(0, 80)}`);
-      // fall through to cascade
-    }
-  }
+  // LAST RUNG before pure scene: a solo on whatever model the final attempt rendered.
+  const lastSolo = await tryDegradeSingle(target, 'dual_degrade_single');
+  if (lastSolo) return lastSolo;
+
   reasons.push('dual_degrade_cascade');
   return { url: target, outcome: 'cascade', faceCount, predictionId, reasons };
 }

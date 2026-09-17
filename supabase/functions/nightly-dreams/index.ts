@@ -4211,6 +4211,11 @@ Output ONLY the prompt.`;
 
     // Face swap: dual (two people) or single — retry up to 3 times with
     // backoff between attempts so a cold Replicate model has time to boot.
+    /** Which SOLO re-render attempt switches MODEL instead of re-rolling the same one.
+     *  2 = the original render, one retry on the rolled model, then the OTHER model — the "try gemini before
+     *  giving up on a face" rung (Kevin 2026-09-17). See the solo guard's rerender callback. */
+    const SOLO_MODEL_MOVE_ATTEMPT = 2;
+
     const FACE_SWAP_MAX_RETRIES = 3;
     const FACE_SWAP_BACKOFF_MS = [2_000, 4_000];
     if (faceSwapSources && faceSwapSources.length === 2 && tempUrl) {
@@ -4551,6 +4556,41 @@ Output ONLY the prompt.`;
         },
         {
           strict: strict_face_swap,
+          /**
+           * A FAILED COUPLE FALLS BACK TO A SINGLE ON THE SAME MODEL — never to a couple on a
+           * different one (Kevin 2026-09-16 and again 2026-09-17: "i want couples to fail over to a
+           * single, so a flux couple failure falls back to a flux single, then to gemini").
+           *
+           * This defaulted to 2 and the intent had NEVER been applied. The 2026-09-16 decision was
+           * written up against the DEGRADE GUARD's options further up instead of this object, so the
+           * dual pipeline kept its default: each re-render calls styleContract.forAttempt(), which
+           * walks the model chain, so a couple that failed on flux was re-rendered on gemini. Measured
+           * 2026-09-17 over 7 couples — flux was picked first on 6 of them, its first dual split failed
+           * on 5, and every one shipped on gemini. An 80/20 config was delivering ~0% flux couples.
+           *
+           * 0 = the original render only. A failed split now falls through to the degrade path, which
+           * swaps a SOLO onto the SAME render (same model, same look). If that solo is refused too —
+           * no gender-safe face — the cascade takes over and soloRebuild picks another model. So the
+           * ladder is exactly: flux couple → flux single → another model.
+           *
+           * ONE move (Kevin 2026-09-17, the approved ladder):
+           *
+           *   couple on the rolled model  → fail
+           *   SOLO   on that same model   → fail      ← soloBetweenAttempts
+           *   couple on the NEXT model    → fail      ← the one re-render
+           *   SOLO   on that model        → fail
+           *   pure scene (no face)
+           *
+           * The old default of 2 put the model move BEFORE the solo, which is the order he rejected: a
+           * couple that failed on flux was re-rendered on gemini and shipped there, so an 80/20 config
+           * delivered ~0% flux couples. 0 was the first fix and went too far the other way — it removed
+           * the gemini rung entirely, so a refused solo went straight to a faceless scene.
+           *
+           * Worst case is 4 renders for one dream; the recover-budget check cuts the ladder short and
+           * degrades early when the 140s window will not take another render.
+           */
+          maxRerenders: 1,
+          soloBetweenAttempts: true,
           deadlineMs: dualDeadlineMs,
           recoverBudgetMs: DUAL_RECOVER_MS,
           // Live-tunable wrong-person floor (engine_config, audit L3; cached fetch).
@@ -4592,7 +4632,25 @@ Output ONLY the prompt.`;
         {
           castGender: faceSwapGender,
           replicateToken: REPLICATE_TOKEN,
-          rerender: async () => {
+          rerender: async (attempt: number) => {
+            /**
+             * THE GEMINI RUNG FOR SOLOS (Kevin 2026-09-17): a solo that the guard cannot make safe used to
+             * go straight to a faceless pure scene — it never tried another model at all. Now the FINAL
+             * re-render moves to the next model in the style contract's chain:
+             *
+             *   solo on the rolled model → re-render on it → re-render on the NEXT model → pure scene
+             *
+             * Same shape as the couple ladder, one rung shorter because a solo has no couple stage.
+             */
+            let soloModel = pickedModel;
+            if (attempt >= SOLO_MODEL_MOVE_ATTEMPT && styleContract) {
+              const pick = styleContract.forAttempt(2);
+              if (pick.model && pick.model !== pickedModel) {
+                soloModel = pick.model;
+                modelUsedOverride = pick.model;
+                fallbackReasons.push(`solo_model_move:${pick.model.replace(/^.*\//, '')}`);
+              }
+            }
             // Front-load the person count on the retry — re-rolling the identical
             // prompt mostly re-renders the same invented couple (see the
             // generate-dream twin). Subject-count only, never the scene.
