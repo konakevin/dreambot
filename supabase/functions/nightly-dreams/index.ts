@@ -4439,14 +4439,26 @@ Output ONLY the prompt.`;
                  * its rolled model was being re-rendered on another one — two extra renders of latency and
                  * cost to ship a couple in a model the look was not chosen for.
                  *
-                 * 0 = the original render only. A failed dual split now falls through to the degrade path
-                 * below, which rebuilds a SOLO that keeps the look (verified 2026-09-16: the rebuild retains
-                 * the medium and drops the photography prior). Faster, cheaper, and the +1 is dropped
-                 * deliberately instead of chasing it across models.
+                 * 1 = probe the failed couple, then RE-RENDER A GENUINE SOLO and probe that.
                  *
-                 * To restore the model-move, set this back to 2 — nothing else needs to change.
+                 * IT WAS 0, AND THAT MADE THE WHOLE SOLO RUNG DEAD CODE (found 2026-09-17, Kevin watching a
+                 * batch live: "it's supposed to fail back to a single on flux"). With 0 the loop in
+                 * ensureSoloSwapTarget runs exactly once, on attempt 0 — and attempt 0 probes the COUPLE
+                 * render that just failed. That image still has two people in it, so the probe reads
+                 * `solo_multi_face(faces=2)`, the guard returns safe:false, and the `rerender` callback
+                 * directly above — the one that calls assembleSoloFallbackFromDual to build a real single
+                 * from the cast — is NEVER INVOKED. It cannot succeed by construction.
+                 *
+                 * Measured on 5 consecutive organic couples: every one stamped
+                 *   dual_degrade_single:attempt1 → degrade_solo_multi_face(faces=2) → degrade_solo_swap_unsafe
+                 *   → dual_degrade_single:attempt1_refused_gender → policy:couple:2:gemini-2-image:chain_2of2
+                 * i.e. the ladder read "couple on flux → a solo attempt that always refuses → couple on
+                 * gemini". The comment block below claimed the opposite and had done since 2026-09-16.
+                 *
+                 * The +1 is still dropped deliberately; this only makes the drop actually happen on the
+                 * rebuilt single instead of falling through to a couple on another model.
                  */
-                maxRerenders: 0,
+                maxRerenders: 1,
                 mediumKey: resolvedMediumKey,
                 // FULL render deadline + a SHORT reserve: this is the last-resort
                 // solo fallback, guaranteed its reserved window by the shortened

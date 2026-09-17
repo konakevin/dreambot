@@ -145,3 +145,27 @@ describe('the SOLO ladder gets the same gemini rung', () => {
     expect(strip(NIGHTLY_SRC)).toContain('if (pick.model && pick.model !== pickedModel)');
   });
 });
+
+describe('the SOLO rung must be able to fire at all', () => {
+  it('the degrade guard gets at least ONE re-render, or the rebuild is dead code', () => {
+    // THE BUG THIS LOCKS (2026-09-17). ensureSoloSwapTarget's loop probes attempt 0 BEFORE any re-render,
+    // and on the degrade path attempt 0 is the failed COUPLE image — two people in frame. So with
+    // maxRerenders: 0 the probe reads solo_multi_face(faces=2), the guard returns unsafe, and the
+    // `rerender` callback that builds a genuine single from the cast is never called once.
+    //
+    // The ladder then read: couple on flux -> a solo attempt that ALWAYS refuses -> couple on gemini.
+    // Measured on 5 consecutive organic couples, every one identical. A comment claimed the opposite.
+    const call = NIGHTLY_SRC.match(/ensureSoloSwapTarget\([\s\S]*?\n {12}\);/);
+    expect(call).toBeTruthy();
+    const m = strip(call![0]).match(/maxRerenders: (\d+)/);
+    expect(m).toBeTruthy();
+    expect(Number(m![1])).toBeGreaterThanOrEqual(1);
+  });
+
+  it('and the rebuild it reaches is a REAL single built from the cast, not a prefix on the couple prompt', () => {
+    // assembleSoloFallbackFromDual rebuilds from the dual's own slots with the partner dropped. The legacy
+    // path glued "exactly one person" onto the couple prompt and kept rendering two people.
+    expect(strip(NIGHTLY_SRC)).toContain('assembleSoloFallbackFromDual(');
+    expect(strip(NIGHTLY_SRC)).toContain('solo_fallback:rebuilt_solo:');
+  });
+});

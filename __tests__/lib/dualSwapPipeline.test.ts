@@ -665,3 +665,105 @@ describe('identityMinSim override (parity loop round 7)', () => {
     expect(stamp(url, 1)).toBe(`dual_target:1:${url}`);
   });
 });
+
+/**
+ * LADDER ORDER (Kevin, 2026-09-17): "a flux couple failure falls back to a flux single, then to gemini".
+ *
+ * The rung has to be attempted on the CURRENT model before deps.rerender walks the model chain. If the
+ * order inverts, an 85/15 split ships mostly gemini couples, because every flux couple that fails its
+ * split is handed to the next model instead of being delivered as a flux single. That is exactly what
+ * production did until 2026-09-17 — though there the cause was the solo rung silently refusing rather
+ * than the order (see coupleDegradeSoloRung.test.ts). Both have to hold for the ladder to work.
+ */
+describe('ladder order — the single on THIS model comes before the move to the next one', () => {
+  it('calls singleSwap before rerender when soloBetweenAttempts is on', async () => {
+    const calls: string[] = [];
+    const deps = {
+      dispatchDual: jest.fn(async () => {
+        calls.push('dual');
+        return { swappedUrl: null, faceCount: 1 };
+      }),
+      singleSwap: jest.fn(async () => {
+        calls.push('single');
+        return { url: 'SINGLE.jpg', predictionId: 'solo-pid' };
+      }),
+      rerender: jest.fn(async () => {
+        calls.push('rerender');
+        return { url: 'RERENDER.jpg', predictionId: 'p2' };
+      }),
+      selfSource: 'self.jpg',
+    };
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      degradeToSingle: true,
+      maxRerenders: 1,
+      soloBetweenAttempts: true,
+    });
+
+    expect(calls[0]).toBe('dual');
+    expect(calls[1]).toBe('single');
+    expect(r.outcome).toBe('single');
+    // The point of the rung: it ships without ever moving models.
+    expect(deps.rerender).not.toHaveBeenCalled();
+  });
+
+  it('only moves to the next model once the single on this one has REFUSED', async () => {
+    const calls: string[] = [];
+    let dualN = 0;
+    const deps = {
+      dispatchDual: jest.fn(async () => {
+        calls.push('dual');
+        return dualN++ === 0
+          ? { swappedUrl: null, faceCount: 1 }
+          : { swappedUrl: 'SWAP2.jpg', faceCount: 2 };
+      }),
+      // null = the gender guard refused (what a two-person image produces).
+      singleSwap: jest.fn(async () => {
+        calls.push('single');
+        return null;
+      }),
+      rerender: jest.fn(async () => {
+        calls.push('rerender');
+        return { url: 'RERENDER.jpg', predictionId: 'p2' };
+      }),
+      selfSource: 'self.jpg',
+    };
+    await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      degradeToSingle: true,
+      maxRerenders: 1,
+      soloBetweenAttempts: true,
+    });
+
+    expect(calls.slice(0, 3)).toEqual(['dual', 'single', 'rerender']);
+  });
+
+  it('without soloBetweenAttempts the move comes first — Create and onboarding keep chasing the couple', async () => {
+    const calls: string[] = [];
+    let dualN = 0;
+    const deps = {
+      dispatchDual: jest.fn(async () => {
+        calls.push('dual');
+        return dualN++ === 0
+          ? { swappedUrl: null, faceCount: 1 }
+          : { swappedUrl: 'SWAP2.jpg', faceCount: 2 };
+      }),
+      singleSwap: jest.fn(async () => {
+        calls.push('single');
+        return { url: 'SINGLE.jpg', predictionId: 'solo-pid' };
+      }),
+      rerender: jest.fn(async () => {
+        calls.push('rerender');
+        return { url: 'RERENDER.jpg', predictionId: 'p2' };
+      }),
+      selfSource: 'self.jpg',
+    };
+    await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      degradeToSingle: true,
+      maxRerenders: 1,
+    });
+
+    expect(calls.slice(0, 2)).toEqual(['dual', 'rerender']);
+  });
+});
