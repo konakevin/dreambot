@@ -1,0 +1,5 @@
+## Keep build context minimal
+fly.toml
+README.md
+.dockerignore
+*.md
