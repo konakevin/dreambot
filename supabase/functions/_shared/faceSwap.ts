@@ -4,8 +4,10 @@
  * reimagine, DLT) and nightly (cast-bearing dreams).
  *
  * Single swap: faceSwap() — one face onto one image.
- * Dual swap: dualFaceSwap() — fixed left-55%/right-55% crop pipeline for
- *            two-character side-by-side compositions.
+ * Dual swap: runs ONLY on the Fly `face-swap-dual` engine (services/face-swap-dual, face detection +
+ *            identity + gender checks), routed by _shared/dualSwapDispatch.ts. The in-isolate 55/55
+ *            crop-and-stitch engine that lived in this file was deleted 2026-09-17
+ *            (NO_PIXELS_IN_ISOLATE_PLAN.md phase 5): no pixel work in the isolate.
  *
  * Both source and target are passed to Replicate as public URLs. Source
  * is perturbed (one bottom-right pixel randomized) and uploaded to a
@@ -393,11 +395,10 @@ async function faceSwapOnce(
  *                      face detector — different models handle stylized
  *                      targets differently)
  *
- * When called from dualFaceSwap, retry is disabled on the primary
- * (retry: false). Fallback chain still runs because dual-cast renders
- * are the worst affected by primary outages — yan-ops as a fallback is
- * exactly the use case Phase 2 unblocks. The orchestrator's outer 3x
- * retry loop wraps this whole function.
+ * `retry: false` disables the primary retries (the Fly dual engine's copy of
+ * this file uses it for its two parallel half-swaps); the fallback chain
+ * still runs. The orchestrator's outer 3x retry loop wraps this whole
+ * function.
  */
 const TRANSIENT_REPLICATE_ERRORS = [
   'timed out',
@@ -438,9 +439,9 @@ export async function faceSwap(
   // since 2026-05-09 was a placebo — Replicate hashes downloaded BYTES,
   // not the URL, so the canned-output bug for stuck face embeddings was
   // free to recur. Restored 2026-05-31 after Kevin's nightly hit a
-  // recurring canned scene). Default ON for single-cast; dual-cast
-  // callers pass `perturb: false` to preserve CPU budget (2 parallel
-  // target-half decode/encodes already fill it).
+  // recurring canned scene). Default ON — the perturb itself runs on the
+  // image-ops service since phase 4a; the Fly dual engine's copy of this
+  // file passes `perturb: false` for its two parallel half-swaps.
   const perturb = opts?.perturb ?? true;
   const startedAt = Date.now();
   const deadline = startedAt + maxWaitMs;
@@ -591,259 +592,4 @@ export async function faceSwap(
         );
     }
   }
-}
-
-// ── Pixel helpers for dual face swap ──────────────────────────────────
-
-function cropRegion(
-  data: Uint8Array,
-  srcW: number,
-  h: number,
-  startX: number,
-  cropW: number
-): Uint8Array {
-  const out = new Uint8Array(cropW * h * 4);
-  for (let y = 0; y < h; y++) {
-    const srcOff = (y * srcW + startX) * 4;
-    out.set(data.subarray(srcOff, srcOff + cropW * 4), y * cropW * 4);
-  }
-  return out;
-}
-
-function stitchHalves(
-  leftData: Uint8Array,
-  leftW: number,
-  rightData: Uint8Array,
-  rightW: number,
-  h: number,
-  leftTake: number,
-  rightSkip: number,
-  outW: number
-): Uint8Array {
-  const BLEND_PX = 40;
-  const halfBlend = Math.min(BLEND_PX >> 1, leftTake, outW - leftTake);
-  const blendStart = leftTake - halfBlend;
-  const blendEnd = leftTake + halfBlend;
-  const blendWidth = blendEnd - blendStart;
-
-  const rightTake = outW - leftTake;
-  const out = new Uint8Array(outW * h * 4);
-  for (let y = 0; y < h; y++) {
-    const dstRow = y * outW * 4;
-    // Pure left zone
-    out.set(leftData.subarray(y * leftW * 4, y * leftW * 4 + blendStart * 4), dstRow);
-    // Blend zone — linear crossfade between left and right
-    for (let x = blendStart; x < blendEnd; x++) {
-      const t = (x - blendStart) / blendWidth; // 0→1
-      const lOff = (y * leftW + x) * 4;
-      const rX = x - leftTake + rightSkip;
-      const rOff = (y * rightW + rX) * 4;
-      const dOff = dstRow + x * 4;
-      out[dOff] = Math.round(leftData[lOff] * (1 - t) + rightData[rOff] * t);
-      out[dOff + 1] = Math.round(leftData[lOff + 1] * (1 - t) + rightData[rOff + 1] * t);
-      out[dOff + 2] = Math.round(leftData[lOff + 2] * (1 - t) + rightData[rOff + 2] * t);
-      out[dOff + 3] = 255;
-    }
-    // Pure right zone
-    const rSrc = (y * rightW + (blendEnd - leftTake + rightSkip)) * 4;
-    out.set(rightData.subarray(rSrc, rSrc + (outW - blendEnd) * 4), dstRow + blendEnd * 4);
-  }
-  return out;
-}
-
-// Bilinear (was nearest-neighbor, 2026-07-08 Stage 0): the swap models
-// occasionally return off-size output; nearest produced visible blockiness
-// on the resize-back. Bilinear is ~free at these sizes.
-function resizeBilinear(
-  data: Uint8Array,
-  srcW: number,
-  srcH: number,
-  dstW: number,
-  dstH: number
-): Uint8Array {
-  if (srcW === dstW && srcH === dstH) return data;
-  const out = new Uint8Array(dstW * dstH * 4);
-  const xR = srcW / dstW;
-  const yR = srcH / dstH;
-  for (let y = 0; y < dstH; y++) {
-    const fy = Math.min(srcH - 1, y * yR);
-    const y0 = Math.floor(fy);
-    const y1 = Math.min(srcH - 1, y0 + 1);
-    const wy = fy - y0;
-    for (let x = 0; x < dstW; x++) {
-      const fx = Math.min(srcW - 1, x * xR);
-      const x0 = Math.floor(fx);
-      const x1 = Math.min(srcW - 1, x0 + 1);
-      const wx = fx - x0;
-      const d = (y * dstW + x) * 4;
-      for (let c = 0; c < 4; c++) {
-        const p00 = data[(y0 * srcW + x0) * 4 + c];
-        const p10 = data[(y0 * srcW + x1) * 4 + c];
-        const p01 = data[(y1 * srcW + x0) * 4 + c];
-        const p11 = data[(y1 * srcW + x1) * 4 + c];
-        out[d + c] = Math.round(
-          p00 * (1 - wx) * (1 - wy) + p10 * wx * (1 - wy) + p01 * (1 - wx) * wy + p11 * wx * wy
-        );
-      }
-    }
-  }
-  return out;
-}
-
-/**
- * Dual face swap — crop→swap→paste for two people in one scene.
- *
- * Crops left 55% and right 55% (10% overlap at center), swaps each face
- * independently in parallel, stitches left half + right half at midpoint.
- * Uploads stitched result to Supabase temp storage, returns public URL.
- *
- * `deadlineMs` is the absolute deadline (Date.now() + remaining). The swap
- * budget is computed from whatever time remains, minus 15s reserved for
- * download/stitch/upload. No retry on individual swaps — retrying in
- * parallel doubles total time and blows the Edge Function limit.
- */
-export async function dualFaceSwap(
-  leftSourceUrl: string,
-  rightSourceUrl: string,
-  targetImageUrl: string,
-  replicateToken: string,
-  supabase: SupabaseClient,
-  userId: string,
-  deadlineMs?: number,
-  skipPrimary = false
-): Promise<string> {
-  const deadline = deadlineMs ?? Date.now() + DEFAULT_MAX_WAIT_MS + 15_000;
-  console.log(`[dualFaceSwap] Starting — budget ${Math.round((deadline - Date.now()) / 1000)}s`);
-
-  const targetResp = await fetch(targetImageUrl);
-  if (!targetResp.ok) throw new Error(`Download target failed: ${targetResp.status}`);
-  const targetImg = await decodeImage(new Uint8Array(await targetResp.arrayBuffer()));
-  const W = targetImg.width;
-  const H = targetImg.height;
-  let imgData: Uint8Array | null = targetImg.data;
-  console.log(`[dualFaceSwap] Target: ${W}x${H}`);
-
-  const leftW = Math.floor(W * 0.55);
-  const rightStart = Math.floor(W * 0.45);
-  const rightW = W - rightStart;
-  const midX = Math.floor(W / 2);
-
-  let leftPixels: Uint8Array | null = cropRegion(imgData, W, H, 0, leftW);
-  let rightPixels: Uint8Array | null = cropRegion(imgData, W, H, rightStart, rightW);
-  // Drop the full target RGBA — we only need the crops from here on (~5MB freed)
-  imgData = null;
-
-  const [leftJpeg, rightJpeg] = await Promise.all([
-    encodeJpeg({ data: leftPixels, width: leftW, height: H }, 92),
-    encodeJpeg({ data: rightPixels, width: rightW, height: H }, 92),
-  ]);
-  // Drop the crop RGBA — we only need the encoded JPEGs for upload (~5.6MB freed)
-  leftPixels = null;
-  rightPixels = null;
-
-  const ts = Date.now();
-  const leftPath = `temp/${userId}/crop-left-${ts}.jpg`;
-  const rightPath = `temp/${userId}/crop-right-${ts}.jpg`;
-  const [leftUp, rightUp] = await Promise.all([
-    supabase.storage.from('uploads').upload(leftPath, leftJpeg, {
-      contentType: 'image/jpeg',
-      upsert: true,
-      cacheControl: '2592000',
-    }),
-    supabase.storage.from('uploads').upload(rightPath, rightJpeg, {
-      contentType: 'image/jpeg',
-      upsert: true,
-      cacheControl: '2592000',
-    }),
-  ]);
-  if (leftUp.error) throw new Error(`Upload left crop failed: ${leftUp.error.message}`);
-  if (rightUp.error) throw new Error(`Upload right crop failed: ${rightUp.error.message}`);
-  const leftCropUrl = supabase.storage.from('uploads').getPublicUrl(leftPath).data.publicUrl;
-  const rightCropUrl = supabase.storage.from('uploads').getPublicUrl(rightPath).data.publicUrl;
-  console.log(`[dualFaceSwap] Crops uploaded: ${leftPath}, ${rightPath}`);
-
-  const swapBudgetMs = Math.max(deadline - Date.now() - 15_000, 20_000);
-  console.log(`[dualFaceSwap] Swap budget: ${Math.round(swapBudgetMs / 1000)}s`);
-  const [leftSwapUrl, rightSwapUrl] = await Promise.all([
-    faceSwap(leftSourceUrl, leftCropUrl, replicateToken, supabase, userId, {
-      maxWaitMs: swapBudgetMs,
-      retry: false,
-      skipPrimary,
-      // Skip byte-level source perturbation in the dual path — 2 parallel
-      // decode/encodes of the source plus the 2 already-running target-half
-      // encodes blow the per-isolate CPU budget (the 2026-05-09 reason
-      // perturbSourceImage was originally disabled). Dual relies on the
-      // dup-detect block in nightly-dreams to catch canned-output
-      // collisions instead.
-      perturb: false,
-    }),
-    faceSwap(rightSourceUrl, rightCropUrl, replicateToken, supabase, userId, {
-      maxWaitMs: swapBudgetMs,
-      retry: false,
-      skipPrimary,
-      perturb: false,
-    }),
-  ]);
-  console.log('[dualFaceSwap] Both swaps complete');
-
-  // Sequential download + decode of the swap results — parallel here held
-  // 2 encoded buffers + 2 RGBA arrays simultaneously (~12MB peak); sequential
-  // halves the window at a cost of ~500ms wall-clock.
-  const leftSwapResp = await fetch(leftSwapUrl);
-  const leftSwapImg = await decodeImage(new Uint8Array(await leftSwapResp.arrayBuffer()));
-  let leftSwapData: Uint8Array | null = leftSwapImg.data;
-  if (leftSwapImg.width !== leftW || leftSwapImg.height !== H) {
-    console.warn(
-      `[dualFaceSwap] Left swap resize: ${leftSwapImg.width}x${leftSwapImg.height} -> ${leftW}x${H}`
-    );
-    leftSwapData = resizeBilinear(leftSwapData, leftSwapImg.width, leftSwapImg.height, leftW, H);
-  }
-
-  const rightSwapResp = await fetch(rightSwapUrl);
-  const rightSwapImg = await decodeImage(new Uint8Array(await rightSwapResp.arrayBuffer()));
-  let rightSwapData: Uint8Array | null = rightSwapImg.data;
-  if (rightSwapImg.width !== rightW || rightSwapImg.height !== H) {
-    console.warn(
-      `[dualFaceSwap] Right swap resize: ${rightSwapImg.width}x${rightSwapImg.height} -> ${rightW}x${H}`
-    );
-    rightSwapData = resizeBilinear(
-      rightSwapData,
-      rightSwapImg.width,
-      rightSwapImg.height,
-      rightW,
-      H
-    );
-  }
-
-  const rightStitchSkip = midX - rightStart;
-  const stitched = stitchHalves(
-    leftSwapData,
-    leftW,
-    rightSwapData,
-    rightW,
-    H,
-    midX,
-    rightStitchSkip,
-    W
-  );
-  // Drop the half buffers — stitched is the only thing we need from here (~10MB freed)
-  leftSwapData = null;
-  rightSwapData = null;
-
-  const stitchedBytes = await encodeJpeg({ data: stitched, width: W, height: H }, 92);
-  const tempFile = `temp/${userId}/stitched-${Date.now()}.jpg`;
-  const { error: upErr } = await supabase.storage.from('uploads').upload(tempFile, stitchedBytes, {
-    contentType: 'image/jpeg',
-    upsert: true,
-    cacheControl: '2592000',
-  });
-  if (upErr) throw new Error(`Stitched upload failed: ${upErr.message}`);
-  const { data: urlData } = supabase.storage.from('uploads').getPublicUrl(tempFile);
-
-  supabase.storage
-    .from('uploads')
-    .remove([leftPath, rightPath])
-    .catch(() => {});
-  console.log('[dualFaceSwap] Pipeline complete');
-  return urlData.publicUrl;
 }

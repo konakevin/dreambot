@@ -49,8 +49,9 @@ supabase secrets set \
 supabase functions deploy nightly-dreams generate-dream restyle-photo --no-verify-jwt
 ```
 
-Roll back: `supabase secrets unset DUAL_SWAP_FLY_URL` (the dispatch falls
-back to the in-Supabase function automatically).
+Roll back: there is no in-Supabase engine to fall back to (deleted 2026-09-17, NO_PIXELS_IN_ISOLATE_PLAN.md
+phase 5). Unsetting `DUAL_SWAP_FLY_URL` makes every dual swap a `dual_swap_error` → the pipeline's gender-safe
+solo rebuild. Roll back by redeploying a previous image of THIS service (`fly releases` → `fly deploy --image`).
 
 ## Ops
 
@@ -81,11 +82,10 @@ Fly.io flat above).
 
 ## Drift management
 
-`src/faceSwap.ts` and `src/imageCodec.ts` are copies of
-`supabase/functions/_shared/faceSwap.ts` + `imageCodec.ts`. The
-in-Supabase `face-swap-dual` still imports the originals from
-`_shared/`. Until the in-Supabase function is retired, **bug fixes
-to face-swap logic need to be applied in both locations** (or just
-re-copy the `_shared/` files into `src/` after edits). The contract
+`src/faceSwap.ts` and `src/imageCodec.ts` began as copies of
+`supabase/functions/_shared/faceSwap.ts` + `imageCodec.ts`. Since
+2026-09-17 the in-Supabase `face-swap-dual` function and the in-isolate
+dual engine no longer exist, so THIS copy is the only dual engine: edit
+it here. (`_shared/faceSwap.ts` keeps only the single-swap client.) The contract
 between dispatcher → this service is the body shape declared in
 `src/index.ts:RequestBody` — that's the load-bearing surface.

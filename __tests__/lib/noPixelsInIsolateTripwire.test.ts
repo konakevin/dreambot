@@ -21,7 +21,7 @@ const NOT_PIXELS = new Set(['_shared/imageCodec.ts', '_shared/deviceCheck.ts']);
 
 /** The in-isolate fallbacks that remain, by file. Lower a number when a phase lands; never raise one. */
 const PINNED: Record<string, number> = {
-  '_shared/faceSwap.ts': 9, // ensureHttpsImageUrl atob loop, perturbSourceImage, legacy dual split
+  '_shared/faceSwap.ts': 3, // ensureHttpsImageUrl atob loop + perturbSourceImage decode/encode (fallbacks)
   '_shared/persistence.ts': 3, // buildDisplayVariant + the aHash helper (nightly dup-detect fallback)
   'holiday-postcard/index.ts': 3, // compositing — phase 4
   'nightly-dreams/index.ts': 1, // dup-detect decode fallback
@@ -65,5 +65,37 @@ describe('no pixels in the isolate — tripwire', () => {
       );
     }
     expect(n).toBe(pinned);
+  });
+});
+
+describe('phase 5 — the dual swap has NO in-isolate engine', () => {
+  const FN = path.join(__dirname, '..', '..', 'supabase', 'functions');
+  const read = (rel: string) => fs.readFileSync(path.join(FN, rel), 'utf8');
+
+  it('the in-Supabase face-swap-dual function is gone (the Fly service is the only engine)', () => {
+    expect(fs.existsSync(path.join(FN, 'face-swap-dual'))).toBe(false);
+  });
+
+  it('faceSwap.ts no longer carries the 55/55 crop-and-stitch engine', () => {
+    const src = read('_shared/faceSwap.ts');
+    for (const gone of [
+      'function dualFaceSwap(',
+      'function stitchHalves(',
+      'function cropRegion(',
+    ]) {
+      expect(src).not.toContain(gone);
+    }
+  });
+
+  it('the dispatcher routes to Fly only, and a missing URL is an error — never a fallback engine', () => {
+    // Code only — the header comment is allowed to tell the history of the deleted engines.
+    const src = read('_shared/dualSwapDispatch.ts')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/^\s*\/\/[^\n]*$/gm, '');
+    expect(src).not.toContain('DUAL_SWAP_FANOUT');
+    expect(src).not.toContain('functions/v1/face-swap-dual');
+    expect(src).not.toContain('dualFaceSwap');
+    expect(src).toContain('if (!flyUrl || !flyToken) {');
+    expect(src).toContain('the dual swap has no in-isolate engine (phase 5, 2026-09-17)');
   });
 });

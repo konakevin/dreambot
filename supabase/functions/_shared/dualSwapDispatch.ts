@@ -1,25 +1,21 @@
 /**
- * Dispatch helper for dual face swap — routes to either the in-process
- * `dualFaceSwap()` or the standalone `face-swap-dual` Edge Function based
- * on the `DUAL_SWAP_FANOUT` env flag.
+ * Dispatch helper for the dual face swap — the ONE road to the Fly-hosted `face-swap-dual` engine
+ * (services/face-swap-dual: 2 GB, face detection, dynamic split, identity + gender checks).
  *
- * Default: in-process. Setting `DUAL_SWAP_FANOUT=true` routes the pixel-
- * heavy decode/crop/encode/stitch work into its own Edge Function isolate,
- * isolating it from the orchestrator's Sonnet/Flux/logging memory footprint.
+ * History. The swap first ran in-process (blind 55/55 crop-and-stitch inside the render isolate), then
+ * behind `DUAL_SWAP_FANOUT` in its own Supabase isolate, then (2026-06-01) on Fly behind
+ * `DUAL_SWAP_FLY_URL` with the Supabase isolate as the config-time fallback. On 2026-09-17
+ * (NO_PIXELS_IN_ISOLATE_PLAN.md phase 5) both in-isolate engines were deleted: a 2 s CPU budget
+ * cannot decode, crop, encode and stitch a render, and the fallback had been unreachable since the
+ * Fly cutover. With no Fly URL the dispatch throws, the caller stamps `dual_swap_error`, and the
+ * pipeline degrades to the gender-safe solo rebuild (the frozen chain) — never to in-isolate pixels.
  *
- * 2026-05-09: switched fanout transport from `supabase.functions.invoke()`
- * to raw `fetch()`. The SDK invoke pattern is designed for client-to-Edge-
- * Function calls where the user's auth context propagates automatically.
- * For Edge-Function-to-Edge-Function (server-to-server) we already have
- * explicit service-role context — the SDK's auth abstraction adds opacity
- * without value, and was returning "non-2xx" for reasons we never fully
- * isolated. Raw fetch with an explicit `Authorization: Bearer` header is
- * the same transport our external smoke tests verified, and makes the
- * auth flow transparent + debuggable.
+ * Transport is raw `fetch()` with an explicit Bearer (2026-05-09: the SDK's `functions.invoke()` was
+ * built for client→function calls and returned opaque "non-2xx" errors server-to-server).
  */
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
-import { dualFaceSwap, ensureHttpsImageUrl } from './faceSwap.ts';
+import { ensureHttpsImageUrl } from './faceSwap.ts';
 
 export interface DualDispatchResult {
   /** The swapped image, or null when the render had no clean 2-face split
@@ -66,15 +62,9 @@ export async function dispatchDualFaceSwap(
   // substituting for genderage on this attempt (see dualSwapPipeline).
   genderOverride?: { left: 'male' | 'female'; right: 'male' | 'female' } | null
 ): Promise<DualDispatchResult> {
-  const useFanout = Deno.env.get('DUAL_SWAP_FANOUT') === 'true';
-
-  // Convert data: URL targets (from native OpenAI + Gemini providers) to a
-  // temp HTTPS upload BEFORE either path so:
-  //   1) the fanout POST body stays small (no ~6-8 MB base64 ride-along)
-  //   2) the in-process dualFaceSwap doesn't have to handle data: in its
-  //      fetch + decode + re-upload path (it works either way, but explicit
-  //      conversion here matches the single faceSwap() boundary)
-  // Cleanup is best-effort in the finally below.
+  // Convert data: URL targets (from native OpenAI + Gemini providers) to a temp HTTPS upload (on the
+  // image-ops service, phase 3b) so the POST body stays small — no ~6-8 MB base64 ride-along — and the
+  // engine fetches a URL like any other. Cleanup is best-effort in the finally below.
   const { url: httpsTarget, tempPath: targetTempPath } = await ensureHttpsImageUrl(
     targetImageUrl,
     supabase,
@@ -82,46 +72,17 @@ export async function dispatchDualFaceSwap(
   );
 
   try {
-    if (!useFanout) {
-      // In-process path uses the legacy in-Supabase engine (no detection — Edge's
-      // 256 MB cap can't host onnxruntime). Returns a URL; normalize to the result
-      // shape with faceCount=2 (it always crops 55/55).
-      const tInProc = Date.now();
-      const url = await dualFaceSwap(
-        leftSourceUrl,
-        rightSourceUrl,
-        httpsTarget,
-        replicateToken,
-        supabase,
-        userId,
-        deadlineMs,
-        skipPrimary
-      );
-      return {
-        swappedUrl: url,
-        faceCount: 2,
-        engine: 'in-process-legacy',
-        swapMs: Date.now() - tInProc,
-        rejectReason: null,
-        identity: null,
-      };
-    }
-
-    // 2026-06-01: when DUAL_SWAP_FLY_URL is set, route to the Fly.io
-    // hosted face-swap-dual (2 GB RAM, escapes the 256 MB Supabase Edge
-    // Function cap that was triggering HTTP 546 WORKER_RESOURCE_LIMIT on
-    // large-output models — Ultra / gpt-image-2). When unset, falls back
-    // to the in-Supabase face-swap-dual function. See services/face-swap-
-    // dual/README.md + CLAUDE.md Scaling Initiative.
+    // The dual swap runs ONLY on the Fly-hosted engine. No URL / token = a dual_swap_error for the
+    // caller (→ the gender-safe solo rebuild), never an in-isolate engine (deleted 2026-09-17, phase 5).
     const flyUrl = Deno.env.get('DUAL_SWAP_FLY_URL');
     const flyToken = Deno.env.get('DUAL_SWAP_FLY_TOKEN');
-    const useFly = Boolean(flyUrl);
-
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-
-    const endpoint = useFly ? flyUrl! : `${supabaseUrl}/functions/v1/face-swap-dual`;
-    const authToken = useFly && flyToken ? flyToken : serviceRoleKey;
+    if (!flyUrl || !flyToken) {
+      throw new Error(
+        'DUAL_SWAP_FLY_URL / DUAL_SWAP_FLY_TOKEN unset — the dual swap has no in-isolate engine (phase 5, 2026-09-17)'
+      );
+    }
+    const endpoint = flyUrl;
+    const authToken = flyToken;
 
     const t0 = Date.now();
     // BOUNDED CALL (2026-09-12): this fetch had no timeout. When the Fly machine hung under two concurrent swaps
@@ -156,7 +117,7 @@ export async function dispatchDualFaceSwap(
     const elapsedMs = Date.now() - t0;
     const text = await res.text();
 
-    const target = useFly ? 'face-swap-dual@fly' : 'face-swap-dual@supabase';
+    const target = 'face-swap-dual@fly';
 
     if (!res.ok) {
       throw new Error(
@@ -194,11 +155,7 @@ export async function dispatchDualFaceSwap(
       throw new Error(`${target}: no swappedUrl in response (${elapsedMs}ms)`);
     }
     const faceCount = parsed.faceCount ?? (swappedUrl ? 2 : 0);
-    const engine = parsed.variant
-      ? `${useFly ? 'fly' : 'supabase'}-${parsed.variant}`
-      : useFly
-        ? 'fly-unversioned'
-        : 'supabase-legacy';
+    const engine = parsed.variant ? `fly-${parsed.variant}` : 'fly-unversioned';
     console.log(
       `[dispatchDualFaceSwap]${traceId ? `[${traceId}]` : ''} ${target} ${elapsedMs}ms swapped=${!!swappedUrl} faceCount=${faceCount} engine=${engine}`
     );

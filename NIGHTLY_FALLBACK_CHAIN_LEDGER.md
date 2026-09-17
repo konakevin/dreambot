@@ -193,6 +193,12 @@ postcards → `/composite`. **Batch `SOLO2` (10 forced solos, same shape as this
 image_ops:fly:1654-2460`.** Guards: `noPixelsInIsolateTripwire.test.ts` pins every remaining decode/encode/atob
 site (fallbacks only); `edge-546-monitor.yml` (6 h) fails above a fixed 3% 546 rate per function.
 
+**Phase 5 (Kevin: "delete the legacy dual split").** The in-isolate 55/55 crop-and-stitch engine (`dualFaceSwap` +
+helpers, 254 lines of `_shared/faceSwap.ts`), its only host (the in-Supabase `face-swap-dual` function, undeployed)
+and `DUAL_SWAP_FANOUT` are gone. `dualSwapDispatch.ts` is Fly-only: no `DUAL_SWAP_FLY_URL` → `dual_swap_error` →
+the gender-safe solo rebuild (the frozen chain), never in-isolate pixels. Chain semantics unchanged: the Fly engine
+was already the only reachable one. Guarded by the phase-5 describe in `noPixelsInIsolateTripwire.test.ts`.
+
 ## 6. State deployed tonight (Kevin: leave it for users)
 
 Commits `31cfa893`, `081ef539`, `621a5847`, `f75651ac`, `a7b1a3c2`, `9654f0f8` — all deployed to

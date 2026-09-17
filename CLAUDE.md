@@ -93,8 +93,11 @@ cast into one of their places. Free (no charge).
   Beyond the cap, jobs queue + drain (never fail). **The heavy ceiling is the Fly.io `face-swap-dual`
   service** — scale Fly FIRST (`fly scale count N`, runbook in `QUEUE_WORKERS_REFACTOR.md`), then raise
   the heavy cap.
-- **Dual face swap** runs in its own `face-swap-dual` isolate (Fly.io, 2GB; memory separation), routed via
-  `_shared/dualSwapDispatch.ts`. Never add pixel work to it in-process (Hard Rules).
+- **Dual face swap** runs ONLY on the Fly.io `face-swap-dual` service (2GB; face detection + identity/gender
+  checks), routed via `_shared/dualSwapDispatch.ts`. There is NO in-isolate engine any more (deleted
+  2026-09-17, `NO_PIXELS_IN_ISOLATE_PLAN.md` phase 5): with no `DUAL_SWAP_FLY_URL` the dispatch throws and the
+  pipeline degrades to the gender-safe solo rebuild. ALL pixel work (persist/display/thumbhash/hashes, swap
+  targets, the perturb, postcards) runs on the Fly `image-ops` service via `_shared/imageOps.ts` (Hard Rules).
 - **Pro-state is ONE rule across three runtimes** (keep in sync): `lib/proStatus.ts` (client),
   `scripts/lib/nightlyEligibility.js` (cron gate), `is_pro_active()` Postgres fn (Edge). Pro =
   paid+unexpired OR within trial; **trial length = `engine_config.pro_trial_days`** (default 14) — one DB
@@ -186,8 +189,8 @@ for the public feed + serves deep-link share targets.**
   target is staged in the same commit. (2026-06-18: committed `settings/index.tsx`'s `resetSparkleIntro`
   import while `SparkleIntroSheet.tsx` stayed untracked → broke `main` silently.)
 - **Deploy edge functions.** `supabase functions deploy <name> --no-verify-jwt` — ALWAYS `--no-verify-jwt`,
-  deploy immediately after editing. Active (17): `generate-dream`, `nightly-dreams`, `dream-queue-worker`,
-  `enqueue-dream`, `first-dream-render`, `face-swap-dual`, `restyle-photo`, `describe-photo`,
+  deploy immediately after editing. Active (16): `generate-dream`, `nightly-dreams`, `dream-queue-worker`,
+  `enqueue-dream`, `first-dream-render`, `restyle-photo`, `describe-photo`,
   `classify-photo`, `extract-style`, `audit-cast-photos`, `revenuecat-webhook`, `send-push`,
   `refund-self-moderation`, `refund-stuck-jobs`, `upscale-image`, `holiday-postcard`.
 - **Migrations** — apply with `node scripts/apply-migration.mjs <NNN>` (posts the file to the Management
@@ -250,8 +253,11 @@ count(*) GROUP BY category` first. (The April 2026 incident wiped both with one 
   runtime crashes (BOOT_ERROR). Use explicit null checks.
 - **NEVER enumerate biomes/materials/sub-styles in a path's prompt-prefix** — Flux's CLIP attends to the
   FIRST-named noun and renders only that. The prefix names the REGION; scene content carries the biome.
-- **NEVER add new pixel work to `dualFaceSwap` in-process** — new steps go in a separate Edge Function;
-  no new base64 data URIs in the swap pipeline (upload to temp storage, pass URLs).
+- **NEVER add pixel work (decode / encode / `atob` over image bytes) to `supabase/functions`** — the isolate
+  has a fixed 2 s CPU budget and that was every HTTP 546. It goes to the Fly `image-ops` service
+  (`services/image-ops`: a `/persist` mode or a new route, called through `_shared/imageOps.ts`, fail-open).
+  `__tests__/lib/noPixelsInIsolateTripwire.test.ts` pins the remaining call sites (fallbacks only) and fails
+  CI on a new one. No new base64 data URIs in the swap pipeline (upload to temp storage, pass URLs).
 - **NEVER front-load or amplify the scene on a FACE-SWAP prompt** (`_shared/characterSlotPrompt.ts`). The
   face swap needs Flux to render BIG, clearly-separated, frontal faces — `scene_description` stays AFTER
   the framing block, and you never tell Flux the scene "fills the background" / is "rich/layered/dominant".

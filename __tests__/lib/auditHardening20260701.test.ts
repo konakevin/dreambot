@@ -17,11 +17,12 @@ const REPO = path.join(__dirname, '..', '..');
 const read = (rel: string): string => fs.readFileSync(path.join(REPO, rel), 'utf-8');
 
 describe('edge-function auth guards (self-authenticating under --no-verify-jwt)', () => {
-  it('face-swap-dual rejects anything without the service-role token (was CRITICAL)', () => {
-    const src = read('supabase/functions/face-swap-dual/index.ts');
-    // Body userId is unauthenticated input; only a service-role bearer may pass.
-    expect(src).toMatch(/timingSafeEqual\(presentedToken, serviceRoleKey\)/);
-    expect(src).toMatch(/status:\s*401/);
+  it('face-swap-dual (the in-Supabase dual engine, CRITICAL-once) no longer exists — Fly-only since 2026-09-17', () => {
+    // NO_PIXELS_IN_ISOLATE_PLAN.md phase 5: the function and the in-isolate engine were deleted, so its
+    // auth surface is gone with it. The Fly service (services/face-swap-dual) carries its own Bearer guard.
+    expect(
+      fs.existsSync(path.join(__dirname, '..', '..', 'supabase', 'functions', 'face-swap-dual'))
+    ).toBe(false);
   });
 
   it('first-dream-render requires the worker token', () => {

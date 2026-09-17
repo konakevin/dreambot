@@ -6,6 +6,8 @@
 
 ## Why now
 
+(Status 2026-09-17: the in-Supabase `face-swap-dual` function, the in-isolate `dualFaceSwap` engine and `DUAL_SWAP_FANOUT` are all deleted — the dual swap is Fly-only; NO_PIXELS_IN_ISOLATE_PLAN.md phase 5.)
+
 Phase 2 (DUAL_SWAP_FANOUT) split `face-swap-dual` into its own isolate — necessary but not sufficient. Today's smoke confirmed the dual-swap pipeline still blows Supabase's 150MB/2s per-invocation ceiling on standard 1024×1664 renders (HTTP 546 `WORKER_RESOURCE_LIMIT`). Per CLAUDE.md scaling roadmap, this is the signal to refactor.
 
 The current synchronous architecture has 4 root problems:
