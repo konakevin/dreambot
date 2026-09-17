@@ -62,8 +62,8 @@ One call replaces `persistToStorage` + `buildDisplayVariant` + the dedup decode 
 Storage paths are identical to today's (`${userId}/${ts}.jpg`, `….display.jpg`, `${userId}/swap-target-…`),
 written with the service role the swap app already holds. The isolate remains the only DB writer.
 
-### `POST /perturb` (phase 4)
-`{ sourceUrl, userId }` → the single-swap perturb → temp URL.
+### `mode: 'perturb'` (phase 4a — built as a `/persist` mode, not a second route)
+`{ sourceUrl, userId, mode: 'perturb' }` → decode → one corner pixel nudged → JPEG q90-95 → `temp/<user>/perturbed-….jpg` → `{ url, key }`. Every written object now returns its `key` (temp / perturb callers delete it after the swap).
 
 ### Isolate client `_shared/imageOps.ts`
 `persistViaFly(opts)`: `AbortSignal.timeout(25_000)`, Bearer from `IMAGE_OPS_FLY_TOKEN`, URL from
@@ -78,21 +78,24 @@ stamps `image_ops:fallback:<code>`; success stamps `image_ops:fly:<ms>`. Rollout
 |---|---|---|
 | 0 | service + tests, deploy, `/healthz`, smoke `/persist` on a real render URL; parity: thumbhash + ahash equal the isolate's for the same image | objects in Storage, parity exact |
 | 1 | `nightly-dreams`: persist + display + dedup hashes via Fly, behind the secret | **DONE 2026-09-17.** 10 organic renders (6 solo, 4 couple): 10/10, **0 × 546**, 0 fallbacks, display + thumbhash + phash inline. Hash 0.3-1.7 s, persist 0.9-1.8 s per render. |
-| 2 | `generate-dream`, `restyle-photo` on the same client (`first-dream-render` next) | **DONE 2026-09-17.** First cloned Create job (gemini-3, a base64 provider) fell back `image_ops:fallback:http_400:bad_request` — the client only knew https sources (Fly: "sourceUrl must be https"); the render still shipped via the in-isolate path. Fixed in 3a. Re-run on `374aacb4`: `image_ops:fly:1180`, display + thumbhash written IN the uploads INSERT, no background variant scheduled, job complete in 50 s, no 546. |
+| 2 | `generate-dream`, `restyle-photo` on the same client (`first-dream-render` renders THROUGH `nightly-dreams` per cascade tier, so phase 1 already covers it) | **DONE 2026-09-17.** First cloned Create job (gemini-3, a base64 provider) fell back `image_ops:fallback:http_400:bad_request` — the client only knew https sources (Fly: "sourceUrl must be https"); the render still shipped via the in-isolate path. Fixed in 3a. Re-run on `374aacb4`: `image_ops:fly:1180`, display + thumbhash written IN the uploads INSERT, no background variant scheduled, job complete in 50 s, no 546. |
 | 3a | the client splits a `data:` source into `sourceBase64` + `mime`, so a base64 provider render is persisted on Fly without the isolate touching its bytes | **DONE 2026-09-17** (`374aacb4`) — the gemini-3 job in phase 2. |
-| 3b | `ensureHttpsImageUrl` → `/persist mode:temp` with `sourceBase64` (kills the atob loop on the swap-target path) | gemini/gpt FACE-SWAP renders' CPU |
-| 4 | `/perturb`, holiday-postcard compositing, upscale cache write | remaining `decodeImage(` count → 0 |
+| 3b | `ensureHttpsImageUrl` → `/persist mode:temp` (the client splits the data: URL; kills the atob loop on BOTH swap paths — `faceSwap()` and `dispatchDualFaceSwap()`) | **BUILT 2026-09-17**, bounded 10 s, fail-open into the loop. Measure: Fly logs `mode=temp` vs edge `[ensureHttpsImageUrl] image_ops:fallback` warns on gemini/gpt swap renders. |
+| 4a | `perturbSourceImage` → `/persist mode:perturb` (same `temp/<user>/perturbed-…` key, so cleanup is unchanged) — the solo path's biggest CPU spend | **DONE 2026-09-17.** Batch `SOLO2`, 10 forced solos on the deployed path: **10/10 rendered, 0 × 546** (this morning's identical batch died 5 of 10), 41-57 s each, flux 9 / gemini 1 (the roll), all `single held`. The smoke quantified the cause: a cast photo is 1943×1958 (3.8 MP) at 435 KB — under the isolate's 1.2 MB perturb guard, so every solo swap decoded + re-encoded 3.8 MP in-isolate; Fly clocks that at 2.1 s of CPU. |
+| 4b | holiday-postcard compositing → `POST /composite` (byte-identical `postcardComposite.ts` copy, parity-pinned; the edge fn keeps the `holidays` read and overwrites the render's own key; no pixel cap on Fly, so 4 MP frames stop being deferred to the cron). `upscaleClarity.ts` is I/O only — nothing to move. | **BUILT 2026-09-17**, fail-open into the in-isolate path. Measure: one postcard on a throwaway copy of a render. |
 | 5 | ultra / 4 MP is a model choice. Delete the legacy in-isolate dual split. | — |
 
 ## 5. Guards
 
 - **Parity test** (jest, main repo): `services/image-ops/src/{imageCodec,thumbhashGen}.ts` byte-identical
   to their sources. Drift fails CI.
-- **Tripwire** (jest): pins the count of `decodeImage(` / `encodeJpeg(` / `atob(` in `supabase/functions`;
-  a new one fails CI, and the number only goes down as phases land.
+- **Tripwire** (jest, `__tests__/lib/noPixelsInIsolateTripwire.test.ts`, BUILT): pins the count of `decodeImage(` /
+  `encodeJpeg(` / `atob(` per file in `supabase/functions`; a new one fails CI, and the number only goes down as phases land.
 - **Client fail-open test**: fetch throws / times out / 5xx → `null` + stamp, never a thrown render.
-- **Monitor**: a `edge-546-monitor` GitHub Action running the docs' 546-rate query per function, alarming
-  above 3% (fixed SLO, not config-coupled).
+- **Monitor** (BUILT 2026-09-17): `.github/workflows/edge-546-monitor.yml` every 6 h → `scripts/check-edge-546.js`
+  (Management API `function_edge_logs`, per function, 24 h window; logic in `scripts/lib/edge546.js`, tested). Alarms
+  above a FIXED 3% SLO on ≥ 20 requests. Needs the `SUPABASE_ACCESS_TOKEN` repo secret (set 2026-09-17). Its first
+  runs alarm on the pre-fix window (29 of 337 on nightly-dreams at 18:44 UTC) until 24 h roll past the fix — expected.
 
 ## 6. Budgets
 

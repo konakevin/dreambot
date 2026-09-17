@@ -32,6 +32,12 @@ describe('drift guard — the service copies are byte-identical to their sources
     );
   });
 
+  it('postcardComposite.ts equals _shared/postcardComposite.ts', () => {
+    expect(read('services/image-ops/src/postcardComposite.ts')).toBe(
+      read('supabase/functions/_shared/postcardComposite.ts')
+    );
+  });
+
   it('aHashFromDecoded body equals persistence.ts:aHashFromDecoded', () => {
     const body = (src: string) => {
       const m = src.match(
@@ -191,6 +197,80 @@ describe('persistViaFly — fail-open under every failure shape', () => {
     );
     const r = await persistViaFly(hopts, good);
     expect(r.ok).toBe(true);
+  });
+
+  it('temp / perturb: a 200 without the object key is bad_response — the caller could never delete it', async () => {
+    for (const mode of ['temp', 'perturb'] as const) {
+      const o = { sourceUrl: 'https://r/x.jpg', userId: 'u', mode };
+      const noKey = jest.fn(
+        async () => new Response(JSON.stringify({ url: 'https://x/u/t.jpg' }), { status: 200 })
+      );
+      expect(await persistViaFly(o, noKey)).toMatchObject({ ok: false, reason: 'bad_response' });
+      const withKey = jest.fn(
+        async () =>
+          new Response(JSON.stringify({ url: 'https://x/u/t.jpg', key: 'u/t.jpg', ms: {} }), {
+            status: 200,
+          })
+      );
+      const r = await persistViaFly(o, withKey);
+      expect(r.ok).toBe(true);
+      if (r.ok) expect(r.result.key).toBe('u/t.jpg');
+    }
+  });
+
+  it('compositeViaFly: same fail-open transport; a 200 must echo the key and carry a numeric placement', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { compositeViaFly } = require('@engine/imageOps');
+    const copts = {
+      imageUrl: 'https://x/u/1.jpg',
+      overlayUrl: 'https://x/h/o.png',
+      objectKey: 'u/1.jpg',
+      layout: { anchor: 'bottom' as const, widthPct: 0.82, marginPct: 0.05, scrim: true },
+    };
+    envVars.IMAGE_OPS_FLY_URL = undefined;
+    expect(await compositeViaFly(copts, jest.fn())).toMatchObject({
+      ok: false,
+      reason: 'disabled',
+    });
+    envVars.IMAGE_OPS_FLY_URL = 'https://image-ops.test';
+    const boom = jest.fn(async () => {
+      throw new Error('ECONNRESET');
+    });
+    expect(await compositeViaFly(copts, boom)).toMatchObject({ ok: false, reason: 'fetch_error' });
+    const wrongKey = jest.fn(
+      async () =>
+        new Response(
+          JSON.stringify({ key: 'u/other.jpg', placed: { x: 0, y: 0, width: 1, height: 1 } }),
+          { status: 200 }
+        )
+    );
+    expect(await compositeViaFly(copts, wrongKey)).toMatchObject({
+      ok: false,
+      reason: 'bad_response',
+    });
+    const good = jest.fn(async (url: string, init: RequestInit) => {
+      expect(url).toBe('https://image-ops.test/composite');
+      expect(JSON.parse(String(init.body))).toMatchObject({
+        objectKey: 'u/1.jpg',
+        layout: copts.layout,
+      });
+      return new Response(
+        JSON.stringify({
+          key: 'u/1.jpg',
+          placed: { x: 10, y: 20, width: 300, height: 80 },
+          width: 1,
+          height: 1,
+          ms: {},
+        }),
+        { status: 200 }
+      );
+    });
+    const r = await compositeViaFly(copts, good);
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.result.placed).toEqual({ x: 10, y: 20, width: 300, height: 80 });
+      expect(r.stamp).toMatch(/^image_ops:fly:\d+$/);
+    }
   });
 
   it('a data: source is sent as sourceBase64 + mime — the isolate never atob-loops it (phase 3)', async () => {

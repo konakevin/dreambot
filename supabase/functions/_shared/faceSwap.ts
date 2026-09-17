@@ -19,6 +19,7 @@
 // deno-lint-ignore-file no-explicit-any
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { decodeImage, encodeJpeg } from './imageCodec.ts';
+import { imageOpsEnabled, persistViaFly } from './imageOps.ts';
 
 const DEFAULT_MAX_WAIT_MS = 90_000;
 const POLL_INTERVAL_MS = 1000;
@@ -48,6 +49,21 @@ export async function ensureHttpsImageUrl(
 ): Promise<{ url: string; tempPath: string | null }> {
   if (typeof url !== 'string') throw new Error('ensureHttpsImageUrl: url is not a string');
   if (!url.startsWith('data:')) return { url, tempPath: null };
+
+  // PHASE 3b (NO_PIXELS_IN_ISOLATE_PLAN.md): the base64 → bytes loop below is CPU the isolate does not
+  // have to spare (a 2 s budget, shared with everything else in the render). The image-ops service takes
+  // the data: URL, decodes it and writes the SAME swap-target key; the caller's cleanup is unchanged.
+  // Fail-open: service off / error → the loop below, as before.
+  if (bucket === 'uploads' && imageOpsEnabled()) {
+    const r = await persistViaFly({ sourceUrl: url, userId, mode: 'temp', timeoutMs: 10_000 });
+    if (r.ok && r.result.url && r.result.key) {
+      console.log(`[ensureHttpsImageUrl] ${r.stamp}`);
+      return { url: r.result.url, tempPath: r.result.key };
+    }
+    console.warn(
+      `[ensureHttpsImageUrl] ${r.ok ? 'image_ops:fallback:bad_response' : r.stamp} — decoding in the isolate`
+    );
+  }
 
   // Parse: data:<mime>;base64,<payload>
   const comma = url.indexOf(',');
@@ -185,6 +201,25 @@ async function perturbSourceImage(
   supabase: SupabaseClient,
   userId: string
 ): Promise<{ url: string; path: string }> {
+  // PHASE 4 (NO_PIXELS_IN_ISOLATE_PLAN.md): this decode + re-encode is the solo path's single biggest CPU
+  // spend (forced-solo batch: 5 of 10 died with 546 while couples, which swap on Fly, died 0 of 10). The
+  // image-ops service does the identical perturb and writes the identical temp/<user>/perturbed-… key,
+  // so the caller's cleanup is unchanged. Fail-open: service off / error → the in-isolate code below.
+  if (imageOpsEnabled()) {
+    const r = await persistViaFly({
+      sourceUrl: sourceImageUrl,
+      userId,
+      mode: 'perturb',
+      timeoutMs: 10_000,
+    });
+    if (r.ok && r.result.url && r.result.key) {
+      console.log(`[perturbSource] ${r.stamp}`);
+      return { url: r.result.url, path: r.result.key };
+    }
+    console.warn(
+      `[perturbSource] ${r.ok ? 'image_ops:fallback:bad_response' : r.stamp} — perturbing in the isolate`
+    );
+  }
   const resp = await fetch(sourceImageUrl);
   if (!resp.ok) throw new Error(`Source download failed: ${resp.status}`);
   const buf = new Uint8Array(await resp.arrayBuffer());

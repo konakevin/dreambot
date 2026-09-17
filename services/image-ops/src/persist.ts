@@ -13,13 +13,14 @@
  */
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { decodeBase64 } from 'https://deno.land/std@0.224.0/encoding/base64.ts';
-import { decodeImage, encodeJpeg, type DecodedImage } from './imageCodec.ts';
+import { type DecodedImage, decodeImage, encodeJpeg } from './imageCodec.ts';
 import { computeThumbhash } from './thumbhashGen.ts';
 import { aHashFromDecoded, sha256Hex } from './hashes.ts';
 
 /** final = persisted render + variants; temp = swap-target object; hash = NO upload, just the hashes + dims
- *  (nightly's dup-detect asks this up to three times per render — it must never leave objects behind). */
-export type PersistMode = 'final' | 'temp' | 'hash';
+ *  (nightly's dup-detect asks this up to three times per render — it must never leave objects behind);
+ *  perturb = the single-swap cache-bust: re-encode the cast photo with one corner pixel nudged. */
+export type PersistMode = 'final' | 'temp' | 'hash' | 'perturb';
 
 export interface PersistRequest {
   /** An https URL to fetch (Replicate outputs). Exactly one of sourceUrl / sourceBase64. */
@@ -29,7 +30,8 @@ export interface PersistRequest {
   /** Required with sourceBase64; ignored for sourceUrl (the bytes are sniffed either way). */
   mime?: string;
   userId: string;
-  /** final = a persisted render (long cache); temp = a swap target (short cache); hash = nothing written. */
+  /** final = a persisted render (long cache); temp = a swap target (short cache); hash = nothing written;
+   *  perturb = a re-encoded copy of a cast photo under temp/ (the isolate's perturbSourceImage). */
   mode: PersistMode;
   /** Deterministic object key → idempotent overwrite (the HQ cache uses this). Final mode only. */
   objectKey?: string;
@@ -41,6 +43,8 @@ export interface PersistRequest {
 export interface PersistResult {
   /** null in hash mode — nothing was written. */
   url: string | null;
+  /** The Storage key of the object `url` points at (callers of temp / perturb delete it after the swap). */
+  key: string | null;
   displayUrl: string | null;
   thumbhash: string | null;
   sha256: string | null;
@@ -49,7 +53,13 @@ export interface PersistResult {
   height: number | null;
   bytes: number;
   contentType: string;
-  ms: { fetch: number; decode: number; encode: number; upload: number; total: number };
+  ms: {
+    fetch: number;
+    decode: number;
+    encode: number;
+    upload: number;
+    total: number;
+  };
 }
 
 export class PersistError extends Error {
@@ -67,32 +77,39 @@ export const MAX_SOURCE_BYTES = 25 * 1024 * 1024;
 const FETCH_TIMEOUT_MS = 20_000;
 
 export function validateRequest(body: unknown): PersistRequest {
-  if (!body || typeof body !== 'object')
+  if (!body || typeof body !== 'object') {
     throw new PersistError('bad_request', 400, 'JSON body required');
+  }
   const b = body as Record<string, unknown>;
   const hasUrl = typeof b.sourceUrl === 'string' && b.sourceUrl.length > 0;
   const hasB64 = typeof b.sourceBase64 === 'string' && b.sourceBase64.length > 0;
-  if (hasUrl === hasB64)
+  if (hasUrl === hasB64) {
     throw new PersistError(
       'bad_request',
       400,
       'exactly one of sourceUrl / sourceBase64 is required'
     );
-  if (hasUrl && !/^https:\/\//i.test(b.sourceUrl as string))
+  }
+  if (hasUrl && !/^https:\/\//i.test(b.sourceUrl as string)) {
     throw new PersistError('bad_request', 400, 'sourceUrl must be https');
-  if (typeof b.userId !== 'string' || !/^[0-9a-f-]{36}$/i.test(b.userId))
+  }
+  if (typeof b.userId !== 'string' || !/^[0-9a-f-]{36}$/i.test(b.userId)) {
     throw new PersistError('bad_request', 400, 'userId must be a uuid');
-  if (b.mode !== 'final' && b.mode !== 'temp' && b.mode !== 'hash')
-    throw new PersistError('bad_request', 400, "mode must be 'final', 'temp' or 'hash'");
+  }
+  if (b.mode !== 'final' && b.mode !== 'temp' && b.mode !== 'hash' && b.mode !== 'perturb') {
+    throw new PersistError('bad_request', 400, "mode must be 'final', 'temp', 'hash' or 'perturb'");
+  }
   if (b.objectKey !== undefined) {
     if (
       typeof b.objectKey !== 'string' ||
       !b.objectKey.startsWith(`${b.userId}/`) ||
       b.objectKey.includes('..')
-    )
+    ) {
       throw new PersistError('bad_request', 400, 'objectKey must live under the user prefix');
-    if (b.mode !== 'final')
+    }
+    if (b.mode !== 'final') {
       throw new PersistError('bad_request', 400, 'objectKey is final-mode only');
+    }
   }
   const variants =
     b.variants && typeof b.variants === 'object'
@@ -118,10 +135,12 @@ export function sniff(bytes: Uint8Array): { contentType: string; ext: string } {
     bytes[1] === 0x50 &&
     bytes[2] === 0x4e &&
     bytes[3] === 0x47
-  )
+  ) {
     return { contentType: 'image/png', ext: 'png' };
-  if (bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff)
+  }
+  if (bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) {
     return { contentType: 'image/jpeg', ext: 'jpg' };
+  }
   if (
     bytes.length >= 12 &&
     bytes[0] === 0x52 &&
@@ -132,8 +151,9 @@ export function sniff(bytes: Uint8Array): { contentType: string; ext: string } {
     bytes[9] === 0x45 &&
     bytes[10] === 0x42 &&
     bytes[11] === 0x50
-  )
+  ) {
     return { contentType: 'image/webp', ext: 'webp' };
+  }
   throw new PersistError('unsupported_image', 400, 'bytes are not png / jpeg / webp');
 }
 
@@ -146,14 +166,19 @@ export async function loadSource(
   if (req.sourceUrl) {
     let res: Response;
     try {
-      res = await fetchImpl(req.sourceUrl, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
+      res = await fetchImpl(req.sourceUrl, {
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+      });
     } catch (e) {
       throw new PersistError('source_fetch_failed', 502, `fetch threw: ${(e as Error).message}`);
     }
-    if (!res.ok)
+    if (!res.ok) {
       throw new PersistError('source_fetch_failed', 502, `source returned ${res.status}`);
+    }
     const len = Number(res.headers.get('content-length') ?? '0');
-    if (len > MAX_SOURCE_BYTES) throw new PersistError('too_large', 413, `source is ${len} bytes`);
+    if (len > MAX_SOURCE_BYTES) {
+      throw new PersistError('too_large', 413, `source is ${len} bytes`);
+    }
     bytes = new Uint8Array(await res.arrayBuffer());
   } else {
     try {
@@ -162,9 +187,12 @@ export async function loadSource(
       throw new PersistError('bad_base64', 400, `base64 decode failed: ${(e as Error).message}`);
     }
   }
-  if (bytes.length > MAX_SOURCE_BYTES)
+  if (bytes.length > MAX_SOURCE_BYTES) {
     throw new PersistError('too_large', 413, `source is ${bytes.length} bytes`);
-  if (bytes.length === 0) throw new PersistError('empty_source', 400, 'source is empty');
+  }
+  if (bytes.length === 0) {
+    throw new PersistError('empty_source', 400, 'source is empty');
+  }
   const { contentType, ext } = sniff(bytes);
   return { bytes, contentType, ext, fetchMs: Date.now() - t0 };
 }
@@ -178,14 +206,28 @@ export function objectKeyFor(
   req: PersistRequest,
   ext: string
 ): { key: string; cacheControl: string; upsert: boolean } {
-  if (req.mode === 'temp')
+  if (req.mode === 'temp') {
     return {
       key: `${req.userId}/swap-target-${Date.now()}-${rand()}.${ext}`,
       cacheControl: '300',
       upsert: false,
     };
-  if (req.objectKey) return { key: req.objectKey, cacheControl: '2592000', upsert: true };
-  return { key: `${req.userId}/${Date.now()}.${ext}`, cacheControl: '2592000', upsert: false };
+  }
+  if (req.mode === 'perturb') {
+    return {
+      key: `temp/${req.userId}/perturbed-${Date.now()}-${rand()}.jpg`,
+      cacheControl: '2592000',
+      upsert: true,
+    };
+  }
+  if (req.objectKey) {
+    return { key: req.objectKey, cacheControl: '2592000', upsert: true };
+  }
+  return {
+    key: `${req.userId}/${Date.now()}.${ext}`,
+    cacheControl: '2592000',
+    upsert: false,
+  };
 }
 
 export async function persist(
@@ -200,18 +242,27 @@ export async function persist(
   const src = await loadSource(req, deps.fetchImpl);
   ms.fetch = src.fetchMs;
 
+  if (req.mode === 'perturb') {
+    return perturbSource(supabase, req, src, bucket, ms, tStart);
+  }
+
   // 1. The original, exactly as received. This is the one write that must succeed — unless this is a
   //    hash-only call, which writes nothing.
   let url: string | null = null;
+  let writtenKey: string | null = null;
   if (req.mode !== 'hash') {
     const { key, cacheControl, upsert } = objectKeyFor(req, src.ext);
     const tUp = Date.now();
-    const { error: upErr } = await supabase.storage
-      .from(bucket)
-      .upload(key, src.bytes, { contentType: src.contentType, cacheControl, upsert });
-    if (upErr)
+    const { error: upErr } = await supabase.storage.from(bucket).upload(key, src.bytes, {
+      contentType: src.contentType,
+      cacheControl,
+      upsert,
+    });
+    if (upErr) {
       throw new PersistError('upload_failed', 500, `original upload failed: ${upErr.message}`);
+    }
     url = supabase.storage.from(bucket).getPublicUrl(key).data.publicUrl;
+    writtenKey = key;
     ms.upload += Date.now() - tUp;
   }
 
@@ -221,6 +272,7 @@ export async function persist(
 
   const result: PersistResult = {
     url,
+    key: writtenKey,
     displayUrl: null,
     thumbhash: null,
     sha256: null,
@@ -269,16 +321,18 @@ export async function persist(
           ms.encode = Date.now() - tEnc;
           const dKey = `${req.userId}/${Date.now()}-${rand()}.display.jpg`;
           const tUp2 = Date.now();
-          const { error } = await supabase.storage
-            .from(bucket)
-            .upload(dKey, jpeg, { contentType: 'image/jpeg', cacheControl: '2592000' });
+          const { error } = await supabase.storage.from(bucket).upload(dKey, jpeg, {
+            contentType: 'image/jpeg',
+            cacheControl: '2592000',
+          });
           ms.upload += Date.now() - tUp2;
-          if (!error)
+          if (!error) {
             result.displayUrl = supabase.storage.from(bucket).getPublicUrl(dKey).data.publicUrl;
-          else
+          } else {
             console.warn(
               `[image-ops] display upload failed (${req.traceId ?? '-'}): ${error.message}`
             );
+          }
         } catch (e) {
           console.warn(
             `[image-ops] display encode failed (${req.traceId ?? '-'}): ${(e as Error).message}`
@@ -290,4 +344,65 @@ export async function persist(
 
   ms.total = Date.now() - tStart;
   return result;
+}
+
+/**
+ * perturb mode — what the isolate's `perturbSourceImage` (faceSwap.ts) did in-process: re-encode the cast
+ * photo at a random JPEG quality 90-95 with one bottom-right-corner pixel nudged, so the BYTES differ on
+ * every call and Replicate's input-hash cache cannot lock a face embedding onto a stale prediction (the
+ * canned-output bug, 2026-04-29). The face is in the upper half; the corner is never it. Key, cache and
+ * upsert are byte-identical to the isolate's, so the caller's cleanup (`.remove([path])`) is unchanged.
+ * Decode failure is a hard 422 — the caller falls back to its own perturb, or to the raw URL.
+ */
+async function perturbSource(
+  supabase: SupabaseClient,
+  req: PersistRequest,
+  src: { bytes: Uint8Array; contentType: string },
+  bucket: string,
+  ms: PersistResult['ms'],
+  tStart: number
+): Promise<PersistResult> {
+  const tDec = Date.now();
+  let decoded: DecodedImage;
+  try {
+    decoded = await decodeImage(src.bytes);
+  } catch (e) {
+    throw new PersistError('decode_failed', 422, `decode failed: ${(e as Error).message}`);
+  }
+  ms.decode = Date.now() - tDec;
+  const { data, width: w, height: h } = decoded;
+  const px = Math.max(0, w - 1 - Math.floor(Math.random() * 4));
+  const py = Math.max(0, h - 1 - Math.floor(Math.random() * 4));
+  const off = (py * w + px) * 4;
+  data[off] = Math.floor(Math.random() * 256);
+  data[off + 1] = Math.floor(Math.random() * 256);
+  data[off + 2] = Math.floor(Math.random() * 256);
+  const quality = 90 + Math.floor(Math.random() * 6);
+  const tEnc = Date.now();
+  const jpeg = await encodeJpeg({ data, width: w, height: h }, quality);
+  ms.encode = Date.now() - tEnc;
+
+  const { key, cacheControl, upsert } = objectKeyFor(req, 'jpg');
+  const tUp = Date.now();
+  const { error } = await supabase.storage
+    .from(bucket)
+    .upload(key, jpeg, { contentType: 'image/jpeg', cacheControl, upsert });
+  if (error) {
+    throw new PersistError('upload_failed', 500, `perturbed upload failed: ${error.message}`);
+  }
+  ms.upload = Date.now() - tUp;
+  ms.total = Date.now() - tStart;
+  return {
+    url: supabase.storage.from(bucket).getPublicUrl(key).data.publicUrl,
+    key,
+    displayUrl: null,
+    thumbhash: null,
+    sha256: null,
+    ahash: null,
+    width: w,
+    height: h,
+    bytes: src.bytes.length,
+    contentType: src.contentType,
+    ms,
+  };
 }

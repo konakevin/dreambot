@@ -7,9 +7,15 @@ budget, instead of inside a Supabase Edge isolate with a hard 2 s CPU cap (the c
 Endpoints (Bearer `FLY_AUTH_TOKEN`, JSON in/out):
 
 - `GET /healthz` — liveness, no auth
-- `POST /persist` — persist a render (URL or provider base64) + display variant + thumbhash + dedup hashes.
-  Contract in `src/persist.ts`. Storage paths are identical to what the isolate wrote; this service never
-  writes a database row.
+- `POST /persist` — one call for everything the isolate used to do with a render's bytes. `mode`:
+  - `final` — persist the render + display JPEG + thumbhash + sha256/aHash (the uploads row's fields)
+  - `temp` — a swap-target object (`<user>/swap-target-…`, 5-min cache), nothing else
+  - `hash` — nothing written; sha256 + aHash + dims (nightly's dup-detect)
+  - `perturb` — the single-swap cache-bust: cast photo re-encoded q90-95 with one corner pixel nudged,
+    written to `temp/<user>/perturbed-….jpg`
+  Source is an https `sourceUrl` or raw `sourceBase64` + `mime`. Every written object comes back with its
+  `key` so the caller can delete it. Contract in `src/persist.ts`. Storage paths are identical to what
+  the isolate wrote; this service never writes a database row.
 
 ## First deploy
 
@@ -39,7 +45,9 @@ deno test --allow-read --allow-net=esm.sh,deno.land,cdn.jsdelivr.net
 ```
 
 The main repo's `__tests__/lib/imageOps.test.ts` pins the codec / thumbhash copies byte-identical to their
-sources and the isolate client's fail-open behaviour.
+sources and the isolate client's fail-open behaviour; `imageOpsWiring.test.ts` pins the call ORDER at each
+isolate site (Fly first, in-isolate path as the fallback); `noPixelsInIsolateTripwire.test.ts` pins the
+count of decode / encode / atob call sites left in `supabase/functions` — a new one fails CI.
 
 ## Operating
 

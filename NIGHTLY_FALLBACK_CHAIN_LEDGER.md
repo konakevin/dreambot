@@ -183,6 +183,16 @@ stamps to see which path it took. STILL in the isolate (phase 3b/4): `ensureHttp
 targets, `perturbSourceImage`, the legacy non-Fly dual split, holiday-postcard compositing, the upscale cache write,
 and `first-dream-render` is not on the client yet.
 
+**Later the same day — phases 3b / 4a / 4b + the monitor.** `first-dream-render` was never a separate case: it renders
+THROUGH `nightly-dreams` per cascade tier. The solo 546 root cause, quantified by the smoke: a cast photo is
+1943×1958 (3.8 MP) at 435 KB — UNDER the isolate's 1.2 MB perturb guard, so every solo swap decoded + re-encoded
+3.8 MP in-isolate (Fly clocks that at 2.1 s of CPU; the budget is 2 s). Now `perturbSourceImage` → Fly
+`mode:perturb`, `ensureHttpsImageUrl` (both swap paths) + generate-dream's swap source → `mode:temp`, holiday
+postcards → `/composite`. **Batch `SOLO2` (10 forced solos, same shape as this morning's 5-of-10 casualty): 10/10,
+0 × 546, 41-57 s each, flux 9 / gemini 1, all `single held`; edge logs show all ten `[perturbSource]
+image_ops:fly:1654-2460`.** Guards: `noPixelsInIsolateTripwire.test.ts` pins every remaining decode/encode/atob
+site (fallbacks only); `edge-546-monitor.yml` (6 h) fails above a fixed 3% 546 rate per function.
+
 ## 6. State deployed tonight (Kevin: leave it for users)
 
 Commits `31cfa893`, `081ef539`, `621a5847`, `f75651ac`, `a7b1a3c2`, `9654f0f8` — all deployed to

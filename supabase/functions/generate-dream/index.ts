@@ -2195,16 +2195,44 @@ Output ONLY the prompt.`;
           lap('face-swap-upload');
         } else {
           console.log('[generate-dream] ⏱ Starting face swap upload...');
-          const base64Data = faceSwapSource.replace(/^data:image\/\w+;base64,/, '');
-          const swapBytes = Uint8Array.from(atob(base64Data), (c) => c.charCodeAt(0));
-          swapFileName = `temp/${userId}/faceswap-${Date.now()}.jpg`;
-          await supabase.storage.from('uploads').upload(swapFileName, swapBytes, {
-            contentType: 'image/jpeg',
-            upsert: true,
-            cacheControl: '2592000',
-          });
-          const { data: swapUrlData } = supabase.storage.from('uploads').getPublicUrl(swapFileName);
-          sourceUrl = swapUrlData.publicUrl;
+          // NO_PIXELS_IN_ISOLATE_PLAN.md (phase 3b): the cast photo arrives as a data: URL and the base64 →
+          // bytes loop below is CPU the isolate does not have to spare. image-ops writes the temp object and
+          // returns its key, so the cleanup below is unchanged. Fail-open: service off / error → the loop.
+          let flyTemp: { url: string; key: string } | null = null;
+          if (imageOpsEnabled()) {
+            const r = await persistViaFly({
+              sourceUrl: faceSwapSource,
+              userId,
+              mode: 'temp',
+              timeoutMs: 10_000,
+              traceId: jobId ?? undefined,
+            });
+            if (r.ok && r.result.url && r.result.key) {
+              flyTemp = { url: r.result.url, key: r.result.key };
+              console.log(`[generate-dream] swap source ${r.stamp}`);
+            } else {
+              console.warn(
+                `[generate-dream] swap source ${r.ok ? 'image_ops:fallback:bad_response' : r.stamp} — decoding in the isolate`
+              );
+            }
+          }
+          if (flyTemp) {
+            swapFileName = flyTemp.key;
+            sourceUrl = flyTemp.url;
+          } else {
+            const base64Data = faceSwapSource.replace(/^data:image\/\w+;base64,/, '');
+            const swapBytes = Uint8Array.from(atob(base64Data), (c) => c.charCodeAt(0));
+            swapFileName = `temp/${userId}/faceswap-${Date.now()}.jpg`;
+            await supabase.storage.from('uploads').upload(swapFileName, swapBytes, {
+              contentType: 'image/jpeg',
+              upsert: true,
+              cacheControl: '2592000',
+            });
+            const { data: swapUrlData } = supabase.storage
+              .from('uploads')
+              .getPublicUrl(swapFileName);
+            sourceUrl = swapUrlData.publicUrl;
+          }
           lap('face-swap-upload');
         }
         console.log('[generate-dream] ⏱ Face swap upload done, starting swap...');

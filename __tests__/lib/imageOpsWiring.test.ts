@@ -86,9 +86,10 @@ describe('phase 1 wiring — final persist', () => {
 });
 
 describe.each([
-  ['generate-dream', 'supabase/functions/generate-dream/index.ts', 'tempUrl'],
-  ['restyle-photo', 'supabase/functions/restyle-photo/index.ts', 'genResult.url'],
-])('phase 2 wiring — %s', (_name, rel, src) => {
+  // generate-dream carries a second call: the Create swap SOURCE (a data: cast photo) → mode 'temp' (3b)
+  ['generate-dream', 'supabase/functions/generate-dream/index.ts', 'tempUrl', 2],
+  ['restyle-photo', 'supabase/functions/restyle-photo/index.ts', 'genResult.url', 1],
+])('phase 2 wiring — %s', (_name, rel, src, calls) => {
   const T = strip(fs.readFileSync(path.join(__dirname, '..', '..', rel), 'utf8'));
 
   it('imports the client', () => {
@@ -116,8 +117,115 @@ describe.each([
     );
   });
 
-  it('the call is gated on imageOpsEnabled()', () => {
-    expect((T.match(/persistViaFly\(/g) || []).length).toBe(1);
-    expect((T.match(/if \(imageOpsEnabled\(\)\) \{/g) || []).length).toBe(1);
+  it('every call is gated on imageOpsEnabled()', () => {
+    expect((T.match(/persistViaFly\(/g) || []).length).toBe(calls);
+    expect((T.match(/if \(imageOpsEnabled\(\)\) \{/g) || []).length).toBe(calls);
+  });
+});
+
+describe('phase 3b wiring — generate-dream swap source (the data: cast photo)', () => {
+  const T = strip(
+    fs.readFileSync(
+      path.join(__dirname, '..', '..', 'supabase', 'functions', 'generate-dream', 'index.ts'),
+      'utf8'
+    )
+  );
+
+  it('asks Fly (temp) BEFORE the atob loop, and the loop remains as the fallback', () => {
+    const fly = T.indexOf("sourceUrl: faceSwapSource, userId, mode: 'temp'");
+    const loop = T.indexOf('Uint8Array.from(atob(base64Data)');
+    expect(fly).toBeGreaterThan(-1);
+    expect(loop).toBeGreaterThan(fly);
+  });
+
+  it('the Fly key becomes swapFileName so the existing cleanup removes it', () => {
+    expect(T).toContain('if (flyTemp) { swapFileName = flyTemp.key; sourceUrl = flyTemp.url; }');
+    expect(T).toContain('.remove([swapFileName])');
+  });
+});
+
+describe('phase 3b + 4 wiring — faceSwap.ts (swap-target atob loop + the single-swap perturb)', () => {
+  const F = strip(
+    fs.readFileSync(
+      path.join(__dirname, '..', '..', 'supabase', 'functions', '_shared', 'faceSwap.ts'),
+      'utf8'
+    )
+  );
+
+  it('imports the client', () => {
+    expect(F).toContain("import { imageOpsEnabled, persistViaFly } from './imageOps.ts';");
+  });
+
+  it('ensureHttpsImageUrl asks Fly (temp) BEFORE the atob loop, and the loop remains as the fallback', () => {
+    const fn = F.indexOf('export async function ensureHttpsImageUrl(');
+    const fly = F.indexOf("mode: 'temp'");
+    const loop = F.indexOf('const bin = atob(b64);');
+    expect(fn).toBeGreaterThan(-1);
+    expect(fly).toBeGreaterThan(fn);
+    expect(loop).toBeGreaterThan(fly);
+  });
+
+  it('perturbSourceImage asks Fly (perturb) BEFORE the in-isolate decode, and the decode remains as the fallback', () => {
+    const fn = F.indexOf('async function perturbSourceImage(');
+    const fly = F.indexOf("mode: 'perturb'");
+    const dec = F.indexOf('const decoded = await decodeImage(buf);');
+    expect(fn).toBeGreaterThan(-1);
+    expect(fly).toBeGreaterThan(fn);
+    expect(dec).toBeGreaterThan(fly);
+  });
+
+  it('a Fly result is used only when it carries the key the cleanup needs, and it is returned AS that key', () => {
+    expect(F).toContain(
+      'if (r.ok && r.result.url && r.result.key) { console.log(`[ensureHttpsImageUrl] ${r.stamp}`); return { url: r.result.url, tempPath: r.result.key }; }'
+    );
+    expect(F).toContain(
+      'if (r.ok && r.result.url && r.result.key) { console.log(`[perturbSource] ${r.stamp}`); return { url: r.result.url, path: r.result.key }; }'
+    );
+  });
+
+  it('both calls are bounded to 10 s — a hung service must not eat the swap deadline', () => {
+    expect((F.match(/timeoutMs: 10_000/g) || []).length).toBe(2);
+  });
+
+  it('every Fly call is gated on imageOpsEnabled()', () => {
+    expect((F.match(/persistViaFly\(/g) || []).length).toBe(2);
+    expect((F.match(/imageOpsEnabled\(\)\) \{/g) || []).length).toBe(2);
+  });
+});
+
+describe('phase 4b wiring — holiday-postcard', () => {
+  const H = strip(
+    fs.readFileSync(
+      path.join(__dirname, '..', '..', 'supabase', 'functions', 'holiday-postcard', 'index.ts'),
+      'utf8'
+    )
+  );
+
+  it('imports the client', () => {
+    expect(H).toContain(
+      "import { compositeViaFly, imageOpsEnabled } from '../_shared/imageOps.ts';"
+    );
+  });
+
+  it('asks Fly AFTER the holidays row is read (the isolate stays the DB reader) and BEFORE any decode', () => {
+    const row = H.indexOf(".from('holidays')");
+    const fly = H.indexOf('compositeViaFly({');
+    const dec = H.indexOf('const base = await decodeImage(srcBytes);');
+    expect(row).toBeGreaterThan(-1);
+    expect(fly).toBeGreaterThan(row);
+    expect(dec).toBeGreaterThan(fly);
+  });
+
+  it("overwrites the render's OWN key and answers the dispatcher's contract (ok + placed + path)", () => {
+    expect(H).toContain('objectKey: objectPath,');
+    expect(H).toContain(
+      'if (r.ok) { console.log(`[holiday-postcard] ${r.stamp} ${holiday} ${objectPath}`); return json({ ok: true, ms: Date.now() - t0, placed: r.result.placed, path: objectPath }); }'
+    );
+  });
+
+  it('the in-isolate path (with its pixel-cap deferral) remains as the fallback', () => {
+    expect(H).toContain('if (dims && dims.width * dims.height > MAX_INLINE_PIXELS) {');
+    expect((H.match(/compositeViaFly\(/g) || []).length).toBe(1);
+    expect((H.match(/if \(imageOpsEnabled\(\)\) \{/g) || []).length).toBe(1);
   });
 });

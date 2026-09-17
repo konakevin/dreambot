@@ -21,6 +21,7 @@ import {
   type RgbaImage,
 } from '../_shared/postcardComposite.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
+import { compositeViaFly, imageOpsEnabled } from '../_shared/imageOps.ts';
 
 const overlayCache = new Map<string, RgbaImage>();
 
@@ -125,6 +126,24 @@ Deno.serve(async (req) => {
       marginPct: Number(row.postcard_margin_pct ?? 5) / 100,
       scrim: row.postcard_scrim !== false,
     };
+
+    // NO_PIXELS_IN_ISOLATE_PLAN.md (phase 4b): the decode + composite + re-encode runs on the image-ops
+    // service, which has no pixel cap — the 4 MP frames this isolate had to defer to the cron now land
+    // inline. Fail-open: service off / error → the in-isolate path below, deferral and all.
+    if (imageOpsEnabled()) {
+      const r = await compositeViaFly({
+        imageUrl,
+        overlayUrl,
+        objectKey: objectPath,
+        layout,
+        traceId: `postcard:${holiday}`,
+      });
+      if (r.ok) {
+        console.log(`[holiday-postcard] ${r.stamp} ${holiday} ${objectPath}`);
+        return json({ ok: true, ms: Date.now() - t0, placed: r.result.placed, path: objectPath });
+      }
+      console.warn(`[holiday-postcard] ${r.stamp} — compositing in the isolate`);
+    }
 
     const [overlay, srcRes] = await Promise.all([loadOverlay(overlayUrl), fetch(imageUrl)]);
     if (!srcRes.ok) return json({ ok: false, error: `source fetch ${srcRes.status}` }, 502);

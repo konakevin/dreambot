@@ -6,16 +6,17 @@
 import {
   assert,
   assertEquals,
-  assertRejects,
   assertMatch,
+  assertRejects,
+  assertThrows,
 } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { encodeBase64 } from 'https://deno.land/std@0.224.0/encoding/base64.ts';
 import {
-  MAX_SOURCE_BYTES,
-  PersistError,
   loadSource,
+  MAX_SOURCE_BYTES,
   objectKeyFor,
   persist,
+  PersistError,
   sniff,
   validateRequest,
 } from './persist.ts';
@@ -30,6 +31,7 @@ function mockSupabase() {
   const uploads: {
     key: string;
     bytes: number;
+    data: Uint8Array;
     contentType: string;
     cacheControl: string;
     upsert: boolean;
@@ -45,6 +47,7 @@ function mockSupabase() {
           uploads.push({
             key,
             bytes: data.length,
+            data,
             contentType: o.contentType,
             cacheControl: o.cacheControl,
             upsert: !!o.upsert,
@@ -52,7 +55,9 @@ function mockSupabase() {
           return Promise.resolve({ error: null });
         },
         getPublicUrl: (key: string) => ({
-          data: { publicUrl: `https://x.supabase.co/storage/v1/object/public/uploads/${key}` },
+          data: {
+            publicUrl: `https://x.supabase.co/storage/v1/object/public/uploads/${key}`,
+          },
         }),
       }),
     },
@@ -73,13 +78,33 @@ Deno.test(
     assertEquals(good.mode, 'final');
     for (const bad of [
       {},
-      { sourceUrl: 'https://a', sourceBase64: 'AA==', userId: USER, mode: 'final' },
+      {
+        sourceUrl: 'https://a',
+        sourceBase64: 'AA==',
+        userId: USER,
+        mode: 'final',
+      },
       { sourceUrl: 'http://insecure', userId: USER, mode: 'final' },
       { sourceUrl: 'https://a', userId: 'not-a-uuid', mode: 'final' },
       { sourceUrl: 'https://a', userId: USER, mode: 'weird' },
-      { sourceUrl: 'https://a', userId: USER, mode: 'final', objectKey: 'someone-else/x.png' },
-      { sourceUrl: 'https://a', userId: USER, mode: 'final', objectKey: `${USER}/../x.png` },
-      { sourceUrl: 'https://a', userId: USER, mode: 'temp', objectKey: `${USER}/x.png` },
+      {
+        sourceUrl: 'https://a',
+        userId: USER,
+        mode: 'final',
+        objectKey: 'someone-else/x.png',
+      },
+      {
+        sourceUrl: 'https://a',
+        userId: USER,
+        mode: 'final',
+        objectKey: `${USER}/../x.png`,
+      },
+      {
+        sourceUrl: 'https://a',
+        userId: USER,
+        mode: 'temp',
+        objectKey: `${USER}/x.png`,
+      },
     ]) {
       let threw: PersistError | null = null;
       try {
@@ -106,7 +131,11 @@ Deno.test('sniff — magic bytes decide the container, never the declared mime',
 });
 
 Deno.test('loadSource — base64 path decodes to the exact fixture bytes', async () => {
-  const src = await loadSource({ sourceBase64: encodeBase64(fixture), userId: USER, mode: 'temp' });
+  const src = await loadSource({
+    sourceBase64: encodeBase64(fixture),
+    userId: USER,
+    mode: 'temp',
+  });
   assertEquals(src.bytes.length, fixture.length);
   assertEquals(src.ext, 'jpg');
 });
@@ -115,7 +144,12 @@ Deno.test('loadSource — a source over the cap is refused with 413, not decoded
   const big = new Uint8Array(MAX_SOURCE_BYTES + 1);
   big.set([0xff, 0xd8, 0xff]);
   await assertRejects(
-    () => loadSource({ sourceBase64: encodeBase64(big), userId: USER, mode: 'temp' }),
+    () =>
+      loadSource({
+        sourceBase64: encodeBase64(big),
+        userId: USER,
+        mode: 'temp',
+      }),
     PersistError,
     'bytes'
   );
@@ -235,13 +269,18 @@ Deno.test(
         uploads.push({
           key,
           bytes: data.length,
+          data,
           contentType: o.contentType,
           cacheControl: o.cacheControl,
           upsert: false,
         });
-        return Promise.resolve({ error: n === 2 ? { message: 'quota' } : null });
+        return Promise.resolve({
+          error: n === 2 ? { message: 'quota' } : null,
+        });
       },
-      getPublicUrl: (key: string) => ({ data: { publicUrl: `https://x/${key}` } }),
+      getPublicUrl: (key: string) => ({
+        data: { publicUrl: `https://x/${key}` },
+      }),
     });
     const r = await persist(sb, {
       sourceBase64: encodeBase64(fixture),
@@ -261,7 +300,12 @@ Deno.test('persist — a failing ORIGINAL upload is the one hard failure', async
     getPublicUrl: (k: string) => ({ data: { publicUrl: `https://x/${k}` } }),
   });
   await assertRejects(
-    () => persist(sb, { sourceBase64: encodeBase64(fixture), userId: USER, mode: 'final' }),
+    () =>
+      persist(sb, {
+        sourceBase64: encodeBase64(fixture),
+        userId: USER,
+        mode: 'final',
+      }),
     PersistError,
     'original upload failed'
   );
@@ -286,3 +330,83 @@ Deno.test(
     assertEquals(r.ms.upload, 0);
   }
 );
+
+// ── perturb mode (phase 4) + the written key ────────────────────────────────────────────────────────
+
+Deno.test('validateRequest — perturb is a mode; objectKey is refused with it', () => {
+  const r = validateRequest({
+    sourceUrl: 'https://x/y.jpg',
+    userId: USER,
+    mode: 'perturb',
+  });
+  assertEquals(r.mode, 'perturb');
+  assertThrows(
+    () =>
+      validateRequest({
+        sourceUrl: 'https://x/y.jpg',
+        userId: USER,
+        mode: 'perturb',
+        objectKey: `${USER}/x.jpg`,
+      }),
+    PersistError,
+    'final-mode only'
+  );
+});
+
+Deno.test(
+  "objectKeyFor — perturb key is byte-identical to the isolate's temp/<user>/perturbed-… .jpg",
+  () => {
+    const k = objectKeyFor({ userId: USER, mode: 'perturb' }, 'png');
+    assertMatch(k.key, new RegExp(`^temp/${USER}/perturbed-\\d+-[a-z0-9]{6}\\.jpg$`));
+    assertEquals(k.cacheControl, '2592000');
+    assertEquals(k.upsert, true);
+  }
+);
+
+Deno.test(
+  'persist — perturb writes ONE jpeg under temp/, bytes differ from the source, dims kept, no variants',
+  async () => {
+    const { sb, uploads } = mockSupabase();
+    const r = await persist(sb, {
+      sourceBase64: encodeBase64(fixture),
+      mime: 'image/jpeg',
+      userId: USER,
+      mode: 'perturb',
+      traceId: 't',
+    });
+    assertEquals(uploads.length, 1);
+    assertEquals(uploads[0].contentType, 'image/jpeg');
+    assertEquals(uploads[0].upsert, true);
+    assertMatch(uploads[0].key, new RegExp(`^temp/${USER}/perturbed-`));
+    assertEquals(r.key, uploads[0].key);
+    assertEquals(r.url, `https://x.supabase.co/storage/v1/object/public/uploads/${uploads[0].key}`);
+    assertEquals([r.displayUrl, r.thumbhash, r.ahash, r.sha256], [null, null, null, null]);
+    const src = await decodeImage(fixture);
+    assertEquals([r.width, r.height], [src.width, src.height]);
+    const out = await decodeImage(uploads[0].data);
+    assertEquals([out.width, out.height], [src.width, src.height]);
+    assert(
+      (await sha256Hex(uploads[0].data)) !== (await sha256Hex(fixture)),
+      'perturbed bytes must differ from the source or Replicate serves the cached prediction'
+    );
+    assert(r.ms.decode >= 0 && r.ms.encode >= 0 && r.ms.total >= r.ms.encode);
+  }
+);
+
+Deno.test('persist — final and temp results carry the written key; hash carries none', async () => {
+  const { sb, uploads } = mockSupabase();
+  const base = {
+    sourceBase64: encodeBase64(fixture),
+    mime: 'image/jpeg',
+    userId: USER,
+  };
+  const f = await persist(sb, { ...base, mode: 'final' });
+  assertEquals(f.key, uploads[0].key);
+  assertMatch(f.key!, new RegExp(`^${USER}/\\d+\\.jpg$`));
+  const t = await persist(sb, { ...base, mode: 'temp' });
+  assertEquals(t.key, uploads[uploads.length - 1].key);
+  assertMatch(t.key!, /swap-target-/);
+  const h = await persist(sb, { ...base, mode: 'hash' });
+  assertEquals(h.key, null);
+  assertEquals(h.url, null);
+});

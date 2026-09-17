@@ -13,10 +13,14 @@ COPY src/imageCodec.ts src/imageCodec.ts
 COPY src/thumbhashGen.ts src/thumbhashGen.ts
 COPY src/hashes.ts src/hashes.ts
 COPY src/persist.ts src/persist.ts
+COPY src/postcardComposite.ts src/postcardComposite.ts
+COPY src/composite.ts src/composite.ts
 COPY src/index.ts src/index.ts
 
-## Pre-warm esm.sh deps (jpeg WASM, thumbhash, supabase client) so a cold start does not pay for them.
-RUN deno cache src/index.ts
+## Pre-warm esm.sh deps (jpeg WASM, thumbhash, supabase client) so a cold start does not pay for them,
+## and FAIL THE BUILD on a missing module or type error — `deno cache` alone let an image ship without
+## composite.ts on 2026-09-17 (both machines crash-looped on "Module not found" until the next deploy).
+RUN deno cache src/index.ts && deno check src/index.ts
 
 ENV PORT=8080
 EXPOSE 8080
