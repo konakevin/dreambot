@@ -17,7 +17,9 @@ import { decodeImage, encodeJpeg, type DecodedImage } from './imageCodec.ts';
 import { computeThumbhash } from './thumbhashGen.ts';
 import { aHashFromDecoded, sha256Hex } from './hashes.ts';
 
-export type PersistMode = 'final' | 'temp';
+/** final = persisted render + variants; temp = swap-target object; hash = NO upload, just the hashes + dims
+ *  (nightly's dup-detect asks this up to three times per render — it must never leave objects behind). */
+export type PersistMode = 'final' | 'temp' | 'hash';
 
 export interface PersistRequest {
   /** An https URL to fetch (Replicate outputs). Exactly one of sourceUrl / sourceBase64. */
@@ -27,7 +29,7 @@ export interface PersistRequest {
   /** Required with sourceBase64; ignored for sourceUrl (the bytes are sniffed either way). */
   mime?: string;
   userId: string;
-  /** final = a persisted render (long cache); temp = a swap target / scratch object (short cache). */
+  /** final = a persisted render (long cache); temp = a swap target (short cache); hash = nothing written. */
   mode: PersistMode;
   /** Deterministic object key → idempotent overwrite (the HQ cache uses this). Final mode only. */
   objectKey?: string;
@@ -37,7 +39,8 @@ export interface PersistRequest {
 }
 
 export interface PersistResult {
-  url: string;
+  /** null in hash mode — nothing was written. */
+  url: string | null;
   displayUrl: string | null;
   thumbhash: string | null;
   sha256: string | null;
@@ -79,8 +82,8 @@ export function validateRequest(body: unknown): PersistRequest {
     throw new PersistError('bad_request', 400, 'sourceUrl must be https');
   if (typeof b.userId !== 'string' || !/^[0-9a-f-]{36}$/i.test(b.userId))
     throw new PersistError('bad_request', 400, 'userId must be a uuid');
-  if (b.mode !== 'final' && b.mode !== 'temp')
-    throw new PersistError('bad_request', 400, "mode must be 'final' or 'temp'");
+  if (b.mode !== 'final' && b.mode !== 'temp' && b.mode !== 'hash')
+    throw new PersistError('bad_request', 400, "mode must be 'final', 'temp' or 'hash'");
   if (b.objectKey !== undefined) {
     if (
       typeof b.objectKey !== 'string' ||
@@ -197,20 +200,24 @@ export async function persist(
   const src = await loadSource(req, deps.fetchImpl);
   ms.fetch = src.fetchMs;
 
-  // 1. The original, exactly as received. This is the one write that must succeed.
-  const { key, cacheControl, upsert } = objectKeyFor(req, src.ext);
-  const tUp = Date.now();
-  const { error: upErr } = await supabase.storage
-    .from(bucket)
-    .upload(key, src.bytes, { contentType: src.contentType, cacheControl, upsert });
-  if (upErr)
-    throw new PersistError('upload_failed', 500, `original upload failed: ${upErr.message}`);
-  const url = supabase.storage.from(bucket).getPublicUrl(key).data.publicUrl;
-  ms.upload += Date.now() - tUp;
+  // 1. The original, exactly as received. This is the one write that must succeed — unless this is a
+  //    hash-only call, which writes nothing.
+  let url: string | null = null;
+  if (req.mode !== 'hash') {
+    const { key, cacheControl, upsert } = objectKeyFor(req, src.ext);
+    const tUp = Date.now();
+    const { error: upErr } = await supabase.storage
+      .from(bucket)
+      .upload(key, src.bytes, { contentType: src.contentType, cacheControl, upsert });
+    if (upErr)
+      throw new PersistError('upload_failed', 500, `original upload failed: ${upErr.message}`);
+    url = supabase.storage.from(bucket).getPublicUrl(key).data.publicUrl;
+    ms.upload += Date.now() - tUp;
+  }
 
-  const wantDisplay = req.variants?.display ?? req.mode === 'final';
-  const wantThumb = req.variants?.thumbhash ?? req.mode === 'final';
-  const wantHashes = req.variants?.hashes ?? req.mode === 'final';
+  const wantDisplay = req.mode !== 'hash' && (req.variants?.display ?? req.mode === 'final');
+  const wantThumb = req.mode !== 'hash' && (req.variants?.thumbhash ?? req.mode === 'final');
+  const wantHashes = req.mode === 'hash' || (req.variants?.hashes ?? req.mode === 'final');
 
   const result: PersistResult = {
     url,

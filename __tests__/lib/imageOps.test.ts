@@ -166,4 +166,30 @@ describe('persistViaFly — fail-open under every failure shape', () => {
       expect(r.stamp).toMatch(/^image_ops:fly:\d+$/);
     }
   });
+
+  it('hash mode: a 200 with a url but no ahash is bad_response; a valid ahash is ok even with url null', async () => {
+    const hopts = { sourceUrl: 'https://r/x.jpg', userId: 'u', mode: 'hash' as const };
+    const noHash = jest.fn(
+      async () => new Response(JSON.stringify({ url: 'https://x/u/1.jpg' }), { status: 200 })
+    );
+    expect(await persistViaFly(hopts, noHash)).toMatchObject({ ok: false, reason: 'bad_response' });
+    const good = jest.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            url: null,
+            ahash: '0fefcf1f07215c47',
+            sha256: 'ab',
+            width: 1,
+            height: 1,
+            bytes: 1,
+            contentType: 'image/jpeg',
+            ms: {},
+          }),
+          { status: 200 }
+        )
+    );
+    const r = await persistViaFly(hopts, good);
+    expect(r.ok).toBe(true);
+  });
 });

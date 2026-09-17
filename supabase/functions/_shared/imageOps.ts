@@ -19,7 +19,8 @@ export interface PersistViaFlyOptions {
   sourceBase64?: string;
   mime?: string;
   userId: string;
-  mode: 'final' | 'temp';
+  /** hash = no upload; the service returns sha256 + ahash + dims only (nightly dup-detect). */
+  mode: 'final' | 'temp' | 'hash';
   objectKey?: string;
   variants?: { display?: boolean; thumbhash?: boolean; hashes?: boolean };
   traceId?: string;
@@ -28,7 +29,8 @@ export interface PersistViaFlyOptions {
 }
 
 export interface PersistViaFlyResult {
-  url: string;
+  /** null in hash mode. */
+  url: string | null;
   displayUrl: string | null;
   thumbhash: string | null;
   sha256: string | null;
@@ -87,7 +89,12 @@ export async function persistViaFly(
       return { ok: false, reason: code, stamp: `image_ops:fallback:${code}` };
     }
     const result = (await res.json()) as PersistViaFlyResult;
-    if (!result || typeof result.url !== 'string' || !/^https:\/\//.test(result.url)) {
+    // A written object must come back as an https URL; a hash call must come back with a hash.
+    const sane =
+      opts.mode === 'hash'
+        ? typeof result.ahash === 'string' && /^[0-9a-f]{16}$/.test(result.ahash)
+        : typeof result.url === 'string' && /^https:\/\//.test(result.url);
+    if (!result || !sane) {
       return { ok: false, reason: 'bad_response', stamp: 'image_ops:fallback:bad_response' };
     }
     return { ok: true, result, ms, stamp: `image_ops:fly:${ms}` };

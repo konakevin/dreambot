@@ -64,6 +64,7 @@ import { getBiomeConfig, resolveBiomeFromTags, isValidBiomeConfig } from '../_sh
 import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
 import { restoreFace } from '../_shared/faceRestore.ts';
+import { imageOpsEnabled, persistViaFly } from '../_shared/imageOps.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { sceneTypeCuts, adaptiveScenePcts } from '../_shared/sceneTypeRoll.ts';
 import {
@@ -5128,21 +5129,46 @@ Output ONLY the prompt.`;
         .map((r) => r.output_phash)
         .filter((h): h is string => !!h);
       for (let dupAttempt = 0; dupAttempt <= DUP_RETRY_MAX; dupAttempt++) {
-        const fetchResp = await fetch(tempUrl);
-        if (!fetchResp.ok) {
-          console.warn(`[dup-detect] fetch failed, skipping: ${fetchResp.status}`);
-          break;
+        // NO PIXELS IN THE ISOLATE (NO_PIXELS_IN_ISOLATE_PLAN.md, phase 1). The perceptual hash comes from
+        // the Fly image-ops service in hash mode — nothing written, ~1 s — so this isolate never decodes the
+        // render: that decode (up to three times on dup retries) was the isolate's CPU on this path.
+        // FAIL-OPEN: any failure runs the in-isolate decode below and stamps why, so a dream never fails
+        // because a faster way to hash it was added.
+        let hashedOnFly = false;
+        if (imageOpsEnabled()) {
+          const h = await persistViaFly({
+            sourceUrl: tempUrl,
+            userId,
+            mode: 'hash',
+            traceId: queueJobId ?? undefined,
+          });
+          fallbackReasons.push(h.stamp.replace('image_ops:', 'image_ops_hash:'));
+          if (h.ok && h.result.ahash) {
+            outPhash = h.result.ahash;
+            outBuf = null;
+            decodedOut = null;
+            hashedOnFly = true;
+          }
         }
-        outBuf = await fetchResp.arrayBuffer();
-        try {
-          // Decode ONCE; reuse for the hash now and the display variant later.
-          decodedOut = await decodeImage(new Uint8Array(outBuf));
-          outPhash = aHashFromDecoded(decodedOut);
-        } catch (e) {
-          console.warn(`[dup-detect] decode/aHash failed: ${(e as Error).message}`);
-          decodedOut = null;
-          break;
+        if (!hashedOnFly) {
+          const fetchResp = await fetch(tempUrl);
+          if (!fetchResp.ok) {
+            console.warn(`[dup-detect] fetch failed, skipping: ${fetchResp.status}`);
+            break;
+          }
+          outBuf = await fetchResp.arrayBuffer();
+          try {
+            // Decode ONCE; reuse for the hash now and the display variant later.
+            decodedOut = await decodeImage(new Uint8Array(outBuf));
+            outPhash = aHashFromDecoded(decodedOut);
+          } catch (e) {
+            console.warn(`[dup-detect] decode/aHash failed: ${(e as Error).message}`);
+            decodedOut = null;
+            break;
+          }
         }
+        // No hash from either path → nothing to compare; ship as-is (the old decode-failure behaviour).
+        if (!outPhash) break;
         const collision = recentPhashes.find(
           (h) => hammingDistance(h, outPhash!) <= HAMMING_THRESHOLD
         );
@@ -5415,9 +5441,30 @@ Output ONLY the prompt.`;
     else if (rolledPartnerId) fallbackReasons.push('partner_turn_not_consumed');
 
     const genLogId = crypto.randomUUID();
-    const persistPromise = outBuf
-      ? persistBufferToStorage(outBuf, userId, supabase)
-      : persistToStorage(tempUrl, userId, supabase);
+    // NO PIXELS IN THE ISOLATE, phase 1: original + display JPEG + thumbhash in ONE Fly call, awaited
+    // BEFORE the generation log so its stamp lands in fallback_reasons. FAIL-OPEN to the in-isolate path.
+    let flyPersisted: { url: string; displayUrl: string | null; thumbhash: string | null } | null =
+      null;
+    if (imageOpsEnabled()) {
+      const p = await persistViaFly({
+        sourceUrl: tempUrl,
+        userId,
+        mode: 'final',
+        traceId: queueJobId ?? undefined,
+      });
+      fallbackReasons.push(p.stamp);
+      if (p.ok && p.result.url)
+        flyPersisted = {
+          url: p.result.url,
+          displayUrl: p.result.displayUrl,
+          thumbhash: p.result.thumbhash,
+        };
+    }
+    const persistPromise = flyPersisted
+      ? Promise.resolve(flyPersisted.url)
+      : outBuf
+        ? persistBufferToStorage(outBuf, userId, supabase)
+        : persistToStorage(tempUrl, userId, supabase);
     const [persistedUrl] = await Promise.all([
       persistPromise,
       insertGenerationLog(supabase, {
@@ -5523,7 +5570,12 @@ Output ONLY the prompt.`;
     // never 546) keep the inline path so their variant is ready immediately.
     let displayUrl: string | null = null;
     let thumbhash: string | null = null;
-    if (decodedOut) {
+    if (flyPersisted) {
+      // Phase 1: the Fly call already built the display JPEG and the thumbhash — nothing decoded here, and
+      // image_url_display is populated inline (the backfill cron finds nothing to do for these rows).
+      displayUrl = flyPersisted.displayUrl;
+      thumbhash = flyPersisted.thumbhash;
+    } else if (decodedOut) {
       try {
         thumbhash = computeThumbhash(decodedOut);
       } catch (_e) {

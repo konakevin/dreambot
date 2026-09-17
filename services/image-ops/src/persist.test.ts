@@ -181,7 +181,7 @@ Deno.test(
       uploads[1].bytes > 1000 && uploads[1].bytes < fixture.length * 2,
       'a real re-encoded JPEG'
     );
-    assertMatch(r.url, /\/uploads\/.+\.jpg$/);
+    assertMatch(r.url!, /\/uploads\/.+\.jpg$/);
     assertMatch(r.displayUrl!, /\.display\.jpg$/);
     assert(r.thumbhash && r.thumbhash.length > 10, 'thumbhash present');
     assertMatch(r.sha256!, /^[0-9a-f]{64}$/);
@@ -248,7 +248,7 @@ Deno.test(
       userId: USER,
       mode: 'final',
     });
-    assert(r.url.length > 0);
+    assert(r.url!.length > 0);
     assertEquals(r.displayUrl, null);
     assert(r.thumbhash, 'thumbhash survives a display upload failure');
   }
@@ -266,3 +266,23 @@ Deno.test('persist — a failing ORIGINAL upload is the one hard failure', async
     'original upload failed'
   );
 });
+
+Deno.test(
+  'persist — hash mode: NOTHING uploaded, both hashes + dims returned, url null',
+  async () => {
+    const { sb, uploads } = mockSupabase();
+    const r = await persist(sb, {
+      sourceBase64: encodeBase64(fixture),
+      userId: USER,
+      mode: 'hash',
+    });
+    assertEquals(uploads.length, 0, 'hash mode must never write an object');
+    assertEquals(r.url, null);
+    assertEquals(r.displayUrl, null);
+    assertEquals(r.thumbhash, null);
+    assertEquals(r.sha256, await sha256Hex(fixture));
+    assertEquals(r.ahash, aHashFromDecoded(await decodeImage(fixture)));
+    assert(r.width! > 0 && r.height! > 0);
+    assertEquals(r.ms.upload, 0);
+  }
+);
