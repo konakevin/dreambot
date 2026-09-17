@@ -14,7 +14,13 @@
  * that model renders a scene well). The vibe keeps its own roll in the render (the third axis); per-look vibe bans
  * can be added on the row when the vibe axis test says so.
  */
-import { resolveModel, type NightlyModelPolicy, type PolicySurface } from './nightlyModelPolicy.ts';
+import {
+  resolveModel,
+  type NightlyModelPolicy,
+  type PolicySurface,
+  weightedList,
+  pickWeighted,
+} from './nightlyModelPolicy.ts';
 import {
   resolveLook,
   approvedModelsFor,
@@ -51,23 +57,17 @@ export const SOLO_PINNED_MODEL_FALLBACK = 'black-forest-labs/flux-1.1-pro';
 export const LOOKS_ALL_MODELS = true;
 
 /**
- * How often a render goes STRAIGHT to the surface's primary model instead of rolling the pool.
+ * DEPRECATED, and kept only so nothing importing it breaks — the live roll no longer reads it.
  *
- * Kevin 2026-09-16: "make flux 50% and then from there it's a 50/50 roll" — so flux 0.50 + 0.50 x 0.50
- * = 75%, and the second model 25%. (Revised the same day from 0.7 / 85-15.)
+ * It used to decide how often a render went STRAIGHT to the surface's primary instead of rolling the pool
+ * (0.5 → flux 75% on a two-model pool). Every change to a model's share therefore meant editing this line
+ * and deploying, which happened three times in one evening — while `nightly_model_policy.primary_weights`
+ * sat in the database, already set on purpose, and was ignored by this path. Couple read 51/49 in the
+ * dashboard and rendered 75/25.
  *
- * The remainder rolls UNIFORMLY over the look's model pool, which since grok was removed is exactly
- * [flux-1.1-pro, gemini-2-image], so a uniform roll IS the 50/50 he asked for. NOTE: the 25% goes to
- * GEMINI-2, not GPT Image — gpt-image-2 is in NIGHTLY_BANNED_MODELS (wide aspect, 150s timeouts) and
- * gpt-image-2.5 is plumbed in the provider but deliberately not in image_models or DreamSmart, so neither
- * can be rolled here. Adding a third model changes this arithmetic: the remainder splits evenly across
- * however many models the pool holds.
- *
- * ⚠️ `nightly_model_policy.primary_weights` is NOT consulted on this path (see resolveStyle: the pick is
- * `forceModel ?? directToPrimary ?? uniform(lookModels)`). Those weights are documentation for the
- * fallback/legacy paths only — change the split HERE, not there.
- *
- * Was 0.5 (Kevin 2026-09-13), which gave flux 75%.
+ * The roll is now WEIGHTED on those DB weights (see resolveStyle). To change a share:
+ *   UPDATE nightly_model_policy SET primary_weights = '{75,25}' WHERE surface = 'solo';
+ * No deploy. Reproduce the old behaviour on a two-model pool with weights {75,25}.
  */
 export const PRIMARY_DIRECT_SHARE = 0.5;
 
@@ -115,10 +115,10 @@ export interface StyleContractInput {
    *  allows, for the FIRST pick and for every retry in the chain. Empty intersection = fail open (the pool stands)
    *  with a stamp, because a day-of render must never fail to render. Omitted = no clipping (the normal roll). */
   restrictModels?: readonly string[] | null;
-  /** EVEN SPLIT across the surface's model pool (Kevin, 2026-09-14: "all 25% for scene only"). The look-first roll
-   *  normally sends `PRIMARY_DIRECT_SHARE` of renders STRAIGHT to the surface's first primary, which on a 4-model
-   *  pool lands that model at 62.5% and the rest at 12.5% each — `primary_weights` are not consulted on this path
-   *  at all. `true` skips the direct-to-primary jump so every model in the pool is equally likely. */
+  /** EVEN SPLIT across the surface's model pool (Kevin, 2026-09-14: "all 25% for scene only") — an explicit
+   *  "ignore the configured weights and roll evenly" escape hatch. Mostly redundant now that the roll is
+   *  weighted, since equal `primary_weights` ARE an even split and are tunable without a deploy; prefer setting
+   *  the weights. Kept because it is an unambiguous override that cannot be undone by a dashboard edit. */
   evenModelSplit?: boolean;
   /** MINIMAL retries re-render WITHOUT re-assembling the prompt, so the look cannot change between attempts —
    *  the prompt still carries the original look's fragment. `true` makes every retry KEEP the look, so the stamps
@@ -266,27 +266,42 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
     // is approved on flux — the five solo looks graded elsewhere (hand_tinted_photo, painted_comic_cover,
     // painted_animation, aquarelle_graphite, colored_pencil) keep the model that earned them. Couples are untouched:
     // that is the surface where flux actually fails, so they keep rolling across the look's approved set.
-    // WHERE A RENDER STARTS (Kevin, 2026-09-13): "hardcode 50% to go direct to flux 1.1pro, and the other 50%
-    // random roll from all models in the pool. same thing with singles." So half of every surface's renders go
-    // straight to the policy primary and half roll the pool (the primary included), which lands flux at roughly
-    // two thirds overall while every model still gets real time. A look that REJECTED the primary is not in the
-    // pool, so it simply rolls.
-    const pinModel = primaryFor(input.policy, policySurface);
-    const directToPrimary =
-      input.evenModelSplit !== true && lookModels.includes(pinModel) && rng() < PRIMARY_DIRECT_SHARE
-        ? pinModel
-        : null;
+    // WHERE A RENDER STARTS — now a WEIGHTED roll over `nightly_model_policy.primary_weights`.
+    //
+    // It used to be a hardcoded `PRIMARY_DIRECT_SHARE` (50% straight to the surface's first primary, 50%
+    // uniform over the pool), which made every share change a code edit and a deploy — done three times in
+    // one evening. Worse, `primary_weights` ALREADY EXISTED, was already set in the dashboard on purpose,
+    // and this path ignored it: couple read 51/49 in the DB while actually rendering 75/25, and solo read
+    // 67/33 while rendering the same 75/25. The knobs were there and disconnected.
+    //
+    // Now one mechanism covers what took two. Equal weights ARE an even split, so `evenModelSplit` no longer
+    // needs a special case here — it stays only as an explicit "ignore the weights" escape hatch. Weights are
+    // taken from the surface's primaryModels and renormalised over whatever survived the look's rejections and
+    // the bans (weightedList drops a model and its weight together), so a look that rejects the heaviest model
+    // redistributes its share across the rest instead of skewing.
+    //
+    // To change a model's share: UPDATE nightly_model_policy.primary_weights. No deploy.
+    const row = input.policy[policySurface];
+    const primaries = row?.primaryModels ?? [];
+    // Anything the look/bans removed is excluded here so its weight is dropped with it.
+    const excluded = new Set(primaries.filter((m) => !lookModels.includes(m)));
+    const weighted = weightedList(primaries, row?.primaryWeights, excluded);
+    // A model can reach lookModels without being in primaryModels (non-LOOKS_ALL_MODELS grading paths), and
+    // it must still be rollable — fall back to the uniform pool when the weighted set came back empty.
+    const weightedPick = weighted.models.length > 0 ? pickWeighted(weighted, rng) : null;
+    const uniformPick = lookModels[Math.floor(rng() * lookModels.length)];
     modelId =
-      input.forceModel ?? directToPrimary ?? lookModels[Math.floor(rng() * lookModels.length)];
+      input.forceModel ??
+      (input.evenModelSplit === true ? uniformPick : (weightedPick ?? uniformPick));
     stamps.push(
       `policy:${policySurface}:1:${short(modelId)}`,
       `model_source:look:${lookModels.length}`
     );
     stamps.push(
-      directToPrimary
-        ? `model_roll:direct:${short(pinModel)}`
-        : input.evenModelSplit === true
-          ? `model_roll:even:${lookModels.length}`
+      input.evenModelSplit === true
+        ? `model_roll:even:${lookModels.length}`
+        : weightedPick
+          ? `model_roll:weighted:${weighted.weights.join('/')}`
           : 'model_roll:pool'
     );
   }

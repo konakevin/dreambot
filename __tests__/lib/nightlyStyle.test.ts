@@ -297,14 +297,50 @@ describe('buildStyleContract', () => {
       expect([PRO, GEMINI, GROK]).toContain(c.model);
     });
 
-    it('goes DIRECT to the primary half the time and rolls the pool the other half', () => {
-      const direct = build({}, () => 0.1); // < 0.5
-      expect(direct.model).toBe(PRO);
-      expect(direct.stamps).toContain('model_roll:direct:flux-1.1-pro');
+    it('rolls the pool WEIGHTED by the policy row, not by a hardcoded share', () => {
+      // No primaryWeights on this policy → weightedList gives every model weight 1, so the roll is
+      // uniform across the 3-model pool and the draw maps by thirds.
+      const first = build({}, () => 0.1);
+      expect(first.model).toBe(PRO);
+      expect(first.stamps).toContain('model_roll:weighted:1/1/1');
 
-      const rolled = build({}, () => 0.99); // >= 0.5 → pool roll, last index
-      expect(rolled.stamps).toContain('model_roll:pool');
-      expect(rolled.model).toBe(GROK);
+      const last = build({}, () => 0.99);
+      expect(last.model).toBe(GROK);
+      expect(last.stamps).toContain('model_roll:weighted:1/1/1');
+    });
+
+    it('CONFIGURED weights decide the share — the stamp records what was applied', () => {
+      // THE POINT OF THE REFACTOR. primary_weights sat in the database, set deliberately, and this path
+      // ignored it: couple read 51/49 in the dashboard while actually rendering 75/25.
+      const weighted = (v: number) =>
+        build(
+          { policy: { ...POLICY3, couple: { ...POLICY3.couple, primaryWeights: [80, 10, 10] } } },
+          () => v
+        );
+      expect(weighted(0.1).model).toBe(PRO); // 0-0.80 → flux
+      expect(weighted(0.5).model).toBe(PRO);
+      expect(weighted(0.85).model).toBe(GEMINI); // 0.80-0.90
+      expect(weighted(0.95).model).toBe(GROK); // 0.90-1.00
+      expect(weighted(0.1).stamps).toContain('model_roll:weighted:80/10/10');
+    });
+
+    it('a rejected model drops its WEIGHT with it, so survivors renormalise', () => {
+      // Without this, removing the heaviest model would leave its share unclaimed and skew the rest.
+      const rejectsFlux = [
+        ok('oil', GEMINI, 'couple'),
+        ok('oil', GROK, 'couple'),
+        { lookKey: 'oil', model: PRO, surface: 'couple' as const, approved: false },
+      ];
+      const c = build(
+        {
+          approvals: rejectsFlux,
+          policy: { ...POLICY3, couple: { ...POLICY3.couple, primaryWeights: [80, 10, 10] } },
+        },
+        () => 0.4
+      );
+      // flux's 80 is gone entirely; gemini and grok split 10/10 rather than inheriting a skew.
+      expect(c.model).not.toBe(PRO);
+      expect(c.stamps).toContain('model_roll:weighted:10/10');
     });
 
     it('a model Kevin graded NO for this look and surface never enters the pool', () => {
@@ -324,11 +360,9 @@ describe('buildStyleContract', () => {
     });
 
     it('the same rules apply to solos', () => {
-      const direct = build({ surface: 'solo', approvals: [ok('oil', PRO, 'solo')] }, () => 0.1);
-      expect(direct.model).toBe(PRO);
-      expect(direct.stamps).toContain('model_roll:direct:flux-1.1-pro');
-      const rolled = build({ surface: 'solo', approvals: [ok('oil', PRO, 'solo')] }, () => 0.99);
-      expect(rolled.stamps).toContain('model_roll:pool');
+      const c = build({ surface: 'solo', approvals: [ok('oil', PRO, 'solo')] }, () => 0.1);
+      expect(c.model).toBe(PRO);
+      expect(c.stamps.some((s) => s.startsWith('model_roll:weighted:'))).toBe(true);
     });
   });
 
@@ -559,9 +593,13 @@ describe('lockLook — minimal retries keep the look so the stamps stay honest',
 /**
  * EVEN MODEL SPLIT — scene-only renders (Kevin, 2026-09-14: "all 25% for scene only").
  *
- * The look-first roll normally sends PRIMARY_DIRECT_SHARE of renders STRAIGHT to the surface's first primary, and
- * `primary_weights` are NOT consulted on this path at all. On a 4-model pool that lands the primary at 62.5% and
- * the rest at 12.5% each — so setting the policy row to 25/25/25/25 alone would NOT produce an even split.
+ * This flag used to be NECESSARY: the roll sent a hardcoded 50% of renders straight to the first primary and
+ * ignored `primary_weights` entirely, so a 25/25/25/25 policy row would NOT have produced an even split.
+ *
+ * It is now largely redundant — the roll is weighted on the DB row, and equal weights ARE an even split, tunable
+ * without a deploy. The flag survives as an explicit "ignore the configured weights" override that a dashboard
+ * edit cannot accidentally undo. These tests lock BOTH: the flag still forces uniform, and the default path now
+ * honours whatever the row says.
  */
 describe('evenModelSplit', () => {
   const ULTRA = 'black-forest-labs/flux-1.1-pro-ultra';
@@ -573,7 +611,7 @@ describe('evenModelSplit', () => {
     scene: { primaryModels: FOUR, fallbackModels: [] },
   };
   // A CONSTANT rng makes every branch deterministic without depending on how many draws resolveLook makes:
-  // the direct check is `v < PRIMARY_DIRECT_SHARE` and the pool draw is `floor(v * poolSize)`.
+  // the weighted pick walks the cumulative weights and the uniform draw is `floor(v * poolSize)`.
   const build = (even: boolean, v: number, surface: 'scene' | 'couple' = 'scene') =>
     buildStyleContract({
       surface,
@@ -588,10 +626,11 @@ describe('evenModelSplit', () => {
       rng: () => v,
     });
 
-  it('OFF: a draw under the direct share jumps straight to the first primary (the 62.5% skew)', () => {
+  it('OFF: the roll is WEIGHTED on the policy row rather than jumping to the primary', () => {
     const c = build(false, 0.1)!;
     expect(c.model).toBe(PRO);
-    expect(c.stamps.some((s) => s.startsWith('model_roll:direct:'))).toBe(true);
+    expect(c.stamps.some((s) => s.startsWith('model_roll:direct:'))).toBe(false);
+    expect(c.stamps).toContain('model_roll:weighted:1/1/1/1');
   });
 
   it('ON: the same draw no longer jumps — it comes from the pool', () => {
@@ -621,25 +660,23 @@ describe('evenModelSplit', () => {
     }
   });
 
-  it('OFF skews hard to the primary over the same sweep — the behaviour scene opts out of', () => {
+  it('OFF with EQUAL weights is now ALSO even — the flag is no longer what makes it fair', () => {
     const counts: Record<string, number> = {};
     const N = 4000;
     for (let i = 0; i < N; i++) {
       const c = build(false, (i + 0.5) / N);
       if (c) counts[c.model] = (counts[c.model] ?? 0) + 1;
     }
-    // A constant rng correlates the direct check with the pool draw, so the primary lands at exactly the direct
-    // share here; in production the two draws are independent and it reaches ~62.5% on a 4-model pool. The point
-    // this locks is simply that OFF is NOT an even split: the primary takes at least half and some model is
-    // starved, which is exactly why a 25/25/25/25 policy row alone would not have delivered what was asked for.
-    const share = (m: string) => (counts[m] ?? 0) / N;
-    expect(share(PRO)).toBeGreaterThanOrEqual(0.5);
-    expect(Math.min(...FOUR.map(share))).toBeLessThan(0.2);
+    for (const m of FOUR) {
+      const share = (counts[m] ?? 0) / N;
+      expect(share).toBeGreaterThan(0.2);
+      expect(share).toBeLessThan(0.3);
+    }
   });
 
-  it('OFF is the default — cast surfaces keep the direct-to-primary jump', () => {
+  it('OFF is the default — cast surfaces roll the configured weights', () => {
     const c = build(false, 0.1, 'couple')!;
-    expect(c.stamps.some((s) => s.startsWith('model_roll:direct:'))).toBe(true);
+    expect(c.stamps.some((s) => s.startsWith('model_roll:weighted:'))).toBe(true);
   });
 });
 

@@ -92,9 +92,13 @@ describe('divergence 1 — per-look model bans are a FACE-SWAP grade', () => {
 });
 
 describe('divergence 2 — pool shape', () => {
-  it('cast keeps the direct-to-primary jump (flux first, by design)', () => {
+  it('cast rolls the CONFIGURED weights (the direct-to-primary jump is gone)', () => {
+    // Was a hardcoded 50% jump to the first primary. The split now comes from
+    // nightly_model_policy.primary_weights, so a cast surface is tuned in the database rather than in
+    // TypeScript — see __tests__/lib/modelWeightDeterminism.test.ts.
     const c = build('couple', 0.1)!;
-    expect(c.stamps.some((s) => s.startsWith('model_roll:direct:'))).toBe(true);
+    expect(c.stamps.some((s) => s.startsWith('model_roll:direct:'))).toBe(false);
+    expect(c.stamps.some((s) => s.startsWith('model_roll:weighted:'))).toBe(true);
   });
 
   it('scene splits evenly instead — no model is favoured', () => {

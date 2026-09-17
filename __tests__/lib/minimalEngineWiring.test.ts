@@ -16,6 +16,12 @@ const SRC = fs.readFileSync(
   path.join(__dirname, '..', '..', 'supabase', 'functions', 'nightly-dreams', 'index.ts'),
   'utf8'
 );
+/** nightlyStyle.ts holds the model roll itself; the wiring claims below read it directly so they lock the
+ *  MECHANISM rather than a particular split (the split is data in nightly_model_policy now). */
+const STYLE_SRC = fs.readFileSync(
+  path.join(__dirname, '..', '..', 'supabase', 'functions', '_shared', 'nightlyStyle.ts'),
+  'utf8'
+);
 const strip = (s: string) => s.replace(/\s+/g, ' ');
 
 describe('the locked engine is wired the way the summary says', () => {
@@ -52,15 +58,30 @@ describe('the locked engine is wired the way the summary says', () => {
   });
 
   // 2026-09-16: grok removed from nightly entirely ("consistently makes ugly renders"), so the pool is two
-  // models. Direct share settled at 0.5 (Kevin: "make flux 50% and then from there it's a 50/50 roll"),
-  // having briefly been 0.7. The remainder rolls UNIFORMLY over the pool, so a 2-model pool IS the 50/50.
-  // Net flux 0.50 + 0.50 x 0.50 = 75%, gemini-2 25%.
-  it('CLAIM: 50% direct to the primary, the rest rolled evenly over the pool', () => {
+  // models. The split was a HARDCODED constant (PRIMARY_DIRECT_SHARE) until 2026-09-17: 50% of renders went
+  // straight to the first primary and the rest rolled uniformly, landing flux at 75% on a two-model pool. Every
+  // change to a share meant editing TypeScript and deploying — done three times in one evening — while
+  // `nightly_model_policy.primary_weights` sat in the database, already set deliberately, and was IGNORED by
+  // this path: couple read 51/49 in the dashboard and rendered 75/25.
+  //
+  // The roll now reads those weights, so the configured number IS the share. This locks the wiring rather than
+  // any particular split, because the split is data now and belongs in the database, not in a test.
+  it('CLAIM: the live roll is WEIGHTED on the policy row, not on a hardcoded share', () => {
     expect(LOOKS_ALL_MODELS).toBe(true);
-    expect(PRIMARY_DIRECT_SHARE).toBe(0.5);
-    // The arithmetic Kevin asked for, stated so a future edit to either number is checked against intent.
-    const fluxShare = PRIMARY_DIRECT_SHARE + (1 - PRIMARY_DIRECT_SHARE) * 0.5;
-    expect(Number(fluxShare.toFixed(2))).toBe(0.75);
+    const src = strip(STYLE_SRC);
+    // It must consult the row's weights...
+    expect(src).toContain('weightedList(primaries, row?.primaryWeights, excluded)');
+    expect(src).toContain('pickWeighted(weighted, rng)');
+    // ...and must NOT resurrect the direct-to-primary jump.
+    expect(src).not.toContain('rng() < PRIMARY_DIRECT_SHARE');
+  });
+
+  it('PRIMARY_DIRECT_SHARE survives only as a deprecated export, unused by the roll', () => {
+    // Kept so nothing importing it breaks. If it ever regains a caller, the split has silently moved back
+    // into code and out of the database.
+    const src = strip(STYLE_SRC);
+    const uses = src.split('PRIMARY_DIRECT_SHARE').length - 1;
+    expect(uses).toBeLessThanOrEqual(2); // the export line + its own doc comment
   });
 
   it('the minimal roll never runs behind a QA force_medium, which would fight the pin', () => {

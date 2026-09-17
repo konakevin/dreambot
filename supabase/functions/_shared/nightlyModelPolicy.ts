@@ -106,14 +106,18 @@ function pickUniform(list: string[], rng: () => number): string {
 }
 
 /** A model list with its weights, kept aligned through the ban filter. */
-interface Weighted {
+export interface Weighted {
   models: string[];
   weights: number[];
 }
 
 /** Pair each model with its weight (equal weights when the array is missing / short / non-positive), dropping
- *  banned models AND their weights together so the survivors renormalise among themselves. */
-function weightedList(
+ *  banned models AND their weights together so the survivors renormalise among themselves.
+ *
+ *  EXPORTED (2026-09-17) so the LIVE minimal path in nightlyStyle.ts can use the same weighting the
+ *  fallback path has always used. Until then `primary_weights` was set in the dashboard, deliberately,
+ *  and silently ignored on the path that actually renders — couple read 51/49 while running 75/25. */
+export function weightedList(
   models: string[],
   weights: number[] | undefined,
   bans: ReadonlySet<string> | null
@@ -130,7 +134,7 @@ function weightedList(
 }
 
 /** Weighted random pick; falls back to uniform when every weight is zero. */
-function pickWeighted(w: Weighted, rng: () => number): string {
+export function pickWeighted(w: Weighted, rng: () => number): string {
   const total = w.weights.reduce((a, b) => a + b, 0);
   if (total <= 0) return pickUniform(w.models, rng);
   let r = rng() * total;
