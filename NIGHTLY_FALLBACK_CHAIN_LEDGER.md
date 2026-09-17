@@ -216,6 +216,14 @@ higher-resolution face pass would lift BOTH models to ~75-78% swappable. The res
 4 per model) is composition, and only a re-render fixes it. All 34 renders are in Kevin's private Dreams album with
 the verdict in the caption (`PAIR2 nn · pro|ultra · reason · faces · h%`).
 
+**Big-face reclaim, Phase 0 DONE (2026-09-17) → GO.** `BIG_FACE_RECLAIM_PLAN.md`. The 11 giant renders from `PAIR2`, the
+Fly engine's own per-face swap driven locally with the guard lifted: the smear was never resolution — the per-face
+path's crop (2.4× pad clamped to the frame) and paste (box+30% + feather) both cross into the neighbouring face on
+giant couples. With a full-frame swap, the neighbour painted out, and paste masks bounded at the neighbour, both faces
+swap on 9 of 11 (identity 0.59-0.73, the normal band); faces above ~0.60×H get "no face found" from every swap
+model. Restore is not the lever (0.9 ≈ raw; 0.7/0.5 waxy, −0.1 to −0.2 identity). Phase 1 = engine tier behind
+`engine_config.dual_big_face_max_hfrac` (default 0.40 = today), ~half a day. Review rows: album captions `BIGFACE …`.
+
 ## 6. State deployed tonight (Kevin: leave it for users)
 
 Commits `31cfa893`, `081ef539`, `621a5847`, `f75651ac`, `a7b1a3c2`, `9654f0f8` — all deployed to
