@@ -69,6 +69,22 @@ export async function persistViaFly(
 
   const t0 = Date.now();
   const { timeoutMs, ...body } = opts;
+  // PHASE 3 (NO_PIXELS_IN_ISOLATE_PLAN.md): providers that return inline images (gemini / gpt-image / grok)
+  // hand the isolate a `data:` URL. The service takes raw base64 for exactly this, so a data: source is
+  // split here — header for the mime, payload as-is — and the isolate never runs an atob loop over it.
+  // (Found on the first phase-2 Create job: a gemini-3 render, `sourceUrl must be https`, fell back.)
+  if (typeof body.sourceUrl === 'string' && body.sourceUrl.startsWith('data:')) {
+    const comma = body.sourceUrl.indexOf(',');
+    const header = comma > 0 ? body.sourceUrl.slice(5, comma) : '';
+    const mime = (header.match(/^image\/[a-z0-9.+-]+/i) || [undefined])[0];
+    if (comma > 0 && /;base64$/i.test(header) && mime) {
+      body.sourceBase64 = body.sourceUrl.slice(comma + 1);
+      body.mime = mime;
+      delete body.sourceUrl;
+    } else {
+      return { ok: false, reason: 'bad_data_url', stamp: 'image_ops:fallback:bad_data_url' };
+    }
+  }
   try {
     const res = await fetchImpl(`${flyUrl.replace(/\/$/, '')}/persist`, {
       method: 'POST',

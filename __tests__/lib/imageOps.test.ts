@@ -192,4 +192,32 @@ describe('persistViaFly — fail-open under every failure shape', () => {
     const r = await persistViaFly(hopts, good);
     expect(r.ok).toBe(true);
   });
+
+  it('a data: source is sent as sourceBase64 + mime — the isolate never atob-loops it (phase 3)', async () => {
+    const f = jest.fn(async (_url: string, init: RequestInit) => {
+      const sent = JSON.parse(String(init.body));
+      expect(sent.sourceUrl).toBeUndefined();
+      expect(sent.sourceBase64).toBe('AAAA');
+      expect(sent.mime).toBe('image/png');
+      return new Response(JSON.stringify({ url: 'https://x/u/1.png', ahash: 'cd', ms: {} }), {
+        status: 200,
+      });
+    });
+    const r = await persistViaFly(
+      { sourceUrl: 'data:image/png;base64,AAAA', userId: 'u', mode: 'final' },
+      f
+    );
+    expect(r.ok).toBe(true);
+    expect(f).toHaveBeenCalledTimes(1);
+  });
+
+  it('a malformed data: source fails open without a request', async () => {
+    const f = jest.fn();
+    const r = await persistViaFly(
+      { sourceUrl: 'data:image/png,notbase64', userId: 'u', mode: 'final' },
+      f
+    );
+    expect(r).toMatchObject({ ok: false, reason: 'bad_data_url' });
+    expect(f).not.toHaveBeenCalled();
+  });
 });
