@@ -199,6 +199,23 @@ and `DUAL_SWAP_FANOUT` are gone. `dualSwapDispatch.ts` is Fly-only: no `DUAL_SWA
 the gender-safe solo rebuild (the frozen chain), never in-isolate pixels. Chain semantics unchanged: the Fly engine
 was already the only reachable one. Guarded by the phase-5 describe in `noPixelsInIsolateTripwire.test.ts`.
 
+**Paired geometry test, flux-1.1-pro vs flux-1.1-pro-ultra (2026-09-17, batch `PAIR2`; harness
+`scripts/_tmp-paired-pro-ultra.js` + `_tmp-paired-post.js`, untracked).** 18 real couple prompts taken from
+`rolled_axes.observability.couplePrompt` — NOT `enhanced_prompt`, which on a degraded couple is the SOLO rebuild's
+prompt (the first run was contaminated that way: 8 of 20 "pairs" rendered one man on both models; discarded, rows
+deleted). Each prompt rendered on both models with the SAME seed straight against Replicate with the engine's inputs,
+and every output judged by the Fly engine's own YuNet + `planDualSplit`, run locally. Swappable = `ok` + `overlap`
+(overlap → the per-face composite path). **pro 10 of 18 (56%), ultra 5 of 16 (31%)** — the same two numbers the
+album-order A/B and the morning probe gave. 16 complete pairs: both 4 · pro only 5 · ultra only 1 · neither 6.
+Ultra's signature on identical seeds: tighter framing (`giant_face` 7/16 vs 4/18, faces 45-85% of frame height) and
+dropping the people entirely (3 pairs rendered the station / cliff / gravestone with nobody in it). Detector recall is
+NOT the cause: re-judging every `lt2_faces` render after a Lanczos downscale recovered 0 of 8. Replicate's NSFW filter
+refused 2 of 18 ultra renders (0 pro) on innocuous prompts. **The reclaimable class is `giant_face`**: two frontal faces
+present, rejected only because the ~128 px swap output smears above 0.4×H (2026-09-02 guard) — pro 4, ultra 7; a
+higher-resolution face pass would lift BOTH models to ~75-78% swappable. The residual (no people / tiny / turned away:
+4 per model) is composition, and only a re-render fixes it. All 34 renders are in Kevin's private Dreams album with
+the verdict in the caption (`PAIR2 nn · pro|ultra · reason · faces · h%`).
+
 ## 6. State deployed tonight (Kevin: leave it for users)
 
 Commits `31cfa893`, `081ef539`, `621a5847`, `f75651ac`, `a7b1a3c2`, `9654f0f8` — all deployed to
