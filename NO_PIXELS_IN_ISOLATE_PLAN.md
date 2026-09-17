@@ -78,8 +78,9 @@ stamps `image_ops:fallback:<code>`; success stamps `image_ops:fly:<ms>`. Rollout
 |---|---|---|
 | 0 | service + tests, deploy, `/healthz`, smoke `/persist` on a real render URL; parity: thumbhash + ahash equal the isolate's for the same image | objects in Storage, parity exact |
 | 1 | `nightly-dreams`: persist + display + dedup hashes via Fly, behind the secret | **DONE 2026-09-17.** 10 organic renders (6 solo, 4 couple): 10/10, **0 × 546**, 0 fallbacks, display + thumbhash + phash inline. Hash 0.3-1.7 s, persist 0.9-1.8 s per render. |
-| 2 | `generate-dream`, `restyle-photo`, `first-dream-render` on the same client | Create-path 546s in the logs query |
-| 3 | `ensureHttpsImageUrl` → `/persist mode:temp` with `sourceBase64` (kills the atob loop) | gemini/gpt renders' CPU |
+| 2 | `generate-dream`, `restyle-photo` on the same client (`first-dream-render` next) | **DONE 2026-09-17.** First cloned Create job (gemini-3, a base64 provider) fell back `image_ops:fallback:http_400:bad_request` — the client only knew https sources (Fly: "sourceUrl must be https"); the render still shipped via the in-isolate path. Fixed in 3a. Re-run on `374aacb4`: `image_ops:fly:1180`, display + thumbhash written IN the uploads INSERT, no background variant scheduled, job complete in 50 s, no 546. |
+| 3a | the client splits a `data:` source into `sourceBase64` + `mime`, so a base64 provider render is persisted on Fly without the isolate touching its bytes | **DONE 2026-09-17** (`374aacb4`) — the gemini-3 job in phase 2. |
+| 3b | `ensureHttpsImageUrl` → `/persist mode:temp` with `sourceBase64` (kills the atob loop on the swap-target path) | gemini/gpt FACE-SWAP renders' CPU |
 | 4 | `/perturb`, holiday-postcard compositing, upscale cache write | remaining `decodeImage(` count → 0 |
 | 5 | ultra / 4 MP is a model choice. Delete the legacy in-isolate dual split. | — |
 

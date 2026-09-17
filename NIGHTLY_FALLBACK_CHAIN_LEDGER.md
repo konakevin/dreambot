@@ -173,6 +173,16 @@ but it still needs the calibration run first. Not built.
 overwritten with the REBUILD model on a degraded couple, so flex (the old rebuild model) inherited every
 flux couple that degraded. flex's own 30-day first render: 73 of 77 held. Same lie as `uploads.model`.
 
+**No pixels in the isolate — phases 1-3a SHIPPED and measured** (plan + inventory: `NO_PIXELS_IN_ISOLATE_PLAN.md`).
+Fly app `dreambot-image-ops` (`services/image-ops`, `/persist` modes final | temp | hash); the secret
+`IMAGE_OPS_FLY_URL` is the switch (unset → every function back on the old path, no deploy). Fail-open client
+`_shared/imageOps.ts`. Measured: `nightly-dreams` 10 organic renders (6 solo, 4 couple) 10/10, **0 × 546**, hash
+0.3-1.7 s + persist 0.9-1.8 s per render; `generate-dream` cloned Create job on gemini-3 (base64 provider)
+`image_ops:fly:1180`, display + thumbhash inline, 50 s, no 546. Read a render's `image_ops_hash:*` / `image_ops:*`
+stamps to see which path it took. STILL in the isolate (phase 3b/4): `ensureHttpsImageUrl`'s atob loop on swap
+targets, `perturbSourceImage`, the legacy non-Fly dual split, holiday-postcard compositing, the upscale cache write,
+and `first-dream-render` is not on the client yet.
+
 ## 6. State deployed tonight (Kevin: leave it for users)
 
 Commits `31cfa893`, `081ef539`, `621a5847`, `f75651ac`, `a7b1a3c2`, `9654f0f8` — all deployed to
