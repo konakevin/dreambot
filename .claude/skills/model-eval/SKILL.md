@@ -1,6 +1,6 @@
 ---
 name: model-eval
-description: Evaluate a NEW image model for use in DreamBot before adopting it — aspect ratio, measured cost, speed, medium fidelity, face-swap survival, couple viability and framing behaviour. Encodes the full 2026-09-16 GPT Image 2.5 investigation, where four wrong verdicts in a row came from testing the wrong thing. Use whenever Kevin asks "can we use <model>", "is <model> any good", "should we add <model> to the rotation", "run a matrix on <model>", or a new model appears on Replicate/OpenAI/Gemini/xAI.
+description: Vet a NEW image model for DreamBot end to end by running `node scripts/eval-model.js "<model>"` — a phased harness measuring aspect ratio, resolution, latency, real cost, medium fidelity, prompt adherence, hard priors, head-geometry compliance, face scale, swap survival and identity, then reporting a verdict. Encodes the full 2026-09-16 GPT Image 2.5 investigation, where four wrong verdicts in a row all came from testing the wrong thing. Use whenever Kevin asks "can we use <model>", "is <model> any good", "is <model> a good fit", "should we add <model> to the rotation", "vet/test <model>", "run a matrix on <model>", or a new model appears on Replicate/OpenAI/Gemini/xAI.
 ---
 
 # Model Evaluation — is this model safe to put in DreamBot?
@@ -8,6 +8,62 @@ description: Evaluate a NEW image model for use in DreamBot before adopting it �
 > **Read this whole file before rendering anything.** It exists because evaluating GPT Image 2.5 on
 > 2026-09-16 produced **four confidently-stated verdicts that were all wrong**, over a full day, and every
 > one of them was a testing mistake rather than a model fact. The traps below are the entire point.
+
+---
+
+## Run it
+
+```sh
+node scripts/eval-model.js "<model id or fuzzy name>"     # full pass
+node scripts/eval-model.js <id> --phase 2                 # one phase
+node scripts/eval-model.js <id> --n 9 --no-album          # sample size; skip the album push
+```
+
+Kevin will ask for this in his own words: *"is flux 3 any good"*, *"should we add X to the rotation"*,
+*"vet this model"*. That is the command. **Do not hand-roll probes when a phase already covers it** — the
+whole point is that the traps below are already designed out of the runner.
+
+**What it does.** Phases run cheapest-first and a fatal failure stops the run, so a model that cannot hit
+9:16 costs about five renders instead of seventy.
+
+| phase | what it settles | judged by |
+|---|---|---|
+| 0 | Can the engine call it at all | automatic |
+| 1 | Aspect, resolution, latency, measured cost | automatic, **fatal gates** |
+| 2 | Medium fidelity, prompt adherence, hard priors, **scene range**, **vibe fidelity** | **you** — renders land in Kevin's private Dreams album |
+| 3 | Geometry compliance and face scale, **sampled across lighting** | automatic, via the swap's own detector |
+| 4 | **Face swap once per look family**, identity, refusals | automatic measurement, your eyes on the pairs |
+
+**It exercises the whole job, not one lucky cell.** Nightly does not hand a model a single kind of work,
+so neither does this:
+
+- **Scene range** (phase 2): eight cells spanning interior vs exterior, landscape vs couples, and six
+  lighting types — warm directional, flat diffuse overcast, harsh midday contrast, artificial interior
+  lamplight, night with reflections, and dappled canopy. Judge each for **lushness, not just
+  correctness**: a right-but-empty frame fails the product.
+- **Vibe fidelity** (phase 2): each vibe rendered **with its `flux_fragment` and without it**, everything
+  else identical. Judge the PAIR. A single render that "looks cozy" proves nothing — that is exactly how
+  the fragment reached 0 of 50 nightlies while every render looked plausible.
+- **Geometry across lighting** (phase 3): day, night and dim interior scored *separately*, because
+  averaging hides the failure flux actually has.
+- **Swap per look family** (phase 4): one render in each of the live families — photographic,
+  painted_realism, watercolor, comic_print, covers_posters, legacy. One per family rather than per look,
+  since the 57 looks collapse into families that behave alike under a swap. What varies is how far a
+  pasted photographic face has to travel: nowhere in `photographic`, furthest in `watercolor` and
+  `comic_print`.
+
+**What it will not do: grade style.** Phase 2 renders and stops. That is a deliberate property, not a gap
+— see the automated-grader trap in §4. When a phase returns `REVIEW`, the answer is your eyes on the
+images, at n≥9, on the BASE render.
+
+**Where "good" is defined.** `scripts/lib/modelEval/dimensions.js` holds all seventeen dimensions with the
+bar for each and the incident behind it. Read it before arguing with a verdict, and add to it whenever a
+new failure mode is found — that file is the actual brain, this one is the operating manual.
+
+**One safety property worth knowing:** the runner refuses to guess which model you meant. A fuzzy name
+that matches several models prints the shortlist and exits without rendering, because Replicate's search
+returns an object detector as the top hit for "flux 2", and a plausible report about the wrong model is
+worse than no report.
 
 ---
 
@@ -34,12 +90,39 @@ model for the swap.**
 A DreamBot cast render is two stages: the model draws the scene, then a real person's face is composited
 in. The pasted face is photographic **by definition**, at whatever scale the base render drew it.
 
-- Wide/full-length → the pasted region is small, surrounding texture dominates, the medium survives
-- Tight/waist-up → the faces ARE the image, and the whole render reads photoreal
+**MEASURED 2026-09-16** (gpt-image-2.5-sunburst, look `nightly_chromolithograph`, identical scene, cast
+and prompt, only the framing clause differing — base and swapped captured for both arms):
 
-This is true of **every** model. It is not a property of the model under test. Always render at least one
-arm with `force_face_swap_eligible: false` (or a scene-only composition) to see what the model actually
-drew.
+| framing | face height in a 2048px frame | base render | after swap |
+|---|---|---|---|
+| WIDE, full length | ~70px | painted, consistent | painted — **swap invisible** |
+| TIGHT, waist up | ~350px | **painted, consistent** | photographic skin — **seam obvious** |
+
+The TIGHT *base* was a perfectly good chromolithograph: both faces carried painterly modelling matching
+the foliage and mosaic around them. The look survived right up until the swap touched it. So:
+
+> **Face scale, not the model, decides whether a swap is visible.** A look that "blends nicely" on comic
+> or oil renders is usually just drawing faces small. Never grade a model on how well the swap hid in it.
+
+The corollary that matters when a model is on trial: a model that *composes tighter* will look like it
+"flattens mediums", when all it did was frame closer. Measure composition separately from medium fidelity.
+
+**Get the base for free — do not re-render.** Every render already stores its raw pre-swap output:
+
+```js
+// ai_generation_log.rolled_axes.observability
+replicateRawUrl   // the RAW model output (data: URI for OpenAI/Gemini, URL for Replicate) = THE BASE
+preStoragetUrl    // post-pipeline
+```
+
+So you can pull the true base of any render that already happened, retroactively, at zero cost and with
+**zero seed variance** — unlike a re-render, which is a different sample and cannot prove what *this*
+image looked like before the swap. Decode and compare the two directly. (`model_used` is the column, not
+`model`; a `.select()` naming `model` errors and PostgREST returns an empty result that looks like "no
+rows" rather than a failure.)
+
+Only when no such row exists, render an arm with `force_face_swap_eligible: false` (or a scene-only
+composition) to see what the model actually drew.
 
 ## 2. n ≥ 9 or say nothing
 
@@ -81,37 +164,68 @@ prompt replayed verbatim. Each step tells you which layer breaks it. (In the 2.5
 - **QA samples are not production.** A 9-render QA batch showed `giant_face` at 44%; production over 105
   couples showed 3%.
 
-## 5. The checklist
+## 5. The seventeen dimensions, and which phase settles each
 
-Run in order. Stop early if a hard gate fails.
+Full text with the incident behind every bar: `scripts/lib/modelEval/dimensions.js`.
 
-**A. API shape — HARD GATE.** Does it render true 9:16? `gpt-image-1/2` accept `size` only from a fixed
-enum, so the closest portrait is 1024x1536 = 2:3 against our 9:16 cards — that is why gpt-image-2 is
-permanently banned, and it is unfixable. Probe the real API for accepted sizes; do not trust docs.
+| dimension | bar | phase |
+|---|---|---|
+| Engine can call it | one bare render returns an image | 0 |
+| **True 9:16** | 0.5625 ± 0.02 — **fatal**, unfixable | 1 |
+| Resolution | ≤~2.5MP; ultra was banned for defeating the detector at 4MP | 1 |
+| **Latency** | p95 < 140s — **fatal**, it FAILS rather than renders slowly | 1 |
+| Cost | ≤~1.2× flux-1.1-pro, measured from usage tokens never quoted | 1 |
+| **Medium fidelity** | ≥7/9 per family — **fatal** | 2 |
+| Prompt adherence | ≥80% of the named facts | 2 |
+| Hard priors | no verdict: discover and record, they are permanent | 2 |
+| **Scene range** | every cell renders, none plain or muddy; per-cell not averaged | 2 |
+| **Vibe fidelity** | fragment visibly moves the render, ≥7/9 **pairs** | 2 |
+| **Geometry** | ≥7/9 two separable faces, **in every lighting condition** | 3 |
+| Composition | report median `bboxFrac`; explains the swap result | 3 |
+| Swap technical | `dual_degrade_single` ≤10% across the look families | 4 |
+| Identity | mean ≥0.5, zero below the 0.35 floor | 4 |
+| Swap naturalness | seam not obvious at that model's own face scale, **per family** | 4 |
+| Scene-only | medium fidelity holds on people-free scenes | 4 |
+| Refusals | <5% on ordinary romance/swimwear/family prompts | 4 |
 
-**B. Cost — MEASURE, don't estimate.** OpenAI returns `usage.output_tokens`; multiply by the published
-rate. This corrected gpt-image-2 from a 6c estimate to 4c actual. Compare against flux-1.1-pro (~$0.040)
-and gemini-2-image (~$0.039), both sparkle tier 1.
+Two of these decide most adoptions:
 
-**C. Speed — HARD GATE.** 150s IDLE_TIMEOUTs killed gpt-image-2 in nightly. First dreams need well under
-60s or onboarding shows a failure. Time every render.
+**Geometry is the reason to switch.** flux-1.1-pro cannot be told where to put heads, and that is what
+costs 21% of production couples their +1. A model that passes phase 3 fixes something we currently cannot
+fix at all. Scored by `/analyze`, the same YuNet detector that gates the real swap, so the number predicts
+production rather than approximating it.
 
-**D. Clean-room medium fidelity** (§3). 6 mediums, 1 subject.
+**Failing the cast dimensions is not the end.** `scene_eligible_models` is its own config list, so a model
+that renders gorgeous places but cannot hold a swap still belongs in pure-scene nightlies and bots. Always
+score scene-only separately before rejecting.
 
-**E. Base-render look fidelity in-engine, swap OFF.** n ≥ 9, one pinned look, `qa_pin_look`.
+## 6. Phase 4 — the swap, across the look families
 
-**F. Post-swap look fidelity + identity.** Same n. Compare against E — the DELTA is the swap's cost, not
-the model's failure. Identity floor is 0.35 (measured, 100 pairs, zero errors); a normal identity score
-does NOT mean the render looks like the person — ArcFace is hair-invariant.
+Automatic now. It routes through `nightly-dreams` with `force_model`, which dispatches any model id the
+provider layer can reach with no DB row needed, and for each live look family renders one dual face swap
+against a real cast lifted from one of Kevin's own recent dual renders.
 
-**G. Couple viability.** Couples are the hard case. Watch `no_dual_split`, `giant_face`,
-`side_haiku_unresolved`, `dual_degrade_single`. Production baseline over 105 couples: 67% clean, 21%
-degrade. A candidate materially worse than that is not couple-safe.
+What it does for you: pins with `qa_pin_look` (never `force_look`, §4), forces a dual cast, reads
+`fallback_reasons` for `dual_degrade_single` / `no_dual_split` / `giant_face` / `side_haiku_unresolved`,
+pulls `identity_sim`, saves the **base** from `rolled_axes.observability.replicateRawUrl` next to the
+final, and holds concurrency at 3 behind `waitForHeadroom({ min: 25 })` because each edge render pins a
+Postgres connection for 20-150s and the pool is shared with the live app.
 
-**H. Framing behaviour.** Does it compose tight or wide on the same instruction? This decides how visible
-the swap will be (§1), and it is the most under-appreciated axis.
+**What still needs your eyes — compare WITHIN a family, never across.** The question is never "is there a
+seam" but "does the pasted face sit in *this* style at *this* model's face scale". A photographic look
+hides a swap by definition and tells you nothing; `watercolor` and `comic_print` are where a photoreal
+face has the furthest to travel and where a model earns or loses the catalogue.
 
-## 6. Model temperaments — what we know
+**Baselines to judge against:** production over 105 couples is 67% clean / 21% degrade on flux, so
+materially worse than that is not couple-safe. Identity floor is 0.35, measured over 100 pairs with zero
+errors — and remember ArcFace is hair-invariant, so a passing score is a floor, not proof it looks like
+the person.
+
+**If couples degrade, check the lighting split from phase 3 before blaming the model's swap.** Losing head
+separation in the `night` and `interior_low` conditions is the same shape as the flux night-vibe failure,
+and it is a geometry problem surfacing at the swap, not a swap problem.
+
+## 7. Model temperaments — what we know
 
 - **flux-1.1-pro.** Renders nouns and adjectives reliably, COUNTS REPETITIONS, and **cannot be told about
   geometry** — "a clear gap between their heads" was ignored across matched seeds. Also has hard priors
@@ -122,7 +236,7 @@ the swap will be (§1), and it is the most under-appreciated axis.
   naming the look; 56 of 57 look fragments carry "lifelike / realistic / true-to-life". A model that
   obeys us precisely will paint a photograph, and that is not its fault.
 
-## 7. Wiring a model in, once it passes
+## 8. Wiring a model in, once it passes
 
 1. `supabase/functions/_shared/providers/<provider>.ts` — model id map + per-model size/quality defaults
 2. `modelPricing.ts` — `MODEL_SPARKLE_COST` + `MODEL_COST_CENTS`, measured
@@ -132,7 +246,7 @@ the swap will be (§1), and it is the most under-appreciated axis.
 5. `NIGHTLY_BANNED_MODELS` if cast-unsafe. **Listing a model as a policy PRIMARY lifts its legacy ban**
    (`looksPathBans`) — so removing it from primaries is how you actually ban it.
 
-## 8. Report like this
+## 9. Report like this
 
 State what was **measured** vs **inferred**, every n, and every hypothesis tested AND REJECTED so nobody
 re-runs it. If a conclusion rests on your eye, say so and show the sheet. Ledgers:
