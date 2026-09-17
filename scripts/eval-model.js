@@ -677,11 +677,17 @@ async function lightPass(model) {
         .update({ caption: `🔬 EVAL light ${i + 1} · ${model.split('/').pop()}` })
         .eq('id', p.upload_id);
 
-      const { data: up } = await sb
-        .from('uploads')
-        .select('width,height')
-        .eq('id', p.upload_id)
-        .maybeSingle();
+      // MEASURE the delivered image. Do NOT read uploads.width/height — those columns
+      // carry a stale default (768x1664 on every seedream render, whose real output is
+      // 1024x1820), so trusting them reports a resolution the model never produced.
+      let size = null;
+      try {
+        const img = await fetch(p.image_url);
+        size = P.imageSize(Buffer.from(await img.arrayBuffer()));
+      } catch {
+        /* a failed measurement is reported as unknown, never as a number */
+      }
+      const up = size ? { width: size.width, height: size.height } : null;
       const { data: logs } = await sb
         .from('ai_generation_log')
         .select('rolled_axes, fallback_reasons')

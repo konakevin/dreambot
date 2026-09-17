@@ -329,12 +329,18 @@ async function generateImageOnce(
   // 2048x2048 SQUARE). If a bigger frame is ever wanted, the working form is
   // { size: 'custom', width: 1152, height: 2048 } = 2.36MP at exactly 9:16.
   //
-  // Left alone deliberately: `enhance_prompt` defaults TRUE on this model, so
-  // seedream rewrites our prompt before rendering. That is worth revisiting —
-  // this engine's whole design is authored pools rather than LLM invention — but
-  // it is a separate decision from the size fix and changes what renders.
+  // `enhance_prompt` is OFF (Kevin 2026-09-16). It defaults TRUE on this model, so
+  // seedream was rewriting every prompt before rendering — meaning the image was of
+  // seedream's paraphrase, not of what the engine composed. That is the opposite of
+  // how this engine works: the varying element comes from authored pools precisely
+  // because a model left to invent it pigeonholes and rhymes, and prompt POSITION
+  // carries meaning that a rewrite destroys. Same reasoning already applied to the
+  // Kontext family's `prompt_upsampling` below, for the same reason.
+  //
+  // NOTE the edit/restyle branch further down still allows it — that path was not
+  // measured here, and changing it would alter restyle output for live users.
   if (model === 'bytedance/seedream-4' && !inputImage) {
-    input = { prompt, aspect_ratio: '9:16', size: '1K' };
+    input = { prompt, aspect_ratio: '9:16', size: '1K', enhance_prompt: false };
   }
 
   if (mode === 'flux-kontext' && inputImage) {
