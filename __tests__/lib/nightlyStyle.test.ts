@@ -292,8 +292,10 @@ describe('buildStyleContract', () => {
       })!;
 
     it('opens the pool to every model the policy names, even when the look is graded on one', () => {
-      const c = build({}, () => 0.99); // 0.99 skips the direct-to-primary branch and rolls the pool
-      expect(c.stamps).toContain('model_source:look:3');
+      // Eligibility is LOOKS_ALL_MODELS: NOT REJECTED, not explicitly approved. A model with no grade for
+      // this look is still in the pair space — which is what lets a newly added model render at all.
+      const c = build({}, () => 0.99);
+      expect(c.stamps).toContain('model_source:pair:3');
       expect([PRO, GEMINI, GROK]).toContain(c.model);
     });
 
@@ -348,9 +350,12 @@ describe('buildStyleContract', () => {
         ok('oil', GEMINI, 'couple'),
         { lookKey: 'oil', model: PRO, surface: 'couple' as const, approved: false },
       ];
-      const c = build({ approvals: rejectsFlux }, () => 0.1); // would go direct to flux if allowed
+      const c = build({ approvals: rejectsFlux }, () => 0.1);
+      // Under the pair roll flux can still be PICKED first — it is then dropped because it has no look it
+      // may render, and the next model takes the render. The rejection is honoured either way, and the
+      // stamp says which model was dropped and why.
       expect(c.model).not.toBe(PRO);
-      expect(c.stamps).toContain('model_source:look:2');
+      expect(c.stamps.some((s) => s.startsWith('pair_no_look:'))).toBe(true);
       expect([c.model, c.forAttempt(2).model, c.forAttempt(3).model]).not.toContain(PRO);
     });
 

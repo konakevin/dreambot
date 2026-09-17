@@ -70,8 +70,10 @@ describe('the locked engine is wired the way the summary says', () => {
     expect(LOOKS_ALL_MODELS).toBe(true);
     const src = strip(STYLE_SRC);
     // It must consult the row's weights...
-    expect(src).toContain('weightedList(primaries, row?.primaryWeights, excluded)');
+    expect(src).toContain('weightedList(row?.primaryModels ?? [], row?.primaryWeights, excluded)');
     expect(src).toContain('pickWeighted(weighted, rng)');
+    // ...and must sample the PAIR: model first, then a look that model may render (NIGHTLY_PAIR_ROLL_PLAN.md).
+    expect(src).toContain('looks: looksFor(picked)');
     // ...and must NOT resurrect the direct-to-primary jump.
     expect(src).not.toContain('rng() < PRIMARY_DIRECT_SHARE');
   });

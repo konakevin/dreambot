@@ -123,6 +123,28 @@ export function approvedLooks(
   return input.looks.filter((l) => l.active && l.nightlyEnabled !== false && ok.has(l.key));
 }
 
+/**
+ * Every LOOK this MODEL was graded NO on for this surface — the mirror of rejectedModelsFor, keyed the
+ * other way round.
+ *
+ * The pair roll (NIGHTLY_PAIR_ROLL_PLAN.md) picks the model first and then needs "which looks may this
+ * model render". It cannot use approvedLooks for that: eligibility here is LOOKS_ALL_MODELS, meaning NOT
+ * REJECTED rather than explicitly approved. Requiring an approval row would ignore a rejection whenever an
+ * approval row also exists for the same pair (the rejection is the later judgement and must win), and
+ * would give an UNGRADED model no looks at all — a newly added model has zero rows and would never render.
+ */
+export function rejectedLooksForModel(
+  approvals: readonly LookApproval[],
+  model: string,
+  surface: LookSurface
+): Set<string> {
+  return new Set(
+    approvals
+      .filter((a) => a.approved === false && a.model === model && a.surface === surface)
+      .map((a) => a.lookKey)
+  );
+}
+
 /** Every model this look is approved on for this surface, in a stable order (the look-first model pick). */
 export function approvedModelsFor(
   approvals: readonly LookApproval[],

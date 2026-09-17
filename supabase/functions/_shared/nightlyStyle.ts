@@ -5,9 +5,13 @@
  * rebuild. Pure: no I/O, injected rng. Locked by __tests__/lib/nightlyStyle.test.ts.
  *
  *   surface (couple | solo | scene)
- *     → model  = resolveModel(policy row for the surface, weights, bans, force_model)
- *     → look   = pinned key (day-of look set › holiday-scene pin › scenario pin) or
- *                resolveLook(approvals for model × surface, family-first, recency, force_look)
+ *     → PAIR   = sample one valid (model, look) pair — NIGHTLY_PAIR_ROLL_PLAN.md
+ *                model = weighted pick over the surface's primary_models (primary_weights, renormalised
+ *                        over whatever survives the bans / restrictModels / a pin)
+ *                look  = family-first roll over the looks THAT model may render (not-rejected), or the
+ *                        pinned key (day-of look set › holiday-scene pin › scenario pin)
+ *                A pin does not invert the order: it collapses the LOOK dimension to one value and the
+ *                model is still sampled from whoever can render it. Day-of is an input, not a branch.
  *     → contract { model, look, fragment, sceneFragment, directive, forAttempt(n), forRebuild() }
  *
  * Scene-only renders (no cast) roll from the SOLO approvals of the model (a look that renders a person well on
@@ -25,6 +29,7 @@ import {
   resolveLook,
   approvedModelsFor,
   rejectedModelsFor,
+  rejectedLooksForModel,
   type LookApproval,
   type LookRow,
   type LookSurface,
@@ -87,10 +92,11 @@ export interface StyleContractInput {
   policy: NightlyModelPolicy;
   bans?: ReadonlySet<string> | null;
   forceModel?: string | null;
-  /** LOOK-FIRST (the minimal state, 2026-09-13). 1.2.0's rule is that the MEDIUM decides the model, so roll the
-   *  look from everything approved for this surface on ANY model, then pick the model from that look's own approved
-   *  set. The policy weights are not consulted. A retry moves to another model the SAME look is approved on (Kevin:
-   *  "allow the move"), which is what keeps a failed couple from degrading to a solo. */
+  /** THE PAIR ROLL (the minimal/live state). `true` samples a valid (model, look) pair: the model from the
+   *  surface's primary_weights, then a look that model may render. It replaced a look-first roll that let a
+   *  model forfeit its configured weight on every look it was rejected for — measured 2026-09-17, a 70/15/15
+   *  config delivered 35/35/30. A retry moves to another model the SAME look is graded on (Kevin: "allow the
+   *  move"), which is what keeps a failed couple from degrading to a solo. */
   modelFromLook?: boolean;
   looks: readonly LookRow[];
   approvals: readonly LookApproval[];
@@ -198,113 +204,190 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
   const lookSurface: LookSurface = input.surface === 'scene' ? 'solo' : input.surface;
 
   const lookFirst = input.modelFromLook === true;
-  // LOOK-FIRST: the look is rolled before any model, so the policy roll is skipped entirely and the model comes
-  // from the look's own approved set below. A QA force_model still wins.
-  const pick = lookFirst
-    ? { model: input.forceModel ?? '', stamp: 'model_source:look' }
-    : resolveModel({
-        surface: policySurface,
-        attempt: 1,
-        policy: input.policy,
-        bans: input.bans ?? null,
-        forceModel: input.forceModel ?? null,
-        rng,
-      });
-  if (!lookFirst) stamps.push(pick.stamp);
 
   // A pin is a forced look unless the key is unknown (then the roll decides and we say so).
   const pinKey = input.forcedLook ?? input.pinnedLook ?? null;
   const pinKnown = pinKey ? input.looks.some((l) => l.key === pinKey) : false;
   if (pinKey && !pinKnown) stamps.push(`look_pin_unknown:${pinKey}`);
-  const resolved = resolveLook({
-    surface: lookSurface,
-    model: pick.model,
-    anyModel: lookFirst,
-    looks: input.looks,
-    approvals: input.approvals,
-    recentLookKeys: input.recentLookKeys ?? [],
-    recencyWindow: input.recencyWindow,
-    legacyPct: input.legacyPct,
-    forcedLook: pinKnown ? pinKey : null,
-    rng,
-  });
+
+  let resolved: ReturnType<typeof resolveLook> = null;
+  let modelId = '';
+  /** Every model that can render the look we end up with — the retry ladder's round-robin set (§3.4 of
+   *  NIGHTLY_PAIR_ROLL_PLAN.md: a retry re-samples the MODEL dimension while holding the look). Populated
+   *  once the pair is resolved, from the same policy row and the same filters the first pick used. */
+  let lookModels: readonly string[] = [];
+
+  if (lookFirst) {
+    // ── THE PAIR ROLL (NIGHTLY_PAIR_ROLL_PLAN.md) ────────────────────────────────────────────────────
+    // ONE mechanism: sample a valid (model, look) PAIR. Everything else is a filter on that pair space —
+    // a pin, a QA force_model, the bans, the pinned medium's own allowed_models.
+    //
+    // WHY IT IS NOT "roll the look, then the model". That order let a model FORFEIT its configured weight
+    // on every look it was rejected for, and handed the forfeit to whoever was left. Measured 2026-09-17:
+    // a batch configured flux 70 / gemini 15 / seedream 15 delivered 35 / 35 / 30, because flux is
+    // rejected on 37 of 57 looks and seedream — ungraded, so never rejected — sat in every pool and
+    // collected the difference. The weights were applied correctly on each render; the POOL was the
+    // variable. Same trap previously handed flux-1.1-pro-ultra 58% of scene renders instead of 25%.
+    //
+    // WHY A PIN IS NOT A SECOND PATH. A pinned look (day-of, holiday scene, scenario medium_key) does not
+    // invert the roll order — it collapses the LOOK dimension to a single value, which leaves the model
+    // dimension sampled exactly as always, from whichever models can render that look. Day-of is an input
+    // here, not a branch beside it.
+    // SCENE IGNORES THE PER-LOOK MODEL REJECTIONS (Kevin, 2026-09-14: "we shouldn't have any looks banned
+    // on any models for scene only — it doesn't have to worry about a face swap"). Every `approved = false`
+    // row is a FACE-SWAP judgement: whether that look carries a swapped likeness on that model. A personless
+    // scene has no face to carry, so the rejection has nothing to say about it. Keeping the filter also
+    // skewed the roll — the one model with NO grades survived every pool and took 58% of scene renders.
+    const sceneIgnoresRejections = input.surface === 'scene';
+    if (sceneIgnoresRejections) stamps.push('scene_ignores_look_model_bans');
+    const row = input.policy[policySurface];
+    let candidates: readonly string[] = input.forceModel
+      ? [input.forceModel]
+      : (row?.primaryModels ?? []);
+    if (!input.forceModel) {
+      candidates = candidates.filter((m) => !(input.bans && input.bans.has(m)));
+      candidates = clipToRestrict(candidates, input.restrictModels, stamps, 'model_restrict');
+      // The pin filters the MODEL dimension: only models that can actually render it survive. Fails open
+      // with a stamp rather than starving — a day-of render must never fail to render.
+      // SCENE is exempt from every look-model rejection (see sceneIgnoresRejections below), so its pin
+      // never narrows the model pool either.
+      if (pinKnown && pinKey && !sceneIgnoresRejections) {
+        const rejected = rejectedModelsFor(input.approvals, pinKey, lookSurface);
+        const able = candidates.filter((m) => !rejected.has(m));
+        if (able.length > 0) candidates = able;
+        else stamps.push(`pin_model_starved:${pinKey}`);
+      }
+    }
+
+    // Weighted pick over the survivors, renormalised — a model filtered out here drops its weight with it
+    // (weightedList pairs models and weights through the same filter), so the rest split what is left
+    // rather than inheriting a skew. Then the LOOK is rolled from that model's own approved set, which is
+    // what keeps a model off the looks it was graded NO on.
+    //
+    // A model can survive the filters and still have no eligible look (recency, family, grading). Rather
+    // than fail, drop it and re-pick from the rest — the loop is the fallback ladder.
+    // ELIGIBILITY IS "NOT REJECTED", NOT "EXPLICITLY APPROVED" — this is LOOKS_ALL_MODELS, and getting it
+    // backwards breaks two things at once. `approvedLooks` requires an explicit approved row, so filtering
+    // that way would (a) ignore a rejection whenever an approval row also exists for the same pair, since
+    // the rejection is the LATER judgement that must win, and (b) give an UNGRADED model no looks at all —
+    // seedream-4.5 has zero rows and would simply never render. So the look pool is every look approved on
+    // any model, minus the ones THIS model was graded NO on.
+    const looksFor = (m: string): readonly LookRow[] => {
+      if (sceneIgnoresRejections) return input.looks;
+      const rejected = rejectedLooksForModel(input.approvals, m, lookSurface);
+      return input.looks.filter((l) => !rejected.has(l.key));
+    };
+    const remaining = [...candidates];
+    while (remaining.length > 0 && !resolved) {
+      const excluded = new Set((row?.primaryModels ?? []).filter((m) => !remaining.includes(m)));
+      const weighted = weightedList(row?.primaryModels ?? [], row?.primaryWeights, excluded);
+      const picked =
+        input.evenModelSplit === true || weighted.models.length === 0
+          ? remaining[Math.floor(rng() * remaining.length)]
+          : pickWeighted(weighted, rng);
+      const attempt = resolveLook({
+        surface: lookSurface,
+        model: picked,
+        // anyModel over a pool ALREADY narrowed to what this model may render (see looksFor). Doing the
+        // narrowing here rather than inside resolveLook is what keeps "not rejected" as the rule.
+        anyModel: true,
+        looks: looksFor(picked),
+        approvals: input.approvals,
+        recentLookKeys: input.recentLookKeys ?? [],
+        recencyWindow: input.recencyWindow,
+        legacyPct: input.legacyPct,
+        forcedLook: pinKnown ? pinKey : null,
+        rng,
+      });
+      if (attempt) {
+        resolved = attempt;
+        modelId = picked;
+        stamps.push(
+          `policy:${policySurface}:1:${short(modelId)}`,
+          `model_source:pair:${candidates.length}`,
+          input.evenModelSplit === true
+            ? `model_roll:even:${remaining.length}`
+            : `model_roll:weighted:${weighted.weights.join('/')}`
+        );
+      } else {
+        // No look this model can render under the current constraints. Drop it and try the next.
+        stamps.push(`pair_no_look:${short(picked)}`);
+        remaining.splice(remaining.indexOf(picked), 1);
+      }
+    }
+
+    // LAST RESORT: nothing in the pool could pair with a look. Take any model that can render anything,
+    // ignoring the weights — a nightly render must ship.
+    if (!resolved) {
+      const anyLook = resolveLook({
+        surface: lookSurface,
+        model: '',
+        anyModel: true,
+        looks: input.looks,
+        approvals: input.approvals,
+        recentLookKeys: input.recentLookKeys ?? [],
+        recencyWindow: input.recencyWindow,
+        legacyPct: input.legacyPct,
+        forcedLook: pinKnown ? pinKey : null,
+        rng,
+      });
+      if (anyLook) {
+        const able = (row?.primaryModels ?? []).filter(
+          (m) => !rejectedModelsFor(input.approvals, anyLook.look.key, lookSurface).has(m)
+        );
+        modelId = input.forceModel ?? able[0] ?? (row?.primaryModels ?? [])[0] ?? '';
+        resolved = anyLook;
+        stamps.push(`pair_fallback_any:${short(modelId)}`);
+      }
+    }
+  } else {
+    // LEGACY / non-minimal path: the policy roll picks the model, then the look comes from its approvals.
+    const pick = resolveModel({
+      surface: policySurface,
+      attempt: 1,
+      policy: input.policy,
+      bans: input.bans ?? null,
+      forceModel: input.forceModel ?? null,
+      rng,
+    });
+    stamps.push(pick.stamp);
+    modelId = pick.model;
+    resolved = resolveLook({
+      surface: lookSurface,
+      model: pick.model,
+      anyModel: false,
+      looks: input.looks,
+      approvals: input.approvals,
+      recentLookKeys: input.recentLookKeys ?? [],
+      recencyWindow: input.recencyWindow,
+      legacyPct: input.legacyPct,
+      forcedLook: pinKnown ? pinKey : null,
+      rng,
+    });
+  }
+
   if (!resolved) {
-    stamps.push(`looks_path_no_look:${short(pick.model)}:${lookSurface}`);
+    stamps.push(`looks_path_no_look:${short(modelId)}:${lookSurface}`);
     return null;
   }
   stamps.push(...resolved.stamps.filter((s) => !s.startsWith('look_pin_unknown')));
 
-  // LOOK-FIRST: the look Kevin's catalog just rolled now decides the model, uniformly among the models HE approved
-  // it on for this surface. That is 1.2.0's rule (the medium picks the model) with his grades standing in for the
-  // inherited Create-screen pin, which said flux for 48 of 49 looks while the grades say all three models work.
-  let modelId = pick.model;
-  let lookModels: readonly string[] = [];
-  if (lookFirst) {
-    // THE MODEL POOL. Opened to every model the surface's policy row names (Kevin: "all looks enabled for all
-    // models, i think that makes 3 total?"), minus two exclusions: models he explicitly graded NO for this look and
-    // surface ("keep the rejections, that's right"), and the day-of / nightly bans.
-    // SCENE IGNORES THE PER-LOOK MODEL REJECTIONS (Kevin, 2026-09-14: "we shouldn't have any looks banned on any
-    // models for scene only — it doesn't have to worry about a face swap"). Every `approved = false` row is a
-    // FACE-SWAP judgement: whether that look carries a swapped likeness on that model. A personless scene has no
-    // face to carry, so the rejection has nothing to say about it. Keeping the filter also skewed the roll — the
-    // only model with NO grades (flux-1.1-pro-ultra, 0 rows) survived every pool while flux-1.1-pro was filtered
-    // out of the 14 looks it was rejected on, handing the ungraded model 58% of scene renders instead of 25%.
-    const rejected =
+  // The retry set: models graded OK for the look that actually rolled, minus bans. Holding the look and
+  // moving the model is what stops a failed couple from degrading straight to a solo.
+  {
+    const rejectedForLook =
       input.surface === 'scene'
         ? new Set<string>()
         : rejectedModelsFor(input.approvals, resolved.look.key, lookSurface);
-    if (input.surface === 'scene') stamps.push('scene_ignores_look_model_bans');
-    const approvedOn = LOOKS_ALL_MODELS
-      ? [...(input.policy[policySurface]?.primaryModels ?? [])].filter((m) => !rejected.has(m))
-      : approvedModelsFor(input.approvals, resolved.look.key, lookSurface);
-    const allowed = approvedOn.filter((m) => !(input.bans && input.bans.has(m)));
-    lookModels = allowed.length > 0 ? allowed : approvedOn;
-    lookModels = clipToRestrict(lookModels, input.restrictModels, stamps, 'model_restrict');
-    // SOLO PIN (Kevin, 2026-09-13): "i feel like we should be pinning flux 1.1pro for all singles renders … i think
-    // it does a better job at the looks". Measured reliability is a wash (flux 97% identity over 112 solos vs 100%
-    // on the other two), so this is his taste call about how the STYLES render, and it applies only where the look
-    // is approved on flux — the five solo looks graded elsewhere (hand_tinted_photo, painted_comic_cover,
-    // painted_animation, aquarelle_graphite, colored_pencil) keep the model that earned them. Couples are untouched:
-    // that is the surface where flux actually fails, so they keep rolling across the look's approved set.
-    // WHERE A RENDER STARTS — now a WEIGHTED roll over `nightly_model_policy.primary_weights`.
-    //
-    // It used to be a hardcoded `PRIMARY_DIRECT_SHARE` (50% straight to the surface's first primary, 50%
-    // uniform over the pool), which made every share change a code edit and a deploy — done three times in
-    // one evening. Worse, `primary_weights` ALREADY EXISTED, was already set in the dashboard on purpose,
-    // and this path ignored it: couple read 51/49 in the DB while actually rendering 75/25, and solo read
-    // 67/33 while rendering the same 75/25. The knobs were there and disconnected.
-    //
-    // Now one mechanism covers what took two. Equal weights ARE an even split, so `evenModelSplit` no longer
-    // needs a special case here — it stays only as an explicit "ignore the weights" escape hatch. Weights are
-    // taken from the surface's primaryModels and renormalised over whatever survived the look's rejections and
-    // the bans (weightedList drops a model and its weight together), so a look that rejects the heaviest model
-    // redistributes its share across the rest instead of skewing.
-    //
-    // To change a model's share: UPDATE nightly_model_policy.primary_weights. No deploy.
-    const row = input.policy[policySurface];
-    const primaries = row?.primaryModels ?? [];
-    // Anything the look/bans removed is excluded here so its weight is dropped with it.
-    const excluded = new Set(primaries.filter((m) => !lookModels.includes(m)));
-    const weighted = weightedList(primaries, row?.primaryWeights, excluded);
-    // A model can reach lookModels without being in primaryModels (non-LOOKS_ALL_MODELS grading paths), and
-    // it must still be rollable — fall back to the uniform pool when the weighted set came back empty.
-    const weightedPick = weighted.models.length > 0 ? pickWeighted(weighted, rng) : null;
-    const uniformPick = lookModels[Math.floor(rng() * lookModels.length)];
-    modelId =
-      input.forceModel ??
-      (input.evenModelSplit === true ? uniformPick : (weightedPick ?? uniformPick));
-    stamps.push(
-      `policy:${policySurface}:1:${short(modelId)}`,
-      `model_source:look:${lookModels.length}`
+    let retrySet: readonly string[] = (input.policy[policySurface]?.primaryModels ?? []).filter(
+      (m) => !rejectedForLook.has(m) && !(input.bans && input.bans.has(m))
     );
-    stamps.push(
-      input.evenModelSplit === true
-        ? `model_roll:even:${lookModels.length}`
-        : weightedPick
-          ? `model_roll:weighted:${weighted.weights.join('/')}`
-          : 'model_roll:pool'
-    );
+    // A pinned medium's own allowed_models clips EVERY retry in the chain, not just the first pick —
+    // otherwise a day-of look's second attempt lands on a model that look forbids.
+    retrySet = clipToRestrict(retrySet, input.restrictModels, stamps, 'model_restrict_retry');
+    lookModels = retrySet.length > 0 ? retrySet : [modelId];
   }
+
   const source: StyleContract['source'] =
     input.forcedLook && pinKnown ? 'force' : input.pinnedLook && pinKnown ? 'pin' : 'roll';
   if (source === 'pin') stamps.push(`look_source:pin:${pinKey}`);
