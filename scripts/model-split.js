@@ -6,6 +6,7 @@
  *   node scripts/model-split.js --surface solo \
  *        --set "flux-1.1-pro=70,gemini-2-image=15,seedream-4.5=15"
  *   node scripts/model-split.js --surface couple --set "flux-1.1-pro=75,gemini-2-image=25"
+ *   node scripts/model-split.js --surface solo --set "..." --preview   # see it, write nothing
  *
  * WHY IT EXISTS. The split lived in a TypeScript constant (PRIMARY_DIRECT_SHARE), so changing any model's
  * share meant an edit and a deploy — done three times in one evening. Meanwhile
@@ -41,6 +42,7 @@ const flag = (n) => {
 };
 const SURFACE = flag('surface');
 const SET = flag('set');
+const PREVIEW = argv.includes('--preview');
 
 const short = (m) => String(m).replace(/^.*\//, '');
 const bar = (pct) => '█'.repeat(Math.round(pct / 2.5)).padEnd(40);
@@ -113,6 +115,41 @@ async function apply() {
       process.exit(1);
     }
     wanted.set(name, Number(w));
+  }
+
+  // PREVIEW accepts models the row does not have yet, so a split can be seen before anything is wired or
+  // written. Without it the only way to answer "what would adding X look like" is to add X.
+  if (PREVIEW) {
+    const known = new Set(row.primary_models);
+    const models = [...row.primary_models];
+    for (const name of wanted.keys()) {
+      const already = models.some((m) => m === name || short(m) === name || short(m) === short(name));
+      if (!already) models.push(name);
+    }
+    const weights = models.map((m) => {
+      for (const [name, w] of wanted) {
+        if (m === name || short(m) === name || short(m) === short(name)) return w;
+      }
+      return 0;
+    });
+    const before = shares(row.primary_models, row.primary_weights);
+    const after = shares(models, weights);
+    console.log(`\n${SURFACE} — PREVIEW (nothing written)\n`);
+    models.forEach((m, i) => {
+      const b = before.find((x) => x.model === m);
+      const isNew = !known.has(m);
+      console.log(
+        `  ${short(m).padEnd(22)} ${(b ? b.pct.toFixed(1) + '%' : '  —  ').padStart(6)}  →  ${after[i].pct.toFixed(1).padStart(5)}%  ${bar(after[i].pct)}${isNew ? ' ← NEW' : ''}`
+      );
+    });
+    const needWiring = models.filter((m) => !known.has(m));
+    if (needWiring.length) {
+      console.log(
+        `\n  ${needWiring.map(short).join(', ')} must be added to primary_models (and image_models) first —`
+      );
+      console.log('  this tool only re-weights models the row already has.\n');
+    }
+    return;
   }
 
   // Resolve each name against the row's models, so a typo FAILS rather than silently doing nothing.

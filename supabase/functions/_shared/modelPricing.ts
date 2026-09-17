@@ -49,7 +49,11 @@ export const MODEL_SPARKLE_COSTS: Record<string, number> = {
   'black-forest-labs/flux-2-dev': 1, // ~$0.025
   'black-forest-labs/flux-2-pro': 1, // ~$0.031
   'black-forest-labs/flux-kontext-pro': 1, // ~$0.040
-  'bytedance/seedream-4': 1, // ~$0.030 (2K, restyle editor 2026-07-06)
+  'bytedance/seedream-4': 1, // ~$0.030 at 1K (nightly, 2026-09-16)
+  // 4.5 is NOT a cheaper 4 — it is the same price as flux-1.1-pro for a model that cannot render
+  // below 3.69MP (no '1K' in its size enum, custom sizes refused under 3,686,400 px). Nightly-pool
+  // only: no image_models is_active row, so it never reaches the user-facing picker.
+  'bytedance/seedream-4.5': 1, // ~$0.040 (Kevin, Replicate dashboard 2026-09-17)
   'google/gemini-2-image': 1, // Nano Banana ~$0.039
   'xai/grok-imagine-image': 1, // Grok Imagine ~$0.02 (1k)
   // GPT Image 2.5 (2026-09-16). MEASURED, not estimated: $30/1M output tokens ×
@@ -101,7 +105,8 @@ export const MODEL_COST_CENTS: Record<string, number> = {
   'black-forest-labs/flux-2-dev': 3, // ~$0.025 (was 4)
   'black-forest-labs/flux-krea-dev': 1, // ~$0.004 (was 4 — big over-estimate)
   'black-forest-labs/flux-2-pro': 3, // ~$0.031 (was 6)
-  'bytedance/seedream-4': 3, // ~$0.030 at 2K (restyle editor 2026-07-06)
+  'bytedance/seedream-4': 3, // ~$0.030 at 1K (nightly, 2026-09-16)
+  'bytedance/seedream-4.5': 4, // ~$0.040 — same as flux-1.1-pro (Kevin, Replicate dashboard)
   'black-forest-labs/flux-kontext-max': 5, // ~$0.050
   'black-forest-labs/flux-1.1-pro-ultra': 6, // ~$0.060
   'black-forest-labs/flux-2-flex': 6, // ~$0.063 (was 3 — under-estimate)
