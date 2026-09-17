@@ -38,6 +38,11 @@ export interface DualDispatchResult {
   /** ArcFace identity sims of the swapped faces vs their sources (Stage 8
    *  shadow measurement on the Fly engine; null when off/unavailable). */
   identity: { left: number | null; right: number | null; ms: number } | null;
+  /** Big-face tier (BIG_FACE_RECLAIM_PLAN.md): the engine swapped on its full-frame per-face path. Null when the
+   *  engine predates the field. */
+  bigFace: boolean | null;
+  /** Taller chosen face as a fraction of frame height, when the engine detected. */
+  maxFaceHFrac: number | null;
 }
 
 export async function dispatchDualFaceSwap(
@@ -60,7 +65,10 @@ export async function dispatchDualFaceSwap(
   traceId?: string | null,
   // R2: Haiku-confirmed genders of the rendered faces (left/right by x-order),
   // substituting for genderage on this attempt (see dualSwapPipeline).
-  genderOverride?: { left: 'male' | 'female'; right: 'male' | 'female' } | null
+  genderOverride?: { left: 'male' | 'female'; right: 'male' | 'female' } | null,
+  // Big-face tier ceiling from engine_config.dual_big_face_max_hfrac (BIG_FACE_RECLAIM_PLAN.md). Null / 0.40 =
+  // today's behaviour on the engine; the engine clamps it to 0.40-0.80.
+  bigFaceMaxHFrac?: number | null
 ): Promise<DualDispatchResult> {
   // Convert data: URL targets (from native OpenAI + Gemini providers) to a temp HTTPS upload (on the
   // image-ops service, phase 3b) so the POST body stays small — no ~6-8 MB base64 ride-along — and the
@@ -111,6 +119,7 @@ export async function dispatchDualFaceSwap(
         rightGender: genders?.right ?? null,
         traceId: traceId ?? null,
         genderOverride: genderOverride ?? null,
+        bigFaceMaxHFrac: bigFaceMaxHFrac ?? null,
       }),
     });
 
@@ -133,6 +142,8 @@ export async function dispatchDualFaceSwap(
       identity?: { left: number | null; right: number | null; ms: number } | null;
       error?: string;
       variant?: string;
+      bigFace?: boolean;
+      maxFaceHFrac?: number | null;
     };
     try {
       parsed = JSON.parse(text);
@@ -166,6 +177,8 @@ export async function dispatchDualFaceSwap(
       swapMs: elapsedMs,
       rejectReason: swappedUrl ? null : (parsed.reason ?? null),
       identity: parsed.identity ?? null,
+      bigFace: typeof parsed.bigFace === 'boolean' ? parsed.bigFace : null,
+      maxFaceHFrac: typeof parsed.maxFaceHFrac === 'number' ? parsed.maxFaceHFrac : null,
     };
   } finally {
     // Clean up the temp data-URL conversion if we made one. Fire-and-forget.

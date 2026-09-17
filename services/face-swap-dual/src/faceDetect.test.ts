@@ -11,15 +11,19 @@
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import decodeJpeg from 'https://esm.sh/@jsquash/jpeg@1.5.0/decode';
 import {
-  decodeYuNet,
-  nms,
-  iou,
-  planDualSplit,
-  faceCropBox,
   compositeFaceMasked,
-  isGiantFace,
-  isClippedFace,
+  compositeFaceMaskedBounded,
+  decodeYuNet,
   type FaceBox,
+  faceCropBox,
+  iou,
+  isClippedFace,
+  isGiantFace,
+  nms,
+  occlusionMask,
+  paintMasked,
+  planDualSplit,
+  restoreMasked,
   type YuNetHeads,
 } from './faceDetectMath.ts';
 import { detectFaces, detectFacesWithGender } from './faceDetect.ts';
@@ -55,7 +59,11 @@ Deno.test('decodeYuNet — one synthetic detection decodes to the right box + sc
   const i = 10 * 20 + 10;
   cls[i] = 0.99;
   obj[i] = 0.99;
-  const heads: Record<number, YuNetHeads> = { 8: empty(80), 16: empty(40), 32: { cls, obj, bbox } };
+  const heads: Record<number, YuNetHeads> = {
+    8: empty(80),
+    16: empty(40),
+    32: { cls, obj, bbox },
+  };
   const out = decodeYuNet(heads, 0.6);
   assertEquals(out.length, 1);
   const b = out[0];
@@ -65,7 +73,11 @@ Deno.test('decodeYuNet — one synthetic detection decodes to the right box + sc
 
 function empty(side: number): YuNetHeads {
   const n = side * side;
-  return { cls: new Float32Array(n), obj: new Float32Array(n), bbox: new Float32Array(n * 4) };
+  return {
+    cls: new Float32Array(n),
+    obj: new Float32Array(n),
+    bbox: new Float32Array(n * 4),
+  };
 }
 
 Deno.test('planDualSplit — clean gap → split at gap midpoint, overlap clamped to gap/2', () => {
@@ -293,7 +305,10 @@ async function rgbaOf(name: string): Promise<{ rgba: Uint8Array; W: number; H: n
 const II = { sanitizeResources: false, sanitizeOps: false };
 
 Deno.test(
-  { name: 'YuNet — a COUPLE render detects exactly 2 faces, cleanly splittable', ...II },
+  {
+    name: 'YuNet — a COUPLE render detects exactly 2 faces, cleanly splittable',
+    ...II,
+  },
   async () => {
     const { rgba, W, H } = await rgbaOf('couple.jpg');
     const faces = await detectFaces(rgba, W, H);
@@ -316,7 +331,10 @@ Deno.test({ name: 'YuNet — a no-people SCENE detects 0 faces', ...II }, async 
 });
 
 Deno.test(
-  { name: 'YuNet — a SINGLE person detects 1 face → not dual-splittable', ...II },
+  {
+    name: 'YuNet — a SINGLE person detects 1 face → not dual-splittable',
+    ...II,
+  },
   async () => {
     const { rgba, W, H } = await rgbaOf('solo.jpg');
     const faces = await detectFaces(rgba, W, H);
@@ -326,7 +344,10 @@ Deno.test(
 );
 
 Deno.test(
-  { name: 'genderage — the mixed couple reads male (left) + female (right)', ...II },
+  {
+    name: 'genderage — the mixed couple reads male (left) + female (right)',
+    ...II,
+  },
   async () => {
     const { rgba, W, H } = await rgbaOf('couple.jpg');
     const faces = (await detectFacesWithGender(rgba, W, H)).sort((a, b) => a.x - b.x);
@@ -334,5 +355,116 @@ Deno.test(
     // couple.jpg: man on the left, woman on the right
     assertEquals(faces[0].gender, 'male', `left should be male: ${JSON.stringify(faces[0])}`);
     assertEquals(faces[1].gender, 'female', `right should be female: ${JSON.stringify(faces[1])}`);
+  }
+);
+
+// ── Big-face tier (BIG_FACE_RECLAIM_PLAN.md, 2026-09-17) ──────────────────────
+// Phase 0: 9 of 11 giant couples swapped at normal identity once the per-face path stopped crossing into the
+// neighbour. The tier is inert at the default ceiling; the isolate raises it from engine_config.
+
+const BIG_50: FaceBox = { x: 60, y: 200, w: 300, h: 672, score: 0.95 }; // 50% of 1344
+const NORMAL_R: FaceBox = { x: 460, y: 420, w: 200, h: 260, score: 0.92 };
+
+Deno.test(
+  'planDualSplit — default ceiling: a 50%-height face is still giant_face (today, byte-for-byte)',
+  () => {
+    const p = planDualSplit([BIG_50, NORMAL_R], 768, { H: 1344 });
+    assertEquals(p.reason, 'giant_face');
+    assertEquals(p.bigFace, undefined);
+    assertEquals(Math.round((p.maxFaceHFrac ?? 0) * 100), 50);
+  }
+);
+
+Deno.test(
+  'planDualSplit — a raised ceiling puts (0.40, ceiling] in the big-face tier; above it stays giant',
+  () => {
+    const p = planDualSplit([BIG_50, NORMAL_R], 768, {
+      H: 1344,
+      bigFaceMaxHFrac: 0.6,
+    });
+    assertEquals(p.bigFace, true);
+    assertEquals(p.reason, 'ok');
+    assertEquals(p.leftBox, BIG_50);
+    const huge: FaceBox = { x: 60, y: 100, w: 500, h: 900, score: 0.95 }; // 67%
+    const q = planDualSplit([huge, NORMAL_R], 768, {
+      H: 1344,
+      bigFaceMaxHFrac: 0.6,
+    });
+    assertEquals(q.reason, 'giant_face');
+    assertEquals(q.bigFace, undefined);
+  }
+);
+
+Deno.test('planDualSplit — a normal couple never carries the tier, whatever the ceiling', () => {
+  const normalL: FaceBox = { x: 90, y: 420, w: 200, h: 260, score: 0.92 };
+  const p = planDualSplit([normalL, NORMAL_R], 768, {
+    H: 1344,
+    bigFaceMaxHFrac: 0.8,
+  });
+  assertEquals(p.reason, 'ok');
+  assertEquals(p.bigFace, undefined);
+  // and the ceiling can never go BELOW the giant guard
+  const q = planDualSplit([normalL, NORMAL_R], 768, {
+    H: 1344,
+    bigFaceMaxHFrac: 0.1,
+  });
+  assertEquals(q.reason, 'ok');
+});
+
+Deno.test(
+  'occlusionMask — covers the neighbour (+15%) but never our own box; null when apart',
+  () => {
+    const W = 100,
+      H = 100;
+    const ours: FaceBox = { x: 10, y: 10, w: 30, h: 30, score: 1 };
+    const other: FaceBox = { x: 30, y: 10, w: 30, h: 30, score: 1 }; // overlaps ours by 10px
+    const m = occlusionMask(W, H, ours, other)!;
+    assert(m);
+    assertEquals(m[20 * W + 35], 0); // inside OUR box (even though inside the neighbour too) → untouched
+    assertEquals(m[20 * W + 50], 1); // neighbour's face, outside our box → painted
+    assertEquals(m[20 * W + 62], 1); // neighbour +15% margin (30+30*1.15 = 64.5) → painted
+    assertEquals(m[20 * W + 70], 0); // beyond the margin → untouched
+    const far: FaceBox = { x: 90, y: 90, w: 5, h: 5, score: 1 };
+    assert(occlusionMask(W, H, ours, far)); // still paints the far neighbour itself
+    const rgba = new Uint8Array(W * H * 4).fill(200);
+    const copy = new Uint8Array(rgba);
+    const painted = paintMasked(rgba, m);
+    assert(painted > 0);
+    assertEquals(rgba[(20 * W + 35) * 4], 200); // ours untouched
+    restoreMasked(rgba, copy, m);
+    assertEquals(rgba, copy); // restore is exact
+  }
+);
+
+Deno.test(
+  'compositeFaceMaskedBounded — the paste never crosses the neighbour edge / overlap midline',
+  () => {
+    const W = 200,
+      H = 60;
+    const face: FaceBox = { x: 20, y: 10, w: 60, h: 40, score: 1 };
+    const base = new Uint8Array(W * H * 4); // black
+    const crop = new Uint8Array(W * H * 4).fill(255); // white full-frame "swap result"
+    // separated neighbour at x=120: nothing at/after 120 may change
+    compositeFaceMaskedBounded(base, W, H, crop, 0, 0, W, H, face, 36, {
+      x: 120,
+      y: 10,
+      w: 60,
+      h: 40,
+      score: 1,
+    });
+    assertEquals(base[(30 * W + 50) * 4], 255); // face core pasted
+    assertEquals(base[(30 * W + 120) * 4], 0); // neighbour edge untouched
+    assertEquals(base[(30 * W + 150) * 4], 0);
+    // overlapping neighbour (starts at x=70, our box ends at 80): midline = 75
+    const base2 = new Uint8Array(W * H * 4);
+    compositeFaceMaskedBounded(base2, W, H, crop, 0, 0, W, H, face, 36, {
+      x: 70,
+      y: 10,
+      w: 60,
+      h: 40,
+      score: 1,
+    });
+    assertEquals(base2[(30 * W + 72) * 4], 255);
+    assertEquals(base2[(30 * W + 76) * 4], 0);
   }
 );

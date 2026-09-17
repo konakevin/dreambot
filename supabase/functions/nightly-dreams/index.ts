@@ -4303,7 +4303,7 @@ Output ONLY the prompt.`;
       const result = await genderSafeDualSwap(
         tempUrl,
         {
-          dispatchDual: (target, genderOverride) =>
+          dispatchDual: async (target, genderOverride) =>
             dispatchDualFaceSwap(
               s0.sourceUrl,
               s1.sourceUrl,
@@ -4315,7 +4315,8 @@ Output ONLY the prompt.`;
               false,
               { left: s0.gender, right: s1.gender },
               queueJobId,
-              genderOverride ?? null
+              genderOverride ?? null,
+              (await fetchEngineConfig(supabase)).dualBigFaceMaxHFrac
             ),
           confirmGenders: async (target) => {
             const r = await classifyDualGenders(target, REPLICATE_TOKEN);
@@ -5214,7 +5215,9 @@ Output ONLY the prompt.`;
               t0 + 140_000,
               true,
               { left: faceSwapSources[0].gender, right: faceSwapSources[1].gender },
-              queueJobId
+              queueJobId,
+              null,
+              (await fetchEngineConfig(supabase)).dualBigFaceMaxHFrac
             );
             tempUrl = r.swappedUrl ?? genResult.url;
           } else if (faceSwapSource) {
@@ -5321,7 +5324,9 @@ Output ONLY the prompt.`;
                       t0 + 140_000,
                       !needsRerender, // skipPrimary only for the canned-output (broken) escape
                       { left: faceSwapSources[0].gender, right: faceSwapSources[1].gender },
-                      queueJobId
+                      queueJobId,
+                      null,
+                      (await fetchEngineConfig(supabase)).dualBigFaceMaxHFrac
                     );
                     // A gate re-swap is a BARE dispatch — it must pass the same
                     // identity bar as the main pipeline or it is a failed attempt.

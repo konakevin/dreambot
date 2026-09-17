@@ -46,6 +46,9 @@ export interface DualSwapDeps {
     swapMs?: number;
     rejectReason?: string | null;
     identity?: { left: number | null; right: number | null; ms: number } | null;
+    /** Big-face tier (BIG_FACE_RECLAIM_PLAN.md): swapped on the engine's full-frame per-face path. */
+    bigFace?: boolean | null;
+    maxFaceHFrac?: number | null;
   }>;
   /**
    * Place SELF onto the render as a GENDER-SAFE single swap (the degrade path).
@@ -367,6 +370,8 @@ export async function genderSafeDualSwap(
       swapMs?: number;
       rejectReason?: string | null;
       identity?: { left: number | null; right: number | null; ms: number } | null;
+      bigFace?: boolean | null;
+      maxFaceHFrac?: number | null;
     };
     try {
       // Pass the override only when confident, so a no-confirmGenders caller (and
@@ -385,6 +390,9 @@ export async function genderSafeDualSwap(
       // log nothing, which let an audit misread the live dynamic engine as
       // dormant. These reasons ride the caller's fallbackReasons into the log.
       reasons.push(`dual_engine:${res.engine ?? 'unknown'}`);
+      // Big-face tier (BIG_FACE_RECLAIM_PLAN.md): stamp the reclaimed couples so the rollout is measurable.
+      if (res.bigFace)
+        reasons.push(`big_face:${res.maxFaceHFrac == null ? '?' : res.maxFaceHFrac.toFixed(2)}`);
       // Stage 8 shadow: identity sims of the delivered swap (calibration data
       // accrues in production forensics before any enforcement flips).
       if (res.identity)
@@ -443,6 +451,10 @@ export async function genderSafeDualSwap(
     // different fixes (pose wording vs gender-read fallback), so forensics
     // must be able to tell them apart (2026-07-08 action bench lesson).
     if (res.rejectReason) reasons.push(`dual_reject:${res.rejectReason}`);
+    // Big-face tier (BIG_FACE_RECLAIM_PLAN.md): a giant rejection carries the face's fraction of frame height, so the
+    // ceiling (engine_config.dual_big_face_max_hfrac) can be tuned from stamps instead of re-running probes.
+    if (res.rejectReason && /giant_face/.test(res.rejectReason) && res.maxFaceHFrac != null)
+      reasons.push(`giant_face_hfrac:${res.maxFaceHFrac.toFixed(2)}`);
 
     // STEP 2 OF THE LADDER: the couple failed on THIS model — try a solo on it before moving models.
     // OPT-IN (`soloBetweenAttempts`), because it changes what ships: a solo on the CURRENT model now wins

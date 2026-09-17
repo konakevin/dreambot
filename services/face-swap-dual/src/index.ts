@@ -14,7 +14,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { dualFaceSwap } from './faceSwap.ts';
 import { detectFacesWithGender } from './faceDetect.ts';
 import { decodeImage } from './imageCodec.ts';
-import { embedFace, embedReference, cosine } from './faceEmbed.ts';
+import { cosine, embedFace, embedReference } from './faceEmbed.ts';
 import { detectFaces } from './faceDetect.ts';
 
 /**
@@ -53,6 +53,9 @@ interface RequestBody {
   /** R2: Haiku-confirmed genders of the RENDERED faces (left/right by
    *  x-order) — substitutes for genderage on this attempt. */
   genderOverride?: { left: 'male' | 'female'; right: 'male' | 'female' } | null;
+  /** Big-face tier ceiling (BIG_FACE_RECLAIM_PLAN.md): faces in (0.40, ceiling] of frame height are swapped on
+   *  the full-frame per-face path instead of re-rendered. Omitted / 0.40 = today's behaviour. Clamped 0.40-0.80. */
+  bigFaceMaxHFrac?: number;
 }
 
 const CORS_HEADERS = {
@@ -116,7 +119,9 @@ Deno.serve({ port: PORT }, async (req) => {
       // Log enough to distinguish "wrong secret on the caller" from "no token
       // sent" — a silent 401 here cost a debugging session (Stage 3 probe).
       console.warn(
-        `[face-swap-dual] 401 path=${url.pathname} presented=${presented ? `len${presented.length}` : 'none'} expected=len${expectedToken.length}`
+        `[face-swap-dual] 401 path=${url.pathname} presented=${
+          presented ? `len${presented.length}` : 'none'
+        } expected=len${expectedToken.length}`
       );
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
@@ -138,12 +143,16 @@ Deno.serve({ port: PORT }, async (req) => {
         });
       }
       const t0d = Date.now();
-      const resp = await fetch(imageUrl, { signal: AbortSignal.timeout(15_000) });
+      const resp = await fetch(imageUrl, {
+        signal: AbortSignal.timeout(15_000),
+      });
       if (!resp.ok) throw new Error(`fetch ${resp.status}`);
       const img = await decodeImage(new Uint8Array(await resp.arrayBuffer()));
       const faces = await detectFacesWithGender(img.data, img.width, img.height);
       console.log(
-        `[detect] ok faces=${faces.length} genders=${faces.map((f) => f.gender ?? '?').join('/') || '-'} ${Date.now() - t0d}ms`
+        `[detect] ok faces=${faces.length} genders=${
+          faces.map((f) => f.gender ?? '?').join('/') || '-'
+        } ${Date.now() - t0d}ms`
       );
       return new Response(
         JSON.stringify({
@@ -159,7 +168,10 @@ Deno.serve({ port: PORT }, async (req) => {
           height: img.height,
           ms: Date.now() - t0d,
         }),
-        { status: 200, headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' } }
+        {
+          status: 200,
+          headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+        }
       );
     } catch (err) {
       console.error(`[detect] error: ${(err as Error).message}`);
@@ -175,7 +187,10 @@ Deno.serve({ port: PORT }, async (req) => {
   // photo's largest face. Powers the calibration bench + the solo path.
   if (url.pathname === '/verify') {
     try {
-      const { imageUrl, refs } = (await req.json()) as { imageUrl?: string; refs?: string[] };
+      const { imageUrl, refs } = (await req.json()) as {
+        imageUrl?: string;
+        refs?: string[];
+      };
       if (!imageUrl || !Array.isArray(refs) || refs.length === 0) {
         return new Response(JSON.stringify({ error: 'imageUrl + refs[] required' }), {
           status: 400,
@@ -183,7 +198,9 @@ Deno.serve({ port: PORT }, async (req) => {
         });
       }
       const t0v = Date.now();
-      const resp = await fetch(imageUrl, { signal: AbortSignal.timeout(15_000) });
+      const resp = await fetch(imageUrl, {
+        signal: AbortSignal.timeout(15_000),
+      });
       if (!resp.ok) throw new Error(`fetch ${resp.status}`);
       const img = await decodeImage(new Uint8Array(await resp.arrayBuffer()));
       const faces = (await detectFaces(img.data, img.width, img.height))
@@ -202,7 +219,9 @@ Deno.serve({ port: PORT }, async (req) => {
         });
       }
       console.log(
-        `[verify] faces=${out.length} sims=${JSON.stringify(out.map((o) => o.sims))} ${Date.now() - t0v}ms`
+        `[verify] faces=${out.length} sims=${JSON.stringify(
+          out.map((o) => o.sims)
+        )} ${Date.now() - t0v}ms`
       );
       return new Response(JSON.stringify({ faces: out, ms: Date.now() - t0v }), {
         status: 200,
@@ -231,7 +250,9 @@ Deno.serve({ port: PORT }, async (req) => {
         });
       }
       const t0a = Date.now();
-      const resp = await fetch(imageUrl, { signal: AbortSignal.timeout(15_000) });
+      const resp = await fetch(imageUrl, {
+        signal: AbortSignal.timeout(15_000),
+      });
       if (!resp.ok) throw new Error(`fetch ${resp.status}`);
       const img = await decodeImage(new Uint8Array(await resp.arrayBuffer()));
       const faces = await detectFacesWithGender(img.data, img.width, img.height);
@@ -244,7 +265,10 @@ Deno.serve({ port: PORT }, async (req) => {
       const MIN_SCORE = Number(Deno.env.get('CAST_MIN_SCORE') ?? '0.7');
       const MIN_FRONTAL = Number(Deno.env.get('CAST_MIN_FRONTAL') ?? '0.3');
 
-      let metrics: Record<string, unknown> = { faceCount: faces.length, significantFaces: 0 };
+      let metrics: Record<string, unknown> = {
+        faceCount: faces.length,
+        significantFaces: 0,
+      };
       let suitable = false;
       let reason = 'no_face';
 
@@ -344,7 +368,12 @@ Deno.serve({ port: PORT }, async (req) => {
     leftGender,
     rightGender,
     genderOverride,
+    bigFaceMaxHFrac,
   } = body;
+  const bigFaceCeiling =
+    typeof bigFaceMaxHFrac === 'number' && Number.isFinite(bigFaceMaxHFrac)
+      ? Math.min(0.8, Math.max(0.4, bigFaceMaxHFrac))
+      : undefined;
   if (!targetUrl || !leftSourceUrl || !rightSourceUrl || !userId) {
     return new Response(JSON.stringify({ error: 'Missing required field' }), {
       status: 400,
@@ -368,7 +397,7 @@ Deno.serve({ port: PORT }, async (req) => {
   const effectiveDeadlineMs = Math.max(deadlineMs ?? 0, t0 + MIN_SWAP_BUDGET_MS);
 
   try {
-    const { swappedUrl, faceCount, reason, identity } = await dualFaceSwap(
+    const { swappedUrl, faceCount, reason, identity, bigFace, maxFaceHFrac } = await dualFaceSwap(
       leftSourceUrl,
       rightSourceUrl,
       targetUrl,
@@ -378,7 +407,8 @@ Deno.serve({ port: PORT }, async (req) => {
       effectiveDeadlineMs,
       skipPrimary ?? false,
       { left: leftGender ?? null, right: rightGender ?? null },
-      genderOverride ?? null
+      genderOverride ?? null,
+      { bigFaceMaxHFrac: bigFaceCeiling }
     );
     const elapsed = Date.now() - t0;
     // swappedUrl=null is NOT an error — the render had no clean 2-face split, so
@@ -395,6 +425,10 @@ Deno.serve({ port: PORT }, async (req) => {
         // ArcFace identity read (Stage 8, shadow) — null when measurement is
         // off or failed; {left,right,ms} cosine sims when on.
         identity: identity ?? null,
+        // Big-face tier (BIG_FACE_RECLAIM_PLAN.md): whether this swap took the full-frame per-face path, and the
+        // taller face's fraction of frame height — the dispatcher stamps `big_face:<frac>` for forensics.
+        bigFace: bigFace ?? false,
+        maxFaceHFrac: maxFaceHFrac ?? null,
         // Engine variant + timing ride every response so the DISPATCHER can
         // persist them into ai_generation_log (Stage 0 telemetry) — Fly's own
         // log buffer is ephemeral and invisible to forensics.

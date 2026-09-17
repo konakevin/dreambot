@@ -30,7 +30,17 @@ right filter, not the size guard.
 **Verdict: GO.** The 2026-09-02 "pixelated smear" was a crop/paste path defect on big faces, not a resolution
 ceiling. Review rows: Kevin's private Dreams album, captions `BIGFACE <pair> · <model> · raw|f0.9 · h% · L/R sims`.
 
-## Phase 1 — the engineering (~half a day)
+## Phase 1 — SHIPPED 2026-09-17, ceiling 0.60 (Kevin's call)
+
+Measured on batch `BF` (20 forced couples, ceiling 0.60): **the tier reclaimed 4 of 20 couples and all 4 held**
+(faces at 0.42 / 0.49 / 0.51 / 0.53 of frame height; identity min 0.63-0.73, mean 0.68 vs 0.70 for the other held
+couples). Every one of those was a `giant_face` re-render the day before. Delivered couples 10 of 20; the rest were
+5 faces above the ceiling and 5 with too few detected faces. No engine errors, no identity failures. Stamps:
+`big_face:<frac>` on a reclaimed swap, `giant_face_hfrac:<frac>` on a giant rejection (for tuning the ceiling).
+Rollback = `UPDATE engine_config SET dual_big_face_max_hfrac = 0.40`. Review rows: Kevin's album, captions `AB-BF n`
+(3, 5, 17, 20 are the reclaimed ones).
+
+### What shipped (the design below, as built)
 
 **Fly engine (`services/face-swap-dual/src`):**
 1. `faceDetectMath.ts`: a `bigFace` tier between `GIANT_FACE_MAX_HFRAC` (0.40, unchanged default) and a request

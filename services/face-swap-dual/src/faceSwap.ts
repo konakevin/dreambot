@@ -23,10 +23,14 @@ import { type DualIdentityRead, verifyDualIdentity } from './faceEmbed.ts';
 import { detectFacesWithGender, type GenderedFace } from './faceDetect.ts';
 import {
   compositeFaceMasked,
+  compositeFaceMaskedBounded,
   type FaceBox,
   faceCropBox,
   iou,
+  occlusionMask,
+  paintMasked,
   planDualSplit,
+  restoreMasked,
 } from './faceDetectMath.ts';
 
 const DEFAULT_MAX_WAIT_MS = 90_000;
@@ -749,7 +753,8 @@ async function perFaceCompositeSwap(
   supabase: SupabaseClient,
   userId: string,
   swapBudgetMs: number,
-  skipPrimary: boolean
+  skipPrimary: boolean,
+  opts: { bigFace?: boolean } = {}
 ): Promise<string | null> {
   const overlap = iou(faceL, faceR);
   if (overlap > 0.35) {
@@ -759,9 +764,23 @@ async function perFaceCompositeSwap(
     return null;
   }
 
-  const swapOne = async (src: string, face: FaceBox, label: string) => {
-    const box = faceCropBox(face, W, H);
+  const swapOne = async (src: string, face: FaceBox, other: FaceBox, label: string) => {
+    // Big-face tier (BIG_FACE_RECLAIM_PLAN.md): NO crop. A square crop clamped to the frame width cuts any face
+    // taller than the frame is wide, and a 2.4× crop around a giant face holds the neighbour too (the swap model
+    // then picks its own target). Instead the neighbour is painted out of the full frame, the swap runs on the
+    // frame, and the painted pixels are restored — so the model sees exactly one face and only ours changes.
+    const box = opts.bigFace ? { x: 0, y: 0, w: W, h: H } : faceCropBox(face, W, H);
     const cropPixels = cropRect(base, W, box.x, box.y, box.w, box.h);
+    const mask = opts.bigFace ? occlusionMask(W, H, face, other) : null;
+    const original = mask ? new Uint8Array(cropPixels) : null;
+    if (mask) {
+      console.log(
+        `[dualFaceSwap] per-face(big) ${label}: neighbour painted out px=${paintMasked(
+          cropPixels,
+          mask
+        )}`
+      );
+    }
     const jpeg = await encodeJpeg(
       {
         data: cropPixels,
@@ -792,6 +811,7 @@ async function perFaceCompositeSwap(
     if (img.width !== box.w || img.height !== box.h) {
       data = resizeBilinear(data, img.width, img.height, box.w, box.h);
     }
+    if (mask && original) restoreMasked(data, original, mask);
     supabase.storage
       .from('uploads')
       .remove([path])
@@ -799,36 +819,70 @@ async function perFaceCompositeSwap(
     return { data, box };
   };
 
-  const [l, r] = await Promise.all([swapOne(leftSrc, faceL, 'l'), swapOne(rightSrc, faceR, 'r')]);
+  const [l, r] = await Promise.all([
+    swapOne(leftSrc, faceL, faceR, 'l'),
+    swapOne(rightSrc, faceR, faceL, 'r'),
+  ]);
   console.log('[dualFaceSwap] per-face: both swaps complete, compositing');
 
   // Composite each swapped face back onto a COPY of the original, masked to its own
   // face region (feather ≈ 0.6× face width) so stacked/close crops blend cleanly.
   const composed = new Uint8Array(base);
-  compositeFaceMasked(
-    composed,
-    W,
-    H,
-    l.data,
-    l.box.x,
-    l.box.y,
-    l.box.w,
-    l.box.h,
-    faceL,
-    faceL.w * 0.6
-  );
-  compositeFaceMasked(
-    composed,
-    W,
-    H,
-    r.data,
-    r.box.x,
-    r.box.y,
-    r.box.w,
-    r.box.h,
-    faceR,
-    faceR.w * 0.6
-  );
+  if (opts.bigFace) {
+    // Bounded pastes: a giant neighbour's box+30% core reaches across our face, and the second paste then
+    // overwrote the first with original pixels (Phase 0 v4). Each paste stops at the neighbour.
+    compositeFaceMaskedBounded(
+      composed,
+      W,
+      H,
+      l.data,
+      l.box.x,
+      l.box.y,
+      l.box.w,
+      l.box.h,
+      faceL,
+      faceL.w * 0.6,
+      faceR
+    );
+    compositeFaceMaskedBounded(
+      composed,
+      W,
+      H,
+      r.data,
+      r.box.x,
+      r.box.y,
+      r.box.w,
+      r.box.h,
+      faceR,
+      faceR.w * 0.6,
+      faceL
+    );
+  } else {
+    compositeFaceMasked(
+      composed,
+      W,
+      H,
+      l.data,
+      l.box.x,
+      l.box.y,
+      l.box.w,
+      l.box.h,
+      faceL,
+      faceL.w * 0.6
+    );
+    compositeFaceMasked(
+      composed,
+      W,
+      H,
+      r.data,
+      r.box.x,
+      r.box.y,
+      r.box.w,
+      r.box.h,
+      faceR,
+      faceR.w * 0.6
+    );
+  }
 
   const bytes = await encodeJpeg({ data: composed, width: W, height: H }, 92);
   const tempFile = `temp/${userId}/composite-${Date.now()}.jpg`;
@@ -854,6 +908,10 @@ export interface DualSwapResult {
    *  sources (Stage 8, IDENTITY_VERIFY=shadow|enforce). MEASUREMENT only —
    *  enforcement policy lives in the edge pipeline, which knows the medium. */
   identity?: DualIdentityRead | null;
+  /** Big-face tier (BIG_FACE_RECLAIM_PLAN.md): this swap ran on the full-frame per-face path. */
+  bigFace?: boolean;
+  /** Taller chosen face as a fraction of frame height (when detection ran). */
+  maxFaceHFrac?: number;
 }
 
 /** Measure identity on a successful swap when IDENTITY_VERIFY is on. Never
@@ -932,7 +990,10 @@ export async function dualFaceSwap(
   // gender_unconfirmed reject. Substitutes for genderage on THIS attempt —
   // genderage misreads athletes/stylized faces where Haiku reads fine
   // (2026-07-08 action bench: 5/11 rejects were genderage misreads).
-  genderOverride?: { left: 'male' | 'female'; right: 'male' | 'female' } | null
+  genderOverride?: { left: 'male' | 'female'; right: 'male' | 'female' } | null,
+  // Big-face tier ceiling (BIG_FACE_RECLAIM_PLAN.md): faces in (0.40, ceiling] of frame height swap via the
+  // full-frame per-face path instead of re-rendering. Undefined = 0.40 = today's behaviour.
+  opts: { bigFaceMaxHFrac?: number } = {}
 ): Promise<DualSwapResult> {
   const deadline = deadlineMs ?? Date.now() + DEFAULT_MAX_WAIT_MS + 15_000;
   const dynamicSplit = Deno.env.get('DUAL_SWAP_DYNAMIC_SPLIT') === 'true';
@@ -965,15 +1026,21 @@ export async function dualFaceSwap(
     try {
       const faces = await detectFacesWithGender(imgData, W, H);
       faceCount = faces.length;
-      const split = planDualSplit(faces, W, { H });
-      if (!split.ok) {
+      const split = planDualSplit(faces, W, {
+        H,
+        bigFaceMaxHFrac: opts.bigFaceMaxHFrac,
+      });
+      const bigFace = split.bigFace === true;
+      if (!split.ok || bigFace) {
         // ONLY 'overlap' may fall through to the per-face composite path.
         // lt2_faces → no second face to swap. giant_face / face_clipped
         // (2026-09-02) → the BASE composition is broken (a face too large for
         // the frame or hanging off its edge); compositing onto it pastes the
         // ~128px swap output at a massive upscale = the pixelated-smear
         // corruption that shipped with every gate green. All must re-render.
-        if (split.reason !== 'overlap' || !split.leftBox || !split.rightBox) {
+        // A BIG face (tier) is swappable only via the full-frame per-face path — for 'ok' as well as 'overlap'.
+        const perFaceEligible = split.reason === 'overlap' || (split.ok && bigFace);
+        if (!perFaceEligible || !split.leftBox || !split.rightBox) {
           console.log(
             `[dualFaceSwap] no clean split (${split.reason}, faces=${faceCount}) — re-render`
           );
@@ -981,6 +1048,7 @@ export async function dualFaceSwap(
             swappedUrl: null,
             faceCount,
             reason: `no_split:${split.reason}`,
+            maxFaceHFrac: split.maxFaceHFrac,
           };
         }
         // reason==='overlap' → faces too close to split into vertical strips
@@ -1037,16 +1105,29 @@ export async function dualFaceSwap(
           supabase,
           userId,
           perFaceBudgetMs,
-          skipPrimary
+          skipPrimary,
+          { bigFace }
         );
         if (!composedUrl) {
-          return { swappedUrl: null, faceCount, reason: 'perface_swap_failed' };
+          return {
+            swappedUrl: null,
+            faceCount,
+            reason: 'perface_swap_failed',
+            bigFace,
+            maxFaceHFrac: split.maxFaceHFrac,
+          };
         }
-        console.log(`[dualFaceSwap] per-face composite complete faces=${faceCount}`);
+        console.log(
+          `[dualFaceSwap] per-face composite complete faces=${faceCount} big=${bigFace} hfrac=${(
+            split.maxFaceHFrac ?? 0
+          ).toFixed(2)}`
+        );
         return {
           swappedUrl: composedUrl,
           faceCount,
           identity: await maybeMeasureIdentity(composedUrl, lSrc, rSrc),
+          bigFace,
+          maxFaceHFrac: split.maxFaceHFrac,
         };
       }
       const fL = split.leftBox as GenderedFace;

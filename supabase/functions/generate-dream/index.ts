@@ -2003,7 +2003,7 @@ Output ONLY the prompt.`;
       const result = await genderSafeDualSwap(
         tempUrl,
         {
-          dispatchDual: (target, genderOverride) =>
+          dispatchDual: async (target, genderOverride) =>
             dispatchDualFaceSwap(
               s0.sourceUrl,
               s1.sourceUrl,
@@ -2015,7 +2015,8 @@ Output ONLY the prompt.`;
               false,
               { left: genderFromLock(s0.genderLock), right: genderFromLock(s1.genderLock) },
               jobId,
-              genderOverride ?? null
+              genderOverride ?? null,
+              (await fetchEngineConfig(supabase)).dualBigFaceMaxHFrac
             ),
           confirmGenders: async (target) => {
             const r = await classifyDualGenders(target, REPLICATE_TOKEN);

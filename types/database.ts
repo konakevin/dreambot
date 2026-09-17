@@ -78,6 +78,7 @@ export type Database = {
           error_message: string | null;
           fallback_reasons: string[];
           id: string;
+          is_qa: boolean;
           job_id: string | null;
           model_used: string;
           recipe_snapshot: Json;
@@ -97,6 +98,7 @@ export type Database = {
           error_message?: string | null;
           fallback_reasons?: string[];
           id?: string;
+          is_qa?: boolean;
           job_id?: string | null;
           model_used?: string;
           recipe_snapshot: Json;
@@ -116,6 +118,7 @@ export type Database = {
           error_message?: string | null;
           fallback_reasons?: string[];
           id?: string;
+          is_qa?: boolean;
           job_id?: string | null;
           model_used?: string;
           recipe_snapshot?: Json;
@@ -1544,6 +1547,7 @@ export type Database = {
       };
       dual_scenarios: {
         Row: {
+          action: string | null;
           attire: string;
           category: string | null;
           created_at: string;
@@ -1554,10 +1558,12 @@ export type Database = {
           medium_key: string | null;
           pool: string;
           pose_pool: string | null;
+          relationship_scope: string | null;
           scene: string;
           sub_theme: string | null;
         };
         Insert: {
+          action?: string | null;
           attire: string;
           category?: string | null;
           created_at?: string;
@@ -1568,10 +1574,12 @@ export type Database = {
           medium_key?: string | null;
           pool: string;
           pose_pool?: string | null;
+          relationship_scope?: string | null;
           scene: string;
           sub_theme?: string | null;
         };
         Update: {
+          action?: string | null;
           attire?: string;
           category?: string | null;
           created_at?: string;
@@ -1582,6 +1590,7 @@ export type Database = {
           medium_key?: string | null;
           pool?: string;
           pose_pool?: string | null;
+          relationship_scope?: string | null;
           scene?: string;
           sub_theme?: string | null;
         };
@@ -1635,6 +1644,7 @@ export type Database = {
           dream_queue_max_jobs_per_tick: number;
           dual_action_pose_pct: number;
           dual_avoid_flux11pro: boolean;
+          dual_big_face_max_hfrac: number;
           dual_closer_pct: number;
           dual_scene_active_pct: number;
           dual_scene_elegant_pct: number;
@@ -1735,6 +1745,7 @@ export type Database = {
           dream_queue_max_jobs_per_tick?: number;
           dual_action_pose_pct?: number;
           dual_avoid_flux11pro?: boolean;
+          dual_big_face_max_hfrac?: number;
           dual_closer_pct?: number;
           dual_scene_active_pct?: number;
           dual_scene_elegant_pct?: number;
@@ -1835,6 +1846,7 @@ export type Database = {
           dream_queue_max_jobs_per_tick?: number;
           dual_action_pose_pct?: number;
           dual_avoid_flux11pro?: boolean;
+          dual_big_face_max_hfrac?: number;
           dual_closer_pct?: number;
           dual_scene_active_pct?: number;
           dual_scene_elegant_pct?: number;
@@ -2644,6 +2656,42 @@ export type Database = {
           },
         ];
       };
+      nightly_look_approvals_archive: {
+        Row: {
+          approved: boolean;
+          archived_at: string;
+          archived_by: number;
+          graded_at: string | null;
+          look_key: string;
+          model: string;
+          note: string | null;
+          source: string | null;
+          surface: string;
+        };
+        Insert: {
+          approved: boolean;
+          archived_at?: string;
+          archived_by: number;
+          graded_at?: string | null;
+          look_key: string;
+          model: string;
+          note?: string | null;
+          source?: string | null;
+          surface: string;
+        };
+        Update: {
+          approved?: boolean;
+          archived_at?: string;
+          archived_by?: number;
+          graded_at?: string | null;
+          look_key?: string;
+          model?: string;
+          note?: string | null;
+          source?: string | null;
+          surface?: string;
+        };
+        Relationships: [];
+      };
       nightly_model_policy: {
         Row: {
           fallback_models: string[];
@@ -3245,6 +3293,7 @@ export type Database = {
       };
       single_scenarios: {
         Row: {
+          action: string | null;
           attire: string;
           category: string | null;
           created_at: string;
@@ -3256,10 +3305,12 @@ export type Database = {
           medium_key: string | null;
           pool: string;
           pose_pool: string | null;
+          relationship_scope: string | null;
           scene: string;
           sub_theme: string | null;
         };
         Insert: {
+          action?: string | null;
           attire: string;
           category?: string | null;
           created_at?: string;
@@ -3271,10 +3322,12 @@ export type Database = {
           medium_key?: string | null;
           pool: string;
           pose_pool?: string | null;
+          relationship_scope?: string | null;
           scene: string;
           sub_theme?: string | null;
         };
         Update: {
+          action?: string | null;
           attire?: string;
           category?: string | null;
           created_at?: string;
@@ -3286,6 +3339,7 @@ export type Database = {
           medium_key?: string | null;
           pool?: string;
           pose_pool?: string | null;
+          relationship_scope?: string | null;
           scene?: string;
           sub_theme?: string | null;
         };
