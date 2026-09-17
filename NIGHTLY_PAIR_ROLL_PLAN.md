@@ -1,6 +1,6 @@
 # Nightly pair roll — one mechanism for (model × look)
 
-**Status:** BUILT + deployed 2026-09-17. Spec kept as the rationale of record.
+**Status:** SPEC, not built. Written 2026-09-17 after the batch that exposed the problem.
 **Touches:** `_shared/nightlyStyle.ts` `resolveStyle` — the function every nightly dream goes through.
 **Owner note (Kevin):** *"i hate spaghetti code, so the code structure and architecture matter here,
 i'd rather do it right."*
@@ -109,30 +109,16 @@ repetitive.
 
 ## 3. Decisions to make before writing code
 
-### 3.1 The ungraded-model rule — **fail OPEN** (Kevin, 2026-09-17)
+### 3.1 The ungraded-model rule — **fail CLOSED with an explicit starter set**
 
-**Decided: an ungraded model is eligible for every look until it is graded.** Eligibility is NOT REJECTED,
-never "explicitly approved".
+Today an ungraded model is eligible for everything, because eligibility is "not rejected". That is what
+put seedream at 30% while rendering 37 looks nobody has ever checked it on.
 
-This spec originally proposed the opposite — fail closed, with a starter set — on the grounds that an
-ungraded model "over-renders *and* renders the least-vetted looks, the worst of both". **The first half of
-that stopped being true the moment the pair roll landed.** Under the pair roll a model's share is its
-configured weight, full stop; the size of its eligible set no longer moves it. Seedream went from taking
-30% on a 15 weight to taking exactly 15%. So the harm fail-closed was defending against is gone, and what
-is left is only the second half: a new model draws from the whole catalogue until someone grades it.
+Proposed: a model's eligible set is explicit. A new model declares a **starter set** (suggested default:
+the looks every existing model is approved on — the safe intersection) and widens only as it is graded.
 
-That residual is acceptable and self-correcting — the share is bounded, the renders land in the album, and
-anything that looks wrong becomes a rejection row. Fail-closed would instead make a new model render
-*nothing* until a grading pass exists, which is a much worse default for trying something out.
-
-Two consequences worth stating, because both are load-bearing:
-
-- **A rejection must OVERRIDE an approval** for the same (look, model, surface). The rejection is the later
-  judgement. Filtering by explicit approvals instead silently reinstates a rejected pair whenever both rows
-  exist — caught by test during the build.
-- **`approvedLooks()` is the wrong helper for this path.** It requires an explicit approved row, so it
-  hands an ungraded model an EMPTY set and the model never renders at all. Use
-  `rejectedLooksForModel()` and subtract. Also caught by test during the build.
+Rationale: an ungraded model over-renders *and* renders the least-vetted looks, which is the worst of
+both. Fail-closed makes adding a model a deliberate act with a visible blast radius.
 
 ### 3.2 Look recency stays GLOBAL
 
