@@ -11,6 +11,8 @@
     "supabase/functions/**",
     "services/**",
     "scripts/qa-nightly-coherence.ts",
+    "scripts/sim-look-model-roll.ts",
+    "__tests__/lib/styleContractEmptyPool.test.ts",
     "__tests__/lib/selfInsertDetector.test.ts",
     "__tests__/lib/selfInsertParity.test.ts",
     "__tests__/lib/staleRecovery.test.ts",

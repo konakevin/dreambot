@@ -283,6 +283,20 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
     // To change a model's share: UPDATE nightly_model_policy.primary_weights. No deploy.
     const row = input.policy[policySurface];
     const primaries = row?.primaryModels ?? [];
+    // EMPTY POOL GUARD. A look with EVERY primary rejected for this surface leaves `lookModels` empty; the roll
+    // below then passes `undefined` to short() and throws, which kills the WHOLE nightly render rather than just
+    // skipping the look. Returning null instead drops this render to the legacy chain, which is exactly what the
+    // caller already does with a null contract.
+    //
+    // Not hypothetical: `nightly_rotoscope` / couple rejects BOTH flux-1.1-pro and gemini-2-image, and it killed a
+    // real render on 2026-09-17 ("Cannot read properties of undefined (reading 'replace')"). It was LATENT until
+    // migration 522 removed seedream-4.5 from the cast surfaces -- seedream was that look's only surviving model,
+    // so shrinking primary_models to two emptied the pool. ANY future narrowing of primary_models can re-arm this
+    // on a different look, which is why it is a guard here and not a one-off data fix on rotoscope.
+    if (lookModels.length === 0) {
+      stamps.push(`looks_path_no_model:${resolved.look.key}:${lookSurface}`);
+      return null;
+    }
     // Anything the look/bans removed is excluded here so its weight is dropped with it.
     const excluded = new Set(primaries.filter((m) => !lookModels.includes(m)));
     const weighted = weightedList(primaries, row?.primaryWeights, excluded);

@@ -3158,10 +3158,32 @@ Deno.serve(async (req) => {
               ? (fallbackReasons.push('dual_comp:waist_up'), 'waist_up' as const)
               : null,
           femaleHairVariationPct: force_female_hair_pct ?? hairCfg.femaleHairVariationPct,
-          // Couple prompt order (mig 470): QA flag wins, else engine_config.couple_prompt_style.
+          // Couple prompt order (mig 470): QA flag wins, then the per-MODEL rule, then engine_config.
+          //
+          // 2026-09-17 (Kevin: "flux seems to always render couples from like the bust up ... i wish my nightly
+          // dreams looked more like the public posts album"). `looksCouplePromptStyle` hands FLUX couples the
+          // album's LEGACY order and every other model subject_first. That IS the fix for this exact complaint,
+          // shipped 2026-09-13 as LOOKS_FLUX_COUPLE_ALBUM_SKELETON after the same report ("my last 30 public
+          // posts are flux, yet don't have this constraint") -- but it was gated on `looksPath`, which
+          // LOOKS_MINIMAL forces false. So it reached ZERO renders.
+          //
+          // MEASURED on the 2026-09-17 batch, 22 organic duals: 22/22 rendered subject_first (15 of them flux),
+          // `an ENVIRONMENTAL TWO-SHOT` 0/22, `the setting sweeping ... around and above them` 0/22, and
+          // `standing side by side` 20/22. Both couple renders Kevin picked out of his album as the target
+          // (the Victorian alley and the frontier schoolhouse) are LEGACY-order renders.
+          //
+          // This is the THIRD fix found inert behind LOOKS_MINIMAL -- the vibe fragment (0 of 50 nightlies) and
+          // lookNeutralFraming (look ignored 78% of the time) were the first two, and both were patched forward
+          // exactly like this. Minimal knows its model: `minimalModel` is what the render actually uses (see the
+          // pickedModel resolution below, `faceSwapPrePickedModel || minimalModel || ...`), and any ban-refit has
+          // already rewritten it by this point -- so the per-model rule can be applied here too.
           promptStyle:
             force_prompt_style ??
-            (looksPath ? looksCouplePromptStyle(looksModel) : sfaCfgCloser.couplePromptStyle),
+            (looksPath
+              ? looksCouplePromptStyle(looksModel)
+              : minimalModel
+                ? looksCouplePromptStyle(minimalModel)
+                : sfaCfgCloser.couplePromptStyle),
           costumeLock: costumePicks ? costumePicks.map((p) => p.attire) : null,
           sceneRegister,
           // Stage 5c: expanded solo compositions (three-quarter / enviro-wide)
