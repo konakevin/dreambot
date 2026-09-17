@@ -408,6 +408,27 @@ export async function genderSafeDualSwap(
             attempt: attempt + 1,
           };
         }
+        // STEP 2 OF THE LADDER, IDENTITY ARM (2026-09-17). The `continue` below jumps straight to the next
+        // model, so until now the solo rung was reachable ONLY from the no_dual_split path — an identity
+        // failure went couple-on-flux -> couple-on-gemini with no single attempted, which is the other half
+        // of "it's supposed to fail back to a single on flux".
+        //
+        // Gated on the DEGRADE FLOOR so the two rules do not fight: between the floor and the threshold a
+        // weak dual still beats a degrade (both faces present and gender-routed — a likeness miss, not a
+        // safety failure), and that dual is kept in `best` and shipped at exhaustion. Below the floor the
+        // dual is unusable (measured here at 0.069 and -0.017 — not the cast member at all), so there is no
+        // weak dual worth protecting and the single is strictly better than a couple on another model.
+        if (
+          opts.soloBetweenAttempts === true &&
+          attempt < maxRerenders &&
+          min < identityDegradeFloor
+        ) {
+          const onThisModel = await tryDegradeSingle(
+            target,
+            `dual_degrade_single:identity${attempt + 1}`
+          );
+          if (onThisModel) return onThisModel;
+        }
         continue;
       }
 

@@ -767,3 +767,104 @@ describe('ladder order — the single on THIS model comes before the move to the
     expect(calls.slice(0, 2)).toEqual(['dual', 'rerender']);
   });
 });
+
+/**
+ * THE IDENTITY ARM OF THE LADDER (2026-09-17). The identity-below-threshold branch ends in `continue`,
+ * which jumps past the solo rung at the bottom of the loop. So until this was fixed, the rung was
+ * reachable ONLY from the no_dual_split path: a couple whose swap came back as the wrong person went
+ * flux-couple -> gemini-couple with no single ever attempted.
+ *
+ * Measured on two consecutive organic couples (identity 0.069 and -0.017 — not the cast member at all),
+ * both of which shipped as gemini couples.
+ *
+ * The floor is what keeps this from fighting the "a weak dual beats a degrade" rule: between the floor
+ * and the threshold the dual is kept and shipped at exhaustion; only below the floor is it unusable.
+ */
+describe('identity failure also tries the single on this model first', () => {
+  const identityDeps = (sims: number[], single: unknown) => {
+    let i = 0;
+    return {
+      dispatchDual: jest.fn(async () => ({
+        swappedUrl: 'SWAP.jpg',
+        faceCount: 2,
+        identity: {
+          left: sims[Math.min(i, sims.length - 1)],
+          right: sims[Math.min(i++, sims.length - 1)],
+        },
+      })),
+      singleSwap: jest.fn(async () => single),
+      rerender: jest.fn(async () => ({ url: 'RERENDER.jpg', predictionId: 'p2' })),
+      selfSource: 'self.jpg',
+    };
+  };
+
+  it('a dual BELOW the degrade floor degrades to a single instead of moving models', async () => {
+    const deps = identityDeps([0.05], { url: 'SINGLE.jpg', predictionId: 'solo-pid' });
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      degradeToSingle: true,
+      maxRerenders: 1,
+      soloBetweenAttempts: true,
+      identityMinSim: 0.35,
+      identityDegradeFloor: 0.25,
+    });
+
+    expect(deps.singleSwap).toHaveBeenCalled();
+    expect(r.outcome).toBe('single');
+    expect(deps.rerender).not.toHaveBeenCalled();
+    expect(r.reasons.some((x) => x.startsWith('dual_degrade_single:identity'))).toBe(true);
+  });
+
+  it('a WEAK dual above the floor is still protected — no degrade, it ships at exhaustion', async () => {
+    // 0.30 sits between the floor (0.25) and the threshold (0.35): both faces are present and
+    // gender-routed, so the existing rule says keep it rather than drop the +1.
+    const deps = identityDeps([0.3], { url: 'SINGLE.jpg', predictionId: 'solo-pid' });
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      degradeToSingle: true,
+      maxRerenders: 1,
+      soloBetweenAttempts: true,
+      identityMinSim: 0.35,
+      identityDegradeFloor: 0.25,
+    });
+
+    expect(deps.singleSwap).not.toHaveBeenCalled();
+    expect(r.outcome).toBe('dual');
+    expect(r.reasons.some((x) => x.startsWith('identity_shipped_best'))).toBe(true);
+  });
+
+  it('when the single REFUSES, it still moves to the next model — and in that ORDER', async () => {
+    // Order matters and a bare "both were called" assertion cannot see it: the pipeline ALWAYS runs a tail
+    // degrade after the loop, so singleSwap is called either way. Only the sequence proves the identity arm
+    // ran before the model move rather than after it.
+    const calls: string[] = [];
+    let i = 0;
+    const deps = {
+      dispatchDual: jest.fn(async () => {
+        calls.push('dual');
+        i++;
+        return { swappedUrl: 'SWAP.jpg', faceCount: 2, identity: { left: 0.05, right: 0.05 } };
+      }),
+      singleSwap: jest.fn(async () => {
+        calls.push('single');
+        return null;
+      }),
+      rerender: jest.fn(async () => {
+        calls.push('rerender');
+        return { url: 'RERENDER.jpg', predictionId: 'p2' };
+      }),
+      selfSource: 'self.jpg',
+    };
+    await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      degradeToSingle: true,
+      maxRerenders: 1,
+      soloBetweenAttempts: true,
+      identityMinSim: 0.35,
+      identityDegradeFloor: 0.25,
+    });
+
+    expect(calls.slice(0, 3)).toEqual(['dual', 'single', 'rerender']);
+    expect(i).toBeGreaterThan(1);
+  });
+});
