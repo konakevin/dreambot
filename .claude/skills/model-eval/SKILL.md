@@ -188,8 +188,22 @@ A model can look inconsistent for this reason alone and get blamed for it. Phase
 | limit | value | why |
 |---|---|---|
 | ratio | 0.5625 ± 0.02 | the app's 9:16 cards |
-| megapixels | ≤ ~2.5 | above this the face detector fails — the ultra ban. flux-1.1-pro's real output is 768×1344 = 1.03MP |
-| bytes | ≤ ~8MB | decoding a large image in an edge function blew Supabase's 150MB / 2s budget once and surfaced as HTTP 546 `WORKER_RESOURCE_LIMIT`; it is why the swap path asks for JPEG, not PNG |
+| megapixels | ≤ ~2.5 | **Edge runtime**, not the face detector — see the correction below. flux-1.1-pro's real output is 768×1344 = 1.03MP |
+| bytes | ≤ ~8MB | decoding a large image in an edge function blew Supabase's 150MB / 2s budget and surfaced as HTTP 546 `WORKER_RESOURCE_LIMIT`; it is why the swap path asks for JPEG, not PNG |
+
+**A correction worth carrying, because the opposite was believed and repeated for months.** The stated
+reason for the flux-1.1-pro-ultra ban was that ~4MP *"defeats the face detector"*. Tested directly on
+seedream-4.5, whose floor is 3.69MP with no way under it: **the dual swap held on 8 of 8 multi-person
+renders.** At that size the detector is fine.
+
+What actually broke was the function around it — **2 of 10 renders died**, one HTTP 546 and one timeout,
+and p50 latency went 52s → 79s against a 140s ceiling. So the limit stands and matters *more* than
+thought, because these failures are worse than the feared one: a degraded swap still ships a picture, a
+546 ships nothing after taking a sparkle and a queue slot.
+
+Still unverified: whether the ultra ban's stated cause was ever correct. Somewhere between 3.69MP and 4MP
+either detection starts failing or it never did. **Do not repeat "large images defeat the detector" as
+established fact** — measure it for the model in front of you.
 
 ## 5. Traps that will waste your day
 

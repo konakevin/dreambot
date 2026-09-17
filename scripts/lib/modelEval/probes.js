@@ -384,13 +384,21 @@ async function rawRender(modelId, prompt, env, opts = {}) {
 /**
  * THE OUTPUT CONSTRAINTS a render has to land inside to be usable here.
  *
- * `maxMegapixels` is the face detector's limit, not a quality preference:
- * flux-1.1-pro-ultra was banned because ~4MP defeated detection, so a model that only
- * renders huge is a model whose cast paths all degrade. `maxBytes` is the Edge runtime:
- * decoding a large image inside an edge function blew through Supabase's 150MB / 2s
- * per-invocation budget once already and surfaced as HTTP 546 WORKER_RESOURCE_LIMIT, which
- * is why the swap path asks for JPEG rather than PNG. For scale, flux-1.1-pro's real
- * output is 768x1344 = 1.03MP.
+ * `maxMegapixels` is an EDGE RUNTIME limit, not a face-detector one — a correction worth
+ * stating plainly because the opposite was believed and repeated for months. The received
+ * reason for the flux-1.1-pro-ultra ban was that ~4MP "defeats the face detector". Tested
+ * 2026-09-16 on seedream-4.5, whose floor is 3.69MP: the dual swap held on 8 of 8
+ * multi-person renders. The detector was fine.
+ *
+ * What broke was the function around it. Two of those ten renders died — one HTTP 546
+ * WORKER_RESOURCE_LIMIT and one timeout — because decoding an image that size inside an
+ * edge function blows Supabase's 150MB / 2s per-invocation budget, the same failure that
+ * made the swap path request JPEG instead of PNG. Latency tracks it too: p50 79s at
+ * 3.69MP against 52s at 1.86MP, with a 140s ceiling.
+ *
+ * So the limit stands, and is if anything more important than thought — a degraded swap
+ * still ships a picture, a 546 ships nothing after taking a sparkle and a queue slot. For
+ * scale, flux-1.1-pro's real output is 768x1344 = 1.03MP.
  */
 const OUTPUT_LIMITS = { targetRatio: 9 / 16, ratioTolerance: 0.02, maxMegapixels: 2.5, maxBytes: 8 * 1024 * 1024 };
 

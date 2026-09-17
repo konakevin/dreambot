@@ -318,11 +318,16 @@ async function generateImageOnce(
   // output_format / output_quality fields.
   //
   // SIZE IS '1K', NOT '2K' (measured 2026-09-16). At '2K' seedream returns
-  // 1440x2560 = 3.69MP — a correct 9:16 shape, but close to the ~4MP that got
-  // flux-1.1-pro-ultra banned for DEFEATING THE FACE DETECTOR, which would make
-  // every cast render here degrade for a reason that has nothing to do with the
-  // model. '1K' returns 1024x1820 = 1.86MP at the same 0.563 ratio, comfortably
-  // under the ceiling and still larger than flux-1.1-pro's actual 768x1344.
+  // 1440x2560 = 3.69MP — a correct 9:16 shape, but too large for the EDGE RUNTIME.
+  //
+  // The reason is not what was first assumed. Rendering at 3.69MP was tested directly
+  // on seedream-4.5 (whose floor is that size): the dual swap held 8 of 8, so the face
+  // detector copes fine at 3.69MP. What failed was the function around it — 2 of 10
+  // renders died, one HTTP 546 WORKER_RESOURCE_LIMIT and one timeout, decoding an
+  // image that size inside the edge budget. Latency moved with it too, p50 79s vs 52s.
+  //
+  // '1K' returns 1024x1820 = 1.86MP at the same 0.563 ratio: 20 of 20 renders
+  // completed, 0 swaps degraded, p50 52s. Still larger than flux-1.1-pro's 768x1344.
   //
   // Do NOT "fix" this by passing width/height: those are ignored unless
   // size='custom' (the schema says so, and passing them alone silently returns a
@@ -341,6 +346,28 @@ async function generateImageOnce(
   // measured here, and changing it would alter restyle output for live users.
   if (model === 'bytedance/seedream-4' && !inputImage) {
     input = { prompt, aspect_ratio: '9:16', size: '1K', enhance_prompt: false };
+  }
+
+  // seedream-4.5 is NOT a drop-in for 4, despite an identically-shaped schema.
+  // Measured 2026-09-16: its `size` enum has NO '1K' (only 2K / 4K / custom), and
+  // custom dimensions are refused below 3,686,400 px — "below the minimum of
+  // 3686400 pixels (~1920x1920)". So its SMALLEST possible output is 1440x2560 =
+  // 3.69MP, which it cannot go under. That is above the ~2.5MP working ceiling and
+  // near the ~4MP that got flux-1.1-pro-ultra banned for defeating face detection.
+  //
+  // MEASURED at that floor, 10 organic nightlies: NOT ADOPTABLE.
+  //   swap        0 of 8 multi-person renders degraded — the detector handles 3.69MP
+  //   completed   8 of 10. One HTTP 546 WORKER_RESOURCE_LIMIT, one timeout.
+  //   latency     p50 79s, worst 111s, against a 140s ceiling
+  //   price       ~$0.04/image, the same as flux-1.1-pro (Kevin, Replicate dashboard)
+  //
+  // So it fails 20% of renders outright while costing what flux costs, and a failed
+  // render is worse than a degraded one: it ships nothing after taking a sparkle and a
+  // queue slot. seedream-4 at '1K' does the same job for ~$0.03 with 20 of 20
+  // completed. Kept wired at its floor only so the finding stays reproducible — do not
+  // add it to image_models, a policy surface, or scene_eligible_models.
+  if (model === 'bytedance/seedream-4.5' && !inputImage) {
+    input = { prompt, aspect_ratio: '9:16', size: '2K', enhance_prompt: false };
   }
 
   if (mode === 'flux-kontext' && inputImage) {

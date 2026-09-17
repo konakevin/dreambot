@@ -62,12 +62,24 @@ const DIMENSIONS = [
   {
     key: 'resolution',
     phase: 1,
-    title: 'Not so large it defeats the face detector',
+    title: 'Small enough for the Edge runtime to survive',
     judge: JUDGE.AUTO,
-    why: `Bigger is NOT better here. flux-1.1-pro-ultra was banned because its ~4MP output
-      defeated the swap's face detection. The swap is the product; a model that renders
-      beautifully and cannot be swapped into is useless for every cast path.`,
-    bar: 'output ≤ ~2.5 megapixels (or a smaller size is selectable)',
+    why: `Bigger is NOT better here, but MEASURE WHY before repeating the folklore. The
+      received wisdom was that large output "defeats the face detector" — the reason given
+      for the flux-1.1-pro-ultra ban at ~4MP. Tested directly 2026-09-16 on seedream-4.5,
+      whose floor is 3.69MP: the dual swap held on 8 of 8 multi-person renders. At that
+      size the detector is FINE.
+      What actually breaks is the EDGE RUNTIME. Two of those ten renders died outright —
+      one HTTP 546 WORKER_RESOURCE_LIMIT and one timeout — because decoding a 3.69MP image
+      inside the function blows Supabase's per-invocation memory/CPU budget, the same
+      failure that made the swap path ask for JPEG rather than PNG. Latency moves with it
+      too: p50 79s at 3.69MP versus 52s at 1.86MP, against a 140s ceiling.
+      That distinction matters because the failures are WORSE than the thing we feared. A
+      degraded swap still ships a picture; a 546 ships nothing after taking a sparkle and a
+      queue slot. So the bar stands, for reliability and latency rather than detection.
+      Still unverified: whether the ultra ban's stated cause was ever right. Somewhere
+      between 3.69MP and 4MP either the detector starts failing or it never did.`,
+    bar: 'output ≤ ~2.5 megapixels (or a smaller size is selectable) — for Edge stability',
     fatal: false,
   },
   {
