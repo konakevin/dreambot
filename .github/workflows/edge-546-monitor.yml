@@ -1,0 +1,31 @@
+name: Edge 546 Monitor
+
+# Loud check that no Edge Function is dying of WORKER_RESOURCE_LIMIT (HTTP 546) again. The isolate's
+# 2 s CPU budget was being spent on pixel work (decode / re-encode / atob) — 7.8% of nightly-dreams
+# requests on 2026-09-17 — until that work moved to the Fly image-ops service. If the rate climbs back
+# over the 3% SLO, this run fails and the failure email is the alarm. See NO_PIXELS_IN_ISOLATE_PLAN.md
+# and scripts/check-edge-546.js.
+
+on:
+  schedule:
+    - cron: '37 */6 * * *' # every 6 h, offset from the other monitors
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Edge Function 546 rate (24 h)
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: node scripts/check-edge-546.js --hours=24
