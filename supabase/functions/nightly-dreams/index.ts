@@ -4367,18 +4367,36 @@ Output ONLY the prompt.`;
                   }
                   // Attempt 2+ switches to a model that differs from attempt 1 (never faceless).
                   let rebuildFragment = soloFallbackCtx ? soloFallbackCtx.realMediumFragment : '';
-                  if (styleContract && activeStyle) {
+                  // THE REBUILD MODEL (fixed 2026-09-17). This was gated on `styleContract && activeStyle`,
+                  // and `activeStyle` is assigned ONLY inside the full-looks branch that LOOKS_MINIMAL switches
+                  // off — while `styleContract` IS set under minimal. So in production the block never ran,
+                  // forRebuild() never got a say, and the rebuild fell back to engine_config.solo_rebuild_model.
+                  // That is how a failed FLUX couple came back as a flux-2-flex single: Kevin, watching a batch,
+                  // "it should still use flux 1.1pro on the single re-try after the couple fails".
+                  //
+                  // forRebuild() prefers the SOLO primary and drops any model the look is rejected on for solo,
+                  // which is the rule that was wanted all along — a config default cannot express "unless the
+                  // look is rejected there". Fourth fix found inert behind the dormant path; see
+                  // __tests__/lib/looksMinimalInertFixGuard.test.ts.
+                  //
+                  // The MODEL is taken on both paths. The LOOK is not: minimal builds its contract with
+                  // lockLook: true so the stamps and the pixels agree, so only the full path may re-pick it.
+                  if (styleContract) {
                     const pick = styleContract.forRebuild();
                     rebuildModel = pick.model;
-                    rebuildFragment = pick.fragment;
-                    activeStyle = {
-                      ...activeStyle,
-                      model: pick.model,
-                      lookKey: pick.look.key,
-                      fragment: pick.fragment,
-                    };
-                    if (pick.look.key !== resolvedMediumKey) resolvedMediumKey = pick.look.key;
-                    fallbackReasons.push(...pick.stamps);
+                    if (activeStyle) {
+                      rebuildFragment = pick.fragment;
+                      activeStyle = {
+                        ...activeStyle,
+                        model: pick.model,
+                        lookKey: pick.look.key,
+                        fragment: pick.fragment,
+                      };
+                      if (pick.look.key !== resolvedMediumKey) resolvedMediumKey = pick.look.key;
+                      fallbackReasons.push(...pick.stamps);
+                    } else {
+                      fallbackReasons.push(`solo_rebuild_model:${rebuildModel.split('/').pop()}`);
+                    }
                   }
                   if (rebuildAttempt >= 2) {
                     const retryModel = soloRebuildModelFor({
