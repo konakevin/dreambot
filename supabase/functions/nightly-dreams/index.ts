@@ -2615,12 +2615,27 @@ Deno.serve(async (req) => {
       const bannedLooks = expandMediumBans(bannedMediums, catalog.looks);
       if (bannedLooks.has(nightlyMedium.key)) {
         const was = nightlyMedium.key;
+        // KEEP THE ROLLED MODEL (2026-09-17). A medium ban is a judgement about the LOOK, not the model — yet
+        // this refit used to re-roll the model along with the look: a second, UNSTAMPED 85/15 roll, or a
+        // one-model pool if the replacement look rejects flux. So a render that stamped
+        // `policy:solo:1:flux-1.1-pro` could ship on gemini with nothing in the stamps to say why (AB-CHAIN 2,
+        // technicolor -> painted_fantasy under the fall holiday). Measured: 19 of 430 renders in 7 days took this
+        // path; 4 rolled flux and delivered gemini silently. restrictModels pins the re-roll to the model already
+        // chosen; if no unbanned look is graded for it the refit is null and the nofit branch below keeps the
+        // original look, which is the lesser evil — a render on the rolled model in a debatable look beats a
+        // silent model swap. Any model change that does still happen is stamped.
         const refit = await buildMinimalContract({
           excludeLookKeys: bannedLooks,
           withVibes: false,
+          restrictModels: minimalModel ? [minimalModel] : null,
         });
         if (refit && !bannedLooks.has(refit.look.key) && (await applyMinimalLook(refit, false))) {
           styleContract = refit;
+          if (refit.model !== minimalModel)
+            fallbackReasons.push(
+              `look_medium_ban_model:${minimalModel.split('/').pop()}->${refit.model.split('/').pop()}`
+            );
+          fallbackReasons.push(...refit.stamps.filter((st) => st.startsWith('model_restrict:')));
           minimalModel = refit.model;
           if (faceSwapPrePickedModel) faceSwapPrePickedModel = refit.model;
           resolvedMediumKey = nightlyMedium.key;
