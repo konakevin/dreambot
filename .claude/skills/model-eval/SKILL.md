@@ -15,9 +15,19 @@ description: Vet a NEW image model for DreamBot end to end by running `node scri
 
 ```sh
 node scripts/eval-model.js "<model id or fuzzy name>"     # full pass
+node scripts/eval-model.js <id> --estimate                # cost it without spending anything
 node scripts/eval-model.js <id> --phase 2                 # one phase
 node scripts/eval-model.js <id> --n 9 --no-album          # sample size; skip the album push
 ```
+
+**It costs real money — every dimension needs real renders.** A full pass at the default n=9 is **~100
+renders, about $4** at flux-1.1-pro pricing. `--estimate` prints the per-phase breakdown and the cost at
+each price point we have measured, and renders nothing. Quote that before starting a run, do not guess.
+
+Phase 2 is 81 of those 100, which is where it belongs: medium fidelity, scene range and vibes are what
+actually decide whether a model is usable, and they are the dimensions that need n≥9. **A bad model costs
+pennies** — 1 render if it cannot be called, 4 if the aspect ratio or latency disqualifies it, because both
+are unfixable and the run stops there.
 
 Kevin will ask for this in his own words: *"is flux 3 any good"*, *"should we add X to the rotation"*,
 *"vet this model"*. That is the command. **Do not hand-roll probes when a phase already covers it** — the

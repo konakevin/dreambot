@@ -538,6 +538,60 @@ async function phase3(model) {
   return true;
 }
 
+// ── what a run will cost, BEFORE it spends anything ───────────────────────────
+/**
+ * Every render here is a real paid API call — there is no way to measure aspect ratio,
+ * latency, true cost or swap survival without rendering. So the run is costed up front
+ * and `--estimate` prints it without spending a cent.
+ *
+ * The counts are DERIVED from the same constants the phases loop over, not typed in, so
+ * this cannot drift away from what the run actually does when a scene or a vibe is added.
+ */
+function plan(familyCount = 6) {
+  const sceneN = Math.max(2, Math.min(3, N));
+  const perCondition = Math.max(3, Math.ceil(N / P.GEOMETRY_CONDITIONS.length));
+  const rows = [
+    ['0', 'plumbing', 1],
+    ['1', 'latency samples', 3],
+    ['2', `medium fidelity (${P.MEDIUM_FAMILIES.length} families × ${N})`, P.MEDIUM_FAMILIES.length * N],
+    ['2', 'prompt adherence', Math.min(N, 5)],
+    ['2', `hard priors (${P.PRIORS.length} × ${Math.min(N, 5)})`, P.PRIORS.length * Math.min(N, 5)],
+    ['2', `scene range (${P.SCENE_MATRIX.length} scenes × ${sceneN})`, P.SCENE_MATRIX.length * sceneN],
+    ['2', 'vibe fidelity (5 vibes × with/without)', 10],
+    ['3', `geometry (${P.GEOMETRY_CONDITIONS.length} lighting × ${perCondition})`, P.GEOMETRY_CONDITIONS.length * perCondition],
+    ['4', `swap per look family (${familyCount})`, familyCount],
+  ];
+  return { rows, total: rows.reduce((a, r) => a + r[2], 0) };
+}
+
+/** Per-render prices we have MEASURED, for scale. A candidate's real price is not known
+ *  until phase 1 measures it — which is itself one of the reasons to run phase 1 first. */
+const KNOWN_PRICES = [
+  ['flux-1.1-pro', 0.04],
+  ['gemini-2-image', 0.039],
+  ['gpt-image-2.5 (high)', 0.042],
+  ['gpt-image-2.5 (medium)', 0.011],
+];
+
+function printEstimate(familyCount) {
+  const { rows, total } = plan(familyCount);
+  say('\n  Renders this run will make:');
+  for (const [phase, what, n] of rows) say(`    phase ${phase}  ${String(n).padStart(3)}  ${what}`);
+  say(`    ${' '.repeat(9)}${String(total).padStart(3)}  TOTAL`);
+  say('\n  Estimated cost at measured per-render prices:');
+  for (const [label, price] of KNOWN_PRICES) {
+    say(`    $${(total * price).toFixed(2).padStart(6)}   if it prices like ${label} ($${price.toFixed(3)}/render)`);
+  }
+  say('\n  Phase 4 also runs Sonnet briefs (~$0.02 each, so well under $0.20 total) and the');
+  say('  face swap, which runs on the existing Fly machine and is not billed per call.');
+  say('\n  A model that FAILS early costs almost nothing — that is what the gating is for:');
+  say('    1 render  (~$0.04)  cannot be called at all');
+  say('    4 renders (~$0.16)  wrong aspect ratio, or too slow — both unfixable, run stops');
+  say(`\n  --n <N> scales the sampled phases (default ${N}). Below n=9 the medium and look`);
+  say('  verdicts stop being trustworthy: variance dominates, and n=1-3 produced two of');
+  say('  the four wrong verdicts this whole skill exists to prevent.');
+}
+
 // ── phase 4: the swap, once per LOOK FAMILY ───────────────────────────────────
 /**
  * One representative look from each family, swapped.
@@ -734,6 +788,21 @@ function report(model, resolution) {
   }
   const model = resolution.id;
   say(`  model: ${model}  ·  provider: ${P.providerFor(model)}  ·  n=${N}`);
+
+  // Real families, so the estimate matches the run rather than assuming six.
+  let familyCount = 6;
+  try {
+    familyCount = (await pickFamilyLooks()).length || 6;
+  } catch {
+    /* fall back to the usual count */
+  }
+  if (has('estimate')) {
+    printEstimate(familyCount);
+    say('\n  Nothing was rendered. Drop --estimate to run it.');
+    return;
+  }
+  const { total } = plan(familyCount);
+  say(`  this run will make ~${total} renders — see --estimate for the cost breakdown`);
 
   // The engine-touching phases share the DB pool with the live app.
   await waitForHeadroom({ min: 25, label: 'model-eval' });
