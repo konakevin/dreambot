@@ -188,30 +188,64 @@ async function phase1(model, first) {
   const timings = [first.elapsedMs];
   const costs = first.costUsd ? [first.costUsd] : [];
 
-  // ASPECT. The single most common disqualifier, and unfixable when it fails.
-  const r = first.ratio;
-  const offBy = Math.abs(r - P.TARGET_RATIO);
-  if (offBy <= 0.02) {
-    record('aspect', 'PASS', `${r.toFixed(3)} ≈ 9:16 (${first.width}x${first.height})`);
-  } else {
-    record(
-      'aspect',
-      'FAIL',
-      `${r.toFixed(3)} vs target ${P.TARGET_RATIO.toFixed(3)} (${first.width}x${first.height}). ` +
-        'Display cannot rescue this: the feed crops and full-screen letterboxes. This is why gpt-image-2 is banned from nightly.'
+  // SEARCH the model's own knobs for a body that lands inside our limits, rather than
+  // judging it on the one default body. seedream-4 on its default returns 3.69MP and
+  // looks fatally over the detector ceiling; at size='1K' it is 1.86MP at the same
+  // correct 9:16. Rejecting on the default would have thrown away a usable model.
+  const props = await P.fetchInputSchema(model, env);
+
+  // Hidden defaults that REWRITE our prompt — report before anything else, because a
+  // model blamed for inconsistency may simply have been paraphrasing us all along.
+  const rewriters = P.promptRewriteParams(props);
+  for (const rw of rewriters) {
+    say(
+      `   ⚠ ${rw.key} defaults to ${JSON.stringify(rw.default)} — this model REWRITES the prompt before rendering.`
     );
+    say(`     ${rw.description}`);
+    say('     This engine is built on authored pools; a model paraphrasing us is a real behaviour change.');
   }
 
-  // RESOLUTION. Too big defeats the face detector — the flux-1.1-pro-ultra ban.
-  const mp = first.megapixels;
-  if (mp != null) {
-    record(
-      'resolution',
-      mp <= 2.5 ? 'PASS' : 'FAIL',
-      `${mp.toFixed(2)}MP` +
-        (mp > 2.5 ? ' — over the ~2.5MP ceiling; flux-1.1-pro-ultra was banned for defeating face detection at ~4MP' : '')
-    );
+  const cands = P.sizeCandidates(props);
+  const tried = [];
+  if (props && cands.length > 1) {
+    say(`   probing ${cands.length} input configurations for one that fits our limits:`);
+    for (const c of cands) {
+      const rr = await P.rawRender(model, 'A quiet harbour at dawn.', env, { input: c.input });
+      if (!rr.ok) {
+        say(`     ${c.label.padEnd(26)} rejected — ${String(rr.error).slice(0, 60)}`);
+        continue;
+      }
+      const okRatio = Math.abs(rr.ratio - P.OUTPUT_LIMITS.targetRatio) <= P.OUTPUT_LIMITS.ratioTolerance;
+      const okMp = rr.megapixels <= P.OUTPUT_LIMITS.maxMegapixels;
+      tried.push({ ...c, ratio: rr.ratio, mp: rr.megapixels, w: rr.width, h: rr.height, ok: okRatio && okMp });
+      say(
+        `     ${c.label.padEnd(26)} ${String(rr.width + 'x' + rr.height).padEnd(11)} ${rr.megapixels.toFixed(2)}MP  ratio ${rr.ratio.toFixed(3)}  ${okRatio && okMp ? '✓' : okRatio ? '⚠ too big' : '✗ wrong shape'}`
+      );
+    }
   }
+
+  const winner = tried.find((t) => t.ok);
+  const best = winner || tried.find((t) => Math.abs(t.ratio - P.OUTPUT_LIMITS.targetRatio) <= P.OUTPUT_LIMITS.ratioTolerance);
+  const shape = best || { ratio: first.ratio, mp: first.megapixels, w: first.width, h: first.height, label: 'engine default' };
+
+  record(
+    'aspect',
+    Math.abs(shape.ratio - P.TARGET_RATIO) <= 0.02 ? 'PASS' : 'FAIL',
+    `${shape.ratio.toFixed(3)} (${shape.w}x${shape.h}) via ${shape.label}` +
+      (Math.abs(shape.ratio - P.TARGET_RATIO) <= 0.02
+        ? ''
+        : ' — no configuration produced 9:16. Display cannot rescue this: the feed crops and full-screen letterboxes. This is why gpt-image-2 is banned.')
+  );
+  record(
+    'resolution',
+    shape.mp <= 2.5 ? 'PASS' : 'FAIL',
+    `${shape.mp.toFixed(2)}MP via ${shape.label}` +
+      (shape.mp > 2.5
+        ? ' — over the ~2.5MP ceiling and NO configuration got under it; flux-1.1-pro-ultra was banned for defeating face detection at ~4MP'
+        : winner && winner.label !== 'engine default'
+          ? `  ← WIRE THIS: ${JSON.stringify(winner.input)}`
+          : '')
+  );
 
   // LATENCY over a few samples — one render is not a p95.
   const more = await P.pool(
@@ -574,6 +608,8 @@ const KNOWN_PRICES = [
 ];
 
 function printEstimate(familyCount) {
+  say('\n  LIGHT pass (--light): 10 organic nightly dreams, ~$0.40 plus ~$0.20 of Sonnet briefs.');
+  say('  That is the "do I like it" pass. Everything below is the full "is it safe" pass.');
   const { rows, total } = plan(familyCount);
   say('\n  Renders this run will make:');
   for (const [phase, what, n] of rows) say(`    phase ${phase}  ${String(n).padStart(3)}  ${what}`);
@@ -590,6 +626,144 @@ function printEstimate(familyCount) {
   say(`\n  --n <N> scales the sampled phases (default ${N}). Below n=9 the medium and look`);
   say('  verdicts stop being trustworthy: variance dominates, and n=1-3 produced two of');
   say('  the four wrong verdicts this whole skill exists to prevent.');
+}
+
+// ── LIGHT mode: does it feel right? ───────────────────────────────────────────
+/**
+ * Ten organic nightly dreams on the candidate, and nothing else.
+ *
+ * WHY THIS EXISTS, and why it comes first (Kevin): the full pass answers "is this model
+ * SAFE" in seventeen measured dimensions, but the first question is usually "do I even
+ * LIKE it" — and that is answered fastest by looking at the actual product, not at a
+ * clean-room contact sheet. Ten renders is enough to form a real opinion and cheap
+ * enough to throw away.
+ *
+ * NOTHING IS FORCED EXCEPT THE MODEL. Look, vibe, cast role, place, scene type and pose
+ * all roll exactly as they would on a real night, so what comes back is what a user would
+ * actually receive. Pinning a flattering look would answer a question nobody asked.
+ *
+ * It still reports the measured stamps alongside — degrade rate, identity, resolution —
+ * because "I like it" and "it survives the swap" are different questions and this batch
+ * happens to answer a bit of both. Where they disagree, the stamps win: a batch can look
+ * lovely while every couple in it quietly degraded to a solo.
+ */
+async function lightPass(model) {
+  const n = Number(flag('n', 10));
+  say(`\n▸ LIGHT PASS — ${n} organic nightly dreams on ${model}`);
+  say('   Nothing forced but the model: look, vibe, cast, place and scene all roll as on a real night.');
+  const TOK = env.DREAM_QUEUE_WORKER_TOKEN;
+  if (!TOK) {
+    say('   ✗ DREAM_QUEUE_WORKER_TOKEN missing from .env.local');
+    return;
+  }
+
+  const rows = await P.pool(
+    Array.from({ length: n }, (_, i) => async () => {
+      await waitForHeadroom({ min: 25, label: `light:${i + 1}` });
+      const started = Date.now();
+      const res = await fetch(
+        'https://jimftynwrinwenonjrlj.supabase.co/functions/v1/nightly-dreams',
+        {
+          method: 'POST',
+          headers: { Authorization: 'Bearer ' + TOK, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: KEVIN, persist: true, force_model: model }),
+        }
+      );
+      const p = await res.json().catch(() => ({}));
+      const secs = Math.round((Date.now() - started) / 1000);
+      if (!p.upload_id) return { i, ok: false, error: p.error || res.status, secs };
+      await sb
+        .from('uploads')
+        .update({ caption: `🔬 EVAL light ${i + 1} · ${model.split('/').pop()}` })
+        .eq('id', p.upload_id);
+
+      const { data: up } = await sb
+        .from('uploads')
+        .select('width,height')
+        .eq('id', p.upload_id)
+        .maybeSingle();
+      const { data: logs } = await sb
+        .from('ai_generation_log')
+        .select('rolled_axes, fallback_reasons')
+        .eq('upload_id', p.upload_id)
+        .limit(1);
+      const log = logs && logs[0];
+      const a = (log && log.rolled_axes) || {};
+      const stamps = ((log && log.fallback_reasons) || []).map(String);
+      return {
+        i,
+        ok: true,
+        secs,
+        look: String(a.medium || a.look || '').replace('nightly_', ''),
+        vibe: a.vibe || '',
+        cast: String(a.dreamType || '').replace('face_swap_', ''),
+        kind: (a.seedSource && a.seedSource.kind) || '',
+        place: (a.seedSource && a.seedSource.location) || '',
+        degraded: stamps.some((s) => /dual_degrade_single|degrade_solo|solo_rebuild/.test(s)),
+        sim: stamps.find((s) => s.startsWith('identity_sim:')) || '',
+        // A model whose real output differs from what it was asked for shows up here.
+        size: up ? `${up.width}x${up.height}` : '',
+        mp: up && up.width ? (up.width * up.height) / 1e6 : null,
+        stamps,
+      };
+    }),
+    3 // the DB pool is the shared ceiling
+  );
+
+  const done = rows.filter((r) => r && r.ok);
+  say('');
+  say('   #  cast        look                   vibe               scene      s   notes');
+  for (const r of rows) {
+    if (!r) continue;
+    if (!r.ok) {
+      say(`   ${String(r.i + 1).padStart(2)}  FAILED — ${r.error}`);
+      continue;
+    }
+    const notes = [r.degraded ? 'DEGRADED' : '', r.sim].filter(Boolean).join(' ');
+    say(
+      `   ${String(r.i + 1).padStart(2)}  ${String(r.cast).padEnd(11)} ${String(r.look).padEnd(22)} ${String(r.vibe).padEnd(18)} ${String(r.kind).padEnd(10)} ${String(r.secs).padStart(3)}  ${notes}`
+    );
+  }
+
+  if (!done.length) {
+    say('\n   Nothing completed. Check the error above — a brand-new model often needs an');
+    say('   input-schema special case in _shared/generateImage.ts (see bytedance/seedream-4).');
+    return;
+  }
+
+  const casts = done.filter((r) => r.cast.includes('dual') || r.cast.includes('plus_one'));
+  const degraded = done.filter((r) => r.degraded);
+  const times = done.map((r) => r.secs).sort((a, b) => a - b);
+  const mps = done.map((r) => r.mp).filter(Boolean);
+  const medMp = mps.length ? mps.sort((a, b) => a - b)[Math.floor(mps.length / 2)] : null;
+
+  say('');
+  say(`   completed   ${done.length}/${rows.length}`);
+  say(`   latency     p50 ${times[Math.floor(times.length / 2)]}s · slowest ${times[times.length - 1]}s (timeout is 140s)`);
+  if (medMp) {
+    say(
+      `   resolution  ${done[0].size} = ${medMp.toFixed(2)}MP` +
+        (medMp > 2.5
+          ? '  ⚠ over the ~2.5MP face-detector ceiling — the same reason flux-1.1-pro-ultra is banned'
+          : '  ✓ under the face-detector ceiling')
+    );
+  }
+  if (casts.length) {
+    const rate = Math.round((degraded.length / casts.length) * 100);
+    say(
+      `   swap        ${degraded.length}/${casts.length} multi-person renders degraded (${rate}%)` +
+        (rate > 21 ? '  ⚠ worse than the 21% flux baseline over 105 production couples' : '')
+    );
+  } else {
+    say('   swap        no multi-person renders rolled — run again for couple signal');
+  }
+  say(`\n   In your Dreams album, tagged 🔬 EVAL light. Judge whether you LIKE them;`);
+  say('   the stamps above say whether they SURVIVED, which is the separate question.');
+  say('\n   If you like what you see, run the full pass for the measured verdict:');
+  say(`     node scripts/eval-model.js "${model}"`);
+
+  fs.writeFileSync(path.join(OUT, 'light.json'), JSON.stringify(rows, null, 2));
+  say(`   raw: ${OUT}/light.json`);
 }
 
 // ── phase 4: the swap, once per LOOK FAMILY ───────────────────────────────────
@@ -801,6 +975,13 @@ function report(model, resolution) {
     say('\n  Nothing was rendered. Drop --estimate to run it.');
     return;
   }
+
+  // LIGHT: the "do I even like it" pass. Real pipeline, nothing forced but the model.
+  if (has('light')) {
+    await lightPass(model);
+    return;
+  }
+
   const { total } = plan(familyCount);
   say(`  this run will make ~${total} renders — see --estimate for the cost breakdown`);
 

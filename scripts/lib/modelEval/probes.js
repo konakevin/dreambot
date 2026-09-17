@@ -381,6 +381,98 @@ async function rawRender(modelId, prompt, env, opts = {}) {
   };
 }
 
+/**
+ * THE OUTPUT CONSTRAINTS a render has to land inside to be usable here.
+ *
+ * `maxMegapixels` is the face detector's limit, not a quality preference:
+ * flux-1.1-pro-ultra was banned because ~4MP defeated detection, so a model that only
+ * renders huge is a model whose cast paths all degrade. `maxBytes` is the Edge runtime:
+ * decoding a large image inside an edge function blew through Supabase's 150MB / 2s
+ * per-invocation budget once already and surfaced as HTTP 546 WORKER_RESOURCE_LIMIT, which
+ * is why the swap path asks for JPEG rather than PNG. For scale, flux-1.1-pro's real
+ * output is 768x1344 = 1.03MP.
+ */
+const OUTPUT_LIMITS = { targetRatio: 9 / 16, ratioTolerance: 0.02, maxMegapixels: 2.5, maxBytes: 8 * 1024 * 1024 };
+
+/** Replicate's OpenAPI input schema for a model — the list of knobs it actually has. */
+async function fetchInputSchema(modelId, env) {
+  try {
+    const res = await fetch(`https://api.replicate.com/v1/models/${modelId}`, {
+      headers: { Authorization: 'Bearer ' + env.REPLICATE_API_TOKEN },
+    });
+    if (!res.ok) return null;
+    const j = await res.json();
+    const schema = ((j.latest_version || {}).openapi_schema || {}).components;
+    return (schema && schema.schemas && schema.schemas.Input && schema.schemas.Input.properties) || null;
+  } catch {
+    return null;
+  }
+}
+
+/** Allowed values for a property: the declared enum, or the values named in its own
+ *  description when Replicate inlines them there instead (seedream's `size` does). */
+function allowedValues(prop) {
+  if (!prop) return [];
+  if (Array.isArray(prop.enum)) return prop.enum;
+  const desc = String(prop.description || '');
+  const found = desc.match(/'([^']+)'|\b(\d+K)\b/g) || [];
+  return [...new Set(found.map((v) => v.replace(/'/g, '')))];
+}
+
+/**
+ * Candidate input bodies to TRY, built from whatever knobs this model exposes.
+ *
+ * WHY THIS SEARCHES INSTEAD OF ASSERTING. A model gets one default body from the engine,
+ * and judging it on that alone is how a usable model gets rejected: seedream-4 on its
+ * default `size: '2K'` returns 3.69MP and looks like a fatal resolution failure, while
+ * `size: '1K'` returns 1.86MP at the same correct 9:16 and is fine. The question is never
+ * "does the default work", it is "does ANY configuration land inside our limits".
+ *
+ * AND THE SCHEMA CANNOT BE TRUSTED ON ITS OWN — read the descriptions, then measure.
+ * seedream advertises width/height as plain integers with a 1024-4096 range; passing them
+ * silently returns a 2048x2048 SQUARE, because they are honoured only when size='custom'.
+ * That fact is in the description, not the type. Every candidate below is rendered and
+ * MEASURED; none are trusted.
+ */
+function sizeCandidates(props) {
+  const out = [];
+  const has = (k) => props && Object.prototype.hasOwnProperty.call(props, k);
+  const sizeVals = has('size') ? allowedValues(props.size) : [];
+  const ars = has('aspect_ratio') ? allowedValues(props.aspect_ratio) : [];
+  const ar = ars.includes('9:16') ? '9:16' : null;
+
+  // The engine's own default body, so the report says what happens TODAY.
+  out.push({ label: 'engine default', input: { aspect_ratio: ar || '9:16', num_outputs: 1, output_format: 'png', output_quality: 100 } });
+
+  for (const v of sizeVals) {
+    if (String(v).toLowerCase() === 'custom') continue; // handled below, needs w/h
+    out.push({ label: `size=${v}${ar ? ' + 9:16' : ''}`, input: { size: v, ...(ar ? { aspect_ratio: ar } : {}) } });
+  }
+  if (sizeVals.some((v) => String(v).toLowerCase() === 'custom') && has('width') && has('height')) {
+    out.push({ label: 'size=custom 1152x2048', input: { size: 'custom', width: 1152, height: 2048 } });
+  } else if (has('width') && has('height')) {
+    out.push({ label: 'width/height 1152x2048', input: { width: 1152, height: 2048 } });
+  }
+  if (ar && !sizeVals.length) out.push({ label: 'aspect_ratio 9:16 only', input: { aspect_ratio: ar } });
+  return out;
+}
+
+/**
+ * Parameters that make the model REWRITE our prompt before rendering.
+ *
+ * Worth surfacing loudly rather than leaving as a footnote: this engine's design rule is
+ * authored pools, never letting a model invent the varying element, because invention
+ * pigeonholes and rhymes. seedream-4 ships `enhance_prompt: true` BY DEFAULT — so every
+ * render was of seedream's rewrite of our prompt, not our prompt. A model can look
+ * inconsistent for this reason alone and be blamed for it.
+ */
+function promptRewriteParams(props) {
+  if (!props) return [];
+  return Object.entries(props)
+    .filter(([k]) => /enhance_prompt|prompt_upsampl|magic_prompt|rewrite|auto_prompt|prompt_expansion/i.test(k))
+    .map(([k, v]) => ({ key: k, default: v.default, description: String(v.description || '').replace(/\s+/g, ' ').slice(0, 110) }));
+}
+
 /** Save a render and return its path, so a phase can hand back a contact sheet. */
 function save(buf, dir, name) {
   fs.mkdirSync(dir, { recursive: true });
@@ -422,6 +514,11 @@ module.exports = {
   GEOMETRY_CONDITIONS,
   REFUSAL_SET,
   TARGET_RATIO,
+  OUTPUT_LIMITS,
+  fetchInputSchema,
+  allowedValues,
+  sizeCandidates,
+  promptRewriteParams,
   megapixels,
   ratio,
   imageSize,

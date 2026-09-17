@@ -63,7 +63,7 @@ so neither does this:
   `comic_print`.
 
 **What it will not do: grade style.** Phase 2 renders and stops. That is a deliberate property, not a gap
-— see the automated-grader trap in §4. When a phase returns `REVIEW`, the answer is your eyes on the
+— see the automated-grader trap in §5. When a phase returns `REVIEW`, the answer is your eyes on the
 images, at n≥9, on the BASE render.
 
 **Where "good" is defined.** `scripts/lib/modelEval/dimensions.js` holds all seventeen dimensions with the
@@ -157,7 +157,41 @@ If they come back identical, the model genuinely cannot, and that is a real disq
 Then escalate: our verbatim `flux_fragment` → fragment behind the gender lock → the full production
 prompt replayed verbatim. Each step tells you which layer breaks it. (In the 2.5 case, none did.)
 
-## 4. Traps that will waste your day
+## 4. Probe the model's PARAMETERS before judging its output
+
+A model gets one default input body from our engine. Judging it on that alone is how a perfectly usable
+model gets thrown away — and it nearly happened to a model we already owned.
+
+**The case (2026-09-16, `bytedance/seedream-4`).** It was sitting active in `image_models` at the cheapest
+tier, wired into nothing, never evaluated. Our engine sent it `size: '2K'`, which returns **1440×2560 =
+3.69MP** — correct 9:16 shape, but close to the ~4MP that got `flux-1.1-pro-ultra` banned for defeating the
+face detector, so every cast render would degrade for a reason that has nothing to do with the model. The
+same model at `size: '1K'` returns **1024×1820 = 1.86MP** at the identical 0.563 ratio. One word.
+
+> **The question is never "does the default body work". It is "does ANY configuration land inside our
+> limits".** Phase 1 now enumerates the model's own knobs from its Replicate OpenAPI schema, renders one
+> image per candidate, measures the result, and prints the winning input body ready to wire.
+
+**The schema will lie to you — read the descriptions, then MEASURE.** seedream advertises `width` and
+`height` as plain integers with a 1024-4096 range. Pass them and you silently get a **2048×2048 square**,
+because they are honoured only when `size='custom'`. That is stated in the field's *description*, not its
+type. Never trust a declared parameter until a render has confirmed what it does.
+
+**Look for hidden defaults that rewrite the prompt.** seedream ships `enhance_prompt: true` by default, so
+every render was of *seedream's paraphrase* of our prompt rather than our prompt. This engine is built on
+authored pools precisely because letting a model invent the varying element makes it pigeonhole and rhyme.
+A model can look inconsistent for this reason alone and get blamed for it. Phase 1 flags any
+`enhance_prompt` / `prompt_upsampling` / `magic_prompt` style parameter and its default.
+
+**The limits a configuration has to hit** (`OUTPUT_LIMITS` in `probes.js`):
+
+| limit | value | why |
+|---|---|---|
+| ratio | 0.5625 ± 0.02 | the app's 9:16 cards |
+| megapixels | ≤ ~2.5 | above this the face detector fails — the ultra ban. flux-1.1-pro's real output is 768×1344 = 1.03MP |
+| bytes | ≤ ~8MB | decoding a large image in an edge function blew Supabase's 150MB / 2s budget once and surfaced as HTTP 546 `WORKER_RESOURCE_LIMIT`; it is why the swap path asks for JPEG, not PNG |
+
+## 5. Traps that will waste your day
 
 - **`force_look` aliases to `force_medium`**, and `if (looksMinimal && modelPolicy && !force_medium)`
   skips the minimal contract build — so pinning a look with it silently tests a DISABLED looks engine.
@@ -174,7 +208,7 @@ prompt replayed verbatim. Each step tells you which layer breaks it. (In the 2.5
 - **QA samples are not production.** A 9-render QA batch showed `giant_face` at 44%; production over 105
   couples showed 3%.
 
-## 5. The seventeen dimensions, and which phase settles each
+## 6. The seventeen dimensions, and which phase settles each
 
 Full text with the incident behind every bar: `scripts/lib/modelEval/dimensions.js`.
 
@@ -209,13 +243,13 @@ production rather than approximating it.
 that renders gorgeous places but cannot hold a swap still belongs in pure-scene nightlies and bots. Always
 score scene-only separately before rejecting.
 
-## 6. Phase 4 — the swap, across the look families
+## 7. Phase 4 — the swap, across the look families
 
 Automatic now. It routes through `nightly-dreams` with `force_model`, which dispatches any model id the
 provider layer can reach with no DB row needed, and for each live look family renders one dual face swap
 against a real cast lifted from one of Kevin's own recent dual renders.
 
-What it does for you: pins with `qa_pin_look` (never `force_look`, §4), forces a dual cast, reads
+What it does for you: pins with `qa_pin_look` (never `force_look`, §5), forces a dual cast, reads
 `fallback_reasons` for `dual_degrade_single` / `no_dual_split` / `giant_face` / `side_haiku_unresolved`,
 pulls `identity_sim`, saves the **base** from `rolled_axes.observability.replicateRawUrl` next to the
 final, and holds concurrency at 3 behind `waitForHeadroom({ min: 25 })` because each edge render pins a
@@ -235,7 +269,7 @@ the person.
 separation in the `night` and `interior_low` conditions is the same shape as the flux night-vibe failure,
 and it is a geometry problem surfacing at the swap, not a swap problem.
 
-## 7. Model temperaments — what we know
+## 8. Model temperaments — what we know
 
 - **flux-1.1-pro.** Renders nouns and adjectives reliably, COUNTS REPETITIONS, and **cannot be told about
   geometry** — "a clear gap between their heads" was ignored across matched seeds. Also has hard priors
@@ -246,7 +280,7 @@ and it is a geometry problem surfacing at the swap, not a swap problem.
   naming the look; 56 of 57 look fragments carry "lifelike / realistic / true-to-life". A model that
   obeys us precisely will paint a photograph, and that is not its fault.
 
-## 8. Wiring a model in, once it passes
+## 9. Wiring a model in, once it passes
 
 1. `supabase/functions/_shared/providers/<provider>.ts` — model id map + per-model size/quality defaults
 2. `modelPricing.ts` — `MODEL_SPARKLE_COST` + `MODEL_COST_CENTS`, measured
@@ -256,7 +290,7 @@ and it is a geometry problem surfacing at the swap, not a swap problem.
 5. `NIGHTLY_BANNED_MODELS` if cast-unsafe. **Listing a model as a policy PRIMARY lifts its legacy ban**
    (`looksPathBans`) — so removing it from primaries is how you actually ban it.
 
-## 9. Report like this
+## 10. Report like this
 
 State what was **measured** vs **inferred**, every n, and every hypothesis tested AND REJECTED so nobody
 re-runs it. If a conclusion rests on your eye, say so and show the sheet. Ledgers:

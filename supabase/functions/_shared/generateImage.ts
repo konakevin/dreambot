@@ -316,8 +316,25 @@ async function generateImageOnce(
   // Seedream text-to-image (no source image — e.g. a forced model on a
   // flux-dev-path medium): schema-clean input; it has no num_outputs /
   // output_format / output_quality fields.
+  //
+  // SIZE IS '1K', NOT '2K' (measured 2026-09-16). At '2K' seedream returns
+  // 1440x2560 = 3.69MP — a correct 9:16 shape, but close to the ~4MP that got
+  // flux-1.1-pro-ultra banned for DEFEATING THE FACE DETECTOR, which would make
+  // every cast render here degrade for a reason that has nothing to do with the
+  // model. '1K' returns 1024x1820 = 1.86MP at the same 0.563 ratio, comfortably
+  // under the ceiling and still larger than flux-1.1-pro's actual 768x1344.
+  //
+  // Do NOT "fix" this by passing width/height: those are ignored unless
+  // size='custom' (the schema says so, and passing them alone silently returns a
+  // 2048x2048 SQUARE). If a bigger frame is ever wanted, the working form is
+  // { size: 'custom', width: 1152, height: 2048 } = 2.36MP at exactly 9:16.
+  //
+  // Left alone deliberately: `enhance_prompt` defaults TRUE on this model, so
+  // seedream rewrites our prompt before rendering. That is worth revisiting —
+  // this engine's whole design is authored pools rather than LLM invention — but
+  // it is a separate decision from the size fix and changes what renders.
   if (model === 'bytedance/seedream-4' && !inputImage) {
-    input = { prompt, aspect_ratio: '9:16', size: '2K' };
+    input = { prompt, aspect_ratio: '9:16', size: '1K' };
   }
 
   if (mode === 'flux-kontext' && inputImage) {
