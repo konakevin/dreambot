@@ -1,5 +1,13 @@
 /**
- * seedream-4.5 in the nightly cast pool (migration 521, Kevin 2026-09-17 "option B").
+ * seedream-4.5 — PRICED but NOT in the nightly pool (migration 521 in, 522 back out the same hour).
+ *
+ * Kevin removed it on the renders: busy, incoherent scenes, and his face drifting to an older
+ * grey-bearded man — the flux age-drift defect appearing on a model that was supposed not to have it.
+ * The measured numbers were fine (0 of 8 couples degraded, better than flux) and were not the reason.
+ *
+ * The pricing assertions below still matter and are the point of keeping this file: the model stays
+ * PLUMBED and PRICED so a future render logs a true cost instead of falling back to DEFAULT_COST_CENTS,
+ * and so re-adding it later does not mean rediscovering its 3.69MP floor.
  *
  * This locks the two things that would silently go wrong, both of which have precedent here:
  *
@@ -52,7 +60,7 @@ describe('seedream-4.5 is priced, not defaulted', () => {
   });
 });
 
-describe('migration 521 wires it the way the engine expects', () => {
+describe('migration 521 wired it the way the engine expects (kept as the record)', () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const fs = require('fs');
   // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -62,7 +70,7 @@ describe('migration 521 wires it the way the engine expects', () => {
     'utf8'
   );
 
-  it('adds it to the CAST surfaces only — scene was never evaluated on it', () => {
+  it('touched the CAST surfaces only — scene was never evaluated on it', () => {
     expect(SRC).toContain("WHERE surface IN ('solo', 'couple')");
     expect(SRC).not.toMatch(/surface\s*=\s*'scene'/);
   });
@@ -84,5 +92,47 @@ describe('migration 521 wires it the way the engine expects', () => {
     // model in the catalogue. loadModelCosts() reads image_models without an is_active filter, so the
     // row still supplies the price.
     expect(SRC).toMatch(/false,\s*--\s*INVISIBLE to the user-facing model picker/);
+  });
+});
+
+describe('migration 522 took it back out', () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const fs2 = require('fs');
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const path2 = require('path');
+  const OUT: string = fs2.readFileSync(
+    path2.join(
+      __dirname,
+      '..',
+      '..',
+      'supabase',
+      'migrations',
+      '522_seedream_45_out_of_nightly.sql'
+    ),
+    'utf8'
+  );
+
+  it('leaves only flux and gemini-2 on the cast surfaces', () => {
+    const models = OUT.match(/primary_models = ARRAY\[([\s\S]*?)\]/);
+    expect(models).toBeTruthy();
+    expect(models![1]).not.toContain('seedream');
+    expect(models![1]).toContain('flux-1.1-pro');
+    expect(models![1]).toContain('gemini-2-image');
+  });
+
+  it('keeps models and weights the same length', () => {
+    // weightedList pairs them by INDEX; a short weights array silently falls back to equal weights, so
+    // the split would read as configured and not be. Same guard as 521.
+    const models = OUT.match(/primary_models = ARRAY\[([\s\S]*?)\]/);
+    const weights = OUT.match(/primary_weights = ARRAY\[([\s\S]*?)\]/);
+    const nModels = (models![1].match(/'/g) || []).length / 2;
+    expect(weights![1].split(',').length).toBe(nModels);
+  });
+
+  it('keeps the model PRICED even though it no longer renders', () => {
+    // The image_models row and the static maps stay: an unpriced model falls back to DEFAULT_COST_CENTS
+    // and would quietly overstate any future render by 25%.
+    expect(MODEL_COST_CENTS[SEED45]).toBe(4);
+    expect(MODEL_SPARKLE_COSTS[SEED45]).toBe(1);
   });
 });
