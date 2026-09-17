@@ -1148,7 +1148,11 @@ export function assembleCharacterPrompt(
       ? `ONE person alone in the scene, the only person in the image, the clear subject of the scene, ${
           distanceLine ? `${distanceLine}, ` : ''
         }face clearly visible and turned naturally toward the viewer at an easy three-quarter angle`
-      : 'ONE person alone in the scene, the only person in the image, the clear subject of a candid cinematic photograph, face clearly visible and turned naturally toward the viewer at an easy three-quarter angle';
+      : // The distance line rides here too (2026-09-17): with framingInAnchor set the tail block skips it, so a
+        // caller without lookNeutralFraming (Create's rebuild twin) used to lose the clause from BOTH places.
+        `ONE person alone in the scene, the only person in the image, the clear subject of a candid cinematic photograph, ${
+          distanceLine ? `${distanceLine}, ` : ''
+        }face clearly visible and turned naturally toward the viewer at an easy three-quarter angle`;
 
     // Framing — single doesn't need the L/R clear-gap line. Stage 5c presets
     // trade face size for composition freedom; the classic waist-up stays the
@@ -1553,6 +1557,14 @@ export function assembleSoloFallbackFromDual(
     // that shrinks the face below the swap floor (the very failure we're recovering
     // from).
     soloComposition: 'three_quarter',
+    // DISTANCE LINE IN THE ANCHOR (2026-09-17). three_quarter's "shown from the knees up" clause used to land
+    // in the tail framing block, ~1,400 characters in, where flux-1.1-pro ignores it — every rebuilt single
+    // shipped as a headshot (Kevin hearted three in a row: "another huge face from this batch, completely
+    // boring, can't see any background"). The round-16 fixed-seed probe measured the same clause riding the
+    // anchor BEFORE the face clause opening all three seeds to knees-up shots with the scene visible, identity
+    // intact. The rebuild spreads the COUPLE's input, which never carries this flag, so it is set here
+    // explicitly. Solo only by construction (cast is [selfMember]); couples keep their own anchor untouched.
+    framingInAnchor: true,
   });
 }
 

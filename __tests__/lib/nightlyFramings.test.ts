@@ -488,18 +488,31 @@ describe('solo distance line inside the anchor — parity loop round 16', () => 
       `the clear subject of the scene, shown from the knees up in a three-quarter length composition, fully visible, generous open space around them showing the scene, ${FACE}`
     );
   });
-  it('off → byte-identical to the round-15 prompt; the legacy (production) solo never carries it', () => {
+  it('off → byte-identical to the round-15 prompt', () => {
     const clause = SOLO_FRAMINGS.find((r) => r.key === 'full_arch')!.text;
     const a = assembleCharacterPrompt(soloSlots, soloIn({ framingClause: clause }));
     expect(
       assembleCharacterPrompt(soloSlots, soloIn({ framingClause: clause, framingInAnchor: false }))
     ).toBe(a);
     expect(a).toContain(`the clear subject of the scene, ${FACE}`);
+  });
+  it('on → the LEGACY (non-neutral) solo anchor carries the distance line too', () => {
+    // CONTRACT CHANGE 2026-09-17. Round 16 pinned the legacy anchor as never carrying the distance line
+    // ("production stays byte-identical"). That held while production never sent framingInAnchor. Once it
+    // did (solos on the minimal path + the rebuilt single), a caller without lookNeutralFraming lost the
+    // clause from BOTH places — the tail block skips it when the flag is set — and every rebuilt single
+    // shipped as a headshot. Kevin hearted three in a row. The line now rides both anchor branches; the
+    // flag OFF path above is still byte-identical, which is the part of the old contract that mattered.
     const legacy = assembleCharacterPrompt(soloSlots, {
-      ...soloIn({ framingInAnchor: true, lookNeutralFraming: false }),
+      ...soloIn({
+        framingInAnchor: true,
+        lookNeutralFraming: false,
+        soloComposition: null,
+        framingClause: null,
+      }),
     });
     expect(legacy).toContain(
-      'the clear subject of a candid cinematic photograph, face clearly visible'
+      'the clear subject of a candid cinematic photograph, shown from the knees up in a three-quarter length composition, fully visible, generous open space around them showing the scene, face clearly visible'
     );
   });
 });

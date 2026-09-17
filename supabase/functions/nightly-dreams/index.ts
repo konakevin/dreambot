@@ -50,6 +50,7 @@ import {
   LOOKS_FLUX_STANCE_POOL_SHARE,
   LOOKS_FLUX_COUPLE_OVERRIDE_LIBRARY,
   LOOKS_SOLO_POOL_MIX,
+  LOOKS_SOLO_FRAMING_IN_ANCHOR,
   LOOKS_DUAL_POOL_MIX,
   provisionalLooksMedium,
   retryPromptFor,
@@ -3256,6 +3257,20 @@ Deno.serve(async (req) => {
                 // If couple degrades become a problem, this is the line to revert (back to
                 // `selectedCast.length === 1`), NOT the vibe fix above.
                 ...(qa_legacy_framing ? {} : { lookNeutralFraming: true }),
+                // SOLO DISTANCE LINE IN THE ANCHOR (2026-09-17). The sixth fix found dead behind the dormant
+                // path. Every solo prompt already carries its distance ("shown from the knees up in a
+                // three-quarter length composition") — in the TAIL framing block, ~1,400 characters in, where
+                // flux-1.1-pro ignores it: the round-16 fixed-seed probe found the same clause anywhere after
+                // the identity block left every seed a waist-up portrait, and the SAME clause riding the anchor
+                // before the face clause opened all three seeds to knees-up shots with the scene visible.
+                // `framingInAnchor` is that move. It was set only in looksSlotInputFields, so the live path never
+                // sent it and every solo — including every single rebuilt from a failed couple — shipped as a
+                // headshot. Kevin, on three of them in a row: "another huge face from this batch, completely
+                // boring, can't see any background". Solos only: solo identity held 0.6+ with wider framing in
+                // every measured round, while on couples every widening lever breaks the dual split.
+                ...(selectedCast.length === 1 && LOOKS_SOLO_FRAMING_IN_ANCHOR
+                  ? { framingInAnchor: true }
+                  : {}),
               }),
         };
         // Flux parity arm G: flux couples on the album skeleton render with the 1.2.0 flux override fragment.

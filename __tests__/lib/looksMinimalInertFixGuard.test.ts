@@ -104,3 +104,25 @@ describe('the two earlier casualties stay patched forward', () => {
     expect(hatch![0]).toContain('lookNeutralFraming');
   });
 });
+
+describe('the SOLO distance line rides the anchor on the live path', () => {
+  // The sixth casualty (2026-09-17). Every solo prompt carries "shown from the knees up…" — in the tail
+  // framing block ~1,400 characters in, where flux-1.1-pro ignores it (round-16 fixed-seed probe: the same
+  // clause after the identity block left every seed a waist-up portrait; in the anchor before the face
+  // clause, all three seeds opened up). `framingInAnchor` is that move and was set only in
+  // looksSlotInputFields. Kevin, on three headshots in a row: "another huge face from this batch,
+  // completely boring, can't see any background".
+  it('minimal sends framingInAnchor for solos, keyed to the same flag the looks path uses', () => {
+    expect(strip(NIGHTLY_SRC)).toContain(
+      '...(selectedCast.length === 1 && LOOKS_SOLO_FRAMING_IN_ANCHOR ? { framingInAnchor: true } : {}),'
+    );
+  });
+
+  it('and NOT for couples — every widening lever on flux-1.1-pro breaks the dual split', () => {
+    // 56% -> 4% (album order), 23% -> 40% degrade (positive framing), 2 of 3 rebuilt (wide stances).
+    // The condition is the lock: the flag is only ever sent when the cast is ONE person.
+    const line = NIGHTLY_SRC.match(/\.\.\.\(([^)]*?)\? \{ framingInAnchor: true \}/);
+    expect(line).toBeTruthy();
+    expect(strip(line![1])).toContain('selectedCast.length === 1');
+  });
+});
