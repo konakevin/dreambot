@@ -224,7 +224,7 @@ swap on 9 of 11 (identity 0.59-0.73, the normal band); faces above ~0.60×H get 
 model. Restore is not the lever (0.9 ≈ raw; 0.7/0.5 waxy, −0.1 to −0.2 identity). Phase 1 = engine tier behind
 `engine_config.dual_big_face_max_hfrac` (default 0.40 = today), ~half a day. Review rows: album captions `BIGFACE …`.
 
-**Big-face tier SHIPPED (Phase 1, 2026-09-17; ceiling 0.60 for the measurement, then 0.50 on Kevin's taste call — faces above half the frame are re-rendered).** Fly engine: faces in (0.40, ceiling] swap on the
+**Big-face tier SHIPPED (Phase 1, 2026-09-17; ceiling 0.60 for the measurement, then 0.45 on Kevin's taste call — faces above 45% of the frame are re-rendered).** Fly engine: faces in (0.40, ceiling] swap on the
 full-frame per-face path (neighbour painted out, restored after, neighbour-bounded pastes); above the ceiling stays
 `giant_face`. Ceiling = `engine_config.dual_big_face_max_hfrac` (mig 524, default 0.40 = off; set 0.60), passed per
 request by all four dispatch sites. Batch `BF` (20 couples): tier reclaimed 4, all held, identity 0.63-0.73; the
