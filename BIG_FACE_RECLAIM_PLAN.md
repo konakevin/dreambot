@@ -30,7 +30,8 @@ right filter, not the size guard.
 **Verdict: GO.** The 2026-09-02 "pixelated smear" was a crop/paste path defect on big faces, not a resolution
 ceiling. Review rows: Kevin's private Dreams album, captions `BIGFACE <pair> · <model> · raw|f0.9 · h% · L/R sims`.
 
-## Phase 1 — SHIPPED 2026-09-17, ceiling 0.60 (Kevin's call)
+## Phase 1 — SHIPPED 2026-09-17; ceiling set to **0.50** (Kevin, same evening: "i actually don't like renders that
+close up … .5 sounds more reasonable" — a 0.53 couple, `AB-BF 20`, was the example he didn't want)
 
 Measured on batch `BF` (20 forced couples, ceiling 0.60): **the tier reclaimed 4 of 20 couples and all 4 held**
 (faces at 0.42 / 0.49 / 0.51 / 0.53 of frame height; identity min 0.63-0.73, mean 0.68 vs 0.70 for the other held
