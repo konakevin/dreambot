@@ -13,6 +13,7 @@ import {
   HAIR_COLOR_PROMPT,
   replaceHairColorInSummary,
   CAST_ETHNICITY_BUCKETS,
+  VISION_PROMPTS,
 } from '@engine/vision';
 
 describe('HAIR_COLOR_PROMPT — de-bias lock (regression guard)', () => {
@@ -83,5 +84,80 @@ describe('replaceHairColorInSummary — inject the focused color, keep everythin
   it('is a no-op on empty inputs (null-safe)', () => {
     expect(replaceHairColorInSummary('', 'black')).toBe('');
     expect(replaceHairColorInSummary('brown hair, tan skin', '')).toBe('brown hair, tan skin');
+  });
+
+  /**
+   * The focused read answers from a flat ~10-word natural palette, so letting it
+   * clobber an ALREADY-distinctive clause averages the person away. The 2026-09-01
+   * fleet re-scan did exactly that: "Long purple-to-teal ombre wavy hair" became
+   * "blonde hair", and "salt-and-pepper white hair" became "dark brown hair".
+   * Dyed / multi-tone hair is the identity signal we least want flattened.
+   */
+  it('does NOT repaint dyed / multi-tone / ombre hair', () => {
+    expect(
+      replaceHairColorInSummary('long purple-to-teal ombre wavy hair, fair skin', 'blonde')
+    ).toBe('long purple-to-teal ombre wavy hair, fair skin');
+    expect(replaceHairColorInSummary('salt-and-pepper hair, tan skin', 'dark brown')).toBe(
+      'salt-and-pepper hair, tan skin'
+    );
+    expect(replaceHairColorInSummary('brown hair with caramel highlights', 'black')).toBe(
+      'brown hair with caramel highlights'
+    );
+  });
+
+  it('still corrects a plain natural colour (the de-bias fix must keep working)', () => {
+    expect(replaceHairColorInSummary('dark brown hair, olive skin', 'auburn')).toBe(
+      'auburn hair, olive skin'
+    );
+  });
+});
+
+/**
+ * The cast scanner must ask for a HAIRCUT, never a hairstyle.
+ *
+ * Regression guard for the 2026-09-01 fleet re-scan. The prompt used to say
+ * "ALWAYS the CUT ... say how the hair is worn (loose, ponytail, bun, braids,
+ * half-up). If there are no bangs, describe the hairline positively (e.g.
+ * 'center-parted', 'swept back from the forehead')". That instruction is a
+ * FILLER GENERATOR: it stamped 61% of men with the identical "swept back from
+ * the forehead" and pinned women into whatever they wore in one photo — which
+ * then rides every render forever. Measured against the re-scan's own backups,
+ * worn-style phrases went 13% -> 38% while length/texture/bangs fell 13% -> 6%.
+ *
+ * Kevin's bar (2026-09-17): length + colour + type (wavy/curly/coily) + bangs
+ * incl. the bangs kind, for both genders. Never the day-of styling.
+ */
+describe('VISION_PROMPTS.castPerson — haircut, not hairstyle (regression guard)', () => {
+  const p = VISION_PROMPTS.castPerson;
+
+  it('does NOT instruct the model to report how the hair is worn', () => {
+    expect(p).not.toMatch(/say how the hair is worn/i);
+    expect(p).not.toMatch(/ALWAYS the CUT/i);
+  });
+
+  it('does NOT instruct the model to invent a positive hairline phrase', () => {
+    expect(p).not.toMatch(/describe the hairline positively/i);
+    // the exact filler string that ended up on 61% of men
+    expect(p).not.toMatch(/e\.g\. "center-parted", "swept back from the forehead"/i);
+  });
+
+  it('explicitly forbids the worn-style vocabulary', () => {
+    for (const banned of ['ponytail', 'bun', 'half-up', 'updo', 'braids', 'pin curls']) {
+      expect(p.toLowerCase()).toContain(banned);
+    }
+    expect(p).toMatch(/do NOT write ponytail/i);
+    expect(p).toMatch(/NEVER include how the hair is worn/i);
+  });
+
+  it('requires the detail the re-scan destroyed: length, colour, type, bangs', () => {
+    expect(p).toMatch(/give the LENGTH \(short, medium, or long\)/i);
+    expect(p).toMatch(/the TYPE if it is not straight \(wavy, curly, or tightly coily\)/i);
+    expect(p).toMatch(/BANGS with their kind/i);
+    // the TRAITS line is what becomes physical_summary — it must lead with length
+    expect(p).toMatch(/hair clause must ALWAYS start with a length word/i);
+  });
+
+  it('still never uses negative phrasing (AI generators read negatives as positives)', () => {
+    expect(p).toMatch(/never write "no bangs"/i);
   });
 });

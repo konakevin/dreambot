@@ -86,6 +86,7 @@
     "__tests__/lib/genderLock.test.ts",
     "__tests__/lib/faceSwapGenderLock.test.ts",
     "__tests__/lib/castSkinTone.test.ts",
+    "__tests__/lib/extractHairStyling.test.ts",
     "__tests__/lib/faceSwapFallback.test.ts",
     "__tests__/lib/chaosTier.test.ts",
     "__tests__/lib/firstDreamMediums.test.ts",

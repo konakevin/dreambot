@@ -260,6 +260,43 @@ export function extractGender(promptDesc: string): 'man' | 'woman' | 'person' {
 // face-swapped away anyway and in the prompt they pull renders toward
 // Disney-princess / stock-photo archetypes. Hair + build (handled separately)
 // are the only identity traits actually visible in the final render.
+// Day-of STYLING, not a haircut. The scanner used to be told to always report
+// how the hair was worn and — absent bangs — to add a "positive hairline"
+// phrase, so the 2026-09-01 fleet re-scan stamped 61% of men with the identical
+// "swept back from the forehead" and pinned women into a "low bun" from one
+// photo, in every render, forever. The prompt no longer asks for it, but 43
+// cast members still carry it, so we strip it at prompt time too (no re-scan
+// needed). Braids count as styling (Kevin, 2026-09-17); bangs do NOT — a fringe
+// is a real cut and stays.
+const HAIR_STYLE_TRIGGER =
+  /\b(worn\s+in|styled\s+in|pulled\s+back|tied\s+back|swept\s+(back|up|upward)|slicked|gathered|tucked\s+behind|in\s+(a|an|two|twin)\b|ponytail|pigtails|top\s*knot|bun|chignon|updo|half[- ]up|braids?|plaits?|pin\s+curls?|center[- ]part(ed)?|side[- ]part(ed)?|middle[- ]part(ed)?|parted|hairline|fade|undercut|bowl\s+cut|comb[- ]?over|pompadour|quiff)\b/i;
+
+// Left dangling once the styling phrase is cut off the end of a clause.
+// NOTE: length words (short/medium/long/cropped) must NOT appear here — they are
+// the detail we most want to keep ("cropped short with a fade" → "cropped short").
+const TRAILING_FILLER =
+  /[\s,]+(with|and|in|into|a|an|the|his|her|their|subtle|slight|soft|softly|neat|neatly|loose|loosely|classic|simple|front[- ]draped)\s*$/i;
+
+/** Remove a trailing day-of styling phrase from ONE hair clause, then tidy the
+ *  dangling connector it leaves behind ("brown hair with subtle" → "brown hair").
+ *  Returns null when nothing describing hair survives. */
+function stripHairStyling(clause: string): string | null {
+  // Facial hair is never "styling" — pass beards/stubble through untouched.
+  if (/\b(beard|mustache|moustache|stubble|sideburns|clean[- ]shaven)\b/i.test(clause))
+    return clause;
+  const m = clause.match(HAIR_STYLE_TRIGGER);
+  let out = m && m.index !== undefined ? clause.slice(0, m.index) : clause;
+  let prev: string;
+  do {
+    prev = out;
+    out = out.trim().replace(TRAILING_FILLER, '');
+  } while (out !== prev);
+  out = out.trim().replace(/[\s,]+$/, '');
+  // Must still describe hair; a clause that was ONLY styling/hairline is dropped.
+  if (!/\b(hair|bangs|fringe|bald|balding)\b/i.test(out)) return null;
+  return out || null;
+}
+
 export function extractHair(physicalSummary: string | null | undefined): string | null {
   if (!physicalSummary) return null;
   const parts = physicalSummary.split(/[,;]/).map((p) => p.trim());
@@ -269,7 +306,14 @@ export function extractHair(physicalSummary: string | null | undefined): string 
     )
   );
   if (hairParts.length === 0) return null;
-  return hairParts.join(', ');
+  const cleaned = hairParts
+    .map(stripHairStyling)
+    .filter((p): p is string => !!p && p.trim().length > 0);
+  // NEVER return null where we previously returned a clause: resolveIdentity
+  // silently falls back to the free-prose description on null, which is exactly
+  // the archetype-pulling text extractHair exists to avoid.
+  if (cleaned.length === 0) return hairParts.join(', ');
+  return cleaned.join(', ');
 }
 
 // Pull JUST the skin-tone / complexion clause out of physical_summary. Skin
