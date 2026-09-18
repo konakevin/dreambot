@@ -1682,6 +1682,7 @@ export type Database = {
           new_scene_max_people: number;
           new_scene_price_best: number;
           new_scene_price_standard: number;
+          nightly_couple_eye_lock: boolean;
           nightly_enabled: boolean;
           nightly_legacy_look_pct: number;
           nightly_look_recency: number;
@@ -1784,6 +1785,7 @@ export type Database = {
           new_scene_max_people?: number;
           new_scene_price_best?: number;
           new_scene_price_standard?: number;
+          nightly_couple_eye_lock?: boolean;
           nightly_enabled?: boolean;
           nightly_legacy_look_pct?: number;
           nightly_look_recency?: number;
@@ -1886,6 +1888,7 @@ export type Database = {
           new_scene_max_people?: number;
           new_scene_price_best?: number;
           new_scene_price_standard?: number;
+          nightly_couple_eye_lock?: boolean;
           nightly_enabled?: boolean;
           nightly_legacy_look_pct?: number;
           nightly_look_recency?: number;

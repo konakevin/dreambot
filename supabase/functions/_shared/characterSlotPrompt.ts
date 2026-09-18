@@ -203,6 +203,8 @@ export interface CharacterSlotPipelineInput {
    *  ("BROWN-HAIRED MAN on the LEFT", "a DARK BROWN-HAIRED FEMALE woman —"), the way the senior echo already does
    *  for 55+. Six fixed seeds on flux-1.1-pro: 2/6 salt-and-pepper men + 4/6 blonde wives without it, 0/6 with. */
   hairEcho?: boolean;
+  /** false = no <COLOUR>-EYED token at position 1 (album-recipe probe, 2026-09-18). Default on. */
+  eyeLock?: boolean;
   /** The framing recipe seats the couple / person — the couple anchor drops "standing". */
   framingSeated?: boolean;
   /** 1.2.0-parity (2026-09-12): the album's renders carried "a relaxed warm editorial photograph … filmic colour";
@@ -1269,7 +1271,7 @@ export function assembleCharacterPrompt(
     // Gender lock SHOUTED at position 1 — non-negotiable, mirrors the dual
     // path. This is what stops a male cast photo from rendering on a female
     // body (and vice-versa) on the single-cast nightly path.
-    const soloEye = m.castGender ? eyeEcho(m) : '';
+    const soloEye = m.castGender && input.eyeLock !== false ? eyeEcho(m) : '';
     const soloEcho = m.castGender ? `${soloEye}${hairEcho(m)}` : '';
     const genderLock = m.castGender
       ? soloEcho
@@ -1444,7 +1446,7 @@ export function assembleCharacterPrompt(
     return hc ? `${hc.toUpperCase()}-HAIRED OLDER ` : 'OLDER ';
   };
   // Both-or-neither: a lone colour cue spreads across the couple, so only state eyes when BOTH sides have one.
-  const bothEyes = !!left.eyes && !!right.eyes;
+  const bothEyes = input.eyeLock !== false && !!left.eyes && !!right.eyes;
   const leftEye = bothEyes ? eyeEcho(left) : '';
   const rightEye = bothEyes ? eyeEcho(right) : '';
   const genderLock = `${leftEye}${seniorEcho(left)}${hairEcho(left)}${left.gender.toUpperCase()} on the LEFT, ${rightEye}${seniorEcho(right)}${hairEcho(right)}${right.gender.toUpperCase()} on the RIGHT`;

@@ -100,6 +100,10 @@ export interface NightlyQaFlags {
   force_final_prompt: string | null;
   /** QA: couple prompt order override (mig 470): 'legacy' | 'subject_first'. */
   force_prompt_style: 'legacy' | 'subject_first' | null;
+  /** ALBUM RECIPE probe (2026-09-18): false drops the <COLOUR>-EYED token from the position-1 lock. null = engine default (on). */
+  force_eye_lock: boolean | null;
+  /** ALBUM RECIPE probe: true applies the 1.2.0 flux override fragments even on the looks engine (normally exempt). */
+  force_override_library: boolean;
   /** QA (parity pairs, COUPLE_PROMPT_PARITY_PLAN.md §2): Sonnet's six dual slots, verbatim — the
    *  slot pipeline skips Sonnet and assembles from these. */
   force_dual_slots: DualSlots | null;
@@ -255,6 +259,9 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
     force_costume_pct:
       typeof body.force_costume_pct === 'number' ? body.force_costume_pct : undefined,
     force_day_of_look: typeof body.force_day_of_look === 'string' ? body.force_day_of_look : null,
+    force_eye_lock:
+      body.force_eye_lock === false ? false : body.force_eye_lock === true ? true : null,
+    force_override_library: body.force_override_library === true,
     force_prompt_style:
       body.force_prompt_style === 'legacy' || body.force_prompt_style === 'subject_first'
         ? body.force_prompt_style

@@ -74,6 +74,8 @@ export interface EngineConfig {
    *  fraction of frame height, for solos and couples alike; a bigger face re-renders down the chain (the smallest
    *  ships at exhaustion). 0.35 catches the "detached heads" and close-up couples; 1.0 = off. Live-tunable. */
   nightlyMaxFaceHFrac: number;
+  /** engine_config.nightly_couple_eye_lock — <COLOUR>-EYED tokens on the couple position-1 lock (mig 526, default false). */
+  nightlyCoupleEyeLock: boolean;
   /** Phase A (ACTION_POSE_EXPANSION_PLAN.md): % of plain-location dual dreams
    *  that try the biome-tagged ACTIVE pose pool. 0 = off (default). */
   dualActionPosePct: number;
@@ -192,6 +194,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   identityDegradeFloor: 0.25,
   dualBigFaceMaxHFrac: 0.4,
   nightlyMaxFaceHFrac: 0.35,
+  nightlyCoupleEyeLock: false,
   dualActionPosePct: 0,
   // COMMUNITY SCENARIO SHARE — goofy + elegant + active must total <= 20 (migration 519,
   // scripts/lib/scenarioShare.js SCENARIO_SHARE_CEILING_PCT). These three pools REPLACE the
@@ -307,6 +310,10 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     nightlyMaxFaceHFrac: Number(
       data.nightly_max_face_hfrac ?? DEFAULT_ENGINE_CONFIG.nightlyMaxFaceHFrac
     ),
+    nightlyCoupleEyeLock:
+      typeof data.nightly_couple_eye_lock === 'boolean'
+        ? data.nightly_couple_eye_lock
+        : DEFAULT_ENGINE_CONFIG.nightlyCoupleEyeLock,
     dualActionPosePct: Number(data.dual_action_pose_pct ?? DEFAULT_ENGINE_CONFIG.dualActionPosePct),
     dualSceneGoofyPct: Number(data.dual_scene_goofy_pct ?? DEFAULT_ENGINE_CONFIG.dualSceneGoofyPct),
     dualSceneElegantPct: Number(

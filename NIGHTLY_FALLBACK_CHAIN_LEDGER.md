@@ -308,6 +308,21 @@ album's. The eye-colour lock stays for now (Kevin: "just do the photograph stuff
   beat obeys `DIRECTION_WORDS` ("peering down toward the water" is rejected). Two iconic spots disabled on Kevin's
   call: the Hamptons boardwalk, the Beus Canyon trail mouth.
 
+## 5h. FLUX COUPLES BACK TO THE ALBUM RECIPE (2026-09-18 ~06:40 UTC, Kevin: priority one, "it was working at one point")
+
+Measured (project_flux_framing_is_the_look_fragment): flux ignores camera-distance words; the look fragment decides.
+Two forced 20-couple runs on the live nightly, legacy order, no eye lock: album override fragments → held 9/20,
+held faces 9-22% (median 16%), 0 giant; catalogue painted looks → held 9/20, held faces 11-32% (median 23%), 2 giant.
+Subject-first (organic, last two batches) → 8/18, faces 21-39% (median 27%), 9 of 12 failures giant/gate.
+
+Shipped: `engine_config.couple_prompt_style` = legacy (DB); `nightly_couple_eye_lock` = false (mig 526, solos keep
+eye colour); `lookFragmentOverrideFor` no longer exempts flux-1.1-pro COUPLES on the looks engine (stamp
+`look_override_library:applied:flux-1.1-pro:couple`); solos and other models unchanged. QA flags `force_eye_lock`,
+`force_override_library`. Verification: round album20 (organic).
+
+Open (proposed, not built): when a flux couple render comes back with no faces (the scene swallowed them — 6 of 9
+album-recipe failures), retry once on flux with the faces-first block before moving to gemini.
+
 ## 6. State deployed tonight (Kevin: leave it for users)
 
 Commits `31cfa893`, `081ef539`, `621a5847`, `f75651ac`, `a7b1a3c2`, `9654f0f8` — all deployed to

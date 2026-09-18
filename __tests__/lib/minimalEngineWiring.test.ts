@@ -242,7 +242,14 @@ describe('nothing may silently repaint the look', () => {
   });
 
   it('the guard turns the library OFF for every looks-engine render', () => {
-    expect(strip(SRC)).toContain('if (looksMinimal && minimalModel) {');
+    // 2026-09-18: flux COUPLES are no longer exempt (the album fragments are their framing lever) and a QA flag can
+    // lift the exemption; solos and other models still render the catalogue look honestly.
+    expect(strip(SRC)).toContain(
+      "const fluxCouple = isDualFaceSwap && model === 'black-forest-labs/flux-1.1-pro';"
+    );
+    expect(strip(SRC)).toContain(
+      'if (looksMinimal && minimalModel && !force_override_library && !fluxCouple) {'
+    );
     expect(strip(SRC)).toContain("fallbackReasons.push('look_override_library:off:looks_engine');");
   });
 

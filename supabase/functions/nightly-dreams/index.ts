@@ -427,6 +427,8 @@ Deno.serve(async (req) => {
     force_day_of,
     force_final_prompt,
     force_prompt_style,
+    force_eye_lock,
+    force_override_library,
     force_costume_keys,
     force_costume_pct,
     force_day_of_look,
@@ -1629,7 +1631,13 @@ Deno.serve(async (req) => {
         fallbackReasons.push('look_override_library:exempt:force_look');
         return null;
       }
-      if (looksMinimal && minimalModel) {
+      // FLUX COUPLES GET THE ALBUM FRAGMENTS (Kevin 2026-09-18, priority one — project_flux_framing_is_the_look_fragment):
+      // on flux-1.1-pro the look fragment decides the framing. The catalogue's own looks in legacy order held
+      // couples at a median 23% face (two giant faces in 20); the four 1.2.0 override fragments held at 16%
+      // (9-22%, none giant) — the public-album numbers. Solos and every other model stay exempt (their looks
+      // render honestly); a flux couple's rendered fragment is stamped below, so the log never lies about it.
+      const fluxCouple = isDualFaceSwap && model === 'black-forest-labs/flux-1.1-pro';
+      if (looksMinimal && minimalModel && !force_override_library && !fluxCouple) {
         fallbackReasons.push('look_override_library:off:looks_engine');
         return null;
       }
@@ -1637,7 +1645,7 @@ Deno.serve(async (req) => {
       const frag = pickFaceSwapModelOverride(model, nightlyVibe?.key ?? null);
       fallbackReasons.push(
         frag
-          ? `look_override_library:applied:${model.split('/').pop()}`
+          ? `look_override_library:applied:${model.split('/').pop()}${fluxCouple && looksMinimal ? ':couple' : ''}`
           : 'look_override_library:no_entry'
       );
       return frag;
@@ -3190,6 +3198,8 @@ Deno.serve(async (req) => {
           promptStyle:
             force_prompt_style ??
             (looksPath ? looksCouplePromptStyle(looksModel) : sfaCfgCloser.couplePromptStyle),
+          // ALBUM RECIPE probe (2026-09-18): the album couples carried no eye colour at position 1.
+          eyeLock: force_eye_lock ?? (isDualFaceSwap ? hairCfg.nightlyCoupleEyeLock : true),
           costumeLock: costumePicks ? costumePicks.map((p) => p.attire) : null,
           sceneRegister,
           // Stage 5c: expanded solo compositions (three-quarter / enviro-wide)
@@ -3299,6 +3309,7 @@ Deno.serve(async (req) => {
                 promptStyle:
                   force_prompt_style ??
                   (looksPath ? looksCouplePromptStyle(looksModel) : sfaCfgCloser.couplePromptStyle),
+                eyeLock: force_eye_lock ?? (isDualFaceSwap ? hairCfg.nightlyCoupleEyeLock : true),
               }
             : slotInput;
         if (slotInputUsed !== slotInput) fallbackReasons.push('qa:force_slot_input');
