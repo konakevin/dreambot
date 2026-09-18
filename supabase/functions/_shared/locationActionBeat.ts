@@ -17,7 +17,7 @@
 // (0 = off) + a force_location_action QA flag.
 
 import { callSonnet } from './llm.ts';
-import { UNSAFE_WORDS, TOO_ENERGETIC } from './actionSafety.ts';
+import { UNSAFE_WORDS, TOO_ENERGETIC, DIRECTION_WORDS } from './actionSafety.ts';
 
 // Words that would fight the downstream face-forward framing or occlude the face
 // if they leaked into the action string. If the model slips one in, we drop the
@@ -79,6 +79,10 @@ STYLE examples (invent your own, do NOT reuse) — energetic OR calm, prop ONLY 
     if (!beat || beat.length < 6) return null;
     if (UNSAFE_WORDS.test(beat)) return null;
     if (TOO_ENERGETIC.test(beat)) return null;
+    // 2026-09-18 (nophoto20 #7): "each peering down toward the water" turned both faces away and the
+    // masks in their hands went over the faces in the render. The beat obeys the same direction rules as
+    // every Sonnet-written field.
+    if (DIRECTION_WORDS.test(beat)) return null;
     return beat;
   } catch (_e) {
     return null;

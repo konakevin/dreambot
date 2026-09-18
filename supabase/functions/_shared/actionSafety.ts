@@ -18,7 +18,7 @@
 // Words that would fight the downstream face-forward framing or occlude the face
 // if they leaked into the action string.
 export const UNSAFE_WORDS =
-  /\b(face|faces|eyes?|eyebrows?|gaze|gazing|smil\w*|lips|mouth|cheeks?|jaw|forehead|helmet|mask|masked|hood|hoods|goggles|visor|balaclava|veil|spyglass to (?:the |one'?s )?eye|pipe in (?:the |his |her )?mouth|selfie|camera|lens|kiss\w*|hug\w*|embrac\w*|cheek to cheek)\b/i;
+  /\b(face|faces|eyes?|eyebrows?|gaze|gazing|smil\w*|lips|mouth|cheeks?|jaw|forehead|helmets?|masks?|masked|hood|hoods|goggles?|visors?|balaclava|veil|spyglass to (?:the |one'?s )?eye|pipe in (?:the |his |her )?mouth|selfie|camera|lens|kiss\w*|hug\w*|embrac\w*|cheek to cheek)\b/i;
 
 // Over-energetic / above-the-head actions read GOOFY under a face-swap (a leap or
 // arms-thrown-overhead breaks the grounded, knees-up, professional-cinematic bar

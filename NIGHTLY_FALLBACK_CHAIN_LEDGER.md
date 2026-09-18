@@ -293,6 +293,21 @@ couples 21-39% (median 27%). The album prompts never say photograph/portrait; th
 looks (ink_illustration, magazine_cover, soft_brush_illustration, halloween_ornate_ink) STAY — that fragment is the
 album's. The eye-colour lock stays for now (Kevin: "just do the photograph stuff for now").
 
+## 5g. Wardrobe + seed hygiene (2026-09-18 ~05:20 UTC)
+
+- NO PLAIN CLOTHES (Kevin): `WARDROBE_MOODS` is a costume-designer register steered by the scene type
+  (`wardrobeMoodFor(sceneRegister)`); everyday basics in a wardrobe field are a `plain_clothes(...)` violation;
+  the retry names the exact phrase; `salvageSlots` keeps passing fields. Deployed nightly-dreams + generate-dream.
+- Looks retired by Kevin's taps tonight: painted_animation, soft_pop_art, digital_watercolor (+ the 11 photographic /
+  portrait looks of §5f). Catalogue 38 enabled.
+- Water / mask seeds: 53 scenario rows reworded (chest-deep → knee-deep, soaking → sitting on the rim, masks →
+  pushed up on the forehead, treading water → in the shallows); backup `scratchpad/water-seeds-backup2.json`. A first
+  pass that also caught waist-deep and non-water piles (puppies, ball pit, laundry) was REVERTED in full.
+- 8 authored scene_clusters beats reworded the same way; proximity scan 0 violations.
+- Location-action generator (Sonnet, Option B): `UNSAFE_WORDS` now catches plurals (masks, goggles, snorkels) and the
+  beat obeys `DIRECTION_WORDS` ("peering down toward the water" is rejected). Two iconic spots disabled on Kevin's
+  call: the Hamptons boardwalk, the Beus Canyon trail mouth.
+
 ## 6. State deployed tonight (Kevin: leave it for users)
 
 Commits `31cfa893`, `081ef539`, `621a5847`, `f75651ac`, `a7b1a3c2`, `9654f0f8` — all deployed to

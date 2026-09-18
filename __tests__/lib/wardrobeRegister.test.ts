@@ -11,6 +11,7 @@ import {
   describeViolations,
   salvageSlots,
   validateSlots,
+  wardrobeMoodFor,
 } from '@engine/characterSlotPrompt';
 
 describe('wardrobe register', () => {
@@ -98,5 +99,26 @@ describe('salvageSlots — a bad props line no longer costs the wardrobe', () =>
       left_wardrobe: 'FALLBACK',
       right_wardrobe: 'a tailored burgundy greatcoat with a fur collar',
     });
+  });
+});
+
+describe('wardrobeMoodFor — the scene type steers the register', () => {
+  const all = (reg: 'elegant' | 'active' | 'casual' | null) =>
+    new Set(Array.from({ length: 40 }, (_, i) => wardrobeMoodFor(reg, () => (i % 40) / 40)));
+
+  it('elegant scenes draw evening / couture / cinema registers, active scenes draw hero / expedition / court', () => {
+    const elegant = [...all('elegant')].join(' | ');
+    const active = [...all('active')].join(' | ');
+    expect(elegant).toMatch(/evening wear|couture|mid-century elegance/);
+    expect(elegant).not.toMatch(/expedition|adventure-hero/);
+    expect(active).toMatch(/adventure-hero|expedition|fantasy-court/);
+    expect(active).not.toMatch(/evening wear/);
+  });
+
+  it('a plain place (casual / null) still gets a statement register, never everyday clothes', () => {
+    for (const mood of all(null)) {
+      expect(mood).not.toMatch(PLAIN_CLOTHES);
+      expect(WARDROBE_MOODS).toContain(mood);
+    }
   });
 });

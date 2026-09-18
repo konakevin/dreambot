@@ -424,6 +424,42 @@ export const WARDROBE_MOODS = [
   'festival maximalism: layered prints, sequins, colour on colour',
 ];
 
+/** SCENE-TYPE STEERING (Kevin 2026-09-18, item 2): the register the brief asks for follows the scene the night
+ *  rolled — an elegant scene dresses for the gala, an active scenario dresses the adventurer, a plain place gets
+ *  the statement / resort / cinema registers. Uniform within the subset; every subset is a slice of
+ *  WARDROBE_MOODS, so the no-plain-clothes lock covers all of them. */
+const WARDROBE_BY_REGISTER: Record<'elegant' | 'active' | 'casual', readonly string[]> = {
+  elegant: [
+    WARDROBE_MOODS[1],
+    WARDROBE_MOODS[6],
+    WARDROBE_MOODS[10],
+    WARDROBE_MOODS[3],
+    WARDROBE_MOODS[4],
+  ],
+  active: [
+    WARDROBE_MOODS[2],
+    WARDROBE_MOODS[8],
+    WARDROBE_MOODS[9],
+    WARDROBE_MOODS[5],
+    WARDROBE_MOODS[11],
+  ],
+  casual: [
+    WARDROBE_MOODS[0],
+    WARDROBE_MOODS[7],
+    WARDROBE_MOODS[5],
+    WARDROBE_MOODS[3],
+    WARDROBE_MOODS[4],
+    WARDROBE_MOODS[10],
+  ],
+};
+export function wardrobeMoodFor(
+  register: 'elegant' | 'active' | 'casual' | null | undefined,
+  rng: () => number = Math.random
+): string {
+  const pool = WARDROBE_BY_REGISTER[register ?? 'casual'] ?? WARDROBE_BY_REGISTER.casual;
+  return pool[Math.min(pool.length - 1, Math.floor(rng() * pool.length))];
+}
+
 // ── Resolved cast identity (computed once per render) ───────────────────
 
 type ResolvedIdentity = {
@@ -690,7 +726,7 @@ ${
 
 export function buildSlotBrief(input: CharacterSlotPipelineInput): string {
   const location = input.iconicAnchor || input.userPlace || 'the location';
-  const wardrobeMood = WARDROBE_MOODS[Math.floor(Math.random() * WARDROBE_MOODS.length)];
+  const wardrobeMood = wardrobeMoodFor(input.sceneRegister ?? null);
 
   // When a location-specific wardrobe anchor is provided (rolled from
   // biome_config.WARDROBE), use it as style GUIDANCE — period/setting
