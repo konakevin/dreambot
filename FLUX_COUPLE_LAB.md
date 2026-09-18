@@ -135,3 +135,57 @@ been from looking at this current batch."
 
 Exact state captured in `nightly-states/v1.5-narrative.json` (commit, engine_config, policy rows, enabled + retired
 looks). Rule: no production nightly change without Kevin's word; further work is opt-in behind request flags.
+
+### Per-look probe (P-*, 2026-09-18 evening): the catalogue's own fragments under `narrative_fg`, five forced flux couples each
+
+| look | held | fails |
+|---|---|---|
+| canvas | 5/5 | |
+| aquarelle_graphite | 5/5 | |
+| chromolithograph | 5/5 | faces up to 33% |
+| pulp_cover | 4/5 | identity 1 |
+| lineless_watercolor | 3/5 | identity 2 |
+| classical_oil | 2/5 | identity 2, Fly error 1 |
+
+Pooled 24/30 (80%); with R9, catalogue fragments under the narrative composer = 30/40 (75%) vs the four album
+fragments 37/40 (92.5%). The gap is real but far smaller than the 47% the old prompt produced, and every miss is
+identity on the woman's side in the softer looks. Kevin's call whether flux couples render the honest look (75-80%)
+or the album fragments (92%); nothing changed in production.
+
+## LESSONS LEARNED — composing a render that face-swaps, on a stubborn model (flux-1.1-pro)
+
+Written 2026-09-18/19 after the night the engine went from "complete shit" (Kevin, 03:30) to "the best it's ever
+been" (Kevin, 19:00). Every line below was measured, not reasoned. Read this before touching a cast prompt.
+
+1. **Flux ignores camera language.** "Pull the camera back", "full body", "24mm from six metres", the album's
+   "environmental two-shot at a natural editorial distance": 7-8% faces with any of them or none, at any position;
+   even "tight close-up" only reached 14%. Do not fix framing with distance words.
+2. **The strongest cue wins, and the look fragment is usually it.** A photographic fragment ("slide film photograph",
+   "portrait") drags a couple to a 50-67% two-face close-up; a painting fragment lets the scene win (backs to the
+   camera, or no people at all). Photographic and portrait-shaped looks are retired from cast renders for this reason.
+3. **Face words early pull the camera in; face words last do not.** Eye-colour tokens at position one, a
+   "faces to camera" block at the front: 22% held (R2) against 70% with the same words at the end (R1). The faces line
+   belongs after the scene. Position matters for emphasis, not for distance.
+4. **The sentence shape is the lever.** One left-to-right paragraph — fragment, "a three-quarter length two-shot",
+   the couple named IN THE FOREGROUND (left person with wardrobe, right person with a clear gap between their heads),
+   the beat, "behind and around them, <place>: <scene>", the faces line, mood and vibe — took flux couples from 45%
+   first-try holds to 85-92%, faces median 11-14%. The comma-joined fragment list with LEFT/RIGHT markers was the
+   regression, not any single clause in it.
+5. **Name the people before the scene.** Under a grand-landscape sentence flux painted Giessbach Falls, a canyon
+   cascade and the Skein Towers with nobody in them. "In the foreground … behind and around them" is the hinge.
+6. **A repeated model is not a fallback.** Flux couple → flux couple again burned the budget the later rungs needed
+   and shipped faceless dreams. The retry must move models; flux-2-flex under this composer held 20/20.
+7. **Measure delivered, from stamps.** `uploads.model` lies on retries; forced batches overstate failures; ten-render
+   rounds swing ±25 points (70 → 22 → 20 → 70) — repeat a winner before building on it; grade the pictures, not the
+   swap counters (Kevin 4-4.5 where the counters said 3.8).
+8. **Identity failures are one-sided.** The woman's side 9 of 11, on the softer looks. That is a swap/source-photo
+   lead, not a prompt lead; do not chase it with prompt words.
+9. **What did not help:** contrasting palettes per side (20%); camera clauses (see 1); face-first ordering (see 3).
+   JSON prompting works on FLUX.2 (flex 10/10) and is unnecessary on flux-1.1-pro (prose holds the same).
+10. **Wardrobe and beats are separate levers.** No plain clothes (validator + costume register steered by scene
+    type); no masks over faces; no turned-away beats; water seeds knee-deep. Fix them in the brief and the pools, never
+    in the prompt tail.
+11. **Every fix must be stamped and counted.** Seven earlier fixes reached zero renders behind a dormant path
+    (`looks_minimal:on`). Check the engine stamp (`couple_engine:…`) before believing any batch.
+12. **One variable per round.** The 09-13 lesson repeated on 09-17: tier + gate + same-model rung in one night made it
+    worse. A switch (production untouched, experimental opt-in) is what made the lab possible.
