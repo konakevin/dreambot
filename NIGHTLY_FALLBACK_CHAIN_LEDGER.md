@@ -7,7 +7,7 @@ stamps). Never read the delivered model from `uploads.model` — see §3.
 ## 1. The objective (frozen by Kevin, 2026-09-17)
 
 ```
-Couple:  flux couple → flux single → gemini couple → gemini single → nobody
+Couple:  flux couple → flux couple AGAIN → flux single → gemini couple → gemini single → nobody   (2026-09-17 late: one couple re-render before the solo rung — see §5c)
 Single:  flux single → flux single again → gemini single → nobody
 ```
 Each arrow = "if that fails." "flux" = whatever the roll picked (85/15 flux/gemini). "flux single" after
@@ -241,6 +241,18 @@ chain (rung 1 the rolled model, rung 2 `styleContract.forAttempt(2)`, each throu
 identity ≥ 0.35) before pure scene; stamps `solo_floor_rerender:<rung>:<model>` / `_ok` / `_low` / `_unsafe`.
 Rate on real users' last 30 days: 1 of 208 solos (0.5%). Guarded by `looksMinimalInertFixGuard.test.ts` #4 and the
 dormant-path pin (33 → 32).
+
+## 5c. The chain gains a rung (2026-09-17, late — Kevin: "yeah, try that")
+
+A true 20-night run (`bf50`, no forcing) and the stamps of 09-14..16 vs today: the 09-14..16 engine re-rendered
+EVERY failed couple as a couple before degrading (17 of 17; 9 held) and delivered 96% of couples as couples
+(197); the frozen chain's immediate solo rung converted 25 of 45 failed couples to solos in one day, on the same
+looks and the same composer text. My forced batches overstate first-render failures (30% vs 9% on true rolls) —
+forcing `dual` skips the roll's own medium/scene selection. New chain: flux couple → flux couple AGAIN (same
+model, `couple_retry:1:same_model`) → flux single → gemini couple → gemini single → nobody. Implementation:
+`soloFromAttempt` in dualSwapPipeline (default 0 keeps Create/onboarding as they were), nightly passes
+`maxRerenders: 2, soloFromAttempt: 1`, and the re-render walks `forAttempt(attempt)` from attempt 2. Measured on
+the next true 20-night run (round `chain6`).
 
 ## 6. State deployed tonight (Kevin: leave it for users)
 

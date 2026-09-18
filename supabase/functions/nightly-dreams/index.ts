@@ -4521,8 +4521,13 @@ Output ONLY the prompt.`;
             // the same model again (legacy). NOTE: model_used attribution for a retry that shipped on a
             // different model lands with the fallback rows (Phase 4, NIGHTLY_MODEL_POLICY_PLAN.md).
             let rerenderModel = pickedModel;
-            if (styleContract && activeStyle) {
-              const pick = styleContract.forAttempt(attempt + 1);
+            if (attempt === 1) {
+              // THE "FLUX COUPLE AGAIN" RUNG (Kevin 2026-09-17, late): the first re-render stays on the model
+              // that just failed — a fresh composition on the same model, before any single and before any
+              // model move. Attempt 2 walks the contract's chain to the next model.
+              fallbackReasons.push(`couple_retry:1:same_model:${pickedModel.replace(/^.*\//, '')}`);
+            } else if (styleContract && activeStyle) {
+              const pick = styleContract.forAttempt(attempt);
               // Round 19: a model move across the flux ↔ others order boundary re-assembles the slots in the new
               // model's order (r18 #5/#7 rendered grok in the legacy order and both needed a re-render).
               const reordered =
@@ -4563,14 +4568,14 @@ Output ONLY the prompt.`;
               // Kevin 2026-09-13 "allow the move": keep the look, re-render on another model IT is graded on
               // rather than letting 1.2.0 drop the +1 to a generic figure. The look is unchanged, so the legacy
               // prompt still describes the right medium and needs no surgery.
-              const pick = styleContract.forAttempt(attempt + 1);
+              const pick = styleContract.forAttempt(attempt);
               rerenderModel = pick.model;
               if (pick.model !== pickedModel) modelUsedOverride = pick.model;
               fallbackReasons.push(...pick.stamps);
             } else if (modelPolicy) {
               const pick = resolveModel({
                 surface: 'couple',
-                attempt: attempt + 1,
+                attempt,
                 policy: modelPolicy,
                 bans: nightlyBans,
                 previousModel: pickedModel,
@@ -4662,8 +4667,12 @@ Output ONLY the prompt.`;
            * Worst case is 4 renders for one dream; the recover-budget check cuts the ladder short and
            * degrades early when the 140s window will not take another render.
            */
-          maxRerenders: 1,
+          // THE CHAIN (Kevin 2026-09-17, late): flux couple → flux couple AGAIN → flux single → gemini couple →
+          // gemini single → nobody. Attempt 1 re-renders on the SAME model (see rerender), the solo rung fires
+          // from attempt 1, attempt 2 moves models. Worst case 5 renders; the recover-budget check cuts it short.
+          maxRerenders: 2,
           soloBetweenAttempts: true,
+          soloFromAttempt: 1,
           deadlineMs: dualDeadlineMs,
           recoverBudgetMs: DUAL_RECOVER_MS,
           // Live-tunable wrong-person floor (engine_config, audit L3; cached fetch).

@@ -198,6 +198,12 @@ export async function genderSafeDualSwap(
     /** Per-call likeness bar for a delivered dual (parity loop round 7, the looks path passes 0.5): a swap whose
      *  min per-face sim is below it takes the re-render ladder instead of shipping. Default = IDENTITY_MIN_SIM. */
     identityMinSim?: number;
+    /** The couple ladder's solo rung fires only from this attempt on (default 0 = after the first failed couple).
+     *  Nightly passes 1 (Kevin 2026-09-17, late): flux couple → flux couple AGAIN → flux single → next-model
+     *  couple → its single → nobody. The 09-14..16 engine re-rendered a failed couple before degrading and
+     *  delivered 96% of couples as couples; the immediate solo rung was converting them at the first-try
+     *  failure rate. */
+    soloFromAttempt?: number;
   }
 ): Promise<DualSwapOutcome> {
   const log = deps.log ?? (() => {});
@@ -205,6 +211,7 @@ export async function genderSafeDualSwap(
   const maxRerenders = opts.maxRerenders ?? 2;
   const recoverBudgetMs = opts.recoverBudgetMs ?? RECOVER_BUDGET_MS;
   const identityDegradeFloor = opts.identityDegradeFloor ?? IDENTITY_DEGRADE_FLOOR;
+  const soloFromAttempt = opts.soloFromAttempt ?? 0;
   let target = renderUrl;
   let predictionId: string | null = null;
   let faceCount = 2;
@@ -428,6 +435,7 @@ export async function genderSafeDualSwap(
         // weak dual worth protecting and the single is strictly better than a couple on another model.
         if (
           opts.soloBetweenAttempts === true &&
+          attempt >= soloFromAttempt &&
           attempt < maxRerenders &&
           min < identityDegradeFloor
         ) {
@@ -465,7 +473,7 @@ export async function genderSafeDualSwap(
     //
     // Only while a move is still ahead of us; the final attempt falls through to the tail so the
     // sub-threshold-best check below still gets its say.
-    if (opts.soloBetweenAttempts === true && attempt < maxRerenders) {
+    if (opts.soloBetweenAttempts === true && attempt >= soloFromAttempt && attempt < maxRerenders) {
       const onThisModel = await tryDegradeSingle(
         target,
         `dual_degrade_single:attempt${attempt + 1}`

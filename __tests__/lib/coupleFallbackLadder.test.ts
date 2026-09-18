@@ -27,14 +27,35 @@ const PIPELINE_SRC = fs.readFileSync(
 );
 const strip = (s: string) => s.replace(/\s+/g, ' ');
 
-describe('a failed couple does NOT re-render on another model', () => {
-  it('the dual pipeline gets ONE model move — enough for the gemini rung, no more', () => {
-    // The whole ladder hangs off this one option. Every re-render calls
-    // styleContract.forAttempt(), which walks the model chain — so any value above 0 turns "fall back to
-    // a single" into "render the couple again somewhere else", which is what was happening.
+describe('a failed couple re-renders ONCE on the same model, then the single, then ONE model move', () => {
+  // Kevin 2026-09-17 (late), after a true 20-night run: "we used to render couples pretty well". The 09-14..16
+  // engine re-rendered every failed couple before degrading (17 of 17) and delivered 96% of couples as couples;
+  // the immediate solo rung converted 25 of 45 failed couples to solos in a day. The chain is now:
+  //   flux couple → flux couple AGAIN → flux single → gemini couple → gemini single → nobody
+  it('the dual pipeline gets TWO re-renders and the solo rung starts at attempt 1', () => {
     const call = NIGHTLY_SRC.match(/genderSafeDualSwap\([\s\S]*?\n {6}\);/);
     expect(call).toBeTruthy();
-    expect(strip(call![0])).toContain('maxRerenders: 1');
+    expect(strip(call![0])).toContain('maxRerenders: 2');
+    expect(strip(call![0])).toContain('soloFromAttempt: 1');
+  });
+
+  it('attempt 1 stays on the model that just failed; attempt 2 walks the contract chain', () => {
+    const N = strip(NIGHTLY_SRC);
+    expect(N).toContain('if (attempt === 1) {');
+    expect(N).toContain('fallbackReasons.push(`couple_retry:1:same_model:${pickedModel.replace(');
+    expect(N).toContain('const pick = styleContract.forAttempt(attempt);');
+    expect(N).not.toContain('styleContract.forAttempt(attempt + 1)');
+  });
+
+  it('the pipeline gates BOTH solo arms (split + identity) on soloFromAttempt', () => {
+    const P = strip(PIPELINE_SRC);
+    expect(P).toContain('const soloFromAttempt = opts.soloFromAttempt ?? 0;');
+    expect(P).toContain(
+      'if (opts.soloBetweenAttempts === true && attempt >= soloFromAttempt && attempt < maxRerenders) {'
+    );
+    expect(P).toContain(
+      'if ( opts.soloBetweenAttempts === true && attempt >= soloFromAttempt && attempt < maxRerenders && min < identityDegradeFloor ) {'
+    );
   });
 
   it('and the option sits in the DUAL pipeline call, not only on the degrade guard', () => {
@@ -71,7 +92,7 @@ describe('the order the pipeline degrades in', () => {
     // The rung Kevin asked for: couple on the rolled model → SOLO on that same model → next model.
     // Without this the ladder is "couple flux → couple gemini → solo", which is the order he rejected.
     expect(strip(PIPELINE_SRC)).toContain(
-      'if (opts.soloBetweenAttempts === true && attempt < maxRerenders)'
+      'if (opts.soloBetweenAttempts === true && attempt >= soloFromAttempt && attempt < maxRerenders)'
     );
   });
 

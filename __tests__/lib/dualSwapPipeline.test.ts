@@ -868,3 +868,62 @@ describe('identity failure also tries the single on this model first', () => {
     expect(i).toBeGreaterThan(1);
   });
 });
+
+describe('the chain with a couple re-render BEFORE the solo rung (soloFromAttempt, Kevin 2026-09-17 late)', () => {
+  it('first couple fails → the couple is re-rendered on the same model → holds → dual, NO single tried', async () => {
+    const dispatchDual = jest
+      .fn()
+      .mockResolvedValueOnce({ swappedUrl: null, faceCount: 1, rejectReason: 'no_split:lt2_faces' })
+      .mockResolvedValueOnce({ swappedUrl: 'SWAP2.jpg', faceCount: 2 });
+    const deps = makeDeps({ dispatchDual });
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      maxRerenders: 2,
+      soloBetweenAttempts: true,
+      soloFromAttempt: 1,
+    });
+    expect(r.outcome).toBe('dual');
+    expect(deps.rerender).toHaveBeenCalledTimes(1);
+    expect(deps.rerender).toHaveBeenCalledWith(1);
+    expect(deps.singleSwap).not.toHaveBeenCalled();
+    expect(r.reasons).toContain('dual_attempts:2');
+  });
+
+  it('two couple failures → the single is tried on attempt 1 (before the model move) and wins', async () => {
+    const dispatchDual = jest
+      .fn()
+      .mockResolvedValueOnce({ swappedUrl: null, faceCount: 1, rejectReason: 'no_split:lt2_faces' })
+      .mockResolvedValueOnce({
+        swappedUrl: null,
+        faceCount: 0,
+        rejectReason: 'no_split:lt2_faces',
+      });
+    const deps = makeDeps({ dispatchDual });
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      maxRerenders: 2,
+      soloBetweenAttempts: true,
+      soloFromAttempt: 1,
+    });
+    expect(r.outcome).toBe('single');
+    expect(deps.dispatchDual).toHaveBeenCalledTimes(2);
+    expect(deps.rerender).toHaveBeenCalledTimes(1); // attempt 1 only; the single won before attempt 2
+    expect(deps.singleSwap).toHaveBeenCalledTimes(1);
+  });
+
+  it('with the default (0) the solo rung still fires after the FIRST failure — Create keeps its behaviour', async () => {
+    const dispatchDual = jest.fn().mockResolvedValueOnce({
+      swappedUrl: null,
+      faceCount: 1,
+      rejectReason: 'no_split:lt2_faces',
+    });
+    const deps = makeDeps({ dispatchDual });
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      maxRerenders: 2,
+      soloBetweenAttempts: true,
+    });
+    expect(r.outcome).toBe('single');
+    expect(deps.rerender).not.toHaveBeenCalled();
+  });
+});

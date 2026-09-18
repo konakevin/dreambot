@@ -48,13 +48,16 @@ describe('the locked engine is wired the way the summary says', () => {
     );
   });
 
-  // REVERSED 2026-09-16 (Kevin: "shift the fallback from a failed couples render directly to a single,
-  // not a couple on a different model"). The chain code still exists and forAttempt is still wired, but the
-  // degrade guard runs with maxRerenders: 0, so it is never reached for a nightly couple — the failed dual
-  // falls straight through to the solo rebuild, which keeps the look.
-  it('CLAIM: a failed couple degrades straight to a solo rather than moving model', () => {
-    expect(strip(SRC)).toContain('maxRerenders: 0,');
-    expect(strip(SRC)).not.toContain('maxRerenders: 2,');
+  // REVERSED 2026-09-16 (Kevin: "shift the fallback from a failed couples render directly to a single, not a
+  // couple on a different model"), then REVISED 2026-09-17 late (Kevin: "yeah, try that") after a true 20-night
+  // run: the 09-14..16 engine re-rendered every failed couple before degrading and delivered 96% of couples as
+  // couples; the immediate solo rung was converting them at the first-try failure rate. The chain is now
+  //   flux couple → flux couple AGAIN (same model) → flux single → gemini couple → gemini single → nobody
+  it('CLAIM: a failed couple is re-rendered once on the same model, then the solo, then ONE model move', () => {
+    const call = SRC.match(/genderSafeDualSwap\([\s\S]*?\n {6}\);/);
+    expect(call).toBeTruthy();
+    expect(strip(call![0])).toContain('maxRerenders: 2,');
+    expect(strip(call![0])).toContain('soloFromAttempt: 1,');
   });
 
   // 2026-09-16: grok removed from nightly entirely ("consistently makes ugly renders"), so the pool is two
