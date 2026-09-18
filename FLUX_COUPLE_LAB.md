@@ -119,3 +119,10 @@ and chainmail, #2 balancing on boards in the infinity pool. Two things worth a n
 under the overcast light (the cast summary's "warm medium skin" again, see the sunflower render earlier tonight;
 the fix is the cast description text, not the composer), and the woman there is turned three-quarters away with
 the man far behind — a dynamic beat pulls the composition into motion. Both held the swap.
+
+## PROMOTED — 2026-09-18 18:02 UTC (Kevin: "promote it, flip nightly_couple_engine to experimental")
+
+`engine_config.nightly_couple_engine` = experimental. Couples now compose through `coupleComposerX` (default `narrative_fg`; `narrative_fg_beat` is opt-in via
+force_couple_variant until a full round proves it), album
+fragments on flux couples, no eye colour on the couple lock, flux first → gemini/flex roll. Rollback = the same row
+back to `production`, no deploy. First real-user run on it: 2026-09-19 08:00 UTC.
