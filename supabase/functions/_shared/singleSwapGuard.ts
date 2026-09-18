@@ -41,6 +41,9 @@ export interface SoloSwapGuardDeps {
    */
   rerender: (attempt: number) => Promise<{ url: string; predictionId: string | null }>;
   log?: (msg: string) => void;
+  /** Face-size read for the composition gate (tallest face as a fraction of frame height); defaults to the Fly
+   *  detector (flyFaceHFrac). Injectable for tests. null = unreadable → the gate fails open. */
+  faceHFrac?: (imageUrl: string) => Promise<number | null>;
 }
 
 export interface SoloSwapGuardResult {
@@ -162,6 +165,31 @@ async function flyProbe(
 }
 
 /**
+ * COMPOSITION GATE read (Kevin 2026-09-17 late: "i am so beyond sick of these closeup framings"): the tallest
+ * detected face as a fraction of frame height, from the Fly detector — the same YuNet the dual split uses, so a
+ * solo and a couple are judged by one ruler. null when the probe is off/unavailable (the gate fails open).
+ */
+export async function flyFaceHFrac(imageUrl: string): Promise<number | null> {
+  const flyUrl = Deno.env.get('DUAL_SWAP_FLY_URL');
+  const flyToken = Deno.env.get('DUAL_SWAP_FLY_TOKEN');
+  if (!flyUrl || !flyToken) return null;
+  try {
+    const res = await fetch(`${new URL(flyUrl).origin}/detect`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${flyToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageUrl }),
+      signal: AbortSignal.timeout(20_000),
+    });
+    if (!res.ok) return null;
+    const j = (await res.json()) as { faces?: { h: number }[]; height?: number };
+    if (!Array.isArray(j.faces) || !j.height || j.faces.length === 0) return null;
+    return Math.max(...j.faces.map((f) => f.h)) / j.height;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Stage 8d (2026-07-09): post-swap identity read for SOLO swaps — did the
  * swapped face actually carry the cast identity? Calls the Fly /verify
  * endpoint (ArcFace) with the cast source photo as the reference and returns
@@ -224,6 +252,10 @@ export async function ensureSoloSwapTarget(
     // the fallback still fires in its guaranteed window instead of settling to an
     // unswapped scene (Kevin 2026-08-28 "never fall back to pure scene").
     recoverBudgetMs?: number;
+    /** COMPOSITION GATE (engine_config.nightly_max_face_hfrac): a gender-safe render whose tallest face exceeds
+     *  this fraction of frame height is re-rendered like an unsafe one; if every attempt is too big the SMALLEST
+     *  ships (stamped), never a faceless scene. Unset = off (Create / onboarding). */
+    maxFaceHFrac?: number;
   } = {}
 ): Promise<SoloSwapGuardResult> {
   const log = deps.log ?? (() => {});
@@ -233,6 +265,13 @@ export async function ensureSoloSwapTarget(
   let target = renderUrl;
   let predictionId: string | null = null;
   let last: Verdict = { kind: 'hard', reason: 'solo_probe_not_run', faceCount: null };
+  // Composition gate bookkeeping: the smallest-faced otherwise-safe render, shipped at exhaustion.
+  let bestBig: {
+    url: string;
+    predictionId: string | null;
+    frac: number;
+    faceCount: number | null;
+  } | null = null;
 
   const haveBudget = (): boolean => {
     if (!opts.deadlineMs) return true;
@@ -280,6 +319,20 @@ export async function ensureSoloSwapTarget(
       return { url: target, safe: true, faceCount: null, predictionId, reasons };
     }
 
+    // COMPOSITION GATE: a safe (or soft-safe) render still has to fit the frame.
+    if ((last.kind === 'safe' || last.kind === 'soft') && typeof opts.maxFaceHFrac === 'number') {
+      const frac = await (deps.faceHFrac ?? flyFaceHFrac)(target);
+      if (frac !== null && frac > opts.maxFaceHFrac) {
+        reasons.push(`solo_face_too_big:${frac.toFixed(2)}>${opts.maxFaceHFrac}`);
+        if (!bestBig || frac < bestBig.frac)
+          bestBig = { url: target, predictionId, frac, faceCount: last.faceCount };
+        last = { kind: 'hard', reason: 'solo_face_too_big', faceCount: last.faceCount };
+        log(
+          `face too big (${frac.toFixed(2)} of frame)${attempt < maxRerenders ? ' — re-render' : ''}`
+        );
+        continue;
+      }
+    }
     if (last.kind === 'safe') {
       // 'solo_probe_ok' is the silent happy path; only log the odd-but-safe.
       if (last.reason !== 'solo_probe_ok') reasons.push(last.reason);
@@ -293,6 +346,17 @@ export async function ensureSoloSwapTarget(
     log(`solo probe unsafe (${last.reason})${attempt < maxRerenders ? ' — re-render' : ''}`);
   }
 
+  // Composition gate exhausted: every render was gender-safe but too big — ship the smallest, never nobody.
+  if (bestBig) {
+    reasons.push(`solo_face_gate:exhausted:best=${bestBig.frac.toFixed(2)}`);
+    return {
+      url: bestBig.url,
+      safe: true,
+      faceCount: bestBig.faceCount,
+      predictionId: bestBig.predictionId,
+      reasons,
+    };
+  }
   if (last.kind === 'soft') {
     reasons.push('solo_multiface_samegender_accepted');
     return { url: target, safe: true, faceCount: last.faceCount, predictionId, reasons };

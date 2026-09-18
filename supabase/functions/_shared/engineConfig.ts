@@ -70,6 +70,10 @@ export interface EngineConfig {
    *  of frame height swap on the Fly engine's full-frame per-face path instead of re-rendering. 0.40 = off
    *  (today's guard); Phase 0 measured 0.60 as the practical ceiling. Live-tunable, no deploy. */
   dualBigFaceMaxHFrac: number;
+  /** COMPOSITION GATE for nightly cast dreams (Kevin 2026-09-17 late): the tallest face may be at most this
+   *  fraction of frame height, for solos and couples alike; a bigger face re-renders down the chain (the smallest
+   *  ships at exhaustion). 0.35 catches the "detached heads" and close-up couples; 1.0 = off. Live-tunable. */
+  nightlyMaxFaceHFrac: number;
   /** Phase A (ACTION_POSE_EXPANSION_PLAN.md): % of plain-location dual dreams
    *  that try the biome-tagged ACTIVE pose pool. 0 = off (default). */
   dualActionPosePct: number;
@@ -187,6 +191,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   faceRestoreFidelity: 0.9,
   identityDegradeFloor: 0.25,
   dualBigFaceMaxHFrac: 0.4,
+  nightlyMaxFaceHFrac: 0.35,
   dualActionPosePct: 0,
   // COMMUNITY SCENARIO SHARE — goofy + elegant + active must total <= 20 (migration 519,
   // scripts/lib/scenarioShare.js SCENARIO_SHARE_CEILING_PCT). These three pools REPLACE the
@@ -298,6 +303,9 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     ),
     dualBigFaceMaxHFrac: Number(
       data.dual_big_face_max_hfrac ?? DEFAULT_ENGINE_CONFIG.dualBigFaceMaxHFrac
+    ),
+    nightlyMaxFaceHFrac: Number(
+      data.nightly_max_face_hfrac ?? DEFAULT_ENGINE_CONFIG.nightlyMaxFaceHFrac
     ),
     dualActionPosePct: Number(data.dual_action_pose_pct ?? DEFAULT_ENGINE_CONFIG.dualActionPosePct),
     dualSceneGoofyPct: Number(data.dual_scene_goofy_pct ?? DEFAULT_ENGINE_CONFIG.dualSceneGoofyPct),

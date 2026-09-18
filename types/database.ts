@@ -1687,6 +1687,7 @@ export type Database = {
           nightly_look_recency: number;
           nightly_looks_allowlist: string[];
           nightly_looks_mode: string;
+          nightly_max_face_hfrac: number;
           nightly_max_jobs: number;
           nightly_require_ai_enabled: boolean;
           nightly_require_onboarding: boolean;
@@ -1788,6 +1789,7 @@ export type Database = {
           nightly_look_recency?: number;
           nightly_looks_allowlist?: string[];
           nightly_looks_mode?: string;
+          nightly_max_face_hfrac?: number;
           nightly_max_jobs?: number;
           nightly_require_ai_enabled?: boolean;
           nightly_require_onboarding?: boolean;
@@ -1889,6 +1891,7 @@ export type Database = {
           nightly_look_recency?: number;
           nightly_looks_allowlist?: string[];
           nightly_looks_mode?: string;
+          nightly_max_face_hfrac?: number;
           nightly_max_jobs?: number;
           nightly_require_ai_enabled?: boolean;
           nightly_require_onboarding?: boolean;

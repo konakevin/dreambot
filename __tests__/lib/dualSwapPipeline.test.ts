@@ -927,3 +927,50 @@ describe('the chain with a couple re-render BEFORE the solo rung (soloFromAttemp
     expect(deps.rerender).not.toHaveBeenCalled();
   });
 });
+
+describe('composition gate on couples (maxFaceHFrac, Kevin 2026-09-17 late)', () => {
+  it('a held couple with a face taller than the limit is re-rendered; a smaller one ships', async () => {
+    const dispatchDual = jest
+      .fn()
+      .mockResolvedValueOnce({ swappedUrl: 'BIG.jpg', faceCount: 2, maxFaceHFrac: 0.52 })
+      .mockResolvedValueOnce({ swappedUrl: 'OK.jpg', faceCount: 2, maxFaceHFrac: 0.28 });
+    const deps = makeDeps({ dispatchDual });
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      maxRerenders: 2,
+      maxFaceHFrac: 0.35,
+    });
+    expect(r.outcome).toBe('dual');
+    expect(r.url).toBe('OK.jpg');
+    expect(deps.rerender).toHaveBeenCalledTimes(1);
+    expect(r.reasons).toContain('face_gate:couple:0.52>0.35');
+    expect(deps.singleSwap).not.toHaveBeenCalled();
+  });
+
+  it('every attempt too big → the SMALLEST couple ships, stamped exhausted, never a degrade for size', async () => {
+    const dispatchDual = jest
+      .fn()
+      .mockResolvedValueOnce({ swappedUrl: 'A.jpg', faceCount: 2, maxFaceHFrac: 0.6 })
+      .mockResolvedValueOnce({ swappedUrl: 'B.jpg', faceCount: 2, maxFaceHFrac: 0.41 });
+    const deps = makeDeps({ dispatchDual });
+    const r = await genderSafeDualSwap('render.jpg', deps, {
+      strict: false,
+      maxRerenders: 1,
+      maxFaceHFrac: 0.35,
+    });
+    expect(r.outcome).toBe('dual');
+    expect(r.url).toBe('B.jpg');
+    expect(r.reasons).toContain('face_gate:exhausted:best=0.41');
+    expect(deps.singleSwap).not.toHaveBeenCalled();
+  });
+
+  it('no limit set (Create / onboarding) → a big face ships as before', async () => {
+    const dispatchDual = jest
+      .fn()
+      .mockResolvedValue({ swappedUrl: 'BIG.jpg', faceCount: 2, maxFaceHFrac: 0.6 });
+    const deps = makeDeps({ dispatchDual });
+    const r = await genderSafeDualSwap('render.jpg', deps, { strict: false, maxRerenders: 2 });
+    expect(r.url).toBe('BIG.jpg');
+    expect(deps.rerender).not.toHaveBeenCalled();
+  });
+});

@@ -95,3 +95,29 @@ describe('big-face tier — the Fly engine contract', () => {
     expect(f).toContain('if (opts.bigFace) { // Bounded pastes');
   });
 });
+
+describe('composition gate — every nightly cast site passes engine_config.nightly_max_face_hfrac; Create does not', () => {
+  it('config defaults to 0.35 and reads nightly_max_face_hfrac', () => {
+    const src = read('supabase/functions/_shared/engineConfig.ts');
+    expect(src).toContain('nightlyMaxFaceHFrac: 0.35,');
+    expect(strip(src)).toContain(
+      'nightlyMaxFaceHFrac: Number( data.nightly_max_face_hfrac ?? DEFAULT_ENGINE_CONFIG.nightlyMaxFaceHFrac ),'
+    );
+    const m = read('supabase/migrations/525_nightly_max_face_hfrac.sql');
+    expect(m).toContain(
+      'ADD COLUMN IF NOT EXISTS nightly_max_face_hfrac numeric NOT NULL DEFAULT 0.35'
+    );
+  });
+  it('nightly: the couple pipeline call and all three solo guard sites carry the limit', () => {
+    const src = read('supabase/functions/nightly-dreams/index.ts');
+    const guards = (src.match(/ensureSoloSwapTarget\(/g) || []).length;
+    const wired = (
+      src.match(/maxFaceHFrac: \(await fetchEngineConfig\(supabase\)\)\.nightlyMaxFaceHFrac/g) || []
+    ).length;
+    expect(guards).toBe(3);
+    expect(wired).toBe(guards + 1); // + the genderSafeDualSwap call
+  });
+  it('Create passes no limit (its couples and solos keep their behaviour)', () => {
+    expect(read('supabase/functions/generate-dream/index.ts')).not.toContain('nightlyMaxFaceHFrac');
+  });
+});

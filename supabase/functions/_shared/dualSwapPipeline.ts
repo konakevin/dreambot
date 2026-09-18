@@ -204,6 +204,10 @@ export async function genderSafeDualSwap(
      *  delivered 96% of couples as couples; the immediate solo rung was converting them at the first-try
      *  failure rate. */
     soloFromAttempt?: number;
+    /** COMPOSITION GATE (engine_config.nightly_max_face_hfrac): a delivered couple whose tallest face exceeds this
+     *  fraction of frame height is re-rendered down the chain; at exhaustion the SMALLEST one ships (stamped).
+     *  Unset = off (Create / onboarding). */
+    maxFaceHFrac?: number;
   }
 ): Promise<DualSwapOutcome> {
   const log = deps.log ?? (() => {});
@@ -212,6 +216,8 @@ export async function genderSafeDualSwap(
   const recoverBudgetMs = opts.recoverBudgetMs ?? RECOVER_BUDGET_MS;
   const identityDegradeFloor = opts.identityDegradeFloor ?? IDENTITY_DEGRADE_FLOOR;
   const soloFromAttempt = opts.soloFromAttempt ?? 0;
+  // Composition gate bookkeeping: the smallest-faced delivered couple, shipped at exhaustion.
+  let bestBig: { url: string; faceCount: number; frac: number } | null = null;
   let target = renderUrl;
   let predictionId: string | null = null;
   let faceCount = 2;
@@ -397,6 +403,19 @@ export async function genderSafeDualSwap(
       // log nothing, which let an audit misread the live dynamic engine as
       // dormant. These reasons ride the caller's fallbackReasons into the log.
       reasons.push(`dual_engine:${res.engine ?? 'unknown'}`);
+      // COMPOSITION GATE (Kevin 2026-09-17 late): a swapped couple is still rejected when its tallest face is
+      // taller than the configured fraction of the frame — re-render down the chain like a split failure.
+      if (
+        typeof opts.maxFaceHFrac === 'number' &&
+        typeof res.maxFaceHFrac === 'number' &&
+        res.maxFaceHFrac > opts.maxFaceHFrac
+      ) {
+        reasons.push(`face_gate:couple:${res.maxFaceHFrac.toFixed(2)}>${opts.maxFaceHFrac}`);
+        if (!bestBig || res.maxFaceHFrac < bestBig.frac)
+          bestBig = { url: res.swappedUrl, faceCount, frac: res.maxFaceHFrac };
+        log(`face too big (${res.maxFaceHFrac.toFixed(2)} of frame) — re-render`);
+        continue;
+      }
       // Big-face tier (BIG_FACE_RECLAIM_PLAN.md): stamp the reclaimed couples so the rollout is measurable.
       if (res.bigFace)
         reasons.push(`big_face:${res.maxFaceHFrac == null ? '?' : res.maxFaceHFrac.toFixed(2)}`);
@@ -480,6 +499,18 @@ export async function genderSafeDualSwap(
       );
       if (onThisModel) return onThisModel;
     }
+  }
+
+  // Composition gate exhausted: every couple held but was too big — ship the smallest, never degrade for size.
+  if (bestBig && !best) {
+    reasons.push(`face_gate:exhausted:best=${bestBig.frac.toFixed(2)}`);
+    return {
+      url: bestBig.url,
+      outcome: 'dual',
+      faceCount: bestBig.faceCount,
+      predictionId,
+      reasons,
+    };
   }
 
   // ── Could not deliver an above-threshold dual ──

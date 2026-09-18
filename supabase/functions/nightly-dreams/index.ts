@@ -4504,6 +4504,7 @@ Output ONLY the prompt.`;
                 // dual phase above — it must fire, not settle to a scene.
                 deadlineMs: renderDeadlineMs,
                 recoverBudgetMs: SOLO_RECOVER_MS,
+                maxFaceHFrac: (await fetchEngineConfig(supabase)).nightlyMaxFaceHFrac,
               }
             );
             fallbackReasons.push(...guard.reasons.map((r) => `degrade_${r}`));
@@ -4673,6 +4674,8 @@ Output ONLY the prompt.`;
           maxRerenders: 2,
           soloBetweenAttempts: true,
           soloFromAttempt: 1,
+          // COMPOSITION GATE (engine_config.nightly_max_face_hfrac): no couple ships with a face taller than this.
+          maxFaceHFrac: (await fetchEngineConfig(supabase)).nightlyMaxFaceHFrac,
           deadlineMs: dualDeadlineMs,
           recoverBudgetMs: DUAL_RECOVER_MS,
           // Live-tunable wrong-person floor (engine_config, audit L3; cached fetch).
@@ -4768,7 +4771,11 @@ Output ONLY the prompt.`;
           },
           log: (m) => console.log(`[nightly-dreams] ${m}`),
         },
-        { deadlineMs: t0 + 140_000, mediumKey: resolvedMediumKey }
+        {
+          deadlineMs: t0 + 140_000,
+          mediumKey: resolvedMediumKey,
+          maxFaceHFrac: (await fetchEngineConfig(supabase)).nightlyMaxFaceHFrac,
+        }
       );
       fallbackReasons.push(...soloGuard.reasons);
       logAxes.soloFaceCount = soloGuard.faceCount;
@@ -4932,7 +4939,12 @@ Output ONLY the prompt.`;
               rerender: async () => ({ url: rr.url, predictionId: rr.predictionId }),
               log: (m) => console.log(`[nightly-dreams] ${m}`),
             },
-            { maxRerenders: 0, deadlineMs: t0 + 140_000, mediumKey: resolvedMediumKey }
+            {
+              maxRerenders: 0,
+              deadlineMs: t0 + 140_000,
+              mediumKey: resolvedMediumKey,
+              maxFaceHFrac: (await fetchEngineConfig(supabase)).nightlyMaxFaceHFrac,
+            }
           );
           if (!guard2.safe) {
             fallbackReasons.push(`solo_floor_rerender_unsafe:${rung}`);

@@ -254,6 +254,19 @@ model, `couple_retry:1:same_model`) → flux single → gemini couple → gemini
 `maxRerenders: 2, soloFromAttempt: 1`, and the re-render walks `forAttempt(attempt)` from attempt 2. Measured on
 the next true 20-night run (round `chain6`).
 
+## 5d. Composition gate (2026-09-17, late — Kevin: "i am so beyond sick of these closeup framings")
+
+Three renders from the chain6 run: a couple with two detached heads (first render 0.67 of frame, re-render 0.43 —
+SHIPPED by the big-face tier at 0.50), a close-up couple at 0.37 (below every guard), and a floating head in a melt
+pool (the scene seed said "chest-deep"). Every prompt carried "from mid-thigh up" / "knees up" ~20-35% in; flux
+ignores it. Kevin chose options 2+3+4: (2) tier back to 0.40 = off; (3) a COMPOSITION GATE, `engine_config.
+nightly_max_face_hfrac` (mig 525, default 0.35): solos — after the gender verdict, the Fly detector's tallest face
+fraction (`flyFaceHFrac`); too big = a hard verdict → the guard's ladder re-renders; couples — the engine's
+`maxFaceHFrac` after a held swap → re-render down the chain. At exhaustion the SMALLEST ships (stamps
+`face_gate:*` / `solo_face_gate:*`), never a faceless scene; a failed probe fails open. Nightly only. (4) seed
+hygiene: 229 + 224 enabled scenario seeds mention water/submersion (~120 genuinely put the body in water above the
+waist); rewording awaits Kevin's approval.
+
 ## 6. State deployed tonight (Kevin: leave it for users)
 
 Commits `31cfa893`, `081ef539`, `621a5847`, `f75651ac`, `a7b1a3c2`, `9654f0f8` — all deployed to

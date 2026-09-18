@@ -149,3 +149,46 @@ describe('ensureSoloSwapTarget — fail-closed / benefit-of-the-doubt boundaries
     expect(r.reasons).toContain('solo_recover_budget_exhausted');
   });
 });
+
+describe('ensureSoloSwapTarget — composition gate (maxFaceHFrac)', () => {
+  it('a safe render whose face is too tall is re-rendered; the next, smaller one is accepted', async () => {
+    mockClassify.mockResolvedValue(read('female', null, 1));
+    const faceHFrac = jest.fn().mockResolvedValueOnce(0.5).mockResolvedValueOnce(0.22);
+    const deps = { ...makeDeps('female'), faceHFrac };
+    const r = await ensureSoloSwapTarget('render', deps, { maxFaceHFrac: 0.35 });
+    expect(r.safe).toBe(true);
+    expect(r.url).toBe('rerendered');
+    expect(deps.rerender).toHaveBeenCalledTimes(1);
+    expect(r.reasons).toContain('solo_face_too_big:0.50>0.35');
+  });
+
+  it('every attempt too tall → ships the SMALLEST as safe, stamped exhausted (never faceless)', async () => {
+    mockClassify.mockResolvedValue(read('male', null, 1));
+    const faceHFrac = jest
+      .fn()
+      .mockResolvedValueOnce(0.6)
+      .mockResolvedValueOnce(0.45)
+      .mockResolvedValueOnce(0.5);
+    const deps = { ...makeDeps('male') };
+    const r = await ensureSoloSwapTarget(
+      'render',
+      { ...deps, faceHFrac },
+      { maxFaceHFrac: 0.35, maxRerenders: 2 }
+    );
+    expect(r.safe).toBe(true);
+    expect(r.url).toBe('rerendered');
+    expect(r.reasons).toContain('solo_face_gate:exhausted:best=0.45');
+  });
+
+  it('an unreadable face-size probe fails OPEN (safe, no re-render), and no limit means no probe at all', async () => {
+    mockClassify.mockResolvedValue(read('female', null, 1));
+    const faceHFrac = jest.fn().mockResolvedValue(null);
+    const deps = { ...makeDeps('female'), faceHFrac };
+    const r = await ensureSoloSwapTarget('render', deps, { maxFaceHFrac: 0.35 });
+    expect(r.safe).toBe(true);
+    expect(deps.rerender).not.toHaveBeenCalled();
+    const off = await ensureSoloSwapTarget('render', deps, {});
+    expect(off.safe).toBe(true);
+    expect(faceHFrac).toHaveBeenCalledTimes(1);
+  });
+});
