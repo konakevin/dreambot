@@ -113,11 +113,9 @@ export function composeExperimentalCouple(args: {
   if (variant === 'narrative_fg_beat') {
     const scenarioLike =
       /^(a couple|couple|two people|two|they|the couple|the two|person|the pair)\b/i.test(place);
-    const beatSentence = scenarioLike
-      ? place
-          .replace(/^(a couple|couple|the couple|the two|two people|two|the pair)\b\s*/i, 'They ')
-          .replace(/^They\s+(\w+?)s\b/, (_m, v) => `They ${v}`)
-      : '';
+    // Verbatim: the scenario text is a caption-like sentence ("Couple balancing on wooden boards…", "Two travelers
+    // stride…"); rewriting the subject to "They" mangled half of them in R12. Flux reads the caption fine.
+    const beatSentence = scenarioLike ? place : '';
     const beatText = [beatSentence, beat]
       .filter(Boolean)
       .map((b) => `${b.charAt(0).toUpperCase()}${b.slice(1)}.`)

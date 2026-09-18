@@ -112,3 +112,10 @@ Follow-ups Kevin asked for:
 2. `narrative_fg_beat`: an ACTIVE-scenario seed ("Couple rides twin red foxes through an autumn forest") is the couple's
    own sentence right after their names, before "Behind and around them"; only the scene description stays behind
    them. R12 = 10 flux couples with the active pool forced, to measure the beat surviving.
+| R12 | `narrative_fg_beat`, active scenarios forced (every render carries a strong beat) | **8/10 (80%)** | 8 8 9 11 11 13 15 17 (median 11%) | one Fly error (degraded), identity 1 | Hold rate unchanged by the beat placement. The "They …" subject rewrite mangled half the scenario sentences ("They balancing…", "They sun-kissed travelers stride…"); fixed to the verbatim caption sentence. Beat survival judged by eye below. |
+
+R12 by eye: the beats survived — #3 the dog-sled team on a frosted Yukon trail, #6 the Norse mead hall in firelight
+and chainmail, #2 balancing on boards in the infinity pool. Two things worth a note: #3 rendered Kevin dark-skinned
+under the overcast light (the cast summary's "warm medium skin" again, see the sunflower render earlier tonight;
+the fix is the cast description text, not the composer), and the woman there is turned three-quarters away with
+the man far behind — a dynamic beat pulls the composition into motion. Both held the swap.

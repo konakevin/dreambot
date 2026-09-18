@@ -107,8 +107,10 @@ describe('composeExperimentalCouple', () => {
       input: scenarioInput as any,
       variant: 'narrative_fg_beat',
     });
-    expect(p).toContain('They ride twin red foxes through an autumn forest.');
-    expect(p.indexOf('They ride twin red foxes')).toBeLessThan(p.indexOf('Behind and around them'));
+    expect(p).toContain('Couple rides twin red foxes through an autumn forest.');
+    expect(p.indexOf('Couple rides twin red foxes')).toBeLessThan(
+      p.indexOf('Behind and around them')
+    );
     expect(p).not.toMatch(/Behind and around them, Couple rides/);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const q = composeExperimentalCouple({
