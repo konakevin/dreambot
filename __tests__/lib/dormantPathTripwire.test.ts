@@ -39,7 +39,8 @@ const countIdent = (src: string, ident: string): number =>
 
 describe('the dormant path does not grow without someone noticing', () => {
   it('the number of `looksPath` references is pinned', () => {
-    expect(countIdent(SRC, 'looksPath')).toBe(33);
+    // 33 → 32 on 2026-09-17: the below-floor solo re-render was un-gated (looksMinimalInertFixGuard #4).
+    expect(countIdent(SRC, 'looksPath')).toBe(32);
   });
 
   it('the number of `activeStyle` references is pinned', () => {

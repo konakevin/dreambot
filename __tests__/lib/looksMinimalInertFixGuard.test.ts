@@ -17,6 +17,8 @@
  *   1. the vibe fragment          reached 0 of 50 nightlies          (found 2026-09-16)
  *   2. lookNeutralFraming         look ignored 78% of the time       (found 2026-09-16)
  *   3. the flux couple order      22/22 duals on the wrong order     (found 2026-09-17)
+ *   4. the below-floor solo       a statue got Kevin's face, identity -0.03, shipped as a pure scene
+ *      re-render                  instead of re-rendering            (found 2026-09-17, bf50 #2)
  *
  * #3 is the one this file was written for. `looksCouplePromptStyle` gives FLUX couples the album's LEGACY
  * order — it was shipped 2026-09-13 in answer to "a lot of these flux couple renders are really close up and
@@ -124,5 +126,31 @@ describe('the SOLO distance line rides the anchor on the live path', () => {
     const line = NIGHTLY_SRC.match(/\.\.\.\(([^)]*?)\? \{ framingInAnchor: true \}/);
     expect(line).toBeTruthy();
     expect(strip(line![1])).toContain('selectedCast.length === 1');
+  });
+});
+
+describe('a below-floor solo re-renders down the frozen chain before it can become a pure scene', () => {
+  const N = strip(NIGHTLY_SRC);
+  it('the rescue is NOT gated on looksPath (it was, for parity round 10 — and reached nothing)', () => {
+    expect(N).toContain(
+      'if ( swapUnusable && !strict_face_swap && faceSwapSource && !(faceSwapSources && faceSwapSources.length === 2) ) {'
+    );
+    expect(N).not.toContain('swapUnusable && looksPath &&');
+  });
+  it('rung 1 re-renders on the rolled model, rung 2 moves to the next model in the contract chain', () => {
+    expect(N).toContain('for (let rung = 1; rung <= 2 && swapUnusable; rung++) {');
+    expect(N).toContain('const pick = styleContract ? styleContract.forAttempt(2) : null;');
+    expect(N).toContain('fallbackReasons.push(`solo_floor_rerender:${rung}:${model.replace(');
+    expect(N).toContain('fallbackReasons.push(`solo_model_move:${model.replace(');
+  });
+  it('every rung goes through the gender-safe guard, the swap and the identity read (0.35), never a bare paste', () => {
+    const block = N.slice(
+      N.indexOf('for (let rung = 1; rung <= 2 && swapUnusable; rung++) {'),
+      N.indexOf('if (swapUnusable && !strict_face_swap && sceneFallbackPrompt) {')
+    );
+    expect(block.length).toBeGreaterThan(500);
+    expect(block).toContain('ensureSoloSwapTarget(');
+    expect(block).toContain('verifySoloIdentity(swapped, faceSwapSource)');
+    expect(block).toContain('if (v && v.sim >= 0.35) {');
   });
 });

@@ -4870,45 +4870,65 @@ Output ONLY the prompt.`;
     // render full of random people posing as the user, re-render the SAME place +
     // medium as a beautiful EMPTY scene. Live kill-switch: pure_scene_on_swap_fail.
     // strict (onboarding first-dream) already hard-fails to its own cascade above.
-    // Parity loop round 10 (looks path): a solo whose swap scored below the identity floor gets ONE fresh
-    // re-render through the same gender-safe guard + swap before the pure-scene fallback — a cast dream should
-    // never ship faceless (round 9 #6 shipped a landscape triptych after identity 0).
+    // THE "FLUX SINGLE AGAIN → GEMINI SINGLE" RUNGS FOR A BELOW-FLOOR SOLO (Kevin's frozen chain, 2026-09-17):
+    //     flux single → flux single again → gemini single → nobody
+    // A solo whose swap scored below the identity floor gets a FRESH render — a re-swap on the same render
+    // cannot help when flux drew the person as a statue (bf50 #2: a tower with carved stone heads, identity
+    // -0.03) — first on the rolled model, then on the next model in the style contract's chain, each through
+    // the gender-safe guard + swap + identity read, before the pure-scene fallback. This block existed since
+    // parity round 10 but was gated on the looks-path flag, which is always false under LOOKS_MINIMAL: the seventh fix
+    // found dead in that graveyard (__tests__/lib/looksMinimalInertFixGuard.test.ts locks the un-gating).
     if (
       swapUnusable &&
-      looksPath &&
       !strict_face_swap &&
       faceSwapSource &&
-      !(faceSwapSources && faceSwapSources.length === 2) &&
-      Date.now() - t0 < 80_000
+      !(faceSwapSources && faceSwapSources.length === 2)
     ) {
-      try {
-        fallbackReasons.push('solo_floor_rerender');
-        const soloNoun =
-          faceSwapGender === 'female' ? 'woman' : faceSwapGender === 'male' ? 'man' : 'person';
-        const rr = await generateImage(
-          'flux-dev',
-          `exactly one person, a solo portrait of a single ${soloNoun} alone, ${finalPrompt}`,
-          undefined,
-          {
-            replicateToken: REPLICATE_TOKEN,
-            openaiKey: Deno.env.get('OPENAI_API_KEY'),
-            geminiKey: Deno.env.get('GEMINI_API_KEY'),
-            xaiKey: Deno.env.get('XAI_API_KEY'),
-          },
-          pickedModel,
-          'png'
-        );
-        const guard2 = await ensureSoloSwapTarget(
-          rr.url,
-          {
-            castGender: faceSwapGender,
-            replicateToken: REPLICATE_TOKEN,
-            rerender: async () => ({ url: rr.url, predictionId: rr.predictionId }),
-            log: (m) => console.log(`[nightly-dreams] ${m}`),
-          },
-          { maxRerenders: 0, deadlineMs: t0 + 140_000, mediumKey: resolvedMediumKey }
-        );
-        if (guard2.safe) {
+      const soloNoun =
+        faceSwapGender === 'female' ? 'woman' : faceSwapGender === 'male' ? 'man' : 'person';
+      for (let rung = 1; rung <= 2 && swapUnusable; rung++) {
+        if (Date.now() - t0 > (rung === 1 ? 80_000 : 100_000)) {
+          fallbackReasons.push(`solo_floor_rerender_skipped_deadline:${rung}`);
+          break;
+        }
+        let model = pickedModel;
+        if (rung === 2) {
+          const pick = styleContract ? styleContract.forAttempt(2) : null;
+          if (!pick || !pick.model || pick.model === pickedModel) {
+            fallbackReasons.push('solo_floor_rerender_no_next_model');
+            break;
+          }
+          model = pick.model;
+        }
+        try {
+          fallbackReasons.push(`solo_floor_rerender:${rung}:${model.replace(/^.*\//, '')}`);
+          const rr = await generateImage(
+            'flux-dev',
+            `exactly one person, a solo portrait of a single ${soloNoun} alone, ${finalPrompt}`,
+            undefined,
+            {
+              replicateToken: REPLICATE_TOKEN,
+              openaiKey: Deno.env.get('OPENAI_API_KEY'),
+              geminiKey: Deno.env.get('GEMINI_API_KEY'),
+              xaiKey: Deno.env.get('XAI_API_KEY'),
+            },
+            model,
+            'png'
+          );
+          const guard2 = await ensureSoloSwapTarget(
+            rr.url,
+            {
+              castGender: faceSwapGender,
+              replicateToken: REPLICATE_TOKEN,
+              rerender: async () => ({ url: rr.url, predictionId: rr.predictionId }),
+              log: (m) => console.log(`[nightly-dreams] ${m}`),
+            },
+            { maxRerenders: 0, deadlineMs: t0 + 140_000, mediumKey: resolvedMediumKey }
+          );
+          if (!guard2.safe) {
+            fallbackReasons.push(`solo_floor_rerender_unsafe:${rung}`);
+            continue;
+          }
           const swapped = await faceSwap(
             faceSwapSource,
             guard2.url,
@@ -4925,13 +4945,19 @@ Output ONLY the prompt.`;
             replicatePredictionId = rr.predictionId;
             observability.replicateRawUrl = rr.url;
             observability.replicatePredictionId = rr.predictionId;
+            if (model !== pickedModel) {
+              modelUsedOverride = model;
+              fallbackReasons.push(`solo_model_move:${model.replace(/^.*\//, '')}`);
+            }
             swapUnusable = false;
             logAxes.faceSwapResult = 'single-fallback-success';
-            fallbackReasons.push(`solo_floor_rerender_ok:${v.sim}`);
-          } else fallbackReasons.push(`solo_floor_rerender_low:${v ? v.sim : 'null'}`);
-        } else fallbackReasons.push('solo_floor_rerender_unsafe');
-      } catch (e) {
-        fallbackReasons.push(`solo_floor_rerender_failed:${(e as Error).message.slice(0, 60)}`);
+            fallbackReasons.push(`solo_floor_rerender_ok:${rung}:${v.sim}`);
+          } else fallbackReasons.push(`solo_floor_rerender_low:${rung}:${v ? v.sim : 'null'}`);
+        } catch (e) {
+          fallbackReasons.push(
+            `solo_floor_rerender_failed:${rung}:${(e as Error).message.slice(0, 60)}`
+          );
+        }
       }
     }
 

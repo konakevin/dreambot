@@ -231,6 +231,17 @@ request by all four dispatch sites. Batch `BF` (20 couples): tier reclaimed 4, a
 chain is unchanged otherwise. Stamps `big_face:` / `giant_face_hfrac:`. Guards: `bigFaceWiring.test.ts`,
 `dualBigFaceMaxHFrac.dbspec.ts`, 5 engine tests in `faceDetect.test.ts`.
 
+**Replacement point 10 — a below-floor SOLO went straight to a pure scene (found 2026-09-17 night, `bf50 #2`).**
+Flux drew the person as carved stone heads on a tower; the swap pasted Kevin onto the stonework; identity −0.03;
+the one permitted rescue (a re-SWAP on the same render) cannot help a base render with no face; the 0.15 floor
+then re-rendered the scene with people cleared. The frozen single chain says flux → flux again → gemini → nobody,
+so two rungs were skipped. Root cause: the fresh-render rescue (`solo_floor_rerender`, parity round 10) was gated
+on the looks-path flag — the SEVENTH fix found dead under LOOKS_MINIMAL. Fix: un-gated, and it now walks the
+chain (rung 1 the rolled model, rung 2 `styleContract.forAttempt(2)`, each through the gender guard + swap +
+identity ≥ 0.35) before pure scene; stamps `solo_floor_rerender:<rung>:<model>` / `_ok` / `_low` / `_unsafe`.
+Rate on real users' last 30 days: 1 of 208 solos (0.5%). Guarded by `looksMinimalInertFixGuard.test.ts` #4 and the
+dormant-path pin (33 → 32).
+
 ## 6. State deployed tonight (Kevin: leave it for users)
 
 Commits `31cfa893`, `081ef539`, `621a5847`, `f75651ac`, `a7b1a3c2`, `9654f0f8` — all deployed to
