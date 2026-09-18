@@ -189,3 +189,75 @@ been" (Kevin, 19:00). Every line below was measured, not reasoned. Read this bef
     (`looks_minimal:on`). Check the engine stamp (`couple_engine:…`) before believing any batch.
 12. **One variable per round.** The 09-13 lesson repeated on 09-17: tier + gate + same-model rung in one night made it
     worse. A switch (production untouched, experimental opt-in) is what made the lab possible.
+
+### Per-look probe, FULL couple catalogue (P-*, P2-*, P3-*, 2026-09-18 19:22-20:00 UTC) — Kevin: "come up with a final list of approved looks based on that probe"
+
+Every look in the couple pool (20 approved on at least one model) plus the two legacy album looks that were never
+approved for couples (watercolor_ink, ink_illustration), five forced flux-1.1-pro couples each with the look's OWN
+catalogue fragment (`--library=false --look=<key>`, stamped `look_override_library:exempt:force_look`) on the live
+`narrative_fg` composer. Rule fixed before the results: approve at 4-5 of 5 first-try holds; 3 of 5 gets five more and
+needs 7 of 10; 2 or fewer retires the look from flux couples. 120 renders, 3 concurrent, headroom-gated.
+
+| look | first-try | re-render → couple | solo | verdict |
+|---|---|---|---|---|
+| adult_cartoon, airbrush_poster, aquarelle_graphite, canvas, chromolithograph, hand_drawn_illustration, ink_illustration, ink_wash_comic, marker, painted_comic_cover, painted_graphic_novel, rotoscope, soft_brush_illustration, watercolor_ink, watercolor_paper | 5/5 each | 0 | 0 | APPROVE (15) |
+| digital_painting | 4/5 | 1 | 0 | APPROVE |
+| painted_fantasy | 4/5 | 1 | 0 | APPROVE |
+| pulp_cover | 4/5 | 1 | 0 | APPROVE |
+| soft_comic | 4/5 | 0 | 1 | APPROVE |
+| lineless_watercolor | 7/10 | 2 | 1 | APPROVE (at the bar; all three misses = the woman's face dissolving in the wash) |
+| colored_pencil | 5/10 | 2 | 3 | RETIRE from flux couples (identity misses both sides + one giant face; #4 a cartoon head) |
+| classical_oil | 2/5 | 0 | 3 | RETIRE from flux couples (three big-face solos 28-47%) |
+
+Totals: 120 renders, first-try 105 (88%), delivered couples 112 (93%). Over the 20 approved looks: first-try 98/105
+(93%), delivered couples 103/105 (98%) — better than the four album fragments' 37/40 (92.5%) in R11/R12. The old
+approval matrix (graded 09-12/13 on the pre-narrative prompt) was stale in BOTH directions: rotoscope (rejected on
+flux AND gemini, effectively dead) held 5/5; ink_illustration ("both couples collapsed to faceless scenes") 5/5;
+watercolor_ink 5/5; while classical_oil (approved) fails. The composer, not the fragment, was what those grades measured.
+
+Visual pass (montage of all 120): three-quarter framing, the place visible, faces 9-25% nearly everywhere; tightest
+held frames were airbrush_poster #1 and chromolithograph #1 at 33% (under the 0.35 gate). Honest looks read MORE varied
+than the four album fragments (watercolor paper, marker, rotoscope, pulp all distinct) and the dream's medium label
+would finally match the picture.
+
+**Proposed (NOT applied — production frozen):** (1) `nightly_look_approvals` flux-1.1-pro × couple: approved=true for
+the 20 (revives rotoscope, adds watercolor_ink + ink_illustration to the couple pool), approved=false for classical_oil
++ colored_pencil (a rejected flux drops flux from that look's model pool → those two render couples on gemini, where
+both are approved). (2) An `engine_config.nightly_flux_couple_honest_looks` boolean (default false = today's album
+fragments) read at `lookFragmentOverrideFor`'s `fluxCouple` exemption (nightly-dreams/index.ts ~1644) and the
+`LOOKS_FLUX_COUPLE_OVERRIDE_LIBRARY` site (~3295), so the flip is one DB row and reversible without a deploy.
+
+### BUILT + LIVE 2026-09-18 ~20:20 UTC — honest looks for flux couples (Kevin: "go ahead, write the approvals and build the switch")
+
+- **Migration 528** `nightly_look_approvals` flux-1.1-pro × couple: the 20 probe-approved looks `approved = true`
+  (revives rotoscope; watercolor_ink + ink_illustration join the couple pool), classical_oil + colored_pencil
+  `approved = false` (flux leaves their model pool → they render couples on gemini-2-image). Rollback state in the file.
+- **Migration 529** `engine_config.nightly_flux_couple_honest_looks` boolean (default false = album fragments).
+  Read at both library sites in `nightly-dreams/index.ts` (`lookFragmentOverrideFor` → stamp
+  `look_override_library:off:honest_looks`; the `LOOKS_FLUX_COUPLE_OVERRIDE_LIBRARY` branch). QA per request:
+  `force_honest_looks` (`lab-couple-round.js --honest=true|false`); `--model=roll` leaves the model to the engine.
+- **Flipped to `true`** after the deploy. **Rollback = `UPDATE engine_config SET nightly_flux_couple_honest_looks =
+  false`** (album fragments return, no deploy); the approvals stay either way.
+- What organic flux couples now do: roll a look from the 20 (family-first, recency 7) → flux at policy weight 100 →
+  the look's own fragment in the `narrative_fg` paragraph → the dream's medium label matches the picture. Solos,
+  gemini couples and scenes were already honest. The re-render rung still moves to the look chain's next model
+  (gemini), unlike the forced-flux probe.
+- **Verified after the flip (V1, 20:08-20:12 UTC):** 10 forced couples with the engine rolling look AND model
+  (`--model=roll --library=false`, no forced look): 10/10 held first try, faces median 14% (11-21%); every row stamped
+  `look_override_library:off:honest_looks`, `model_roll:weighted:100/0` → flux-1.1-pro, and `uploads.dream_medium` ==
+  the rolled look (watercolor_paper, ink_wash_comic, hand_drawn_illustration, watercolor_ink ×2, painted_comic_cover,
+  ink_illustration, pulp_cover, rotoscope [`weighted:100 look:1` — flux is its only model], painted_fantasy).
+
+### First re-render = the policy's fallback roll (2026-09-18 ~20:40 UTC) — Kevin: "make it roll between flux 2 flex and gemini for the first-try miss fallback … same roll for singles too, go … i trust flex … just enable flex for whatever gemini is enabled for"
+
+- `nightlyStyle.ts forAttempt`: on the looks path, attempt 2 (the one re-render, `maxRerenders: 1`) now draws from
+  `nightly_model_policy.<surface>.fallback_models` / `fallback_weights` — configured [flux-2-flex, gemini-2-image]
+  50/50 on BOTH the couple and solo rows — instead of walking the graded chain (which sent 19 of 20 looks to gemini).
+  The failed model never repeats (not in the row); bans still apply; an empty row (scene) keeps the chain walk.
+  Stamp: `policy:<surface>:2:<model>:fallback_roll`. The rolled look is kept (`lockLook`), with its honest fragment.
+- **Migration 530**: flux-2-flex mirrors every gemini-2-image approval (couple + solo, source 'override').
+- The chain now, in Kevin's form: **couple = flux couple → [flex | gemini 50/50] couple → flux single (rebuild) →
+  scene; single = flux single → [flex | gemini 50/50] single → scene.** Tune the split in the policy row's
+  `fallback_weights` (100/0 = gemini only = the previous behaviour), no deploy.
+- Not render-tested by Kevin's call ("we don't need to test it, i trust flex"); locked by
+  `__tests__/lib/nightlyStyle.test.ts` "first re-render = the policy fallback roll".

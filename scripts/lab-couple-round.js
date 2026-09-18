@@ -21,9 +21,11 @@ const MODEL = arg('model', 'black-forest-labs/flux-1.1-pro');
 const ENGINE = arg('engine', 'experimental');
 const BIG = arg('big', null);
 const ACTIVE = arg('active', 'false') === 'true';
+const LOOK = arg('look', null);
 const GATE = arg('gate', null);
 const EYES = arg('eyes', 'false');
 const LIB = arg('library', 'true');
+const HONEST = arg('honest', null); // true | false | null = engine_config.nightly_flux_couple_honest_looks (mig 529)
 const STYLE = arg('style', 'legacy');
 const env = Object.fromEntries(
   fs
@@ -52,7 +54,8 @@ async function one(n) {
     user_id: KEVIN,
     persist: true,
     force_cast_role: 'dual',
-    force_model: MODEL,
+    // --model=roll leaves the model to the engine (look-first pool + policy), the production roll.
+    ...(MODEL === 'roll' ? {} : { force_model: MODEL }),
     force_prompt_style: STYLE,
     force_eye_lock: EYES !== 'true' ? false : true,
     force_override_library: LIB === 'true',
@@ -60,6 +63,8 @@ async function one(n) {
     force_couple_variant: VARIANT,
   };
   if (ACTIVE) body.force_active = true;
+  if (LOOK) body.force_look = LOOK;
+  if (HONEST === 'true' || HONEST === 'false') body.force_honest_looks = HONEST === 'true';
   if (BIG) body.qa_big_face_max_hfrac = Number(BIG);
   if (GATE) body.qa_max_face_hfrac = Number(GATE);
   const t0 = Date.now();

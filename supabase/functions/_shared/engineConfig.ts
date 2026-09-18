@@ -78,6 +78,9 @@ export interface EngineConfig {
   nightlyCoupleEyeLock: boolean;
   /** engine_config.nightly_couple_engine — 'production' | 'experimental' (mig 527, FLUX COUPLE LAB). */
   nightlyCoupleEngine: 'production' | 'experimental';
+  /** engine_config.nightly_flux_couple_honest_looks — flux-1.1-pro couples render their rolled look's OWN fragment
+   *  (true) instead of the four 1.2.0 album fragments (false, mig 529 default = the 2026-09-18 promotion state). */
+  nightlyFluxCoupleHonestLooks: boolean;
   /** Phase A (ACTION_POSE_EXPANSION_PLAN.md): % of plain-location dual dreams
    *  that try the biome-tagged ACTIVE pose pool. 0 = off (default). */
   dualActionPosePct: number;
@@ -198,6 +201,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   nightlyMaxFaceHFrac: 0.35,
   nightlyCoupleEyeLock: false,
   nightlyCoupleEngine: 'production',
+  nightlyFluxCoupleHonestLooks: false,
   dualActionPosePct: 0,
   // COMMUNITY SCENARIO SHARE — goofy + elegant + active must total <= 20 (migration 519,
   // scripts/lib/scenarioShare.js SCENARIO_SHARE_CEILING_PCT). These three pools REPLACE the
@@ -319,6 +323,10 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
         : DEFAULT_ENGINE_CONFIG.nightlyCoupleEyeLock,
     nightlyCoupleEngine:
       data.nightly_couple_engine === 'experimental' ? 'experimental' : 'production',
+    nightlyFluxCoupleHonestLooks:
+      typeof data.nightly_flux_couple_honest_looks === 'boolean'
+        ? data.nightly_flux_couple_honest_looks
+        : DEFAULT_ENGINE_CONFIG.nightlyFluxCoupleHonestLooks,
     dualActionPosePct: Number(data.dual_action_pose_pct ?? DEFAULT_ENGINE_CONFIG.dualActionPosePct),
     dualSceneGoofyPct: Number(data.dual_scene_goofy_pct ?? DEFAULT_ENGINE_CONFIG.dualSceneGoofyPct),
     dualSceneElegantPct: Number(

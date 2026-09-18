@@ -432,6 +432,7 @@ Deno.serve(async (req) => {
     force_override_library,
     force_couple_engine,
     force_couple_variant,
+    force_honest_looks,
     qa_big_face_max_hfrac,
     qa_max_face_hfrac,
     force_costume_keys,
@@ -1642,6 +1643,16 @@ Deno.serve(async (req) => {
       // (9-22%, none giant) — the public-album numbers. Solos and every other model stay exempt (their looks
       // render honestly); a flux couple's rendered fragment is stamped below, so the log never lies about it.
       const fluxCouple = isDualFaceSwap && model === 'black-forest-labs/flux-1.1-pro';
+      // HONEST LOOKS (Kevin 2026-09-18, mig 529): the per-look probe (FLUX_COUPLE_LAB.md, 120 renders) showed the
+      // catalogue's own fragments hold flux couples as well as the album fragments under the narrative composer
+      // (20 approved looks: 93% first try, 98% delivered as a couple, mig 528), so the album substitution became a
+      // switch. true = the flux couple renders its rolled look honestly like every other surface; false = the four
+      // 1.2.0 fragments (the promotion state). Stamped, so a batch can prove which one it got.
+      const honestLooks = force_honest_looks ?? engineCfg0.nightlyFluxCoupleHonestLooks;
+      if (looksMinimal && minimalModel && !force_override_library && fluxCouple && honestLooks) {
+        fallbackReasons.push('look_override_library:off:honest_looks');
+        return null;
+      }
       if (looksMinimal && minimalModel && !force_override_library && !fluxCouple) {
         fallbackReasons.push('look_override_library:off:looks_engine');
         return null;
@@ -3294,6 +3305,7 @@ Deno.serve(async (req) => {
           looksFields &&
           looksFields.coupleSceneAfterAction &&
           LOOKS_FLUX_COUPLE_OVERRIDE_LIBRARY &&
+          !(force_honest_looks ?? engineCfg0.nightlyFluxCoupleHonestLooks) &&
           looksModel
         ) {
           const ov = pickFaceSwapModelOverride(looksModel, resolvedVibeKey ?? null);

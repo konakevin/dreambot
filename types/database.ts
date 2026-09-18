@@ -1685,6 +1685,7 @@ export type Database = {
           nightly_couple_engine: string;
           nightly_couple_eye_lock: boolean;
           nightly_enabled: boolean;
+          nightly_flux_couple_honest_looks: boolean;
           nightly_legacy_look_pct: number;
           nightly_look_recency: number;
           nightly_looks_allowlist: string[];
@@ -1789,6 +1790,7 @@ export type Database = {
           nightly_couple_engine?: string;
           nightly_couple_eye_lock?: boolean;
           nightly_enabled?: boolean;
+          nightly_flux_couple_honest_looks?: boolean;
           nightly_legacy_look_pct?: number;
           nightly_look_recency?: number;
           nightly_looks_allowlist?: string[];
@@ -1893,6 +1895,7 @@ export type Database = {
           nightly_couple_engine?: string;
           nightly_couple_eye_lock?: boolean;
           nightly_enabled?: boolean;
+          nightly_flux_couple_honest_looks?: boolean;
           nightly_legacy_look_pct?: number;
           nightly_look_recency?: number;
           nightly_looks_allowlist?: string[];

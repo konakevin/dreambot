@@ -108,6 +108,9 @@ export interface NightlyQaFlags {
   force_couple_engine: 'production' | 'experimental' | null;
   /** FLUX COUPLE LAB: the experimental composer's variant (narrative | narrative_asym | narrative_faces | json). */
   force_couple_variant: string | null;
+  /** HONEST LOOKS (mig 529): true renders a flux couple's rolled look with its own fragment, false forces the album
+   *  fragments; null = engine_config.nightly_flux_couple_honest_looks. */
+  force_honest_looks: boolean | null;
   /** FLUX COUPLE LAB: per-request big-face tier ceiling / composition gate overrides (numbers 0.2-1). */
   qa_big_face_max_hfrac: number | null;
   qa_max_face_hfrac: number | null;
@@ -280,6 +283,8 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
         : null,
     force_couple_variant:
       typeof body.force_couple_variant === 'string' ? body.force_couple_variant : null,
+    force_honest_looks:
+      body.force_honest_looks === true ? true : body.force_honest_looks === false ? false : null,
     qa_big_face_max_hfrac: num01(body.qa_big_face_max_hfrac),
     qa_max_face_hfrac: num01(body.qa_max_face_hfrac),
     force_prompt_style:

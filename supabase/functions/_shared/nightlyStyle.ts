@@ -418,6 +418,31 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
       // rest with flux ahead of the others — visiting each once, never repeating. Attempt n takes chain[n-1], so a
       // look graded on three models gets three distinct models before the pipeline gives up and degrades.
       if (lookFirst && !input.forceModel) {
+        // FIRST RE-RENDER = THE POLICY'S FALLBACK ROLL (Kevin 2026-09-18: "make it roll between flux 2 flex and
+        // gemini for the first-try miss fallback … same roll for singles too"). `nightly_model_policy.<surface>
+        // .fallback_models` / `fallback_weights` (50/50 flux-2-flex / gemini-2-image as configured) decide the model
+        // that renders attempt 2; the failed model never repeats because it is not in the fallback row, and the bans
+        // still apply (a day-of ban drops that model and its weight). An EMPTY fallback row (scene) keeps the
+        // graded-chain walk below. Stamped `policy:<surface>:2:<model>:fallback_roll`.
+        const fallbackRow = weightedList(
+          input.policy[policySurface]?.fallbackModels ?? [],
+          input.policy[policySurface]?.fallbackWeights,
+          input.bans ?? null
+        );
+        if (attempt === 2 && fallbackRow.models.length > 0) {
+          const next = resolveModel({
+            surface: policySurface,
+            attempt: 2,
+            policy: input.policy,
+            bans: input.bans ?? null,
+            forceModel: null,
+            previousModel: base.model,
+            rng,
+          });
+          const p = pickFor(next.model, lookSurface, input.surface, `look_retry:${attempt}`);
+          p.stamps.unshift(`${next.stamp}:fallback_roll`);
+          return p;
+        }
         // Round robin: the model that just failed, then every OTHER model this look is graded on, each once.
         // A couple that started on flux without a flux grade simply has the whole graded pool ahead of it.
         const rest = lookModels.filter((m) => m !== base.model);

@@ -80,6 +80,12 @@ default variant `narrative_fg` — one left-to-right paragraph, the couple named
 face words last), flux couples render the four 1.2.0 fragments, no eye colour on the couple lock, gate 0.35.
 Measured: flux first-try dual-swap hold 45% → 92% (37/40), faces median 11-14%. Ledger `FLUX_COUPLE_LAB.md`.
 **Do not change the production nightly engine without Kevin's word; new work is opt-in behind request flags.**
+Since 2026-09-18 ~20:20 UTC flux couples also render their rolled look's OWN fragment
+(`engine_config.nightly_flux_couple_honest_looks = true`, mig 529; per-look approvals mig 528: 20 looks approved, classical_oil +
+colored_pencil rejected on flux couples) — the per-look probe held 93% first try / 98% delivered on the catalogue's own text.
+Rollback to the promotion state = that row back to `false` (album fragments), no deploy. The one re-render (couple AND single)
+is the policy row's fallback roll, `nightly_model_policy.fallback_weights` = [flux-2-flex, gemini-2-image] 50/50 (2026-09-18 ~20:40 UTC;
+100/0 restores gemini-only); flex mirrors gemini's look approvals (mig 530).
 
 ### Shared engine + worker reliability (status of record: `QUEUE_WORKERS_REFACTOR.md`)
 

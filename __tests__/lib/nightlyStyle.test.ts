@@ -398,9 +398,10 @@ describe('buildStyleContract', () => {
       expect(c.forAttempt(3).look.key).toBe('oil');
     });
 
-    it('stamps each step as chain N of M so a failed dream can be read back', () => {
+    it('stamps each step so a failed dream can be read back: the fallback roll, then chain N of M', () => {
       const c = build();
-      expect(c.forAttempt(2).stamps.some((st) => st.includes(':chain_2of3'))).toBe(true);
+      // 2026-09-18: attempt 2 is the policy's fallback roll (POLICY3 couple fallback = [GEMINI]).
+      expect(c.forAttempt(2).stamps[0]).toBe('policy:couple:2:gemini-2-image:fallback_roll');
       expect(c.forAttempt(3).stamps.some((st) => st.includes(':chain_3of3'))).toBe(true);
     });
 
@@ -749,5 +750,78 @@ describe('scene surface and look-model rejections', () => {
       expect(share).toBeGreaterThan(0.2);
       expect(share).toBeLessThan(0.3);
     }
+  });
+});
+
+describe('first re-render = the policy fallback roll (Kevin 2026-09-18)', () => {
+  // "make it roll between flux 2 flex and gemini for the first-try miss fallback … same roll for singles too".
+  const ROLL_POLICY: NightlyModelPolicy = {
+    couple: {
+      primaryModels: [PRO, GEMINI],
+      primaryWeights: [100, 0],
+      fallbackModels: [FLEX, GEMINI],
+      fallbackWeights: [50, 50],
+    },
+    solo: {
+      primaryModels: [PRO, GEMINI],
+      primaryWeights: [100, 0],
+      fallbackModels: [FLEX, GEMINI],
+      fallbackWeights: [50, 50],
+    },
+    solo_rebuild: { primaryModels: [PRO], fallbackModels: [] },
+    scene: { primaryModels: [PRO, GEMINI], fallbackModels: [] },
+  };
+  const build = (
+    surface: 'couple' | 'solo',
+    rng: () => number,
+    over: Record<string, unknown> = {}
+  ) =>
+    buildStyleContract({
+      surface,
+      policy: ROLL_POLICY,
+      looks: LOOKS,
+      approvals: [ok('oil', PRO, surface), ok('oil', GEMINI, surface)],
+      modelFromLook: true,
+      rng,
+      ...over,
+    })!;
+
+  it('a couple that fails on flux re-renders on the fallback roll: flex at one end of the dice, gemini at the other', () => {
+    const low = build('couple', () => 0.1);
+    expect(low.model).toBe(PRO);
+    expect(low.forAttempt(2).model).toBe(FLEX);
+    expect(low.forAttempt(2).stamps[0]).toBe('policy:couple:2:flux-2-flex:fallback_roll');
+    const high = build('couple', () => 0.9);
+    expect(high.forAttempt(2).model).toBe(GEMINI);
+    expect(high.forAttempt(2).stamps[0]).toBe('policy:couple:2:gemini-2-image:fallback_roll');
+  });
+
+  it('the failed model never repeats and the look is kept', () => {
+    for (const r of [0.1, 0.5, 0.9]) {
+      const c = build('couple', () => r);
+      expect(c.forAttempt(2).model).not.toBe(PRO);
+      expect(c.forAttempt(2).look.key).toBe('oil');
+    }
+  });
+
+  it('the same roll applies to singles', () => {
+    expect(build('solo', () => 0.1).forAttempt(2).model).toBe(FLEX);
+    expect(build('solo', () => 0.9).forAttempt(2).model).toBe(GEMINI);
+    expect(build('solo', () => 0.1).forAttempt(2).stamps[0]).toBe(
+      'policy:solo:2:flux-2-flex:fallback_roll'
+    );
+  });
+
+  it('a banned fallback model drops out of the roll with its weight', () => {
+    const c = build('couple', () => 0.1, { bans: new Set([FLEX]) });
+    expect(c.forAttempt(2).model).toBe(GEMINI);
+  });
+
+  it('an empty fallback row keeps the graded-chain walk', () => {
+    const c = build('couple', () => 0.1, {
+      policy: { ...ROLL_POLICY, couple: { primaryModels: [PRO, GEMINI], fallbackModels: [] } },
+    });
+    expect(c.forAttempt(2).model).toBe(GEMINI);
+    expect(c.forAttempt(2).stamps[0]).toContain(':chain_2of2');
   });
 });

@@ -253,9 +253,26 @@ describe('nothing may silently repaint the look', () => {
     expect(strip(SRC)).toContain("fallbackReasons.push('look_override_library:off:looks_engine');");
   });
 
+  it('the honest-looks switch (mig 529) lifts the flux-couple exemption and is stamped', () => {
+    // 2026-09-18 per-look probe: the catalogue fragments hold flux couples under the narrative composer, so the album
+    // substitution is a config switch (engine_config.nightly_flux_couple_honest_looks, QA force_honest_looks), never a
+    // silent code path. Both library sites must read it.
+    expect(strip(SRC)).toContain(
+      'const honestLooks = force_honest_looks ?? engineCfg0.nightlyFluxCoupleHonestLooks;'
+    );
+    expect(strip(SRC)).toContain(
+      'if (looksMinimal && minimalModel && !force_override_library && fluxCouple && honestLooks) {'
+    );
+    expect(strip(SRC)).toContain("fallbackReasons.push('look_override_library:off:honest_looks');");
+    expect(strip(SRC)).toContain(
+      '!(force_honest_looks ?? engineCfg0.nightlyFluxCoupleHonestLooks) &&'
+    );
+  });
+
   it('every outcome is STAMPED — a silent substitution is the actual bug', () => {
     for (const stamp of [
       'look_override_library:off:looks_engine',
+      'look_override_library:off:honest_looks',
       'look_override_library:exempt:force_look',
       'look_override_library:applied:',
       'look_override_library:no_entry',
