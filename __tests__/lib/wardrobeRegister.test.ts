@@ -40,6 +40,15 @@ describe('validateSlots — plain clothes', () => {
     expect(v).toEqual(['plain_clothes(henley, cargo pants)']);
   });
 
+  it('LAB R11 follow-up: sweater, pullover, chinos and jeans are plain clothes too (#9, #17 slipped through on them)', () => {
+    const v = validateSlots({
+      ...base,
+      left_wardrobe: 'a green crewneck sweater, brown chinos',
+      right_wardrobe: 'a cashmere pullover over jeans',
+    });
+    expect(v).toEqual(['plain_clothes(sweater, chinos, pullover, jeans)']);
+  });
+
   it('does not flag those words in the scene (a passer-by may wear a hoodie)', () => {
     const v = validateSlots({
       ...base,

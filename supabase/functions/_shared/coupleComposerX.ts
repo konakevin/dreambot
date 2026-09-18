@@ -19,12 +19,14 @@ export type CoupleVariant =
   | 'narrative_asym'
   | 'narrative_faces'
   | 'narrative_fg'
+  | 'narrative_fg_beat'
   | 'json';
 export const COUPLE_VARIANTS: readonly CoupleVariant[] = [
   'narrative',
   'narrative_asym',
   'narrative_faces',
   'narrative_fg',
+  'narrative_fg_beat',
   'json',
 ];
 
@@ -104,6 +106,30 @@ export function composeExperimentalCouple(args: {
 
   // narrative_fg (the "no people" failures): the couple is named IN THE FOREGROUND before the scene, with no face
   // words up front (R2 showed face words first pull the camera in); the scene follows "behind and around them".
+  // narrative_fg_beat (LAB R11 #17, "rides twin red foxes" rendered as a walk): an ACTIVE-scenario seed arrives as the
+  // place text and reads "Couple rides twin red foxes through an autumn forest" — under narrative_fg that landed after
+  // "Behind and around them", which is nonsense. Scenario-shaped place text becomes the couple's own sentence right
+  // after their names, and only the scene description stays behind them.
+  if (variant === 'narrative_fg_beat') {
+    const scenarioLike =
+      /^(a couple|couple|two people|two|they|the couple|the two|person|the pair)\b/i.test(place);
+    const beatSentence = scenarioLike
+      ? place
+          .replace(/^(a couple|couple|the couple|the two|two people|two|the pair)\b\s*/i, 'They ')
+          .replace(/^They\s+(\w+?)s\b/, (_m, v) => `They ${v}`)
+      : '';
+    const beatText = [beatSentence, beat]
+      .filter(Boolean)
+      .map((b) => `${b.charAt(0).toUpperCase()}${b.slice(1)}.`)
+      .join(' ');
+    const behind = scenarioLike ? scene : `${place ? `${place}` : ''}${scene ? `: ${scene}` : ''}`;
+    const fgS = `${medium ? `${medium}. ` : ''}A three-quarter length two-shot. In the foreground, on the left, ${left.desc}, wearing ${leftWardrobe}; to ${her} right, with a clear gap between their heads, ${right.desc}, wearing ${rightWardrobe}. ${beatText ? `${beatText} ` : ''}Behind and around them${behind ? `, ${behind}` : ''}. Both are shown from the knees up, side by side, their faces turned toward the camera, clearly visible and unobstructed, lifelike adult faces with realistic proportions.`;
+    const extrasB = [props, mood, vibe]
+      .filter(Boolean)
+      .map((z) => `${z.charAt(0).toUpperCase()}${z.slice(1)}.`)
+      .join(' ');
+    return `${fgS} ${extrasB} ${tail}`.replace(/\s+/g, ' ').trim();
+  }
   if (variant === 'narrative_fg') {
     const fgS = `${medium ? `${medium}. ` : ''}A three-quarter length two-shot. In the foreground, on the left, ${left.desc}, wearing ${leftWardrobe}; to ${her} right, with a clear gap between their heads, ${right.desc}, wearing ${rightWardrobe}. ${beat ? `${beat.charAt(0).toUpperCase()}${beat.slice(1)}. ` : ''}Behind and around them${place ? `, ${place}` : ''}${scene ? `: ${scene}` : ''}. Both are shown from the knees up, side by side, their faces turned toward the camera, clearly visible and unobstructed, lifelike adult faces with realistic proportions.`;
     const extrasFg = [props, mood, vibe]

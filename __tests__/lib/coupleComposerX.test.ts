@@ -95,12 +95,37 @@ describe('composeExperimentalCouple', () => {
     expect(p.slice(0, 200)).not.toMatch(/faces?/);
   });
 
+  it("narrative_fg_beat turns a scenario-shaped place into the couple's own sentence before the scene", () => {
+    const scenarioInput = {
+      ...input,
+      iconicAnchor: 'Couple rides twin red foxes through an autumn forest',
+      setAtOverride: null,
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const p = composeExperimentalCouple({
+      slots,
+      input: scenarioInput as any,
+      variant: 'narrative_fg_beat',
+    });
+    expect(p).toContain('They ride twin red foxes through an autumn forest.');
+    expect(p.indexOf('They ride twin red foxes')).toBeLessThan(p.indexOf('Behind and around them'));
+    expect(p).not.toMatch(/Behind and around them, Couple rides/);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const q = composeExperimentalCouple({
+      slots,
+      input: input as any,
+      variant: 'narrative_fg_beat',
+    });
+    expect(q).toContain('Behind and around them, a narrow Victorian alley with iron railings');
+  });
+
   it('variant names are locked', () => {
     expect(COUPLE_VARIANTS).toEqual([
       'narrative',
       'narrative_asym',
       'narrative_faces',
       'narrative_fg',
+      'narrative_fg_beat',
       'json',
     ]);
     expect(isCoupleVariant('json')).toBe(true);

@@ -124,7 +124,7 @@ const input = (extra: Partial<CharacterSlotPipelineInput> = {}): CharacterSlotPi
 });
 const sonnetDual = {
   scene_description: 'a barn strung with orange lights, a cider cauldron on a trestle table',
-  left_wardrobe: 'a cozy sweater with a witch-hat headband',
+  left_wardrobe: 'a velvet cape with a witch-hat headband',
   right_wardrobe: 'a plaid flannel and jeans',
   mood: 'festive',
   props: '',

@@ -1073,7 +1073,7 @@ const FORBIDDEN_PATTERNS: { name: string; regex: RegExp }[] = [
 /** PLAIN CLOTHES (Kevin 2026-09-18): everyday basics in a WARDROBE field are a violation. The scene may
  *  mention a hood or a t-shirt on a passer-by; the cast may not wear one. */
 export const PLAIN_CLOTHES =
-  /\b(hoodies?|hooded sweatshirts?|henleys?|t-?shirts?|tees?|fleece|cargo (pants|shorts|trousers)|joggers|sweatpants|track ?pants|athleisure|puffer vests?|casual|comfortable|practical|everyday|basics?)\b/i;
+  /\b(hoodies?|hooded sweatshirts?|henleys?|t-?shirts?|tees?|fleece|cargo (pants|shorts|trousers)|joggers|sweatpants|track ?pants|athleisure|puffer vests?|sweaters?|pullovers?|chinos|jeans|casual|comfortable|practical|everyday|basics?)\b/i;
 function wardrobeFields(slots: CharacterSlots): string[] {
   const out: string[] = [];
   if ('wardrobe' in slots) out.push(slots.wardrobe);

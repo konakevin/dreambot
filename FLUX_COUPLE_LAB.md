@@ -104,3 +104,11 @@ of five, cleared by the same-model re-render every time in R7/R8/R9. That is a s
 | round | variable | held | held faces | failures | verdict |
 |---|---|---|---|---|---|
 | R11 | `narrative_fg` + album fragments on flux-1.1-pro, n=20 (the experimental engine's default) | **20/20 (100%)** | 9–27%, median 13% | none | `narrative_fg` on flux pooled R7+R8+R11: **37/40 first-try (92.5%)**, 40/40 delivered on flux. |
+
+### After R11 (Kevin: "4 to 4.5 on average, much better composition, a lot of really big wins"; my grades averaged 3.8 on the same 20)
+
+Follow-ups Kevin asked for:
+1. Plain-clothes list gains sweater, pullover, chinos, jeans (R11 #9 and #17 slipped through on those). Deployed to nightly + Create.
+2. `narrative_fg_beat`: an ACTIVE-scenario seed ("Couple rides twin red foxes through an autumn forest") is the couple's
+   own sentence right after their names, before "Behind and around them"; only the scene description stays behind
+   them. R12 = 10 flux couples with the active pool forced, to measure the beat surviving.
