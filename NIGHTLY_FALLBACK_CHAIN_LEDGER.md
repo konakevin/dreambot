@@ -283,6 +283,16 @@ Stopgap so tonight's 08:00 UTC run is not that (the full chain is NIGHTLY_CHAIN_
   reuse-single rung (`soloBetweenAttempts` / `soloFromAttempt`) removed.
 - Expected stamps on a failed couple: `rerender_for_dual` → `policy:couple:2:gemini-2-image:chain_2of2`.
 
+## 5f. Photograph / headshot looks retired (2026-09-18 ~04:50 UTC, Kevin: "kill all headshot type of looks, photography or whatever")
+
+Measured first: Kevin's 16 public-album flux couples carry faces at 9-24% of frame (median 14%); this batch's flux
+couples 21-39% (median 27%). The album prompts never say photograph/portrait; the batch's looks do. Retired via
+`dream_mediums.nightly_enabled=false` (+ `client_meta.retired`, reversible): the photographic family
+(cinematic_still, film_noir, hand_tinted_photo, kodachrome, technicolor, vintage_film) and the portrait-shaped looks
+(baroque_oil, gouache_portrait, pastel_chalk, pastel_portrait, watercolor_portrait). The "editorial" illustration
+looks (ink_illustration, magazine_cover, soft_brush_illustration, halloween_ornate_ink) STAY — that fragment is the
+album's. The eye-colour lock stays for now (Kevin: "just do the photograph stuff for now").
+
 ## 6. State deployed tonight (Kevin: leave it for users)
 
 Commits `31cfa893`, `081ef539`, `621a5847`, `f75651ac`, `a7b1a3c2`, `9654f0f8` — all deployed to

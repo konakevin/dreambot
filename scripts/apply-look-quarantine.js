@@ -63,10 +63,14 @@ const min = parseInt(
   for (let i = 0; i < ids.length; i += 200) {
     const { data: logs } = await s
       .from('ai_generation_log')
-      .select('upload_id,rolled_axes')
+      .select('upload_id,rolled_axes,fallback_reasons')
       .in('upload_id', ids.slice(i, i + 200));
     for (const g of logs || []) {
-      const stamps = (g.rolled_axes && g.rolled_axes.stamps) || [];
+      // The look stamp lives in fallback_reasons (`look:<key>`); rolled_axes.stamps was never written.
+      const stamps = [
+        ...((g.rolled_axes && g.rolled_axes.stamps) || []),
+        ...(Array.isArray(g.fallback_reasons) ? g.fallback_reasons : []),
+      ];
       const hit = stamps.map(String).find((x) => /^look:/.test(x));
       if (hit) stampLook.set(g.upload_id, hit.replace('look:', ''));
     }

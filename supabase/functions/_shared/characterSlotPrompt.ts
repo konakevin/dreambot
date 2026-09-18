@@ -405,19 +405,23 @@ export function extractIdentityPhrase(promptDesc: string): string {
 
 // ── Wardrobe-mood randomizer ────────────────────────────────────────────
 
-const WARDROBE_MOODS = [
-  'casual everyday outfits',
-  'active outdoor / sporty clothing',
-  'polished resort wear',
-  'breezy boho artsy style',
-  'vintage retro inspired',
-  'simple monochrome neutrals',
-  'colorful playful patterns',
-  'modern minimalist',
-  'utilitarian outdoor gear',
-  'soft pastel palette',
-  'rich saturated jewel tones',
-  'classic timeless pieces',
+// WARDROBE REGISTER (Kevin 2026-09-18: "we shouldn't have any 'plain clothes' outfits, everyone should be
+// tailored for locations and built to stand out and look good"). Every entry is a costume-designer brief; the
+// old list carried five everyday moods (casual, sporty, minimalist, neutrals, utilitarian gear) and they were the
+// merino-pullover-and-cargo-pants renders. Exported so a test can lock the register.
+export const WARDROBE_MOODS = [
+  'bold statement pieces in saturated colour, cut to flatter',
+  'glamorous evening wear reimagined for this exact place',
+  'adventure-hero costume: rich textures, layered accessories, a signature piece',
+  'vintage-cinema wardrobe: hats, gloves, tailored silhouettes, polished shoes',
+  'romantic flowing fabrics that catch the light and move with the scene',
+  'sharp tailored outerwear with a dramatic silhouette and a strong collar',
+  'jewel-toned couture with metallic details and structured shapes',
+  'retro resort glamour: bold prints, wide brims, statement jewellery',
+  'rugged expedition couture: waxed leather, brass buckles, embroidered layers',
+  'fantasy-court garments true to the place: brocade, velvet, clasps, capes',
+  'mid-century elegance: structured coats, silk scarves, gleaming accessories',
+  'festival maximalism: layered prints, sequins, colour on colour',
 ];
 
 // ── Resolved cast identity (computed once per render) ───────────────────
@@ -706,7 +710,7 @@ export function buildSlotBrief(input: CharacterSlotPipelineInput): string {
   // upstream on real-world locations (nightly-dreams) so it can't fight this rule.
   const isRealWorld = input.realWorldLocation !== false;
   const travelerRule = isRealWorld
-    ? ' The cast are VISITORS/travelers here, NOT locals — dress them in flattering, stylish CONTEMPORARY clothes they would actually travel in, and NEVER in the traditional, national, or ethnic dress of a real-world culture (no kimono, hanfu, mandarin/Mao jacket, sari, kurta, dirndl, lederhosen, keffiyeh, cheongsam, qipao, etc.). A tourist visiting Japan wears their own clothes, not a kimono.'
+    ? ' The cast are VISITORS/travelers here, NOT locals — dress them as a costume designer would dress visiting film stars — striking, flattering, contemporary-or-timeless — and NEVER in the traditional, national, or ethnic dress of a real-world culture (no kimono, hanfu, mandarin/Mao jacket, sari, kurta, dirndl, lederhosen, keffiyeh, cheongsam, qipao, etc.). A tourist visiting Japan wears their own clothes, not a kimono.'
     : '';
   const costumeLock =
     input.costumeLock && input.costumeLock.length === input.cast.length ? input.costumeLock : null;
@@ -718,7 +722,7 @@ export function buildSlotBrief(input: CharacterSlotPipelineInput): string {
       } The exact costume text is applied by code, so write the wardrobe field(s) as a SHORT reference only (3-6 words, e.g. "the vampire countess costume") and spend your words on the scene and the action. Let the scene, mood, props and action play off the costumes — the cape catching the lantern light, the hat brim in the fog. The costume is clothing, headwear and props only; the face stays fully clear by code.`
     : (input.wardrobeAnchor
         ? `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: flattering, cool, and distinctive, in pieces true to the period / setting / cultural register of "${location}". One on-location inspiration to draw from: "${input.wardrobeAnchor}". Adapt it into something bold and attractive for each character — flattering silhouette, rich materials, standout details, styled hair — or invent something equally on-location and eye-catching. NEVER plain, dowdy, mundane, frumpy, drab, or merely "historically accurate" — this is a DREAM, so make the outfit sing while staying true to the setting. Avoid generic "linen shirt + chinos" defaults.`
-        : `wardrobe MUST be flattering, stylish, contemporary clothing suited to ${location}'s climate and setting — distinctive, never dowdy or drab. A tropical beach, an alpine village, a desert ruin, a modern city, and an arctic glacier all call for different wardrobe. WARDROBE MOOD for this render: ${wardrobeMood}. Lean into this style while keeping it climate-appropriate and flattering. Bring distinctive pieces, colors, and silhouettes — avoid the same "linen shirt + chinos" default every render.`) +
+        : `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: tailored to this exact place, its climate and its register, and built to STAND OUT — a signature piece, a flattering silhouette, named colours and materials, styled hair. A tropical reef, an alpine village, a desert ruin, a modern city and an arctic glacier each call for a different costume. WARDROBE REGISTER for this render: ${wardrobeMood}. NEVER everyday basics: no hoodie, henley, t-shirt, fleece, cargo pants, joggers, sweatpants, puffer vest, generic sneakers, and never the words casual, comfortable, practical or everyday — this is a DREAM, the outfit is part of the story.`) +
       travelerRule;
 
   const forbiddenList = `━━━ FORBIDDEN IN ANY FIELD — your output will be rejected if you violate ━━━
@@ -1028,18 +1032,90 @@ const FORBIDDEN_PATTERNS: { name: string; regex: RegExp }[] = [
   { name: 'pronoun', regex: /\b(she|he|him|her|his|hers|she's|he's)\b/i },
 ];
 
+/** PLAIN CLOTHES (Kevin 2026-09-18): everyday basics in a WARDROBE field are a violation. The scene may
+ *  mention a hood or a t-shirt on a passer-by; the cast may not wear one. */
+export const PLAIN_CLOTHES =
+  /\b(hoodies?|hooded sweatshirts?|henleys?|t-?shirts?|tees?|fleece|cargo (pants|shorts|trousers)|joggers|sweatpants|track ?pants|athleisure|puffer vests?|casual|comfortable|practical|everyday|basics?)\b/i;
+function wardrobeFields(slots: CharacterSlots): string[] {
+  const out: string[] = [];
+  if ('wardrobe' in slots) out.push(slots.wardrobe);
+  if ('left_wardrobe' in slots) out.push(slots.left_wardrobe, slots.right_wardrobe);
+  return out.filter((f) => !!f);
+}
 export function validateSlots(slots: CharacterSlots): string[] {
   const violations = new Set<string>();
-  const fields: string[] = [slots.scene_description, slots.mood, slots.props ?? ''];
-  if ('wardrobe' in slots) fields.push(slots.wardrobe);
-  if ('left_wardrobe' in slots) fields.push(slots.left_wardrobe, slots.right_wardrobe);
+  const fields: string[] = [
+    slots.scene_description,
+    slots.mood,
+    slots.props ?? '',
+    ...wardrobeFields(slots),
+  ];
   for (const field of fields) {
     if (!field) continue;
     for (const { name, regex } of FORBIDDEN_PATTERNS) {
       if (regex.test(field)) violations.add(name);
     }
   }
+  const plain = new Set<string>();
+  for (const w of wardrobeFields(slots)) {
+    for (const m of w.match(new RegExp(PLAIN_CLOTHES.source, 'gi')) ?? [])
+      plain.add(m.toLowerCase());
+  }
+  if (plain.size > 0) violations.add(`plain_clothes(${Array.from(plain).join(', ')})`);
   return Array.from(violations);
+}
+/** The retry brief names the exact phrase that tripped each rule — "occlusion" alone sent Sonnet back with
+ *  the same masks twice (nophoto20 #7, 2026-09-18). */
+export function describeViolations(slots: CharacterSlots): string {
+  const named: Record<string, string> = {
+    scene_description: slots.scene_description,
+    mood: slots.mood,
+    props: slots.props ?? '',
+  };
+  if ('wardrobe' in slots) named.wardrobe = slots.wardrobe;
+  if ('left_wardrobe' in slots) {
+    named.left_wardrobe = slots.left_wardrobe;
+    named.right_wardrobe = slots.right_wardrobe;
+  }
+  const lines: string[] = [];
+  for (const [field, text] of Object.entries(named)) {
+    if (!text) continue;
+    for (const { name, regex } of FORBIDDEN_PATTERNS) {
+      const m = text.match(regex);
+      if (m) lines.push(`- ${name}: "${m[0]}" in ${field}`);
+    }
+    if (/wardrobe/.test(field)) {
+      const m = text.match(PLAIN_CLOTHES);
+      if (m) lines.push(`- plain_clothes: "${m[0]}" in ${field} — dress them to stand out instead`);
+    }
+  }
+  return lines.join('\n');
+}
+/** Keep every field that passes on its own; replace only the offending ones. A props line that mentions a
+ *  mask must not cost the wardrobe Sonnet wrote (the snorkel couple shipped in a fleece and a hoodie). */
+export function salvageSlots(
+  parsed: CharacterSlots,
+  fallback: CharacterSlots
+): { slots: CharacterSlots; replaced: string[] } {
+  const replaced: string[] = [];
+  const clean = (field: string, text: string, isWardrobe: boolean): string => {
+    const bad =
+      FORBIDDEN_PATTERNS.some(({ regex }) => regex.test(text)) ||
+      (isWardrobe && PLAIN_CLOTHES.test(text));
+    if (!bad) return text;
+    replaced.push(field);
+    return (fallback as unknown as Record<string, string>)[field] ?? '';
+  };
+  const out = { ...parsed } as unknown as Record<string, string | null | undefined>;
+  out.scene_description = clean('scene_description', parsed.scene_description, false);
+  out.mood = clean('mood', parsed.mood, false);
+  out.props = clean('props', parsed.props ?? '', false);
+  if ('wardrobe' in parsed) out.wardrobe = clean('wardrobe', parsed.wardrobe, true);
+  if ('left_wardrobe' in parsed) {
+    out.left_wardrobe = clean('left_wardrobe', parsed.left_wardrobe, true);
+    out.right_wardrobe = clean('right_wardrobe', parsed.right_wardrobe, true);
+  }
+  return { slots: out as unknown as CharacterSlots, replaced };
 }
 
 // ── Fallback slots when Sonnet fails ───────────────────────────────────
@@ -1049,7 +1125,8 @@ function fallbackSlots(input: CharacterSlotPipelineInput): CharacterSlots {
   const sceneFallback = `${location}, ${input.timeAxis.split(' — ')[0]}, ${input.weatherAxis.split(',')[0]}, atmospheric depth`;
   const moodFallback =
     input.vibeDirective.split('.')[0].slice(0, 80) || 'warm cinematic atmosphere';
-  const wardrobeFallback = 'casual outdoor clothing in earthy tones';
+  const wardrobeFallback =
+    'a striking tailored statement outfit chosen for this exact place, in rich colour and texture';
   if (input.cast.length === 1) {
     return {
       scene_description: sceneFallback,
@@ -1646,6 +1723,7 @@ export async function runCharacterSlotPipeline(
     }
   }
 
+  let lastParsed: CharacterSlots | null = null;
   for (let attempt = 0; slots === null && attempt < 2; attempt++) {
     try {
       // 2026-09-08: 500 → 900 output tokens. Day-of R35: 3 of 12 responses were cut off INSIDE the action
@@ -1660,8 +1738,9 @@ export async function runCharacterSlotPipeline(
         slots = parsed;
         break;
       }
+      lastParsed = parsed;
       fallbackReasons.push(`slot_violations_attempt_${attempt + 1}:${violations.join('|')}`);
-      lastAttemptBrief = `${slotBrief}\n\n━━━ YOUR PREVIOUS OUTPUT WAS REJECTED ━━━\nForbidden content categories found in your fields: ${violations.join(', ')}\nRewrite the JSON without these. Keep the same fields; only the content changes.`;
+      lastAttemptBrief = `${slotBrief}\n\n━━━ YOUR PREVIOUS OUTPUT WAS REJECTED ━━━\nThese exact phrases broke the rules:\n${describeViolations(parsed)}\nRewrite the JSON without them. Keep the same fields; only the content changes. Props must never cover a face (a mask is pushed up on the forehead or held away from the face); wardrobe must be a costume-designer outfit, never everyday basics.`;
     } catch (err) {
       fallbackReasons.push(`slot_parse_error_attempt_${attempt + 1}:${(err as Error).message}`);
       lastAttemptBrief = `${slotBrief}\n\n━━━ RETRY ━━━\nYour previous output was not parseable JSON. Output ONLY a single valid JSON object — no markdown fences, no commentary, no extra text. Start with { and end with }.`;
@@ -1669,8 +1748,16 @@ export async function runCharacterSlotPipeline(
   }
 
   if (!slots) {
-    slots = fallbackSlots(input);
-    fallbackReasons.push('character_slot_fallback_used');
+    if (lastParsed) {
+      const salvaged = salvageSlots(lastParsed, fallbackSlots(input));
+      slots = salvaged.slots;
+      fallbackReasons.push(
+        `character_slot_fallback_used:partial(${salvaged.replaced.join(',') || 'none'})`
+      );
+    } else {
+      slots = fallbackSlots(input);
+      fallbackReasons.push('character_slot_fallback_used');
+    }
   }
 
   // HOLIDAY COSTUME LOCK (holidayCostumes.ts): the wardrobe slot(s) are the locked text verbatim —

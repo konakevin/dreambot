@@ -10,10 +10,14 @@ scene is ever rolled; a later rung that needs the other surface composes it from
 | rung | couple night | single night |
 |---|---|---|
 | 1 | flux-1.1-pro couple | flux-1.1-pro single |
-| 2 | flux-1.1-pro single, same scene | single on the roll (flux-2-flex 50 / gemini-2-image 50), same scene |
-| 3 | couple on the roll (flux-2-flex 50 / gemini-2-image 50), same scene | pure scene, same place, people-free |
-| 4 | single on that same rolled model, same scene | |
+| 2 | 50/50 single or couple, on a 50/50 gemini-2-image / flux-2-flex roll, same scene | single on the gemini / flex roll, same scene |
+| 3 | flux-1.1-pro single, same scene | pure scene, same place, people-free |
+| 4 | single on a FRESH gemini / flex roll, same scene | |
 | 5 | pure scene, same place, people-free | |
+
+(Revised by Kevin 2026-09-18 ~04:20 UTC from the first table: rung 2 rolls the SURFACE as well as the model, rung 3
+resets to a flux single, rung 4 rolls the model again. Every roll is stamped and pinned so a resumed job never
+re-rolls a rung it already started.)
 
 A rung = one render + one swap attempt (dual or single) + the checks that exist today (gender + side read,
 identity 0.35, composition gate 0.35). No rung re-renders on its own: the pipeline's inner attempts, the
