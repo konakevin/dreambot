@@ -98,3 +98,9 @@ of five, cleared by the same-model re-render every time in R7/R8/R9. That is a s
    gemini in the roll for variety. Both land.
 3. Next lab: the partner-side identity failures (her source photo quality via analyzeCastPhoto, hair across the
    face, the engine's female-face handling).
+
+### R11 — Kevin's 20-render check of the winning state (2026-09-18, after the lab)
+
+| round | variable | held | held faces | failures | verdict |
+|---|---|---|---|---|---|
+| R11 | `narrative_fg` + album fragments on flux-1.1-pro, n=20 (the experimental engine's default) | **20/20 (100%)** | 9–27%, median 13% | none | `narrative_fg` on flux pooled R7+R8+R11: **37/40 first-try (92.5%)**, 40/40 delivered on flux. |
