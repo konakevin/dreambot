@@ -267,6 +267,22 @@ fraction (`flyFaceHFrac`); too big = a hard verdict → the guard's ladder re-re
 hygiene: 229 + 224 enabled scenario seeds mention water/submersion (~120 genuinely put the body in water above the
 waist); rewording awaits Kevin's approval.
 
+## 5e. Chain v2 stopgap (2026-09-18 ~04:30 UTC) — flux couple → NEXT model couple → single → pure scene
+
+chain6 (20 real nightlies) shipped 2 FACELESS dreams (#19, #20): flux couple (0/1 faces) → flux couple AGAIN
+(the 09-17 rung) → `recover_budget_exhausted` at 91 s → the gemini rungs never ran → flux solo rebuild ×2
+(no face / 4 faces) → `SHIPPED_FACELESS`. Kevin: "i refuse to believe … if that's true then our engine is
+complete shit". It was true. Every rung was flux-1.1-pro on the same wide scene.
+
+Stopgap so tonight's 08:00 UTC run is not that (the full chain is NIGHTLY_CHAIN_V2_DESIGN.md):
+- `nightly_model_policy` couple + solo: primary flux-1.1-pro 100 / gemini-2-image 0 (gemini stays a primary so
+  its cast ban stays lifted); fallback flux-2-flex 50 / gemini-2-image 50 (used by chain v2).
+- `nightly-dreams`: the same-model branch deleted; the first re-render asks the contract for RENDER 2
+  (`chainAttempt = attempt + 1` — the pipeline counts re-renders from 1, the contract counts renders from 1,
+  so `forAttempt(attempt)` on the first re-render returned the SAME model); `maxRerenders: 1`; the
+  reuse-single rung (`soloBetweenAttempts` / `soloFromAttempt`) removed.
+- Expected stamps on a failed couple: `rerender_for_dual` → `policy:couple:2:gemini-2-image:chain_2of2`.
+
 ## 6. State deployed tonight (Kevin: leave it for users)
 
 Commits `31cfa893`, `081ef539`, `621a5847`, `f75651ac`, `a7b1a3c2`, `9654f0f8` — all deployed to

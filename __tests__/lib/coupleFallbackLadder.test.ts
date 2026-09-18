@@ -27,24 +27,25 @@ const PIPELINE_SRC = fs.readFileSync(
 );
 const strip = (s: string) => s.replace(/\s+/g, ' ');
 
-describe('a failed couple re-renders ONCE on the same model, then the single, then ONE model move', () => {
-  // Kevin 2026-09-17 (late), after a true 20-night run: "we used to render couples pretty well". The 09-14..16
-  // engine re-rendered every failed couple before degrading (17 of 17) and delivered 96% of couples as couples;
-  // the immediate solo rung converted 25 of 45 failed couples to solos in a day. The chain is now:
-  //   flux couple → flux couple AGAIN → flux single → gemini couple → gemini single → nobody
-  it('the dual pipeline gets TWO re-renders and the solo rung starts at attempt 1', () => {
+describe('a failed couple moves to the NEXT model at once, then the single, then a pure scene', () => {
+  // Kevin 2026-09-18 (NIGHTLY_CHAIN_V2_DESIGN.md), after chain6: the 09-17 "flux couple again" rung re-rendered
+  // the same scene on the model that had just failed and burned the budget the later rungs needed — 2 faceless
+  // dreams in 20 (#19, #20: flux → flux → recover_budget_exhausted → SHIPPED_FACELESS). The chain is now:
+  //   flux couple → couple on the next model → single → pure scene
+  it('the dual pipeline gets ONE re-render and no reuse-single between attempts', () => {
     const call = NIGHTLY_SRC.match(/genderSafeDualSwap\([\s\S]*?\n {6}\);/);
     expect(call).toBeTruthy();
-    expect(strip(call![0])).toContain('maxRerenders: 2');
-    expect(strip(call![0])).toContain('soloFromAttempt: 1');
+    expect(strip(call![0])).toContain('maxRerenders: 1,');
+    expect(strip(call![0])).not.toContain('soloBetweenAttempts');
+    expect(strip(call![0])).not.toContain('soloFromAttempt');
   });
 
-  it('attempt 1 stays on the model that just failed; attempt 2 walks the contract chain', () => {
+  it('the first re-render asks the contract for RENDER 2 (the next model), never the model that failed', () => {
     const N = strip(NIGHTLY_SRC);
-    expect(N).toContain('if (attempt === 1) {');
-    expect(N).toContain('fallbackReasons.push(`couple_retry:1:same_model:${pickedModel.replace(');
-    expect(N).toContain('const pick = styleContract.forAttempt(attempt);');
-    expect(N).not.toContain('styleContract.forAttempt(attempt + 1)');
+    expect(N).not.toContain('same_model');
+    expect(N).toContain('const chainAttempt = attempt + 1;');
+    expect(N).toContain('const pick = styleContract.forAttempt(chainAttempt);');
+    expect(N).not.toContain('styleContract.forAttempt(attempt)');
   });
 
   it('the pipeline gates BOTH solo arms (split + identity) on soloFromAttempt', () => {
@@ -96,12 +97,12 @@ describe('the order the pipeline degrades in', () => {
     );
   });
 
-  it('that rung is OPT-IN, so Create and onboarding keep chasing the couple', () => {
-    // It changes what ships — a solo on the current model beats a couple the next model might deliver.
-    // Right for nightly, wrong as a default.
+  it('that rung is OPT-IN, and the nightly no longer opts in (every rung is a fresh render)', () => {
+    // It changes what ships — a solo pasted onto the failed couple render beats nothing, but Kevin's chain
+    // (2026-09-18) wants a FRESH single of the same scene instead, so the nightly leaves the rung off.
     expect(strip(PIPELINE_SRC)).toContain('soloBetweenAttempts?: boolean;');
     const call = NIGHTLY_SRC.match(/genderSafeDualSwap\([\s\S]*?\n {6}\);/);
-    expect(strip(call![0])).toContain('soloBetweenAttempts: true');
+    expect(strip(call![0])).not.toContain('soloBetweenAttempts');
   });
 
   it('the single degrade is GENDER-SAFE — a refusal cascades rather than pasting on the wrong body', () => {

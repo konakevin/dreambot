@@ -4522,13 +4522,14 @@ Output ONLY the prompt.`;
             // the same model again (legacy). NOTE: model_used attribution for a retry that shipped on a
             // different model lands with the fallback rows (Phase 4, NIGHTLY_MODEL_POLICY_PLAN.md).
             let rerenderModel = pickedModel;
-            if (attempt === 1) {
-              // THE "FLUX COUPLE AGAIN" RUNG (Kevin 2026-09-17, late): the first re-render stays on the model
-              // that just failed — a fresh composition on the same model, before any single and before any
-              // model move. Attempt 2 walks the contract's chain to the next model.
-              fallbackReasons.push(`couple_retry:1:same_model:${pickedModel.replace(/^.*\//, '')}`);
-            } else if (styleContract && activeStyle) {
-              const pick = styleContract.forAttempt(attempt);
+            // CHAIN (Kevin 2026-09-18, NIGHTLY_CHAIN_V2_DESIGN.md): a failed couple moves to the NEXT model at
+            // once, never the model that just failed. The 09-17 "flux couple again" rung re-rendered the same
+            // scene on the model that had just failed and burned the budget the later rungs needed: 2 faceless
+            // dreams in 20 (chain6 #19/#20). The pipeline counts re-renders from 1 while the contract counts
+            // RENDERS from 1, so the first re-render asks the contract for render 2.
+            const chainAttempt = attempt + 1;
+            if (styleContract && activeStyle) {
+              const pick = styleContract.forAttempt(chainAttempt);
               // Round 19: a model move across the flux ↔ others order boundary re-assembles the slots in the new
               // model's order (r18 #5/#7 rendered grok in the legacy order and both needed a re-render).
               const reordered =
@@ -4569,14 +4570,14 @@ Output ONLY the prompt.`;
               // Kevin 2026-09-13 "allow the move": keep the look, re-render on another model IT is graded on
               // rather than letting 1.2.0 drop the +1 to a generic figure. The look is unchanged, so the legacy
               // prompt still describes the right medium and needs no surgery.
-              const pick = styleContract.forAttempt(attempt);
+              const pick = styleContract.forAttempt(chainAttempt);
               rerenderModel = pick.model;
               if (pick.model !== pickedModel) modelUsedOverride = pick.model;
               fallbackReasons.push(...pick.stamps);
             } else if (modelPolicy) {
               const pick = resolveModel({
                 surface: 'couple',
-                attempt,
+                attempt: chainAttempt,
                 policy: modelPolicy,
                 bans: nightlyBans,
                 previousModel: pickedModel,
@@ -4585,7 +4586,7 @@ Output ONLY the prompt.`;
                 shadowStampSet(
                   'couple_retry',
                   pickedModel,
-                  candidateModels(modelPolicy, 'couple', attempt + 1, pickedModel)
+                  candidateModels(modelPolicy, 'couple', chainAttempt, pickedModel)
                 )
               );
               if (policyMode === 'on') {
@@ -4635,45 +4636,9 @@ Output ONLY the prompt.`;
         },
         {
           strict: strict_face_swap,
-          /**
-           * A FAILED COUPLE FALLS BACK TO A SINGLE ON THE SAME MODEL — never to a couple on a
-           * different one (Kevin 2026-09-16 and again 2026-09-17: "i want couples to fail over to a
-           * single, so a flux couple failure falls back to a flux single, then to gemini").
-           *
-           * This defaulted to 2 and the intent had NEVER been applied. The 2026-09-16 decision was
-           * written up against the DEGRADE GUARD's options further up instead of this object, so the
-           * dual pipeline kept its default: each re-render calls styleContract.forAttempt(), which
-           * walks the model chain, so a couple that failed on flux was re-rendered on gemini. Measured
-           * 2026-09-17 over 7 couples — flux was picked first on 6 of them, its first dual split failed
-           * on 5, and every one shipped on gemini. An 80/20 config was delivering ~0% flux couples.
-           *
-           * 0 = the original render only. A failed split now falls through to the degrade path, which
-           * swaps a SOLO onto the SAME render (same model, same look). If that solo is refused too —
-           * no gender-safe face — the cascade takes over and soloRebuild picks another model. So the
-           * ladder is exactly: flux couple → flux single → another model.
-           *
-           * ONE move (Kevin 2026-09-17, the approved ladder):
-           *
-           *   couple on the rolled model  → fail
-           *   SOLO   on that same model   → fail      ← soloBetweenAttempts
-           *   couple on the NEXT model    → fail      ← the one re-render
-           *   SOLO   on that model        → fail
-           *   pure scene (no face)
-           *
-           * The old default of 2 put the model move BEFORE the solo, which is the order he rejected: a
-           * couple that failed on flux was re-rendered on gemini and shipped there, so an 80/20 config
-           * delivered ~0% flux couples. 0 was the first fix and went too far the other way — it removed
-           * the gemini rung entirely, so a refused solo went straight to a faceless scene.
-           *
-           * Worst case is 4 renders for one dream; the recover-budget check cuts the ladder short and
-           * degrades early when the 140s window will not take another render.
-           */
-          // THE CHAIN (Kevin 2026-09-17, late): flux couple → flux couple AGAIN → flux single → gemini couple →
-          // gemini single → nobody. Attempt 1 re-renders on the SAME model (see rerender), the solo rung fires
-          // from attempt 1, attempt 2 moves models. Worst case 5 renders; the recover-budget check cuts it short.
-          maxRerenders: 2,
-          soloBetweenAttempts: true,
-          soloFromAttempt: 1,
+          // ONE re-render (NIGHTLY_CHAIN_V2_DESIGN.md): couple on the rolled model → couple on the next model
+          // → the single → a pure scene. No reuse-single between attempts: every rung is a fresh render.
+          maxRerenders: 1,
           // COMPOSITION GATE (engine_config.nightly_max_face_hfrac): no couple ships with a face taller than this.
           maxFaceHFrac: (await fetchEngineConfig(supabase)).nightlyMaxFaceHFrac,
           deadlineMs: dualDeadlineMs,

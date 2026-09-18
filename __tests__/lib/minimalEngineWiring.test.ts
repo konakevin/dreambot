@@ -53,11 +53,14 @@ describe('the locked engine is wired the way the summary says', () => {
   // run: the 09-14..16 engine re-rendered every failed couple before degrading and delivered 96% of couples as
   // couples; the immediate solo rung was converting them at the first-try failure rate. The chain is now
   //   flux couple → flux couple AGAIN (same model) → flux single → gemini couple → gemini single → nobody
-  it('CLAIM: a failed couple is re-rendered once on the same model, then the solo, then ONE model move', () => {
+  // REVISED AGAIN 2026-09-18 (NIGHTLY_CHAIN_V2_DESIGN.md): the same-model rung burned the budget the later rungs
+  // needed (chain6: 2 faceless dreams in 20). Now: flux couple → couple on the next model → single → pure scene.
+  it('CLAIM: a failed couple is re-rendered ONCE, on the next model, with no reuse-single between attempts', () => {
     const call = SRC.match(/genderSafeDualSwap\([\s\S]*?\n {6}\);/);
     expect(call).toBeTruthy();
-    expect(strip(call![0])).toContain('maxRerenders: 2,');
-    expect(strip(call![0])).toContain('soloFromAttempt: 1,');
+    expect(strip(call![0])).toContain('maxRerenders: 1,');
+    expect(strip(call![0])).not.toContain('soloFromAttempt');
+    expect(strip(SRC)).toContain('const chainAttempt = attempt + 1;');
   });
 
   // 2026-09-16: grok removed from nightly entirely ("consistently makes ugly renders"), so the pool is two
