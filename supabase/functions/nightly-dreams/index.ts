@@ -3339,9 +3339,10 @@ Deno.serve(async (req) => {
         if (isDualFaceSwap && 'left_wardrobe' in slotResult.slots) {
           const coupleEngine = force_couple_engine ?? hairCfg.nightlyCoupleEngine;
           if (coupleEngine === 'experimental') {
+            // Default = the lab's winner (R7/R8: 17/20 first-try holds on flux-1.1-pro, 20/20 on flux-2-flex).
             const variant = isCoupleVariant(force_couple_variant)
               ? force_couple_variant
-              : 'narrative';
+              : 'narrative_fg';
             finalPrompt = composeExperimentalCouple({
               slots: slotResult.slots,
               input: slotInputUsed,

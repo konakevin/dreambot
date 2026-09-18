@@ -66,3 +66,35 @@ wrap dress). Nothing in the round is a close-up.
 failing-side gender **female 9, male 2**. The partner's face is the weak link, four to one, whichever side she is on.
 Open lead for the next lab: her source photo (analyzeCastPhoto quality), hair across the face in the render, or the
 swap's female-face handling — not the prompt shape.
+| R10 | `narrative_fg` as plain prose on **flux-2-flex** | **10/10 (100%)** | 8 10 10 10 10 10 10 11 14 20 (median 10%) | none | flex holds on JSON and on prose alike (20/20 across R5 + R10). One composer serves both models. |
+
+## Verdict (10 rounds, 100 forced couples, 2026-09-18 05:50–07:20 UTC)
+
+| couple recipe | model | first-try hold | delivered on the model via the chain | held faces (median) |
+|---|---|---|---|---|
+| subject-first fragment list (production until 05:27) | flux-1.1-pro | 44% organic | — | 27% |
+| album recipe, fragment-list assembly (production since 05:27) | flux-1.1-pro | 45% forced / 9% organic (n=11) | gemini carried | 16% |
+| `narrative` (R1+R4) | flux-1.1-pro | **70%** (14/20) | — | 12–16% |
+| **`narrative_fg` (R7+R8)** | **flux-1.1-pro** | **85%** (17/20) | **100%** (20/20) | **11–14%** |
+| `narrative_fg` + catalogue looks (R9) | flux-1.1-pro | 60% | 90% | 13% |
+| **`json` / `narrative_fg` (R5+R10)** | **flux-2-flex** | **100%** (20/20) | 100% | **9–10%** |
+| `json` (R6) | flux-2-pro | 30% | — | 7% (too wide for the split) |
+| `narrative_faces` (R2), `narrative_asym` (R3) | flux-1.1-pro | 22%, 20% | — | — |
+
+**What fixed flux-1.1-pro couples:** not camera words (flux ignores them, probes 1 and 2), not the eye colour alone,
+not the geometry block. The prompt SHAPE: one left-to-right paragraph that names the couple in the foreground
+before the scene, keeps face words late, and carries the 1.2.0 illustration fragment. From 45% to 85% first try, with
+faces at the album's size and zero giant faces or empty landscapes in 20 renders.
+
+**What the remaining failures are:** one side's identity ≈ 0 on the first render, the woman's side four times out
+of five, cleared by the same-model re-render every time in R7/R8/R9. That is a swap/source lead, not a prompt lead.
+
+**Recommendation (Kevin's call, nothing promoted):**
+1. Promote: `UPDATE engine_config SET nightly_couple_engine = 'experimental'` (default variant `narrative_fg`, the
+   album fragments stay on for flux couples, eye lock stays off). Production composer stays in the code as the
+   rollback: set it back to `production`.
+2. Chain: keep flux-1.1-pro first for the look Kevin wants; make flux-2-flex the whole couple fallback (it held 20/20
+   under this composer) — `nightly_model_policy` couple fallback flex 100 instead of the 50/50 with gemini — or keep
+   gemini in the roll for variety. Both land.
+3. Next lab: the partner-side identity failures (her source photo quality via analyzeCastPhoto, hair across the
+   face, the engine's female-face handling).
