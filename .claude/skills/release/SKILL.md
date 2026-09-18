@@ -154,3 +154,119 @@ bot. None of this touches render/content history.
 - "Launch <feature>" / "commence launch operation" → the full feature-launch section above:
   public flip + `activate_announcement` + **the admin seen-row clear** + device verification.
   Don't stop at just the public flip.
+
+---
+
+## Go-live runbook: flipping a finished release live (verified end-to-end, v1.4.0, 2026-09-18)
+
+The 1.4.0 ship was a *pure go-live* — the build was already approved and on the App Store, so
+none of the build/submit machinery applied. Only DB flips. This section is the exact sequence,
+the copy-paste SQL, and the four things that actually had to be looked up because they were not
+written down. Read this first when Kevin says "the build is live, flip it on."
+
+### The one-sentence mental model
+`engine_config` decides **who may open the app at all**. `announcements` decides **who sees a
+what's-new sheet once inside**. They are independent, and an announcement's version floor never
+activates anything on its own.
+
+### Step 1 — App update gate (System 1)
+```sql
+-- HARD (locks out everyone below; Kevin asked for exactly this on 1.4.0)
+UPDATE public.engine_config SET min_app_version = '1.4.0', latest_app_version = '1.4.0';
+-- SOFT (dismissible nudge only) — leave min_app_version at the previous version
+UPDATE public.engine_config SET latest_app_version = '1.4.0';
+SELECT min_app_version, latest_app_version FROM public.engine_config;   -- verify
+```
+⚠️ **Warn Kevin every time on a hard flip:** `ForceUpdateGate` has **no admin exemption**, so if
+his own test device is below the new floor he is hard-walled and cannot test anything —
+including the announcement he just asked you to set up. Tell him to install the new build from
+the App Store *first*. (On 1.4.0 he confirmed "that's the point, to lock everyone out until they
+have 1.4.0" — hard is a legitimate ask, just never assume it.)
+
+### Step 2 — Make the right announcement live
+**`is_active` is a SEPARATE MANUAL FLIP.** This was the actual point of confusion on 1.4.0:
+Kevin assumed an announcement with `min_app_version = '1.4.0'` would start showing once 1.4.0
+shipped. It does not. The version floor only decides *who is eligible once the row is already
+active*. Something must activate it.
+
+```sql
+-- see everything at once before touching it
+SELECT id, is_active, audience, existing_users_only, min_app_version, starts_at, title
+FROM public.announcements ORDER BY is_active DESC, starts_at DESC;
+
+SELECT activate_announcement('<feature>-launch');  -- atomic: deactivates the current one,
+                                                   -- activates this one, resets starts_at = now()
+SELECT count(*) FROM public.announcements WHERE is_active = true;  -- must be exactly 1
+```
+- **Only ONE announcement can be active** (migration 484 unique index). Activating a new one
+  **automatically deactivates the previous one** — on 1.4.0 this superseded `farmbot-launch`.
+  Say this out loud to Kevin: any existing user who never saw the old sheet now never will. The
+  row is deactivated, not deleted, so history is preserved and it could be re-activated.
+  Deactivating a *sheet* does not touch the feature/bot itself — FarmBot stayed public and kept
+  posting.
+- `min_app_version` on an announcement is a **floor (>=), not an exact match**. `'1.4.0'` shows
+  to 1.4.0 **and every version above it**. Pre-empt this — Kevin asked "is that not how it's
+  working?" about exactly this.
+- **Nice property worth pointing out:** once the app gate hard-blocks below X, every user who
+  can open the app already passes an announcement floor of X, so the announcement's own version
+  gate becomes redundant. The two systems agree, which is the safe direction.
+
+### Step 3 — Clear Kevin's seen row (always, as part of go-live)
+Already covered above, but the verified shape:
+```sql
+SELECT count(*) AS total, count(*) FILTER (WHERE user_id = 'eab700d8-f11a-4f47-a3a1-addda6fb67ec') AS kevins
+FROM announcement_seen WHERE announcement_id = '<feature>-launch';
+-- total = 1 and kevins = 1 is the EXPECTED pre-consumed-preview case → safe to delete.
+-- total > kevins means real users already saw it → STOP and investigate first.
+DELETE FROM announcement_seen
+WHERE announcement_id = '<feature>-launch' AND user_id = 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
+```
+Activation does **not** clear seen rows — verify the delete still reads 0 *after* activating.
+
+### Step 4 — Verify, and tell Kevin how to test
+- Exactly one active announcement, and it is the intended id.
+- `starts_at` is the activation moment (not the row's creation date).
+- Kevin must be on the new build (Step 1 walls him otherwise), and must **force-quit** —
+  `useAnnouncement.ts` caches the eligibility query in-session, so background/foreground can
+  serve a stale answer.
+
+### The new-install gate — where it actually lives (asked on 1.4.0; confirm from these, not memory)
+It is **server-side RLS**, so no client can bypass it. `lib/announcementEligibility.ts` does
+**not** check it — that file's own header says `is_active` / `starts_at` / `ends_at` /
+`existing_users_only` are RLS-only.
+```sql
+-- policy announcements_read (migrations 333, 445)
+is_active AND starts_at <= now() AND (ends_at IS NULL OR ends_at > now())
+  AND (NOT existing_users_only OR account_created_before(starts_at))
+
+-- public.account_created_before(ts): STABLE SECURITY DEFINER
+SELECT COALESCE((SELECT u.created_at FROM public.users u WHERE u.id = auth.uid()) < ts, false)
+--                                                        ^ unknown user → FALSE → hide (fails CLOSED)
+```
+So a brand-new post-launch signup never sees a "new!" sheet, and the failure mode is to hide
+rather than leak. Because `activate_announcement` resets `starts_at = now()`, "existing users"
+means *everyone who existed at the moment you flipped it*, which is why firing it at the real
+go-live moment matters.
+
+### Admin preview: Kevin can test an announcement that is still DARK
+RLS policy `announcements_admin_preview` is simply `auth.uid() = '<Kevin>'` — it lets his
+account read **any** announcement row regardless of `is_active`, `starts_at`, or
+`existing_users_only`. Combined with the client-side admin bypass of the version gates in
+`selectEligibleAnnouncement`, this means: **clearing his seen row alone is enough for him to
+re-test a sheet without activating it publicly.** Offer that when he wants to preview before
+committing to a launch — it has zero blast radius, whereas activating supersedes whatever is
+currently live.
+
+### Client-side gate order (`lib/announcementEligibility.ts`, for reference)
+1. not already seen · 2. `style === 'sheet'` · 3. audience matches · 4. **admin bypasses 5+6** ·
+5. `min_build` · 6. `min_app_version`. Fails **open** on a null/malformed version, and
+`build === 0` (unreadable native build) also passes.
+
+### Cheat-sheet additions
+- "The build is live, flip it on" → Step 1 (confirm soft vs hard) **+ Step 2** (activate the
+  right announcement — it will NOT turn itself on) + Step 3 (clear Kevin's seen row).
+- "Only the <X> announcement should be active" → `SELECT activate_announcement('<X>')`; it
+  deactivates the other one for you. Then confirm `count(*) WHERE is_active = true` is 1.
+- "Why isn't the announcement showing?" → check in this order: `is_active`, then `starts_at <=
+  now()`, then `existing_users_only` vs the account's `created_at`, then the seen row, then the
+  version floor. Not the version floor first — that is rarely the cause.
