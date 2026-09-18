@@ -126,3 +126,12 @@ the man far behind — a dynamic beat pulls the composition into motion. Both he
 force_couple_variant until a full round proves it), album
 fragments on flux couples, no eye colour on the couple lock, flux first → gemini/flex roll. Rollback = the same row
 back to `production`, no deploy. First real-user run on it: 2026-09-19 08:00 UTC.
+
+## ⭐ RESTORE POINT — 2026-09-18 evening (Kevin: "the best it's ever been")
+
+"the nightly engine is finally performing at a very high level. it's making very well composed renders, nice styles,
+accurate placements, no huge faces, showing the environment well in most photos. it's very good, the best it's ever
+been from looking at this current batch."
+
+Exact state captured in `nightly-states/v1.5-narrative.json` (commit, engine_config, policy rows, enabled + retired
+looks). Rule: no production nightly change without Kevin's word; further work is opt-in behind request flags.

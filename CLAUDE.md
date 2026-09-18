@@ -71,6 +71,16 @@ gets a swap-safe **Option B** action fitting the exact place (`_shared/locationA
 **`first-dream-render`**, which runs a cascade (dual → single → scene face-swap) so the user is reliably
 cast into one of their places. Free (no charge).
 
+### ⭐ Nightly couples — RESTORE POINT 2026-09-18 ("the best it's ever been")
+
+Kevin graded the live engine on 2026-09-18 evening as the best it has ever been (composition, styles, placement, no
+huge faces, environment visible). The exact state is `nightly-states/v1.5-narrative.json` (commit + config + policy +
+enabled looks): couples compose through `_shared/coupleComposerX.ts` (`nightly_couple_engine = experimental`,
+default variant `narrative_fg` — one left-to-right paragraph, the couple named in the foreground before the scene,
+face words last), flux couples render the four 1.2.0 fragments, no eye colour on the couple lock, gate 0.35.
+Measured: flux first-try dual-swap hold 45% → 92% (37/40), faces median 11-14%. Ledger `FLUX_COUPLE_LAB.md`.
+**Do not change the production nightly engine without Kevin's word; new work is opt-in behind request flags.**
+
 ### Shared engine + worker reliability (status of record: `QUEUE_WORKERS_REFACTOR.md`)
 
 - **Scene engine** (shared by all paths): `dreamAlgorithm.ts:rollDream` → `recipeBuilder.ts`/

@@ -1,0 +1,158 @@
+{
+ "name": "v1.5-narrative",
+ "note": "Kevin 2026-09-18: the nightly engine is finally performing at a very high level — well composed, nice styles, accurate placements, no huge faces, environment shown; the best it has ever been.",
+ "saved_at": "2026-09-18T18:27:32.303Z",
+ "commit": "c438863899a764316608fb71b9c4a431a74aaa1d",
+ "code": {
+  "couple_composer": "_shared/coupleComposerX.ts default variant narrative_fg (narrative_fg_beat opt-in)",
+  "flux_couples_fragment": "faceSwapModelOverrides (the four 1.2.0 fragments) via lookFragmentOverrideFor — flux-1.1-pro couples on the looks engine are NOT exempt",
+  "eye_lock": "couples off (mig 526), solos on",
+  "wardrobe": "costume-designer register steered by scene type; PLAIN_CLOTHES validator incl. sweater/pullover/chinos/jeans; salvageSlots",
+  "beats": "actionSafety masks/goggles plural + DIRECTION_WORDS on Sonnet location beats",
+  "chain": "flux couple → next look-chain model (gemini) couple → flux single (solo_rebuild_model) → pure scene; singles: flux → gemini/flex → scene",
+  "gate": "nightly_max_face_hfrac 0.35 both surfaces; big-face tier off (0.40)"
+ },
+ "engine_config": {
+  "nightly_couple_engine": "experimental",
+  "couple_prompt_style": "legacy",
+  "nightly_couple_eye_lock": false,
+  "nightly_max_face_hfrac": 0.35,
+  "dual_big_face_max_hfrac": 0.4,
+  "solo_rebuild_model": "black-forest-labs/flux-1.1-pro",
+  "nightly_looks_mode": "on",
+  "location_action_pct": 75,
+  "dual_scene_goofy_pct": 6,
+  "dual_scene_elegant_pct": 6,
+  "dual_scene_active_pct": 8,
+  "single_scene_goofy_pct": 6,
+  "single_scene_elegant_pct": 6,
+  "single_scene_active_pct": 8,
+  "dual_action_pose_pct": 25,
+  "single_action_pose_pct": 25
+ },
+ "nightly_model_policy": [
+  {
+   "surface": "couple",
+   "primary_models": [
+    "black-forest-labs/flux-1.1-pro",
+    "google/gemini-2-image"
+   ],
+   "primary_weights": [
+    100,
+    0
+   ],
+   "fallback_models": [
+    "black-forest-labs/flux-2-flex",
+    "google/gemini-2-image"
+   ],
+   "fallback_weights": [
+    50,
+    50
+   ]
+  },
+  {
+   "surface": "scene",
+   "primary_models": [
+    "black-forest-labs/flux-1.1-pro",
+    "google/gemini-2-image",
+    "black-forest-labs/flux-1.1-pro-ultra"
+   ],
+   "primary_weights": [
+    33,
+    33,
+    34
+   ],
+   "fallback_models": [],
+   "fallback_weights": []
+  },
+  {
+   "surface": "solo",
+   "primary_models": [
+    "black-forest-labs/flux-1.1-pro",
+    "google/gemini-2-image"
+   ],
+   "primary_weights": [
+    100,
+    0
+   ],
+   "fallback_models": [
+    "black-forest-labs/flux-2-flex",
+    "google/gemini-2-image"
+   ],
+   "fallback_weights": [
+    50,
+    50
+   ]
+  },
+  {
+   "surface": "solo_rebuild",
+   "primary_models": [
+    "black-forest-labs/flux-2-flex"
+   ],
+   "primary_weights": [],
+   "fallback_models": [],
+   "fallback_weights": []
+  }
+ ],
+ "looks_enabled": [
+  "halloween_classical_oil",
+  "halloween_dark_fantasy_oil",
+  "halloween_digital_painting",
+  "halloween_ornate_ink",
+  "halloween_storybook_gouache",
+  "halloween_watercolor_ink",
+  "nightly_adult_cartoon",
+  "nightly_airbrush_poster",
+  "nightly_alla_prima",
+  "nightly_aquarelle_graphite",
+  "nightly_canvas",
+  "nightly_chromolithograph",
+  "nightly_classical_oil",
+  "nightly_colored_pencil",
+  "nightly_digital_painting",
+  "nightly_encaustic",
+  "nightly_fresco",
+  "nightly_hand_drawn_illustration",
+  "nightly_ink_illustration",
+  "nightly_ink_wash_comic",
+  "nightly_jewel_realism",
+  "nightly_lineless_watercolor",
+  "nightly_magazine_cover",
+  "nightly_marker",
+  "nightly_matte_painting",
+  "nightly_movie_poster",
+  "nightly_oil_pastel",
+  "nightly_painted_comic_cover",
+  "nightly_painted_fantasy",
+  "nightly_painted_graphic_novel",
+  "nightly_pulp_cover",
+  "nightly_rotoscope",
+  "nightly_scifi_paperback",
+  "nightly_soft_brush_illustration",
+  "nightly_soft_comic",
+  "nightly_storybook_gouache",
+  "nightly_watercolor_ink",
+  "nightly_watercolor_paper"
+ ],
+ "looks_retired": [
+  "nightly_baroque_oil",
+  "nightly_big_head",
+  "nightly_cinematic_still",
+  "nightly_comics",
+  "nightly_digital_watercolor",
+  "nightly_film_noir",
+  "nightly_glamour",
+  "nightly_gouache_portrait",
+  "nightly_hand_tinted_photo",
+  "nightly_kodachrome",
+  "nightly_painted_animation",
+  "nightly_pastel_chalk",
+  "nightly_pastel_portrait",
+  "nightly_pop_art",
+  "nightly_salon_realism",
+  "nightly_soft_pop_art",
+  "nightly_technicolor",
+  "nightly_vintage_film",
+  "nightly_watercolor_portrait"
+ ]
+}
