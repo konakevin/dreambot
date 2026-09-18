@@ -65,6 +65,7 @@ import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
 import { restoreFace } from '../_shared/faceRestore.ts';
 import { imageOpsEnabled, persistViaFly } from '../_shared/imageOps.ts';
+import { composeExperimentalCouple, isCoupleVariant } from '../_shared/coupleComposerX.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { sceneTypeCuts, adaptiveScenePcts } from '../_shared/sceneTypeRoll.ts';
 import {
@@ -429,6 +430,10 @@ Deno.serve(async (req) => {
     force_prompt_style,
     force_eye_lock,
     force_override_library,
+    force_couple_engine,
+    force_couple_variant,
+    qa_big_face_max_hfrac,
+    qa_max_face_hfrac,
     force_costume_keys,
     force_costume_pct,
     force_day_of_look,
@@ -3328,6 +3333,26 @@ Deno.serve(async (req) => {
         finalPrompt = slotResult.assembledPrompt;
         // Captured BEFORE any retry or degrade can overwrite finalPrompt (see the declaration).
         if (selectedCast.length === 2) couplePromptOriginal = slotResult.assembledPrompt;
+        // FLUX COUPLE LAB (2026-09-18): the experimental couple composer replaces the assembled prompt when the
+        // couple engine is 'experimental' (engine_config.nightly_couple_engine, or force_couple_engine in QA).
+        // Production is the branch above, untouched.
+        if (isDualFaceSwap && 'left_wardrobe' in slotResult.slots) {
+          const coupleEngine = force_couple_engine ?? hairCfg.nightlyCoupleEngine;
+          if (coupleEngine === 'experimental') {
+            const variant = isCoupleVariant(force_couple_variant)
+              ? force_couple_variant
+              : 'narrative';
+            finalPrompt = composeExperimentalCouple({
+              slots: slotResult.slots,
+              input: slotInputUsed,
+              variant,
+            });
+            couplePromptOriginal = finalPrompt;
+            fallbackReasons.push(`couple_engine:experimental:${variant}`);
+          } else {
+            fallbackReasons.push('couple_engine:production');
+          }
+        }
         slotPipelineFallbacks = slotResult.fallbackReasons;
         slotPipelineHandled = true;
         castSlotsCtx = { slots: slotResult.slots, input: slotInputUsed };
@@ -4327,7 +4352,7 @@ Output ONLY the prompt.`;
               { left: s0.gender, right: s1.gender },
               queueJobId,
               genderOverride ?? null,
-              (await fetchEngineConfig(supabase)).dualBigFaceMaxHFrac
+              qa_big_face_max_hfrac ?? (await fetchEngineConfig(supabase)).dualBigFaceMaxHFrac
             ),
           confirmGenders: async (target) => {
             const r = await classifyDualGenders(target, REPLICATE_TOKEN);
@@ -4543,8 +4568,11 @@ Output ONLY the prompt.`;
               const pick = styleContract.forAttempt(chainAttempt);
               // Round 19: a model move across the flux ↔ others order boundary re-assembles the slots in the new
               // model's order (r18 #5/#7 rendered grok in the legacy order and both needed a re-render).
+              const experimental = fallbackReasons.some((r) =>
+                /^couple_engine:experimental:/.test(String(r))
+              );
               const reordered =
-                looksPath && castSlotsCtx
+                looksPath && castSlotsCtx && !experimental
                   ? reassembleForModel(castSlotsCtx.slots, castSlotsCtx.input, pick)
                   : null;
               if (reordered && castSlotsCtx) {
@@ -4651,7 +4679,8 @@ Output ONLY the prompt.`;
           // → the single → a pure scene. No reuse-single between attempts: every rung is a fresh render.
           maxRerenders: 1,
           // COMPOSITION GATE (engine_config.nightly_max_face_hfrac): no couple ships with a face taller than this.
-          maxFaceHFrac: (await fetchEngineConfig(supabase)).nightlyMaxFaceHFrac,
+          maxFaceHFrac:
+            qa_max_face_hfrac ?? (await fetchEngineConfig(supabase)).nightlyMaxFaceHFrac,
           deadlineMs: dualDeadlineMs,
           recoverBudgetMs: DUAL_RECOVER_MS,
           // Live-tunable wrong-person floor (engine_config, audit L3; cached fetch).
@@ -5240,7 +5269,7 @@ Output ONLY the prompt.`;
               { left: faceSwapSources[0].gender, right: faceSwapSources[1].gender },
               queueJobId,
               null,
-              (await fetchEngineConfig(supabase)).dualBigFaceMaxHFrac
+              qa_big_face_max_hfrac ?? (await fetchEngineConfig(supabase)).dualBigFaceMaxHFrac
             );
             tempUrl = r.swappedUrl ?? genResult.url;
           } else if (faceSwapSource) {
@@ -5349,7 +5378,8 @@ Output ONLY the prompt.`;
                       { left: faceSwapSources[0].gender, right: faceSwapSources[1].gender },
                       queueJobId,
                       null,
-                      (await fetchEngineConfig(supabase)).dualBigFaceMaxHFrac
+                      qa_big_face_max_hfrac ??
+                        (await fetchEngineConfig(supabase)).dualBigFaceMaxHFrac
                     );
                     // A gate re-swap is a BARE dispatch — it must pass the same
                     // identity bar as the main pipeline or it is a failed attempt.

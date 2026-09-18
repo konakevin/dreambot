@@ -104,6 +104,13 @@ export interface NightlyQaFlags {
   force_eye_lock: boolean | null;
   /** ALBUM RECIPE probe: true applies the 1.2.0 flux override fragments even on the looks engine (normally exempt). */
   force_override_library: boolean;
+  /** FLUX COUPLE LAB: pick the couple composer for this request; null = engine_config.nightly_couple_engine. */
+  force_couple_engine: 'production' | 'experimental' | null;
+  /** FLUX COUPLE LAB: the experimental composer's variant (narrative | narrative_asym | narrative_faces | json). */
+  force_couple_variant: string | null;
+  /** FLUX COUPLE LAB: per-request big-face tier ceiling / composition gate overrides (numbers 0.2-1). */
+  qa_big_face_max_hfrac: number | null;
+  qa_max_face_hfrac: number | null;
   /** QA (parity pairs, COUPLE_PROMPT_PARITY_PLAN.md §2): Sonnet's six dual slots, verbatim — the
    *  slot pipeline skips Sonnet and assembles from these. */
   force_dual_slots: DualSlots | null;
@@ -166,6 +173,11 @@ function isSlotInput(v: unknown): v is CharacterSlotPipelineInput {
     'iconicAnchor' in o &&
     'userPlace' in o
   );
+}
+
+function num01(x: unknown): number | null {
+  const n = typeof x === 'number' ? x : typeof x === 'string' ? Number(x) : NaN;
+  return Number.isFinite(n) && n >= 0.2 && n <= 1 ? n : null;
 }
 
 export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
@@ -262,6 +274,14 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
     force_eye_lock:
       body.force_eye_lock === false ? false : body.force_eye_lock === true ? true : null,
     force_override_library: body.force_override_library === true,
+    force_couple_engine:
+      body.force_couple_engine === 'experimental' || body.force_couple_engine === 'production'
+        ? body.force_couple_engine
+        : null,
+    force_couple_variant:
+      typeof body.force_couple_variant === 'string' ? body.force_couple_variant : null,
+    qa_big_face_max_hfrac: num01(body.qa_big_face_max_hfrac),
+    qa_max_face_hfrac: num01(body.qa_max_face_hfrac),
     force_prompt_style:
       body.force_prompt_style === 'legacy' || body.force_prompt_style === 'subject_first'
         ? body.force_prompt_style

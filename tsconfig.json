@@ -18,6 +18,7 @@
     "__tests__/lib/soloRebuildDistanceInAnchor.test.ts",
     "__tests__/lib/imageOps.test.ts",
     "__tests__/lib/wardrobeRegister.test.ts",
+    "__tests__/lib/coupleComposerX.test.ts",
     "__tests__/lib/selfInsertDetector.test.ts",
     "__tests__/lib/selfInsertParity.test.ts",
     "__tests__/lib/staleRecovery.test.ts",

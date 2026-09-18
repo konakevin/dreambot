@@ -344,6 +344,11 @@ async function generateImageOnce(
   //
   // NOTE the edit/restyle branch further down still allows it — that path was not
   // measured here, and changing it would alter restyle output for live users.
+  // FLUX.2 structured (JSON) prompts: Replicate's flux-2-flex upsamples prompts by default, which would rewrite
+  // the JSON into prose before the model sees it (FLUX COUPLE LAB, 2026-09-18). Prose prompts keep the default.
+  if (model === 'black-forest-labs/flux-2-flex' && /^\s*\{/.test(prompt)) {
+    input.prompt_upsampling = false;
+  }
   if (model === 'bytedance/seedream-4' && !inputImage) {
     input = { prompt, aspect_ratio: '9:16', size: '1K', enhance_prompt: false };
   }

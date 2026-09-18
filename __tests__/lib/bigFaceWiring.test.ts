@@ -112,7 +112,9 @@ describe('composition gate — every nightly cast site passes engine_config.nigh
     const src = read('supabase/functions/nightly-dreams/index.ts');
     const guards = (src.match(/ensureSoloSwapTarget\(/g) || []).length;
     const wired = (
-      src.match(/maxFaceHFrac: \(await fetchEngineConfig\(supabase\)\)\.nightlyMaxFaceHFrac/g) || []
+      src.match(
+        /maxFaceHFrac:\s*(?:qa_max_face_hfrac \?\?\s*)?\(await fetchEngineConfig\(supabase\)\)\.nightlyMaxFaceHFrac/g
+      ) || []
     ).length;
     expect(guards).toBe(3);
     expect(wired).toBe(guards + 1); // + the genderSafeDualSwap call
