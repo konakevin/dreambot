@@ -1,7 +1,7 @@
 [
-  "Classic 16-bit pixel art: a chunky visible pixel grid, sixteen-colour discipline per region, banded dithering on every gradient, clean sprite-era pixel craft with hard pixel edges.",
-  "Hi-bit painterly pixel art: a large canvas of hand-placed pixels, soft dithered gradients built from many close tones, rich pixel clusters for texture, every edge still a crisp pixel edge on a visible pixel grid.",
-  "Ordered-dither pixel art: Bayer checkerboard dithering on every gradient and sky band, a tight limited palette, mechanical dot patterns visible up close, crisp pixel edges throughout.",
-  "Fine-dither pixel art: very fine checker dithering inside every gradient, a high-contrast limited palette, meticulous pixel shading, crisp pixel edges on a tight pixel grid.",
-  "Impressionist pixel clusters: loose textured clusters of pixels like brush strokes, dabs of pixel colour building every form, painterly pixel clusters that still resolve on a visible pixel grid."
+  "Classic SNES RPG splash-screen pixel art: a chunky visible pixel grid, sixteen-colour palettes per region, a banded dithered gradient sky, sprite-era pixel craft, the pretty scene a 16-bit RPG shows on its title screen.",
+  "VGA adventure-game background pixel art: 256-colour DOS-era painted backgrounds, hand-dithered gradients, crisp pixel edges, the lush scene art of classic point-and-click adventures.",
+  "Old-school Ultima-style tile scene: the world built from visible repeating pixel tiles (grass tiles, water tiles, stone tiles), a tile grid you can read, chunky tile-sprites for trees and buildings, classic computer-RPG charm.",
+  "Amiga 32-colour pixel art: ordered Bayer dithering on every gradient and sky band, a tight 32-colour palette, mechanical dot patterns visible up close, crisp pixel edges, demoscene-era craft.",
+  "HD voxel world: the whole scene built from small 3D cubes like a lovingly rendered HD Minecraft world, crisp cube edges on every surface, blocky terrain and cube-built trees and water, soft global lighting and gentle shadows between the cubes."
 ]

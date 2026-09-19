@@ -23,7 +23,7 @@ const builder = ({ sharedDNA, vibeDirective, picker }) => {
   const life = scene.gated(picker, P, 'life', 'vista_life', 0.6);
   const moment = scene.gated(picker, P, 'moment', 'vista_moment', 0.35);
 
-  return `${blocks.PIXEL_LOOK_OVERRIDE(sharedDNA)}You are writing a PIXEL-ART PAINTING of a great natural landform for PixelBot: a place so grand people stop scrolling. The landform IS the picture. There is no character.
+  return `${blocks.PIXEL_LOOK_OVERRIDE(sharedDNA)}You are writing a WHIMSICAL PIXEL-ART PAINTING of a storybook landscape for PixelBot: a place with old-school game-world charm and a little magic, the kind of vista an old RPG would show as its title screen. The landform IS the picture. There is no character.
 
 ${blocks.SCENE_REGISTER_BLOCK}
 ${blocks.ONE_HERO_BLOCK} Here the hero is the LANDFORM: it fills 60 to 70 percent of the frame, scale-provers stay tiny and deep, and the near foreground stays simple so nothing competes with it.
@@ -45,7 +45,7 @@ ${sky}
 
 ━━━ AIR ━━━
 ${air}
-${life ? `\n━━━ TINY LIFE (a scale-prover, never the hero) ━━━\n${life}\n${blocks.TINY_LIFE_BLOCK}\n` : ''}${moment ? `\n━━━ A PASSING MOMENT ━━━\n${moment}\n` : ''}
+${life ? `\n━━━ A CHARM DETAIL (tiny, never the hero) ━━━\n${life}\n${blocks.TINY_LIFE_BLOCK}\n` : ''}${moment ? `\n━━━ A PASSING MOMENT ━━━\n${moment}\n` : ''}
 ━━━ PALETTE ━━━
 ${palette}
 
@@ -57,5 +57,5 @@ If any two of the LIGHT, the LIGHT MOMENT, and the SKY disagree physically (moon
 ${blocks.SCENE_STRUCTURE('[the pixel-art style words] [the landform seen from the camera] [the light and the light moment] [the sky and the air] [tiny life if any] [the passing moment if any] [the palette]')}`;
 };
 
-builder.vibes = ['epic', 'ethereal', 'cinematic', 'nostalgic'];
+builder.vibes = ['whimsical', 'enchanted', 'nostalgic', 'ethereal'];
 module.exports = builder;

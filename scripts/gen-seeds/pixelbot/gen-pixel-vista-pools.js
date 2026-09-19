@@ -10,20 +10,17 @@ const DIR = 'scripts/bots/pixelbot/seeds/';
 const SCALE = process.argv.includes('--scale');
 const only = (() => { const i = process.argv.indexOf('--only'); return i >= 0 ? process.argv[i + 1] : null; })();
 const FMT = `Format every entry exactly as 'CAPS TITLE: body' (a short capitalised title, a colon, then the body). Return ONLY a JSON array of strings.`;
+const WHIMSY_LAW = "WHIMSY LAW (Kevin, 2026-09-19): this is a whimsical, somewhat magical storybook world with old-school game charm, the vista an old RPG would put on its title screen. Rounded, exaggerated, charming shapes; saturated colour; a little magic. Realistic geography, documentary landscape, and grim tones are absent.";
 const CLEAN = `POSITIVE ONLY: describe what is there; write no negations, no "no", no "never", no "without".`;
 
 const POOLS = {
-  landform: { mvp: 25, scale: 200, prompt: (n) => `You are writing ${n} LANDFORM descriptions for PixelBot's pixel-vista path: a great natural landform as the HERO of a pixel-art painting. Each entry is ONE specific landform described as GEOLOGY + SHAPE + SCALE + TERRAIN: what it is made of, how it is shaped, how big it reads, what grows on it. 30 to 50 words.
+  landform: { mvp: 25, scale: 200, prompt: (n) => `You are writing ${n} STORYBOOK LANDFORM descriptions for PixelBot's pixel-vista path: a charming, slightly magical landform as the HERO of a whimsical pixel-art painting. Each entry is ONE landform described by SHAPE + what it is made of + what grows on it + its one charming exaggeration. 25 to 45 words.
 
-THE BAR: a place so grand a person stops scrolling, the kind of vista that fills a wall. Specific and believable: real rock, real landforms (hanging valleys, arêtes, sea stacks, mesas, ice shelves, dune seas, terraced hills, braided rivers).
-
-VARIETY MANDATE, distribute the ${n} across: 4 MOUNTAINS (granite spires, a glaciated massif, a volcanic cone, a knife-edge ridge), 3 CANYONS (a slot canyon, a layered red canyon, a river gorge), 4 FJORDS OR SEA CLIFFS, 3 DESERTS (a dune sea, a salt flat, badlands), 2 VOLCANIC (a black lava coast, a caldera lake), 2 ARCTIC OR GLACIAL (an ice shelf edge, a glacier tongue), 4 HILLS OR VALLEYS (terraced, rolling, a river valley, a highland plateau), 3 ISLANDS OR LAKES.
-
-AXIS-CLEAN: the entry names the LAND and what grows on it only. Light, time of day, weather, clouds, sky, animals, people, and buildings all belong to other axes and are absent here.
-NAMES: describe the geology; a famous viewpoint, park, or landmark name is absent (a broad region as flavour is fine: "a northern fjord coast").
-FOREST FORMS: trees stand at irregular spacing, uneven girth, some leaning, scattered across slopes.
+${WHIMSY_LAW}
+VARIETY MANDATE, distribute the ${n}: 5 ROLLING HILLS (candy-green, patchwork, a winding river or road between them), 4 CROOKED MOUNTAINS (a single leaning peak, a snow cap like frosting, a spiral path), 3 MUSHROOM-ROCK TOWERS OR HOODOOS (rounded caps, stacked like pancakes), 3 COAST BAYS (a crescent bay, pastel cliffs, a sea stack with a tuft of trees), 3 GLOWING WATERFALL GORGES (a waterfall that catches light like glass), 2 DUNE SEAS (soft rounded dunes in candy stripes of sand), 2 SNOWY PEAKS (frosting caps, sparkling), 3 ISLANDS IN A LAKE (a round island with one giant tree or a tiny hill village).
+AXIS-CLEAN: the land and what grows on it only. Light, time, weather, sky, animals, people, and the charm detail belong to other axes. A famous place name is absent.
 ${CLEAN}
-Examples: "GLACIER-CARVED GRANITE VALLEY: a U-shaped valley of pale grey granite walls three thousand feet high, hanging side-valleys spilling ribbon waterfalls, a braided river across the flat green floor, scattered old pines leaning on the lower slopes"; "RED SLOT CANYON: a narrow winding canyon of rust and cream sandstone, walls sculpted into smooth waves and ribs, a strip of pale sand along the floor, the walls leaning together far overhead"; "BASALT SEA STACKS: three black columnar basalt stacks standing off a black-sand beach, their tops capped with wind-cropped grass, surf boiling white around their feet".
+Examples: "CANDY-GREEN PATCHWORK HILLS: soft rounded hills quilted in bright green and gold fields, hedgerows like stitching, a winding blue river looping between them, a few puffball trees on every crest"; "THE LEANING PEAK: one tall crooked mountain leaning slightly to the left, its summit capped in snow like a dollop of frosting, a spiral path climbing its flank, wildflower meadows at its feet".
 ${FMT}` },
 
   light: { mvp: 25, scale: 100, prompt: (n) => `You are writing ${n} LIGHT descriptions for PixelBot's pixel-vista path: the base ambient light of a landscape painting. Each entry stacks TIME OF DAY + DIRECTION + COLOUR OF THE LIGHT + HOW SHADOWS FALL. 15 to 30 words.
@@ -42,36 +39,40 @@ ${CLEAN}
 Examples: "COLD CLEAR AIR: sharp and dry, every far ridge crisp, the distance reading in clean steps of paler tone"; "VALLEY MIST: a low white mist pooled along the valley floor, thinning as it rises, the upper slopes clear above it".
 ${FMT}` },
 
-  light_moment: { mvp: 25, scale: 60, prompt: (n) => `You are writing ${n} LIGHT-MOMENT descriptions for PixelBot's pixel-vista path: the ONE dramatic light EVENT that makes the picture, the money shot. 15 to 30 words.
+  light_moment: { mvp: 25, scale: 60, prompt: (n) => `You are writing ${n} MAGICAL LIGHT-MOMENT descriptions for PixelBot's pixel-vista path: the ONE gently magical light event that makes the picture, the money shot. 15 to 30 words. Light is described as light (a glow, a path, a soft shaft, a sparkle), never as an object.
 
-VARIETY MANDATE: 5 alpenglow or first sun striking one peak or one rim while the rest waits in shadow, 4 a storm break with a single beam reaching the ground, 4 crepuscular rays fanning through a gap, 4 the sun low behind the landform (a backlit rim, a sunstar at its edge), 3 moonrise or moonlight laid across water or snow, 3 a sunset colour wash climbing the cliffs, 2 one clean lightning fork far off, briefly lighting the land.
-AXIS-CLEAN: the event only. The base light, general weather, and the landform belong to other axes and are absent here. Light is described as light (beams, glow, a wash, a rim), never as an object.
+${WHIMSY_LAW}
+VARIETY MANDATE: 5 a waterfall or river glowing softly from within, 4 a moon path laid across still water, 4 fireflies or sparkles drifting over the valley, 4 soft sunbeams fanning through a cloud gap, 3 aurora ribbons waving gently, 3 glowing mushrooms or flowers lighting a slope at dusk, 2 a slow shooting star leaving a soft trail.
+AXIS-CLEAN: the light event only. The base light, the sky, and the landform belong to other axes.
 ${CLEAN}
-Examples: "ALPENGLOW ON THE HIGHEST PEAK: the summit alone burning rose-orange for a minute while every lower slope waits in blue shadow"; "STORM BREAK: one wide beam of sun punching through a torn cloud and laying a bright pool of light on the valley floor".
+Examples: "GLOWING WATERFALL: the waterfall lit softly from within, pale aqua light spilling down the rock and pooling in a glowing basin below"; "FIREFLY DRIFT: hundreds of tiny warm sparks drifting slowly up from the valley floor, each one a soft golden glow".
 ${FMT}` },
 
-  sky: { mvp: 25, scale: 60, prompt: (n) => `You are writing ${n} SKY descriptions for PixelBot's pixel-vista path: the sky layer only, cloud forms and the character of the sky. 12 to 25 words.
+  sky: { mvp: 25, scale: 60, prompt: (n) => `You are writing ${n} STORYBOOK SKY descriptions for PixelBot's pixel-vista path: the sky layer of a whimsical pixel-art painting, the kind of sky an old RPG paints in bands. 12 to 25 words.
 
-VARIETY MANDATE: 5 a clean clear dome, 5 towering cumulus or stacked cloud towers, 4 high cirrus or a mackerel sky, 3 a distant storm wall or a far rain curtain, 3 a soft cloud cap draped over a summit, described as cloud (moist, feathered edges, clinging to the peak), 3 a banded gradient sky with a few small clouds, 2 a night sky with a field of stars and the Milky Way arch.
-AXIS-CLEAN: sky and clouds only. Time-of-day light words and landform nouns belong to other axes and are absent here. Clouds are made of moist air with soft feathered edges; they drape, cap, stream, and build.
+${WHIMSY_LAW}
+VARIETY MANDATE: 6 an OVERSIZED moon (a huge pale moon low over the land, a crescent big as a hill), 6 candy-coloured gradient BANDS (peach into lavender into teal, stacked in soft steps), 4 a field of twinkling stars with one long shooting star, 5 puffy cotton-ball clouds drifting in a friendly row, 4 a soft sun with a gentle halo or a ring of rainbow haze.
+AXIS-CLEAN: sky only. Landform nouns, animals, and people are absent. Clouds are soft, round, and friendly; they drift and puff.
 ${CLEAN}
-Examples: "TOWERING CUMULUS: great white cloud towers stacking up over the horizon, flat grey bases, sunlit crowns, small blue gaps between"; "MACKEREL SKY: a high rippled sheet of small cloud scales across most of the sky, thin enough to glow".
+Examples: "OVERSIZED PALE MOON: a huge soft moon sitting low and enormous over the land, gently glowing, a few small stars around it"; "CANDY BANDS: the sky stacked in soft bands from peach at the horizon through pink and lavender to deep teal overhead".
 ${FMT}` },
 
-  life: { mvp: 25, scale: 60, prompt: (n) => `You are writing ${n} TINY-LIFE descriptions for PixelBot's pixel-vista path: a small scale-prover that proves how big the landform is. 10 to 22 words. It is tiny in the frame, far away, a speck or a line of specks.
+  life: { mvp: 25, scale: 60, prompt: (n) => `You are writing ${n} CHARM-DETAIL descriptions for PixelBot's pixel-vista path: one tiny charming detail that makes the landscape a storybook place, far off and small, never the hero. 10 to 22 words.
 
-VARIETY MANDATE: 5 a flock of birds, 4 a lone tree or a thin tree line, 4 a tiny caravan or a lone walker far off on a path, 3 grazing animals as specks (mountain goats, sheep, reindeer, wild horses), 3 a single small boat on the water, 3 one eagle or hawk soaring, 3 a herd or migration seen as dots from above.
-Every entry says tiny, far, or specks. Faces, close figures, and groups near the camera are absent.
+${WHIMSY_LAW}
+VARIETY MANDATE: 5 a tiny cottage with a curl of chimney smoke, 4 a little windmill or water mill, 3 a lighthouse on a point, 3 a wooden bridge or a rowboat, 3 a lone tree with a swing or a lantern, 3 a few sheep or a cart on a road as specks, 2 a distant hot-air balloon, 2 a tiny campfire dot.
+Every entry says tiny, small, or far off. Faces and close figures are absent. Signs are blank.
 ${CLEAN}
-Examples: "TINY CARAVAN: a line of three pack animals and a walker as specks on the switchback trail, far below the ridge"; "ONE LONE PINE: a single wind-bent pine on the near ridge, small against the enormous face beyond".
+Examples: "TINY COTTAGE WITH SMOKE: a small round cottage far down the valley, one lit window, a soft curl of smoke from its chimney"; "LITTLE WINDMILL: a tiny windmill on a far hill, its sails turning slowly against the sky".
 ${FMT}` },
 
-  moment: { mvp: 25, scale: 50, prompt: (n) => `You are writing ${n} PASSING-MOMENT descriptions for PixelBot's pixel-vista path: a small event or phenomenon crossing the scene. 10 to 22 words.
+  moment: { mvp: 25, scale: 50, prompt: (n) => `You are writing ${n} PASSING-MOMENT descriptions for PixelBot's pixel-vista path: a small charming event crossing the scene. 10 to 22 words.
 
-VARIETY MANDATE: 5 a rain curtain crossing far off, 4 a rainbow, 3 snow beginning to fall, 3 a rockfall dust plume on a far face, 3 cloud shadows racing across the land, 3 a waterfall's spray blown sideways by a gust, 2 one lightning fork far away, 2 a flock lifting all at once.
-Everything is described as weather, light, water, or living things in motion, never as objects.
+${WHIMSY_LAW}
+VARIETY MANDATE: 5 a slow shooting star, 4 a flock of small birds lifting in a swirl, 4 a blossom blizzard or leaves swirling, 4 lanterns drifting up far off, 3 a passing rain shower with a rainbow, 3 snow beginning to fall in fat sparkly flakes, 2 a hot-air balloon drifting by.
+Everything is weather, light, petals, or small living things in motion, never a large object.
 ${CLEAN}
-Examples: "CLOUD SHADOWS RACING: broad dark cloud shadows sliding fast across the sunlit hills, the land flickering light and dark"; "SPRAY BLOWN SIDEWAYS: a gust catching the waterfall and carrying its white spray out across the cliff face".
+Examples: "BLOSSOM BLIZZARD: a gust carrying a swirl of pink petals across the valley, bright against the far hills"; "LANTERNS RISING: a handful of tiny paper lanterns drifting up far across the water, each a warm dot".
 ${FMT}` },
 
   camera: { mvp: 25, scale: 25, prompt: (n) => `You are writing ${n} CAMERA framings for PixelBot's pixel-vista path: painterly framings for a wide pixel-art painting of a landform. 10 to 22 words: the camera position plus what dominates the frame. Every framing keeps the WHOLE landform readable with sky above it.
@@ -82,11 +83,12 @@ ${CLEAN}
 Examples: "FROM THE FACING RIDGE: wide view straight across the valley, the landform filling the middle and upper frame, sky above, the near ridge as a dark base"; "ALONG THE FJORD: looking down the length of the water, cliffs converging toward the far mouth, sky in a band above".
 ${FMT}` },
 
-  palette: { mvp: 25, scale: 40, prompt: (n) => `You are writing ${n} PALETTE harmonies for PixelBot's pixel-vista path: a named harmony of 3 to 5 colours plus one accent for a limited-palette pixel-art painting. 10 to 20 words, colour and light words ONLY (nouns of things and places are absent).
+  palette: { mvp: 25, scale: 40, prompt: (n) => `You are writing ${n} PALETTE harmonies for PixelBot's pixel-vista path: a named saturated old-school harmony of 3 to 5 colours for a whimsical limited-palette pixel-art painting, 10 to 20 words, colour and light words ONLY (nouns of things and places are absent). Every entry ends with one colour named "only in the brightest highlights".
 
-VARIETY MANDATE: 6 warm dawn or dusk harmonies, 6 cool harmonies (slate, cobalt, silver, teal, ice), 5 earth harmonies (ochre, rust, sage, cream, umber), 4 high-contrast harmonies (deep indigo or near-black with one hot accent), 4 soft misty harmonies (pale greys, lavender, pearl, a faint warm note).
+${WHIMSY_LAW}
+VARIETY MANDATE: 6 candy harmonies (pink, teal, cream), 6 sunset harmonies (orange, violet, gold), 5 mint and lavender harmonies, 4 cobalt and gold harmonies, 4 forest green and rose harmonies.
 ${CLEAN}
-Examples: "COLD DAWN: slate blue, pale rose, dove grey, one warm amber accent"; "DESERT EARTH: ochre, rust red, sun-bleached cream, sage green, a deep umber shadow tone".
+Examples: "CANDY DUSK: bubblegum pink, soft teal, warm cream, lavender, pale gold only in the brightest highlights"; "COBALT AND GOLD: deep cobalt, sky blue, warm gold, cream, white only in the brightest highlights".
 ${FMT}` },
 };
 

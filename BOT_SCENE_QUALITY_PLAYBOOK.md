@@ -3354,6 +3354,8 @@ R0b #1 verified: when vehicle_class rolled "Mass Effect Normandy-class frigate" 
 
 ### CRITICAL LESSON 8 — Heart-calibration is the gold-standard signal, beyond my own grading
 
+> **⚠️ SUPERSEDED 2026-09-19 (Kevin):** *"don't use my heart history as a marker ... posts have been hearted over time for various reasons, it's not a reliable marker."* Do NOT query like/favorite history to calibrate a path, rank registers, or steer a brainstorm. A heart set is usable only when Kevin names it in chat for that purpose. The mechanics below are kept for history only.
+
 I graded space R3 at 4.7/5 average with strong framing variety. Kevin's response: "i'm starting to see a repeated pattern/framing... we seem to be churning. go pull the last batch and look at the prompts." My grading missed that even with framing variety, the underlying register-bias was still too hard-SF-heavy — Kevin's actual heart data showed 10/10 iconic-LEGO-Space hearts, ZERO hard-SF.
 
 **The lesson:** my grading is calibrated to "is the render technically good?" but Kevin's hearts are calibrated to "does this match the path's identity?" These can diverge significantly. After R0-R3 of any path migration, pull Kevin's hearts via DB query + analyze which registers/scenes/framings made the cut. The hearts are the ground truth for path identity.
@@ -3723,6 +3725,64 @@ Added pixel-item-shop (4.92), retro-racing (5.0 — the single strongest batch o
 - **Register-collision guard (again): name the other bot's territory as a ban.** retro-racing explicitly locks "16-bit SUNSET arcade (OutRun), NOT MangaBot's anime-cel night-touge" — zero overlap, and it produced a perfect 6/6 batch. Same pattern as anime-trains vs dream-express.
 - **Text/labels are the #1 pixel-genre risk** (shops love signs, maps love place-labels, racers love billboards). The global no-text suffix + a per-recipe "wares/features are PICTORIAL, no price-tags/labels" mandate mostly holds (1/6 shop render got a "SHOPEY" sign). Keep everything pictorial; never rely on a single guard.
 - **Pixel-grid fidelity varies by model/look** — some renders come out crisply chunky-16-bit, others as finer hi-bit/HD-pixel illustration (still gorgeous, slightly off the strict SNES chunk). A model-lottery, not a recipe issue.
+
+### Scene register + pixel LOOKS + pixel-vista: the "pixel PAINTING, not a game screen" build (2026-09-19, Phase 0 of PIXELBOT_SCENES_PLAN.md)
+
+Kevin's redirect: PixelBot should post pixel PAINTINGS of cozy / cool / fantasy scenes ("more pixelart
+than 8bit screenshots"), keeping the in-game paths as a minority flavour. Five paths were cut after a
+3-per-path shadow path map; the rest is a new scene register built alongside the untouched in-game one.
+Lessons (all verified on renders, prompts read from `ai_prompt`):
+
+- **The bot's own identity block banned the look Kevin wanted.** `PIXEL_ART_ONLY_BLOCK` says "NEVER
+  HD-2D, NEVER modern painterly-pixel hybrid": that IS the pixel-painting register. Audit a bot's bans
+  against the ask before touching pools.
+- **Two shared per-render rolls were the "random chaos" engine:** a game CAMERA pool (Doom corridor,
+  Castlevania side-scroll, extreme close-up) and a HARDWARE PALETTE pool (CGA, Game Boy green, NES
+  2-bit) injected into every path. Scene paths now carry their own painterly camera + colour-harmony
+  palette pools and never consume the shared game rolls.
+- **A second code-only medium with a three-way split works:** prefix = identity + quality only
+  (`pixel-art illustration, hand-placed pixels on a visible pixel grid, crisp hard-edged pixels...`),
+  medium fragment = content + composition only, the rolled LOOK owns technique (dither type, grid
+  discipline, cluster texture). Strip technique words from the prefix or the look cannot lead.
+- **Pixel LOOKS register (6th looks bot):** looks that REDUCE technique ("flat cel, no dither",
+  "chunky low-res, four shades", "soft-cluster, minimal dithering") make Flux drop the pixel grid and
+  render smooth vector illustration; looks that ADD visible technique (classic 16-bit banded dither,
+  hi-bit painterly clusters, ordered Bayer dither, fine checker dither, impressionist pixel clusters)
+  hold fidelity. CRT-scanline and inked-outline looks rendered fine but indistinguishable: cut. Ten
+  candidates → five, verified one render per look before any path QA.
+- **flux-1.1-pro (non-ultra) is the smooth-illustration model on this register:** smooth on 4 of 6
+  draws across the look check + three rounds; flux-2-pro 5/5, flux-2-max 3/3, flux-2-flex 3/3,
+  flux-dev 4/5 held. Dropped from the scene model set (a weighted `modelByPath` object, which also
+  bypasses `dream_mediums.allowed_models` for the code-only medium: no migration needed).
+- **An unattached palette "accent" renders as an OBJECT.** "…one bright cyan accent" at the end of the
+  prompt produced cyan blobs on a terrace wall. Attach accents to the light: "cyan only in the
+  brightest highlights". Same family as the "coins of light" literalization.
+- **Light described as a column / pillar renders a column.** "an unbroken column of white
+  reflection" → a literal white pillar at the canyon end. Light is a path, a streak, a soft shaft, a
+  glow. Sweep `column|pillar|wall|tower|bar` in every light pool.
+- **Camera entries must be agnostic of the hero type.** "ALONG THE CANYON looking down its length"
+  fought a dune-sea landform. Write "ALONG ITS LENGTH: down the long axis of the landform".
+- **Sky "stacked cloud heaps / towers / flat-topped wall" reads as a giant thunderhead (or a nuclear
+  mushroom).** Fine over a volcano, odd elsewhere. Describe clouds as soft, feathered, draped, low.
+- **Recency is per PROCESS.** Two parallel wrapper processes each keep their own recency, so one
+  landform rolled three times in a round. Run ONE process with `--count 5` per QA round.
+- **Scene wiring derives from one map** (`scenePaths.js` + `SCENE_PATHS` in index.js): medium, model
+  set, vibes, chaos + polish off, shadow lane. Adding a path is one line. Agents build a path with the
+  in-memory wrapper (`scripts/_pixelbot-scene-render.js`) and never touch the shared files.
+- pixel-vista: R0 4.24 → R1 4.06 → R2 3.86 (a hard-fail smooth render) → R3 4.62 PASS, one variable
+  per round in the order above. The dune sea with a storm-break shaft and horse specks, the slot canyon
+  looking up at the moon, and the alpenglow peak are the reference renders (shadow posts, hidden).
+- **Kevin's three mid-build steers (same evening) re-defined the target; log them as the identity:**
+  (1) medium strictly pixel / near-pixel / voxel, "borderline digital painting" = hard fail, looks that
+  trend toward painting cut; (2) "whimsical, somewhat magical ... old school feel and charm, not these
+  overly realistic landscape or geographic images" (that is EarthBot's lane); (3) "how video games have
+  historically rendered pixel scenes: Final Fantasy splash / loading screens, old school Ultima scenes."
+  So the scene register is a classic game's title / splash / loading SCENE, and the looks register is ERA
+  sub-styles (SNES RPG splash, VGA adventure background, Ultima tile scene, Amiga 32-colour ordered
+  dither, HD voxel world). The first pixel-vista PASS (realistic-geology pools) predates the steer and
+  was re-done. Lesson: a bot's aesthetic identity must be re-confirmed against the OWNER's reference
+  images/games before the first pool is written, "beautiful" is not a spec.
+
 
 ## DinoBot
 

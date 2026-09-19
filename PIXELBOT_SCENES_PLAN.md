@@ -31,6 +31,10 @@ the bar with looks rolling, with a per-path ship checklist so scaling and go-liv
 
 ---
 
+## 0a. Kevin's mid-build recalibration (2026-09-19, supersedes any wording below that conflicts)
+
+From his in-app review of the first shadow renders: (1) the medium must be unmistakably pixels, near-pixel, or voxel (HD Minecraft); a render that reads as a digital painting is a hard fail and looks that trend toward painting are cut; (2) more WHIMSY: "whimsical, somewhat magical looking pixelart that evokes that old school feel and charm", never realistic landscape or geography (EarthBot's lane); (3) the exact reference: "how video games have historically rendered pixel scenes: how Final Fantasy would have pretty pixel art for its splash or loading screens, or old school Ultima scenes." So the scene register is the pretty SCENE a classic game shows on its title / splash / loading screen (era-authentic limited palette, dithered gradient sky, chunky pixels or tiles), and the looks register is ERA sub-styles (SNES RPG splash, VGA adventure background, Ultima-style tile scene, Amiga 32-colour ordered dither, HD voxel world). Every brief in section 3 is read through this lens: storybook shapes, glowing light, an oversized moon, a charm detail, saturated era palettes.
+
 ## 0. Ground rules for this build (non-negotiable, all sourced)
 
 1. **Every test render is a shadow post** (`iter-bot ... --post --shadow`), hidden from the public,

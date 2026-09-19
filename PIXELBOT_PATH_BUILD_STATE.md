@@ -20,9 +20,9 @@ Tools: `scripts/_pixelbot-scene-render.js` (shadow render, in-memory wiring, `--
 | path | status | rounds | last avg / min | verdict / residual |
 |---|---|---|---|---|
 | pixel-vista | PASS | 3 | 4.62 / 4.4 | pass; residual: thunderhead-cloud sky entries |
-| pixel-harbor | not started | | | |
-| pixel-cabin-glow | not started | | | |
-| pixel-cozy-room | not started | | | |
+| pixel-harbor | IN PROGRESS (agent, batch 1) | | | |
+| pixel-cabin-glow | IN PROGRESS (agent, batch 1) | | | |
+| pixel-cozy-room | IN PROGRESS (agent, batch 1) | | | |
 | pixel-cool-rides | not started | | | |
 | pixel-fantasy-vista | not started | | | |
 | pixel-rain-street | not started | | | |
@@ -79,3 +79,9 @@ verdict: PASS in 3 rounds. Residuals (accepted, not chased): the "stacked cloud 
 ## Phase 0: COMPLETE 2026-09-19 05:30 UTC
 - painting register proven; looks register curated 10 → 5 (Classic 16-bit, Hi-bit painterly, Ordered-dither, Fine-dither, Impressionist clusters); flux-1.1-pro dropped from SCENE_MODELS; pixel-vista PASS.
 - Lessons for the playbook: (1) looks that REDUCE technique lose the pixel grid; (2) an unattached palette "accent" renders as an object, attach accents to the light; (3) light described as a column/pillar renders a column; (4) camera entries must be landform-agnostic; (5) flux-1.1-pro (non-ultra) is the smooth-illustration model on this register.
+
+## KEVIN STEERS MID-BUILD (2026-09-19 ~05:45 UTC, from his in-app review of the shadow renders)
+1. Medium: "pixels or a near pixel look, or voxel (think HD minecraft) ... some of these are borderline digital painting": borderline painting = HARD FAIL; looks that trend toward painting cut (hi-bit painterly, fine-dither, soft-cluster).
+2. Whimsy: "whimsical, somewhat magical looking pixelart that evokes that old school feel and charm, and not these overly realistic landscape or geographic images. too serious. we already have earthbot."
+3. Recalibration: "how video games have historically rendered pixel scenes: how Final Fantasy would have pretty pixel art for its splash or loading screens, or old school Ultima scenes."
+Applied: prefix/medium/register block rewritten to "classic video-game splash-screen pixel art" with whimsy + magic; looks register rebuilt as ERA sub-styles: SNES RPG splash, VGA adventure background, Ultima-style tile scene, Amiga 32-colour ordered dither, HD voxel world (the voxel option Kevin asked for). pixel-vista's landform / sky / light_moment / charm / moment / palette pools regenerated with whimsy-first recipes (realistic geology pools backed up in /tmp/vista-pools-realistic-backup). The three batch-1 agents were re-briefed. pixel-vista's PASS predates the steer → it re-runs a look check + R4 under the new register when a render slot frees.
