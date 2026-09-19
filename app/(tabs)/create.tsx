@@ -964,20 +964,34 @@ export default function CreateScreen() {
     const promptBoxShown = !(hasPhoto && config.photoStyle === 'restyle');
     // Skip the dialog entirely if the user turned it off (checkbox or Settings).
     if (promptEmpty && promptBoxShown && confirmSurprise) {
+      const onConfirm = (dontShowAgain?: boolean) => {
+        if (dontShowAgain) void setConfirmSurprise(false);
+        startDream();
+      };
+      const checkbox = { checkbox: { label: "Don't show this again" } };
+      if (isNewScene) {
+        // Photo in New Scene mode: the surprise is a SETTING invented around the
+        // person, so the copy says that (Kevin 2026-09-19). "Add a prompt" just
+        // closes the sheet and drops the cursor into the prompt box.
+        showAlert(
+          'Let DreamBot pick the scene?',
+          "With no prompt, DreamBot invents a setting and drops you into it. Type a prompt if you'd rather choose.",
+          [
+            { text: 'Add a prompt', style: 'cancel', onPress: () => promptRef.current?.focus() },
+            { text: 'Let it dream', onPress: onConfirm },
+          ],
+          checkbox
+        );
+        return;
+      }
       showAlert(
         'Surprise dream?',
         'No prompt, no problem. DreamBot will dream up a surprise for you. Continue?',
         [
           { text: 'Cancel', style: 'cancel' },
-          {
-            text: 'Surprise me',
-            onPress: (dontShowAgain) => {
-              if (dontShowAgain) void setConfirmSurprise(false);
-              startDream();
-            },
-          },
+          { text: 'Surprise me', onPress: onConfirm },
         ],
-        { checkbox: { label: "Don't show this again" } }
+        checkbox
       );
       return;
     }
