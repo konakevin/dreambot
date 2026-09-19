@@ -57,7 +57,19 @@ differently.
      that commit, just don't treat "tagged" as "shipped." `RELEASES.md`'s own row is the real
      record of what actually reached ASC and its status.
 4. **Build locally, in the background** (the Expo Free plan caps cloud builds/month; local
-   produces an identical signed IPA using the same remote credentials):
+   produces an identical signed IPA using the same remote credentials).
+   **CHECK FREE DISK FIRST — `df -h /System/Volumes/Data`, and do not start under ~15 GB free**
+   (2026-09-19: the 1.5.0 build ran the machine to 118 MB and died mid-compile; worse, once the
+   volume is full EVERY tool call fails with `ENOSPC` because it cannot write its own output
+   file, so you go blind and have to have Kevin run the cleanup by hand). A local iOS build
+   needs ~10-15 GB of headroom. Safe reclaims, in order, none of it real data:
+   `~/Library/Developer/Xcode/iOS DeviceSupport/*` (re-copied from a device),
+   `~/Library/Developer/Xcode/DerivedData/*` (pure cache), `npm cache clean --force`, and the
+   dead build's own temp at `$TMPDIR/eas-build-local-nodejs` (several GB — always delete this
+   after a failed build). Ask before touching Xcode Archives (dSYMs) or simulators.
+   Also `eas` lives in the nvm node path: source nvm first (`export NVM_DIR="$HOME/.nvm" &&
+   source "$NVM_DIR/nvm.sh"`) or `npx eas` fails with "could not determine executable to run".
+   Launch it detached:
    ```sh
    nohup eas build --local -p ios --profile production --non-interactive \
      --output ./build-<X.Y.Z>.ipa > /tmp/eas-build-<X.Y.Z>.log 2>&1 &
@@ -70,12 +82,29 @@ differently.
    ```
 6. **Log the row in `RELEASES.md`** — build number from `eas build:list --limit 1`, status
    "Submitted (processing at Apple)" for now.
-7. **Hand off to Kevin, explicitly:** attach the processed build to the version in ASC,
+7. **Write the App Store release notes and hand them to Kevin — every submit, unasked**
+   (Kevin, 2026-09-19). The moment the submit lands, produce the "What's New" text for this
+   version and print it IN CHAT as a plain bulleted list he can paste straight into ASC. Do not
+   bury it in a file, and do not wait to be asked.
+   - **Source it from the real diff, not memory:** `git log --format='%h %s' v<prev>..v<new>
+     --no-merges`, then keep only what a USER can see in the binary.
+   - **Write it user-facing.** Feature name in bold, then one plain sentence about what the
+     person can now do. No migration numbers, no table/column names, no internal engine words
+     (`narrative_fg`, `dream_queue`, `looks_minimal`), no commit hashes, no percentages from a
+     lab round. If a bullet only makes sense to us, cut it.
+   - **Server-side work still counts** when the user can SEE it — nightly quality, framing,
+     reliability — because it is new to them in this version even though it shipped earlier.
+     Fold it into one benefit line ("Better nightly dreams"), never a changelog of the engine.
+   - **Length:** 4-7 bullets. Lead with the headline feature, close with a polish/reliability
+     line that sweeps up the small stuff.
+   - The `RELEASES.md` row (step 6) stays the ENGINEERING record — detailed, internal, with
+     migration numbers. These notes are the opposite audience. Never paste one into the other.
+8. **Hand off to Kevin, explicitly:** attach the processed build to the version in ASC,
    screenshots (iPhone 6.7" required; iPad 13" required — `supportsTablet: true` — slots only
    appear after an iPad-capable build processes), review notes, **Submit for Review**. Apple's
    24-48h clock doesn't start until that click. Tell him this plainly rather than implying the
    release is "done" — it isn't, until Apple approves.
-8. **Once Kevin confirms it's live / "Ready for Sale" in ASC** (you have no way to poll this
+9. **Once Kevin confirms it's live / "Ready for Sale" in ASC** (you have no way to poll this
    yourself — wait for him to say so): update the `RELEASES.md` row status to "Released," then
    run the app update gate decision above (soft nudge is the safe default), then continue to
    the feature-launch section below if this release ships a gated feature.
