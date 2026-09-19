@@ -1670,6 +1670,7 @@ export type Database = {
           gift_message_max_len: number;
           gifting_enabled: boolean;
           holiday_postcard_scope: string;
+          holiday_stack_cap_pct: number;
           holidays_enabled: boolean;
           id: number;
           identity_degrade_floor: number;
@@ -1775,6 +1776,7 @@ export type Database = {
           gift_message_max_len?: number;
           gifting_enabled?: boolean;
           holiday_postcard_scope?: string;
+          holiday_stack_cap_pct?: number;
           holidays_enabled?: boolean;
           id?: number;
           identity_degrade_floor?: number;
@@ -1880,6 +1882,7 @@ export type Database = {
           gift_message_max_len?: number;
           gifting_enabled?: boolean;
           holiday_postcard_scope?: string;
+          holiday_stack_cap_pct?: number;
           holidays_enabled?: boolean;
           id?: number;
           identity_degrade_floor?: number;

@@ -2170,7 +2170,9 @@ Deno.serve(async (req) => {
               holScenePools.find((x) => x.h.key === dayOfKey)?.rows ?? []
             )
           : null;
-        const pct = dayOfSel && dayOfSel.rows.length > 0 ? 100 : combineHolidayPct(usable);
+        const stackCap = (await fetchEngineConfig(supabase)).holidayStackCapPct;
+        const pct =
+          dayOfSel && dayOfSel.rows.length > 0 ? 100 : combineHolidayPct(usable, stackCap);
         if (dayOfSel && dayOfSel.rows.length > 0) {
           holidayScene = pickHoliday(dayOfSel.rows);
           holidayCategory = dayOfKey as string;
@@ -2356,7 +2358,7 @@ Deno.serve(async (req) => {
           }))
         );
         const usableHol = holDualPools.filter((x) => x.rows.length > 0).map((x) => x.h);
-        const holidayPct = combineHolidayPct(usableHol);
+        const holidayPct = combineHolidayPct(usableHol, splitCfg.holidayStackCapPct);
         const { holidayCut, goofyCut, elegantCut, activeCut } = sceneTypeCuts(
           adaptiveScenePcts(
             looksPath
@@ -2435,7 +2437,7 @@ Deno.serve(async (req) => {
           }))
         );
         const usableHolSolo = holSinglePools.filter((x) => x.rows.length > 0).map((x) => x.h);
-        const holidayPct = combineHolidayPct(usableHolSolo);
+        const holidayPct = combineHolidayPct(usableHolSolo, splitCfg.holidayStackCapPct);
         const { holidayCut, goofyCut, elegantCut, activeCut } = sceneTypeCuts(
           adaptiveScenePcts(
             looksPath

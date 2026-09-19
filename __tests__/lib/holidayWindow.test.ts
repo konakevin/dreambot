@@ -258,6 +258,18 @@ describe('combineHolidayPct + pickWeightedHoliday', () => {
       ])
     ).toBe(100);
   });
+  it('caps the stacked total at holiday_stack_cap_pct while the pick keeps the ratio (mig 535)', () => {
+    const fallAndHalloween = [
+      { key: 'fall', displayName: '', emoji: '', holidayPct: 30, daysUntilPeak: 40 },
+      { key: 'halloween', displayName: '', emoji: '', holidayPct: 30, daysUntilPeak: 10 },
+    ];
+    // Kevin 2026-09-19: Fall alone 30%; October 25 / 25 = 50%.
+    expect(combineHolidayPct(fallAndHalloween.slice(0, 1), 50)).toBe(30);
+    expect(combineHolidayPct(fallAndHalloween, 50)).toBe(50);
+    expect(combineHolidayPct(fallAndHalloween)).toBe(60); // no cap = the old behaviour
+    expect(pickWeightedHoliday(fallAndHalloween, 0.49).key).toBe('fall');
+    expect(pickWeightedHoliday(fallAndHalloween, 0.51).key).toBe('halloween');
+  });
   it('picks weighted by pct', () => {
     const actives = [
       { key: 'fall', displayName: '', emoji: '', holidayPct: 10, daysUntilPeak: 4 },

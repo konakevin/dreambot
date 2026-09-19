@@ -306,9 +306,13 @@ export function localDateInTz(now: Date, tz: string | null | undefined): Calenda
 }
 
 /** Combined holiday cut for the scene-type roll: sum of active pcts, capped 0-100. */
-export function combineHolidayPct(actives: ActiveHoliday[]): number {
+/** The summed roll pct of every active season, clamped to `capPct` (engine_config.holiday_stack_cap_pct, mig 535;
+ *  100 = no cap). The weighted pick inside the cut (pickWeightedHoliday) keeps the rows' ratio, so Fall 30 +
+ *  Halloween 30 under a cap of 50 lands 25 / 25. */
+export function combineHolidayPct(actives: ActiveHoliday[], capPct = 100): number {
   const total = actives.reduce((sum, h) => sum + h.holidayPct, 0);
-  return Math.max(0, Math.min(100, Math.round(total)));
+  const cap = Math.max(0, Math.min(100, Math.round(capPct)));
+  return Math.max(0, Math.min(cap, Math.round(total)));
 }
 
 /**

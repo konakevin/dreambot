@@ -174,7 +174,7 @@ export const FeedCard = memo(function FeedCard({
       disableSwipeToProfile={disableSwipeToProfile}
       onDelete={canDelete ? () => onDelete(item.id) : undefined}
       onAdminQuarantineImmediate={
-        isAdmin && showAdminQuarantine ? () => onAdminQuarantine(item.id) : undefined
+        isAdmin && showAdminQuarantine ? (targetId) => onAdminQuarantine(targetId) : undefined
       }
       // DLT is hidden from the UI for now (DLT_ENABLED=false): passing undefined
       // here removes BOTH the card's color-wand button and the long-press

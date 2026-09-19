@@ -101,6 +101,9 @@ export default function InboxFeedScreen() {
   });
   const membersReady = memberKeys.length === 0 || membersQuery.data !== undefined;
 
+  // Renders the admin X removed on this screen: their pages leave the pager at once (the inbox list itself
+  // refetches on the mutation's success invalidation).
+  const [hiddenUploads, setHiddenUploads] = useState<ReadonlySet<string>>(new Set());
   const pages = useMemo<InboxPage[]>(() => {
     if (!membersReady) return [];
     const members = membersQuery.data ?? {};
@@ -115,8 +118,10 @@ export default function InboxFeedScreen() {
     }));
     const commentIds: Record<string, string | null> = {};
     for (const g of groups) if (g.commentId) commentIds[g.groupKey] = g.commentId;
-    return buildInboxPages(inputs, commentIds);
-  }, [groups, membersReady, membersQuery.data]);
+    return buildInboxPages(inputs, commentIds).filter(
+      (p) => p.kind !== 'post' || !hiddenUploads.has(p.uploadId)
+    );
+  }, [groups, membersReady, membersQuery.data, hiddenUploads]);
 
   // ── The posts behind the post pages ─────────────────────────────────────────────────────────────────────
   const postIds = useMemo(() => {
@@ -268,7 +273,10 @@ export default function InboxFeedScreen() {
   const { mutate: quarantinePost } = useQuarantinePost();
   const handleDelete = useCallback((uploadId: string) => deletePost(uploadId), [deletePost]);
   const handleAdminQuarantine = useCallback(
-    (uploadId: string) => quarantinePost(uploadId),
+    (uploadId: string) => {
+      setHiddenUploads((prev) => new Set([...prev, uploadId]));
+      quarantinePost(uploadId);
+    },
     [quarantinePost]
   );
   const onComment = useCallback(

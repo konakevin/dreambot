@@ -175,7 +175,8 @@ interface Props {
   disableSwipeToProfile?: boolean;
   onDelete?: () => void;
   /** Admin-only one-tap delete (no confirm). Rendered as a red X above the heart. */
-  onAdminQuarantineImmediate?: () => void;
+  /** Admin one-tap red X. Receives the render being looked at: an album slide's SOURCE dream, else the post. */
+  onAdminQuarantineImmediate?: (targetId: string) => void;
   /** Launch "Dream Like This" from this post (the color-wand side button). */
   onDreamLikeThis?: () => void;
   onLikesPress?: () => void;
@@ -760,7 +761,7 @@ export const DreamCard = memo(function DreamCard({
               {onAdminQuarantineImmediate && (
                 <TouchableOpacity
                   style={ui.sideButton}
-                  onPress={onAdminQuarantineImmediate}
+                  onPress={() => onAdminQuarantineImmediate(activeSourceId ?? item.id)}
                   activeOpacity={0.7}
                   accessibilityLabel="Admin: delete this post immediately"
                 >

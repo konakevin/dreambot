@@ -124,6 +124,8 @@ export interface EngineConfig {
   /** Holiday Dreams master kill switch (HOLIDAY_DREAMS_PLAN.md). When false the
    *  whole holiday layer is inert regardless of the date/catalog. Starts false. */
   holidaysEnabled: boolean;
+  /** engine_config.holiday_stack_cap_pct — cap on the SUMMED season roll when several are active (mig 535; 100 = none). */
+  holidayStackCapPct: number;
   /** Couple model steer (dualModelSteer.ts, mig 462): steer DUAL face-swap picks off
    *  flux-1.1-pro/Ultra to a proven sibling the medium allows. false = off. */
   dualAvoidFlux11pro: boolean;
@@ -224,6 +226,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   sceneActionPct: 0,
   pureSceneOnSwapFail: true,
   holidaysEnabled: false,
+  holidayStackCapPct: 100,
   dualAvoidFlux11pro: false,
   dualCloserPct: 0,
   sceneActionLocationPct: 0,
@@ -361,6 +364,10 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     pureSceneOnSwapFail:
       (data.pure_scene_on_swap_fail ?? DEFAULT_ENGINE_CONFIG.pureSceneOnSwapFail) !== false,
     holidaysEnabled: (data.holidays_enabled ?? DEFAULT_ENGINE_CONFIG.holidaysEnabled) === true,
+    holidayStackCapPct: clampPct(
+      data.holiday_stack_cap_pct,
+      DEFAULT_ENGINE_CONFIG.holidayStackCapPct
+    ),
     dualAvoidFlux11pro:
       (data.dual_avoid_flux11pro ?? DEFAULT_ENGINE_CONFIG.dualAvoidFlux11pro) === true,
     dualCloserPct: Number(data.dual_closer_pct ?? DEFAULT_ENGINE_CONFIG.dualCloserPct),

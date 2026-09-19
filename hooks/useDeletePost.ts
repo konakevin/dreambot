@@ -187,7 +187,10 @@ async function applyOptimisticRemoval(qc: QueryClient, uploadId: string): Promis
         snapshots.set(JSON.stringify(query.queryKey), prev);
         qc.setQueryData<InfiniteData<AnyPage>>(query.queryKey, {
           ...prev,
-          pages: removeUploadFromPages(prev.pages, uploadId) as AnyPage[],
+          pages: stripSlideFromPages(
+            removeUploadFromPages(prev.pages, uploadId) as AnyPage[],
+            uploadId
+          ),
         });
       }
     }
@@ -213,6 +216,20 @@ async function applyOptimisticRemoval(qc: QueryClient, uploadId: string): Promis
   return { snapshots, restoreSnapshots };
 }
 
+/** An album slide whose SOURCE was removed leaves every cached host's media (the server's heal trigger does the
+ *  same to the row; the success invalidation then re-pulls covers). */
+function stripSlideFromPost(p: DreamPostItem, sourceId: string): DreamPostItem {
+  if (!p.media || !p.media.some((m) => m.sourceId === sourceId)) return p;
+  return { ...p, media: p.media.filter((m) => m.sourceId !== sourceId) };
+}
+function stripSlideFromPages(pages: AnyPage[], sourceId: string): AnyPage[] {
+  return pages.map((page) =>
+    Array.isArray(page)
+      ? page.map((p) => stripSlideFromPost(p, sourceId))
+      : { ...page, rows: page.rows.map((p) => stripSlideFromPost(p, sourceId)) }
+  );
+}
+
 function restoreOptimisticRemoval(qc: QueryClient, ctx: RemovalCtx | undefined): void {
   if (ctx?.snapshots) {
     for (const [keyStr, data] of ctx.snapshots) {
@@ -232,6 +249,11 @@ export function useDeletePost() {
     onSuccess: () => {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show('Dream deleted', 'checkmark-circle');
+      // Same race as quarantine (see useQuarantinePost): confirm with the server once it has committed.
+      invalidateProfileGrids(qc);
+      qc.invalidateQueries({ queryKey: ['albumPosts'] });
+      qc.invalidateQueries({ queryKey: ['inboxGrouped'] });
+      qc.invalidateQueries({ queryKey: ['inboxFeedPosts'] });
     },
     onError: (_err, _vars, ctx) => {
       if (__DEV__) console.error('[useDeletePost] Error:', _err);
@@ -262,6 +284,14 @@ export function useQuarantinePost() {
     onSuccess: () => {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show('Flagged as bad render', 'checkmark-circle');
+      // The optimistic prune is not the last word: viewing the next dream in the pager marks it seen, which
+      // invalidates 'my-dreams' — a refetch that lands BEFORE the RPC commits brings the quarantined row back for
+      // up to staleTime (Kevin 2026-09-19: "they are still showing"). Re-pull every surface once the server agrees.
+      invalidateProfileGrids(qc);
+      qc.invalidateQueries({ queryKey: ['albumPosts'] });
+      qc.invalidateQueries({ queryKey: ['inboxGrouped'] });
+      qc.invalidateQueries({ queryKey: ['newNotificationCount'] });
+      qc.invalidateQueries({ queryKey: ['inboxFeedPosts'] });
     },
     onError: (_err, _vars, ctx) => {
       if (__DEV__) console.error('[useQuarantinePost] Error:', _err);
