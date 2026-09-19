@@ -1,6 +1,6 @@
 # PixelBot Scene Paths: Build, Seed, and QA Plan
 
-**Status:** PLANNED 2026-09-19, handoff-ready, not started. Written against commit `0d345649`
+**Status:** SHIPPED 2026-09-19 (see §0d). Eleven scene paths live in PixelBot's rotation. Written against commit `0d345649`
 (the roster cut). Read this whole doc, then `BOT_SCENE_QUALITY_PLAYBOOK.md` in full (CLAUDE.md hard
 rule), then invoke the `bot-paths` skill (the build/QA loop) and the `dream-shoot` skill (the grading
 crew). Track progress in `PIXELBOT_PATH_BUILD_STATE.md` (create it at kickoff, update after every
@@ -110,7 +110,7 @@ Looks that reduce technique lose the pixel grid; an unattached palette "accent" 
    FOREGROUND (iter-bot produces nothing from a backgrounded shell).
 10. **Fan-out rules** (from `bot-paths`): one agent = one path; agents never touch `index.js`,
     `pools.js`, `archetypes.js`, `archetype-templates.js`, or `gen-pixelbot-pool.js` (single-writer,
-    merged by the orchestrator between batches); at most 3 agents at once.
+    merged by the orchestrator between batches); agents never run `git checkout` / `git restore` / `git clean` / `git stash` (one did on 2026-09-19 and reverted the orchestrator's uncommitted harbor edits); at most 3 agents at once.
 11. **My grades skew harsh** (floor 3 unless something is broken). "Bolder is not broken." Kevin's
     eye decides the LOOK from the app; the agent's job is mechanical honesty plus fixing real defects.
 12. **Log every new lesson into the playbook the moment it's learned**, under a new PixelBot subsection.
@@ -801,6 +801,26 @@ up to three rounds. Four batches plus the vista: two or three sessions.
 4. Tier 2 is IN this build (Kevin 2026-09-19), as batches three and four in section 7.
 5. The pixel looks register is IN this build, as Phase 0 (section 2.8), confirmed by Kevin 2026-09-19.
    Candidate list and exclusions are in 2.8; the render check decides the final set.
+
+## 0d. SHIPPED (2026-09-19 08:20 UTC) — this plan is COMPLETE
+
+All eleven scene paths are built, seeded to production size, QA'd to a PASS, and LIVE in PixelBot's rotation.
+Final scores: rain-street 4.74, cabin-glow 4.74, fantasy-vista 4.72, campfire-night 4.70, cozy-room 4.70,
+ruins 4.66, cool-rides 4.65, vista 4.64, skyward 4.64, shoreline 4.62, harbor 4.60. `pixel-cozy-farm` was
+SCRAPPED (§3.7). Pools hold 7,470 entries, every pool on its target, zero format drift.
+
+Go-live was the faithful xerox of §6.4: the keys moved into `paths[]` and STAYED in `SCENE_PATHS`, which is
+what derives the painting medium, the model set, the vibes, chaos-off and polish-off. `epic-vista` left the
+rotation (`pixel-vista` replaces it; its files are dormant on disk, deleting them is the one remaining
+tidy-up). `pixel-campfire-night` alone pins four models, dropping flux-1.1-pro-ultra, which rendered a
+golden-hour sunset on a night prompt and signed it. PixelBot now posts 18 paths: 11 scene + 7 in-game.
+
+The shadow test renders are RETAINED at Kevin's request (2026-09-19) for later review. Delete them when he
+says so with `node scripts/_pixelbot-cleanup-test-renders.js --since 2026-09-19T05:00:00Z --apply` (dry-run
+by default, triple-guarded on PixelBot + shadow + the date window). Review page:
+`node scripts/_pixelbot-final-matrix.js`, then open /tmp/pixelbot-final-matrix.html.
+
+The sections below are the build history, kept for the lessons.
 
 ## 0c. RESUME POINT (2026-09-19 ~06:00 UTC, written for a context reset)
 
