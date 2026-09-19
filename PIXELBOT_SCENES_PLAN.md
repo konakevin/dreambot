@@ -677,7 +677,7 @@ step 5. It never edits shared files.
 
 Score = the average of the five lenses. **Hard fails cap a render at 2** regardless of lenses:
 readable text or gibberish signage; any HUD or UI element; a person large or uncanny; wrong medium
-family (photo, 3D, smooth illustration); two unrelated scenes in one frame; game-screen framing
+family (photo, 3D, a FULLY smooth painting or vector illustration with no pixel structure; mildly pixelated is fine); two unrelated scenes in one frame; game-screen framing
 (side-scroll platform, top-down map, first-person corridor) on a painting path; Sonnet refusal or
 meta-commentary in `ai_prompt`.
 

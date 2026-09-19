@@ -3787,7 +3787,8 @@ Lessons (all verified on renders, prompts read from `ai_prompt`):
   "LOW FROM THE BEACH: lying low on wet sand" → Sonnet wrote "viewed lying low on wet sand" → Flux painted a girl
   face-down in the water (hard fail). Camera entries name where the CAMERA sits ("camera set low at the wet sand's
   edge", "from the saddle"), never a posture verb (lying / sprawled / standing / perched / kneeling / crouching).
-  Sweep every scene camera pool for posture verbs before R0.
+  Sweep every scene camera pool for posture verbs before R0. Verified: after the sweep, pixel-vista R6 rolled three low-camera entries with no body and no void and
+  passed 4.64.
 - **"the near ridge as a dark foreground base" renders a BLACK VOID cutout** across the bottom quarter (vista R5 #1).
   Name what the foreground IS (a sunlit base of rounded rock and grass); "dark / black / shadowed" as a foreground's
   whole description renders nothing there.
@@ -3804,6 +3805,23 @@ Lessons (all verified on renders, prompts read from `ai_prompt`):
   harbor (4.54) and cozy-room (4.70) passed on the first round after it.
 - **pixel-cozy-farm SCRAPPED 2026-09-19 (Kevin: "scrap the farm pixels, we'll leave that domain to farmbot").** The
   farm domain belongs to FarmBot; PixelBot posts no farm content. Do not re-propose a pixel farm path.
+- **MEDIUM BAR RELAXED (Kevin 2026-09-19 ~06:35 UTC).** He hearted two renders I had graded as "smooth": cozy-room R2 #3 (flux-dev
+  + the Ultima-tile look) and cabin-glow R2 #3 (flux-1.1-pro-ultra + the VGA look): "it's okay to be mildly not true pixel,
+  these are slightly pixelated, and remind me of when old computers were first being able to render more high def scenes,
+  so i would say we keep these looks in." So on PixelBot the medium HARD FAIL is only a FULLY smooth painting / vector
+  illustration / photo / 3D with no pixel structure; a mildly pixelated early-high-def computer scene is a 4 to 5. The
+  05:55 prune of ultra + flux-dev was WRONG for his taste: both restored to `SCENE_MODELS` (flux-1.1-pro non-ultra stays
+  out), and a sixth look "Early high-def computer scene art" added in his words. Lesson: a medium hard-fail line must be
+  calibrated against the OWNER's hearted renders before it is used to prune models.
+- **DULL entries are a defect class of their own, distinct from literalizations (Kevin 2026-09-19: "too simplistic and
+  quite frankly BORING").** The flagged harbor render (R2 #4) had clean pools and five axes that each rolled their
+  flattest value: a row of five equal sailboats as the hero, "a flat featureless overcast sheet across the full dome",
+  "bleached white midday light", a waterline camera, the tile look. Every pool must be curated against DULLNESS: no blank /
+  clear-dome / overcast-sheet skies (every sky entry carries a feature: dithered bands, a big soft moon, cotton puffs,
+  stars, a galaxy arc, an aurora, a sun halo), no bleached flat light, no rows of equal objects as the hero, one charm
+  detail per hero entry. The sky is pixel art's signature axis. Harbor R4 after an 18-entry dullness sweep: 4.60 PASS with
+  four of five skies carrying a feature. Sweep regex before R0 on any scene path: `overcast sheet|clear dome|featureless|
+  flat .*sky|bleached|minimal shadow|a row of|a line of (six|five|four)`.
 
 ## DinoBot
 

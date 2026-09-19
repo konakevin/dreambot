@@ -18,7 +18,7 @@ const POOLS = {
 
 THE BAR: charming, playful, a little magical, old-school game charm. Think storybook shapes: a crooked little lighthouse with a striped tower, a round-windowed houseboat with a smoking chimney, a rowboat with a lantern on a pole, a tiny windmill on the quay, a boathouse with a heart-shaped window, a lighthouse keeper's cottage with a red door, a pier that curls like a tail, a fishing hut on stilts with a crooked roof, a sleepy ferry with a striped awning, a canoe with a tiny flag. Every entry carries at least ONE charm detail. Cozy and sweet, never serious, never documentary, never industrial.
 
-VARIETY MANDATE, distribute the ${n} across: 5 LAKESIDE DOCKS (a little rowboat, a skiff, a canoe at a wonky wooden dock), 4 STORYBOOK FISHING HARBOURS (tiny colourful boats, crooked cottages stacked up a hill), 3 LIGHTHOUSE POINTS (a striped or crooked lighthouse on a rock, a keeper's cottage), 3 RIVER LANDINGS OR FERRIES (a sleepy ferry, a punt under a willow, a landing stage with a lantern), 3 MISTY LAKE CANOES (a lone canoe on open water with a charm detail), 3 TINY MARINAS (a few little sailboats with coloured sails at wooden fingers), 2 CANAL HOUSEBOATS (a round-windowed narrowboat, a barge with flower boxes), 2 TROPICAL PIERS (a palm-trunk pier with a thatched hut, an outrigger with a tiny sail).
+VARIETY MANDATE, distribute the ${n} across: 5 LAKESIDE DOCKS (a little rowboat, a skiff, a canoe at a wonky wooden dock), 4 STORYBOOK FISHING HARBOURS (tiny colourful boats, crooked cottages stacked up a hill), 3 LIGHTHOUSE POINTS (a striped or crooked lighthouse on a rock, a keeper's cottage), 3 RIVER LANDINGS OR FERRIES (a sleepy ferry, a punt under a willow, a landing stage with a lantern), 3 MISTY LAKE CANOES (a lone canoe on open water with a charm detail), 3 TINY MARINAS (ONE hero sailboat with a coloured sail at the near finger, its charm detail named, any other boats tiny and far; never a row of equal boats), 2 CANAL HOUSEBOATS (a round-windowed narrowboat, a barge with flower boxes), 2 TROPICAL PIERS (a palm-trunk pier with a thatched hut, an outrigger with a tiny sail).
 
 NAME THE BOAT TYPE every time. Hulls are plain painted wood in a cheerful colour, unmarked; every board is blank. Colour words are welcome here (a red door, a blue hull, a yellow lantern).
 AXIS-CLEAN: the entry names the hero, its shape and colour, its charm detail, and its place only. Light, time of day, weather, clouds, sky, reflections, animals, and people belong to other axes and are absent here.
@@ -28,7 +28,7 @@ ${FMT}` },
 
   light: { mvp: 25, scale: 100, prompt: (n) => `You are writing ${n} LIGHT descriptions for PixelBot's pixel-harbor path: the base ambient light of a waterside painting. Each entry stacks TIME OF DAY + DIRECTION + COLOUR OF THE LIGHT + HOW SHADOWS FALL. 15 to 30 words.
 
-VARIETY MANDATE: 5 dawn or first light, 5 late golden evening light, 5 blue hour or dusk, 4 moonlight, 3 soft overcast silver, 3 clear midday.
+VARIETY MANDATE: 5 dawn or first light, 5 late golden evening light, 5 blue hour or dusk, 4 moonlight, 3 soft pearl light with one warm lantern note, 3 warm bright daylight with crisp coloured shadows and saturated colour. ANTI-DULL RULE (Kevin 2026-09-19): every light entry makes the scene glow; flat grey overcast light, bleached white midday, and "minimal shadow" are absent.
 AXIS-CLEAN: light only. Fog, rain, clouds, reflections, and the boats or buildings belong to other axes and are absent here.
 ${CLEAN}
 Examples: "GOLDEN EVENING FROM THE WEST: low warm sun from the left, long amber shadows across the planks, every edge rimmed in gold"; "BLUE HOUR: the sun just gone, cool indigo light from the whole sky, one last warm band along the western edge, shadows soft and blue".
@@ -53,10 +53,10 @@ ${FMT}` },
 
   sky: { mvp: 25, scale: 60, prompt: (n) => `You are writing ${n} SKY descriptions for PixelBot's pixel-harbor path: the sky layer only, cloud forms and the character of the sky over water. 12 to 25 words.
 
-VARIETY MANDATE: 5 a clean clear dome, 5 scattered soft cumulus, 4 high cirrus streaks, 4 a soft overcast sheet, 3 a low dark storm line far off along the horizon with a soft ragged top, 2 a night sky with a field of stars, 2 a banded gradient sky with a few small clouds.
+VARIETY MANDATE: 6 candy banded dithered gradient skies (each band a clean shade), 5 scattered cotton cumulus puffs over a graded sky, 4 a big soft moon filling a quarter of the sky, 4 a star-dusted vault or a galaxy arc, 3 a low dark storm line far off with a soft ragged top under a graded sky, 3 an aurora curtain or a sun halo. ANTI-DULL RULE (Kevin 2026-09-19, "too simplistic and BORING" on a blank sky): every sky entry carries a FEATURE the eye can enjoy; a plain clear dome and a featureless overcast sheet are absent. The sky is pixel art's signature.
 AXIS-CLEAN: sky and clouds only. Time-of-day light words, the water, reflections, and the hero belong to other axes and are absent here. Clouds are made of moist air with soft feathered edges; they drift, drape, and build.
 ${CLEAN}
-Examples: "SCATTERED CUMULUS: a handful of soft white puffs drifting over the water, flat bases, sunlit tops, wide blue between them"; "OVERCAST SHEET: a smooth pale grey cloud sheet across the whole sky, faintly brighter toward one side".
+Examples: "SCATTERED CUMULUS: a handful of soft white puffs drifting over the water, flat bases, sunlit tops, wide blue between them"; "CANDY BANDED SKY: a sky stepped in wide dithered bands of colour from the horizon up to the crown, two small cotton clouds resting in the middle band".
 ${FMT}` },
 
   life: { mvp: 25, scale: 60, prompt: (n) => `You are writing ${n} TINY-LIFE descriptions for PixelBot's pixel-harbor path: a small living accent that makes the place feel lived in. It is SMALL in the frame, never the hero, never a portrait. 10 to 22 words.

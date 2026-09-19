@@ -13,17 +13,19 @@ const path = require('path');
 
 const SEEDS = path.join(__dirname, 'seeds');
 
-// Scene model set (PIXELBOT_SCENES_PLAN.md §2.2). Pruned twice on evidence:
-// 2026-09-19 05:25 flux-1.1-pro dropped (smooth on 4 of 6 draws);
-// 2026-09-19 05:55 flux-1.1-pro-ultra (smooth / flat on 5 draws across vista, harbor,
-// cozy-room) and flux-dev (smooth on the HD voxel look, cartoon drift on SNES splash,
-// soft on fine-dither) dropped. The flux-2 family held the pixel medium on every
-// draw across four paths and every era look. Kevin's medium rule: pixels / near-pixel /
-// voxel, never a digital painting.
+// Scene model set (PIXELBOT_SCENES_PLAN.md §2.2). History: 2026-09-19 05:25 flux-1.1-pro
+// dropped (smooth on 4 of 6 draws); 05:55 flux-1.1-pro-ultra + flux-dev dropped for the same
+// reason; 06:35 BOTH RESTORED on Kevin's word: he hearted an ultra + VGA-look render and a
+// flux-dev + Ultima-look render as "slightly pixelated, like when old computers first rendered
+// high-def scenes" and said "it's okay to be mildly not true pixel ... keep these looks in".
+// The medium hard fail is now only a FULLY smooth painting / vector illustration / photo / 3D.
+// flux-1.1-pro (non-ultra) stays out (smooth vector illustration with no pixel structure).
 const SCENE_MODELS = {
   'black-forest-labs/flux-2-pro': 1,
   'black-forest-labs/flux-2-max': 1,
   'black-forest-labs/flux-2-flex': 1,
+  'black-forest-labs/flux-1.1-pro-ultra': 1,
+  'black-forest-labs/flux-dev': 1,
 };
 const SCENE_MEDIUM = 'pixelbot_painting';
 
