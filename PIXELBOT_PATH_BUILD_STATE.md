@@ -21,7 +21,7 @@ Tools: `scripts/_pixelbot-scene-render.js` (shadow render, in-memory wiring, `--
 |---|---|---|---|---|
 | pixel-vista | PASS | 3 | 4.62 / 4.4 | pass; residual: thunderhead-cloud sky entries |
 | pixel-harbor | IN PROGRESS (agent, batch 1) | | | |
-| pixel-cabin-glow | IN PROGRESS (agent, batch 1) | | | |
+| pixel-cabin-glow | PASS | 2 | 4.74 / 4.6 | pass; residual: warm place + snowfall air combo |
 | pixel-cozy-room | IN PROGRESS (agent, batch 1) | | | |
 | pixel-cool-rides | not started | | | |
 | pixel-fantasy-vista | not started | | | |
@@ -86,3 +86,9 @@ verdict: PASS in 3 rounds. Residuals (accepted, not chased): the "stacked cloud 
 3. Recalibration: "how video games have historically rendered pixel scenes: how Final Fantasy would have pretty pixel art for its splash or loading screens, or old school Ultima scenes."
 Applied: prefix/medium/register block rewritten to "classic video-game splash-screen pixel art" with whimsy + magic; looks register rebuilt as ERA sub-styles: SNES RPG splash, VGA adventure background, Ultima-style tile scene, Amiga 32-colour ordered dither, HD voxel world (the voxel option Kevin asked for). pixel-vista's landform / sky / light_moment / charm / moment / palette pools regenerated with whimsy-first recipes (realistic geology pools backed up in /tmp/vista-pools-realistic-backup). The three batch-1 agents were re-briefed. pixel-vista's PASS predates the steer → it re-runs a look check + R4 under the new register when a render slot frees.
 4. Clarification: "they should still be pretty and not dummed down, but the medium and vibe need to feel old school, while still pulling off a beautiful/cool render." Register wording moved from "chunky" to "richly detailed"; beauty bar unchanged.
+
+### pixel-cabin-glow (agent, batch 1) → PASS in R2
+R0 05:35 (old register) avg 4.58 min 4.5: numerically a pass but every dwelling read realistic; variable → whimsy hero pool regen + whimsy vibes (+ the global steer)
+R1 05:40 (intermediate register, voxel looks in) avg 4.68 min 4.2: #2 sky over-stuffed (storm-lit light + aurora + shooting star); variable → storm-lit light entries replaced, template "the sky carries at most ONE special feature" (+ the global era-looks register)
+R2 05:43 (shipping register, era looks: Amiga, SNES, VGA) avg 4.74 min 4.6 → PASS. Mushroom-cap hut across a lake under a dithered sunset (ultra, VGA) 5.0; blue-scale-roof cottage under aurora (dev, VGA) 4.8; stilt house with its door light on the water + ducks (2-pro, Amiga) 4.7
+residuals: a tropical dwelling can roll a snowfall air entry (whimsical, one template line would fix); regex false positives ("face" of a window, cabin "wall") left. Lessons: "one warm note" palette rule held 15/15; stacked sky phenomena = three axes firing at once, cozy paths carry no dramatic light; name the massing per dwelling; empty path to the door held 15/15; register beats pool for VIBE; ultra holds fidelity under the era looks.

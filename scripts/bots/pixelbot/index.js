@@ -25,6 +25,7 @@ const scene = require('./scenePaths');
 // shadowPaths until Kevin approves each one; go-live = move the key to paths[].
 const SCENE_PATHS = {
   'pixel-vista': require('./paths/pixel-vista'), // replaces epic-vista at ship (plan §3.8)
+  'pixel-cabin-glow': require('./paths/pixel-cabin-glow'), // PASS R2 4.74 (2026-09-19)
 };
 
 const pathBuilders = {
