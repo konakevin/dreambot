@@ -1,3 +1,6 @@
+| `boot_stall {phase, stage, elapsed_ms, reachability, attempt}` | `hooks/useBootStall.ts` (each phase escalation; BOOT_STALL_PLAN.md) |
+| `boot_recovered {elapsed_ms, max_phase, attempts}`      | `hooks/useBootStall.ts` (logo routed away after a stall)      |
+| `boot_retry_tapped {attempt, phase_at_tap}`             | `hooks/useBootStall.ts` (hard-state "Try again")              |
 # Analytics Plan (PostHog)
 
 Product analytics for DreamBot. Goal: understand **what people use, where they go, where they drop off** — screen/page hotspots, feature usage, funnels.

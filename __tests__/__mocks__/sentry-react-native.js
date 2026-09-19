@@ -9,4 +9,5 @@ module.exports = {
   wrap: (c) => c,
   captureException: () => {},
   captureMessage: () => {},
+  withScope: (fn) => fn({ setLevel() {}, setTags() {}, setExtras() {}, setFingerprint() {} }),
 };

@@ -39,3 +39,31 @@ export function captureException(error: unknown, context?: Record<string, unknow
 }
 
 export { Sentry };
+
+export type MessageLevel = 'info' | 'warning' | 'error';
+
+export interface CaptureMessageOptions {
+  level?: MessageLevel;
+  tags?: Record<string, string>;
+  extra?: Record<string, unknown>;
+  /** Group all occurrences into ONE Sentry issue so a frequency alert rule can count them. */
+  fingerprint?: string[];
+}
+
+/**
+ * Report a non-exception signal (e.g. the boot-stall alarm, BOOT_STALL_PLAN.md).
+ * Returns whether it was ACTUALLY sent — false without a DSN or in __DEV__ (the
+ * same gate as `enabled: !__DEV__` in initSentry). Callers use the return to
+ * decide whether they may tell the user "we've been notified".
+ */
+export function captureMessage(message: string, opts: CaptureMessageOptions = {}): boolean {
+  if (!DSN || __DEV__) return false;
+  Sentry.withScope((scope) => {
+    if (opts.level) scope.setLevel(opts.level);
+    if (opts.tags) scope.setTags(opts.tags);
+    if (opts.extra) scope.setExtras(opts.extra);
+    if (opts.fingerprint) scope.setFingerprint(opts.fingerprint);
+    Sentry.captureMessage(message);
+  });
+  return true;
+}

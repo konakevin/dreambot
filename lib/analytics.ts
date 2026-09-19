@@ -163,3 +163,27 @@ export function trackDreamDeleted(p: { is_album: boolean }): void {
 export function trackDreamPinned(p: { pinned: boolean }): void {
   capture('dream_pinned', p);
 }
+
+// ── Boot health (BOOT_STALL_PLAN.md) ─────────────────────────────────────────
+// How often launches sit on the logo, how far they escalate, and how long a
+// recovery took — the morning-after metric for any backend incident. The
+// paging alarm is Sentry (lib/sentry.ts captureMessage), not these.
+export function trackBootStall(p: {
+  phase: 'soft' | 'medium' | 'hard';
+  stage: 'auth' | 'route';
+  elapsed_ms: number;
+  reachability: 'unknown' | 'online' | 'offline';
+  attempt: number;
+}): void {
+  capture('boot_stall', p);
+}
+export function trackBootRecovered(p: {
+  elapsed_ms: number;
+  max_phase: 'soft' | 'medium' | 'hard';
+  attempts: number;
+}): void {
+  capture('boot_recovered', p);
+}
+export function trackBootRetryTapped(p: { attempt: number; phase_at_tap: string }): void {
+  capture('boot_retry_tapped', p);
+}

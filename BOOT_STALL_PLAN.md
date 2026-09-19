@@ -1,8 +1,19 @@
 # Boot Stall Detection, Escalating Splash Copy, and Outage Alarm
 
-**Status:** PLANNED, handoff-ready. Not started. Researched 2026-09-18 against the live tree at
-commit `483da02e`. Everything a fresh agent needs to build this end to end is in this doc; the
-file:line references were verified on that commit, re-verify before editing.
+**Status:** BUILT 2026-09-18 (client code + tests; uncommitted pending Kevin's review). Researched
+against commit `483da02e`; sections 1-2 are the design of record, section 3 is now the file list
+as built, sections 4-5 are the tests (54, all green in the fast lane) and the device QA still to run.
+
+**What is built (see §3 for the exact files):** the thresholds + copy, the pure phase/copy logic,
+the reachability probe, the bounded has_ai_recipe resolver, a pure STATE MACHINE
+(`lib/bootStallMachine.ts`) that owns every decision (once-per-launch alarm, online-only, retry
+semantics) so the hook is a thin timer/effect runner, `captureMessage` in `lib/sentry.ts`, the three
+analytics events, the StartupLogo status block, the Settings "Preview boot stall (QA)" tour, and the
+`app/index.tsx` rewiring. Ships in the next binary (client-only).
+
+**Still manual / not done:** (a) the Sentry alert rule (§2.5, one-time UI setup); (b) the on-device
+QA script in §5, especially step 3 (black-hole simulation) and step 7 (the Stage 1 / auth-js
+question); (c) the `RELEASES.md` note when it ships; (d) Phase 2 §8.1 is NOT built.
 
 **Kevin's ask (verbatim intent):** "once in a while the db or some system will have a problem and it
 causes the app to just sit on the splashscreen for a long time. add something at startup that
@@ -347,10 +358,13 @@ which is the thing to check the morning after any incident.
 
 ---
 
-## 3. Implementation checklist (file by file)
+## 3. Implementation checklist (file by file): AS BUILT 2026-09-18
 
 1. `constants/bootStall.ts` (NEW): thresholds + all copy strings + probe URLs.
-2. `lib/bootStall.ts` (NEW): `phaseForElapsed`, `copyFor`, `BootPhase`, `Reachability` types.
+2. `lib/bootStall.ts` (NEW): `phaseForElapsed`, `copyFor`, `shouldAlarm`, `recipeDeadline`, the types.
+2b. `lib/bootStallMachine.ts` (NEW, added during the build): the pure state machine , `step(state,
+    event) → {state, effects}` + `statusFor`. Every timing/alarm/retry decision lives here so it is
+    unit-tested instead of hand-tested inside a hook. The hook only arms timers and runs effects.
 3. `lib/reachability.ts` (NEW): `probeReachability(timeoutMs)`.
 4. `lib/bootRecipeResolver.ts` (NEW): `resolveHasRecipe(...)` as specified in §2.8.
 5. `lib/sentry.ts` (MOD): add `captureMessage(...)` returning `boolean`.
@@ -361,7 +375,8 @@ which is the thing to check the morning after any incident.
 9. `app/index.tsx` (MOD): wire hook + resolver; keep the sunnysteph comment and invariant.
 10. `app/settings/index.tsx` (MOD): "Preview boot stall (QA)" `SettingsRow` (cycles phases on tap
     or opens a tiny picker; admin-only block).
-11. `__tests__/lib/bootStall.test.ts` (NEW) and `__tests__/lib/bootRecipeResolver.test.ts` (NEW), see §4.
+11. Tests (NEW): `__tests__/lib/bootStall.test.ts`, `bootRecipeResolver.test.ts`, `reachability.test.ts`,
+    `bootStallMachine.test.ts`: 54 tests, see §4. The jest Sentry stub gained `withScope`.
 12. `ANALYTICS_PLAN.md` (MOD): add the three events to the call-site map.
 13. Sentry alert rule (UI, §2.5). Note it in the observability memory / `RELEASES.md`.
 14. Ships in the next App Store build (client code, no OTA). Log it in `RELEASES.md` when released.

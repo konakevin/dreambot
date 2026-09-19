@@ -9,6 +9,7 @@ import { router } from 'expo-router';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { showPremiumGate } from '@/lib/premiumGate';
 import { showForceUpdatePreview } from '@/components/ForceUpdateGate';
+import { BootStallPreviewHost, showBootStallPreview } from '@/components/BootStallPreview';
 import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
@@ -407,6 +408,14 @@ export default function SettingsScreen() {
               icon="arrow-up-circle"
               label="Preview update gate (QA)"
               onPress={() => showForceUpdatePreview('hard')}
+            />
+            {/* QA: tour every boot-stall state (BOOT_STALL_PLAN.md) — the soft/medium
+                lines and the three hard states — without black-holing the network.
+                Tap the caption / "Try again" to advance. */}
+            <SettingsRow
+              icon="hourglass-outline"
+              label="Preview boot stall (QA)"
+              onPress={() => showBootStallPreview()}
             />
             <SettingsRow
               icon="trash-outline"
@@ -860,6 +869,7 @@ export default function SettingsScreen() {
         onClose={() => setShowMediumsIntro(false)}
         ctaLabel="Ok"
       />
+      <BootStallPreviewHost />
     </ScreenLayout>
   );
 }
