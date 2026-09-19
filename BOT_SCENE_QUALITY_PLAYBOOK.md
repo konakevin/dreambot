@@ -3783,6 +3783,27 @@ Lessons (all verified on renders, prompts read from `ai_prompt`):
   was re-done. Lesson: a bot's aesthetic identity must be re-confirmed against the OWNER's reference
   images/games before the first pool is written, "beautiful" is not a spec.
 
+- **A camera entry that describes the VIEWER's posture renders a PERSON in that posture** (vista R5, 2026-09-19): camera
+  "LOW FROM THE BEACH: lying low on wet sand" → Sonnet wrote "viewed lying low on wet sand" → Flux painted a girl
+  face-down in the water (hard fail). Camera entries name where the CAMERA sits ("camera set low at the wet sand's
+  edge", "from the saddle"), never a posture verb (lying / sprawled / standing / perched / kneeling / crouching).
+  Sweep every scene camera pool for posture verbs before R0.
+- **"the near ridge as a dark foreground base" renders a BLACK VOID cutout** across the bottom quarter (vista R5 #1).
+  Name what the foreground IS (a sunlit base of rounded rock and grass); "dark / black / shadowed" as a foreground's
+  whole description renders nothing there.
+- **A reflection described as a RIBBON / BAR resting ON the water renders a solid object** (harbor R3 #5: "a long
+  muted ribbon of white-silver resting on the water surface" → a moon disc sitting on the water with a white bar).
+  Same family as light-as-column. Reflections are a path of glitter, a doubled glow, flecks, a soft dithered band.
+- **"a flurry SWEEPING across the basin in a swirling rush" renders white comet-swooshes** (harbor R3 #1). Snow
+  drifts, skates, falls; it never sweeps, rushes, or swirls (motion nouns become streak objects).
+- **"a folded paper tucked inside a book" renders a note with squiggle pseudo-text** (cozy-room R3 #2). Paper, note,
+  letter, label, chalkboard, map = text priors; name a wordless object instead (a pressed-leaf bookmark, a ribbon).
+- **The flux-2 family holds the pixel medium under every era look:** 15 of 15 renders across vista R5 / harbor R3 /
+  cozy-room R3 scored 5 on the medium lens (crisp pixel or voxel, no smooth drift) on flux-2-pro / max / flex with the
+  SNES / VGA / Ultima / Amiga / HD-voxel looks rolling. The prune to the flux-2 family was the right model variable;
+  harbor (4.54) and cozy-room (4.70) passed on the first round after it.
+- **pixel-cozy-farm SCRAPPED 2026-09-19 (Kevin: "scrap the farm pixels, we'll leave that domain to farmbot").** The
+  farm domain belongs to FarmBot; PixelBot posts no farm content. Do not re-propose a pixel farm path.
 
 ## DinoBot
 

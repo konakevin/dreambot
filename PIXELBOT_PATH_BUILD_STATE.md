@@ -19,10 +19,10 @@ Tools: `scripts/_pixelbot-scene-render.js` (shadow render, in-memory wiring, `--
 ## Paths
 | path | status | rounds | last avg / min | verdict / residual |
 |---|---|---|---|---|
-| pixel-vista | PASS | 3 | 4.62 / 4.4 | pass; residual: thunderhead-cloud sky entries |
-| pixel-harbor | IN PROGRESS (agent, batch 1) | | | |
+| pixel-vista | IN PROGRESS (new register: R4 4.0, R5 4.10 with one hard fail) | 6 | 4.10 / 2.0 | old-register PASS void; next variable (not yet run) = camera-pool sweep |
+| pixel-harbor | PASS R3, then KEVIN FLAG (flat marina) → fix round pending | 4 | 4.54 / 4.1 | wired + committed e1f3f8be; residuals for scale: lunar-ribbon reflection, flurry-sweeping air |
 | pixel-cabin-glow | PASS | 2 | 4.74 / 4.6 | pass; residual: warm place + snowfall air combo |
-| pixel-cozy-room | IN PROGRESS (agent, batch 1) | | | |
+| pixel-cozy-room | PASS | 4 | 4.70 / 4.2 | pass in R3 (final register, flux-2 set); wired + committed e1f3f8be; residuals: rain streaks inside 1/5, folded-paper pseudo-text, a doubled object |
 | pixel-cool-rides | not started | | | |
 | pixel-fantasy-vista | not started | | | |
 | pixel-rain-street | not started | | | |
@@ -30,7 +30,7 @@ Tools: `scripts/_pixelbot-scene-render.js` (shadow render, in-memory wiring, `--
 | pixel-shoreline | not started | | | |
 | pixel-skyward | not started | | | |
 | pixel-ruins | not started | | | |
-| pixel-cozy-farm | not started | | | |
+| pixel-cozy-farm | SCRAPPED 2026-09-19 (Kevin: "scrap the farm pixels, we'll leave that domain to farmbot") | 1 | | files removed; 5 R0 shadow renders (06:14 UTC) left hidden, ungraded |
 
 ## Round logs
 
@@ -108,4 +108,26 @@ Lessons: commerce nouns summon signage (sheds / net lofts / cottages instead); s
 R0 4.12 (a chalkboard with gibberish on ultra; a literal "bar of light") → whimsy room pool + light-moment rewording; R1 4.03 (ultra smooth again) → era line in the template; R2 3.66 min 2.0 under the final register (dev SNES-splash cartoon drift with snow INSIDE the room; jam jars with gibberish labels). Post-R2 unverified: every jam jar "sealed with a cloth top and string". Keepers: burrow reading room, round window, gramophone (2-pro, Ultima tile) 4.9; voxel tea room, smiling teapot, rain-lit lamps through the window (2-pro, HD voxel) 4.9; attic bedroom, round window in the rain, sleeping hound, guitar (2-max) 4.9.
 Lessons: object nouns carry TEXT priors (jam jars → labels; a cabin → a chalkboard), crowd them out positively; a bar/beam/wedge of light renders a solid object; light-moment entries must be light-agnostic.
 
-## RESUME (2026-09-19 ~06:00 UTC): see PIXELBOT_SCENES_PLAN.md §0c. Disk full mid-round; harbor R3 / cozy-room R3 / vista R5 each posted 3 of 5 (fetch + render 2 more); SCENE_MODELS = flux-2 family (uncommitted); harbor + cozy-room built but unwired; farm seeded, unrendered.
+### pixel-harbor R3 (final register + flux-2 set; 3 posted 05:54 UTC before the disk filled, 2 make-up at 06:10) → PASS
+R3 | models: 2-max, 2-flex, 2-flex, 2-pro, 2-pro | looks: SNES, Amiga, HD voxel, VGA, Ultima | avg 4.54 | min 4.1 → PASS
+  #2 green canoe with a bow lantern at a pebble dock, four ducks, life rings, a galaxy arc (2-flex, Amiga) 4.9 BANGER; #4 moonlit harbour village, two plump trawlers, a clock post, a fish arcing (2-pro, VGA) 4.7; #3 yellow voxel skiff with a striped flag at a tilting dock under a peach dusk (2-flex, HD voxel) 4.7; #5 teal canal barge with flower boxes in rose-dawn rain (2-pro, Ultima) 4.3; #1 blue canoe in rain with a lantern and ducks (2-max, SNES) 4.1
+  sub-4.5 causes (ai_prompt; none below 4): #1 air #22 "a sudden flurry sweeping across the basin in a pale swirling rush" → two white comet-swooshes over the trees (rain + snow both fired); #5 reflection #15 "LUNAR RIBBON: a long muted ribbon of white-silver resting on the water surface" → a literal moon disc ON the water with a white bar, under a dawn light entry
+  verdict: PASS in R3 (four rounds; R0-R2 under superseded registers). Medium lens 5 on all five. Residual rewrites for SCALE time, NOT applied (xerox rule): air #22 → "a soft flurry drifting across the basin, snowflakes skating sideways on the harbour wind"; reflection #15 → "MOONLIGHT PATH: the moon's reflection as a long soft dithered path of white-silver across the surface, breaking into flecks where the water moves".
+  KEVIN FLAG (2026-09-19 ~06:30 UTC, in-app): the R2 #4 flat Ultima-tile marina (blank sky, row of striped-sail boats, a hut with a porthole) = "too simplistic and quite frankly BORING". Diagnosis + fix round: see the harbor R4 entry below once run.
+
+### pixel-cozy-room R3 (final register + flux-2 set; 3 posted 05:54 UTC, 2 make-up at 06:11) → PASS
+R3 | models: 2-max, 2-pro, 2-flex, 2-flex, 2-flex | looks: Ultima, VGA, SNES, VGA, VGA | avg 4.70 | min 4.2 → PASS
+  #4 cushion-cave window nook over a lamp-lit harbour at night, patchwork curtain, sparrow on the sill, copper kettle (2-flex, VGA) 4.9 BANGER; #5 wood-panelled sleeper cabin, string lights, mushroom lamps, rooftops at sunset, toy train, hedgehog in a basket (2-flex, VGA) 4.9 BANGER; #3 snow-window reading nook, mushroom lamp, quilted bench bed (2-flex, SNES) 4.8; #1 burrow sitting room, porthole sunset, stove, sleeping dog, toy train (2-max, Ultima) 4.7 (black letterbox bars, model artifact); #2 lighthouse bunk room with a porthole on the sea (2-pro, VGA) 4.2
+  sub-4.5 causes: #2 "rain thickening down the porthole glass" → streaks across the interior wall above the window (the known 1-in-5 residual) and "a folded paper tucked inside the top book" → a note with squiggle pseudo-text (small, not readable; docked, not a hard fail); #3 the radio object rendered twice
+  verdict: PASS in R3 (four rounds; R0-R2 under superseded registers). Medium lens 5 on all five. Residuals for scale time: objects "folded paper" → a wordless object (a pressed-leaf bookmark); window_view rain/snow entries → "rain running down the outside of the glass".
+
+### pixel-vista R5 (new register, flux-2 set; 3 posted 05:54 UTC, 2 make-up at 06:09)
+R5 | models: 2-flex, 2-flex, 2-pro, 2-max, 2-pro | looks: HD voxel, Ultima, SNES, SNES, SNES | avg 4.10 | min 2.0
+  #3 island with one enormous round-canopied tree under fanning sunbeams and a banded sunset sky (2-pro, SNES) 4.9 BANGER; #2 wobbly conical mountain island with a glowing aqua waterfall, red flower ring, shooting star (2-flex, Ultima) 4.7; #5 the same wobbly mountain under aurora ribbons and stars (2-pro, SNES) 4.7; #1 voxel river valley with a moon path (2-flex, HD voxel) 4.2 (black void across the bottom quarter)
+  hard fail: #4 mushroom-cap rock towers, sun halo, fireflies (2-max, SNES): a girl lying FACE-DOWN in the water in the foreground → 2.0; also "a merry swirl of golden leaves looping high" → a literal golden spiral line
+  causes (ai_prompt): #4 camera #21 "LOW FROM THE BEACH: lying low on wet sand" → Sonnet wrote "viewed lying low on wet sand" → Flux painted a body lying on the sand (the viewer's POSTURE became a person); #1 camera #1 "the near ridge as a dark foreground base" → a black void. Landform repeat (#2/#5) = recency per process (the make-up pair was a second process), expected.
+  variable for R6 (NOT YET RUN, paused by Kevin's interrupt): camera-pool sweep, one pool: rewrite the 8 entries so every entry names where the CAMERA sits ("camera set low at the wet sand's edge", "from the saddle"), never the viewer's posture, and the foreground is named for what it IS (a sunlit base of rounded rock and grass, never "dark").
+
+### pixel-cozy-farm R0 (2026-09-19 06:14 UTC) → SCRAPPED before grading (Kevin: farm domain stays with FarmBot). Five hidden shadow renders remain; files removed.
+
+## RESUME (2026-09-19 ~06:30 UTC): harbor + cozy-room PASSED R3, wired + committed (e1f3f8be). pixel-cozy-farm SCRAPPED. Kevin flagged the harbor R2 #4 flat marina in-app (fix round pending). Paused at Kevin's interrupt: vista R6 (camera-pool sweep, pool not yet edited), then batch 2 (cool-rides, fantasy-vista, rain-street) as three agents, then batch 3, then batch 4 (ruins). Nothing deleted beyond the farm files; nothing live.

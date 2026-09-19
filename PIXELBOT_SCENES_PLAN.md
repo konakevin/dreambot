@@ -35,6 +35,8 @@ the bar with looks rolling, with a per-path ship checklist so scaling and go-liv
 
 From his in-app review of the first shadow renders: (1) the medium must be unmistakably pixels, near-pixel, or voxel (HD Minecraft); a render that reads as a digital painting is a hard fail and looks that trend toward painting are cut; (2) more WHIMSY: "whimsical, somewhat magical looking pixelart that evokes that old school feel and charm", never realistic landscape or geography (EarthBot's lane); (3) the exact reference: "how video games have historically rendered pixel scenes: how Final Fantasy would have pretty pixel art for its splash or loading screens, or old school Ultima scenes." So the scene register is the pretty SCENE a classic game shows on its title / splash / loading screen (era-authentic limited palette, dithered gradient sky, chunky pixels or tiles), and the looks register is ERA sub-styles (SNES RPG splash, VGA adventure background, Ultima-style tile scene, Amiga 32-colour ordered dither, HD voxel world). Every brief in section 3 is read through this lens: storybook shapes, glowing light, an oversized moon, a charm detail, saturated era palettes. And (4), his clarification: "they should still be pretty and not dummed down, but the medium and vibe need to feel old school, while still pulling off a beautiful/cool render." The bar for beauty, detail, composition, and light does not drop; era lives in the pixel medium and the whimsical vibe. A crude, low-detail, or blocky-for-its-own-sake render fails the Director lens the same way a photoreal one fails the Medium lens.
 
+**(5) Medium bar relaxed, 2026-09-19 ~06:35 UTC (Kevin, from two hearted renders: cozy-room R2 #3 on flux-dev + the Ultima-tile look, cabin-glow R2 #3 on flux-1.1-pro-ultra + the VGA look):** "it's okay to be mildly 'not true pixel', these are slightly pixelated, and remind me of when old computers were first being able to render more 'high def' scenes, so i would say we keep these looks in." So the medium HARD FAIL is only a FULLY smooth painting / vector illustration / photo / 3D with no pixel structure at all; a mildly pixelated, early-high-def computer scene scores 4 to 5 on the medium lens. Applied the same minute: flux-1.1-pro-ultra and flux-dev restored to `SCENE_MODELS` (they produce that register with the VGA and Ultima looks; flux-1.1-pro non-ultra stays out), and a sixth look "Early high-def computer scene art" added to the register in his words. The earlier "looks that trend toward painting are cut" sentence in (1) is superseded by this.
+
 ## 0b. Identity of record, current state, and how to continue (written 2026-09-19 ~06:00 UTC at Kevin's request)
 
 This section is the hand-off. It supersedes anything below that conflicts with it.
@@ -54,8 +56,8 @@ This section is the hand-off. It supersedes anything below that conflicts with i
 ### Where the identity is encoded (all committed on `main`)
 
 - `scripts/bots/pixelbot/shared-blocks.js`: `PAINTING_PREFIX` ("beautiful classic video-game splash-screen pixel art, the lush pretty scene an old RPG shows on its title screen, richly detailed pixels on a visible pixel grid, dithered gradient sky, limited era palette, old-school storybook charm"), `PAINTING_MEDIUM`, `PAINTING_SUFFIX`, `PIXEL_LOOK_OVERRIDE`, and the scene blocks (`SCENE_REGISTER_BLOCK` carries the whimsy + beauty + era statement, `ONE_HERO_BLOCK`, `TINY_LIFE_BLOCK`, `PICTORIAL_BLOCK`, `SCENE_STRUCTURE`).
-- `scripts/bots/pixelbot/seeds/pixelbot_look_register.json`: five ERA looks, each "richly detailed": Classic SNES RPG splash, VGA adventure-game background, Old-school Ultima-style tile scene, Amiga 32-colour ordered dither, HD voxel world. Rolled per render in `rollSharedDNA.lookRegister`; scene templates prepend `PIXEL_LOOK_OVERRIDE(sharedDNA)`. Cut with reasons: flat cel, chunky low-res, soft-cluster (drop the grid → smooth), hi-bit painterly and fine-dither (borderline painting), CRT phosphor and inked-outline (indistinguishable), impressionist clusters and voxel diorama (modern, not how games rendered scenes).
-- `scripts/bots/pixelbot/scenePaths.js`: `SCENE_MODELS` (ultra, flux-2-pro, flux-2-max, flux-2-flex, flux-dev; flux-1.1-pro dropped for rendering smooth on 4 of 6 draws), pool loading, gates, wiring derivation, `patchInMemory` for unwired paths.
+- `scripts/bots/pixelbot/seeds/pixelbot_look_register.json`: six ERA looks, each "richly detailed": Classic SNES RPG splash, VGA adventure-game background, Old-school Ultima-style tile scene, Amiga 32-colour ordered dither, HD voxel world, and (added 06:35 on Kevin's word) Early high-def computer scene art. Rolled per render in `rollSharedDNA.lookRegister`; scene templates prepend `PIXEL_LOOK_OVERRIDE(sharedDNA)`. Cut with reasons: flat cel, chunky low-res, soft-cluster (drop the grid → smooth), hi-bit painterly and fine-dither (borderline painting), CRT phosphor and inked-outline (indistinguishable), impressionist clusters and voxel diorama (modern, not how games rendered scenes).
+- `scripts/bots/pixelbot/scenePaths.js`: `SCENE_MODELS` (flux-2-pro, flux-2-max, flux-2-flex, flux-1.1-pro-ultra, flux-dev; flux-1.1-pro dropped for rendering smooth on 4 of 6 draws; ultra + dev were dropped at 05:55 and RESTORED at 06:35 on Kevin's word, see §0a (5)), pool loading, gates, wiring derivation, `patchInMemory` for unwired paths.
 - `scripts/bots/pixelbot/index.js`: `SCENE_PATHS` map (one line per scene path) drives `pathBuilders`, `shadowPaths`, `mediumByPath`, `modelByPath`, `vibesByPath`, chaos + polish skip lists.
 - Tooling: `scripts/_pixelbot-scene-render.js --path <key> --count 5 --label <key>-r<N> [--look i]` (shadow-posts, wires in memory, one process per round so recency holds), `scripts/_pixelbot-round-fetch.js --path <key> --since <ISO> --limit 5 --out <dir>` (rows, prompts, images).
 - Memory: `project_pixelbot_identity_splash_screen_pixel_art` (identity), `feedback_hearts_are_pointers_not_ratings` (never mine heart history).
@@ -66,10 +68,10 @@ This section is the hand-off. It supersedes anything below that conflicts with i
 |---|---|
 | pixel-vista | PASSED R3 (4.62) under the OLD realistic register, which Kevin rejected; six pools regenerated whimsy-first (storybook landforms, oversized moons, candy sky bands, magical light moments, charm details, saturated era palettes); needs a look check (one render per era look) + a fresh R0 under the new register. Wired in `SCENE_PATHS`. |
 | pixel-harbor, pixel-cabin-glow, pixel-cozy-room | batch 1, three parallel agents mid-build with all steers delivered by message; each reports a verdict, a round table, files, the `SCENE_PATHS` line, lessons. Orchestrator merges the line, re-verifies the bot loads, commits per path. |
-| pixel-cozy-farm | eight pools seeded to 25 against `FARMBOT_CREATIVE_DIRECTION.md`, path file written, NOT rendered yet; R0 when a render slot frees. |
+| pixel-cozy-farm | SCRAPPED 2026-09-19 (Kevin: "scrap the farm pixels, we'll leave that domain to farmbot"). |
 | pixel-cool-rides, pixel-fantasy-vista, pixel-rain-street | batch 2, not started. |
 | pixel-campfire-night, pixel-shoreline, pixel-skyward | batch 3, not started. |
-| pixel-ruins | batch 4 with the farm, not started. |
+| pixel-ruins | batch 4 (alone; the farm is scrapped), not started. |
 
 ### Lessons learned so far (also in the playbook's PixelBot section)
 
@@ -81,7 +83,7 @@ Looks that reduce technique lose the pixel grid; an unattached palette "accent" 
 2. Render budget: at most three renders in flight bot-wide (agents count). Headroom check first; stay off 07:45 to 08:30 UTC.
 3. Collect batch-1 agent reports from `/private/tmp/claude-501/-Users-kevinmchenry-Development-apps-dreambot/78dd141e-21c0-4e87-8920-71b6f8cfc2a4/scratchpad/agent-pixel-*.md` (or re-run those paths' rounds yourself if the reports are missing: the path files and pools they created are on disk). Merge each `SCENE_PATHS` line, verify the bot loads, commit per path with explicit paths.
 4. pixel-vista: look check (five renders, `--look 0..4`), cut any era look that renders smooth or crude, then R0 to R2 under the new register.
-5. pixel-cozy-farm: R0 to R2.
+5. (pixel-cozy-farm: SCRAPPED 2026-09-19 (Kevin: "scrap the farm pixels, we'll leave that domain to farmbot").)
 6. Batches 2, 3, 4 per section 7, three agents at a time, each briefed with sections 0a, 0b, 3.x, 4, 5 and the hard rules from the batch-1 briefs (never edit shared files, never delete, shadow renders only, one process per round).
 7. When every path has a verdict: update the tracker table, write a final report for Kevin, and stop. Nothing is deleted and nothing goes live until he reviews in the app and says so; scaling and go-live are section 6.
 
@@ -472,7 +474,9 @@ DragonBot (no dragon hero, no knights or elves as subjects) and StarBot (no spac
 sky beyond one large moon). **Landmark buckets (25):** floating islands 3, tower or spire 3, giant
 tree 3, crystal or cave 3, castle 3, sky creature 2, glowing forest 3, ruins 3, cloud city 2.
 
-### 3.7 `pixel-cozy-farm` (the rework; FarmBot's world in pixel art)
+### 3.7 `pixel-cozy-farm` (the rework; FarmBot's world in pixel art) — SCRAPPED 2026-09-19 (Kevin: "scrap the farm pixels, we'll leave that domain to farmbot")
+
+**Not built further.** The farm domain belongs to FarmBot; PixelBot posts no farm content. The path file, gen script, and eight MVP-25 seed pools were removed the same day (git history keeps them); the five R0 shadow renders (06:14 UTC) stay hidden, ungraded. The old in-game `cozy-farming-life-sim` stays parked in `shadowPaths` (not live) until Kevin says what to do with it. The brief below is history only.
 
 **Spec of record:** `FARMBOT_CREATIVE_DIRECTION.md` (read sections 1 to 10 before writing a single
 recipe). Kevin on the old path: "way too many realistic farm or just not that fun of posts, takes
@@ -665,7 +669,7 @@ step 5. It never edits shared files.
 
 | Lens | Question | 5 | 3 | 1 |
 |---|---|---|---|---|
-| Medium (pixel fidelity + look) | Is it unmistakably pixel art (grid, hard edges), and did the rolled look's technique read? | crisp pixel painting, look unmistakable | pixel art, look faint | smooth illustration, 3D, or photo |
+| Medium (pixel fidelity + look) | Does it read as pixel-built (grid, dither, hard or gently softened edges), and did the rolled look's technique read? | crisp pixel painting, look unmistakable; a mildly pixelated early-high-def scene is a 4 to 5 (Kevin 2026-09-19) | pixel structure faint, look faint | FULLY smooth painting, vector illustration, 3D, or photo with no pixel structure |
 | Cinematographer (one hero) | Does the eye land on one subject in two seconds, with breathing room and depth? | one hero, four layers | hero readable but busy | collage, no hero, or a game camera |
 | Set dresser (place) | Does it say THIS place, with specific believable detail? | specific, storied, lived-in | generic but coherent | muddy, wrong place, or empty |
 | Lighting (light and palette) | Is the light deliberate and the palette one harmony? | cinematic, coherent | flat but fine | two palettes fighting, or a wrong cast |
@@ -741,8 +745,8 @@ if he asks, then section 6.
    Confirm the path stays in `chaos.skipPaths` and `twoPassPolish.skipPaths`, `mediumByPath` and
    `modelByPath` are untouched, the bot loads, and `paths.includes(key)`. For `pixel-vista`, also
    remove `epic-vista` from `paths` in the same commit and delete its pools, archetype, and template.
-   For `pixel-cozy-farm`, remove `cozy-farming-life-sim` from `shadowPaths` and delete its pools,
-   archetype, template, and path file.
+   (`pixel-cozy-farm` is scrapped; `cozy-farming-life-sim` stays parked in `shadowPaths` until Kevin
+   decides whether it is deleted too.)
 5. **Fold the shadow renders into the feed gradually** (`scripts/promote-shadow-path.js`, backdated)
    or leave them hidden and let the live path post fresh; never flip them all public at once.
 6. **Playbook:** add the path's lessons under a PixelBot subsection. **Tracker:** mark shipped.
@@ -759,8 +763,7 @@ the shuffle-bag rotation.
 **Order.** Phase 0 with `pixel-vista` first (solo, it proves the register and the looks). Then four
 batches of at most three agents: (`pixel-harbor`, `pixel-cabin-glow`, `pixel-cozy-room`), then
 (`pixel-cool-rides`, `pixel-fantasy-vista`, `pixel-rain-street`), then (`pixel-campfire-night`,
-`pixel-shoreline`, `pixel-skyward`), then (`pixel-ruins`, `pixel-cozy-farm`; the farm needs the
-FarmBot spec read and the most judgment). The orchestrator merges wiring between batches and
+`pixel-shoreline`, `pixel-skyward`), then (`pixel-ruins` alone; `pixel-cozy-farm` was scrapped 2026-09-19). The orchestrator merges wiring between batches and
 re-verifies the bot loads after each merge.
 
 **Concurrency.** Never more than three renders in flight bot-wide. Three agents rendering five each
@@ -818,17 +821,16 @@ up to three rounds. Four batches plus the vista: two or three sessions.
 | pixel-vista | old-register PASS void; new-register R4 avg 4.0 (3 bangers + 1 hard fail = HD voxel on flux-dev); R5 started under the flux-2-only set: 3 of 5 posted before the disk filled → fetch those 3, render 2 more, grade as R5 |
 | pixel-harbor | 3 agent rounds, best 4.08; R3 (granted, registers changed mid-flight) started under flux-2-only: 3 of 5 posted → fetch, render 2 more, grade |
 | pixel-cozy-room | 3 agent rounds, best 4.12 (R2 3.66 under the final register); R3 (granted) started: 3 of 5 posted → fetch, render 2 more, grade |
-| pixel-cozy-farm | 8 pools seeded to 25 + path file, committed, NOT rendered; R0 next when a slot frees |
+| pixel-cozy-farm | SCRAPPED 2026-09-19 (Kevin: "scrap the farm pixels, we'll leave that domain to farmbot"); files removed, 5 R0 shadow renders left hidden |
 | cool-rides, fantasy-vista, rain-street | batch 2, not started |
 | campfire-night, shoreline, skyward | batch 3, not started |
-| ruins | batch 4 with the farm, not started |
+| ruins | batch 4 (alone), not started |
 
 **Resume steps, in order:**
 1. `df -h /` must show free space. Then `node -e "require('./scripts/bots/pixelbot')"` loads.
 2. Commit the uncommitted model prune + tracker (`git add` explicit, then `git commit -F - -- <same paths>`), then wire + commit harbor and cozy-room the same way (one commit each, hook must pass).
 3. For each of vista / harbor / cozy-room: `node scripts/_pixelbot-round-fetch.js --path <key> --since <start ISO in scratchpad/<dir>/start.txt> --limit 5 --out <dir>` (start times: `scratchpad/vista-r5/start.txt`, `r3-harbor/start.txt`, `r3-cozy/start.txt`), then `node scripts/_pixelbot-scene-render.js --path <key> --count 2 --label <key>-r<N>b`, fetch again, Read all 5 images, grade on the §5.1 lenses with the medium hard fail, log in the tracker. Max three renders in flight bot-wide.
-4. Then pixel-cozy-farm R0 (5, one process), grade, up to R2.
-5. Dispatch batch 2 as three forked agents with the batch-1 brief shape (see the batch-1 agent prompts in the transcript, or reconstruct from §4/§5: only their own files, `--count 5` one process per round, shadow posts, report to `scratchpad/agent-<key>.md`, never delete, never edit shared files) plus §0a/§0b/§3.x; merge each `SCENE_PATHS` line and commit per path. Then batch 3, then batch 4 (ruins + the farm's remaining rounds).
+5. Dispatch batch 2 as three forked agents with the batch-1 brief shape (see the batch-1 agent prompts in the transcript, or reconstruct from §4/§5: only their own files, `--count 5` one process per round, shadow posts, report to `scratchpad/agent-<key>.md`, never delete, never edit shared files) plus §0a/§0b/§3.x; merge each `SCENE_PATHS` line and commit per path. Then batch 3, then batch 4 (ruins).
 6. Final report to Kevin; nothing deleted; nothing goes live (section 6 waits for his in-app review).
 
 **Standing rules that bit tonight:** commit with an explicit pathspec on the commit command (another session's staged `create.tsx` was swept into `0376a886`); one render process per round for recency; check disk space before a batch (each render also saves a local copy); never mine heart history.
