@@ -26,6 +26,8 @@ const scene = require('./scenePaths');
 const SCENE_PATHS = {
   'pixel-vista': require('./paths/pixel-vista'), // replaces epic-vista at ship (plan §3.8)
   'pixel-cabin-glow': require('./paths/pixel-cabin-glow'), // PASS R2 4.74 (2026-09-19)
+  'pixel-harbor': require('./paths/pixel-harbor'), // batch 1 (agent), R3 under the flux-2 set pending
+  'pixel-cozy-room': require('./paths/pixel-cozy-room'), // batch 1 (agent), R3 under the flux-2 set pending
 };
 
 const pathBuilders = {
