@@ -921,11 +921,6 @@ export const DreamCard = memo(function DreamCard({
           onClose={() => setActionsOpen(false)}
           bottomInset={bottomPadding}
           mediaCount={isGallery ? (item.media_count ?? 0) : undefined}
-          recipe={
-            !isGallery && isOwnPost && dreamAgain.canDreamAgain
-              ? { mediumLabel: dreamAgain.mediumLabel, vibeLabel: dreamAgain.vibeLabel }
-              : undefined
-          }
           rows={buildPostActionRows({
             id: item.id,
             // On a gallery, the visible image; the cover otherwise.

@@ -244,14 +244,9 @@ export const PostTile = memo(function PostTile({
           <PostActionSheet
             visible
             onClose={() => setActionsOpen(false)}
-            // Album header shows "Album · N dreams"; single dreams keep the
-            // Style/Vibe recipe line (an album has no single recipe).
+            // Album header shows "Album · N dreams". (The single-dream Style/Vibe
+            // recipe line was removed 2026-09-18, Kevin: keep the sheet clean.)
             mediaCount={isGallery ? (item.media_count ?? 0) : undefined}
-            recipe={
-              !isGallery && isOwn && dreamAgain.canDreamAgain
-                ? { mediumLabel: dreamAgain.mediumLabel, vibeLabel: dreamAgain.vibeLabel }
-                : undefined
-            }
             rows={buildPostActionRows({
               id: item.id,
               imageUrl: item.image_url,

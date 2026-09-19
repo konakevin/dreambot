@@ -44,12 +44,7 @@ interface PostActionSheetProps {
   title?: string;
   /** Optional small avatar/thumbnail shown left of the title for context. */
   titleImageUrl?: string | null;
-  /** Owner-only "Recipe" line — the dream's medium + vibe ("formula"). Shown
-   *  ONLY on the owner's own dream (the caller gates it); never on other
-   *  people's view of a post. Undefined ⇒ hidden. */
-  recipe?: { mediumLabel: string; vibeLabel: string };
-  /** Multi-image ALBUM → header reads "Album · N dreams" instead of the recipe
-   *  (an album has no single recipe). Undefined/≤1 ⇒ not an album. */
+  /** Multi-image ALBUM → header reads "Album · N dreams". Undefined/≤1 ⇒ not an album. */
   mediaCount?: number;
   /** Card bottom padding (clears the tab bar) so the last row isn't occluded. */
   bottomInset?: number;
@@ -61,7 +56,6 @@ export function PostActionSheet({
   rows,
   title,
   titleImageUrl,
-  recipe,
   mediaCount,
   bottomInset,
 }: PostActionSheetProps) {
@@ -205,15 +199,6 @@ export function PostActionSheet({
             <Text style={s.recipeText} numberOfLines={1}>
               <Text style={s.recipeEyebrow}>Album</Text>
               {` · ${mediaCount} dreams`}
-            </Text>
-          </View>
-        ) : recipe ? (
-          <View style={s.recipeChip}>
-            <Text style={s.recipeText} numberOfLines={1}>
-              <Text style={s.recipeEyebrow}>Style: </Text>
-              {recipe.mediumLabel}
-              <Text style={s.recipeEyebrow}> · Vibe: </Text>
-              {recipe.vibeLabel}
             </Text>
           </View>
         ) : null}
