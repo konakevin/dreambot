@@ -19,19 +19,14 @@ const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   'cozy-rpg-town': require('./paths/cozy-rpg-town'),
-  'dungeon-depth': require('./paths/dungeon-depth'),
   'side-scroller-world': require('./paths/side-scroller-world'),
   'boss-arena': require('./paths/boss-arena'),
-  'jrpg-combat': require('./paths/jrpg-combat'),
   'pixel-horror': require('./paths/pixel-horror'),
   'cozy-farming-life-sim': require('./paths/cozy-farming-life-sim'),
   'pixel-sci-fi-action': require('./paths/pixel-sci-fi-action'),
   'classic-jrpg': require('./paths/classic-jrpg'),
   'epic-vista': require('./paths/epic-vista'),
-  'pixel-landscapes': require('./paths/pixel-landscapes'),
-  'pixel-item-shop': require('./paths/pixel-item-shop'), // Stage K1 SHADOW
   'retro-racing': require('./paths/retro-racing'), // Stage K2 SHADOW
-  'pixel-overworld': require('./paths/pixel-overworld'), // Stage K3 SHADOW
   // Halloween seasonal candidates — promoted from AlphaBot (2026-09), Kevin-
   // approved via QA matrix. Fire ONLY through seasonalPaths.halloween below,
   // never in the year-round `paths` rotation.
@@ -43,27 +38,18 @@ const pathBuilders = {
   'pixel-haunted-dungeon': require('./paths/pixel-haunted-dungeon'),
 };
 
-// Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
-// (admin-only shadow posts), NOT in live rotation until promoted into `paths`.
-const PIXEL_SHADOW_PATHS = ['pixel-item-shop', 'retro-racing', 'pixel-overworld'];
-
 // Per-path vibe lock — each genre prefers a tight subset of vibes for
 // scene-cohesion. Engine respects this when rolling vibe per render.
 const vibesByPath = {
   'cozy-rpg-town': ['nostalgic', 'whimsical', 'enchanted'],
-  'dungeon-depth': ['dark', 'arcane', 'fierce'],
   'side-scroller-world': ['cinematic', 'epic', 'voltage'],
   'boss-arena': ['epic', 'fierce', 'cinematic'],
-  'jrpg-combat': ['epic', 'fierce', 'arcane', 'cinematic'],
   'pixel-horror': ['fierce', 'arcane', 'dark', 'epic'],
   'cozy-farming-life-sim': ['nostalgic', 'whimsical', 'coquette'],
   'pixel-sci-fi-action': ['epic', 'fierce', 'voltage', 'cinematic'],
   'classic-jrpg': ['nostalgic', 'enchanted', 'whimsical', 'epic'],
   'epic-vista': ['epic', 'ethereal', 'cinematic', 'nostalgic'],
-  'pixel-landscapes': ['epic', 'ethereal', 'cinematic', 'nostalgic'],
-  'pixel-item-shop': ['nostalgic', 'whimsical', 'enchanted'], // Stage K1 SHADOW (cozy interior)
   'retro-racing': ['nostalgic', 'cinematic', 'epic', 'voltage'], // Stage K2 SHADOW
-  'pixel-overworld': ['nostalgic', 'enchanted', 'epic'], // Stage K3 SHADOW
 };
 
 const allVibes = Array.from(new Set(Object.values(vibesByPath).flat()));
@@ -103,26 +89,23 @@ module.exports = {
 
   paths: [
     'cozy-rpg-town',
-    'dungeon-depth',
     'side-scroller-world',
     'boss-arena',
-    'jrpg-combat',
     'pixel-horror',
-    'cozy-farming-life-sim',
+    // 'cozy-farming-life-sim', — PULLED 2026-09-19 for rework into a cozy-cute pixel farm (FarmBot-in-pixels); lives in shadowPaths meanwhile
     'pixel-sci-fi-action',
     'classic-jrpg',
     'epic-vista',
-    'pixel-landscapes',
     // Stage K — promoted to live rotation 2026-08-16 (scaled to production;
     // faithful xerox — not in allowSubjectChaosPaths (chaos off), polish applies
     // as in shadow, vibesByPath + global promptPrefix preserved).
-    'pixel-item-shop',
     'retro-racing',
-    'pixel-overworld',
   ],
 
   // Dark-launched (shadow) paths — renderable on demand, hidden from public + rotation.
-  shadowPaths: [], // Stage K paths promoted to live rotation 2026-08-16
+  // cozy-farming-life-sim: pulled from rotation 2026-09-19 for a rework (cozy-cute pixel
+  // farm, FarmBot-in-pixels). Kept renderable + hidden here until the rework is approved.
+  shadowPaths: ['cozy-farming-life-sim'],
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -157,16 +140,13 @@ module.exports = {
     ],
     allowSubjectChaosPaths: [
       'cozy-rpg-town',
-      'dungeon-depth',
       'side-scroller-world',
       'boss-arena',
-      'jrpg-combat',
       'pixel-horror',
       'cozy-farming-life-sim',
       'pixel-sci-fi-action',
       'classic-jrpg',
       'epic-vista',
-      'pixel-landscapes',
     ],
   },
 

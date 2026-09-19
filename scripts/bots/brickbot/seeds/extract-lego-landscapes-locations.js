@@ -74,14 +74,6 @@ const sb = createClient(
       __dirname,
       '..',
       '..',
-      'pixelbot',
-      'seeds',
-      'pixelbot_pixel_landscapes_locations.json'
-    ),
-    path.join(
-      __dirname,
-      '..',
-      '..',
       'toybot',
       'seeds',
       'toybot_toy_landscapes_locations.json'

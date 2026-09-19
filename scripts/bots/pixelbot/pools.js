@@ -42,30 +42,18 @@ const VIBE_COLOR = {
 module.exports = {
   // Per-path scene pools
   COZY_RPG_TOWN_SCENES: load('cozy_rpg_town_scenes'),
-  DUNGEON_DEPTH_SCENES: load('dungeon_depth_scenes'),
   SIDE_SCROLLER_SCENES: load('side_scroller_scenes'),
   BOSS_ARENA_SCENES: load('boss_arena_scenes'),
-  JRPG_COMBAT_SCENES: load('jrpg_combat_scenes'),
   PIXEL_HORROR_SCENES: load('pixel_horror_scenes'),
   COZY_FARMING_SCENES: load('cozy_farming_scenes'),
   PIXEL_SCI_FI_ACTION_SCENES: load('pixel_sci_fi_action_scenes'),
   CLASSIC_JRPG_SCENES: load('classic_jrpg_scenes'),
   EPIC_VISTA_SCENES: load('epic_vista_scenes'),
 
-  // pixel-landscapes path (2026-06-06) — real-world wide vistas as 16-bit
-  // pixel-art world-map scenes. Pool is extracted from location_iconic_spots
-  // (wide + pure_scene_eligible) and mirrored from BrickBot's
-  // lego-landscapes pool. Re-extract via
-  // scripts/bots/brickbot/seeds/extract-lego-landscapes-locations.js
-  // (writes to both bots' seed dirs). Entries are { location, scene } objects.
-  PIXELBOT_PIXEL_LANDSCAPES_LOCATIONS: load('pixelbot_pixel_landscapes_locations'),
-
   // Per-path lighting pools
   COZY_RPG_TOWN_LIGHTING: load('cozy_rpg_town_lighting'),
-  DUNGEON_DEPTH_LIGHTING: load('dungeon_depth_lighting'),
   SIDE_SCROLLER_LIGHTING: load('side_scroller_lighting'),
   BOSS_ARENA_LIGHTING: load('boss_arena_lighting'),
-  JRPG_COMBAT_LIGHTING: load('jrpg_combat_lighting'),
   PIXEL_HORROR_LIGHTING: load('pixel_horror_lighting'),
   COZY_FARMING_LIGHTING: load('cozy_farming_lighting'),
   PIXEL_SCI_FI_ACTION_LIGHTING: load('pixel_sci_fi_action_lighting'),
@@ -74,10 +62,8 @@ module.exports = {
 
   // Per-path atmosphere pools
   COZY_RPG_TOWN_ATMOSPHERE: load('cozy_rpg_town_atmosphere'),
-  DUNGEON_DEPTH_ATMOSPHERE: load('dungeon_depth_atmosphere'),
   SIDE_SCROLLER_ATMOSPHERE: load('side_scroller_atmosphere'),
   BOSS_ARENA_ATMOSPHERE: load('boss_arena_atmosphere'),
-  JRPG_COMBAT_ATMOSPHERE: load('jrpg_combat_atmosphere'),
   PIXEL_HORROR_ATMOSPHERE: load('pixel_horror_atmosphere'),
   COZY_FARMING_ATMOSPHERE: load('cozy_farming_atmosphere'),
   PIXEL_SCI_FI_ACTION_ATMOSPHERE: load('pixel_sci_fi_action_atmosphere'),
@@ -91,11 +77,6 @@ module.exports = {
   PIXELBOT_COZY_RPG_TOWN_ATMOSPHERIC_PHENOMENON: loadIfExists(
     'pixelbot_cozy_rpg_town_atmospheric_phenomenon'
   ),
-  // ─── dungeon-depth axis-system pools (2026-05-20) ───
-  PIXELBOT_DUNGEON_DEPTH_CHAMBER: loadIfExists('pixelbot_dungeon_depth_chamber'),
-  PIXELBOT_DUNGEON_DEPTH_BIOME: loadIfExists('pixelbot_dungeon_depth_biome'),
-  PIXELBOT_DUNGEON_DEPTH_HERO_ENCOUNTER: loadIfExists('pixelbot_dungeon_depth_hero_encounter'),
-  PIXELBOT_DUNGEON_DEPTH_LOOT_DETAIL: loadIfExists('pixelbot_dungeon_depth_loot_detail'),
   // ─── side-scroller-world axis-system pools (2026-05-20) ───
   PIXELBOT_SIDE_SCROLLER_BIOME_SETTING: loadIfExists('pixelbot_side_scroller_biome_setting'),
   PIXELBOT_SIDE_SCROLLER_PLATFORM_GEOGRAPHY: loadIfExists(
@@ -110,30 +91,11 @@ module.exports = {
   PIXELBOT_BOSS_ARENA_BOSS_CREATURE: loadIfExists('pixelbot_boss_arena_boss_creature'),
   PIXELBOT_BOSS_ARENA_PLAYER_ENGAGEMENT: loadIfExists('pixelbot_boss_arena_player_engagement'),
   PIXELBOT_BOSS_ARENA_PHENOMENON: loadIfExists('pixelbot_boss_arena_phenomenon'),
-  // ─── jrpg-combat axis-system pools (2026-05-20) ───
-  PIXELBOT_JRPG_COMBAT_OPEN_WORLD_SETTING: loadIfExists('pixelbot_jrpg_combat_open_world_setting'),
-  PIXELBOT_JRPG_COMBAT_MONSTER_ENEMY: loadIfExists('pixelbot_jrpg_combat_monster_enemy'),
-  PIXELBOT_JRPG_COMBAT_PARTY_ENGAGEMENT: loadIfExists('pixelbot_jrpg_combat_party_engagement'),
-  PIXELBOT_JRPG_COMBAT_SPELL_EFFECT: loadIfExists('pixelbot_jrpg_combat_spell_effect'),
-  // ─── pixel-overworld axis-system pools (Stage K3, SHADOW) ───
-  PIXELBOT_PIXEL_OVERWORLD_MAP_REGION: loadIfExists('pixelbot_pixel_overworld_map_region'),
-  PIXELBOT_PIXEL_OVERWORLD_MAP_FEATURES: loadIfExists('pixelbot_pixel_overworld_map_features'),
-  PIXELBOT_PIXEL_OVERWORLD_TRAVELER_SPRITE: loadIfExists(
-    'pixelbot_pixel_overworld_traveler_sprite'
-  ),
-  PIXELBOT_PIXEL_OVERWORLD_MAP_EVENT: loadIfExists('pixelbot_pixel_overworld_map_event'),
   // ─── retro-racing axis-system pools (Stage K2, SHADOW) ───
   PIXELBOT_RETRO_RACING_ROUTE_SCENE: loadIfExists('pixelbot_retro_racing_route_scene'),
   PIXELBOT_RETRO_RACING_HORIZON_BANDS: loadIfExists('pixelbot_retro_racing_horizon_bands'),
   PIXELBOT_RETRO_RACING_RACE_MOMENT: loadIfExists('pixelbot_retro_racing_race_moment'),
   PIXELBOT_RETRO_RACING_ROADSIDE_DETAIL: loadIfExists('pixelbot_retro_racing_roadside_detail'),
-  // ─── pixel-item-shop axis-system pools (Stage K1, SHADOW) ───
-  PIXELBOT_PIXEL_ITEM_SHOP_SHOP_LOCALE: loadIfExists('pixelbot_pixel_item_shop_shop_locale'),
-  PIXELBOT_PIXEL_ITEM_SHOP_SHELF_DENSITY: loadIfExists('pixelbot_pixel_item_shop_shelf_density'),
-  PIXELBOT_PIXEL_ITEM_SHOP_KEEPER_CUSTOMER_LIFE: loadIfExists(
-    'pixelbot_pixel_item_shop_keeper_customer_life'
-  ),
-  PIXELBOT_PIXEL_ITEM_SHOP_COZY_PHENOMENON: loadIfExists('pixelbot_pixel_item_shop_cozy_phenomenon'),
   // ─── pixel-horror axis-system pools (2026-05-20) ───
   PIXELBOT_PIXEL_HORROR_GOTHIC_SETTING: loadIfExists('pixelbot_pixel_horror_gothic_setting'),
   PIXELBOT_PIXEL_HORROR_CLASSIC_ENEMY: loadIfExists('pixelbot_pixel_horror_classic_enemy'),
