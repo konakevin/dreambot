@@ -13,18 +13,17 @@ const path = require('path');
 
 const SEEDS = path.join(__dirname, 'seeds');
 
-// The scene register's model set (weighted object = engine hardcodes the roll,
-// bypassing dream_mediums.allowed_models for the code-only medium). Equal to
-// start; Phase 0 prunes any model that renders smooth instead of pixels.
-// flux-1.1-pro DROPPED 2026-09-19 (Phase 0 prune): smooth vector illustration, no
-// pixel grid, on 4 of its 6 scene draws across the look check + R0-R2. The flux-2
-// family held pixel fidelity on every draw; flux-dev on 4 of 5; ultra 1 of 2 (kept).
+// Scene model set (PIXELBOT_SCENES_PLAN.md §2.2). Pruned twice on evidence:
+// 2026-09-19 05:25 flux-1.1-pro dropped (smooth on 4 of 6 draws);
+// 2026-09-19 05:55 flux-1.1-pro-ultra (smooth / flat on 5 draws across vista, harbor,
+// cozy-room) and flux-dev (smooth on the HD voxel look, cartoon drift on SNES splash,
+// soft on fine-dither) dropped. The flux-2 family held the pixel medium on every
+// draw across four paths and every era look. Kevin's medium rule: pixels / near-pixel /
+// voxel, never a digital painting.
 const SCENE_MODELS = {
-  'black-forest-labs/flux-1.1-pro-ultra': 1,
   'black-forest-labs/flux-2-pro': 1,
   'black-forest-labs/flux-2-max': 1,
   'black-forest-labs/flux-2-flex': 1,
-  'black-forest-labs/flux-dev': 1,
 };
 const SCENE_MEDIUM = 'pixelbot_painting';
 

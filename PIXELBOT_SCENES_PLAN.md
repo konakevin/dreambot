@@ -798,3 +798,37 @@ up to three rounds. Four batches plus the vista: two or three sessions.
 4. Tier 2 is IN this build (Kevin 2026-09-19), as batches three and four in section 7.
 5. The pixel looks register is IN this build, as Phase 0 (section 2.8), confirmed by Kevin 2026-09-19.
    Candidate list and exclusions are in 2.8; the render check decides the final set.
+
+## 0c. RESUME POINT (2026-09-19 ~06:00 UTC, written for a context reset)
+
+**Blocked on:** the Mac's boot volume ran out of disk mid-round. Kevin frees it (`rm -rf /tmp/pixelbot-*` are local copies of hidden posts; safe), then the agent resumes at step 1 below. Until space is freed, git commits and renders both fail with ENOSPC.
+
+**Committed on main (HEAD `1f629c87`):** Phase 0 register + looks + tooling (`b0550be7`); recalibration to splash-screen register + era looks + whimsy vista pools + farm pools/path (`3aa4e902`); plan §0a/§0b + "richly detailed" wording (`0376a886`); pixel-cabin-glow PASS wired (`1f629c87`).
+
+**Uncommitted in the working tree (commit these first, explicit pathspec on the commit command):**
+- `scripts/bots/pixelbot/scenePaths.js`: SCENE_MODELS pruned to flux-2-pro / 2-max / 2-flex (ultra smooth on 5 draws across vista, harbor, cozy-room; flux-dev smooth on the HD voxel look, cartoon drift on SNES splash). The flux-2 family held the medium on every draw across four paths and every era look.
+- `PIXELBOT_PATH_BUILD_STATE.md`: round logs for vista R4, harbor (agent), cozy-room (agent).
+- Agent-built, unwired, uncommitted: `scripts/bots/pixelbot/paths/pixel-harbor.js` + `scripts/gen-seeds/pixelbot/gen-pixel-harbor-pools.js` + `seeds/pixelbot_pixel_harbor_*.json` (9); `scripts/bots/pixelbot/paths/pixel-cozy-room.js` + `scripts/gen-seeds/pixelbot/gen-pixel-cozy-room-pools.js` + `seeds/pixelbot_pixel_cozy_room_*.json` (8, plus a `.bak-r0-realistic`). Reports: scratchpad `agent-pixel-harbor.md`, `agent-pixel-cozy-room.md`, `agent-pixel-cabin-glow.md`.
+- Wiring lines still to add to `SCENE_PATHS` in index.js: `'pixel-harbor': require('./paths/pixel-harbor'),` and `'pixel-cozy-room': require('./paths/pixel-cozy-room'),`.
+
+**Path status:**
+| path | status |
+|---|---|
+| pixel-cabin-glow | PASS R2 4.74, wired, committed |
+| pixel-vista | old-register PASS void; new-register R4 avg 4.0 (3 bangers + 1 hard fail = HD voxel on flux-dev); R5 started under the flux-2-only set: 3 of 5 posted before the disk filled → fetch those 3, render 2 more, grade as R5 |
+| pixel-harbor | 3 agent rounds, best 4.08; R3 (granted, registers changed mid-flight) started under flux-2-only: 3 of 5 posted → fetch, render 2 more, grade |
+| pixel-cozy-room | 3 agent rounds, best 4.12 (R2 3.66 under the final register); R3 (granted) started: 3 of 5 posted → fetch, render 2 more, grade |
+| pixel-cozy-farm | 8 pools seeded to 25 + path file, committed, NOT rendered; R0 next when a slot frees |
+| cool-rides, fantasy-vista, rain-street | batch 2, not started |
+| campfire-night, shoreline, skyward | batch 3, not started |
+| ruins | batch 4 with the farm, not started |
+
+**Resume steps, in order:**
+1. `df -h /` must show free space. Then `node -e "require('./scripts/bots/pixelbot')"` loads.
+2. Commit the uncommitted model prune + tracker (`git add` explicit, then `git commit -F - -- <same paths>`), then wire + commit harbor and cozy-room the same way (one commit each, hook must pass).
+3. For each of vista / harbor / cozy-room: `node scripts/_pixelbot-round-fetch.js --path <key> --since <start ISO in scratchpad/<dir>/start.txt> --limit 5 --out <dir>` (start times: `scratchpad/vista-r5/start.txt`, `r3-harbor/start.txt`, `r3-cozy/start.txt`), then `node scripts/_pixelbot-scene-render.js --path <key> --count 2 --label <key>-r<N>b`, fetch again, Read all 5 images, grade on the §5.1 lenses with the medium hard fail, log in the tracker. Max three renders in flight bot-wide.
+4. Then pixel-cozy-farm R0 (5, one process), grade, up to R2.
+5. Dispatch batch 2 as three forked agents with the batch-1 brief shape (see the batch-1 agent prompts in the transcript, or reconstruct from §4/§5: only their own files, `--count 5` one process per round, shadow posts, report to `scratchpad/agent-<key>.md`, never delete, never edit shared files) plus §0a/§0b/§3.x; merge each `SCENE_PATHS` line and commit per path. Then batch 3, then batch 4 (ruins + the farm's remaining rounds).
+6. Final report to Kevin; nothing deleted; nothing goes live (section 6 waits for his in-app review).
+
+**Standing rules that bit tonight:** commit with an explicit pathspec on the commit command (another session's staged `create.tsx` was swept into `0376a886`); one render process per round for recency; check disk space before a batch (each render also saves a local copy); never mine heart history.
