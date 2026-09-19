@@ -970,6 +970,15 @@ function RootLayout() {
                           name="sparkleStore"
                           options={SCREEN_PRESETS.MODAL_SWIPEABLE}
                         />
+                        {/* Fullscreen inbox: same gesture model as photo/[id] (axis-locked swipe-back, pager owns vertical). */}
+                        <Stack.Screen
+                          name="inboxFeed"
+                          options={{
+                            ...SCREEN_PRESETS.MODAL_SWIPEABLE,
+                            gestureEnabled: false,
+                            fullScreenGestureEnabled: false,
+                          }}
+                        />
                         <Stack.Screen name="dream/loading" options={SCREEN_PRESETS.MODAL_LOCKED} />
                         <Stack.Screen name="dream/reveal" options={SCREEN_PRESETS.MODAL_LOCKED} />
                         <Stack.Screen name="inbox" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />

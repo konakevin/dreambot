@@ -374,7 +374,8 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
 - **Services / money:** `SPARKLE_PAYMENTS_SETUP.md`, `PRO_SUBSCRIPTION_SETUP.md`,
   `SPARKLE_PRICING_STRATEGY.md`, `AUTH_PROVIDERS.md`, `BUNDLE_ID_MIGRATION.md`, `APP_STORE_LISTING.md`,
   `LAUNCH.md`. (Website specifics live in `../dreambot-web/CLAUDE.md`.)
-- **Features:** `MEDIUMS_FAQ.md`, `DLT_FIDELITY_PLAN.md`, `DLT_PUT_ME_IN_SCENE_PLAN.md`,
+- **Features:** `SEND_A_DREAM_IDEAS.md` (idea board: send a friend a dream, recast, sequels for friends — not built), `REDREAM.md` ("Redream in a new setting": long-press re-run of a NIGHTLY dream: same look/vibe/cast, new setting, paid; queue
+  source `redream`), `MEDIUMS_FAQ.md`, `DLT_FIDELITY_PLAN.md`, `DLT_PUT_ME_IN_SCENE_PLAN.md`,
   `COMMENTS_IMPLEMENTATION.md`, `UPSCALE_QUEUE_PLAN.md`, `NOTIFICATIONS_ARCHITECTURE.md`,
   `ADMIN_CONFIG_PLAN.md`, `ANALYTICS_PLAN.md`.
 - **DreamSmart (model↔style):** `SMART_DREAM_PLAN.md` (strategy),

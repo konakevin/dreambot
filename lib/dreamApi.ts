@@ -175,6 +175,32 @@ export interface EnqueueDreamResult {
   dream_id: string;
 }
 
+export interface EnqueueRedreamResult {
+  dream_id: string;
+  /** Sparkles charged (engine_config.base_sparkle_cost). */
+  cost: number;
+}
+
+/**
+ * "Redream in a new setting" (constants/redream.ts): re-run a NIGHTLY dream on demand — same look, vibe and cast, new setting.
+ * Charges the base dream price server-side; surfaces `insufficient_sparkles` / `too_many_inflight` /
+ * `not_redreamable` as Error messages exactly like enqueueDream so the caller can route them.
+ */
+export async function enqueueRedream(sourceUploadId: string): Promise<EnqueueRedreamResult> {
+  const { data, error } = await invokeEdge<EnqueueRedreamResult & { error?: string }>(
+    'enqueue-dream',
+    { body: { redream_upload_id: sourceUploadId } }
+  );
+  if (error) {
+    if (__DEV__) console.error('[dreamApi] enqueue-dream (redream) error:', JSON.stringify(error));
+    throw new Error(await functionsInvokeError(error));
+  }
+  if (!data || !data.dream_id) {
+    throw new Error(data?.error ?? 'enqueue failed');
+  }
+  return { dream_id: data.dream_id, cost: typeof data.cost === 'number' ? data.cost : 1 };
+}
+
 /**
  * Enqueue a user dream onto the async dream_queue instead of awaiting the
  * synchronous render — escapes Supabase 546 at scale. Same body shape as

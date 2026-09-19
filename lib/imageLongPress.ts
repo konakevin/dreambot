@@ -1,5 +1,6 @@
 import * as Haptics from 'expo-haptics';
 import { showAlert } from '@/components/CustomAlert';
+import { REDREAM_ICON, REDREAM_LABEL } from '@/constants/redream';
 import { showPremiumGate } from '@/lib/premiumGate';
 import { Toast } from '@/components/Toast';
 import { UpscaleModal } from '@/components/UpscaleOverlay';
@@ -281,6 +282,10 @@ export interface PostActionSheetOpts extends LongPressOpts {
   /** Owner-only "Dream this again" — reloads this dream's saved inputs into
    *  Create (from useDreamAgain). Present ⇒ the row shows. */
   onDreamAgain?: () => void;
+  /** Owner-only "Redream in a new setting" — a NIGHTLY dream re-run in a new setting (constants/redream.ts). The hook
+   *  decides which of the two actions a dream gets; a nightly look never gets onDreamAgain. */
+  onRedream?: () => void;
+  redreamSubtitle?: string;
   /** This post is a multi-image ALBUM (media_count > 1). An album is a
    *  reference GROUPING — single-image actions (Save in HD, Dream this again,
    *  Dream like this) are hidden, and it gets TWO distinct exits: "Dissolve
@@ -437,6 +442,17 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
   // passes onDreamAgain for the owner, so no extra isOwn gate needed here. On an
   // album it reloads the ACTIVE SLIDE's source dream (the caller resolves that);
   // suppressed only on the grid album THUMB, which has no single slide in view.
+  if (opts.onRedream && !opts.albumThumb) {
+    rows.push({
+      key: 'redream',
+      label: REDREAM_LABEL,
+      icon: REDREAM_ICON,
+      subtitle: opts.redreamSubtitle,
+      group: 'primary',
+      onPress: opts.onRedream,
+    });
+  }
+
   if (opts.onDreamAgain && !opts.albumThumb) {
     rows.push({
       key: 'dream-again',

@@ -154,9 +154,12 @@ export function PostActionSheet({
                 size={22}
                 color={row.destructive ? colors.error : colors.textPrimary}
               />
-              <Text style={[s.rowLabel, row.destructive && { color: colors.error }]}>
-                {row.label}
-              </Text>
+              <View style={s.rowTextWrap}>
+                <Text style={[s.rowLabel, row.destructive && { color: colors.error }]}>
+                  {row.label}
+                </Text>
+                {row.subtitle ? <Text style={s.rowSubtitle}>{row.subtitle}</Text> : null}
+              </View>
             </TouchableOpacity>
           )
         )}

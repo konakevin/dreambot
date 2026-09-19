@@ -20,7 +20,7 @@ import { PLAN_NAME_BASIC, PLAN_NAME_PRO } from '@/constants/proPlan';
 export type GateRoute = '/sparkleStore' | '/subscribe';
 
 export type GateReason =
-  | { kind: 'sparkles'; needed: number; balance: number }
+  | { kind: 'sparkles'; needed: number; balance: number; context?: 'sequel' }
   | { kind: 'hd_premium' }
   | { kind: 'hd_cap'; cap: number; resetsOn?: string; tier: 'basic' | 'pro' }
   | { kind: 'nightly_premium' };
@@ -55,10 +55,14 @@ export function gateContent(reason: GateReason): GateContent {
         icon: 'sparkles',
         // Clean and neutral, no scolding — and the numbers live ONLY in the
         // badge below (the old copy repeated them in both body and badge).
-        title: 'Refill your sparkles',
+        // "Dream the sequel" upsell (Kevin 2026-09-18): the out-of-sparkles moment names the thing they wanted.
+        title: reason.context === 'sequel' ? 'The twin needs a sparkle' : 'Refill your sparkles',
         // Hard break between the sentences so the centered wrap lands as two
         // balanced lines instead of orphaning "and keep dreaming."
-        body: 'Every dream starts with a little stardust.\nTop up and keep dreaming.',
+        body:
+          reason.context === 'sequel'
+            ? "You're out of sparkles. Top up and DreamBot will dream the twin right now."
+            : 'Every dream starts with a little stardust.\nTop up and keep dreaming.',
         balance: {
           have: reason.balance,
           need: reason.needed,

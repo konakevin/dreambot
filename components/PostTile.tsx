@@ -287,6 +287,9 @@ export const PostTile = memo(function PostTile({
                     ? () => makePublic([item.id])
                     : () => nav.push(`/post/new?ids=${item.id}`),
               onDreamAgain: isOwn && dreamAgain.canDreamAgain ? dreamAgain.onDreamAgain : undefined,
+              // Nightly dream → "Redream in a new setting" (same look/vibe/cast, new setting) instead.
+              onRedream: isOwn && dreamAgain.isNightlyLook ? dreamAgain.onRedream : undefined,
+              redreamSubtitle: dreamAgain.redreamSubtitle,
               // Profile pin toggle (migration 330) — own PUBLIC posts only (the
               // Dreams album shows private dreams; those aren't pinnable).
               isPinned,

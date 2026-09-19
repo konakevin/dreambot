@@ -186,6 +186,7 @@ import { pickDayOfLook, parseMediumBan, mergeDayOfBans } from '../_shared/dayOfL
 import { loadNightlyModelPolicy } from '../_shared/pools/nightlyModelPolicyLoader.ts';
 import { decideSceneFirst, sceneFirstRegister } from '../_shared/sceneFirstEligibility.ts';
 import { parseQaFlags } from '../_shared/nightlyQaFlags.ts';
+import { applyRedreamPins, parseRedreamPins } from '../_shared/redream.ts';
 import { resolveCastAction } from '../_shared/castActionResolver.ts';
 import { settingClauseOf } from '../_shared/sceneHook.ts';
 import { assessRenderQuality, assessSceneFallbackPeople } from '../_shared/qualityGate.ts';
@@ -444,7 +445,12 @@ Deno.serve(async (req) => {
     strict_face_swap,
     persist,
     queueJobId,
-  } = parseQaFlags(body);
+  } = parseQaFlags(
+    // "Redream in a new setting" (mig 531): a redream's pins (contract look, vibe, cast role) ride the same pin inputs, merged
+    // AFTER isQa was read from the raw body — a paid user render, not QA spend.
+    applyRedreamPins(body)
+  );
+  const redreamPins = parseRedreamPins(body);
   // force_look = force_medium + the override-library exemption + honest stamps (Phase A2). Every
   // downstream `force_medium` read sees the pinned look key.
   const force_medium: string | undefined = force_look ?? force_medium_raw;
@@ -478,6 +484,7 @@ Deno.serve(async (req) => {
   let visionDescription: string | null = null;
   let replicatePredictionId: string | null = null;
   const fallbackReasons: string[] = [];
+  if (redreamPins) fallbackReasons.push(`redream:${redreamPins.sourceUploadId}`);
   // Nightly model policy (mig 468, NIGHTLY_MODEL_POLICY_PLAN.md): resolved ONCE per render. 'off' =
   // the legacy picker everywhere below; 'shadow' = legacy still renders, the policy resolver runs beside
   // it at every pick site and stamps policy_shadow:<site>:match|diff; 'on' = the policy table decides.
@@ -567,6 +574,15 @@ Deno.serve(async (req) => {
     sceneAction?: string | null;
     location: string | null;
     biome: string | null;
+    /** The scenario row's category (goofy / elegant / active pools) — the sequel's world (redream.ts). */
+    category?: string | null;
+    /** The holiday scene's sub-theme, when one was rolled. */
+    subTheme?: string | null;
+    /** The location card the place came from (`force_place` target) — `location` holds the spot text. */
+    placeKey?: string | null;
+    /** Who was in it: 'dual' | 'self' | 'plus_one' | null (no cast). The log that also carries this prunes at
+     *  30 days; the upload keeps it forever so a sequel of an old dream keeps its cast. */
+    castRole?: string | null;
   } | null = null;
   let resolvedMediumAllowedModels: string[] = [];
   // Per-medium scene-eligible model override (mig 214). NULL → fall back to
@@ -2208,7 +2224,19 @@ Deno.serve(async (req) => {
           .eq('category', force_scene_category)
           .eq('disabled', false);
         if (catRows && catRows.length > 0) {
-          const s = catRows[Math.floor(Math.random() * catRows.length)];
+          // A kind pin alongside the category (the sequel: same kind AND same world) narrows to that pool;
+          // a category with no rows in that pool keeps every row rather than failing the render.
+          const wantPool =
+            force_active || force_single_active
+              ? 'active'
+              : force_playful || force_single_playful
+                ? 'goofy'
+                : force_elegant || force_single_elegant
+                  ? 'elegant'
+                  : null;
+          const kindRows = wantPool ? catRows.filter((r) => r.pool === wantPool) : catRows;
+          const pickFrom = kindRows.length > 0 ? kindRows : catRows;
+          const s = pickFrom[Math.floor(Math.random() * pickFrom.length)];
           const sPool = s.pool as string;
           // Mirror the production per-pool pose behavior so QA reflects the real render: ACTIVE-pool
           // scenes embed the action in the scene text; goofy/elegant draw the pose from their kind.
@@ -3418,6 +3446,17 @@ Deno.serve(async (req) => {
       sceneAction: sceneActionText,
       location: iconicAnchor ?? userPlace ?? null,
       biome: biomeKey,
+      category: dualSceneCategory,
+      subTheme: holidaySubTheme,
+      placeKey: userPlace ?? null,
+      castRole:
+        selectedCast.length === 2
+          ? 'dual'
+          : selectedCast.length === 1
+            ? selectedCast[0].role === 'plus_one'
+              ? 'plus_one'
+              : 'self'
+            : null,
     };
 
     if (composition === 'character') {

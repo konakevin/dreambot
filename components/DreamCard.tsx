@@ -34,7 +34,7 @@ import { ExpandableDescription } from '@/components/dreamCardBits/ExpandableDesc
 import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
 import { colors, ui, ANIM } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, horizontalScale } from '@/lib/responsive';
 import { buildPostActionRows } from '@/lib/imageLongPress';
 import { useDreamAgain } from '@/hooks/useDreamAgain';
 import { PostActionSheet } from '@/components/PostActionSheet';
@@ -198,6 +198,9 @@ interface Props {
    *  image reads clean; the photo/[id] album viewer opts in since its
    *  description text needs the extra contrast. */
   showBottomScrim?: boolean;
+  /** Fullscreen inbox (app/inboxFeed.tsx): why this post is in your inbox, rendered just above the username
+   *  ("sunnysteph reposted this", "From sunnysteph · 2 of 4") so it hides with the HUD and moves with the caption. */
+  contextLine?: { icon: keyof typeof Ionicons.glyphMap; color: string; text: string };
 }
 
 export const DreamCard = memo(function DreamCard({
@@ -221,6 +224,7 @@ export const DreamCard = memo(function DreamCard({
   onHudToggle,
   isActive,
   showBottomScrim,
+  contextLine,
 }: Props) {
   const currentUser = useAuthStore((s) => s.user);
   const isSuperAdmin = useAuthStore((s) => s.isSuperAdmin);
@@ -645,6 +649,19 @@ export const DreamCard = memo(function DreamCard({
                   </Text>
                 </View>
               )}
+              {contextLine ? (
+                <View style={s.contextLineWrap}>
+                  <View style={s.contextLinePill}>
+                    {/* The inbox row's own type badge: a filled disc in the type colour, white glyph. */}
+                    <View style={[s.contextLineBadge, { backgroundColor: contextLine.color }]}>
+                      <Ionicons name={contextLine.icon} size={11} color="#FFFFFF" />
+                    </View>
+                    <Text style={s.contextLineText} numberOfLines={1}>
+                      {contextLine.text}
+                    </Text>
+                  </View>
+                </View>
+              ) : null}
               <View>
                 <TouchableOpacity
                   style={s.usernameRow}
@@ -955,6 +972,13 @@ export const DreamCard = memo(function DreamCard({
                   ? dreamAgain.onDreamAgain
                   : undefined
               : undefined,
+            // Nightly dream → "Redream in a new setting" (same look/vibe/cast, new setting). Album slides route through
+            // dreamAgainFromUpload above, which picks the action once it knows what the slide is.
+            onRedream:
+              isOwnPost && !isGallery && dreamAgain.isNightlyLook
+                ? dreamAgain.onRedream
+                : undefined,
+            redreamSubtitle: dreamAgain.redreamSubtitle,
             authorName: item.username ?? undefined,
             isBot: isBotAuthor,
             onBlock: () => toggleBlock.mutate({ userId: item.user_id, currentlyBlocked: false }),
@@ -1100,6 +1124,32 @@ const s = StyleSheet.create({
     fontSize: fontScale(11),
     fontWeight: '600',
     letterSpacing: 0.2,
+  },
+  // Fullscreen-inbox context line ("sunnysteph reposted this") just above the username row.
+  contextLineWrap: { flexDirection: 'row', marginBottom: verticalScale(12) },
+  contextLinePill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: horizontalScale(8),
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    borderRadius: 999,
+    paddingLeft: horizontalScale(6),
+    paddingRight: horizontalScale(12),
+    paddingVertical: verticalScale(5),
+    maxWidth: '100%',
+  },
+  contextLineBadge: {
+    width: horizontalScale(20),
+    height: horizontalScale(20),
+    borderRadius: horizontalScale(10),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  contextLineText: {
+    color: '#FFFFFF',
+    fontSize: fontScale(13),
+    fontWeight: '600',
+    flexShrink: 1,
   },
   // Repost attribution line ("♻ Reposted by @x") at the top of the post info.
   repostAttribRow: {

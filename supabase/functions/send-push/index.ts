@@ -224,9 +224,18 @@ function getAggregatedNotificationContent(
   // aggregated=true (migration 204 drain), so dropping it here routed manual
   // dream_generated / dream_failed / trial+pro reminders to their subtype-less
   // default copy (manual creates pushed the nightly "A new dream has appeared").
-  subtype: string | null = null
+  subtype: string | null = null,
+  // Unseen rows in the group. A sender's batch of shares is ONE group per day (mig 533), so a single actor can
+  // stand behind several posts.
+  eventCount = 1
 ) {
   if (actorCount <= 1) {
+    if (type === 'post_share' && eventCount > 1) {
+      return {
+        title: `${latestActorName} sent you ${eventCount} posts`,
+        body: 'Tap to check them out',
+      };
+    }
     // Singleton group — fall back to the single-actor copy.
     return getNotificationContent(type, latestActorName, body, subtype);
   }
@@ -467,7 +476,8 @@ Deno.serve(async (req) => {
         secondActorName,
         actorCount,
         record.body,
-        record.subtype ?? null
+        record.subtype ?? null,
+        (groupActors ?? []).length || 1
       );
     }
 

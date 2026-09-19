@@ -18,6 +18,7 @@ import * as nav from '@/lib/navigate';
 import { supabase } from '@/lib/supabase';
 import { trackDltStarted } from '@/lib/analytics';
 import { DLT_ENABLED } from '@/constants/features';
+import type { Ionicons } from '@expo/vector-icons';
 import { DreamCard } from '@/components/DreamCard';
 import { FeedCardSkeleton } from '@/components/Skeleton';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -104,7 +105,7 @@ interface Props {
  * re-renders one card; a swipe re-renders two (outgoing + incoming) instead of
  * the whole window.
  */
-type FeedCardProps = {
+export type FeedCardProps = {
   item: DreamPostItem;
   isActive: boolean;
   isLiked: boolean;
@@ -125,9 +126,11 @@ type FeedCardProps = {
   onTogglePosted?: (id: string) => void;
   onHudToggle?: (visible: boolean) => void;
   showBottomScrim?: boolean;
+  /** Fullscreen inbox: the row's context, rendered by DreamCard just above the username. */
+  contextLine?: { icon: keyof typeof Ionicons.glyphMap; color: string; text: string };
 };
 
-const FeedCard = memo(function FeedCard({
+export const FeedCard = memo(function FeedCard({
   item,
   isActive,
   isLiked,
@@ -148,6 +151,7 @@ const FeedCard = memo(function FeedCard({
   onTogglePosted,
   onHudToggle,
   showBottomScrim,
+  contextLine,
 }: FeedCardProps) {
   const canDelete = item.user_id === userId || isAdmin;
   return (
@@ -199,6 +203,7 @@ const FeedCard = memo(function FeedCard({
       onHudToggle={onHudToggle}
       isActive={isActive}
       showBottomScrim={showBottomScrim}
+      contextLine={contextLine}
     />
   );
 });

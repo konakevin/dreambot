@@ -41,6 +41,26 @@ export function useDreamMediums() {
   });
 }
 
+/** Key → label for EVERY active medium (kind 'medium' | 'look') and vibe — the long-press sheet's recipe line.
+ *  The picker RPCs above hide nightly looks and nightly-only vibes on purpose; this one is labels only (mig 532). */
+export interface DreamStyleLabel {
+  key: string;
+  label: string;
+  kind: 'medium' | 'look' | 'vibe';
+}
+
+export function useDreamStyleLabels() {
+  return useQuery({
+    queryKey: ['dreamStyleLabels'],
+    queryFn: async (): Promise<DreamStyleLabel[]> => {
+      const { data, error } = await supabase.rpc('get_dream_style_labels');
+      if (error) throw error;
+      return (data ?? []) as DreamStyleLabel[];
+    },
+    staleTime: 5 * 60_000,
+  });
+}
+
 export function useDreamVibes() {
   return useQuery({
     queryKey: ['dreamVibes'],

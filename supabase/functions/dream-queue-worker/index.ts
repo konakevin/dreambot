@@ -50,7 +50,7 @@ interface QueueRow {
   user_id: string;
   // 'first_dream' is the onboarding first-dream cascade (re-activated
   // 2026-06-15) — dispatched fire-and-forget to first-dream-render.
-  source: 'first_dream' | 'nightly' | 'create' | 'dlt';
+  source: 'first_dream' | 'nightly' | 'create' | 'dlt' | 'redream';
   weight: 'light' | 'heavy';
   payload: Record<string, unknown>;
   status: string;
@@ -101,7 +101,7 @@ async function deadLetterAftermath(
         notifErr.message
       );
     }
-  } else if (job.source === 'create' || job.source === 'dlt') {
+  } else if (job.source === 'create' || job.source === 'dlt' || job.source === 'redream') {
     // Paid user dream. The render did NOT refund in-function for queued jobs
     // (the worker owns it), so refund now — idempotent on the job id, and
     // refund_sparkles returns the ACTUAL amount debited (1/2/3/5 by model), not
@@ -354,29 +354,35 @@ Deno.serve(async (req) => {
           // terminal state. Only nightly is awaited + marked completed here.
           let ownedByRender = false;
           switch (job.source) {
-            case 'nightly': {
-              // Re-validate entitlement at render time. Eligibility was checked
-              // at enqueue (08:00 UTC), but a job can be claimed minutes-to-hours
-              // later (and retried for up to 2h on backoff), during which a trial
-              // can lapse or a subscription be cancelled/refunded. Don't burn a
-              // render on a user who is no longer Pro/Basic/in-trial. A null
-              // uploadId marks the job completed (no render, no retry).
-              const { data: stillEligible, error: eligErr } = await supabase.rpc(
-                'is_dream_eligible',
-                { p_user_id: job.user_id }
-              );
-              if (eligErr) {
-                console.error(
-                  `[worker:${workerId}] job ${job.id}: is_dream_eligible check failed:`,
-                  eligErr.message
+            // 'redream' ("Redream in a new setting", mig 531) is a PAID re-run of a nightly dream — same dispatcher, same
+            // render, the source dream's pins in the payload — so it skips the Pro/trial gate only the free
+            // nightly needs, and is refunded on dead-letter like create (deadLetterAftermath).
+            case 'nightly':
+            case 'redream': {
+              if (job.source === 'nightly') {
+                // Re-validate entitlement at render time. Eligibility was checked
+                // at enqueue (08:00 UTC), but a job can be claimed minutes-to-hours
+                // later (and retried for up to 2h on backoff), during which a trial
+                // can lapse or a subscription be cancelled/refunded. Don't burn a
+                // render on a user who is no longer Pro/Basic/in-trial. A null
+                // uploadId marks the job completed (no render, no retry).
+                const { data: stillEligible, error: eligErr } = await supabase.rpc(
+                  'is_dream_eligible',
+                  { p_user_id: job.user_id }
                 );
-              }
-              if (stillEligible === false) {
-                console.log(
-                  `[worker:${workerId}] job ${job.id}: user ${job.user_id} no longer dream-eligible at render time — skipping`
-                );
-                uploadId = null;
-                break;
+                if (eligErr) {
+                  console.error(
+                    `[worker:${workerId}] job ${job.id}: is_dream_eligible check failed:`,
+                    eligErr.message
+                  );
+                }
+                if (stillEligible === false) {
+                  console.log(
+                    `[worker:${workerId}] job ${job.id}: user ${job.user_id} no longer dream-eligible at render time — skipping`
+                  );
+                  uploadId = null;
+                  break;
+                }
               }
               uploadId = await processNightlyJob({
                 supabase,

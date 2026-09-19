@@ -18,7 +18,7 @@
 import { supabase } from '@/lib/supabase';
 import type { TablesInsert } from '@/types/database';
 
-export type FirstRunFlag = 'feed' | 'create' | 'mediums' | 'sparkle';
+export type FirstRunFlag = 'feed' | 'create' | 'mediums' | 'sparkle' | 'inboxStrip';
 
 type FlagState = Record<FirstRunFlag, boolean>;
 
@@ -45,7 +45,9 @@ async function hydrate(userId: string): Promise<void> {
   hydratePromise = (async () => {
     const { data, error } = await supabase
       .from('user_first_run')
-      .select('seen_feed_intro, seen_create_intro, seen_mediums_intro, seen_sparkle_intro')
+      .select(
+        'seen_feed_intro, seen_create_intro, seen_mediums_intro, seen_sparkle_intro, seen_inbox_strip_hint'
+      )
       .eq('user_id', userId)
       .maybeSingle();
     if (error) {
@@ -58,6 +60,7 @@ async function hydrate(userId: string): Promise<void> {
       create: data?.seen_create_intro ?? false,
       mediums: data?.seen_mediums_intro ?? false,
       sparkle: data?.seen_sparkle_intro ?? false,
+      inboxStrip: data?.seen_inbox_strip_hint ?? false,
     };
   })();
   try {
@@ -84,6 +87,8 @@ function flagPayload(
       return { user_id: userId, seen_mediums_intro: value, updated_at };
     case 'sparkle':
       return { user_id: userId, seen_sparkle_intro: value, updated_at };
+    case 'inboxStrip':
+      return { user_id: userId, seen_inbox_strip_hint: value, updated_at };
   }
 }
 
@@ -128,7 +133,7 @@ export async function resetAllFirstRunFlags(): Promise<void> {
   const userId = await currentUserId();
   if (!userId) return;
   if (cache && cacheUserId === userId) {
-    cache = { feed: false, create: false, mediums: false, sparkle: false };
+    cache = { feed: false, create: false, mediums: false, sparkle: false, inboxStrip: false };
   }
   const { error } = await supabase.from('user_first_run').upsert(
     {
@@ -137,6 +142,7 @@ export async function resetAllFirstRunFlags(): Promise<void> {
       seen_create_intro: false,
       seen_mediums_intro: false,
       seen_sparkle_intro: false,
+      seen_inbox_strip_hint: false,
       updated_at: new Date().toISOString(),
     },
     { onConflict: 'user_id' }

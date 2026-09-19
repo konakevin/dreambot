@@ -3770,6 +3770,7 @@ export type Database = {
           ai_consent_at: string | null;
           seen_create_intro: boolean;
           seen_feed_intro: boolean;
+          seen_inbox_strip_hint: boolean;
           seen_mediums_intro: boolean;
           seen_sparkle_intro: boolean;
           updated_at: string;
@@ -3779,6 +3780,7 @@ export type Database = {
           ai_consent_at?: string | null;
           seen_create_intro?: boolean;
           seen_feed_intro?: boolean;
+          seen_inbox_strip_hint?: boolean;
           seen_mediums_intro?: boolean;
           seen_sparkle_intro?: boolean;
           updated_at?: string;
@@ -3788,6 +3790,7 @@ export type Database = {
           ai_consent_at?: string | null;
           seen_create_intro?: boolean;
           seen_feed_intro?: boolean;
+          seen_inbox_strip_hint?: boolean;
           seen_mediums_intro?: boolean;
           seen_sparkle_intro?: boolean;
           updated_at?: string;
@@ -4349,6 +4352,14 @@ export type Database = {
         }[];
       };
       get_dream_off_packs: { Args: { p_category?: string }; Returns: Json };
+      get_dream_style_labels: {
+        Args: never;
+        Returns: {
+          key: string;
+          kind: string;
+          label: string;
+        }[];
+      };
       get_dream_vibes: {
         Args: never;
         Returns: {

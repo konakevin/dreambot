@@ -38,6 +38,7 @@ export const PRODUCTION_FORCE_FLAGS: readonly string[] = [
 /** Non-prefixed keys production sets; here for documentation, not for matching. */
 export const PRODUCTION_NON_QA_KEYS: readonly string[] = [
   'first_dream',
+  'redream', // "Redream in a new setting" pins (mig 531): merged into the pin inputs AFTER isQaRequest runs on the raw body
   'strict_face_swap',
   'persist',
   'queue_job_id',

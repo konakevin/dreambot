@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
   StyleSheet,
   RefreshControl,
-  Modal,
   Pressable,
 } from 'react-native';
 import { Text } from '@/components/AppText';
@@ -21,24 +20,17 @@ import ReanimatedSwipeable, {
 } from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import * as nav from '@/lib/navigate';
-import { reopenFailedDreamInCreate, reopenLatestFailedDream } from '@/lib/retryDream';
-import { routeFromNotification } from '@/lib/notificationRouting';
-import { supabase } from '@/lib/supabase';
-import { useAuthStore } from '@/store/auth';
-import { useAlbumStore } from '@/store/album';
+import { useInboxFeedStore } from '@/store/inboxFeed';
 import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 import * as Haptics from 'expo-haptics';
-import { useQueryClient } from '@tanstack/react-query';
 import { useInboxGrouped, type InboxGroup } from '@/hooks/useInboxGrouped';
-import { isDreamBotSystemNotification, DREAMBOT_SYSTEM_TYPES } from '@/lib/systemNotifications';
+import { isDreamBotSystemNotification } from '@/lib/systemNotifications';
+import { formatTimeAgo, iconForGroup, getGroupText } from '@/lib/inboxGroupText';
 import { useDeleteGroup } from '@/hooks/useDeleteGroup';
 import { useMarkInboxViewed } from '@/hooks/useMarkInboxViewed';
-import { useGroupActors } from '@/hooks/useGroupActors';
 import { InboxSkeleton } from '@/components/Skeleton';
 import { GradientTitle } from '@/components/GradientTitle';
 import { PostActionSheet } from '@/components/PostActionSheet';
-import * as Clipboard from 'expo-clipboard';
-import { Toast } from '@/components/Toast';
 import { useDeleteAllNotifications } from '@/hooks/useDeleteAllNotifications';
 import {
   useApproveFollowRequest,
@@ -48,18 +40,6 @@ import {
 } from '@/hooks/useFollowRequests';
 import { colors } from '@/constants/theme';
 import { verticalScale, horizontalScale, fontScale } from '@/lib/responsive';
-
-function formatTimeAgo(dateStr: string): string {
-  const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
-  if (seconds < 60) return 'now';
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes}m`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h`;
-  const days = Math.floor(hours / 24);
-  if (days < 7) return `${days}d`;
-  return `${Math.floor(days / 7)}w`;
-}
 
 // 5 rotating painter mascots — same set the welcome-gift + loading screens
 // use. Picked stable per mount via useMemo so each visit to the inbox can
@@ -76,256 +56,6 @@ const MASCOTS = [
 // the avatar on SYSTEM notifications (isDreamBotSystemNotification) so the row
 // reads as an official message from DreamBot rather than from the user.
 const DREAMBOT_MASCOT = require('@/assets/images/onboarding/mascot-welcome.png');
-
-// Inline message preview length. Bumped from 28 → 90 so comment / reply /
-// mention / dream bodies read like a real message snippet across up to two
-// lines instead of a clipped fragment. (The server may cap the body shorter;
-// this is just the client ceiling.)
-const SUBTEXT_MAX = 90;
-function capSubtext(text: string | null | undefined): string | null {
-  if (!text) return null;
-  const trimmed = text.trim();
-  if (!trimmed) return null;
-  return trimmed.length > SUBTEXT_MAX ? trimmed.slice(0, SUBTEXT_MAX) : trimmed;
-}
-
-// Per-notification-type icon + color. Replaces the always-purple-moon row
-// identity from the pre-mig-223 design — every type has its own glyph so
-// the user can scan the inbox by category at a glance.
-type IconSpec = { name: keyof typeof Ionicons.glyphMap; color: string };
-function iconForGroup(g: InboxGroup): IconSpec {
-  switch (g.type) {
-    case 'post_like':
-    case 'comment_like':
-      return { name: 'heart', color: colors.like };
-    case 'post_comment':
-    case 'comment_reply':
-      return { name: 'chatbubble', color: colors.accent };
-    case 'comment_mention':
-    case 'post_mention':
-      return { name: 'at', color: colors.accent };
-    case 'post_share':
-      return { name: 'paper-plane', color: colors.accent };
-    case 'post_repost':
-      return { name: 'repeat', color: colors.success };
-    case 'post_milestone':
-      return { name: 'trophy', color: '#FFD700' };
-    case 'follow_request':
-      return { name: 'person-add', color: colors.accent };
-    case 'follow_accepted':
-      return { name: 'person', color: colors.accent };
-    case 'friend_request':
-      return { name: 'people-circle', color: colors.accent };
-    case 'friend_accepted':
-      return { name: 'people', color: colors.accent };
-    case 'dream_generated':
-      if (g.subtype === 'welcome') return { name: 'sparkles', color: colors.accent };
-      return { name: 'moon', color: colors.accent };
-    case 'dream_failed':
-      return { name: 'warning', color: '#FFA94D' };
-    case 'download_ready':
-      return { name: 'arrow-down-circle', color: colors.accent };
-    case 'trial_reminder':
-    case 'pro_reminder':
-    case 'basic_reminder':
-      return { name: 'diamond', color: colors.accent };
-    case 'welcome_gift':
-      return { name: 'gift', color: colors.accent };
-    case 'cast_photo':
-      return { name: 'person-circle', color: colors.accent };
-    case 'sparkle_gift':
-      return g.subtype === 'thanks'
-        ? { name: 'heart', color: colors.accent }
-        : { name: 'gift', color: colors.accent };
-    default:
-      return { name: 'notifications', color: colors.accent };
-  }
-}
-
-/**
- * Build the subject (always one line) + optional subtext (capped to 28
- * chars for guaranteed single-line render) for a group row. The "viewed
- * = read" UI doesn't truncate-with-ellipsis on the subject — it must fit
- * naturally; capped lengths in writers (migration 223 + reminder copy
- * rewrites + Haiku ≤28 prompt) keep that invariant honored.
- *
- * `isAggregable` flags the rows that open the actor sheet on tap when
- * count > 1 (likes / reposts / follow-accepted / friend-accepted).
- */
-/**
- * Title line for a trial/pro expiry reminder, keyed by subtype. MUST stay in
- * sync with getNotificationContent() in supabase/functions/send-push/index.ts
- * (the push banner) — same title in the tray and the inbox. The friendly
- * reminder + CTA rides in the row's `body` (subtext).
- */
-function reminderTitle(type: string, subtype: string | null): string {
-  switch (subtype) {
-    case '3day':
-    case 'paid_3day':
-    case 'basic_3day':
-      return '3 dream nights left 🌙';
-    case 'last_night':
-      return "Tonight's your last trial dream 🌙";
-    case 'paid_last_night':
-    case 'basic_last_night':
-      return "Tonight's your last nightly dream 🌙";
-    case 'ended':
-    case 'paid_ended':
-    case 'basic_ended':
-      return 'Your nightly dreams have ended';
-    default:
-      // Paid tiers (Pro + Basic) share tier-agnostic copy — we never name the
-      // tier, so the user renews whichever subscription they want.
-      if (type === 'pro_reminder' || type === 'basic_reminder')
-        return 'Your subscription is ending';
-      return 'Your trial is ending';
-  }
-}
-
-function getGroupText(g: InboxGroup): {
-  subject: string;
-  subtext: string | null;
-  isAggregable: boolean;
-} {
-  const first = g.previewUsernames[0] ?? '';
-  const second = g.previewUsernames[1] ?? '';
-  const count = g.actorCount;
-
-  // "Alice and 12 others" / "Alice and Sarah" / "Alice" — used by every
-  // aggregable type below. Keeps the subject short enough to one-line.
-  const actors = () => {
-    if (count >= 3) return `${first} +${count - 1}`;
-    if (count === 2) return `${first} & ${second}`;
-    return first;
-  };
-
-  switch (g.type) {
-    case 'post_like':
-      return { subject: `${actors()} liked your dream`, subtext: null, isAggregable: true };
-    case 'comment_like':
-      return { subject: `${actors()} liked your comment`, subtext: null, isAggregable: true };
-    case 'post_repost':
-      return { subject: `${actors()} reposted your dream`, subtext: null, isAggregable: true };
-    case 'post_milestone':
-      return { subject: g.body ?? 'Milestone reached', subtext: null, isAggregable: false };
-    case 'follow_accepted':
-      return { subject: `${actors()} accepted your follow`, subtext: null, isAggregable: true };
-    case 'friend_accepted':
-      return { subject: `${actors()} accepted your request`, subtext: null, isAggregable: true };
-    case 'post_share':
-      return { subject: `${first} sent you a post`, subtext: null, isAggregable: false };
-
-    // Comments / mentions / replies — subtext IS the body (capped to 28).
-    case 'post_comment':
-      return {
-        subject: `${first} commented on your dream`,
-        subtext: capSubtext(g.body),
-        isAggregable: false,
-      };
-    case 'comment_reply':
-      return {
-        subject: `${first} replied to your comment`,
-        subtext: capSubtext(g.body),
-        isAggregable: false,
-      };
-    case 'comment_mention':
-      return {
-        subject: `${first} mentioned you`,
-        subtext: capSubtext(g.body),
-        isAggregable: false,
-      };
-    case 'post_mention':
-      return {
-        subject: `${first} mentioned you in a caption`,
-        subtext: capSubtext(g.body),
-        isAggregable: false,
-      };
-
-    case 'friend_request':
-      return { subject: `${first} wants to dream with you`, subtext: null, isAggregable: false };
-    case 'follow_request':
-      return { subject: `${first} requested to follow you`, subtext: null, isAggregable: false };
-
-    case 'dream_generated': {
-      // Body carries the bot message (nightly, already ≤28) or a short
-      // descriptor (manual) — surface as subtext. Welcome ping is
-      // subject-only (the welcome-gift screen carries the full copy).
-      if (g.subtype === 'welcome') {
-        return { subject: "Welcome, here's a gift", subtext: null, isAggregable: false };
-      }
-      // Label form of the push announcement (send-push pairs: "Your dream is
-      // ready" / "You dreamed something last night") so the inbox row reads
-      // as the same event the banner announced. NOTE: this branch only works
-      // once migration 329 lands — get_inbox never returned `subtype` before,
-      // so every dream row (including Create-screen dreams) mislabeled as
-      // "Last night's dream" (Kevin 2026-07-05).
-      // Every dream is its OWN inbox row (migration 360 reverted the manual
-      // day-bucket aggregation) — one row per dream, no "N dreams are ready".
-      return {
-        subject: g.subtype === 'manual' ? 'Your dream is ready' : "Last night's dream",
-        subtext: capSubtext(g.body),
-        isAggregable: false,
-      };
-    }
-
-    case 'dream_failed':
-      return {
-        subject: "Your dream couldn't render",
-        subtext: capSubtext(g.body),
-        isAggregable: false,
-      };
-    case 'download_ready':
-      return { subject: 'Your HD download is ready', subtext: null, isAggregable: false };
-
-    // Reminders (2026-07-21): a DreamBot-voice title line by subtype + the
-    // friendly reminder/CTA as the subtext (stored in `body`). Was a single
-    // body-as-subject line; now reads title + message like a real ping.
-    case 'trial_reminder':
-    case 'pro_reminder':
-    case 'basic_reminder':
-      return {
-        subject: reminderTitle(g.type, g.subtype),
-        subtext: capSubtext(g.body),
-        isAggregable: false,
-      };
-
-    case 'welcome_gift':
-      return {
-        subject: 'Welcome to DreamBot 🌙',
-        subtext: 'Tap to see how it works and grab your welcome gift.',
-        isAggregable: false,
-      };
-
-    case 'cast_photo':
-      // A dream-cast face (self or partner/friend) couldn't be read, so they've
-      // been sitting out the dreams. Fixed title by subtype; the full "who + how
-      // to fix" copy (with the relationship word baked in) rides in `body`. Tap
-      // routes to /settings/dream-cast (system type → no expand).
-      return {
-        subject:
-          g.subtype === 'self'
-            ? 'Your dream face needs a new photo'
-            : 'A dream face needs a new photo',
-        subtext: capSubtext(g.body),
-        isAggregable: false,
-      };
-
-    case 'sparkle_gift':
-      // 'received' body = the gifter's optional message (surface as subtext);
-      // 'thanks' is the reply ping. Never aggregable — each gift is its own tap.
-      if (g.subtype === 'thanks') {
-        return { subject: `${first} loved your gift`, subtext: null, isAggregable: false };
-      }
-      return {
-        subject: `${first} gifted you sparkles`,
-        subtext: capSubtext(g.body),
-        isAggregable: false,
-      };
-
-    default:
-      return { subject: g.body ?? '', subtext: null, isAggregable: false };
-  }
-}
 
 function FollowRequestActions({ actorId }: { actorId: string }) {
   const { mutate: approve, isPending: approving } = useApproveFollowRequest();
@@ -363,89 +93,9 @@ function FollowRequestActions({ actorId }: { actorId: string }) {
   );
 }
 
-/**
- * Modal sheet showing the full actor list for one aggregated group —
- * opened when the user taps an aggregable group with actorCount > 1.
- */
-function GroupActorsSheet({
-  groupKey,
-  visible,
-  titleAction,
-  onClose,
-}: {
-  groupKey: string | null;
-  visible: boolean;
-  titleAction: string;
-  onClose: () => void;
-}) {
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useGroupActors(
-    visible ? groupKey : null
-  );
-  const actors = useMemo(() => data?.pages.flatMap((p) => p.actors) ?? [], [data]);
-
-  return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <Pressable style={styles.sheetBackdrop} onPress={onClose}>
-        <Pressable style={styles.sheetCard} onPress={(e) => e.stopPropagation()}>
-          <View style={styles.sheetHandle} />
-          <Text style={styles.sheetTitle}>{titleAction}</Text>
-          {isLoading ? (
-            <ActivityIndicator color={colors.accent} style={{ marginTop: verticalScale(24) }} />
-          ) : (
-            <FlatList
-              data={actors}
-              keyExtractor={(a) => a.actorId}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.sheetActorRow}
-                  activeOpacity={0.7}
-                  onPress={() => {
-                    onClose();
-                    nav.push(`/user/${item.actorId}`);
-                  }}
-                >
-                  {item.avatarUrl ? (
-                    <Image
-                      source={{ uri: resizeAvatar(item.avatarUrl) }}
-                      style={styles.sheetAvatar}
-                      cachePolicy="memory-disk"
-                    />
-                  ) : (
-                    <View style={styles.sheetAvatarFallback}>
-                      <Text allowFontScaling={false} style={styles.avatarText}>
-                        {(item.username || '?')[0].toUpperCase()}
-                      </Text>
-                    </View>
-                  )}
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.actorName}>{item.username}</Text>
-                  </View>
-                  <Text style={styles.time}>{formatTimeAgo(item.latestAt)}</Text>
-                </TouchableOpacity>
-              )}
-              onEndReached={() => {
-                if (hasNextPage && !isFetchingNextPage) fetchNextPage();
-              }}
-              onEndReachedThreshold={0.6}
-              ListFooterComponent={
-                isFetchingNextPage ? (
-                  <View style={styles.footer}>
-                    <ActivityIndicator color={colors.textSecondary} />
-                  </View>
-                ) : null
-              }
-            />
-          )}
-        </Pressable>
-      </Pressable>
-    </Modal>
-  );
-}
-
 function GroupRow({
   group,
   onPress,
-  onThumbPress,
   onLongPress,
   onDelete,
   onSwipeOpen,
@@ -456,7 +106,6 @@ function GroupRow({
   group: InboxGroup;
   onPress: () => void;
   /** Tap on the right-side post thumbnail — routes straight to the post. */
-  onThumbPress: () => void;
   onLongPress: () => void;
   onDelete: () => void;
   /** Reports this row's swipeable as it starts opening so the screen can close
@@ -467,25 +116,10 @@ function GroupRow({
   onToggleSelect: () => void;
 }) {
   const swipeRef = useRef<SwipeableMethods>(null);
-  const { subject, subtext, isAggregable } = getGroupText(group);
+  const { subject, subtext } = getGroupText(group);
   const icon = iconForGroup(group);
-  // Left-zone tap toggles the full message inline (subtext is display-capped
-  // at SUBTEXT_MAX; `body` holds the whole thing). Rows whose tap opens a
-  // richer surface keep the screen-level behavior: multi-actor aggregates →
-  // actor sheet, dream_failed → retry/tweak alert.
-  const [expanded, setExpanded] = useState(false);
-  const fullBody = group.body?.trim() || null;
-  // Expiry reminders (trial/pro/basic) have a CTA subtext, but tapping them
-  // must ROUTE to the plans screen (/subscribe), not expand — so exclude them
-  // from the expand path. Their CTA is short enough to show fully at 2 lines.
-  const canExpand =
-    !!subtext &&
-    !(isAggregable && group.actorCount > 1) &&
-    group.type !== 'dream_failed' &&
-    // cast_photo is a system type but its body is a full two-sentence message —
-    // it MUST stay expandable (left-zone tap toggles) even though other system
-    // types route on tap. Its "go fix it" action rides the right-side CTA arrow.
-    (!DREAMBOT_SYSTEM_TYPES.has(group.type) || group.type === 'cast_photo');
+  // No inline expansion and no actor sheet any more (Kevin 2026-09-18): a tap anywhere on the row opens the
+  // fullscreen inbox at this row, where the full message and the actions live.
   // "New since last inbox view" — drives the pip overlay on the icon
   // tile. Migration 223 swapped per-row seen_at into a time-window flag
   // off `users.last_inbox_view_at` so the inbox is reliably empty-of-pips
@@ -554,21 +188,16 @@ function GroupRow({
         </TouchableOpacity>
       )}
     >
-      <View style={styles.row}>
-        {/* Left zone — avatar + text. Tap expands/collapses the full message
-            when there's more to read; otherwise falls through to the row's
-            screen-level tap (actor sheet / failed-dream alert / route). */}
-        <TouchableOpacity
-          style={styles.leftZone}
-          onPress={() => {
-            if (selectMode) return onToggleSelect();
-            if (canExpand) return setExpanded((e) => !e);
-            onPress();
-          }}
-          onLongPress={selectMode ? undefined : onLongPress}
-          delayLongPress={400}
-          activeOpacity={0.7}
-        >
+      {/* ONE tap target for the whole row (Kevin 2026-09-18): avatar, text, thumbnail and arrow all highlight and
+          route together — the fullscreen inbox at this row. Only the follow-request buttons are their own taps. */}
+      <TouchableOpacity
+        style={styles.row}
+        onPress={() => (selectMode ? onToggleSelect() : onPress())}
+        onLongPress={selectMode ? undefined : onLongPress}
+        delayLongPress={400}
+        activeOpacity={0.7}
+      >
+        <View style={styles.leftZone}>
           {selectMode && (
             <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
               {isSelected && <Ionicons name="checkmark" size={14} color="#000" />}
@@ -614,59 +243,42 @@ function GroupRow({
               cap both at 2 lines; expanded rows show the full body. Unread
               rows get a heavier subject for a touch of weight. */}
           <View style={styles.textCol}>
-            <Text
-              style={[styles.subject, isNew && styles.subjectUnread]}
-              numberOfLines={expanded ? undefined : 2}
-            >
+            <Text style={[styles.subject, isNew && styles.subjectUnread]} numberOfLines={2}>
               {subject}
             </Text>
             {subtext && (
-              <Text style={styles.subtext} numberOfLines={expanded ? undefined : 2}>
-                {expanded ? (fullBody ?? subtext) : subtext}
+              <Text style={styles.subtext} numberOfLines={2}>
+                {subtext}
               </Text>
             )}
           </View>
-        </TouchableOpacity>
+        </View>
 
         {/* Follow-request approve/deny — only on the actor's own follow request. */}
         {requestPending && firstActorId && <FollowRequestActions actorId={firstActorId} />}
 
-        {/* Post thumbnail — its own tap zone, routes straight to the post
-            (like / download live there) regardless of what the left zone does. */}
+        {/* Post thumbnail — part of the row's single tap. */}
         {group.uploadImageUrl && (
-          <TouchableOpacity
-            onPress={() => (selectMode ? onToggleSelect() : onThumbPress())}
-            onLongPress={selectMode ? undefined : onLongPress}
-            delayLongPress={400}
-            activeOpacity={0.7}
-            hitSlop={6}
-          >
-            <Image
-              source={{ uri: group.uploadImageUrl }}
-              style={styles.thumbnail}
-              contentFit="cover"
-              cachePolicy="memory-disk"
-              placeholder={group.uploadThumbhash ? { thumbhash: group.uploadThumbhash } : null}
-              placeholderContentFit="cover"
-            />
-          </TouchableOpacity>
+          <Image
+            source={{ uri: group.uploadImageUrl }}
+            style={styles.thumbnail}
+            contentFit="cover"
+            cachePolicy="memory-disk"
+            placeholder={group.uploadThumbhash ? { thumbhash: group.uploadThumbhash } : null}
+            placeholderContentFit="cover"
+          />
         )}
 
         {showCtaArrow ? (
-          <TouchableOpacity
-            style={styles.ctaArrow}
-            onPress={() => (selectMode ? onToggleSelect() : onPress())}
-            activeOpacity={0.7}
-            hitSlop={10}
-          >
+          <View style={styles.ctaArrow}>
             <Ionicons name="arrow-forward" size={fontScale(18)} color="#A78BFA" />
-          </TouchableOpacity>
+          </View>
         ) : (
           <Text style={[styles.time, isNew && styles.timeUnread]}>
             {formatTimeAgo(group.lastAt)}
           </Text>
         )}
-      </View>
+      </TouchableOpacity>
     </ReanimatedSwipeable>
   );
 }
@@ -690,7 +302,6 @@ export default function InboxScreen() {
   const { mutate: deleteGroup } = useDeleteGroup();
   const { mutate: deleteAll } = useDeleteAllNotifications();
   const { mutate: markInboxViewed } = useMarkInboxViewed();
-  const queryClient = useQueryClient();
 
   // "•••" header dropdown — custom branded menu. headerH (measured) positions
   // the dropdown right under the header.
@@ -715,10 +326,23 @@ export default function InboxScreen() {
   const [allSelectedGlobal, setAllSelectedGlobal] = useState(false);
 
   // Expand sheet state — opens for aggregable groups with > 1 distinct actor.
-  const [expandedGroupKey, setExpandedGroupKey] = useState<string | null>(null);
-  const [expandedTitle, setExpandedTitle] = useState('');
 
   const groups = useMemo(() => data?.pages.flatMap((p) => p.groups) ?? [], [data]);
+  // Back from the fullscreen inbox lands on the row it was on (store/inboxFeed.ts), like the grid re-anchor.
+  const listRef = useRef<FlatList<InboxGroup>>(null);
+  useFocusEffect(
+    useCallback(() => {
+      const key = useInboxFeedStore.getState().currentGroupKey;
+      if (!key) return;
+      useInboxFeedStore.getState().setCurrentGroupKey(null);
+      const idx = groups.findIndex((g) => g.groupKey === key);
+      if (idx > 0) {
+        setTimeout(() => {
+          listRef.current?.scrollToIndex({ index: idx, animated: false, viewPosition: 0.3 });
+        }, 0);
+      }
+    }, [groups])
+  );
   const hasNew = groups.some((g) => g.isNewSinceView);
   const hasAny = groups.length > 0;
 
@@ -775,188 +399,17 @@ export default function InboxScreen() {
     setAllSelectedGlobal(false);
   }
 
-  // Pooled "N dreams are ready" → open a pager scoped to JUST those N new
-  // dreams (photo/[id] album mode), so swiping cycles the new dreams instead of
-  // dumping the user into their whole Posts feed (which, since fresh dreams are
-  // private drafts, doesn't even contain them). The group's member uploads are
-  // exactly its notifications rows (same group_key). Falls back to single-dream
-  // routing if the group resolves to ≤1 upload.
-  //
-  // Scoped to UNSEEN dreams only (seen_at IS NULL) + marks them seen on open, so
-  // a dream the user already viewed never resurfaces in a later "N dreams are
-  // ready" aggregate — the count (event_count, migration 358) and the badge both
-  // gate on seen_at (Kevin 2026-07-10). "Seen" is thereafter set by two paths:
-  // the Dreams-tab auto-acknowledge (dreams watched as they arrive) and this
-  // open. If every dream in the day-group is already seen, `ids` is empty and we
-  // fall through to a single view of the group's newest so the row still opens.
-  async function openScopedDreamAlbum(g: InboxGroup) {
-    const uid = useAuthStore.getState().user?.id;
-    if (!uid || !g.uploadId) {
-      routeFromNotification(
-        { type: g.type, subtype: g.subtype ?? undefined, uploadId: g.uploadId ?? undefined },
-        { markSeen: true }
-      );
-      return;
-    }
-    const { data } = await supabase
-      .from('notifications')
-      .select('upload_id, created_at')
-      .eq('recipient_id', uid)
-      .eq('group_key', g.groupKey)
-      .is('seen_at', null)
-      .not('upload_id', 'is', null)
-      .order('created_at', { ascending: false });
-    const ids = Array.from(new Set((data ?? []).map((r) => r.upload_id as string).filter(Boolean)));
-
-    // Acknowledge every unseen dream in the group so it drops from the count +
-    // badge and can't reappear in a future aggregate. Fire-and-forget; refresh
-    // the inbox + badge once it lands (same contract as the Dreams-tab auto-ack).
-    if (ids.length > 0) {
-      void supabase
-        .from('notifications')
-        .update({ seen_at: new Date().toISOString() })
-        .eq('recipient_id', uid)
-        .eq('group_key', g.groupKey)
-        .is('seen_at', null)
-        .then(({ error }) => {
-          if (error) {
-            if (__DEV__) console.warn('[openScopedDreamAlbum] seen update failed', error);
-            return;
-          }
-          queryClient.invalidateQueries({ queryKey: ['inboxGrouped', uid] });
-          queryClient.invalidateQueries({ queryKey: ['newNotificationCount', uid] });
-        });
-    }
-
-    if (ids.length <= 1) {
-      // Prefer the one remaining unseen dream; else the group's newest (history).
-      const target = ids[0] ?? g.uploadId;
-      routeFromNotification(
-        { type: g.type, subtype: g.subtype ?? undefined, uploadId: target },
-        { markSeen: true }
-      );
-      return;
-    }
-    // Scope the pager to exactly these unseen uploads (newest first, so the
-    // freshest opens at index 0).
-    const album = useAlbumStore.getState();
-    album.setAlbum(ids);
-    album.setAlbumPosts([]);
-    album.setAlbumSource(null);
-    album.setCurrentPostId(ids[0]);
-    void clearDreamInFlight();
+  // THE FULLSCREEN INBOX (Kevin 2026-09-18, app/inboxFeed.tsx): every row opens the inbox itself fullscreen, one
+  // page per row, at the row that was tapped — swipe up for the next row. Post rows fill the screen with the post;
+  // everything else (a failed dream, a follow request, a gift) is a card with its actions on the page.
+  function openInboxFeed(g: InboxGroup) {
+    if (g.type === 'dream_generated') void clearDreamInFlight();
     markInboxViewed();
-    nav.push(`/photo/${ids[0]}`);
+    nav.push(`/inboxFeed?start=${encodeURIComponent(g.groupKey)}`);
   }
 
   function handleTap(g: InboxGroup) {
-    const text = getGroupText(g);
-    // Aggregable groups with multiple actors → open the expand sheet so the
-    // user can see who liked / reposted / followed. Thumbnail tap could route
-    // to the post but with the new "whole row = route" UX, multi-actor
-    // aggregables route to the actor sheet (the post is still reachable via
-    // the listed actors → that user's profile, or by tapping any single-actor
-    // permutation that ships later).
-    if (text.isAggregable && g.actorCount > 1) {
-      setExpandedGroupKey(g.groupKey);
-      setExpandedTitle(text.subject);
-      return;
-    }
-    // Pooled "N dreams are ready" → scope the pager to just those N new dreams.
-    if (g.type === 'dream_generated' && g.subtype === 'manual' && g.uploadId) {
-      void openScopedDreamAlbum(g);
-      return;
-    }
-    // Dream failures have no post to route to (the render never produced an
-    // upload), so routeFromNotification would no-op and the tap feels broken.
-    // The capped 28-char subtext also truncates right before "sparkle
-    // refunded", so the user never learns what happened. Surface the full
-    // message + refund status in an alert instead. Body is one of:
-    //   "Your dream couldn't render — sparkle refunded (<class>)"
-    //   "Your dream couldn't render (<class>)"  (refund pending / none)
-    if (g.type === 'dream_failed') {
-      // Reopen this dream in Create, prefilled with its saved inputs (prompt +
-      // medium + vibe + model). Prefer the tapped row's job id; older rows with
-      // no reference_id fall back to the latest failed dream.
-      const reopenInCreate = () =>
-        void (g.referenceId ? reopenFailedDreamInCreate(g.referenceId) : reopenLatestFailedDream());
-
-      // Content/NSFW rejection — re-running the same prompt just re-fails, so
-      // reopen it in Create with the prompt loaded, ready to tweak.
-      if (g.subtype === 'rejected') {
-        showAlert(
-          'A little too spicy',
-          g.body ||
-            "That one leaned a little too spicy for our filters. Your sparkle's back, tweak the prompt and give it another go.",
-          [
-            { text: 'Not now', style: 'cancel' },
-            { text: 'Tweak it', onPress: reopenInCreate },
-          ]
-        );
-        return;
-      }
-      // Nightly auto-dream — system dream, not retryable; just inform.
-      if (g.subtype === 'nightly_failed') {
-        showAlert(
-          'Nightly dream slipped away',
-          g.body ||
-            'Your nightly dream slipped away tonight, so we added a sparkle to your balance to make up for it.',
-          [{ text: 'OK' }]
-        );
-        return;
-      }
-      // Render/infra failure → reopen in Create prefilled so they can re-run it
-      // (the old one-tap server retry couldn't work — its queue payload is gone).
-      showAlert(
-        'That dream got away',
-        "Oops, that dream got away from us before it finished. Your sparkle's back in your pocket. Want to open it up in Create and take another swing?",
-        [
-          { text: 'Not now', style: 'cancel' },
-          { text: 'Try again', onPress: reopenInCreate },
-        ]
-      );
-      return;
-    }
-    // Single-actor or individual types → navigate to the relevant surface.
-    // Delegates to the shared helper so push-tap + inbox-tap routing stays
-    // aligned. Helper handles clearAlbum + dreamWish invalidation as
-    // side effects before pushing. See lib/notificationRouting.ts.
-    // markSeen: true defense-in-depth — useFocusEffect already fires
-    // mark_inbox_viewed on inbox mount, but if the focus fires after the
-    // row tap (rapid taps, tight remount), this guarantees the badge
-    // clears. RPC is idempotent.
-    routeFromNotification(
-      {
-        type: g.type,
-        subtype: g.subtype ?? undefined,
-        uploadId: g.uploadId ?? undefined,
-        actorId: g.previewActorIds[0] ?? undefined,
-        referenceId: g.referenceId ?? undefined,
-        commentId: g.commentId ?? undefined,
-      },
-      { markSeen: true }
-    );
-  }
-
-  // Thumbnail tap — always route to the post itself (the like/download
-  // surface), even for rows whose left-zone tap expands text or opens the
-  // actor sheet.
-  function handleThumbTap(g: InboxGroup) {
-    // Pooled "N dreams are ready" → scope the pager to just those N (same as the
-    // row tap), so the thumbnail doesn't drop the user into their whole album.
-    if (g.type === 'dream_generated' && g.subtype === 'manual' && g.uploadId) {
-      void openScopedDreamAlbum(g);
-      return;
-    }
-    routeFromNotification(
-      {
-        type: g.type,
-        uploadId: g.uploadId ?? undefined,
-        actorId: g.previewActorIds[0] ?? undefined,
-        commentId: g.commentId ?? undefined,
-      },
-      { markSeen: true }
-    );
+    openInboxFeed(g);
   }
 
   function handleLongPress(g: InboxGroup) {
@@ -1053,6 +506,14 @@ export default function InboxScreen() {
       </View>
 
       <FlatList
+        ref={listRef}
+        // Re-anchor from the fullscreen inbox can target an unmeasured row; land near it instead of throwing.
+        onScrollToIndexFailed={(info) =>
+          listRef.current?.scrollToOffset({
+            offset: info.averageItemLength * info.index,
+            animated: false,
+          })
+        }
         data={groups}
         keyExtractor={(g) => g.groupKey}
         refreshControl={
@@ -1073,7 +534,6 @@ export default function InboxScreen() {
             <GroupRow
               group={item}
               onPress={() => handleTap(item)}
-              onThumbPress={() => handleThumbTap(item)}
               onLongPress={() => handleLongPress(item)}
               onDelete={() => deleteGroup(item.groupKey)}
               onSwipeOpen={handleSwipeOpen}
@@ -1118,13 +578,6 @@ export default function InboxScreen() {
         }
       />
 
-      <GroupActorsSheet
-        groupKey={expandedGroupKey}
-        visible={expandedGroupKey !== null}
-        titleAction={expandedTitle}
-        onClose={() => setExpandedGroupKey(null)}
-      />
-
       {/* "•••" dropdown. The backdrop fills the screen ON TOP of the list, so a
           tap-to-dismiss is consumed here — it never falls through to open the
           row beneath it. The card stops its own taps from bubbling to it. */}
@@ -1161,26 +614,6 @@ export default function InboxScreen() {
         rows={
           actionGroup
             ? [
-                // Copy the bot's dream message — nightly + manual dream rows
-                // carry the full body even when the row preview truncates it.
-                // (Welcome pings have no real message, so they're excluded.)
-                ...(actionGroup.type === 'dream_generated' &&
-                actionGroup.subtype !== 'welcome' &&
-                actionGroup.body?.trim()
-                  ? [
-                      {
-                        key: 'copy-message',
-                        label: 'Copy dream message',
-                        icon: 'copy-outline',
-                        group: 'primary' as const,
-                        onPress: () => {
-                          void Clipboard.setStringAsync(actionGroup.body!.trim());
-                          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                          Toast.show('Message copied', 'checkmark-circle');
-                        },
-                      },
-                    ]
-                  : []),
                 {
                   key: 'delete',
                   label: 'Delete notification',

@@ -62,10 +62,18 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
   // 1. Render in its own isolate via the worker-token branch of nightly-dreams.
   // Forward the queue job id so the render stamps stage breadcrumbs onto the
   // dream_queue row (survives a hard isolate kill → diagnosable via forensics).
+  // "Redream in a new setting" (mig 531): a redream job carries the source dream's pins; the render merges them into its
+  // pin inputs after the QA check, so the upload is a real user dream.
+  const redream =
+    payload && payload.redream && typeof payload.redream === 'object' ? payload.redream : null;
   const res = await fetch(`${supabaseUrl}/functions/v1/nightly-dreams`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${workerToken}` },
-    body: JSON.stringify({ user_id: userId, queue_job_id: queueJobId }),
+    body: JSON.stringify({
+      user_id: userId,
+      queue_job_id: queueJobId,
+      ...(redream ? { redream } : {}),
+    }),
   });
   let data: Record<string, unknown> = {};
   try {
@@ -121,7 +129,7 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
       userId,
       'dream_created',
       {
-        source: 'nightly',
+        source: redream ? 'redream' : 'nightly',
         medium: up?.dream_medium ?? null,
         vibe: up?.dream_vibe ?? null,
         model: up?.model ?? null,
@@ -131,6 +139,9 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
   } catch (e) {
     console.warn(`[nightly] dream_created emit skipped: ${(e as Error).message}`);
   }
+
+  // A redream is watched live on the loading screen (dream_queue realtime): no "nightly is ready" inbox row.
+  if (redream) return uploadId;
 
   // 4. Notify the dreamer. body is the scene caption (inbox subtext).
   await supabase

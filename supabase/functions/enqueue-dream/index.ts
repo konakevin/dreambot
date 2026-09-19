@@ -18,6 +18,12 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { getSparkleCost, loadModelCosts, isAdminOnlyModel } from '../_shared/modelPricing.ts';
+import {
+  castRoleFromAxes,
+  castRoleFromSeedSource,
+  worldFromSeedSource,
+  worldToTransport,
+} from '../_shared/redream.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { classifyDreamWeight } from '../_shared/dreamQueueWeight.ts';
 import { routeNewSceneSubject, newSceneTierCost } from '../_shared/newSceneDirective.ts';
@@ -342,6 +348,182 @@ Deno.serve(async (req) => {
   }
   if ((inflight ?? 0) >= maxInflight) {
     return json({ error: 'too_many_inflight', limit: maxInflight }, 429);
+  }
+
+  // ── "MORE LIKE THIS" (Kevin 2026-09-18, mig 531): re-run a NIGHTLY dream on demand ──────────────────────
+  // The old "Dream this again" reloaded Create with a nightly look Create cannot render (the empty prompt then
+  // took the surprise path and shipped a photographic pure scene). This enqueues a 'redream' job instead: the
+  // SAME look, vibe and cast role as the source dream, a FRESH scene, rendered by the nightly engine through the
+  // worker's nightly dispatcher, charged the base dream price (engine_config.base_sparkle_cost — the nightly's
+  // primary model is the 1-sparkle tier; a fallback rung that lands on a pricier model is on the house). The
+  // client confirms with the user and checks the balance BEFORE calling; 402 here is the race backstop.
+  if (typeof body.redream_upload_id === 'string' && body.redream_upload_id.length > 0) {
+    const sourceUploadId = body.redream_upload_id;
+    const { data: src } = await supabase
+      .from('uploads')
+      .select('id, user_id, dream_medium, dream_vibe, seed_source')
+      .eq('id', sourceUploadId)
+      .maybeSingle();
+    if (!src || src.user_id !== userId) return json({ error: 'not_found' }, 404);
+    const { data: lookRow } = await supabase
+      .from('dream_mediums')
+      .select('key, nightly_look, is_active')
+      .eq('key', src.dream_medium ?? '')
+      .maybeSingle();
+    if (!lookRow || lookRow.nightly_look !== true) return json({ error: 'not_redreamable' }, 400);
+    // Kevin 2026-09-18: a dream without its seed source cannot be a sequel — refuse rather than guess. (Every
+    // nightly-look upload since 2026-08-31 carries one — 2417 of 2417 when this shipped — so this is a guard.)
+    if (!src.seed_source || typeof src.seed_source !== 'object') {
+      return json({ error: 'not_redreamable' }, 400);
+    }
+    // The cast role the source rendered with (couple / self / partner / no cast). The log prunes after 30 days;
+    // an unknown role leaves the engine's normal roll in charge rather than guessing.
+    const { data: logRow } = await supabase
+      .from('ai_generation_log')
+      .select('rolled_axes')
+      .eq('upload_id', sourceUploadId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    const axes =
+      logRow && logRow.rolled_axes && typeof logRow.rolled_axes === 'object'
+        ? (logRow.rolled_axes as Record<string, unknown>)
+        : null;
+    // The upload's own seed_source carries the cast role since 2026-09-18 (kept forever); the log is the
+    // fallback for older dreams and prunes at 30 days, after which the engine's normal cast roll takes over.
+    const seedCastRole = castRoleFromSeedSource(src.seed_source);
+    const castRole = seedCastRole !== undefined ? seedCastRole : castRoleFromAxes(axes);
+    // THE SEQUEL'S WORLD (redream.ts): the same seed pool the source drew from. Uploads since 2026-09-18 carry
+    // placeKey / category / subTheme on seed_source; older ones are reverse-looked-up from the spot / scene text.
+    const seedRaw =
+      src.seed_source && typeof src.seed_source === 'object'
+        ? { ...(src.seed_source as Record<string, unknown>) }
+        : null;
+    if (seedRaw) {
+      const kindRaw = typeof seedRaw.kind === 'string' ? seedRaw.kind : '';
+      const sceneText = typeof seedRaw.scene === 'string' ? seedRaw.scene : '';
+      // The scene text lives in whichever scenario table the source drew from; try both (dual first).
+      const findScenario = async (
+        filters: Record<string, string>
+      ): Promise<{ category: string | null; sub_theme: string | null } | null> => {
+        const prefix = `${sceneText.slice(0, 100).replace(/[%_]/g, '')}%`;
+        for (const table of ['dual_scenarios', 'single_scenarios'] as const) {
+          let q = supabase.from(table).select('category, sub_theme').like('scene', prefix);
+          for (const [k, v] of Object.entries(filters)) q = q.eq(k, v);
+          const { data } = await q.limit(1).maybeSingle();
+          if (data) return data;
+        }
+        return null;
+      };
+      if (kindRaw === 'location' && !seedRaw.placeKey && typeof seedRaw.location === 'string') {
+        const { data: spot } = await supabase
+          .from('location_iconic_spots')
+          .select('location_key')
+          .eq('spot_text', seedRaw.location)
+          .limit(1)
+          .maybeSingle();
+        // Only a real card pins the place. A spot whose text no longer matches a live row (reworded, retired)
+        // leaves the place to the engine — pinning the literal spot text would re-render the SAME spot.
+        if (spot?.location_key) seedRaw.placeKey = spot.location_key;
+      } else if (
+        (kindRaw === 'goofy' ||
+          kindRaw === 'elegant' ||
+          kindRaw === 'active' ||
+          kindRaw === 'scenario') &&
+        !seedRaw.category &&
+        sceneText
+      ) {
+        const row = await findScenario({});
+        if (row && typeof row.category === 'string') seedRaw.category = row.category;
+      } else if (kindRaw.startsWith('holiday:') && !seedRaw.subTheme && sceneText) {
+        const row = await findScenario({
+          pool: 'holiday',
+          category: kindRaw.slice('holiday:'.length),
+        });
+        if (row && typeof row.sub_theme === 'string') seedRaw.subTheme = row.sub_theme;
+      }
+    }
+    const world = worldToTransport(worldFromSeedSource(seedRaw));
+    const redream = {
+      source_upload_id: sourceUploadId,
+      look_key: lookRow.key as string,
+      vibe_key: (src.dream_vibe as string | null) ?? null,
+      ...(castRole !== undefined ? { cast_role: castRole } : {}),
+      ...(world ? { world } : {}),
+    };
+    const redreamCost = cfg.baseSparkleCost;
+    const { data: rdCharge, error: rdChargeErr } = await supabase.rpc('charge_sparkles', {
+      p_user_id: userId,
+      p_amount: redreamCost,
+      p_reason: 'redream',
+      p_reference_id: jobId,
+    });
+    if (rdChargeErr) {
+      console.error('[enqueue-dream] redream charge_sparkles RPC error:', rdChargeErr.message);
+      return json({ error: 'charge_failed' }, 503);
+    }
+    if (rdCharge === 'insufficient') {
+      return json({ error: 'insufficient_sparkles', needed: redreamCost }, 402);
+    }
+    const rdPayload = { job_id: jobId, redream };
+    await supabase
+      .from('dream_jobs')
+      .upsert(
+        { id: jobId, user_id: userId, status: 'processing', payload: rdPayload },
+        { onConflict: 'id', ignoreDuplicates: true }
+      );
+    const { error: rdEnqErr } = await supabase.from('dream_queue').insert({
+      id: jobId,
+      user_id: userId,
+      source: 'redream',
+      // A cast render goes to the Fly swap service → heavy cap; an explicit no-cast scene is light.
+      weight: castRole === null ? 'light' : 'heavy',
+      payload: rdPayload,
+      status: 'queued',
+      dedup_key: `redream:${jobId}`,
+    });
+    if (rdEnqErr) {
+      if (rdEnqErr.code === '23505')
+        return json({ dream_id: jobId, status: 'queued', cost: redreamCost }, 200);
+      await supabase
+        .rpc('refund_sparkles', {
+          p_user_id: userId,
+          p_amount: redreamCost,
+          p_reason: 'refund:enqueue_failed',
+          p_reference_id: jobId,
+        })
+        .then(
+          () => {},
+          (err: unknown) =>
+            console.error(
+              `[enqueue-dream] redream refund_sparkles FAILED after enqueue error — user ${userId} job ${jobId}:`,
+              err instanceof Error ? err.message : String(err)
+            )
+        );
+      return json({ error: `enqueue_failed: ${rdEnqErr.message}` }, 500);
+    }
+    await captureServer(
+      userId,
+      'sparkles_spent',
+      { amount: redreamCost, reason: 'redream', source: 'redream', dream_id: jobId },
+      { dedupKey: `sparkles_spent:${jobId}` }
+    );
+    const rdWorkerToken = Deno.env.get('DREAM_QUEUE_WORKER_TOKEN');
+    if (rdWorkerToken) {
+      await fetch(`${supabaseUrl}/functions/v1/dream-queue-worker`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${rdWorkerToken}` },
+        body: '{}',
+      }).then(
+        () => {},
+        (err: unknown) =>
+          console.warn(
+            '[enqueue-dream] redream worker kick failed (pg_cron will drain):',
+            String(err)
+          )
+      );
+    }
+    return json({ dream_id: jobId, status: 'queued', cost: redreamCost }, 200);
   }
 
   // Charge up front (idempotent on jobId), same cost rule as generate-dream so
