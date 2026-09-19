@@ -48,11 +48,18 @@ if (!SUPABASE_KEY) {
 }
 const sb = createClient(SUPABASE_URL.trim(), SUPABASE_KEY.trim());
 
+// QA renders (force_* / qa_* requests: lab rounds, probes, matrices — stamped is_qa by _shared/qaRequest.ts) are
+// testing spend, not user dreams. A probe that deliberately walks the fallback chain ships faceless scenes by
+// design and tripped this monitor twice on 2026-09-18 (18 faceless in 36h, all on the admin's account, 11 flagged
+// QA). Every count here is user renders only; older rows predate the flag and carry NULL, which counts as real.
+const notQa = (q) => q.or('is_qa.is.null,is_qa.eq.false');
 async function countSince(since, extra) {
-  let q = sb
-    .from('ai_generation_log')
-    .select('*', { count: 'exact', head: true })
-    .gte('created_at', since);
+  let q = notQa(
+    sb
+      .from('ai_generation_log')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', since)
+  );
   if (extra) q = extra(q);
   const { count } = await q;
   return count || 0;
@@ -70,12 +77,13 @@ async function countSince(since, extra) {
 
   // Triage aid: tally fallback_reasons among recent failures.
   if (failed > 0) {
-    const { data: failRows } = await sb
-      .from('ai_generation_log')
-      .select('fallback_reasons, model_used')
-      .eq('status', 'failed')
-      .gte('created_at', since)
-      .limit(200);
+    const { data: failRows } = await notQa(
+      sb
+        .from('ai_generation_log')
+        .select('fallback_reasons, model_used')
+        .eq('status', 'failed')
+        .gte('created_at', since)
+    ).limit(200);
     const tally = {};
     for (const r of failRows || []) {
       for (const reason of r.fallback_reasons || []) tally[reason] = (tally[reason] || 0) + 1;
@@ -102,6 +110,30 @@ async function countSince(since, extra) {
   console.log(
     `faceless cast degrades (completed w/ pure_scene_fallback, last ${WINDOW_HOURS}h): ${faceless}`
   );
+  if (faceless > 0) {
+    // Triage aid: who, when, and the degrade path — so an alarm is actionable without a DB session.
+    const { data: facelessRows } = await notQa(
+      sb
+        .from('ai_generation_log')
+        .select('created_at, user_id, job_id, fallback_reasons')
+        .eq('status', 'completed')
+        .contains('fallback_reasons', ['pure_scene_fallback'])
+        .gte('created_at', since)
+        .order('created_at', { ascending: false })
+    ).limit(8);
+    for (const r of facelessRows || []) {
+      const path = (r.fallback_reasons || [])
+        .map(String)
+        .filter((x) =>
+          /^redream|dual_degrade|solo_fallback|solo_floor|deadline|dual_swap_error|no_dual/.test(x)
+        )
+        .join(' | ')
+        .slice(0, 200);
+      console.log(
+        `  faceless ${r.created_at} user=${String(r.user_id).slice(0, 8)} job=${String(r.job_id || '').slice(0, 8)} ${path}`
+      );
+    }
+  }
   if (faceless >= FACELESS_ABS_ALARM) {
     console.error(
       `::error::${faceless} cast dreams silently degraded to a FACELESS scene in the last ${WINDOW_HOURS}h (>= ${FACELESS_ABS_ALARM}) — the dual→solo fallback is failing. Inspect solo_fallback:* / dual_degrade_cascade in ai_generation_log.fallback_reasons.`
