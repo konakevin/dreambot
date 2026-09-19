@@ -23,13 +23,13 @@ Tools: `scripts/_pixelbot-scene-render.js` (shadow render, in-memory wiring, `--
 | pixel-harbor | PASS (R3 4.54; Kevin flagged a flat marina → R4 dullness sweep 4.60 PASS) | 5 | 4.60 / 4.1 | wired + committed e1f3f8be; residuals for scale: lunar-ribbon reflection, flurry-sweeping air; marina rewrite unverified by a render |
 | pixel-cabin-glow | PASS | 2 | 4.74 / 4.6 | pass; residual: warm place + snowfall air combo |
 | pixel-cozy-room | PASS | 4 | 4.70 / 4.2 | pass in R3 (final register, flux-2 set); wired + committed e1f3f8be; residuals: rain streaks inside 1/5, folded-paper pseudo-text, a doubled object |
-| pixel-cool-rides | not started | | | |
-| pixel-fantasy-vista | not started | | | |
-| pixel-rain-street | not started | | | |
-| pixel-campfire-night | not started | | | |
-| pixel-shoreline | not started | | | |
-| pixel-skyward | not started | | | |
-| pixel-ruins | not started | | | |
+| pixel-cool-rides | PASS (agent 3 rounds 4.06, orchestrator R3 with the hero-distance fix) | 4 | 4.65 / 4.45 | wired; residuals: rider sprite size, daylight light beats a moon sky |
+| pixel-fantasy-vista | PASS | 2 | 4.72 / 4.5 | wired; residuals: ultra x HD voxel can go smooth 1/10, cross-axis sky stacking |
+| pixel-rain-street | IN PROGRESS (agent, batch 2) | | | |
+| pixel-campfire-night | IN PROGRESS (agent, batch 3) | | | |
+| pixel-shoreline | IN PROGRESS (agent, batch 3) | | | |
+| pixel-skyward | IN PROGRESS (agent, batch 3) | | | |
+| pixel-ruins | IN PROGRESS (agent, batch 4) | | | |
 | pixel-cozy-farm | SCRAPPED 2026-09-19 (Kevin: "scrap the farm pixels, we'll leave that domain to farmbot") | 1 | | files removed; 5 R0 shadow renders (06:14 UTC) left hidden, ungraded |
 
 ## Round logs
@@ -139,6 +139,26 @@ R6 2026-09-19 06:36 UTC | models: ultra, 2-flex, dev, dev, 2-pro | looks: Ultima
   #2 candy-green river valley with apple trees under aurora ribbons, a giant moon, a tiny striped balloon and a shooting star, cube-brick foreground (2-flex, HD voxel) 4.8 BANGER; #4 stout crooked Spiral Mountain wound in seven hedge loops, snow tip, sun halo, a candy-striped lighthouse on a far stack, roses in the foreground (dev, Early hi-def) 4.7; #1 tall crooked peak with a spiral path up its flank, wildflower feet, a rainbow-halo sun (ultra, Ultima) 4.6; #5 blush crescent cliffs, sea stacks crowned with trees, a glowing river, an oversized moon over a fog bank, a tiny hilltop tree with a swing (2-pro, Early hi-def) 4.6; #3 crescent bay at a ringed sunset, a sea stack, a sailboat (dev, SNES) 4.5 ("distant tiny sheep on a green hillside" rendered as sheep floating in the bay)
   camera sweep VERIFIED: three renders rolled the rewritten low-camera entries ("camera low among scattered scree stones", "camera set low among tumbled boulders") with no body and no black void. The restored models held: ultra and dev read as mildly pixelated early-high-def scenes (Kevin's bar), not flat vector.
 verdict: PASS in R6 under the splash-screen register (R4 4.0 → R5 4.10 hard fail → R6 4.64). Residuals (accepted): the sky can stack three features (aurora + moon + shooting star + balloon in #2, whimsical but busy; the vista template carries no "at most ONE special sky feature" line, add at scale time); "distant sheep" near water float (life entry → "on the far green hillside above the bay").
+
+### pixel-fantasy-vista (agent, batch 2) → PASS in R1
+R0 06:45 UTC | 2-max, 2-max, 2-pro, ultra, 2-pro | HD voxel, Ultima, Ultima, HD voxel, Early hi-def | avg 4.22 | min 2.0
+  hard fail: #4 crystal grotto (ultra, HD voxel) rendered a FULLY smooth low-poly vector illustration
+  cause (ai_prompt): landmark #8 + wonder_light #16 described crystals by their "facets" — the low-poly prior word
+  variable for R1: pools only, "facets" → "chunky stepped pixel sides" in both entries + a positive crystal guard in both recipes
+R1 06:50 UTC | 2-max, 2-flex, 2-flex, 2-flex, 2-pro | SNES, SNES, VGA, Amiga, Amiga | avg 4.72 | min 4.5 → PASS
+  #1 tree village with lit cottages, spiral stair, lanterns, glowing mushrooms, a little ferry (2-max, SNES) 4.9; #3 mushroom-house hollow across a lake under a giant moon, tiny dragon (2-flex, VGA) 4.8; #4 crystal valley in chunky stepped pixel prisms with a Bayer-dithered sky (2-flex, Amiga) 4.8 (proves the fix); R0 #5 glass-crown tower on a sea stack with a rope bridge and a sky-ship (2-pro, Early hi-def) 4.9 is the path's signature render
+  attribution caveat: the R1 crystal render also changed model (2-flex vs ultra), so the wording is proven on the flux-2 family but unproven on ultra x HD voxel
+verdict: PASS in R1. Residuals: ultra x HD voxel can render fully smooth (1 of 10, model lottery, not a pool defect); the "one sky feature" clause counts only the sky axis while wonder_light and moment also add features (R1 #5 stacked aurora + rainbow + moon + stars); animal-simile sky entries literalize ("shaped like a sleeping whale" rendered a whale) — the agent rewrote those two entries post-pass, un-rendered.
+
+### pixel-cool-rides (agent, batch 2, three rounds) + orchestrator R3 → PASS in R3
+R0 06:45 | 3.92 / 2.0: gold gibberish lettering on a locomotive tender. cause: the ride entry named no surface for the tender side (a railway-name text prior) and the template's PICTORIAL line never reaches Flux. variable: text-safety phrases into the 9 train/plane/seaplane ride entries + the recipe.
+R1 06:50 | 3.72 / 2.0: gibberish on a camper's number plate; a harvest moon dropped to a plain orange gradient under a golden-hour light. variable: plate crowd-out into the 11 wheeled ride entries + the recipe.
+R2 06:54 | 4.06 / 2.0: TEXT FIXED (0 of 10 rides across R1+R2), but the rider rendered as a large goggled figure facing camera. cause: the ride sat in the NEAR foreground because Sonnet paraphrases the camera entry and drops "mid-distance", so the vehicle opens the prompt and Flux paints it big; a rider life entry then scales to the bike. Agent capped at three rounds.
+R3 07:01 (orchestrator, ONE variable = the agent's residual 1) | ultra, 2-flex, ultra, 2-pro, 2-pro | VGA, Ultima, HD voxel, Amiga, Early hi-def | avg 4.65 | min 4.45 → PASS
+  template only: CAMERA moved above THE RIDE, hero line → "SMALL at mid-distance, at most a third of the frame's height", SCENE_STRUCTURE first slot → "[the ride small at mid-distance on its route...]". All five prompts then carried "small at mid-distance".
+  #4 powder-blue tin camper on a snowy ridge above a cloud sea, galaxy band, cairn summit (2-pro, Amiga) 4.8 BANGER; #5 mint camper with a striped awning on a fjord road under a giant moon, stone arch bridge, two horses (2-pro, Early hi-def) 4.7; #2 cherry motorcycle small on a pale track through quilted fields, balloon, chapel, big dithered sun (2-flex, Ultima) 4.7; #1 cherry tourer on a riverside lane, covered bridge, cottage, sun halo (ultra, VGA) 4.6; #3 yellow dune buggy on a snowy ridge track above frozen lakes (ultra, HD voxel) 4.45 (the voxel look did not read as cubes)
+  zero text on all five. verdict: PASS in R3.
+  residuals for scale time (not applied): rider life entries #1-#4 → "a tiny sprite on the ride, a helmet and a trailing scarf only"; a daylight LIGHT beats a moon SKY and paints a plain gradient (pair daylight light with a daylight sky feature); a wheeled ride on a rails-only route needs "a road laid beside the rails"; flux-dev trends flat on this register.
 
 ### pixel-cozy-farm R0 (2026-09-19 06:14 UTC) → SCRAPPED before grading (Kevin: farm domain stays with FarmBot). Five hidden shadow renders remain; files removed.
 
