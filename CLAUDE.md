@@ -22,7 +22,9 @@ Sparkle currency (RevenueCat IAP) + a Pro subscription, and 18 image-gen bots po
 - **Styling** NativeWind v4 for new code (existing `StyleSheet.create` is fine — match the file).
   **Responsive:** new UI imports `@/lib/responsive` scale helpers (`verticalScale`, `fontScale`,
   `horizontalScale`, `verticalScaleClamped`, `useDeviceClass`); design at the iPhone-14 base (844×390pt),
-  no hardcoded numbers in new styles (legacy grandfathered).
+  no hardcoded numbers in new styles (legacy grandfathered). **Popup dialog text** (alert / confirm card /
+  bottom sheet / gate: eyebrow, title, body, button labels) comes from `constants/dialogText.ts`, never a
+  local fontSize (locked by `__tests__/lib/dialogTextGuard.test.ts`).
 - **State** Zustand + TanStack Query v5. **Images** `expo-image` only.
 - **Backend** Supabase (Postgres, auth, storage, realtime, Deno Edge Functions, pg_cron).
 - **AI** Replicate (Flux) + Gemini (Nano Banana) + OpenAI (GPT Image 2) for images; Anthropic Sonnet

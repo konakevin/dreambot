@@ -21,6 +21,7 @@ import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { useGiftableBalance, useSendGift, type GiftStatus } from '@/hooks/useGiftSparkles';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { colors } from '@/constants/theme';
+import { dialogText } from '@/constants/dialogText';
 import { verticalScale, fontScale, isTabletDevice } from '@/lib/responsive';
 
 const AMOUNT_CHIPS = [5, 10, 25];
@@ -156,7 +157,7 @@ export function GiftSparklesSheet({
               </View>
             )}
             <View style={{ flex: 1 }}>
-              <Text style={s.title}>Gift sparkles</Text>
+              <Text style={[dialogText.title, s.title]}>Gift sparkles</Text>
               <Text style={s.recipientName}>to {recipientUsername}</Text>
             </View>
             <TouchableOpacity onPress={onClose} hitSlop={10}>
@@ -193,7 +194,7 @@ export function GiftSparklesSheet({
                 }}
               >
                 <Ionicons name="sparkles" size={16} color="#0B0B10" />
-                <Text style={s.ctaText}>Get sparkles</Text>
+                <Text style={[dialogText.button, s.ctaText]}>Get sparkles</Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -296,7 +297,7 @@ export function GiftSparklesSheet({
                 onPress={handleSend}
               >
                 <Ionicons name="gift" size={16} color="#0B0B10" />
-                <Text style={s.ctaText}>
+                <Text style={[dialogText.button, s.ctaText]}>
                   {sending ? 'Sending…' : `Send ${amount} ✨ to ${recipientUsername}`}
                 </Text>
               </TouchableOpacity>
@@ -346,7 +347,7 @@ const s = StyleSheet.create({
     justifyContent: 'center',
   },
   avatarText: { color: colors.textPrimary, fontSize: fontScale(16), fontWeight: '700' },
-  title: { color: colors.textPrimary, fontSize: fontScale(18), fontWeight: '800' },
+  title: { textAlign: 'left' },
   recipientName: { color: colors.textSecondary, fontSize: fontScale(14), fontWeight: '600' },
   balanceLine: { color: colors.textPrimary, fontSize: fontScale(15) },
   balanceStrong: { fontWeight: '800', color: '#A78BFA' },
@@ -407,7 +408,7 @@ const s = StyleSheet.create({
     paddingVertical: verticalScale(13),
   },
   ctaDisabled: { opacity: 0.4 },
-  ctaText: { color: '#0B0B10', fontSize: fontScale(15), fontWeight: '800' },
+  ctaText: { color: '#0B0B10' },
   upsell: { alignItems: 'center', gap: verticalScale(8), paddingVertical: verticalScale(8) },
   upsellEmoji: { fontSize: fontScale(40) },
   upsellTitle: { color: colors.textPrimary, fontSize: fontScale(16), fontWeight: '800' },

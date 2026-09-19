@@ -21,6 +21,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useEffect, useRef, useState } from 'react';
 import { hasSeenFlag, markFlagSeen, resetFlag } from '@/lib/firstRunFlags';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
+import { dialogText } from '@/constants/dialogText';
 import { verticalScale, fontScale, screen, isTabletDevice } from '@/lib/responsive';
 import { GradientTitle } from '@/components/GradientTitle';
 import { GradientButton } from '@/components/GradientButton';
@@ -161,7 +162,7 @@ export function MediumsIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’
             setAtBottom(contentOffset.y + layoutMeasurement.height >= contentSize.height - 24);
           }}
         >
-          <Text style={s.eyebrow}>Two ways to dream</Text>
+          <Text style={[dialogText.eyebrow, s.eyebrow]}>Two ways to dream</Text>
 
           {/* Standardized hero title — size 24, sentence case, 2-line wrap
               fallback, width-constrained (shared across all intro screens). */}
@@ -309,15 +310,7 @@ const s = StyleSheet.create({
     // Leave room for the floating CTA so the last card can scroll clear of it.
     paddingBottom: verticalScale(96),
   },
-  eyebrow: {
-    color: colors.accentLight,
-    fontSize: fontScale(12),
-    fontWeight: '700',
-    letterSpacing: 2.5,
-    textTransform: 'uppercase',
-    marginBottom: verticalScale(10),
-    textAlign: 'center',
-  },
+  eyebrow: { marginBottom: verticalScale(10) },
   cards: { gap: 14 },
   sectionLabel: {
     color: colors.textSecondary,

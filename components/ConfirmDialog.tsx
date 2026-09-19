@@ -2,7 +2,8 @@ import { Modal, TouchableOpacity, StyleSheet } from 'react-native';
 import { Text } from '@/components/AppText';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { dialogText } from '@/constants/dialogText';
+import { verticalScale } from '@/lib/responsive';
 
 interface ConfirmDialogProps {
   visible: boolean;
@@ -27,8 +28,8 @@ export function ConfirmDialog({
     <Modal visible={visible} transparent animationType="fade" statusBarTranslucent>
       <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={onCancel}>
         <TouchableOpacity style={styles.card} activeOpacity={1}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.message}>{message}</Text>
+          <Text style={[dialogText.title, styles.title]}>{title}</Text>
+          <Text style={[dialogText.body, styles.message]}>{message}</Text>
 
           <TouchableOpacity style={styles.confirmButton} onPress={onConfirm} activeOpacity={0.85}>
             <LinearGradient
@@ -37,11 +38,11 @@ export function ConfirmDialog({
               end={{ x: 1, y: 1 }}
               style={StyleSheet.absoluteFill}
             />
-            <Text style={styles.confirmText}>{confirmLabel}</Text>
+            <Text style={dialogText.button}>{confirmLabel}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.cancelButton} onPress={onCancel} activeOpacity={0.7}>
-            <Text style={styles.cancelText}>{cancelLabel}</Text>
+            <Text style={dialogText.buttonSecondary}>{cancelLabel}</Text>
           </TouchableOpacity>
         </TouchableOpacity>
       </TouchableOpacity>
@@ -66,20 +67,8 @@ const styles = StyleSheet.create({
     padding: 24,
     alignItems: 'center',
   },
-  title: {
-    color: colors.textPrimary,
-    fontSize: fontScale(18),
-    fontWeight: '800',
-    marginBottom: verticalScale(8),
-    textAlign: 'center',
-  },
-  message: {
-    color: colors.textSecondary,
-    fontSize: fontScale(14),
-    lineHeight: fontScale(20),
-    textAlign: 'center',
-    marginBottom: verticalScale(24),
-  },
+  title: { marginBottom: verticalScale(8) },
+  message: { marginBottom: verticalScale(24) },
   confirmButton: {
     width: '100%',
     // minHeight so the label grows under OS "Larger Text" (gradient is
@@ -92,22 +81,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: verticalScale(10),
   },
-  confirmText: {
-    color: colors.textPrimary,
-    fontSize: fontScale(16),
-    fontWeight: '700',
-    letterSpacing: 0.3,
-  },
   cancelButton: {
     width: '100%',
     minHeight: 44,
     paddingVertical: verticalScale(6),
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  cancelText: {
-    color: colors.textSecondary,
-    fontSize: fontScale(15),
-    fontWeight: '600',
   },
 });

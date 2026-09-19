@@ -16,6 +16,7 @@ import { Text } from '@/components/AppText';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, gradients } from '@/constants/theme';
+import { dialogText } from '@/constants/dialogText';
 import { verticalScale, fontScale } from '@/lib/responsive';
 
 export interface SwapNotice {
@@ -61,10 +62,10 @@ export function DreamSmartSwapSheet({
               </LinearGradient>
 
               <View style={styles.titleBlock}>
-                <Text style={styles.eyebrow}>DreamSmart</Text>
-                <Text style={styles.title}>Switched your model</Text>
+                <Text style={dialogText.eyebrow}>DreamSmart</Text>
+                <Text style={dialogText.title}>Switched your model</Text>
               </View>
-              <Text style={styles.body}>
+              <Text style={dialogText.body}>
                 {notice.fromLabel} may struggle with {notice.styleLabel} renders. {notice.toLabel}{' '}
                 was selected instead.
               </Text>
@@ -75,10 +76,10 @@ export function DreamSmartSwapSheet({
                   activeOpacity={0.7}
                   style={styles.flatPrimary}
                 >
-                  <Text style={styles.flatPrimaryText}>OK</Text>
+                  <Text style={[dialogText.button, styles.flatPrimaryText]}>OK</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={onUseAnyway} activeOpacity={0.7} style={styles.flatOk}>
-                  <Text style={styles.flatOkText}>Use {notice.fromLabel} anyway</Text>
+                  <Text style={dialogText.buttonSecondary}>Use {notice.fromLabel} anyway</Text>
                 </TouchableOpacity>
               </View>
             </>
@@ -128,26 +129,6 @@ const styles = StyleSheet.create({
   // Purple eyebrow above the title — the app's onboarding cadence, and it brands
   // the moment as DreamSmart (paired with the sparkle icon) so the user connects
   // the swap to the DreamSmart toggle they can see on screen.
-  eyebrow: {
-    color: colors.accentLight,
-    fontSize: fontScale(12),
-    fontWeight: '800',
-    letterSpacing: 1.4,
-    textTransform: 'uppercase',
-    textAlign: 'center',
-  },
-  title: {
-    color: colors.textPrimary,
-    fontSize: fontScale(20),
-    fontWeight: '800',
-    textAlign: 'center',
-  },
-  body: {
-    color: colors.textSecondary,
-    fontSize: fontScale(15),
-    lineHeight: fontScale(22),
-    textAlign: 'center',
-  },
   buttons: {
     width: '100%',
     gap: verticalScale(8),
@@ -163,19 +144,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.accentBorder,
   },
-  flatPrimaryText: {
-    color: colors.accentLight,
-    fontSize: fontScale(15),
-    fontWeight: '700',
-  },
+  flatPrimaryText: { color: colors.accentLight },
   flatOk: {
     width: '100%',
     paddingVertical: verticalScale(13),
     alignItems: 'center',
-  },
-  flatOkText: {
-    color: colors.textMuted,
-    fontSize: fontScale(15),
-    fontWeight: '600',
   },
 });

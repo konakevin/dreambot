@@ -13,7 +13,8 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Text } from '@/components/AppText';
 import { colors, gradients } from '@/constants/theme';
-import { verticalScale, horizontalScale, fontScale } from '@/lib/responsive';
+import { dialogText } from '@/constants/dialogText';
+import { verticalScale, horizontalScale } from '@/lib/responsive';
 
 /** 'use' = upload it, 'retry' = let me pick another, 'cancel' = abandon. */
 export type AvatarConfirmResult = 'use' | 'retry' | 'cancel';
@@ -70,7 +71,7 @@ export function AvatarConfirmProvider({ children }: { children: React.ReactNode 
       >
         <Pressable style={styles.overlay} onPress={() => finish('cancel')}>
           <Pressable style={styles.card} onPress={() => {}}>
-            <Text style={styles.title}>Use this photo?</Text>
+            <Text style={dialogText.title}>Use this photo?</Text>
             {uri ? <Image source={{ uri }} style={styles.preview} contentFit="cover" /> : null}
             <View style={styles.row}>
               <TouchableOpacity
@@ -78,7 +79,7 @@ export function AvatarConfirmProvider({ children }: { children: React.ReactNode 
                 onPress={() => finish('retry')}
                 activeOpacity={0.8}
               >
-                <Text style={styles.cancelText}>Choose another</Text>
+                <Text style={dialogText.buttonSecondary}>Choose another</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.useBtnWrap}
@@ -91,7 +92,7 @@ export function AvatarConfirmProvider({ children }: { children: React.ReactNode 
                   end={{ x: 1, y: 1 }}
                   style={styles.useBtn}
                 >
-                  <Text style={styles.useText}>Use photo</Text>
+                  <Text style={[dialogText.button, styles.useText]}>Use photo</Text>
                 </LinearGradient>
               </TouchableOpacity>
             </View>
@@ -124,11 +125,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: verticalScale(18),
   },
-  title: {
-    color: colors.textPrimary,
-    fontSize: fontScale(18),
-    fontWeight: '800',
-  },
   preview: {
     width: PREVIEW,
     height: PREVIEW,
@@ -151,11 +147,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  cancelText: {
-    color: colors.textSecondary,
-    fontSize: fontScale(15),
-    fontWeight: '600',
-  },
   useBtnWrap: {
     flex: 1,
   },
@@ -165,9 +156,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  useText: {
-    color: '#0F0F14',
-    fontSize: fontScale(15),
-    fontWeight: '700',
-  },
+  useText: { color: '#0F0F14' },
 });

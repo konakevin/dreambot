@@ -21,6 +21,7 @@ import * as Haptics from 'expo-haptics';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 import { colors } from '@/constants/theme';
+import { dialogText } from '@/constants/dialogText';
 import { verticalScale, fontScale, screen, isTabletDevice } from '@/lib/responsive';
 import { GradientTitle } from '@/components/GradientTitle';
 import { GradientButton } from '@/components/GradientButton';
@@ -113,7 +114,7 @@ export function GroupPhotoIntroSheet({ visible, onClose, ctaLabel = 'Got it' }: 
           contentContainerStyle={s.content}
           showsVerticalScrollIndicator={false}
         >
-          <Text style={s.eyebrow}>Group photo</Text>
+          <Text style={[dialogText.eyebrow, s.eyebrow]}>Group photo</Text>
           <View style={s.headlineWrap}>
             <GradientTitle
               size={24}
@@ -168,15 +169,7 @@ const s = StyleSheet.create({
     paddingTop: verticalScale(28),
     paddingBottom: verticalScale(96),
   },
-  eyebrow: {
-    color: colors.accentLight,
-    fontSize: fontScale(12),
-    fontWeight: '700',
-    letterSpacing: 2.5,
-    textTransform: 'uppercase',
-    marginBottom: verticalScale(10),
-    textAlign: 'center',
-  },
+  eyebrow: { marginBottom: verticalScale(10) },
   headlineWrap: { alignItems: 'center', marginBottom: verticalScale(8) },
   cards: { gap: 14, marginTop: verticalScale(18) },
   card: {

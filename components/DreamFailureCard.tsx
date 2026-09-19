@@ -17,6 +17,7 @@ import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
+import { dialogText } from '@/constants/dialogText';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import type { DreamFailure } from '@/store/dream';
 
@@ -87,18 +88,18 @@ export function DreamFailureCard({ failure, onRetry, onDismiss }: Props) {
   return (
     <View style={s.card}>
       <Ionicons name={copy.icon} size={48} color={copy.iconColor} style={s.icon} />
-      <Text style={s.title}>{copy.title}</Text>
-      <Text style={s.body}>{copy.body}</Text>
+      <Text style={[dialogText.title, s.title]}>{copy.title}</Text>
+      <Text style={[dialogText.body, s.body]}>{copy.body}</Text>
       <View style={s.actions}>
         <TouchableOpacity
           style={[s.btn, s.btnSecondary]}
           onPress={handleDismiss}
           activeOpacity={0.7}
         >
-          <Text style={s.btnSecondaryText}>Back</Text>
+          <Text style={dialogText.buttonSecondary}>Back</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[s.btn, s.btnPrimary]} onPress={handleRetry} activeOpacity={0.7}>
-          <Text style={s.btnPrimaryText}>Try Again</Text>
+          <Text style={dialogText.button}>Try Again</Text>
         </TouchableOpacity>
       </View>
       {/* Dev-only debug: show the raw error message + reason class for triage */}
@@ -126,20 +127,8 @@ const s = StyleSheet.create({
   icon: {
     marginBottom: verticalScale(12),
   },
-  title: {
-    color: colors.textPrimary,
-    fontSize: fontScale(18),
-    fontWeight: '700',
-    textAlign: 'center',
-    marginBottom: verticalScale(8),
-  },
-  body: {
-    color: colors.textSecondary,
-    fontSize: fontScale(14),
-    textAlign: 'center',
-    lineHeight: fontScale(20),
-    marginBottom: verticalScale(20),
-  },
+  title: { marginBottom: verticalScale(8) },
+  body: { marginBottom: verticalScale(20) },
   actions: {
     flexDirection: 'row',
     gap: 10,
@@ -156,18 +145,8 @@ const s = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-  btnSecondaryText: {
-    color: colors.textSecondary,
-    fontSize: fontScale(14),
-    fontWeight: '600',
-  },
   btnPrimary: {
     backgroundColor: colors.accent,
-  },
-  btnPrimaryText: {
-    color: '#FFFFFF',
-    fontSize: fontScale(14),
-    fontWeight: '700',
   },
   debug: {
     color: colors.textSecondary,

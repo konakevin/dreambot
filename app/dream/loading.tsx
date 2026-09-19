@@ -11,6 +11,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
+import { dialogText } from '@/constants/dialogText';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { useDreamCreate } from '@/hooks/useDreamCreate';
 import { useDreamStore } from '@/store/dream';
@@ -598,8 +599,8 @@ export default function DreamLoadingScreen() {
               color={colors.accent}
               style={{ marginBottom: verticalScale(12) }}
             />
-            <Text style={s.modalTitle}>Photo hard to read</Text>
-            <Text style={s.modalBody}>
+            <Text style={[dialogText.title, s.modalTitle]}>Photo hard to read</Text>
+            <Text style={[dialogText.body, s.modalBody]}>
               We had trouble identifying the subject. Results may surprise you.
             </Text>
             <View style={s.modalActions}>
@@ -608,14 +609,14 @@ export default function DreamLoadingScreen() {
                 onPress={handleConfirmCancel}
                 activeOpacity={0.7}
               >
-                <Text style={s.modalBtnSecondaryText}>Upload Different</Text>
+                <Text style={dialogText.buttonSecondary}>Upload Different</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[s.modalBtn, s.modalBtnPrimary]}
                 onPress={handleConfirmProceed}
                 activeOpacity={0.7}
               >
-                <Text style={s.modalBtnPrimaryText}>Continue</Text>
+                <Text style={dialogText.button}>Continue</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -705,20 +706,8 @@ const s = StyleSheet.create({
     borderColor: colors.border,
     alignItems: 'center',
   },
-  modalTitle: {
-    color: colors.textPrimary,
-    fontSize: fontScale(18),
-    fontWeight: '700',
-    textAlign: 'center',
-    marginBottom: verticalScale(8),
-  },
-  modalBody: {
-    color: colors.textSecondary,
-    fontSize: fontScale(14),
-    textAlign: 'center',
-    lineHeight: fontScale(20),
-    marginBottom: verticalScale(20),
-  },
+  modalTitle: { marginBottom: verticalScale(8) },
+  modalBody: { marginBottom: verticalScale(20) },
   modalActions: {
     flexDirection: 'row',
     gap: 10,
@@ -735,17 +724,7 @@ const s = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-  modalBtnSecondaryText: {
-    color: colors.textSecondary,
-    fontSize: fontScale(14),
-    fontWeight: '600',
-  },
   modalBtnPrimary: {
     backgroundColor: colors.accent,
-  },
-  modalBtnPrimaryText: {
-    color: '#FFFFFF',
-    fontSize: fontScale(14),
-    fontWeight: '700',
   },
 });

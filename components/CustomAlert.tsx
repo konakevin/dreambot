@@ -3,8 +3,9 @@ import { View, TouchableOpacity, Pressable, Modal, StyleSheet } from 'react-nati
 import { Ionicons } from '@expo/vector-icons';
 import { Text } from '@/components/AppText';
 import { colors } from '@/constants/theme';
+import { dialogText } from '@/constants/dialogText';
 import { BRAND_GRADIENT } from '@/components/GradientTitle';
-import { verticalScale, horizontalScale, fontScale, isTabletDevice } from '@/lib/responsive';
+import { verticalScale, horizontalScale, isTabletDevice } from '@/lib/responsive';
 
 // Primary dialog button = the soft purple at the gradient's left end (matches the
 // solid Dream button). The full brand gradient is reserved for one-shot
@@ -108,8 +109,8 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
       <Modal visible={alert.visible} transparent animationType="fade" statusBarTranslucent>
         <Pressable style={styles.overlay} onPress={dismiss}>
           <Pressable style={styles.card} onPress={() => {}}>
-            {alert.title ? <Text style={styles.title}>{alert.title}</Text> : null}
-            {alert.message ? <Text style={styles.message}>{alert.message}</Text> : null}
+            {alert.title ? <Text style={dialogText.title}>{alert.title}</Text> : null}
+            {alert.message ? <Text style={dialogText.body}>{alert.message}</Text> : null}
             {alert.checkbox ? (
               <TouchableOpacity
                 style={styles.checkboxRow}
@@ -119,7 +120,7 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
                 <View style={[styles.checkbox, dontShowAgain && styles.checkboxChecked]}>
                   {dontShowAgain ? <Ionicons name="checkmark" size={14} color="#FFFFFF" /> : null}
                 </View>
-                <Text style={styles.checkboxLabel}>{alert.checkbox.label}</Text>
+                <Text style={dialogText.caption}>{alert.checkbox.label}</Text>
               </TouchableOpacity>
             ) : null}
             <View style={isStacked ? styles.buttonCol : styles.buttonRow}>
@@ -136,7 +137,7 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
                       // Primary action = solid soft-purple (matches the Dream button).
                       <View style={[styles.fill, styles.buttonDefault]}>
                         <Text
-                          style={[styles.buttonText, styles.buttonTextDefault]}
+                          style={dialogText.button}
                           numberOfLines={1}
                           adjustsFontSizeToFit
                           minimumFontScale={0.8}
@@ -154,10 +155,9 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
                         ]}
                       >
                         <Text
-                          style={[
-                            styles.buttonText,
-                            btn.style === 'cancel' && styles.buttonTextCancel,
-                          ]}
+                          style={
+                            btn.style === 'cancel' ? dialogText.buttonSecondary : dialogText.button
+                          }
                           numberOfLines={1}
                           adjustsFontSizeToFit
                           minimumFontScale={0.8}
@@ -200,18 +200,6 @@ const styles = StyleSheet.create({
     padding: 24,
     gap: 12,
   },
-  title: {
-    color: colors.textPrimary,
-    fontSize: fontScale(18),
-    fontWeight: '800',
-    textAlign: 'center',
-  },
-  message: {
-    color: colors.textSecondary,
-    fontSize: fontScale(15),
-    lineHeight: fontScale(21),
-    textAlign: 'center',
-  },
   checkboxRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -231,10 +219,6 @@ const styles = StyleSheet.create({
   checkboxChecked: {
     backgroundColor: PRIMARY_BG,
     borderColor: PRIMARY_BG,
-  },
-  checkboxLabel: {
-    color: colors.textSecondary,
-    fontSize: fontScale(14),
   },
   buttonRow: {
     flexDirection: 'row',
@@ -271,16 +255,5 @@ const styles = StyleSheet.create({
     backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: colors.border,
-  },
-  buttonText: {
-    fontSize: fontScale(15),
-    fontWeight: '700',
-    color: '#FFFFFF',
-  },
-  buttonTextDefault: {
-    color: '#FFFFFF',
-  },
-  buttonTextCancel: {
-    color: colors.textSecondary,
   },
 });

@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { GradientButton } from '@/components/GradientButton';
 import { colors, gradients } from '@/constants/theme';
+import { dialogText } from '@/constants/dialogText';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import * as nav from '@/lib/navigate';
 import {
@@ -71,8 +72,8 @@ export function PremiumGateProvider({ children }: { children: React.ReactNode })
                   />
                 </LinearGradient>
 
-                <Text style={styles.title}>{content.title}</Text>
-                <Text style={styles.body}>{content.body}</Text>
+                <Text style={dialogText.title}>{content.title}</Text>
+                <Text style={dialogText.body}>{content.body}</Text>
 
                 {content.balance ? (
                   <View style={styles.balanceRow}>
@@ -100,7 +101,7 @@ export function PremiumGateProvider({ children }: { children: React.ReactNode })
                         activeOpacity={0.7}
                         style={styles.secondaryBtn}
                       >
-                        <Text style={styles.secondaryText}>{btn.label}</Text>
+                        <Text style={dialogText.buttonSecondary}>{btn.label}</Text>
                       </TouchableOpacity>
                     )
                   )}
@@ -146,18 +147,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {
-    color: colors.textPrimary,
-    fontSize: fontScale(20),
-    fontWeight: '800',
-    textAlign: 'center',
-  },
-  body: {
-    color: colors.textSecondary,
-    fontSize: fontScale(15),
-    lineHeight: fontScale(22),
-    textAlign: 'center',
-  },
   balanceRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -185,10 +174,5 @@ const styles = StyleSheet.create({
   secondaryBtn: {
     paddingVertical: verticalScale(13),
     alignItems: 'center',
-  },
-  secondaryText: {
-    color: colors.textMuted,
-    fontSize: fontScale(15),
-    fontWeight: '600',
   },
 });

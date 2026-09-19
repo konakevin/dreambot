@@ -20,6 +20,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useEffect } from 'react';
 import { hasSeenFlag, markFlagSeen, resetFlag } from '@/lib/firstRunFlags';
 import { colors } from '@/constants/theme';
+import { dialogText } from '@/constants/dialogText';
 import { verticalScale, fontScale, screen, isTabletDevice } from '@/lib/responsive';
 import { ResponsiveContainer } from '@/components/ResponsiveContainer';
 import { formatCompact } from '@/lib/formatNumber';
@@ -107,7 +108,7 @@ export function SparkleIntroSheet({ visible, onClose, cost, balance }: Props) {
           contentContainerStyle={s.content}
           showsVerticalScrollIndicator={false}
         >
-          <Text style={s.eyebrow}>Dreams</Text>
+          <Text style={[dialogText.eyebrow, s.eyebrow]}>Dreams</Text>
 
           <GradientTitle
             size={24}
@@ -120,7 +121,7 @@ export function SparkleIntroSheet({ visible, onClose, cost, balance }: Props) {
             Sparkles power your dreams
           </GradientTitle>
 
-          <Text style={s.body}>
+          <Text style={[dialogText.body, s.body]}>
             Sparkles are what power dreams. Some models cost more depending on their compute usage.
           </Text>
 
@@ -178,23 +179,8 @@ const s = StyleSheet.create({
     paddingBottom: verticalScale(96),
     alignItems: 'center',
   },
-  eyebrow: {
-    color: colors.accentLight,
-    fontSize: fontScale(12),
-    fontWeight: '700',
-    letterSpacing: 2.5,
-    textTransform: 'uppercase',
-    marginBottom: verticalScale(12),
-    textAlign: 'center',
-  },
-  body: {
-    color: colors.textSecondary,
-    fontSize: fontScale(15),
-    lineHeight: fontScale(22),
-    textAlign: 'center',
-    marginTop: verticalScale(16),
-    maxWidth: 340,
-  },
+  eyebrow: { marginBottom: verticalScale(12) },
+  body: { marginTop: verticalScale(16), maxWidth: 340 },
   cards: { width: '100%', marginTop: verticalScale(24), gap: 12 },
   card: {
     flexDirection: 'row',

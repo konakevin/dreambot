@@ -23,6 +23,7 @@ import { moderateText } from '@/lib/moderation';
 import { useAuthStore } from '@/store/auth';
 import { GradientButton } from '@/components/GradientButton';
 import { colors } from '@/constants/theme';
+import { dialogText } from '@/constants/dialogText';
 import { verticalScale, fontScale } from '@/lib/responsive';
 
 const HANDLE_RE = /^[a-z0-9_]{3,20}$/;
@@ -140,8 +141,8 @@ export function UsernameNudge({ currentUsername, secondaryLabel, onSecondary, on
     <Modal visible transparent animationType="fade" onRequestClose={onSecondary}>
       <KeyboardAvoidingView style={s.backdrop} behavior="padding">
         <View style={s.card}>
-          <Text style={s.title}>Choose your username</Text>
-          <Text style={s.subtitle}>
+          <Text style={dialogText.title}>Choose your username</Text>
+          <Text style={[dialogText.body, s.subtitle]}>
             This is your @handle — how people find and mention you. You can set it once, then it’s
             locked.
           </Text>
@@ -178,7 +179,7 @@ export function UsernameNudge({ currentUsername, secondaryLabel, onSecondary, on
             disabled={!canSave}
           />
           <Pressable onPress={onSecondary} hitSlop={8} style={s.secondary}>
-            <Text style={s.secondaryText}>{secondaryLabel}</Text>
+            <Text style={dialogText.buttonSecondary}>{secondaryLabel}</Text>
           </Pressable>
         </View>
       </KeyboardAvoidingView>
@@ -203,20 +204,7 @@ const s = StyleSheet.create({
     borderColor: colors.border,
     padding: 20,
   },
-  title: {
-    color: colors.textPrimary,
-    fontSize: fontScale(20),
-    fontWeight: '800',
-    textAlign: 'center',
-  },
-  subtitle: {
-    color: colors.textSecondary,
-    fontSize: fontScale(13),
-    lineHeight: fontScale(19),
-    textAlign: 'center',
-    marginTop: verticalScale(6),
-    marginBottom: verticalScale(18),
-  },
+  subtitle: { marginTop: verticalScale(6), marginBottom: verticalScale(18) },
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -247,5 +235,4 @@ const s = StyleSheet.create({
     paddingVertical: verticalScale(12),
     marginTop: verticalScale(4),
   },
-  secondaryText: { color: colors.textSecondary, fontSize: fontScale(15), fontWeight: '600' },
 });

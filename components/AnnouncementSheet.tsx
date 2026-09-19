@@ -21,6 +21,7 @@ import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
 import type { Announcement } from '@/hooks/useAnnouncement';
 import { colors } from '@/constants/theme';
+import { dialogText } from '@/constants/dialogText';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { GradientTitle } from '@/components/GradientTitle';
 import { TitleText } from '@/components/TitleText';
@@ -136,13 +137,13 @@ export function AnnouncementSheet({ announcement, onClose }: Props) {
             <Text style={s.heroEmoji}>✨</Text>
           )}
 
-          <Text style={s.body}>{announcement.body}</Text>
+          <Text style={[dialogText.body, s.body]}>{announcement.body}</Text>
 
           {announcement.cta_label && announcement.cta_route ? (
             <>
               <GradientButton label={announcement.cta_label} onPress={handleCta} />
               <TouchableOpacity onPress={onClose} hitSlop={10} style={s.dismiss}>
-                <Text style={s.dismissText}>Not now</Text>
+                <Text style={dialogText.buttonSecondary}>Not now</Text>
               </TouchableOpacity>
             </>
           ) : (
@@ -192,19 +193,9 @@ const s = StyleSheet.create({
     fontSize: fontScale(52),
     textAlign: 'center',
   },
-  body: {
-    color: 'rgba(255,255,255,0.92)',
-    fontSize: fontScale(15),
-    lineHeight: fontScale(22),
-    textAlign: 'center',
-  },
+  body: { color: 'rgba(255,255,255,0.92)' },
   dismiss: {
     alignItems: 'center',
     paddingVertical: verticalScale(4),
-  },
-  dismissText: {
-    color: colors.textSecondary,
-    fontSize: fontScale(14),
-    fontWeight: '600',
   },
 });

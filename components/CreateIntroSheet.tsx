@@ -22,6 +22,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useEffect } from 'react';
 import { hasSeenFlag, markFlagSeen, resetFlag } from '@/lib/firstRunFlags';
 import { colors } from '@/constants/theme';
+import { dialogText } from '@/constants/dialogText';
 import { verticalScale, fontScale, screen, byDevice, isTabletDevice } from '@/lib/responsive';
 import { CREATE_INFO } from '@/constants/onboardingInfo';
 import { GradientTitle } from '@/components/GradientTitle';
@@ -83,7 +84,7 @@ export function CreateIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’s
           showsVerticalScrollIndicator={false}
         >
           <View style={s.col}>
-            <Text style={s.eyebrow}>{CREATE_INFO.eyebrow}</Text>
+            <Text style={[dialogText.eyebrow, s.eyebrow]}>{CREATE_INFO.eyebrow}</Text>
 
             {/* Standardized hero title — size 24, sentence case, 2-line wrap
               fallback, width-constrained (shared across all intro screens). */}
@@ -98,7 +99,7 @@ export function CreateIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’s
               {CREATE_INFO.headline}
             </GradientTitle>
 
-            <Text style={s.body}>{CREATE_INFO.body}</Text>
+            <Text style={[dialogText.body, s.body]}>{CREATE_INFO.body}</Text>
 
             {CREATE_INFO.subFeatures && CREATE_INFO.subFeatures.length > 0 && (
               <View style={s.subFeatures}>
@@ -171,23 +172,8 @@ const s = StyleSheet.create({
   // instead of stretching across a wide pageSheet (no-op on phones).
   col: { width: '100%', alignItems: 'center' },
 
-  eyebrow: {
-    color: colors.accentLight,
-    fontSize: fontScale(12),
-    fontWeight: '700',
-    letterSpacing: 2.5,
-    textTransform: 'uppercase',
-    marginBottom: verticalScale(12),
-    textAlign: 'center',
-  },
-  body: {
-    color: colors.textSecondary,
-    fontSize: fontScale(15),
-    lineHeight: fontScale(22),
-    textAlign: 'center',
-    marginTop: verticalScale(16),
-    maxWidth: byDevice(340, 504),
-  },
+  eyebrow: { marginBottom: verticalScale(12) },
+  body: { marginTop: verticalScale(16), maxWidth: byDevice(340, 504) },
 
   subFeatures: { width: '100%', marginTop: verticalScale(24), gap: 12 },
   subFeature: {

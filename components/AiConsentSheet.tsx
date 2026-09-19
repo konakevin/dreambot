@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { GradientButton } from '@/components/GradientButton';
 import { colors } from '@/constants/theme';
+import { dialogText } from '@/constants/dialogText';
 import { verticalScale, fontScale, isTabletDevice } from '@/lib/responsive';
 import { recordAiConsent } from '@/lib/aiConsent';
 
@@ -71,8 +72,8 @@ export function AiConsentProvider({ children }: { children: React.ReactNode }) {
             <View style={s.iconWrap}>
               <Ionicons name="sparkles" size={26} color={colors.accent} />
             </View>
-            <Text style={s.title}>Putting your face in dreams</Text>
-            <Text style={s.body}>
+            <Text style={dialogText.title}>Putting your face in dreams</Text>
+            <Text style={dialogText.body}>
               To put you in your dreams, your photo is sent to our AI providers (Anthropic,
               Replicate, Google, and OpenAI) to describe your appearance and paint you into the
               scene. They process it under their API terms, never use it to train their models, and
@@ -84,7 +85,7 @@ export function AiConsentProvider({ children }: { children: React.ReactNode }) {
             <View style={s.buttons}>
               <GradientButton label="Agree & continue" onPress={handleAgree} />
               <TouchableOpacity onPress={() => finish(false)} activeOpacity={0.7} style={s.notNow}>
-                <Text style={s.notNowText}>Not now</Text>
+                <Text style={dialogText.buttonSecondary}>Not now</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -121,20 +122,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {
-    color: colors.textPrimary,
-    fontSize: fontScale(19),
-    fontWeight: '800',
-    textAlign: 'center',
-  },
-  body: {
-    color: colors.textSecondary,
-    fontSize: fontScale(14),
-    lineHeight: fontScale(21),
-    textAlign: 'center',
-  },
   link: { color: colors.accent, fontSize: fontScale(14), fontWeight: '700' },
   buttons: { width: '100%', gap: verticalScale(6), marginTop: verticalScale(4) },
   notNow: { alignItems: 'center', paddingVertical: verticalScale(10) },
-  notNowText: { color: colors.textSecondary, fontSize: fontScale(15), fontWeight: '600' },
 });

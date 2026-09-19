@@ -27,6 +27,7 @@ import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { isUpdateRequired, isUpdateAvailable } from '@/lib/appVersion';
 import { APP_STORE_UPDATE_URL } from '@/constants/appStore';
 import { colors, gradients } from '@/constants/theme';
+import { dialogText } from '@/constants/dialogText';
 import { verticalScale, fontScale } from '@/lib/responsive';
 
 type IoniconName = ComponentProps<typeof Ionicons>['name'];
@@ -109,8 +110,8 @@ export function ForceUpdateGate() {
             />
           </LinearGradient>
 
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.body}>{body}</Text>
+          <Text style={dialogText.title}>{title}</Text>
+          <Text style={dialogText.body}>{body}</Text>
 
           <GradientButton label="Update Now" onPress={openStore} style={styles.cta} />
 
@@ -118,7 +119,9 @@ export function ForceUpdateGate() {
               admin can always escape (a real hard gate shows neither). */}
           {(isPreview || !isHard) && (
             <Pressable onPress={dismiss} style={styles.later} hitSlop={8}>
-              <Text style={styles.laterText}>{isPreview ? 'Close preview' : 'Later'}</Text>
+              <Text style={dialogText.buttonSecondary}>
+                {isPreview ? 'Close preview' : 'Later'}
+              </Text>
             </Pressable>
           )}
         </Pressable>
@@ -154,28 +157,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {
-    color: colors.textPrimary,
-    fontSize: fontScale(20),
-    fontWeight: '800',
-    textAlign: 'center',
-  },
-  body: {
-    color: colors.textSecondary,
-    fontSize: fontScale(15),
-    lineHeight: fontScale(22),
-    textAlign: 'center',
-  },
   cta: {
     width: '100%',
     marginTop: verticalScale(6),
   },
   later: {
     paddingVertical: verticalScale(8),
-  },
-  laterText: {
-    color: colors.textMuted,
-    fontSize: fontScale(15),
-    fontWeight: '600',
   },
 });
