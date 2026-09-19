@@ -187,6 +187,7 @@ import { loadNightlyModelPolicy } from '../_shared/pools/nightlyModelPolicyLoade
 import { decideSceneFirst, sceneFirstRegister } from '../_shared/sceneFirstEligibility.ts';
 import { parseQaFlags } from '../_shared/nightlyQaFlags.ts';
 import { applyRedreamPins, parseRedreamPins } from '../_shared/redream.ts';
+import { isDeterministicNoFace } from '../_shared/faceSwapNoFace.ts';
 import { resolveCastAction } from '../_shared/castActionResolver.ts';
 import { settingClauseOf } from '../_shared/sceneHook.ts';
 import { assessRenderQuality, assessSceneFallbackPeople } from '../_shared/qualityGate.ts';
@@ -4879,11 +4880,21 @@ Output ONLY the prompt.`;
               `[nightly-dreams] Face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES} failed:`,
               (err as Error).message
             );
-            if (attempt === FACE_SWAP_MAX_RETRIES) {
-              fallbackReasons.push(`face_swap_failed_${attempt}x:${(err as Error).message}`);
+            // Every provider in the chain said "no face": the picture has no detectable face, and running the same
+            // chain again cannot change that — it only burns the budget the fresh-render rung below needs (a solo
+            // shipped faceless on 2026-09-19 after ~80 s of retries: `solo_floor_rerender_skipped_deadline`).
+            // Transient errors (5xx / 429 / timeouts) keep the retries.
+            const noFaceEverywhere = isDeterministicNoFace((err as Error).message);
+            if (attempt === FACE_SWAP_MAX_RETRIES || noFaceEverywhere) {
+              fallbackReasons.push(
+                noFaceEverywhere
+                  ? `face_swap_no_face_all_providers:${attempt}:${(err as Error).message}`
+                  : `face_swap_failed_${attempt}x:${(err as Error).message}`
+              );
               logAxes.faceSwapResult = 'failed';
               logAxes.faceSwapError = (err as Error).message;
               logAxes.faceSwapAttempts = attempt;
+              break;
             }
           }
         }
@@ -4961,9 +4972,17 @@ Output ONLY the prompt.`;
     ) {
       const soloNoun =
         faceSwapGender === 'female' ? 'woman' : faceSwapGender === 'male' ? 'man' : 'person';
+      // A rung needs a render (~25 s) + a swap (p90 27 s) + persist, under the 150 s gateway ceiling: gate on the
+      // time REMAINING rather than a fixed 80 s from start (2026-09-19) — the fixed gate skipped a rescue that
+      // still had room, and the no-face short-circuit above now leaves that room in the common case.
+      const RENDER_CEILING_MS = 150_000;
+      const FLOOR_RUNG_NEED_MS = 55_000;
       for (let rung = 1; rung <= 2 && swapUnusable; rung++) {
-        if (Date.now() - t0 > (rung === 1 ? 80_000 : 100_000)) {
-          fallbackReasons.push(`solo_floor_rerender_skipped_deadline:${rung}`);
+        const elapsed = Date.now() - t0;
+        if (elapsed > RENDER_CEILING_MS - FLOOR_RUNG_NEED_MS) {
+          fallbackReasons.push(
+            `solo_floor_rerender_skipped_deadline:${rung}:${Math.round(elapsed / 1000)}s`
+          );
           break;
         }
         let model = pickedModel;
