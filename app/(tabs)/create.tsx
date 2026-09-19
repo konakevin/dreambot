@@ -978,7 +978,7 @@ export default function CreateScreen() {
           "With no prompt, DreamBot invents a setting and drops you into it. Type a prompt if you'd rather choose.",
           [
             { text: 'Add a prompt', style: 'cancel', onPress: () => promptRef.current?.focus() },
-            { text: 'Let it dream', onPress: onConfirm },
+            { text: 'Dream it', onPress: onConfirm },
           ],
           checkbox
         );
