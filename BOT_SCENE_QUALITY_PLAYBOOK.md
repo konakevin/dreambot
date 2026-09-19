@@ -3930,6 +3930,17 @@ Lessons (all verified on renders, prompts read from `ai_prompt`):
 - **Keep the intentional similes.** The same sweep that must kill "a headland curling like a sleeping cat" must
   spare "a palm-thatch roof shaped like a wide hat pulled low" — architecture similes are PixelBot's charm and
   scored 5.0; the law only bites on natural forms (clouds, headlands, rock) where the literal object is absurd.
+- **Promoting SEVERAL paths at once needs a shuffle, or each path lands in its own stretch of history**
+  (PixelBot, 2026-09-19). `promote-shadow-path.js` fetches in render-time order and assigns its schedule in
+  that order, so blending 252 renders across 11 paths over 19 weeks put only 4 of the 11 paths in the first
+  month: the feed read as 'vista month, then harbor month' rather than a mixture. Passing a pre-shuffled
+  `--ids` list does NOT help, because the fetch re-sorts. Fixed in the tool itself (a Fisher-Yates pass before
+  scheduling). If you hit this on already-promoted rows, do not re-run the promotion: keep the schedule, which
+  is already spaced and interleaved around the real posts, and permute which post gets which timestamp.
+- **A historical blend must never fabricate engagement**, and the tool is right to touch only the visibility
+  and time columns. A backdated post with zero likes is honest; a backdated post with seeded hearts is
+  feed-gaming. Check the busiest single day afterwards (3 was the peak here) and how many promoted posts
+  landed in the last 24 hours (1) — that pair is the proof the blend did not slam the feed.
 
 ## DinoBot
 

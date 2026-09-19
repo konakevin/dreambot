@@ -192,6 +192,16 @@ function buildSchedule(count, windowStartMs, windowEndMs, existing) {
 
   const userId = await lookupBotUserId(BOT);
   const renders = await fetchShadowRenders(userId);
+  // SHUFFLE so a multi-path promotion reads as a MIXTURE across the window.
+  // The fetch returns render-time order, so promoting several paths at once
+  // used to lay each path down in its own contiguous stretch of history
+  // (PixelBot, 2026-09-19: 252 renders over 19 weeks put only 4 of 11 paths in
+  // the first month). Order carries no meaning here — the schedule is what
+  // spaces the posts — so randomise which render lands in which slot.
+  for (let i = renders.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [renders[i], renders[j]] = [renders[j], renders[i]];
+  }
   if (renders.length === 0) {
     console.log('\nNo matching shadow renders found — nothing to promote.');
     process.exit(0);
