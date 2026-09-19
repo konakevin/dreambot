@@ -126,6 +126,10 @@ module.exports = {
   PIXELBOT_EPIC_VISTA_LIGHTING_ATMOSPHERE: loadIfExists('pixelbot_epic_vista_lighting_atmosphere'),
   PIXELBOT_EPIC_VISTA_PARALLAX_SILHOUETTE: loadIfExists('pixelbot_epic_vista_parallax_silhouette'),
 
+  // Pixel LOOKS register (scene paths only; PIXELBOT_SCENES_PLAN.md §2.8). Hand-authored
+  // pixel sub-styles, pure technique, rolled per render via rollSharedDNA.lookRegister.
+  PIXELBOT_LOOK_REGISTER: loadIfExists('pixelbot_look_register'),
+
   // Shared across all paths (camera/grade)
   PIXEL_PERSPECTIVES: load('pixel_perspectives'),
   SCENE_PALETTES: load('scene_palettes'),

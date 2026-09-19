@@ -16,8 +16,19 @@
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
 const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
+const scene = require('./scenePaths');
+
+// SCENE PATHS (PIXELBOT_SCENES_PLAN.md): pixel PAINTINGS of places on the
+// pixelbot_painting register with the pixel LOOKS register rolling. All wiring
+// for these (medium, model set, vibes, chaos + polish off, shadow lane) derives
+// from this map — adding a scene path is one line here. They live in
+// shadowPaths until Kevin approves each one; go-live = move the key to paths[].
+const SCENE_PATHS = {
+  'pixel-vista': require('./paths/pixel-vista'), // replaces epic-vista at ship (plan §3.8)
+};
 
 const pathBuilders = {
+  ...SCENE_PATHS,
   'cozy-rpg-town': require('./paths/cozy-rpg-town'),
   'side-scroller-world': require('./paths/side-scroller-world'),
   'boss-arena': require('./paths/boss-arena'),
@@ -40,7 +51,7 @@ const pathBuilders = {
 
 // Per-path vibe lock — each genre prefers a tight subset of vibes for
 // scene-cohesion. Engine respects this when rolling vibe per render.
-const vibesByPath = {
+const GAME_VIBES_BY_PATH = {
   'cozy-rpg-town': ['nostalgic', 'whimsical', 'enchanted'],
   'side-scroller-world': ['cinematic', 'epic', 'voltage'],
   'boss-arena': ['epic', 'fierce', 'cinematic'],
@@ -51,6 +62,7 @@ const vibesByPath = {
   'epic-vista': ['epic', 'ethereal', 'cinematic', 'nostalgic'],
   'retro-racing': ['nostalgic', 'cinematic', 'epic', 'voltage'], // Stage K2 SHADOW
 };
+const vibesByPath = { ...GAME_VIBES_BY_PATH, ...scene.vibesByPath(SCENE_PATHS) };
 
 const allVibes = Array.from(new Set(Object.values(vibesByPath).flat()));
 
@@ -66,19 +78,27 @@ module.exports = {
   allowedModels: ALL_ENABLED_AI_MODELS,
 
   // Per-path model pins land here when a specific path needs a specific model.
-  modelByPath: {},
+  modelByPath: scene.modelByPath(SCENE_PATHS),
+  mediumByPath: scene.mediumByPath(SCENE_PATHS),
 
   // nano-banana clean-render override (2026-06-07). Keeps the pixel-art
   // register crisp + readable on this model (+ empty promptPrefixByMedium
   // so the bot's prefix doesn't pull it off-style).
   mediumStyles: {
     pixelbot_gpt_clean: blocks.GPT_CLEAN,
+    // Scene register: a pixel PAINTING of a place (content + composition only;
+    // the rolled look owns technique, the prefix owns identity). Code-only medium.
+    pixelbot_painting: blocks.PAINTING_MEDIUM,
   },
   // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
   // both now banned bot-wide (FLUX-only).
   cleanMediumByModel: {},
   promptPrefixByMedium: {
     pixelbot_gpt_clean: '',
+    pixelbot_painting: blocks.PAINTING_PREFIX,
+  },
+  promptSuffixByMedium: {
+    pixelbot_painting: blocks.PAINTING_SUFFIX,
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -105,7 +125,7 @@ module.exports = {
   // Dark-launched (shadow) paths — renderable on demand, hidden from public + rotation.
   // cozy-farming-life-sim: pulled from rotation 2026-09-19 for a rework (cozy-cute pixel
   // farm, FarmBot-in-pixels). Kept renderable + hidden here until the rework is approved.
-  shadowPaths: ['cozy-farming-life-sim'],
+  shadowPaths: ['cozy-farming-life-sim', ...Object.keys(SCENE_PATHS)],
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -129,6 +149,7 @@ module.exports = {
   chaos: {
     enabled: true,
     skipPaths: [
+      ...Object.keys(SCENE_PATHS), // scene paths: chaos off (one hero, never a collage)
       // Halloween seasonal candidates — protect the curated MVP composition
       // proven during AlphaBot QA.
       'pixel-haunted-house',
@@ -159,6 +180,7 @@ module.exports = {
     // Halloween seasonal candidates — protect the curated MVP composition
     // proven during AlphaBot QA (same protection as chaos.skipPaths above).
     skipPaths: [
+      ...Object.keys(SCENE_PATHS), // scene paths: polish off (setting is the co-hero)
       'pixel-haunted-house',
       'pixel-trickortreat-street',
       'pixel-witchs-cottage',
@@ -174,6 +196,11 @@ module.exports = {
 
   rollSharedDNA({ vibeKey, picker }) {
     return {
+      // Pixel LOOKS register (scene paths consume it via PIXEL_LOOK_OVERRIDE;
+      // in-game templates ignore it and keep their locked SNES register).
+      lookRegister: pools.PIXELBOT_LOOK_REGISTER.length
+        ? picker.pickWithRecency(pools.PIXELBOT_LOOK_REGISTER, 'look_register')
+        : null,
       pixelPerspective: picker.pickWithRecency(pools.PIXEL_PERSPECTIVES, 'pixel_perspective'),
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,

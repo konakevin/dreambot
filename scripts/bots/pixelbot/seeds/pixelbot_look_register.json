@@ -1,0 +1,7 @@
+[
+  "Classic 16-bit pixel art: a chunky visible pixel grid, sixteen-colour discipline per region, banded dithering on every gradient, clean sprite-era pixel craft with hard pixel edges.",
+  "Hi-bit painterly pixel art: a large canvas of hand-placed pixels, soft dithered gradients built from many close tones, rich pixel clusters for texture, every edge still a crisp pixel edge on a visible pixel grid.",
+  "Ordered-dither pixel art: Bayer checkerboard dithering on every gradient and sky band, a tight limited palette, mechanical dot patterns visible up close, crisp pixel edges throughout.",
+  "Fine-dither pixel art: very fine checker dithering inside every gradient, a high-contrast limited palette, meticulous pixel shading, crisp pixel edges on a tight pixel grid.",
+  "Impressionist pixel clusters: loose textured clusters of pixels like brush strokes, dabs of pixel colour building every form, painterly pixel clusters that still resolve on a visible pixel grid."
+]

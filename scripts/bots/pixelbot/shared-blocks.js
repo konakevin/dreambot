@@ -74,3 +74,51 @@ module.exports = {
   ANIMATED_FEEL_BLOCK,
   BLOW_IT_UP_BLOCK,
 };
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PIXEL PAINTING register (scene paths, 2026-09-19, PIXELBOT_SCENES_PLAN.md).
+// A second bot-local medium: pixel PAINTINGS of places, not game screenshots.
+// Everything here is POSITIVE-ONLY. Identity + quality live in the prefix; the
+// rolled LOOK (pixelbot_look_register) owns dither / palette count / outline /
+// shading technique; the medium fragment owns content + composition.
+// ─────────────────────────────────────────────────────────────────────────────
+const PAINTING_PREFIX =
+  'pixel-art illustration, hand-placed pixels on a visible pixel grid, crisp hard-edged pixels, atmospheric painterly light';
+const PAINTING_MEDIUM =
+  'a finished pixel-art painting of a place: every surface built from square pixels, deep layered depth to the horizon, soft atmospheric light, one clear subject with room to breathe';
+const PAINTING_SUFFIX = 'no text, no watermarks, every surface pixelated, crisp dithered pixel edges';
+
+// The rolled pixel sub-style. Plain cooperative wording (never "override" /
+// "authority" / "non-negotiable": those trip Sonnet's own refusal patterns and
+// the refusal text gets rendered). Returns '' when no look rolled.
+const PIXEL_LOOK_OVERRIDE = (sharedDNA) =>
+  sharedDNA && sharedDNA.lookRegister
+    ? `Please write the Flux prompt using this pixel-art style throughout: ${sharedDNA.lookRegister}
+Keep every scene element, the composition, and the light exactly as described below; just describe everything with this style's pixel technique. Start the prompt with these style words.
+
+`
+    : '';
+
+// Scene-path blocks: short on purpose (stacked verbose mandates push Flux to its
+// generic centroid). Each is one idea.
+const SCENE_REGISTER_BLOCK = `This is a finished pixel-art PAINTING of a real place, not a game screen: one clear subject, layered depth, a deliberate palette, atmospheric light. Describe only what is present.`;
+
+const ONE_HERO_BLOCK = `One hero, one place, one quiet moment. The hero owns 30 to 60 percent of the frame with breathing room around it. Depth in layers: near, middle, far, sky. Never a collage of equal elements.`;
+
+const TINY_LIFE_BLOCK = `If life is present it is small: an animal, a bird, or a single figure turned away or at distance, never a portrait, never a crowd.`;
+
+const PICTORIAL_BLOCK = `Every sign, hull, poster, banner, and window is blank or carries a simple pictorial symbol.`;
+
+const SCENE_STRUCTURE = (order) => `Write the prompt in this order: ${order}.
+LENGTH IS THE #1 RULE: 70 to 95 words, count them. Name the hero and stop.
+Output ONLY the prose prompt, comma-separated phrases. No preamble, no headers, no ━━━ markers, no bold labels, no bullets.`;
+
+module.exports.PAINTING_PREFIX = PAINTING_PREFIX;
+module.exports.PAINTING_MEDIUM = PAINTING_MEDIUM;
+module.exports.PAINTING_SUFFIX = PAINTING_SUFFIX;
+module.exports.PIXEL_LOOK_OVERRIDE = PIXEL_LOOK_OVERRIDE;
+module.exports.SCENE_REGISTER_BLOCK = SCENE_REGISTER_BLOCK;
+module.exports.ONE_HERO_BLOCK = ONE_HERO_BLOCK;
+module.exports.TINY_LIFE_BLOCK = TINY_LIFE_BLOCK;
+module.exports.PICTORIAL_BLOCK = PICTORIAL_BLOCK;
+module.exports.SCENE_STRUCTURE = SCENE_STRUCTURE;
