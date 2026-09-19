@@ -12,6 +12,8 @@
  *   --vibe X          # specific vibe (default 'random')
  *   --label X         # string included in saved filenames (default 'iter')
  *   --post            # ALSO post each render to DB + commit dedup + write run log
+ *   --shadow          # with --post: post HIDDEN (shadow=true, is_public/is_posted=false),
+ *                     # even for a LIVE path — the standing rule for test batches
  *   --dry-run         # skip flux + download (brief-only debug)
  *
  * Examples:
@@ -37,7 +39,7 @@ function arg(name, fallback) {
   const botName = arg('bot');
   if (!botName || typeof botName !== 'string') {
     console.error(
-      'Usage: node scripts/iter-bot.js --bot <name> [--count N] [--mode X] [--vibe X] [--label X] [--post] [--dry-run]'
+      'Usage: node scripts/iter-bot.js --bot <name> [--count N] [--mode X] [--vibe X] [--label X] [--post] [--shadow] [--dry-run]'
     );
     process.exit(2);
   }
@@ -49,6 +51,7 @@ function arg(name, fallback) {
   const model = arg('model', null); // force a specific model (e.g. 'black-forest-labs/flux-dev')
   const label = arg('label', 'iter');
   const post = arg('post', false) === true;
+  const shadow = arg('shadow', false) === true;
   const dryRun = arg('dry-run', false) === true;
 
   let bot;
@@ -81,7 +84,7 @@ function arg(name, fallback) {
 
   const outDir = `/tmp/${botName}-${label}`;
   console.log(
-    `🤖 ${bot.displayName || bot.username} — count=${count} mode=${mode} vibe=${vibe} label=${label} post=${post} dryRun=${dryRun}`
+    `🤖 ${bot.displayName || bot.username} — count=${count} mode=${mode} vibe=${vibe} label=${label} post=${post} shadow=${shadow} dryRun=${dryRun}`
   );
   console.log(`📁 ${outDir}\n`);
 
@@ -109,6 +112,7 @@ function arg(name, fallback) {
         label,
         idx: i,
         post,
+        shadow,
         // Tag iter-bot runs so the dispatcher's cycle math (botEngine.js
         // getCycledUsedPaths + getRecentPaths, filtered to source='dispatcher')
         // ignores them — dev iteration doesn't pollute production path

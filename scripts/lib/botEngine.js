@@ -1154,6 +1154,10 @@ async function runBot(opts) {
   // supreme admin via get_shadow_feed. Going live = move the path string from
   // bot.shadowPaths[] to bot.paths[].
   const isShadowPath = (bot.shadowPaths || []).includes(resolvedPath);
+  // Dev entry points (iter-bot --shadow) may force a LIVE path to post hidden —
+  // the standing rule is that every test batch is a shadow post reviewed in-app,
+  // and a live path has no other way to render hidden.
+  const forceShadow = !!opts.shadow;
   let medium = resolveMedium({ bot, path: resolvedPath });
   const vibeKey = vibeArg === 'random' ? resolveVibe({ bot, medium, path: resolvedPath }) : vibeArg;
 
@@ -1782,7 +1786,7 @@ async function runBot(opts) {
         fluxSeed: null,
         model: renderModel,
         path: resolvedPath,
-        shadow: isShadowPath,
+        shadow: isShadowPath || forceShadow,
       });
 
       // 13. Commit dedup picks ONLY on successful post
