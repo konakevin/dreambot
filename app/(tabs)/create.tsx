@@ -956,42 +956,36 @@ export default function CreateScreen() {
   // The dream-launch tail (shared by handleDream + the sparkle sheet's "Got it").
   function proceedWithDream() {
     // Empty-prompt confirmation: when the prompt box is shown but blank, the
-    // dream is fully random — either a totally surprise scene, or (with a photo
-    // in New Scene mode) a random scene invented around the person. Restyle has
-    // no prompt box (it just transforms the photo into the medium), so it's
-    // exempt. Confirm the random intent before spending sparkles.
+    // dream is fully random. Restyle has no prompt box (it just transforms the
+    // photo into the medium), so it's exempt. Confirm the random intent before
+    // spending sparkles.
+    //
+    // ONE dialog shape both ways (Kevin 2026-09-19) — only what DreamBot invents
+    // differs. With a New Scene photo it invents a SETTING around the person. With
+    // no photo nobody is cast at all (the face swap needs "me" / "my partner" in
+    // the prompt, and there is no prompt), so it invents the whole scene. The
+    // secondary action reads "Add a prompt" and drops the cursor into the prompt
+    // box rather than just closing.
     const promptEmpty = !config.userPrompt.trim();
     const promptBoxShown = !(hasPhoto && config.photoStyle === 'restyle');
     // Skip the dialog entirely if the user turned it off (checkbox or Settings).
     if (promptEmpty && promptBoxShown && confirmSurprise) {
-      const onConfirm = (dontShowAgain?: boolean) => {
-        if (dontShowAgain) void setConfirmSurprise(false);
-        startDream();
-      };
-      const checkbox = { checkbox: { label: "Don't show this again" } };
-      if (isNewScene) {
-        // Photo in New Scene mode: the surprise is a SETTING invented around the
-        // person, so the copy says that (Kevin 2026-09-19). "Add a prompt" just
-        // closes the sheet and drops the cursor into the prompt box.
-        showAlert(
-          'Let DreamBot pick the scene?',
-          "With no prompt, DreamBot invents a setting and drops you into it. Type a prompt if you'd rather choose.",
-          [
-            { text: 'Add a prompt', style: 'cancel', onPress: () => promptRef.current?.focus() },
-            { text: 'Dream it', onPress: onConfirm },
-          ],
-          checkbox
-        );
-        return;
-      }
       showAlert(
-        'Surprise dream?',
-        'No prompt, no problem. DreamBot will dream up a surprise for you. Continue?',
+        isNewScene ? 'Let DreamBot pick the scene?' : 'Let DreamBot pick the dream?',
+        isNewScene
+          ? "With no prompt, DreamBot invents a setting and drops you into it. Type a prompt if you'd rather choose."
+          : "With no prompt, DreamBot invents the whole scene. Type a prompt if you'd rather choose.",
         [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Surprise me', onPress: onConfirm },
+          { text: 'Add a prompt', style: 'cancel', onPress: () => promptRef.current?.focus() },
+          {
+            text: 'Dream it',
+            onPress: (dontShowAgain) => {
+              if (dontShowAgain) void setConfirmSurprise(false);
+              startDream();
+            },
+          },
         ],
-        checkbox
+        { checkbox: { label: "Don't show this again" } }
       );
       return;
     }

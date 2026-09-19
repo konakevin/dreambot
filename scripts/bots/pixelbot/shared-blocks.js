@@ -89,10 +89,13 @@ module.exports = {
 // scenes: how Final Fantasy would have pretty pixel art for its splash or loading screens,
 // or old school Ultima scenes." The register IS a classic game's title / splash / loading
 // scene: era-authentic limited palette, dithered gradient sky, chunky pixels or tiles.
+// Kevin: "they should still be pretty and not dummed down, but the medium and vibe need to
+// feel old school, while still pulling off a beautiful/cool render." Beauty + detail stay
+// high; era lives in the pixel medium and the whimsical vibe.
 const PAINTING_PREFIX =
-  'classic video-game splash-screen pixel art, the pretty scene an old RPG shows on its title screen, chunky pixels on a visible pixel grid, dithered gradient sky, limited era palette, old-school storybook charm';
+  'beautiful classic video-game splash-screen pixel art, the lush pretty scene an old RPG shows on its title screen, richly detailed pixels on a visible pixel grid, dithered gradient sky, limited era palette, old-school storybook charm';
 const PAINTING_MEDIUM =
-  'a pretty old-school game scene with a little magic in it: every surface built from chunky pixels or tiles, layered depth to the horizon, glowing light, one clear subject with room to breathe';
+  'a beautiful old-school game scene with a little magic in it: every surface built from richly detailed pixels, layered depth to the horizon, glowing light, one clear subject with room to breathe';
 const PAINTING_SUFFIX = 'no text, no watermarks, every surface pixelated, crisp dithered pixel edges';
 
 // The rolled pixel sub-style. Plain cooperative wording (never "override" /
@@ -108,7 +111,7 @@ Keep every scene element, the composition, and the light exactly as described be
 
 // Scene-path blocks: short on purpose (stacked verbose mandates push Flux to its
 // generic centroid). Each is one idea.
-const SCENE_REGISTER_BLOCK = `This is the pretty pixel-art SCENE a classic video game shows on its title, splash, or loading screen (the way 16-bit Final Fantasy painted its vistas, or an old-school Ultima tile world), not a gameplay screen with sprites and menus, and not a realistic landscape: a whimsical storybook place with a little magic in it (glowing light, an oversized moon, candy-coloured dithered sky bands, a tiny cottage or windmill, rounded exaggerated shapes), one clear subject, layered depth, an era-authentic limited palette. Every surface is unmistakably built from chunky pixels or tiles. Describe only what is present.`;
+const SCENE_REGISTER_BLOCK = `This is the pretty pixel-art SCENE a classic video game shows on its title, splash, or loading screen (the way 16-bit Final Fantasy painted its vistas, or an old-school Ultima tile world), not a gameplay screen with sprites and menus, and not a realistic landscape: a whimsical storybook place with a little magic in it (glowing light, an oversized moon, candy-coloured dithered sky bands, a tiny cottage or windmill, rounded exaggerated shapes), one clear subject, layered depth, an era-authentic limited palette. It is still BEAUTIFUL and richly detailed: the composition, depth, and light of a great painting, delivered in an old-school pixel medium with an old-school whimsical vibe. Every surface is unmistakably built from pixels. Describe only what is present.`;
 
 const ONE_HERO_BLOCK = `One hero, one place, one quiet moment. The hero owns 30 to 60 percent of the frame with breathing room around it. Depth in layers: near, middle, far, sky. Never a collage of equal elements.`;
 

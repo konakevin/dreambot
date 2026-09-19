@@ -33,7 +33,57 @@ the bar with looks rolling, with a per-path ship checklist so scaling and go-liv
 
 ## 0a. Kevin's mid-build recalibration (2026-09-19, supersedes any wording below that conflicts)
 
-From his in-app review of the first shadow renders: (1) the medium must be unmistakably pixels, near-pixel, or voxel (HD Minecraft); a render that reads as a digital painting is a hard fail and looks that trend toward painting are cut; (2) more WHIMSY: "whimsical, somewhat magical looking pixelart that evokes that old school feel and charm", never realistic landscape or geography (EarthBot's lane); (3) the exact reference: "how video games have historically rendered pixel scenes: how Final Fantasy would have pretty pixel art for its splash or loading screens, or old school Ultima scenes." So the scene register is the pretty SCENE a classic game shows on its title / splash / loading screen (era-authentic limited palette, dithered gradient sky, chunky pixels or tiles), and the looks register is ERA sub-styles (SNES RPG splash, VGA adventure background, Ultima-style tile scene, Amiga 32-colour ordered dither, HD voxel world). Every brief in section 3 is read through this lens: storybook shapes, glowing light, an oversized moon, a charm detail, saturated era palettes.
+From his in-app review of the first shadow renders: (1) the medium must be unmistakably pixels, near-pixel, or voxel (HD Minecraft); a render that reads as a digital painting is a hard fail and looks that trend toward painting are cut; (2) more WHIMSY: "whimsical, somewhat magical looking pixelart that evokes that old school feel and charm", never realistic landscape or geography (EarthBot's lane); (3) the exact reference: "how video games have historically rendered pixel scenes: how Final Fantasy would have pretty pixel art for its splash or loading screens, or old school Ultima scenes." So the scene register is the pretty SCENE a classic game shows on its title / splash / loading screen (era-authentic limited palette, dithered gradient sky, chunky pixels or tiles), and the looks register is ERA sub-styles (SNES RPG splash, VGA adventure background, Ultima-style tile scene, Amiga 32-colour ordered dither, HD voxel world). Every brief in section 3 is read through this lens: storybook shapes, glowing light, an oversized moon, a charm detail, saturated era palettes. And (4), his clarification: "they should still be pretty and not dummed down, but the medium and vibe need to feel old school, while still pulling off a beautiful/cool render." The bar for beauty, detail, composition, and light does not drop; era lives in the pixel medium and the whimsical vibe. A crude, low-detail, or blocky-for-its-own-sake render fails the Director lens the same way a photoreal one fails the Medium lens.
+
+## 0b. Identity of record, current state, and how to continue (written 2026-09-19 ~06:00 UTC at Kevin's request)
+
+This section is the hand-off. It supersedes anything below that conflicts with it.
+
+### PixelBot's identity, in Kevin's words (four messages, same evening, all binding)
+
+1. "more pixelart than 8bit screenshots, even though i do want to still keep the in game stuff, it adds a fun flavor"
+2. "we need to make sure the medium is pixels or a near pixel look, or voxel (think HD minecraft, etc.) ... some of these are borderline digital painting, so please take that into account as you're scoring, or when considering what looks make the cut"
+3. "we want these renders to have more whimsy, the ones i'm seeing are too serious, we already have earthbot, i want whimsical, somewhat magical looking pixelart that evokes that old school feel and charm, and not these overly realistic landscape or geographic images"
+4. "we need to recalibrate exactly what pixelbot is about: we still want beautiful art, but more how video games have historically rendered pixel scenes, kinda how final fantasy would have pretty pixel art for its splash or loading screens, or old school ultima scenes"
+5. "they should still be pretty and not dummed down, but the medium and vibe need to feel old school, while still pulling off a beautiful/cool render"
+
+**One-sentence identity:** PixelBot posts the beautiful pixel-art SCENE a classic game shows on its title, splash, or loading screen: whimsical, a little magical, richly detailed, in an era-authentic pixel (or voxel) medium, never a realistic landscape, never a gameplay screen with sprites and menus (those are the seven in-game flavour paths), never a modern digital painting.
+
+**The two questions every render must pass:** (a) does it read as a classic game's pixel scene? (medium lens, hard fail on smooth / painterly / photo); (b) is it beautiful, richly detailed, cool, charming? (director lens, hard fail on crude / sparse / blocky-for-its-own-sake). Old school is the medium and the vibe, not the detail level.
+
+### Where the identity is encoded (all committed on `main`)
+
+- `scripts/bots/pixelbot/shared-blocks.js`: `PAINTING_PREFIX` ("beautiful classic video-game splash-screen pixel art, the lush pretty scene an old RPG shows on its title screen, richly detailed pixels on a visible pixel grid, dithered gradient sky, limited era palette, old-school storybook charm"), `PAINTING_MEDIUM`, `PAINTING_SUFFIX`, `PIXEL_LOOK_OVERRIDE`, and the scene blocks (`SCENE_REGISTER_BLOCK` carries the whimsy + beauty + era statement, `ONE_HERO_BLOCK`, `TINY_LIFE_BLOCK`, `PICTORIAL_BLOCK`, `SCENE_STRUCTURE`).
+- `scripts/bots/pixelbot/seeds/pixelbot_look_register.json`: five ERA looks, each "richly detailed": Classic SNES RPG splash, VGA adventure-game background, Old-school Ultima-style tile scene, Amiga 32-colour ordered dither, HD voxel world. Rolled per render in `rollSharedDNA.lookRegister`; scene templates prepend `PIXEL_LOOK_OVERRIDE(sharedDNA)`. Cut with reasons: flat cel, chunky low-res, soft-cluster (drop the grid → smooth), hi-bit painterly and fine-dither (borderline painting), CRT phosphor and inked-outline (indistinguishable), impressionist clusters and voxel diorama (modern, not how games rendered scenes).
+- `scripts/bots/pixelbot/scenePaths.js`: `SCENE_MODELS` (ultra, flux-2-pro, flux-2-max, flux-2-flex, flux-dev; flux-1.1-pro dropped for rendering smooth on 4 of 6 draws), pool loading, gates, wiring derivation, `patchInMemory` for unwired paths.
+- `scripts/bots/pixelbot/index.js`: `SCENE_PATHS` map (one line per scene path) drives `pathBuilders`, `shadowPaths`, `mediumByPath`, `modelByPath`, `vibesByPath`, chaos + polish skip lists.
+- Tooling: `scripts/_pixelbot-scene-render.js --path <key> --count 5 --label <key>-r<N> [--look i]` (shadow-posts, wires in memory, one process per round so recency holds), `scripts/_pixelbot-round-fetch.js --path <key> --since <ISO> --limit 5 --out <dir>` (rows, prompts, images).
+- Memory: `project_pixelbot_identity_splash_screen_pixel_art` (identity), `feedback_hearts_are_pointers_not_ratings` (never mine heart history).
+
+### State at hand-off (see `PIXELBOT_PATH_BUILD_STATE.md` for round logs)
+
+| path | state |
+|---|---|
+| pixel-vista | PASSED R3 (4.62) under the OLD realistic register, which Kevin rejected; six pools regenerated whimsy-first (storybook landforms, oversized moons, candy sky bands, magical light moments, charm details, saturated era palettes); needs a look check (one render per era look) + a fresh R0 under the new register. Wired in `SCENE_PATHS`. |
+| pixel-harbor, pixel-cabin-glow, pixel-cozy-room | batch 1, three parallel agents mid-build with all steers delivered by message; each reports a verdict, a round table, files, the `SCENE_PATHS` line, lessons. Orchestrator merges the line, re-verifies the bot loads, commits per path. |
+| pixel-cozy-farm | eight pools seeded to 25 against `FARMBOT_CREATIVE_DIRECTION.md`, path file written, NOT rendered yet; R0 when a render slot frees. |
+| pixel-cool-rides, pixel-fantasy-vista, pixel-rain-street | batch 2, not started. |
+| pixel-campfire-night, pixel-shoreline, pixel-skyward | batch 3, not started. |
+| pixel-ruins | batch 4 with the farm, not started. |
+
+### Lessons learned so far (also in the playbook's PixelBot section)
+
+Looks that reduce technique lose the pixel grid; an unattached palette "accent" renders as an object (attach accents to the light); light described as a column renders a column; camera entries must be agnostic of the hero type; "stacked cloud heaps / towers" render as a giant thunderhead; parallel render processes each keep their own recency (one process per round); flux-1.1-pro is the smooth-illustration model on this register; and above all, confirm a bot's aesthetic against the OWNER's reference games before writing the first pool ("beautiful" is not a spec).
+
+### How to continue (exact order)
+
+1. Read this doc, the playbook in full, `PIXELBOT_PATH_BUILD_STATE.md`, and the memory note. Verify: `node -e "const b=require('./scripts/bots/pixelbot'); console.log(b.paths, b.shadowPaths, Object.keys(b.mediumStyles))"` and `cat scripts/bots/pixelbot/seeds/pixelbot_look_register.json`.
+2. Render budget: at most three renders in flight bot-wide (agents count). Headroom check first; stay off 07:45 to 08:30 UTC.
+3. Collect batch-1 agent reports from `/private/tmp/claude-501/-Users-kevinmchenry-Development-apps-dreambot/78dd141e-21c0-4e87-8920-71b6f8cfc2a4/scratchpad/agent-pixel-*.md` (or re-run those paths' rounds yourself if the reports are missing: the path files and pools they created are on disk). Merge each `SCENE_PATHS` line, verify the bot loads, commit per path with explicit paths.
+4. pixel-vista: look check (five renders, `--look 0..4`), cut any era look that renders smooth or crude, then R0 to R2 under the new register.
+5. pixel-cozy-farm: R0 to R2.
+6. Batches 2, 3, 4 per section 7, three agents at a time, each briefed with sections 0a, 0b, 3.x, 4, 5 and the hard rules from the batch-1 briefs (never edit shared files, never delete, shadow renders only, one process per round).
+7. When every path has a verdict: update the tracker table, write a final report for Kevin, and stop. Nothing is deleted and nothing goes live until he reviews in the app and says so; scaling and go-live are section 6.
 
 ## 0. Ground rules for this build (non-negotiable, all sourced)
 
