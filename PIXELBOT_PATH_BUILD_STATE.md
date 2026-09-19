@@ -26,10 +26,10 @@ Tools: `scripts/_pixelbot-scene-render.js` (shadow render, in-memory wiring, `--
 | pixel-cool-rides | PASS (agent 3 rounds 4.06, orchestrator R3 with the hero-distance fix) | 4 | 4.65 / 4.45 | wired; residuals: rider sprite size, daylight light beats a moon sky |
 | pixel-fantasy-vista | PASS | 2 | 4.72 / 4.5 | wired; residuals: ultra x HD voxel can go smooth 1/10, cross-axis sky stacking |
 | pixel-rain-street | NEEDS A DECISION (5 rounds) | 5 | 3.64 / 2.0 | invented lettered signage on facades, 1-2 of 5, model-agnostic; best round R2 4.06; see the log for Kevin's three options |
-| pixel-campfire-night | IN PROGRESS (agent, batch 3) | | | |
-| pixel-shoreline | IN PROGRESS (agent, batch 3) | | | |
-| pixel-skyward | IN PROGRESS (agent, batch 3) | | | |
-| pixel-ruins | IN PROGRESS (agent, batch 4) | | | |
+| pixel-campfire-night | PASS | 3 | 4.62 / 4.0 | wired; residual: ultra unsafe here (1 draw: a sunset + a signature watermark) |
+| pixel-shoreline | PASS | 5 | 4.62 / 4.40 | wired; residual: a simile headland rendered a literal cat |
+| pixel-skyward | PASS | 3 | 4.64 / 4.30 | wired; residual: ultra renders the envelope smooth; hero drifts to centre 2 of 5 |
+| pixel-ruins | CLOSE, Kevin's call | 4 | 4.48 / 3.8 | wired; residual: one frontal or odd-light render per batch |
 | pixel-cozy-farm | SCRAPPED 2026-09-19 (Kevin: "scrap the farm pixels, we'll leave that domain to farmbot") | 1 | | files removed; 5 R0 shadow renders (06:14 UTC) left hidden, ungraded |
 
 ## Round logs
@@ -170,6 +170,34 @@ verdict: FIVE rounds, unresolved. The lettering appears on BUILDING FACADES, not
   Kevin's decision, three options: (a) accept it, the marks are small and unreadable at feed size; (b) narrow the street pool to the non-shopfront buckets (canal street, bridge, hillside stairs, arcade, station forecourt) and drop the bakery-corner and tram-stop buckets, which is where the clean renders come from; (c) drop the path. Option (b) is the one I would run, as one more round.
   Also fixed and worth keeping either way: the time-of-day fix in SCENE_STRUCTURE (identity-critical facts must live in the structure slot, not only in the pool, because Sonnet's compression drops them); flux-dev is the smooth-cel model on this path (2 of 2 draws).
 
+### pixel-campfire-night (agent, batch 3) → PASS in R2 (4.62 / 4.0)
+R0 4.00 / 2.0: a seeded "fish-shaped weathervane" pulled Flux's weathervane prior and rendered a COMPASS ROSE with readable N and E; the fire_light pool named one place's surfaces in every entry ("hull planking", "sandstone grain") so ~70% of rolls mismatched and Flux dropped the mismatched half, thinning the scene. variable: regenerate fire_light PLACE-AGNOSTIC (the light keeps its own character and reveals whatever stands nearest, named by texture kind).
+R1 4.06 / 2.0: the place-agnostic light worked (zero mismatches, the four non-fail renders averaged 4.58), but flux-1.1-pro-ultra rendered a GOLDEN-HOUR SUNSET on an aurora-and-stars prompt and signed it "© EWITT". Diagnosis: not one of the five prompts contained the word "night". variable: the template states plainly that this is a night scene, before the place, and SCENE_STRUCTURE names that element first.
+R2 4.62 / 4.0 → PASS: the night word reached 5 of 5 prompts, zero sunsets, zero watermarks. Keepers: a stubby harbour light on a bowed jetty under a huge haloed moon (dev, SNES) 5.0; a chain of river lanterns to a shrine hut with one clean meteor (2-pro, Amiga) 5.0.
+residuals: flux-1.1-pro-ultra is the one unsafe model here (1 of 1 draws, a watermark AND a sunset) — a per-path model pin is the agent's recommendation, NOT applied because Kevin restored ultra deliberately at 06:35 and one sample is thin; the moment axis assumes a fire while 11 of 25 places are lantern places; a carved animal in place plus a live animal in life rendered two owls.
+
+### pixel-skyward (agent, batch 3) → PASS in R1, confirmed R2 (4.64 / 4.30)
+R0 3.60 / 2.0: two FULLY smooth renders (ultra, dev) despite the pixel prefix, suffix, rolled look and an "ordered dot dither at every seam" line. variable: a per-path pixel-SURFACE clause naming what the vessel's own cloth is built from ("flat blocks of colour, each panel steps into shadow through two or three dithered bands, every edge and rope a hard pixel step").
+R1 4.60 / 4.40 PASS: that clause took flux-dev 2.0 → 4.8 and ultra 2.0 → 4.4/4.7. One miss: a seeded "wide fan of pale light steps spreading up from behind the horizon" rendered a solid SPOTLIGHT CONE. variable: that feature removed from the two sky_bands entries and from the recipe.
+R2 4.64 / 4.30 PASS (confirmation): spotlight gone from all five. Keepers: a voxel canvas airship with one patched red panel over a windmill and lit barn (2-flex, HD voxel) 4.9; a tandem glider against a huge dithered moon over a misty temple valley (dev, HD voxel) 4.8.
+residuals: ultra renders the envelope smooth while the rest of the frame is pixel-built (a 4 under Kevin's relaxed bar, never a hard fail); "a long feathered streak of high cirrus" rendered a literal FEATHER; the hero drifts to frame centre on ~2 of 5.
+
+### pixel-shoreline (agent, batch 3, three rounds) + orchestrator R3/R4 → PASS in R4 (4.62 / 4.40)
+R0 4.58 / 3.8: a heron took the frame as hero. cause: 7 of 25 life entries carried no size or distance word, and TINY_LIFE_BLOCK in the template did not save it. variable: those 7 entries rewritten with an explicit small/far anchor + the recipe now requires a size word per entry. Held in every later round.
+R1 3.96 / 2.0: gibberish glyphs carved across a cliff face. cause: a place entry described sandstone "stacked in thick horizontal layers", which rendered as a BRICK WALL, and masonry drags carved lettering. variable: 4 masonry-prone rock entries rewritten to natural weathered strata.
+R2 4.54 / 3.9: the only miss was hero-less, an empty sand centre. cause: a FLAT has no vertical mass, so nothing anchors the frame. Agent capped at three rounds.
+R3 4.49 / 4.18 (orchestrator, the agent's residual): the two entries that actually failed (SHELL-SCATTERED FLAT, REEF SWELL TRAIN) given one standing object of real mass at mid-distance, plus the recipe rule. Hero-less renders gone. New drag: a moon's "halo ring" rendered a SOLID WHITE RING in the sky.
+R4 4.62 / 4.40 → PASS: the four sky entries naming a "halo ring" reworded to a soft glow spreading around the moon. Keepers: a boardwalk curving along rocks at sunset with a dog on the sand (dev) 4.8; a sea stack with an arch under a rainbow over tide pools (2-pro) 4.76.
+residual: a place entry describing a headland "curling like a sleeping cat" rendered a LITERAL giant sleeping cat headland (charming, but the simile law again); two moons in one sky once.
+
+### pixel-ruins (agent, batch 4, three rounds) + orchestrator R3 → CLOSE (4.48 / 3.8), Kevin's call
+R0 4.48 / 3.8: a mirrored temple facade. cause: EVEN COUNTS of like elements ("four columns", "two blossom trees") render a mirrored pair or rank. variable: even counts → odd counts with one member set apart.
+R1 4.24 / 3.4: a DEAD-SYMMETRICAL NAVE, mirrored ranks of columns down a central water aisle (the EarthBot 7b failure in another costume). variable: pillared interiors rewritten so ONE off-centre mass carries the interior, seen across a corner.
+R2 4.32 / 3.8: the nave is gone and stayed gone, but the same residual returned as a frontal mirrored pavilion. cause: the camera pool states distance and position but never an ANGLE, so Flux faces a columned front square-on. Agent capped at three rounds.
+R3 4.48 / 3.8 (orchestrator, the agent's residual): the three-quarter angle appended to the 20 exterior camera entries and to the template. The mirrored facade is largely gone (one of five still frontal). New drag: a light event rendered as a golden NET or mesh over the courtyard.
+  keepers: a dolmen with a carved moon face under a shaft of moonlight (2-pro) 4.78; a fallen giant half in sand with an eagle relief, water from its hand (2-max) 4.74; a tower ruin with a serpent relief and a turtle in the rain (2-max) 4.74.
+  Kevin's call: accept at 4.48, or one more round on the light pool (the net), or drop. Carvings held 15 of 15 with "worn pictorial reliefs of a carved sun / coiled serpent / leaping fish" — zero gibberish on every model and look, which is reusable everywhere.
+
 ### pixel-cozy-farm R0 (2026-09-19 06:14 UTC) → SCRAPPED before grading (Kevin: farm domain stays with FarmBot). Five hidden shadow renders remain; files removed.
 
-## RESUME (2026-09-19 ~06:45 UTC): vista PASS R6 (4.64), harbor PASS R4 (4.60, after Kevin's flat-marina flag), cozy-room PASS R3 (4.70), cabin-glow PASS R2 (4.74); all four wired in SCENE_PATHS (shadow). pixel-cozy-farm SCRAPPED. Kevin relaxed the medium bar (mildly pixelated is fine) → ultra + dev restored to SCENE_MODELS, sixth look added. Batch 2 (cool-rides, fantasy-vista, rain-street) running as three agents since ~06:32 UTC (reports: scratchpad agent-<key>.md); then batch 3 (campfire-night, shoreline, skyward), then batch 4 (ruins). Nothing deleted beyond the farm files; nothing live.
+## BUILD COMPLETE (2026-09-19 07:31 UTC). Eleven scene paths built, seeded to MVP-25 on bespoke pools, QA'd to a verdict, and wired into SCENE_PATHS in the SHADOW lane (the live public rotation is untouched at 8 in-game paths). Nine PASS: cabin-glow 4.74, fantasy-vista 4.72, cozy-room 4.70, cool-rides 4.65, vista 4.64, skyward 4.64, campfire-night 4.62, shoreline 4.62, harbor 4.60. Two await Kevin: ruins 4.48 (CLOSE) and rain-street (signage). pixel-cozy-farm SCRAPPED. Review page: node scripts/_pixelbot-final-matrix.js then open /tmp/pixelbot-final-matrix.html. Scaling to production pool sizes is section 6 and waits on his sign-off.

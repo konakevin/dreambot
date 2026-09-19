@@ -31,6 +31,10 @@ const SCENE_PATHS = {
   'pixel-fantasy-vista': require('./paths/pixel-fantasy-vista'), // batch 2 (agent), PASS R1 4.72
   'pixel-cool-rides': require('./paths/pixel-cool-rides'), // batch 2 (agent), PASS R3 4.65
   'pixel-rain-street': require('./paths/pixel-rain-street'), // batch 2 (agent), 5 rounds, signage residual — Kevin's decision
+  'pixel-campfire-night': require('./paths/pixel-campfire-night'), // batch 3 (agent), PASS R2 4.62
+  'pixel-shoreline': require('./paths/pixel-shoreline'), // batch 3 (agent) + orchestrator R4, PASS 4.62
+  'pixel-skyward': require('./paths/pixel-skyward'), // batch 3 (agent), PASS R2 4.64
+  'pixel-ruins': require('./paths/pixel-ruins'), // batch 4 (agent) + orchestrator R3, CLOSE 4.48 — Kevin's decision
 };
 
 const pathBuilders = {

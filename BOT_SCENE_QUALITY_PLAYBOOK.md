@@ -3853,6 +3853,71 @@ Lessons (all verified on renders, prompts read from `ai_prompt`):
   runs the render through a zsh wrapper, so `pgrep -f _pixelbot-scene-render | wc -l` returns about four
   matches per single live render and a "3 or more means wait" throttle deadlocks the whole fan-out. Use
   `ps -eo command | grep "^node scripts/_pixelbot-scene-render" | grep -v grep | wc -l`.
+- **A path whose identity is a CONDITION, not a subject, must state that condition in the emitted prompt**
+  (campfire-night R1, 2026-09-19). Across ten night renders the word "night" never once appeared in the body:
+  the place, palette and sky implied it and the flux-2 family inferred it correctly every time, but
+  flux-1.1-pro-ultra fell to its golden-hour prior, rendered a full sunset on a prompt describing aurora and
+  stars, and signed it "© EWITT". One template line naming the scene a night scene before the place put it in
+  5 of 5 prompts and the class disappeared. Generalises to winter, underwater, storm, night: an axis that
+  merely implies the condition is not enough.
+- **flux-1.1-pro-ultra signs its work.** It stamped a copyright signature into a render despite "no
+  watermarks" in the shared suffix. Treat a visible signature as a model trait, not a prompt defect; more
+  suffix negation would only leak the word.
+- **A per-path pixel-SURFACE clause naming the HERO'S OWN material rescues the smooth-prone models**
+  (skyward R0 → R1): a global medium lock does not reach the one big smooth object in a frame (a balloon
+  envelope, a hull, a wall). Naming its pixel construction ("flat blocks of colour, each panel steps into
+  shadow through two or three dithered bands, every edge and rope a hard pixel step") took flux-dev from 2.0
+  to 4.8 and ultra from 2.0 to 4.4-4.7 over ten renders.
+- **A money-shot LIGHT axis must be PLACE-AGNOSTIC when it rolls against many place buckets**
+  (campfire-night R0). Writing the light in concrete surface nouns ("hull planking", "tent canvas",
+  "sandstone grain") is good anti-dullness practice but mismatched ~70% of rolls across eight place buckets,
+  and Flux silently dropped the mismatched half, producing thin under-lit scenes. Move the specificity from
+  the NOUN to the DETAIL KIND: "whatever stands closest, showing its grain and its moss in deep amber, small
+  shadows pooling behind each raised edge". Same family as "camera entries must be agnostic of the hero type".
+- **Even COUNTS of like elements render a MIRRORED composition** (ruins R0): "four columns standing at uneven
+  heights" plus "two blossom trees leaning over a wall" produced a mirrored facade with a matched tree on each
+  flank, and prompt counts do not survive ("three pillars, a fourth broken to a stump" still drew four even
+  columns). Write odd counts with one member set apart, and sweep hero pools for `\b(two|four|six)\b` next to
+  a like-element noun.
+- **A camera pool for an ARCHITECTURAL hero needs an ANGLE word, not just a distance and a position**
+  (ruins R2 → R3). Every entry said "ahead / beyond / below", so Flux faced the columned front square-on.
+  Appending "the ruin turned three-quarters to the camera so one flank recedes into the picture" to the
+  exterior entries plus one template line moved the batch 4.32 → 4.48 and largely killed the mirrored facade.
+- **A life-pool entry with no size or distance word renders HERO-SCALE** (shoreline R0): "a heron standing
+  alone in ankle-deep water" became the subject, and TINY_LIFE_BLOCK in the template did not save it. The
+  entry's own words win. Require the size word per ENTRY in the recipe, not as a bar in the brief.
+- **Rock described as MASONRY renders masonry, and masonry brings carved pseudo-text** (shoreline R1, a hard
+  fail): sandstone "stacked in thick horizontal layers" rendered a brick wall with glyphs across it. Ban the
+  mason's vocabulary from geology pools (stacked, courses, blocks, cut faces, keystone) and write stone
+  positively: bands sag and vary, edges rounded by the sea, cracks at angles. A new member of the text-prior
+  family, alongside the hung board, the mounted plate and the carved emblem.
+- **A FLAT has no vertical mass, and emptiness is a composition problem rather than a content one**
+  (shoreline R2 → R3): both sub-4 renders had clean pools, correct light and correct medium, and failed only
+  because the rolled hero was horizontal (a swell train, a bare shell flat). Give every horizontal hero one
+  standing object of real mass at mid-distance in its own entry; the flats that already carried an upturned
+  rowboat or a rusted anchor scored 4.4 to 4.7.
+- **More objects that render as objects, all confirmed this session:** a moon's "halo RING" renders a solid
+  white ring in the sky (shoreline R3); "a wide fan of pale light steps spreading up from behind the horizon"
+  renders a solid spotlight cone (skyward R1); "the archway breathing a warm glow" renders a floating orb and
+  "bright coins of sunlight" renders literal gold coins (ruins R0/R1). Name the lit SURFACE first, and write a
+  halo as a soft glow spreading outward.
+- **Simile literalization does not need the words "shaped like": a borrowed adjective is enough.** "A long
+  FEATHERED streak of high cirrus" rendered a literal feather (skyward R2) and "a distant headland curling
+  like a sleeping cat" rendered a giant sleeping cat headland, face and all (shoreline R4). Describe form in
+  its own terms.
+- **Charm-detail lists are a text-prior vector well beyond boards.** A "fish-shaped WEATHERVANE" rendered a
+  compass rose with a readable N and E (campfire-night R0). Add `weathervane|compass|sundial|coat of arms|
+  crest|emblem` to the standing text sweep for every scene path.
+- **Two axes that can both supply an ANIMAL will render both** (campfire-night R1: a carved wooden owl in the
+  place charm detail plus a live owl from the life axis = two owls competing with the hero). Keep animal
+  vocabulary in exactly one axis.
+- **Carvings CAN be safe, and this is the wording that held 15 of 15 across every model and look** (ruins):
+  "worn pictorial reliefs of a carved sun, a coiled serpent, a leaping fish, a spread-winged bird, a round
+  moon face". Zero gibberish lettering. Reusable for any stone, banner, mosaic or shield surface.
+- **Sonnet-generated CAMERA pools leak their sibling axes by default** (rain-street ~40%, skyward 9 of 25,
+  ruins): generated entries carry time of day, light quality, weather, terrain, the hero's type, or a posture
+  verb, each contradicting another roll. Hand-authoring 25 hero-agnostic framings takes about five minutes and
+  is clean by construction. Treat the camera pool as hand-written, not generated.
 
 ## DinoBot
 
