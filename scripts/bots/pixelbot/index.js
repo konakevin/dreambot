@@ -29,7 +29,8 @@ const SCENE_PATHS = {
   'pixel-harbor': require('./paths/pixel-harbor'), // batch 1 (agent), R3 under the flux-2 set pending
   'pixel-cozy-room': require('./paths/pixel-cozy-room'), // batch 1 (agent), R3 under the flux-2 set pending
   'pixel-fantasy-vista': require('./paths/pixel-fantasy-vista'), // batch 2 (agent), PASS R1 4.72
-  'pixel-cool-rides': require('./paths/pixel-cool-rides'), // batch 2 (agent), R2 4.06 + hero-distance fix, R3 grading
+  'pixel-cool-rides': require('./paths/pixel-cool-rides'), // batch 2 (agent), PASS R3 4.65
+  'pixel-rain-street': require('./paths/pixel-rain-street'), // batch 2 (agent), 5 rounds, signage residual — Kevin's decision
 };
 
 const pathBuilders = {

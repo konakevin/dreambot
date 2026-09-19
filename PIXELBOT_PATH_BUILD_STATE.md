@@ -25,7 +25,7 @@ Tools: `scripts/_pixelbot-scene-render.js` (shadow render, in-memory wiring, `--
 | pixel-cozy-room | PASS | 4 | 4.70 / 4.2 | pass in R3 (final register, flux-2 set); wired + committed e1f3f8be; residuals: rain streaks inside 1/5, folded-paper pseudo-text, a doubled object |
 | pixel-cool-rides | PASS (agent 3 rounds 4.06, orchestrator R3 with the hero-distance fix) | 4 | 4.65 / 4.45 | wired; residuals: rider sprite size, daylight light beats a moon sky |
 | pixel-fantasy-vista | PASS | 2 | 4.72 / 4.5 | wired; residuals: ultra x HD voxel can go smooth 1/10, cross-axis sky stacking |
-| pixel-rain-street | IN PROGRESS (agent, batch 2) | | | |
+| pixel-rain-street | NEEDS A DECISION (5 rounds) | 5 | 3.64 / 2.0 | invented lettered signage on facades, 1-2 of 5, model-agnostic; best round R2 4.06; see the log for Kevin's three options |
 | pixel-campfire-night | IN PROGRESS (agent, batch 3) | | | |
 | pixel-shoreline | IN PROGRESS (agent, batch 3) | | | |
 | pixel-skyward | IN PROGRESS (agent, batch 3) | | | |
@@ -159,6 +159,16 @@ R3 07:01 (orchestrator, ONE variable = the agent's residual 1) | ultra, 2-flex, 
   #4 powder-blue tin camper on a snowy ridge above a cloud sea, galaxy band, cairn summit (2-pro, Amiga) 4.8 BANGER; #5 mint camper with a striped awning on a fjord road under a giant moon, stone arch bridge, two horses (2-pro, Early hi-def) 4.7; #2 cherry motorcycle small on a pale track through quilted fields, balloon, chapel, big dithered sun (2-flex, Ultima) 4.7; #1 cherry tourer on a riverside lane, covered bridge, cottage, sun halo (ultra, VGA) 4.6; #3 yellow dune buggy on a snowy ridge track above frozen lakes (ultra, HD voxel) 4.45 (the voxel look did not read as cubes)
   zero text on all five. verdict: PASS in R3.
   residuals for scale time (not applied): rider life entries #1-#4 → "a tiny sprite on the ride, a helmet and a trailing scarf only"; a daylight LIGHT beats a moon SKY and paints a plain gradient (pair daylight light with a daylight sky feature); a wheeled ride on a rails-only route needs "a road laid beside the rails"; flux-dev trends flat on this register.
+
+### pixel-rain-street (agent, batch 2, three rounds) + orchestrator R3/R4 → NEEDS A DECISION (invented signage)
+R0 06:49 | 3.88 / 2.0: a second hanging board with letter-like glyphs; a large uncanny carved face on an arch; flux-dev drifted smooth. variable: street pool, pictorial charm becomes a hung or carved OBJECT, never a board or an emblem; the carved face out.
+R1 06:54 | 4.32 / 3.8: an ornate iron shelter rendered a frieze of letter-like marks; ultra painted a near-daylight sky because Sonnet's 70-95-word compression dropped every time-of-day word from the light entry. variable: SCENE_STRUCTURE's light slot now opens with "at dusk" or "at night" and the ambient colour. That WORKED: 5 of 5 prompts carried the time of day afterwards.
+R2 07:01 | 4.06 / 2.0: ultra put a dark plaque with yellow gibberish on an arcade pier. Agent capped at three rounds. Its other four renders averaged 4.58.
+R3 07:09 (orchestrator, signage variable) | 3.62 / 2.0: four street entries changed from MOUNTED to HUNG charm objects, and the template's board vocabulary replaced with a positive house-front line. REGRESSED: two renders carried gibberish, because removing the blankness instruction left nothing telling Flux the surfaces are blank.
+R4 07:13 (orchestrator, revert + stronger blankness) | 3.64 / 2.0: the blankness instruction restored and strengthened ("every board, plate, and shopfront panel shows flat painted colour or one simple carved shape") plus PICTORIAL_BLOCK back. STILL two of five: one gibberish shop sign on a canal facade, one plate reading like "1011" on a tram-stop facade. Best render of the whole build is in this batch (#3, a lamplighter on a ladder lighting a canal lamp, flux-2-pro, 4.85).
+verdict: FIVE rounds, unresolved. The lettering appears on BUILDING FACADES, not on the charm objects, on three different models (2-pro, 2-flex, ultra, 2-max), at 1 to 2 of every 5 renders. Neither removing board vocabulary nor naming blankness positively changed the rate, so the driver is the register itself: a European old-town street with shopfronts IS a signage composition in Flux's prior. Every clean keeper is a canal, a bridge, a stair, or an arch WITHOUT a shop face.
+  Kevin's decision, three options: (a) accept it, the marks are small and unreadable at feed size; (b) narrow the street pool to the non-shopfront buckets (canal street, bridge, hillside stairs, arcade, station forecourt) and drop the bakery-corner and tram-stop buckets, which is where the clean renders come from; (c) drop the path. Option (b) is the one I would run, as one more round.
+  Also fixed and worth keeping either way: the time-of-day fix in SCENE_STRUCTURE (identity-critical facts must live in the structure slot, not only in the pool, because Sonnet's compression drops them); flux-dev is the smooth-cel model on this path (2 of 2 draws).
 
 ### pixel-cozy-farm R0 (2026-09-19 06:14 UTC) → SCRAPPED before grading (Kevin: farm domain stays with FarmBot). Five hidden shadow renders remain; files removed.
 

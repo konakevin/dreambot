@@ -1,0 +1,8 @@
+[
+  { "path": "pixel-vista",         "verdict": "PASS 4.64", "note": "Big natural landforms as pixel paintings. Passed R6 after the camera pool's viewer-posture entries were rewritten. Replaces the old epic-vista at ship time." },
+  { "path": "pixel-cabin-glow",    "verdict": "PASS 4.74", "note": "One dwelling lit from inside, in its landscape, at dusk or night. Passed R2. The strongest first-time batch of the build." },
+  { "path": "pixel-harbor",        "verdict": "PASS 4.60", "note": "Boats, water and the places built beside them. Passed R3, then R4 after your flat-marina flag: an 18-entry dullness sweep of the sky, light and marina pools." },
+  { "path": "pixel-cozy-room",     "verdict": "PASS 4.70", "note": "An interior with a view, the room is the whole world. Passed R3. Two of five in the final batch scored 4.9." },
+  { "path": "pixel-fantasy-vista", "verdict": "PASS 4.72", "note": "A fantasy place you would want to visit. Passed R1 after 'facets' was removed from the crystal entries (it pulls toward smooth low-poly)." },
+  { "path": "pixel-cool-rides",    "verdict": "PASS 4.65", "note": "A cool old machine cruising or parked in a beautiful place. Three rounds to kill two vehicle text priors, then one round to push the ride back to mid-distance." }
+]

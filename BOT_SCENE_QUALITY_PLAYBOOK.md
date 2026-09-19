@@ -3822,6 +3822,37 @@ Lessons (all verified on renders, prompts read from `ai_prompt`):
   detail per hero entry. The sky is pixel art's signature axis. Harbor R4 after an 18-entry dullness sweep: 4.60 PASS with
   four of five skies carrying a feature. Sweep regex before R0 on any scene path: `overcast sheet|clear dome|featureless|
   flat .*sky|bleached|minimal shadow|a row of|a line of (six|five|four)`.
+- **A vehicle carries TWO separate text priors, and each needs its own positive crowd-out IN THE HERO SEED**
+  (cool-rides R0 and R1, 2026-09-19): a locomotive's tender and cab side (a railway-name prior) rendered gold
+  gibberish, and a camper van's number plate rendered gibberish a round later because the first fix covered
+  trains and planes only. The template's PICTORIAL block never reaches Flux, because Sonnet writes only what is
+  present. Name the plain surface in the seed entry: "its tender and cab sides plain green with one painted
+  stripe", "a plain cream fuselage and a plain rounded tail fin", "front and rear panels plain painted with one
+  small round pictorial emblem and blank unmarked plates". After both: zero text on ten rides.
+- **The hero's DISTANCE must live in the hero line AND in SCENE_STRUCTURE, never only in the camera entry**
+  (cool-rides R2 → R3, 4.06 → 4.65). Sonnet paraphrases the camera entry and routinely drops "mid-distance",
+  so the hero noun opens the prompt and Flux paints it big; on this path a rider accent then scaled to the size
+  of the motorcycle (a hard fail). The fix was template-only, one variable: move the CAMERA block above the
+  HERO block, write "SMALL at mid-distance, at most a third of the frame's height" in the hero line, and put
+  "[the ride small at mid-distance on its route]" in the structure line. All five prompts then carried it.
+- **A daylight LIGHT entry beats a moon or stars SKY entry, and Flux paints the plain gradient Kevin calls
+  boring** (cool-rides R1). A cross-axis clause that says "adjust the sky to fit the light" is not enough; name
+  the substitution: "if the sky's feature is a moon or stars under a daylight light, use the sun-halo or
+  cotton-puff feature instead".
+- **"facet" is a low-poly prior word** (fantasy-vista R0): crystals described by their facets rendered a fully
+  smooth faceted vector illustration with no pixel structure. Write "chunky stepped pixel sides" and sweep
+  `facet|polygon|smooth` in any crystal, ice, or glass pool before R0.
+- **An animal simile on a cloud literalizes even on the flux-2 family** (fantasy-vista R1): "a cloud shaped
+  like a sleeping whale" rendered a whale with an eye and a mouth. Describe cloud FORM (a long gentle back, a
+  scooped top, scalloped rim-lit edges), never "shaped like a X".
+- **The "at most ONE special sky feature" clause must count features across EVERY axis that can add one**
+  (fantasy-vista R1 stacked an aurora from the sky axis, a rainbow from the moment axis, a moon drawn from a
+  wonder-light entry, and stars Sonnet added on its own). Word it as "one special feature in total, counting
+  anything the money-shot or the moment would add; keep the sky's own and write the others as plain light".
+- **Count render processes with `ps`, not `pgrep -f`** (cool-rides + fantasy-vista, independently): every agent
+  runs the render through a zsh wrapper, so `pgrep -f _pixelbot-scene-render | wc -l` returns about four
+  matches per single live render and a "3 or more means wait" throttle deadlocks the whole fan-out. Use
+  `ps -eo command | grep "^node scripts/_pixelbot-scene-render" | grep -v grep | wc -l`.
 
 ## DinoBot
 
