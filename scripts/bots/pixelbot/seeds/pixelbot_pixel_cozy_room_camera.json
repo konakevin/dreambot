@@ -1,6 +1,6 @@
 [
   "FROM THE DOORWAY: eye level in the open doorway, the whole room laid out ahead, the window centred on the far wall glowing",
-  "DOORWAY WIDE: standing in the doorway at eye level, the room spreads fully left and right, the window anchoring the far wall",
+  "DOORWAY WIDE: from the doorway at eye level, the room spreads fully left and right, the window anchoring the far wall",
   "DOORWAY CENTERED: eye level from the doorway threshold, the room recedes in soft perspective, the window glowing at its heart",
   "DOORWAY LOW-EYE: eye level from the doorway, the room floor leads the eye forward, the window sitting bright and central beyond",
   "DOORWAY WARM: from the doorway at eye level, warm interior light fills the room, the window a luminous rectangle ahead",
@@ -18,9 +18,9 @@
   "LOW ACROSS THE RUG: low from the floor, the rug stretches forward, the window rising at the far wall in full light",
   "FLOOR LEVEL GLOW: from the floor looking across the rug, the room opens upward and away, the window luminous above the far baseboard",
   "LOW FLOOR SWEEP: low to the floor, the rug fills the foreground, the room lifts overhead, the window shining at the far wall",
-  "RUG TO WINDOW: from floor height, the rug leads the eye across the room, the window standing tall and bright beyond",
+  "RUG TO WINDOW: from floor height, the rug leads the eye across the room, the window set tall and bright beyond",
   "FROM THE FAR WALL: from the far wall looking toward the window, the room extends ahead, the window filling the opposite wall with light",
-  "FAR WALL GAZE: standing at the far wall, the whole room lies between, the window on the opposite wall glowing softly",
+  "FAR WALL GAZE: from the far wall, the whole room lies between, the window on the opposite wall glowing softly",
   "FAR WALL DEPTH: from the far wall, the room recedes in full view, the window ahead centred and radiant on the opposite side",
   "FAR WALL EXPANSE: at the far wall looking across the room, the full interior spreads open, the window bright and welcoming opposite",
   "FAR WALL PROSPECT: from the far wall, the room stretches its full length, the window opposite filled with soft outside luminance"

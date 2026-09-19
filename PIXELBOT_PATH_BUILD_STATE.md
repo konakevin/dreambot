@@ -25,11 +25,11 @@ Tools: `scripts/_pixelbot-scene-render.js` (shadow render, in-memory wiring, `--
 | pixel-cozy-room | PASS | 4 | 4.70 / 4.2 | pass in R3 (final register, flux-2 set); wired + committed e1f3f8be; residuals: rain streaks inside 1/5, folded-paper pseudo-text, a doubled object |
 | pixel-cool-rides | PASS (agent 3 rounds 4.06, orchestrator R3 with the hero-distance fix) | 4 | 4.65 / 4.45 | wired; residuals: rider sprite size, daylight light beats a moon sky |
 | pixel-fantasy-vista | PASS | 2 | 4.72 / 4.5 | wired; residuals: ultra x HD voxel can go smooth 1/10, cross-axis sky stacking |
-| pixel-rain-street | NEEDS A DECISION (5 rounds) | 5 | 3.64 / 2.0 | invented lettered signage on facades, 1-2 of 5, model-agnostic; best round R2 4.06; see the log for Kevin's three options |
-| pixel-campfire-night | PASS | 3 | 4.62 / 4.0 | wired; residual: ultra unsafe here (1 draw: a sunset + a signature watermark) |
+| pixel-rain-street | PASS + LIVE | 6 | 4.74 / 4.70 | invented lettered signage on facades, 1-2 of 5, model-agnostic; best round R2 4.06; see the log for Kevin's three options |
+| pixel-campfire-night | PASS + LIVE | 4 | 4.70 / 4.52 | wired; residual: ultra unsafe here (1 draw: a sunset + a signature watermark) |
 | pixel-shoreline | PASS | 5 | 4.62 / 4.40 | wired; residual: a simile headland rendered a literal cat |
 | pixel-skyward | PASS | 3 | 4.64 / 4.30 | wired; residual: ultra renders the envelope smooth; hero drifts to centre 2 of 5 |
-| pixel-ruins | CLOSE, Kevin's call | 4 | 4.48 / 3.8 | wired; residual: one frontal or odd-light render per batch |
+| pixel-ruins | PASS + LIVE | 5 | 4.66 / 4.48 | wired; residual: one frontal or odd-light render per batch |
 | pixel-cozy-farm | SCRAPPED 2026-09-19 (Kevin: "scrap the farm pixels, we'll leave that domain to farmbot") | 1 | | files removed; 5 R0 shadow renders (06:14 UTC) left hidden, ungraded |
 
 ## Round logs
@@ -200,4 +200,4 @@ R3 4.48 / 3.8 (orchestrator, the agent's residual): the three-quarter angle appe
 
 ### pixel-cozy-farm R0 (2026-09-19 06:14 UTC) → SCRAPPED before grading (Kevin: farm domain stays with FarmBot). Five hidden shadow renders remain; files removed.
 
-## BUILD COMPLETE (2026-09-19 07:31 UTC). Eleven scene paths built, seeded to MVP-25 on bespoke pools, QA'd to a verdict, and wired into SCENE_PATHS in the SHADOW lane (the live public rotation is untouched at 8 in-game paths). Nine PASS: cabin-glow 4.74, fantasy-vista 4.72, cozy-room 4.70, cool-rides 4.65, vista 4.64, skyward 4.64, campfire-night 4.62, shoreline 4.62, harbor 4.60. Two await Kevin: ruins 4.48 (CLOSE) and rain-street (signage). pixel-cozy-farm SCRAPPED. Review page: node scripts/_pixelbot-final-matrix.js then open /tmp/pixelbot-final-matrix.html. Scaling to production pool sizes is section 6 and waits on his sign-off.
+## SHIPPED (2026-09-19 08:20 UTC). Kevin approved all eleven after the final QA batches, so: pools scaled to PRODUCTION with the same recipes in append mode (25 -> 7,470 entries, every pool hit its exact target, zero stragglers, zero format drift), the post-scale sweeps run and 101 re-derived defects fixed at source (37 weathervanes, 29 halo rings, 8 light-as-object phrases, the cloud and headland similes, masonry in rock, camera posture verbs), then a faithful-xerox GO-LIVE: the eleven keys moved into paths[] while staying in SCENE_PATHS, so medium / model set / vibes / chaos-off / polish-off are byte-identical to the approved batches. epic-vista left the rotation (pixel-vista replaces it; its files stay dormant). PixelBot now posts 18 paths: 11 scene + 7 in-game. The shadow test renders are deliberately RETAINED at Kevin's request (2026-09-19) for later review; scripts/_pixelbot-cleanup-test-renders.js deletes them when he says so (dry-run by default). Final scores: rain-street 4.74, campfire-night 4.70, harbor 4.60, cabin-glow 4.74, fantasy-vista 4.72, cozy-room 4.70, ruins 4.66, cool-rides 4.65, vista 4.64, skyward 4.64, shoreline 4.62.

@@ -3918,6 +3918,18 @@ Lessons (all verified on renders, prompts read from `ai_prompt`):
   ruins): generated entries carry time of day, light quality, weather, terrain, the hero's type, or a posture
   verb, each contradicting another roll. Hand-authoring 25 hero-agnostic framings takes about five minutes and
   is clean by construction. Treat the camera pool as hand-written, not generated.
+- **Sonnet RE-DERIVES every banned noun at production scale, so the post-scale sweep is not optional** (PixelBot
+  go-live, 2026-09-19). Scaling eleven paths from 25 to 7,470 entries with the SAME hardened recipes still
+  reintroduced 101 known defects: 37 weathervanes (whose compass-rose prior renders a readable N and E), 29
+  "halo ring" moons (a named ring renders a solid ring), 8 shaft/column/wedge/ribbon-of-light phrases, the two
+  animal similes on a cloud and a headland that had already been fixed by hand at MVP size, masonry vocabulary
+  back in the rock pools, and posture verbs back in camera pools. Every one had already been fixed once and
+  written into the recipe. Budget a sweep-and-fix pass AFTER every scale-up, scope each regex to the pools it
+  applies to, and print the MATCHED TOKEN rather than the entry: a naive sweep flags mist "lying" across water,
+  a record player's "disc" and a cottage roof "shaped like a hat", all of which are correct and must survive.
+- **Keep the intentional similes.** The same sweep that must kill "a headland curling like a sleeping cat" must
+  spare "a palm-thatch roof shaped like a wide hat pulled low" — architecture similes are PixelBot's charm and
+  scored 5.0; the law only bites on natural forms (clouds, headlands, rock) where the literal object is absurd.
 
 ## DinoBot
 

@@ -88,7 +88,18 @@ module.exports = {
   allowedModels: ALL_ENABLED_AI_MODELS,
 
   // Per-path model pins land here when a specific path needs a specific model.
-  modelByPath: scene.modelByPath(SCENE_PATHS),
+  modelByPath: {
+    ...scene.modelByPath(SCENE_PATHS),
+    // pixel-campfire-night only: flux-1.1-pro-ultra rendered a golden-hour SUNSET on an
+    // aurora-and-stars night prompt and stamped a fake copyright mark on it (2026-09-19).
+    // Night is this path's whole identity, so it runs on the four models that held it.
+    'pixel-campfire-night': {
+      'black-forest-labs/flux-2-pro': 1,
+      'black-forest-labs/flux-2-max': 1,
+      'black-forest-labs/flux-2-flex': 1,
+      'black-forest-labs/flux-dev': 1,
+    },
+  },
   mediumByPath: scene.mediumByPath(SCENE_PATHS),
 
   // nano-banana clean-render override (2026-06-07). Keeps the pixel-art
@@ -118,6 +129,22 @@ module.exports = {
   vibesByPath,
 
   paths: [
+    // ─── SCENE PATHS, live 2026-09-19 (PIXELBOT_SCENES_PLAN.md §6) ───
+    // Kevin approved all eleven after the final QA batches. Faithful xerox:
+    // they remain in SCENE_PATHS above, so medium / model set / vibes /
+    // chaos-off / polish-off are byte-identical to the approved shadow runs.
+    'pixel-vista',
+    'pixel-cabin-glow',
+    'pixel-harbor',
+    'pixel-cozy-room',
+    'pixel-fantasy-vista',
+    'pixel-cool-rides',
+    'pixel-rain-street',
+    'pixel-campfire-night',
+    'pixel-shoreline',
+    'pixel-skyward',
+    'pixel-ruins',
+    // ─── the in-game flavour paths Kevin kept ───
     'cozy-rpg-town',
     'side-scroller-world',
     'boss-arena',
@@ -125,7 +152,7 @@ module.exports = {
     // 'cozy-farming-life-sim', — PULLED 2026-09-19 for rework into a cozy-cute pixel farm (FarmBot-in-pixels); lives in shadowPaths meanwhile
     'pixel-sci-fi-action',
     'classic-jrpg',
-    'epic-vista',
+    // 'epic-vista', — REPLACED 2026-09-19 by 'pixel-vista' (plan §3.8); files left dormant
     // Stage K — promoted to live rotation 2026-08-16 (scaled to production;
     // faithful xerox — not in allowSubjectChaosPaths (chaos off), polish applies
     // as in shadow, vibesByPath + global promptPrefix preserved).
@@ -135,7 +162,8 @@ module.exports = {
   // Dark-launched (shadow) paths — renderable on demand, hidden from public + rotation.
   // cozy-farming-life-sim: pulled from rotation 2026-09-19 for a rework (cozy-cute pixel
   // farm, FarmBot-in-pixels). Kept renderable + hidden here until the rework is approved.
-  shadowPaths: ['cozy-farming-life-sim', ...Object.keys(SCENE_PATHS)],
+  // The scene paths went live 2026-09-19; only the pulled farm path stays parked here.
+  shadowPaths: ['cozy-farming-life-sim'],
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
