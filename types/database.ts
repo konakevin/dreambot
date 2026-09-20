@@ -2707,6 +2707,41 @@ export type Database = {
         };
         Relationships: [];
       };
+      nightly_look_model_pins: {
+        Row: {
+          active: boolean;
+          created_at: string;
+          look_key: string;
+          model: string;
+          reason: string | null;
+          surface: string;
+        };
+        Insert: {
+          active?: boolean;
+          created_at?: string;
+          look_key: string;
+          model: string;
+          reason?: string | null;
+          surface: string;
+        };
+        Update: {
+          active?: boolean;
+          created_at?: string;
+          look_key?: string;
+          model?: string;
+          reason?: string | null;
+          surface?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'nightly_look_model_pins_look_key_fkey';
+            columns: ['look_key'];
+            isOneToOne: false;
+            referencedRelation: 'dream_mediums';
+            referencedColumns: ['key'];
+          },
+        ];
+      };
       nightly_model_policy: {
         Row: {
           fallback_models: string[];

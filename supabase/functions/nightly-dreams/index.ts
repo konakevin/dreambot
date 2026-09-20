@@ -1075,6 +1075,7 @@ Deno.serve(async (req) => {
         forceModel: force_model ?? null,
         looks,
         approvals: catalog.approvals,
+        modelPins: catalog.modelPins,
         recentLookKeys: recentMediums,
         recencyWindow: engineCfg0.nightlyLookRecency,
         legacyPct: engineCfg0.nightlyLegacyLookPct,
@@ -2786,6 +2787,9 @@ Deno.serve(async (req) => {
         forceModel: force_model ?? null,
         looks: catalog.looks,
         approvals: catalog.approvals,
+        // Dead while LOOKS_MINIMAL = true, wired anyway so the two contract builders cannot disagree about
+        // routing if the full path is ever switched back on.
+        modelPins: catalog.modelPins,
         recentLookKeys: recentMediums,
         recencyWindow: engineCfg0.nightlyLookRecency,
         legacyPct: engineCfg0.nightlyLegacyLookPct,

@@ -56,6 +56,28 @@ export interface LookApproval {
   approved: boolean;
 }
 
+/** A per-(look x surface) MODEL PIN (migration 536). An ACTIVE row means "whenever this look rolls on this
+ *  surface, render it on THIS model" — it bypasses the policy pool, the weighted roll and the nightly cost cap,
+ *  deliberately and auditably. Distinct from an approval (a quality grade) and from a ban (a model we refuse
+ *  everywhere): a pin is a ROUTING decision about one look. */
+export interface LookModelPin {
+  lookKey: string;
+  surface: LookSurface;
+  model: string;
+  active: boolean;
+}
+
+/** The model pinned for this look on this surface, or null when there is no active pin (the normal roll). */
+export function pinnedModelFor(
+  pins: readonly LookModelPin[] | null | undefined,
+  lookKey: string,
+  surface: LookSurface
+): string | null {
+  if (!pins || pins.length === 0) return null;
+  const hit = pins.find((p) => p.active && p.lookKey === lookKey && p.surface === surface);
+  return hit ? hit.model : null;
+}
+
 export interface ResolveLookInput {
   surface: LookSurface;
   model: string;

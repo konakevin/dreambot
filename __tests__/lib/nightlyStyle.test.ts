@@ -1,7 +1,7 @@
 /** The style contract (NIGHTLY_LOOKS_REFACTOR_PLAN.md §2): model → look → fragments, retry + rebuild answers. */
 import { buildStyleContract, RETRY_SAME_MODEL_FIRST } from '@engine/nightlyStyle';
 import type { NightlyModelPolicy } from '@engine/nightlyModelPolicy';
-import type { LookApproval, LookRow } from '@engine/nightlyLooks';
+import type { LookApproval, LookModelPin, LookRow } from '@engine/nightlyLooks';
 import type { VibeRow } from '@engine/nightlyVibes';
 import { FLUX_COUPLE_EXCLUDED_VIBE_FAMILIES } from '@engine/nightlyVibes';
 
@@ -62,6 +62,106 @@ const vibe = (key: string, family = key.split('__')[0]): VibeRow => ({
 const NIGHT_VIBES = [vibe('moonlit__bold'), vibe('starlit__bold'), vibe('nightshade__soft')];
 const DAY_VIBES = [vibe('golden_hour__bold'), vibe('blue_hour__bold')];
 const rng = () => 0.01; // deterministic: first candidate everywhere
+
+// ── Per-look model PINS (migration 536) ────────────────────────────────────────────────────────────────────────
+// A pin says "whenever this look rolls on this surface, render it on THIS model". It replaces the pool rather than
+// filtering it, because the pinned model is deliberately one the policy row does not carry (Nano Banana Pro sits
+// above the policy's cost ceiling, which is why it cannot be a primary with a weight).
+const NANO_PRO = 'google/gemini-3-image-preview';
+const pin = (
+  lookKey: string,
+  surface: 'couple' | 'solo',
+  model = NANO_PRO,
+  active = true
+): LookModelPin => ({ lookKey, surface, model, active });
+
+describe('per-look model pins (mig 536)', () => {
+  const buildPinned = (over: Partial<Parameters<typeof buildStyleContract>[0]> = {}) =>
+    buildStyleContract({
+      surface: 'couple',
+      policy: POLICY,
+      modelFromLook: true,
+      lockLook: true,
+      looks: LOOKS,
+      approvals: APPROVALS,
+      rng,
+      ...over,
+    });
+
+  // Derive the look the deterministic roll actually produces rather than assuming one, so the suite keeps
+  // testing the pin and not the fixture's ordering.
+  const ROLLED = buildPinned()!.look.key;
+  const OTHER = LOOKS.map((l) => l.key).find((k) => k !== ROLLED)!;
+
+  it('renders on the pinned model even though it is absent from primary_models', () => {
+    const c = buildPinned({ modelPins: [pin(ROLLED, 'couple')] })!;
+    expect(c.model).toBe(NANO_PRO);
+    expect(c.look.key).toBe(ROLLED);
+    expect(POLICY.couple.primaryModels).not.toContain(NANO_PRO);
+  });
+
+  it('stamps the pin so a render says where its model came from', () => {
+    const c = buildPinned({ modelPins: [pin(ROLLED, 'couple')] })!;
+    expect(c.stamps).toEqual(
+      expect.arrayContaining([
+        'policy:couple:1:gemini-3-image-preview',
+        'model_source:look_pin:gemini-3-image-preview',
+      ])
+    );
+    // the roll never happened, so no roll stamp describes a discarded result
+    expect(c.stamps.some((x) => x.startsWith('model_roll:'))).toBe(false);
+  });
+
+  it('beats the weighted roll — the pool would have chosen flux', () => {
+    expect(buildPinned()!.model).toBe(PRO);
+    expect(buildPinned({ modelPins: [pin(ROLLED, 'couple')] })!.model).toBe(NANO_PRO);
+  });
+
+  it('forceModel still wins — QA keeps the last word', () => {
+    const c = buildPinned({ modelPins: [pin(ROLLED, 'couple')], forceModel: GEMINI })!;
+    expect(c.model).toBe(GEMINI);
+  });
+
+  it('a BANNED pinned model is ignored and falls through to the normal pool, stamped', () => {
+    const c = buildPinned({
+      modelPins: [pin(ROLLED, 'couple')],
+      bans: new Set([NANO_PRO]),
+    })!;
+    expect(c.model).toBe(PRO);
+    expect(c.stamps).toContain('look_pin_banned:gemini-3-image-preview');
+    expect(c.stamps.some((x) => x.startsWith('model_source:look_pin:'))).toBe(false);
+  });
+
+  it('an INACTIVE pin is the rollback lever — behaviour returns to the normal roll', () => {
+    const c = buildPinned({ modelPins: [pin(ROLLED, 'couple', NANO_PRO, false)] })!;
+    expect(c.model).toBe(PRO);
+    expect(c.stamps.some((x) => x.startsWith('model_source:look_pin:'))).toBe(false);
+  });
+
+  it('no pins at all leaves every stamp identical to the unpinned contract', () => {
+    expect(buildPinned({ modelPins: [] })!.stamps).toEqual(buildPinned()!.stamps);
+  });
+
+  it('a COUPLE pin does not leak onto the solo surface', () => {
+    const solo = buildPinned({ surface: 'solo', modelPins: [pin(ROLLED, 'couple')] })!;
+    expect(solo.model).not.toBe(NANO_PRO);
+    expect(solo.stamps.some((x) => x.startsWith('model_source:look_pin:'))).toBe(false);
+  });
+
+  it('a pin for a DIFFERENT look does not reach this one', () => {
+    const c = buildPinned({ modelPins: [pin(OTHER, 'couple')] })!;
+    expect(c.look.key).toBe(ROLLED);
+    expect(c.model).toBe(PRO);
+  });
+
+  it('attempt 2 still moves to the fallback roll — the pin governs the first render only', () => {
+    const c = buildPinned({ modelPins: [pin(ROLLED, 'couple')] })!;
+    expect(c.model).toBe(NANO_PRO);
+    const second = c.forAttempt(2);
+    expect(second.model).not.toBe(NANO_PRO);
+    expect(second.look.key).toBe(ROLLED); // lockLook keeps the look across the model move
+  });
+});
 
 describe('buildStyleContract', () => {
   it('couple: policy model, then a look approved for (model, couple); cast fragment = swap fragment', () => {

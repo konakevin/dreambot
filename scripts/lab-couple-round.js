@@ -22,6 +22,7 @@ const ENGINE = arg('engine', 'experimental');
 const BIG = arg('big', null);
 const ACTIVE = arg('active', 'false') === 'true';
 const LOOK = arg('look', null);
+const VIBE = arg('vibe', null); // pin the vibe too (macabre probe 2026-09-20)
 const GATE = arg('gate', null);
 const EYES = arg('eyes', 'false');
 const LIB = arg('library', 'true');
@@ -64,6 +65,7 @@ async function one(n) {
   };
   if (ACTIVE) body.force_active = true;
   if (LOOK) body.force_look = LOOK;
+  if (VIBE) body.force_vibe = VIBE;
   if (HONEST === 'true' || HONEST === 'false') body.force_honest_looks = HONEST === 'true';
   if (BIG) body.qa_big_face_max_hfrac = Number(BIG);
   if (GATE) body.qa_max_face_hfrac = Number(GATE);
@@ -217,6 +219,8 @@ async function one(n) {
         eyes: EYES,
         library: LIB,
         style: STYLE,
+        look: LOOK,
+        vibe: VIBE,
         results: out,
       },
       null,

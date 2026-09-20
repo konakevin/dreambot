@@ -25,7 +25,9 @@ import {
   resolveLook,
   approvedModelsFor,
   rejectedModelsFor,
+  pinnedModelFor,
   type LookApproval,
+  type LookModelPin,
   type LookRow,
   type LookSurface,
 } from './nightlyLooks.ts';
@@ -94,6 +96,11 @@ export interface StyleContractInput {
   modelFromLook?: boolean;
   looks: readonly LookRow[];
   approvals: readonly LookApproval[];
+  /** PER-LOOK MODEL PINS (migration 536). An active pin for the rolled (look x surface) IS the attempt-1 model:
+   *  it skips the policy pool, the weighted roll and the empty-pool guard, because a pinned model is by
+   *  definition the pool. `forceModel` still wins (QA must stay able to override), and a BANNED pin is ignored
+   *  in favour of the normal roll rather than rendering something we refuse. Omitted / empty = today's roll. */
+  modelPins?: readonly LookModelPin[] | null;
   recentLookKeys?: readonly string[];
   recencyWindow?: number;
   /** Chance (0-100) of drawing the look from the legacy family first (mig 513). */
@@ -239,7 +246,26 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
   // inherited Create-screen pin, which said flux for 48 of 49 looks while the grades say all three models work.
   let modelId = pick.model;
   let lookModels: readonly string[] = [];
-  if (lookFirst) {
+  // THE PIN (migration 536). Checked BEFORE the pool is built, because an active pin replaces the pool rather
+  // than filtering it: the pinned model is deliberately one the policy row does not carry (Nano Banana Pro is
+  // above the policy's cost ceiling, which is why it cannot simply be a primary with a weight). Ignored when the
+  // model is banned — a ban is a refusal, and a routing preference must never override it — and ignored under
+  // `forceModel`, so QA keeps the last word. Everything after this point is the unchanged roll.
+  const pinnedModel = lookFirst
+    ? pinnedModelFor(input.modelPins, resolved.look.key, lookSurface)
+    : null;
+  const pinBanned =
+    pinnedModel !== null && input.bans !== null && input.bans?.has(pinnedModel) === true;
+  if (pinnedModel !== null && pinBanned) stamps.push(`look_pin_banned:${short(pinnedModel)}`);
+  const pinActive = pinnedModel !== null && !pinBanned;
+  if (lookFirst && pinActive) {
+    modelId = input.forceModel ?? (pinnedModel as string);
+    lookModels = [modelId];
+    stamps.push(
+      `policy:${policySurface}:1:${short(modelId)}`,
+      `model_source:look_pin:${short(pinnedModel as string)}`
+    );
+  } else if (lookFirst) {
     // THE MODEL POOL. Opened to every model the surface's policy row names (Kevin: "all looks enabled for all
     // models, i think that makes 3 total?"), minus two exclusions: models he explicitly graded NO for this look and
     // surface ("keep the rejections, that's right"), and the day-of / nightly bans.
