@@ -88,6 +88,13 @@ colored_pencil rejected on flux couples) — the per-look probe held 93% first t
 Rollback to the promotion state = that row back to `false` (album fragments), no deploy. The one re-render (couple AND single)
 is the policy row's fallback roll, `nightly_model_policy.fallback_weights` = [flux-2-flex, gemini-2-image] 50/50 (2026-09-18 ~20:40 UTC;
 100/0 restores gemini-only); flex mirrors gemini's look approvals (mig 530).
+**PER-LOOK MODEL PINS** (`nightly_look_model_pins`, mig 536): an active row for a (look × surface) IS that look's
+attempt-1 model — it REPLACES the policy pool, skipping the weighted roll and the ≤2✦ cost cap, and stamps
+`model_source:look_pin:<model>`. Live: `nightly_classical_oil` + `nightly_colored_pencil` on couples → Nano Banana
+Pro (`google/gemini-3-image-preview`, ~13¢), because those two reject flux (mig 528) and Kevin chose to absorb the
+cost rather than fall to gemini. `force_model` still wins, a banned pin is ignored (`look_pin_banned:`), attempt 2
+is untouched. Rollback = `active = false`, no deploy. Use a PIN for routing — never a 0 weight in `primary_models`
+(all-zero weights fall back to UNIFORM) and never `approved = false` (that is a face-swap quality grade).
 
 ### Shared engine + worker reliability (status of record: `QUEUE_WORKERS_REFACTOR.md`)
 
