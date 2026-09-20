@@ -95,8 +95,8 @@ export function BotSelectorStep({ onNext, onBack, nextLabel = 'See my first drea
           {TITLE_TEXT}
         </GradientTitle>
         <Text style={s.subtitle}>
-          Flowers, dragons, deep space, tiny villages. Follow the ones you like and their dreams
-          drift into your feed.
+          Flowers, dragons, deep space, tiny villages. Follow the ones you like, and their dreams
+          will drift into your feed.
         </Text>
       </View>
 
