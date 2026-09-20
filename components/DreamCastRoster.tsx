@@ -415,7 +415,9 @@ export function DreamCastRoster() {
       {pending?.key === key && (
         <TouchableOpacity
           onPress={cancelUpload}
-          hitSlop={10}
+          // 18pt glyph + 13pt each side = a 44pt target, Apple's minimum. hitSlop extends the touch
+          // area OUTSIDE the view, so nothing on screen moves.
+          hitSlop={13}
           activeOpacity={0.7}
           accessibilityRole="button"
           accessibilityLabel="Cancel analyzing this photo"
@@ -493,7 +495,7 @@ export function DreamCastRoster() {
               <TouchableOpacity
                 style={s.ctrl}
                 onPress={() => replacePartner(p)}
-                hitSlop={8}
+                hitSlop={11} // 22pt glyph -> 44pt target (Apple minimum)
                 disabled={anyBusy}
               >
                 <Ionicons name="sync" size={ICON} color={colors.textSecondary} />
@@ -501,7 +503,7 @@ export function DreamCastRoster() {
               <TouchableOpacity
                 style={s.ctrl}
                 onPress={() => confirmRemovePartner(p)}
-                hitSlop={8}
+                hitSlop={11} // 22pt glyph -> 44pt target (Apple minimum)
                 disabled={anyBusy}
               >
                 <Ionicons name="close-circle-outline" size={ICON} color={colors.textSecondary} />
@@ -603,7 +605,7 @@ export function DreamCastRoster() {
                     <TouchableOpacity
                       style={s.ctrl}
                       onPress={uploadSelf}
-                      hitSlop={8}
+                      hitSlop={11} // 22pt glyph -> 44pt target (Apple minimum)
                       disabled={anyBusy}
                     >
                       <Ionicons name="sync" size={ICON} color={colors.textSecondary} />
@@ -611,7 +613,7 @@ export function DreamCastRoster() {
                     <TouchableOpacity
                       style={s.ctrl}
                       onPress={removeSelf}
-                      hitSlop={8}
+                      hitSlop={11} // 22pt glyph -> 44pt target (Apple minimum)
                       disabled={anyBusy}
                     >
                       <Ionicons

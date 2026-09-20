@@ -216,7 +216,9 @@ function CastSlot({
                   mis-tapped photo. Same affordance, same place, different verb. */}
               <TouchableOpacity
                 onPress={() => (isUploading ? onCancel(config.role) : onRemove(config.role))}
-                hitSlop={8}
+                // 22pt glyph + 11pt each side = a 44pt target, Apple's minimum. hitSlop extends the
+                // touch area OUTSIDE the view, so nothing on screen moves.
+                hitSlop={11}
                 activeOpacity={0.7}
                 accessibilityRole="button"
                 accessibilityLabel={isUploading ? 'Cancel analyzing this photo' : 'Remove photo'}
