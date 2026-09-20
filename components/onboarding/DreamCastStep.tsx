@@ -614,7 +614,9 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
         <Text style={[shared.heroSubtitle, s.heroBody]}>
           {settingsCopy
             ? 'Update the faces that star in your nightly dreams. Swap your photo or your +1 anytime.'
-            : 'Add your face and you’ll star in your own nightly dreams. Bring a +1 and you’ll dream together.'}
+            : // Simplified to the plain ask (Kevin, 2026-09-20). The old two-sentence version sold the
+              // result twice over ("you'll star", "you'll dream together") before saying what to do.
+              'Upload a selfie of you and your +1 to appear in your dreams.'}
         </Text>
         {/* The aside gets the accent treatment (echoes the info-screen footnote
             cadence) instead of hiding inside the gray paragraph.
