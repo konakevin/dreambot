@@ -632,7 +632,7 @@ export const DreamCard = memo(function DreamCard({
                   when the card reached the viewer via a followed user's repost. */}
               {item.surface_type === 'repost' && item.reposter_name && (
                 <View style={s.repostAttribRow}>
-                  <Ionicons name="repeat" size={14} color={colors.success} />
+                  <Ionicons name="sync-outline" size={14} color={colors.success} />
                   <Text style={s.repostAttribText} numberOfLines={1}>
                     Reposted by{' '}
                     <Text
@@ -839,11 +839,13 @@ export const DreamCard = memo(function DreamCard({
                   activeOpacity={0.7}
                 >
                   <View style={s.repostStack}>
-                    {/* `repeat` (the Twitter/X, Threads and Mastodon repost glyph), not `sync`: two arrows chasing
-                        each other round a circle is the REFRESH metaphor — it says "again" but not "again, to my
-                        audience". It is also a stroke icon, so it sits with the outline bookmark and send glyphs
-                        on this rail instead of reading as a filled button. Kevin, 2026-09-20. */}
-                    <Ionicons name="repeat" size={26} color="#FFFFFF" style={ui.sideIcon} />
+                    {/* GEOMETRY BEAT SEMANTICS on this rail (Kevin, 2026-09-20). `repeat` is the correct repost glyph
+                        (Twitter/X, Threads, Mastodon) but it is two horizontal arrows stacked, so it is inherently
+                        ~5:3 and read as "squashed" beside the square heart, comment, bookmark and send. The circular
+                        arrows are square by construction; OUTLINE rather than the filled `sync` we had, so it sits
+                        with the four stroke glyphs instead of competing with the solid heart. The cost is knowingly
+                        accepted: this shape says refresh more than it says "again, to my audience". */}
+                    <Ionicons name="sync-outline" size={26} color="#FFFFFF" style={ui.sideIcon} />
                     {isReposted && (
                       <View style={s.repostCheck} pointerEvents="none">
                         <MaterialCommunityIcons
