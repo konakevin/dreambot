@@ -20,7 +20,14 @@ import { Text } from '@/components/AppText';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 
-export function CastPhotoTip() {
+interface Props {
+  /** ONBOARDING ONLY: adds "you can change it later" to the end of the warning. Deliberately off in
+   *  Settings — the user is already standing in the screen that changes it, so the reassurance there
+   *  would be telling them they can do the thing they are currently doing (Kevin, 2026-09-20). */
+  canEditLater?: boolean;
+}
+
+export function CastPhotoTip({ canEditLater = false }: Props) {
   return (
     <View style={s.row}>
       {/* The mascot posing for its own passport photo. */}
@@ -46,6 +53,7 @@ export function CastPhotoTip() {
         <Text style={s.body}>
           A close-up in good light, looking straight at the camera. A bad photo follows you into
           every dream, and without a photo you won&apos;t be in them at all.
+          {canEditLater ? ' You can swap it any time in Settings.' : ''}
         </Text>
       </View>
     </View>

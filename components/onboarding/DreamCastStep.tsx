@@ -573,7 +573,8 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
           single biggest lever on face-swap quality, and it applies to both
           slots (so it lives above the cards, not buried inside one). Shared with
           the Settings roster so the two cannot drift. */}
-      <CastPhotoTip />
+      {/* Onboarding only: Settings hides the line, see CastPhotoTip. */}
+      <CastPhotoTip canEditLater />
       {SLOTS.map((slot) => (
         <CastSlot
           key={slot.role}
