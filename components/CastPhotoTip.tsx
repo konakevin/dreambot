@@ -44,8 +44,8 @@ export function CastPhotoTip() {
             step, which repeated the subtitle right above it. True in Settings too, where this same
             card renders over an existing roster. */}
         <Text style={s.body}>
-          A close-up in good light, looking straight at the camera. Whatever you upload follows you
-          into every dream, and without a photo you won&apos;t be in them at all.
+          A close-up in good light, looking straight at the camera. A bad photo follows you into
+          every dream, and without a photo you won&apos;t be in them at all.
         </Text>
       </View>
     </View>
