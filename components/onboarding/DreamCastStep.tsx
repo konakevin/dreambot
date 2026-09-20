@@ -579,6 +579,39 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
   }
 
   /**
+   * LEAVING WITH AN INCOMPLETE CAST (Kevin, 2026-09-20). Skipping is allowed — the engine copes, it
+   * just costs the user the thing they came for — so this confirms rather than blocks, and the
+   * confirm names the consequence instead of nagging. Two distinct cases, because they cost
+   * different things:
+   *   no self photo  -> the user is in NONE of their own dreams (the big one)
+   *   self but no +1 -> dreams star them alone; every couple scene is off the table
+   * A cast that has both needs no confirm. The prompt fires once per tap, never on a loop: choosing
+   * Continue advances immediately.
+   */
+  function handleNext() {
+    const hasSelf = dreamCast.some((m) => m.role === 'self');
+    const hasPlusOne = dreamCast.some((m) => m.role === 'plus_one');
+    if (hasSelf && hasPlusOne) {
+      onNext();
+      return;
+    }
+    const copy = hasSelf
+      ? {
+          title: 'Continue without a +1?',
+          body: 'Your dreams will star you alone. You can add someone later.',
+        }
+      : {
+          title: 'Continue without a photo?',
+          body: "Without your photo you won't appear in your dreams at all. You can add one later.",
+        };
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    showAlert(copy.title, copy.body, [
+      { text: 'Go back', style: 'cancel' },
+      { text: 'Continue', onPress: () => onNext() },
+    ]);
+  }
+
+  /**
    * Cancel an in-flight analyze. Bumping the run id FIRST is what makes this safe: the running upload
    * sees it is stale and discards its own result (and deletes the file it wrote) instead of racing the
    * replacement the user is about to pick. The store entry is cleared here, synchronously, so the slot
@@ -681,7 +714,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
 
       {!isEditing && (
         <OnboardingFooter
-          onNext={onNext}
+          onNext={handleNext}
           onBack={onBack}
           nextLabel={dreamCast.length === 0 ? 'Skip' : 'Next'}
           // While a cast photo is uploading/describing, lock BOTH buttons —
