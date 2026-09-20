@@ -115,6 +115,7 @@ function CastSlot({
   member,
   onUpload,
   onRemove,
+  onCancel,
   onRelationship,
   uploading,
 }: {
@@ -122,6 +123,8 @@ function CastSlot({
   member: DreamCastMember | undefined;
   onUpload: (role: CastRole) => void;
   onRemove: (role: CastRole) => void;
+  /** Abort an in-flight analyze so a mis-tapped photo can be replaced immediately. */
+  onCancel: (role: CastRole) => void;
   onRelationship: (rel: CastRelationship) => void;
   uploading: CastRole | null;
 }) {
@@ -207,15 +210,19 @@ function CastSlot({
                   </>
                 )}
               </View>
-              {!isUploading && (
-                <TouchableOpacity
-                  onPress={() => onRemove(config.role)}
-                  hitSlop={8}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
-                </TouchableOpacity>
-              )}
+              {/* The X now shows DURING the analyze too (Kevin, 2026-09-20: "if i tap the wrong pic,
+                  i have to wait for it to complete before choosing a different pic"). Analyzing is
+                  a vision round-trip plus a retry, so the wait was long enough to strand a
+                  mis-tapped photo. Same affordance, same place, different verb. */}
+              <TouchableOpacity
+                onPress={() => (isUploading ? onCancel(config.role) : onRemove(config.role))}
+                hitSlop={8}
+                activeOpacity={0.7}
+                accessibilityRole="button"
+                accessibilityLabel={isUploading ? 'Cancel analyzing this photo' : 'Remove photo'}
+              >
+                <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
+              </TouchableOpacity>
             </View>
 
             {/* Relationship picker for +1 */}
@@ -285,6 +292,12 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
   const setScrollLocked = useOnboardingStore((s) => s.setScrollLocked);
   const user = useAuthStore((s) => s.user);
   const [uploading, setUploading] = useState<CastRole | null>(null);
+  // CANCELLING AN ANALYZE. `uploadRunRef` is bumped by every start AND by cancel, so an aborted run can
+  // tell it no longer owns the UI or the store entry and must not touch either on its way out. The
+  // controller aborts the describe-photo fetch itself; everything before it (compress, storage upload)
+  // is not abortable, so those steps finish and the staleness check discards the result instead.
+  const uploadRunRef = useRef(0);
+  const uploadAbortRef = useRef<AbortController | null>(null);
   const validatedOnceRef = useRef(false);
 
   // Lock the pager swipe while a cast photo is uploading/describing so the
@@ -366,6 +379,11 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
     if (!user) return;
 
     const asset = result.assets[0];
+    const runId = ++uploadRunRef.current;
+    const controller = new AbortController();
+    uploadAbortRef.current = controller;
+    /** True once this run has been cancelled or superseded — its work must be discarded, not applied. */
+    const isStale = () => controller.signal.aborted || uploadRunRef.current !== runId;
     setUploading(role);
     // Mark this upload in-flight so the first-dream cutoff waits for it before
     // enqueuing — otherwise advancing mid-upload yields a scene-only dream.
@@ -420,6 +438,12 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
       // so both pills start neutral and the Friend/Partner choice is EXPLICIT — the user
       // consciously picks instead of it being masked by a backend default (a pre-picked
       // "Friend" got glossed over). If skipped, the engine treats null as platonic.
+      // Cancelled while the file was uploading: the storage write already happened, so remove it and
+      // leave the store untouched (the cancel handler owns that).
+      if (isStale()) {
+        void supabase.storage.from(CAST_BUCKET).remove([path]);
+        return;
+      }
       const existing = getMember(role);
       const plusOneRel: CastRelationship | undefined = existing?.relationship;
       setCastMember({
@@ -433,14 +457,22 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
       // Describe the photo — spinner stays visible until this completes.
       // fetchEdge guarantees a fresh access token (proactive refresh + a 401
       // refresh-retry), so the stale-token 401 can't happen here.
-      const describeOnce = () => fetchEdge('describe-photo', { image_url: signedUrl, role });
+      const describeOnce = () =>
+        fetchEdge('describe-photo', { image_url: signedUrl, role }, { signal: controller.signal });
       let descRes = await describeOnce();
 
-      // 1 retry on 5xx (Haiku flakiness / mid-deploy).
-      if (!descRes.ok && descRes.status >= 500) {
+      // 1 retry on 5xx (Haiku flakiness / mid-deploy). Skipped outright if the user cancelled, so a
+      // discarded run does not hold castUploadsInFlight up for the retry sleep.
+      if (!descRes.ok && descRes.status >= 500 && !isStale()) {
         if (__DEV__) console.warn(`[DreamCast] describe-photo ${descRes.status}, retrying once...`);
         await new Promise((r) => setTimeout(r, 1500));
         descRes = await describeOnce();
+      }
+      // The staleness gate sits ABOVE the rejection branches on purpose: a cancelled run must not
+      // pop "that photo was rejected" for a photo the user already threw away.
+      if (isStale()) {
+        void supabase.storage.from(CAST_BUCKET).remove([path]);
+        return;
       }
       // 422 = server upload gate rejected the photo (group shot / no face /
       // unreadable). Roll back the store entry + orphaned file, show reason copy.
@@ -518,6 +550,9 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
           descData.description.slice(0, 60)
         );
     } catch (err) {
+      // An aborted fetch throws. That is a cancel, not a failure: the handler already cleaned up, and
+      // an alert here would scold the user for a button they just pressed.
+      if (isStale()) return;
       const msg = err instanceof Error ? err.message : String(err);
       if (__DEV__) console.error('[DreamCast] UPLOAD FAILED for', role, ':', msg);
       // ALWAYS remove the cast member on failure. We used to keep the thumb
@@ -534,10 +569,30 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
         [{ text: 'OK' }]
       );
     } finally {
-      setUploading(null);
+      // endCastUpload ALWAYS runs: castUploadsInFlight is a counter and this run incremented it.
+      // setUploading only if this run still owns the UI — after a cancel the user may already have a
+      // NEW analyze running, and clearing it here would unlock the footer mid-flight.
+      if (uploadRunRef.current === runId) setUploading(null);
       endCastUpload();
       fdlog(`castUpload END role=${role}`);
     }
+  }
+
+  /**
+   * Cancel an in-flight analyze. Bumping the run id FIRST is what makes this safe: the running upload
+   * sees it is stale and discards its own result (and deletes the file it wrote) instead of racing the
+   * replacement the user is about to pick. The store entry is cleared here, synchronously, so the slot
+   * is back to "Upload Photo" before the aborted fetch has even unwound.
+   */
+  function handleCancelUpload(role: CastRole) {
+    if (uploading !== role) return;
+    uploadRunRef.current += 1;
+    uploadAbortRef.current?.abort();
+    uploadAbortRef.current = null;
+    removeCastMember(role);
+    setUploading(null);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    fdlog(`castUpload CANCELLED role=${role}`);
   }
 
   async function handleRemove(role: CastRole) {
@@ -583,6 +638,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
           onUpload={handleUpload}
           onRemove={handleRemove}
           onRelationship={handleRelationship}
+          onCancel={handleCancelUpload}
           uploading={uploading}
         />
       ))}
