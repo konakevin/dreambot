@@ -53,7 +53,7 @@ export function CastPhotoTip({ canEditLater = false }: Props) {
         <Text style={s.body}>
           A close-up in good light, looking straight at the camera. A bad photo follows you into
           every dream, and without a photo you won&apos;t be in them at all.
-          {canEditLater ? ' You can swap it any time in Settings.' : ''}
+          {canEditLater ? ' You can change these later.' : ''}
         </Text>
       </View>
     </View>
