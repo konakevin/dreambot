@@ -1076,6 +1076,9 @@ Deno.serve(async (req) => {
         looks,
         approvals: catalog.approvals,
         modelPins: catalog.modelPins,
+        // A null contract used to log only `looks_minimal:no_contract`; the stamp naming the look/surface that
+        // emptied died inside the builder. Route it into fallback_reasons so the log says WHICH look failed.
+        diagnostics: fallbackReasons,
         recentLookKeys: recentMediums,
         recencyWindow: engineCfg0.nightlyLookRecency,
         legacyPct: engineCfg0.nightlyLegacyLookPct,
@@ -4826,7 +4829,12 @@ Output ONLY the prompt.`;
                 geminiKey: Deno.env.get('GEMINI_API_KEY'),
                 xaiKey: Deno.env.get('XAI_API_KEY'),
               },
-              pickedModel,
+              // BUG FIX 2026-09-20: this was `pickedModel`, so the solo model MOVE above computed a new model,
+              // stamped `solo_model_move:` and set `modelUsedOverride` — while the pixels kept rendering on the
+              // model that had just failed. The rung existed in the stamps and in ai_generation_log.model_used
+              // and nowhere else. `soloModel` IS `pickedModel` until the move fires, so this is a no-op on every
+              // path that never moves.
+              soloModel,
               'png'
             );
             observability.replicateRawUrl = rr.url;

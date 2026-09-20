@@ -101,6 +101,12 @@ export interface StyleContractInput {
    *  definition the pool. `forceModel` still wins (QA must stay able to override), and a BANNED pin is ignored
    *  in favour of the normal roll rather than rendering something we refuse. Omitted / empty = today's roll. */
   modelPins?: readonly LookModelPin[] | null;
+  /** WHY A CONTRACT CAME BACK NULL (bug fix 2026-09-20). buildStyleContract returns null on an empty look pool or
+   *  an empty model pool, and its stamps died with it — the caller could only log a generic `no_contract`, so the
+   *  one stamp naming the look and surface that failed (`looks_path_no_look:` / `looks_path_no_model:`) never
+   *  reached ai_generation_log. Pass an array here and the reason is appended to it before the null return.
+   *  Same shape as `clipToRestrict`'s stamps out-param. */
+  diagnostics?: string[];
   recentLookKeys?: readonly string[];
   recencyWindow?: number;
   /** Chance (0-100) of drawing the look from the legacy family first (mig 513). */
@@ -237,6 +243,7 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
   });
   if (!resolved) {
     stamps.push(`looks_path_no_look:${short(pick.model)}:${lookSurface}`);
+    input.diagnostics?.push(`looks_path_no_look:${short(pick.model)}:${lookSurface}`);
     return null;
   }
   stamps.push(...resolved.stamps.filter((s) => !s.startsWith('look_pin_unknown')));
@@ -321,6 +328,7 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
     // on a different look, which is why it is a guard here and not a one-off data fix on rotoscope.
     if (lookModels.length === 0) {
       stamps.push(`looks_path_no_model:${resolved.look.key}:${lookSurface}`);
+      input.diagnostics?.push(`looks_path_no_model:${resolved.look.key}:${lookSurface}`);
       return null;
     }
     // Anything the look/bans removed is excluded here so its weight is dropped with it.
@@ -450,22 +458,38 @@ export function buildStyleContract(input: StyleContractInput): StyleContract | n
         // that renders attempt 2; the failed model never repeats because it is not in the fallback row, and the bans
         // still apply (a day-of ban drops that model and its weight). An EMPTY fallback row (scene) keeps the
         // graded-chain walk below. Stamped `policy:<surface>:2:<model>:fallback_roll`.
-        const fallbackRow = weightedList(
-          input.policy[policySurface]?.fallbackModels ?? [],
-          input.policy[policySurface]?.fallbackWeights,
-          input.bans ?? null
-        );
+        //
+        // THE ROLL RESPECTS THE LOOK'S REJECTIONS (bug fix 2026-09-20). It used to filter on `bans` alone, so a
+        // look that rejects a FALLBACK model still landed on it: `nightly_rotoscope`/couple rejects
+        // gemini-2-image, and the 50/50 roll sent roughly half its retries there — onto the exact pairing Kevin
+        // graded NO — because `lockLook: true` carries the look across the model move. The rejections are folded
+        // into the ban set for this roll, which drops each rejected model AND its weight so the survivors
+        // renormalise. FAILS OPEN: if the rejections would empty the row, the unfiltered roll stands and stamps
+        // `fallback_rejected_all:<n>` — a re-render must happen, and shipping a graded-NO pairing still beats
+        // degrading to a solo (or, one rung later, to a personless scene).
+        const rejectedForRetry = rejectedModelsFor(input.approvals, base.look.key, lookSurface);
+        const retryBans = new Set<string>([...(input.bans ?? []), ...rejectedForRetry]);
+        const rowModels = input.policy[policySurface]?.fallbackModels ?? [];
+        const rowWeights = input.policy[policySurface]?.fallbackWeights;
+        const filteredRow = weightedList(rowModels, rowWeights, retryBans);
+        const bansOnlyRow = weightedList(rowModels, rowWeights, input.bans ?? null);
+        const rejectionsEmptyTheRow =
+          filteredRow.models.length === 0 && bansOnlyRow.models.length > 0;
+        const fallbackRow = rejectionsEmptyTheRow ? bansOnlyRow : filteredRow;
         if (attempt === 2 && fallbackRow.models.length > 0) {
           const next = resolveModel({
             surface: policySurface,
             attempt: 2,
             policy: input.policy,
-            bans: input.bans ?? null,
+            bans: rejectionsEmptyTheRow ? (input.bans ?? null) : retryBans,
             forceModel: null,
             previousModel: base.model,
             rng,
           });
           const p = pickFor(next.model, lookSurface, input.surface, `look_retry:${attempt}`);
+          if (rejectionsEmptyTheRow) {
+            p.stamps.unshift(`fallback_rejected_all:${bansOnlyRow.models.length}`);
+          }
           p.stamps.unshift(`${next.stamp}:fallback_roll`);
           return p;
         }
