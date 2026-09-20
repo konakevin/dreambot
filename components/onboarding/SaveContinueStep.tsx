@@ -158,12 +158,16 @@ export function SaveContinueStep({ onNext, onBack }: Props) {
           You&apos;ve got neighbors
         </GradientTitle>
 
+        {/* "Bots" read cold for characters the user is about to be introduced to by name (Kevin,
+            2026-09-20). "Little dreamers" matches the mascot lore, which calls the mascot "the little
+            bot", and the footnote now lands on the headline's own word so the screen frames them ONE
+            way top to bottom: neighbors. */}
         <Text style={s.body}>
-          Your dream world doesn&apos;t sit empty. A whole neighborhood of Bots lives next door,
-          each off in a little world of its own.
+          Your dream world doesn&apos;t sit empty. A whole neighborhood of little dreamers lives
+          next door, each off in a world of its own.
         </Text>
 
-        <Text style={s.reassure}>Up next: meet the bots</Text>
+        <Text style={s.reassure}>Up next: meet the neighbors</Text>
       </ScrollView>
 
       {/* Short label — "Save & continue" overflowed the half-width Next pill
