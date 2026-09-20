@@ -24,7 +24,11 @@ import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { OnboardingFooter } from './OnboardingFooter';
 
-const TITLE_TEXT = 'Build your dream team';
+// Pays off the previous screen, which ends on "Up next: meet the neighbors" (Kevin, 2026-09-20). The two
+// screens now frame the bots ONE way — neighbors, not a "team" the user assembles — and the subtitle below
+// drops "Bots" for the same reason the screen before it did: the word reads cold for characters you are
+// about to meet by name.
+const TITLE_TEXT = 'Meet your neighbors';
 
 // Minimum bots to follow before continuing — one bot made for a dead-feeling
 // first feed; three guarantees a decent mix on first launch.
@@ -91,7 +95,7 @@ export function BotSelectorStep({ onNext, onBack, nextLabel = 'See my first drea
           {TITLE_TEXT}
         </GradientTitle>
         <Text style={s.subtitle}>
-          Flowers, dragons, deep space, tiny villages. Follow the Bots you like and their dreams
+          Flowers, dragons, deep space, tiny villages. Follow the ones you like and their dreams
           drift into your feed.
         </Text>
       </View>
