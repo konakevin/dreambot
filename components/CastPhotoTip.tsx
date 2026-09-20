@@ -39,8 +39,13 @@ export function CastPhotoTip() {
           <Ionicons name="warning" size={22} color={MEDIUM_BADGE.art.color} />
           <Text style={s.title}>Use a passport-style photo</Text>
         </View>
+        {/* Carries BOTH photo consequences since 2026-09-20 (Kevin): a bad photo follows you, and no
+            photo keeps you out. The second half used to be a separate purple line on the onboarding
+            step, which repeated the subtitle right above it. True in Settings too, where this same
+            card renders over an existing roster. */}
         <Text style={s.body}>
-          Close-up, straight-on, well lit. A bad photo follows you into every dream.
+          A close-up in good light, looking straight at the camera. Whatever you upload follows you
+          into every dream, and without a photo you won&apos;t be in them at all.
         </Text>
       </View>
     </View>

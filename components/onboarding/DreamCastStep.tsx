@@ -618,21 +618,6 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
               // result twice over ("you'll star", "you'll dream together") before saying what to do.
               'Upload a selfie of you and your +1 to appear in your dreams.'}
         </Text>
-        {/* The aside gets the accent treatment (echoes the info-screen footnote
-            cadence) instead of hiding inside the gray paragraph.
-            Also the ONE place onboarding names the feature — "Dream Cast" is used
-            cold in the Create tutorial + Settings, so it must be taught here. */}
-        {!settingsCopy && (
-          <Text style={s.funPart}>
-            {/* Says the permission, then the consequence, and stops. The old line
-                ("trust us, this is where the magic happens ✨") asked for faith
-                instead of giving a reason, and repeated a benefit the headline above
-                had already stated. The ✨ went with it — it was decorating a claim
-                that now stands on its own, right above a pink warning block already
-                competing for the eye. */}
-            Your Dream Cast is optional, but without a photo, you won&apos;t appear in your dreams.
-          </Text>
-        )}
         <View style={{ height: verticalScale(18) }} />
         {innerSlots}
       </ScrollView>
@@ -667,18 +652,6 @@ const s = StyleSheet.create({
     lineHeight: fontScale(22),
     textAlign: 'center',
     marginTop: verticalScale(4),
-  },
-  // The "where the magic happens" nudge gets room to breathe on its own so it reads
-  // as a friendly shout to upload a photo (Kevin 2026-08-29), not a buried caption.
-  funPart: {
-    color: colors.accentLight,
-    fontSize: fontScale(15),
-    fontWeight: '700',
-    lineHeight: fontScale(21),
-    textAlign: 'center',
-    marginTop: verticalScale(18),
-    marginBottom: verticalScale(4),
-    paddingHorizontal: horizontalScale(8),
   },
   encourageText: {
     color: colors.textPrimary,
