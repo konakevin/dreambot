@@ -169,6 +169,11 @@ export function DreamCastRoster() {
   // The just-picked local photo, shown immediately (with an analyzing spinner)
   // while the upload+describe runs — so a photo appears the instant you pick it.
   const [pending, setPending] = useState<{ key: string; uri: string } | null>(null);
+  // CANCELLING AN ANALYZE (Kevin, 2026-09-20 — ported from the onboarding cast step). The run id is
+  // bumped by every start AND by cancel, so an in-flight run can tell it no longer owns the UI and
+  // must not clear a NEWER run's busy state on its way out.
+  const uploadRunRef = useRef(0);
+  const uploadAbortRef = useRef<AbortController | null>(null);
 
   const persist = async () => {
     if (!user) return;
@@ -188,10 +193,15 @@ export function DreamCastRoster() {
     onResult: (r: CastPhotoResult) => void
   ) => {
     if (!user || busy) return;
+    const runId = ++uploadRunRef.current;
+    const controller = new AbortController();
+    uploadAbortRef.current = controller;
+    const isStale = () => controller.signal.aborted || uploadRunRef.current !== runId;
     setBusy(key);
     beginCastUpload();
     try {
       const r = await pickUploadDescribeCast(user.id, pathKey, role, {
+        signal: controller.signal,
         onPicked: (uri) => {
           setPending({ key, uri });
           restoreScroll(); // the picker has just dismissed
@@ -202,6 +212,8 @@ export function DreamCastRoster() {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       await persist();
     } catch (err) {
+      // A cancel is not a failure — the handler already reset the UI.
+      if (isStale()) return;
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       if (err instanceof CastNotRecognizedError) {
         const copy = castRejectCopy(err.reason);
@@ -215,11 +227,26 @@ export function DreamCastRoster() {
         );
       }
     } finally {
-      setBusy(null);
-      setPending(null);
+      // endCastUpload ALWAYS runs (castUploadsInFlight is a counter this run incremented); the busy
+      // state only if this run still owns it, or a slow cancelled run would unlock the UI midway
+      // through the REPLACEMENT analyze.
+      if (uploadRunRef.current === runId) {
+        setBusy(null);
+        setPending(null);
+      }
       endCastUpload();
       restoreScroll(); // content just changed height again as the row settled
     }
+  };
+
+  /** Abort an in-flight analyze so a mis-tapped photo can be replaced immediately. */
+  const cancelUpload = () => {
+    uploadRunRef.current += 1;
+    uploadAbortRef.current?.abort();
+    uploadAbortRef.current = null;
+    setBusy(null);
+    setPending(null);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
   const uploadSelf = () =>
@@ -379,6 +406,26 @@ export function DreamCastRoster() {
   const busyLabel = (key: string) =>
     pending?.key === key ? 'Analyzing your photo…' : 'Opening your photos…';
 
+  /** The busy line, plus the X that aborts the analyze. The X appears only once a photo has actually
+   *  been PICKED — while the picker is still opening there is nothing to cancel and the picker has its
+   *  own. Written as a function, not a nested component, so the row does not remount every render. */
+  const busyStatus = (key: string) => (
+    <View style={s.statusRow}>
+      <Text style={s.status}>{busyLabel(key)}</Text>
+      {pending?.key === key && (
+        <TouchableOpacity
+          onPress={cancelUpload}
+          hitSlop={10}
+          activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel="Cancel analyzing this photo"
+        >
+          <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+
   /** One roster card. Rendered by both groups, identical in each — which is the
    *  point: what changes is WHICH LIST the person is in, not how the card looks. */
   const renderPartner = (p: DreamPartner, i: number, arr: DreamPartner[]) => {
@@ -428,7 +475,7 @@ export function DreamCastRoster() {
             )}
             {/* No idle status line: "Ready for dreams" was true of every member in
                 every state, so it taught nothing. */}
-            {isBusy && <Text style={s.status}>{busyLabel(p.id)}</Text>}
+            {isBusy && busyStatus(p.id)}
           </View>
           {!isBusy && (
             <>
@@ -587,7 +634,7 @@ export function DreamCastRoster() {
                 <CastThumb uriOverride={pending?.key === 'self' ? pending.uri : undefined} busy />
                 <View style={s.info}>
                   <Text style={s.name}>You</Text>
-                  <Text style={s.status}>{busyLabel('self')}</Text>
+                  {busyStatus('self')}
                 </View>
               </View>
             ) : (
@@ -634,7 +681,7 @@ export function DreamCastRoster() {
                   <CastThumb uriOverride={pending.uri} busy />
                   <View style={s.info}>
                     <Text style={s.name}>New cast member</Text>
-                    <Text style={s.status}>Analyzing your photo…</Text>
+                    {busyStatus('new')}
                   </View>
                 </View>
               </View>
@@ -756,6 +803,7 @@ const s = StyleSheet.create({
   },
   // subtleOnDark, not textSecondary: this is descriptive copy meant to be READ, and
   // the grey greys were disappearing into the panel.
+  statusRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   status: { color: colors.subtleOnDark, fontSize: fontScale(13), marginTop: verticalScale(2) },
   // Neutral, not accent. Six purple rings were spending the accent on the one thing
   // on the card nobody can interact with, which was most of the screen's noise.

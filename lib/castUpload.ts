@@ -76,6 +76,12 @@ export async function pickUploadDescribeCast(
     /** Fires the instant the user picks an image (before the multi-second
      *  upload+describe) so the UI can show the photo + an "analyzing" spinner. */
     onPicked?: (localUri: string) => void;
+    /** CANCELLING AN ANALYZE (2026-09-20). Abort this and the helper resolves `null` — the same value
+     *  a picker-cancel returns, so every caller's existing "user backed out" branch handles it and no
+     *  error alert fires. The describe fetch is aborted outright; the steps before it (transcode,
+     *  storage upload) cannot be, so they finish and the uploaded file is deleted on the way out
+     *  rather than left orphaned. */
+    signal?: AbortSignal;
   }
 ): Promise<CastPhotoResult | null> {
   if (!(await hasAiConsent())) {
@@ -114,11 +120,36 @@ export async function pickUploadDescribeCast(
       .remove([path])
       .catch(() => {});
 
-  const describeOnce = () => fetchEdge('describe-photo', { image_url: signedUrl, role });
-  let descRes = await describeOnce();
-  if (!descRes.ok && descRes.status >= 500) {
-    await new Promise((r) => setTimeout(r, 1500));
+  const aborted = () => opts?.signal?.aborted === true;
+  // Cancelled while the file was uploading: nothing to describe, and the file must not linger.
+  if (aborted()) {
+    cleanup();
+    return null;
+  }
+
+  const describeOnce = () =>
+    fetchEdge('describe-photo', { image_url: signedUrl, role }, { signal: opts?.signal });
+  let descRes: Response;
+  try {
     descRes = await describeOnce();
+    // 1 retry on 5xx, skipped when cancelled so a discarded run does not sit through the sleep.
+    if (!descRes.ok && descRes.status >= 500 && !aborted()) {
+      await new Promise((r) => setTimeout(r, 1500));
+      descRes = await describeOnce();
+    }
+  } catch (e) {
+    // An aborted fetch throws. That is a cancel, not a failure.
+    if (aborted()) {
+      cleanup();
+      return null;
+    }
+    throw e;
+  }
+  // ABOVE the rejection branches on purpose: a cancelled run must never raise "that photo was
+  // rejected" about a photo the user already threw away.
+  if (aborted()) {
+    cleanup();
+    return null;
   }
   // 422 = the server upload gate rejected the photo (group shot / no face /
   // unreadable). Carry the reason so the caller shows reason-specific copy.
