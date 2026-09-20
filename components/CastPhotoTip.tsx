@@ -46,13 +46,15 @@ export function CastPhotoTip({ canEditLater = false }: Props) {
           <Ionicons name="warning" size={22} color={MEDIUM_BADGE.art.color} />
           <Text style={s.title}>Use a passport-style photo</Text>
         </View>
-        {/* Carries BOTH photo consequences since 2026-09-20 (Kevin): a bad photo follows you, and no
-            photo keeps you out. The second half used to be a separate purple line on the onboarding
-            step, which repeated the subtitle right above it. True in Settings too, where this same
-            card renders over an existing roster. */}
+        {/* Trimmed to the two lines that change behaviour (Kevin, 2026-09-20: "it's so wordy now …
+            takes up too much of the screen"): how to shoot it, and what skipping costs. The old
+            "a bad photo follows you into every dream" went because the title already says
+            passport-style. The skip warning moved here from a purple line on the onboarding step,
+            which repeated the subtitle right above it. True in Settings too, where this same card
+            renders over an existing roster. */}
         <Text style={s.body}>
-          A close-up in good light, looking straight at the camera. A bad photo follows you into
-          every dream, and without a photo you won&apos;t be in them at all.
+          A close-up in good light, looking straight at the camera. Without a photo you won&apos;t
+          be in your dreams at all.
           {canEditLater ? ' You can change these later.' : ''}
         </Text>
       </View>
