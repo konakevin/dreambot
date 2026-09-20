@@ -26,7 +26,6 @@ import { InfoStep } from '@/components/onboarding/InfoStep';
 // sheet the first time the user opens the Create tab (CreateIntroSheet,
 // which reuses the same CREATE_INFO config).
 import { NIGHTLY_INFO, CAST_INFO, MOOD_INFO } from '@/constants/onboardingInfo';
-import { useEngineConfig } from '@/hooks/useEngineConfig';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -48,27 +47,12 @@ interface StepConfig {
   skipInEdit?: boolean;
 }
 
-// Nightly info card with the trial length appended live from engine_config —
-// the ONE place onboarding tells the user the nightly dreams they're being
-// sold are a {proTrialDays}-day Pro trial, so day-15 "my dreams stopped"
-// isn't a surprise. Named component (not an inline arrow) so the hook is
-// lint-clean and identity is stable across pager re-renders.
-function NightlyInfoStep(p: Parameters<StepComponent>[0]) {
-  const { proTrialDays } = useEngineConfig();
-  return (
-    <InfoStep
-      {...NIGHTLY_INFO}
-      // "keep them going for as long as you like" never mentioned that a decision
-      // exists at the end, so it read as though the dreams simply continue free. This
-      // names the moment, and says up front that starting costs nothing -- true: the
-      // trial is granted by the signup trigger (migration 176), nothing touches
-      // RevenueCat until a user chooses to subscribe, so there is no card to take and
-      // nothing to cancel.
-      body={`${NIGHTLY_INFO.body}\n\nYour first ${proTrialDays} nights of dreaming are free. No card, nothing to cancel. When the trial ends you decide whether to keep going. No pressure.`}
-      {...p}
-    />
-  );
-}
+// THE TRIAL PARAGRAPH LIVES ON /welcome-gift, NOT HERE (Kevin, 2026-09-20). This card used to append
+// "Your first N nights of dreaming are free. No card, nothing to cancel…" from engine_config. It was
+// redundant: every onboarding exit — post, skip and cancel alike — routes through /welcome-gift, which
+// sells the same thing better with a live "{N} DAYS FREE" pill and names the plans it continues on. Two
+// trial explanations inside one flow made the first card long enough to bury the one idea it exists to
+// land, so the card is back to a single paragraph about the dreams themselves.
 
 // Mediums + vibes picker steps removed when Kevin pivoted away from user-
 // curated taste (the nightly engine rolls its own and the Create screen
@@ -87,7 +71,7 @@ const STEPS: StepConfig[] = [
   { key: 'welcome', component: WelcomeStep },
   {
     key: 'info_nightly',
-    component: NightlyInfoStep,
+    component: (p) => <InfoStep {...NIGHTLY_INFO} {...p} />,
     skipInEdit: true,
   },
   { key: 'locations', component: LocationPickerStep },
