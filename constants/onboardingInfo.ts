@@ -24,7 +24,10 @@ export const NIGHTLY_INFO: InfoStepConfig = {
   body: 'Every night while you sleep, DreamBot paints you a new dream, set in the places you love, and some nights, somewhere wonderfully unexpected.',
   // The "up next" transition lives in the footnote slot so it reads as its
   // own quiet line under the paragraph instead of bulking up the body.
-  footnote: 'Up next: choose where you’ll dream',
+  // "choose where you'll dream" read as an order (Kevin, 2026-09-20: "it sounds almost hostile lol") — a bare
+  // imperative plus a clause that lands like a sentence being handed down. Naming the thing instead of
+  // commanding it keeps the softer register the vibe screen's footnote already uses.
+  footnote: 'Up next: the worlds you want to dream in',
 };
 
 export const CAST_INFO: InfoStepConfig = {
