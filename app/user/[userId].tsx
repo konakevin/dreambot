@@ -442,7 +442,7 @@ export default function PublicProfileScreen() {
           {(
             [
               { key: 'posts', label: 'Posts', icon: 'grid-outline', activeIcon: 'grid' },
-              { key: 'reposts', label: 'Reposts', icon: 'sync-outline', activeIcon: 'sync' },
+              { key: 'reposts', label: 'Reposts', icon: 'repeat-outline', activeIcon: 'repeat' },
             ] as const
           ).map((t) => {
             const active = gridView === t.key;

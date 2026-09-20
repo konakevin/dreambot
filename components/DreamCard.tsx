@@ -632,7 +632,7 @@ export const DreamCard = memo(function DreamCard({
                   when the card reached the viewer via a followed user's repost. */}
               {item.surface_type === 'repost' && item.reposter_name && (
                 <View style={s.repostAttribRow}>
-                  <Ionicons name="sync" size={14} color={colors.success} />
+                  <Ionicons name="repeat" size={14} color={colors.success} />
                   <Text style={s.repostAttribText} numberOfLines={1}>
                     Reposted by{' '}
                     <Text
@@ -839,7 +839,11 @@ export const DreamCard = memo(function DreamCard({
                   activeOpacity={0.7}
                 >
                   <View style={s.repostStack}>
-                    <Ionicons name="sync" size={26} color="#FFFFFF" style={ui.sideIcon} />
+                    {/* `repeat` (the Twitter/X, Threads and Mastodon repost glyph), not `sync`: two arrows chasing
+                        each other round a circle is the REFRESH metaphor — it says "again" but not "again, to my
+                        audience". It is also a stroke icon, so it sits with the outline bookmark and send glyphs
+                        on this rail instead of reading as a filled button. Kevin, 2026-09-20. */}
+                    <Ionicons name="repeat" size={26} color="#FFFFFF" style={ui.sideIcon} />
                     {isReposted && (
                       <View style={s.repostCheck} pointerEvents="none">
                         <MaterialCommunityIcons
