@@ -32,7 +32,9 @@ export const CAST_INFO: InfoStepConfig = {
   customMascot: require('@/assets/images/onboarding/mascot-cast.png'),
   // \n forces a balanced break — the natural wrap strands "postcards?" alone.
   headline: 'Want to be in the\ndream postcards?',
-  body: 'Just a selfie and you’re in! You’ll find yourself painted right into your dreams, a quiet little surprise waiting when you wake.',
+  // Says WHY the selfie is needed rather than how nice the result will be (Kevin, 2026-09-20: the old line
+  // "Just a selfie and you're in! … a quiet little surprise waiting when you wake" was "too fluffy").
+  body: 'We need a selfie of you and your +1, so DreamBot knows what you look like when it places you in your dreams.',
   footnote: 'Up next: upload a selfie of you and a dream partner',
 };
 
