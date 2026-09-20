@@ -27,6 +27,13 @@ export function OverlayPill({ label, active, onPress }: Props) {
         onPress();
       }}
       activeOpacity={0.7}
+      // VERTICAL-ONLY hit slop (Kevin, 2026-09-20). The pill is 28pt tall (6 + 16 line + 6) against
+      // Apple's 44pt minimum, and it sits right under the notch where thumbs land badly. 8pt top and
+      // bottom takes the TARGET to 44 while the pill still looks 28 — these ride over a full-bleed
+      // image on both the home feed and the bots feed, so growing them visually would eat the artwork.
+      // Deliberately NOT horizontal: the pills sit 6pt apart, so side slop would overlap neighbouring
+      // targets and turn picking one bot into a coin flip with the next.
+      hitSlop={{ top: 8, bottom: 8 }}
       style={[s.pill, active && s.pillActive]}
     >
       <Text style={[s.text, active && s.textActive]}>{label}</Text>
