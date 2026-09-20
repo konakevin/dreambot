@@ -48,6 +48,26 @@ export const PRO_YEARLY_SPARKLE_BUNDLE = PRO_SPARKLE_BUNDLE * 12;
  *  Mirrored in is_pro_active() Postgres function + store/auth.ts. */
 export const PRO_TRIAL_DAYS = 14;
 
+/**
+ * The trial term as the USER sees it (Kevin, 2026-09-20: "change the '14 days free' to use weeks instead").
+ *
+ * The STORED value stays in DAYS and must: `engine_config.pro_trial_days` is the one row three runtimes compute
+ * expiry from — `lib/proStatus.ts`, `scripts/lib/nightlyEligibility.js` and the `is_pro_active()` Postgres
+ * function — so the unit there is load-bearing arithmetic, not copy. Weeks are a presentation of it, derived
+ * here so the two can never drift.
+ *
+ * Whole weeks only when the configured length divides evenly, otherwise days. Retune `pro_trial_days` to 10 and
+ * the badge says "10 DAYS FREE" rather than rounding a lie to "1 WEEK".
+ */
+export function trialTerm(days: number): string {
+  const n = Math.max(0, Math.round(days));
+  if (n >= 7 && n % 7 === 0) {
+    const weeks = n / 7;
+    return `${weeks} ${weeks === 1 ? 'WEEK' : 'WEEKS'} FREE`;
+  }
+  return `${n} ${n === 1 ? 'DAY' : 'DAYS'} FREE`;
+}
+
 /** Nightly dreams are a PRO feature. Pro users (paid OR within the 14-day
  *  trial) get one auto-rendered dream per night (~30/month). Free users
  *  (post-trial) get NONE — they generate manually with sparkles instead.

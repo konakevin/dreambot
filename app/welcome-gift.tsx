@@ -43,7 +43,7 @@ import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { colors } from '@/constants/theme';
 import { GradientTitle } from '@/components/GradientTitle';
 import { verticalScale, verticalScaleClamped, fontScale } from '@/lib/responsive';
-import { PLAN_NAME_BASIC, PLAN_NAME_PRO } from '@/constants/proPlan';
+import { PLAN_NAME_BASIC, PLAN_NAME_PRO, trialTerm } from '@/constants/proPlan';
 
 // 5 rotating painter mascots (same set the loading screen uses). Pick
 // one stable per mount via useMemo — different each visit. Local require
@@ -64,12 +64,14 @@ export default function WelcomeGiftScreen() {
   const mascot = useMemo(() => MASCOTS[Math.floor(Math.random() * MASCOTS.length)], []);
   const insets = useSafeAreaInsets();
   const { welcomeSparkleBonus, proTrialDays } = useEngineConfig();
-  // Always DAYS (Kevin 2026-09-16), reversing the 2026-07-12 "N WEEKS reads
-  // warmer" preference: a day count reads as more trial, and it matches how the
-  // onboarding info screen already phrases it ("your first N nights"). Still
-  // derived from engine_config.proTrialDays rather than hardcoded, so changing the
-  // trial length can never leave this badge quietly lying about it.
-  const trialFree = `${proTrialDays} ${proTrialDays === 1 ? 'DAY' : 'DAYS'} FREE`;
+  // WEEKS (Kevin, 2026-09-20). This badge has now flipped twice: weeks on 2026-07-12 ("reads warmer"),
+  // days on 2026-09-16 ("a day count reads as more trial, and it matches how the onboarding info screen
+  // phrases it — 'your first N nights'"), weeks again now. The second of those two reasons EXPIRED the
+  // same day it was reversed: the onboarding trial paragraph it was matching was deleted, so this badge
+  // is the only place the term is stated and has nothing left to agree with. Before flipping it a fourth
+  // time, note that only the wording is in play — `engine_config.pro_trial_days` stays in DAYS because
+  // three runtimes compute expiry from it, and `trialTerm` derives the display so the two cannot drift.
+  const trialFree = trialTerm(proTrialDays);
   // from=onboarding → auto-presented at the end of onboarding (RevealStep):
   // the user has never seen the inbox, so "back" means the feed.
   const { from } = useLocalSearchParams<{ from?: string }>();
