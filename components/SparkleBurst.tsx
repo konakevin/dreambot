@@ -6,7 +6,7 @@
  * across: the seeded particle layout, the ease-out travel with a slight upward drift, and the
  * fade-in-then-out curve. What did NOT: the tier config, the milestone headline, the masked gradient
  * text, and the looping twinkle stars — all of which existed for a full-screen celebration, not a
- * ~1s punctuation on a feed card.
+ * 700ms punctuation on a feed card.
  *
  * WHY SEEDED: particle angles and sizes are derived once at module load from a deterministic RNG, so
  * no `Math.random` runs during render. Every burst is laid out identically, which keeps it feeling
@@ -37,13 +37,9 @@ const SPARKLE_COLORS = [
   '#FFAA33',
 ];
 
-// Tuned by eye (Kevin, 2026-09-20: "make it a bit bigger and last longer"). Raising SPREAD and
-// DURATION together is what keeps it reading as a throw: distance alone makes particles look
-// flung, duration alone makes them look slow. COUNT rose with the spread so the wider circle does
-// not thin out into scattered dots.
-const COUNT = 18;
-const SPREAD = 108;
-const DURATION = 900;
+const COUNT = 14;
+const SPREAD = 78;
+const DURATION = 620;
 
 /** Deterministic RNG — same shape as the original so the burst keeps its character. */
 function seededRandom(seed: number): number {
@@ -69,7 +65,7 @@ const PARTICLES: ParticleConfig[] = Array.from({ length: COUNT }, (_, i) => {
     // Evenly spaced around the circle with a little jitter, so it reads as a spray rather than a dial.
     angle: (i / COUNT) * Math.PI * 2 + (r1 - 0.5) * 0.7,
     distanceFactor: 0.45 + r2 * 0.55,
-    size: 3.5 + r3 * 4.5,
+    size: 3 + r3 * 3.5,
     color: SPARKLE_COLORS[i % SPARKLE_COLORS.length],
     delayMs: Math.floor(r4 * 90),
     rotationDeg: Math.floor(r1 * 360),
