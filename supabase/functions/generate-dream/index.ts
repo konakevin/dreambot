@@ -1627,6 +1627,11 @@ Output ONLY the prompt.`;
                 // composer's tail silently lost it; ResolvedVibe has carried it since mig 504.
                 vibeFragment: vibe.fluxFragment,
                 vibeFragmentPosition: vibe.fragmentPosition,
+                // Dress them for the ACTIVITY, not a rolled aesthetic. Create never set
+                // sceneRegister, so the brief asked for "retro resort glamour" on every
+                // cast dream and a snowboarding prompt came back in a velvet jacket with
+                // gold piping. Off = the register sentence, exactly as before.
+                ...(castCfg.createActivityWardrobe ? { activityWardrobe: true } : {}),
                 // Create: NEUTRAL pose only — force the relationship-appropriate
                 // partner/companion pool (NOT the 18% playful roll). Create is the
                 // user's OWN prompt, so we tread lightly: no goofy thumbs-up poses

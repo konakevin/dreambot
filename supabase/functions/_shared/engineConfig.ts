@@ -178,6 +178,10 @@ export interface EngineConfig {
   /** Gate Create couples on the Create-side approval matrix. Inert until the grading
    *  probe seeds it. */
   createCoupleApprovals: boolean;
+  /** Anchor Create's wardrobe to the ACTIVITY instead of a rolled aesthetic register.
+   *  Create never set sceneRegister, so it drew the `casual` pool — resort glamour,
+   *  vintage cinema, mid-century elegance — and dressed snowboarders in cravats. */
+  createActivityWardrobe: boolean;
   /** Holiday DAY-OF date rule (mig 471, HOLIDAY_DAY_OF_PLAN.md §4): local hour at the 08:00 UTC run
    *  from which the day-of is evaluated against the NEXT local date (24 = never). Default 20. */
   dayOfEveningCutoffHour: number;
@@ -267,6 +271,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   createRetryChangesModel: false,
   createPromptSceneSplit: false,
   createCoupleApprovals: false,
+  createActivityWardrobe: false,
   dayOfEveningCutoffHour: 20,
   dayOfCostumePct: 100,
   holidayPostcardScope: 'day_of',
@@ -431,6 +436,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     createRetryChangesModel: data.create_retry_changes_model === true,
     createPromptSceneSplit: data.create_prompt_scene_split === true,
     createCoupleApprovals: data.create_couple_approvals === true,
+    createActivityWardrobe: data.create_activity_wardrobe === true,
     dayOfEveningCutoffHour: clampHour(data.day_of_evening_cutoff_hour, 20),
     dayOfCostumePct: clampPct(data.day_of_costume_pct, DEFAULT_ENGINE_CONFIG.dayOfCostumePct),
     holidayPostcardScope:

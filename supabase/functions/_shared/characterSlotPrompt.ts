@@ -95,6 +95,25 @@ export interface CharacterSlotPipelineInput {
    * characters render in on-location attire (fairy-tale tunics at Fairy Cottage,
    * yukata at Tokyo, etc.). If null, falls back to the generic mood randomizer. */
   wardrobeAnchor?: string | null;
+  /** CREATE-ONLY (2026-09-21). Anchor the wardrobe to what the cast is DOING rather
+   *  than to a rolled aesthetic register.
+   *
+   *  Create never sets `sceneRegister`, so `wardrobeMoodFor` fell to the `casual`
+   *  subset — retro resort glamour, vintage-cinema hats and gloves, mid-century silk
+   *  scarves — and a snowboarding prompt came back in a velvet ski jacket with gold
+   *  piping and an ivory cravat (Kevin: "the outfits we have on are ridiculous …
+   *  half the time it's some fancy outfit, and not ski jacket/pants").
+   *
+   *  A pool per activity does not scale, because a user can prompt anything. It is
+   *  also unnecessary: Sonnet already knows what people wear to snowboard, scuba dive
+   *  or work a forge, and the no-plain-clothes rule is enforced INDEPENDENTLY by the
+   *  PLAIN_CLOTHES validator. The register was overriding that knowledge, not adding
+   *  to it. This swaps the aesthetic sentence for the activity, which Create already
+   *  extracts via promptSceneSplit and passes as `action`.
+   *
+   *  Nightly and first-dream never set it, so with it unset every path here is
+   *  byte-identical (the same contract `authorAction` documents in reverse). */
+  activityWardrobe?: boolean;
   /** Whether the location is a REAL-WORLD place (not a fantasy/imagined dream
    * world). Drives the TRAVELER wardrobe rule: on real places the cast are
    * VISITORS and must wear contemporary travel clothes, never the traditional/
@@ -426,6 +445,124 @@ export const WARDROBE_MOODS = [
   'festival maximalism: layered prints, sequins, colour on colour',
 ];
 
+// ── Wardrobe PALETTE randomizer (Create's activity path) ────────────────
+//
+// WHY A SECOND POOL (Kevin, 2026-09-21): "how are we going to keep AI from using the same outfits over
+// and over, it tends to pigeon hole when left to it's own devices."
+//
+// He is right, and it is his own hard rule: never let the model invent the VARYING element — it
+// pigeonholes and rhymes, so the varying element comes from an authored pool. WARDROBE_MOODS used to be
+// that pool for Create. The problem was never that it existed, it was the AXIS it varied: garment GENRE
+// ("retro resort glamour", "vintage-cinema wardrobe"), which fights the activity and is how a snowboarder
+// ended up in a cravat.
+//
+// So Create keeps an authored pool and varies an ORTHOGONAL axis instead: colour, material and finish.
+// Every entry below reads correctly on a snow shell, a wetsuit, chef's whites, riding kit or a ballgown,
+// because none of them names a garment. The activity decides WHAT they wear; this decides how it looks,
+// and it changes every render.
+//
+// HUE BALANCE IS THE WHOLE POINT, and it took two passes to get right.
+//
+// PASS 1 (Kevin: "a lot of orange/rust/browns … so once again, it's pigeon holing"): seven of
+// fourteen entries were warm-earth — rust, ochre, oxblood, brass, tan, copper, burnt amber. The
+// model was not pigeonholing; it was rotating faithfully through a pool that was half orange.
+//
+// PASS 2 (Kevin: "what about the outfit color repetitivness?"): measured across 22 renders, a
+// NEUTRAL appeared in 19 of them. The family counts looked fine — the problem was the TEMPLATE.
+// Twelve of sixteen entries paired a colour with a neutral or a metallic ("ice blue, bone white and
+// brushed silver", "violet and pewter", "cobalt and ivory"), so grey was in almost every render no
+// matter which entry was drawn. Capping the family did nothing because the neutrals were riding
+// along inside the coloured entries.
+//
+// So entries are now COLOUR AGAINST COLOUR. Metallics and neutrals appear only in the three
+// entries that are deliberately monochrome. An unbalanced pool is indistinguishable from no pool at
+// all, and so is a pool where every entry quietly contains the same colour.
+//
+// Deliberately free of any PLAIN_CLOTHES word — a palette must never be the thing that trips the
+// validator (also locked there).
+//
+// And free of any MATERIAL. The first cut carried "velvety, deep-pile textures" and "weathered
+// leather", and the very first batch came back with a "velvet-finish snow jacket" — the same
+// cravat-on-a-snowboarder failure in miniature, because a material is not activity-agnostic the way
+// a colour is. Velvet belongs on a gown, leather on a jacket, neither on a technical shell. Palettes
+// name COLOUR and FINISH QUALITY (matte, glossy, brushed, tarnished, polished) only; the garment and
+// its fabric come from the activity.
+export const WARDROBE_PALETTES = [
+  // COLOUR AGAINST COLOUR — the two named hues are what each half of the couple leads with.
+  'cobalt blue against warm terracotta',
+  'deep teal with acid-yellow accents',
+  'ice blue and soft coral',
+  'navy and mustard',
+  'forest green with burnt-orange accents',
+  'sage and dusty rose',
+  'acid lime cutting across deep olive',
+  'deep plum and emerald',
+  'violet with saffron accents',
+  'lilac and moss green',
+  'crimson and deep navy',
+  'blush pink with sage',
+  'coral and turquoise',
+  'burnt orange and petrol blue',
+  'ochre and plum',
+  'rust with teal accents',
+  'oxblood and brass',
+  'magenta against deep pine',
+  // TONAL — one hue, light to deep. Still colour, not grey.
+  'tonal blues, pale through midnight',
+  'tonal reds, rose through oxblood',
+  // TRUE NEUTRAL — kept deliberately few; monochrome is a real look, not a default.
+  'black on black with a glossy technical sheen',
+  'porcelain white and jet in sharp geometric blocks',
+  'storm grey broken by one high-voltage accent',
+] as const;
+
+// The SECOND axis, and the one that actually reads (Kevin, 2026-09-21: "two of them are the exact
+// same ... this is what i warned about").
+//
+// Varying palette alone was not enough. Across the first batch the COLOUR rotated fine — cobalt,
+// plum, ochre, ice blue — while the garment vocabulary never moved: "snow shell" 6 times,
+// "insulated trousers/salopettes" 7 times, "roll-neck midlayer" 3 times. Two renders came back as
+// the same puffer-and-snow-pants silhouette in different hues, which reads as the same dream.
+//
+// Colour is the weaker signal; SHAPE is what the eye compares. So a second orthogonal pool varies
+// proportion and construction. Like the palettes these name no garment and no material — a cut
+// reads correctly on a snow shell, a gown, chef's whites or riding kit, because it describes how a
+// thing is cut rather than what it is. 14 palettes x 10 cuts = 140 combinations on a fixed prompt.
+export const WARDROBE_CUTS = [
+  'sleek and close-fitting, cut sharp to the body',
+  'oversized and relaxed, with generous volume',
+  'long-line on top over slim, tapered legs',
+  'strongly structured shoulders and a defined waist',
+  'layered, with a contrasting collar or hood framing the face',
+  'retro 1970s proportions — wide, bold and a little exaggerated',
+  'utility-cut, with visible hardware, straps and pockets',
+  'cropped above the waist over a high-waisted lower half',
+  'an asymmetric closure and one deliberately off-centre line',
+  'softly draped and unstructured, moving with the body',
+] as const;
+
+/** One cut per render, paired with one palette. Pure + rng-injected so a test can pin it. */
+export function wardrobeCutFor(rng: () => number = Math.random): string {
+  return WARDROBE_CUTS[
+    Math.min(WARDROBE_CUTS.length - 1, Math.floor(rng() * WARDROBE_CUTS.length))
+  ];
+}
+
+/** One palette per render, SPLIT across the two characters.
+ *
+ *  The first cut said "both characters dressed for the same outing" and Sonnet did the obvious thing:
+ *  painted both of them the same colour head to toe. The render came back with a couple in identical
+ *  plum puffers and plum trousers, looking like a bought matching set (2026-09-21). A shared palette
+ *  is meant to make them a PAIR, not a uniform — so the brief now hands each of them a different
+ *  colour from the same range, which is what coordinated dressing actually looks like.
+ *
+ *  Pure + rng-injected so a test can pin it. */
+export function wardrobePaletteFor(rng: () => number = Math.random): string {
+  return WARDROBE_PALETTES[
+    Math.min(WARDROBE_PALETTES.length - 1, Math.floor(rng() * WARDROBE_PALETTES.length))
+  ];
+}
+
 /** SCENE-TYPE STEERING (Kevin 2026-09-18, item 2): the register the brief asks for follows the scene the night
  *  rolled — an elegant scene dresses for the gala, an active scenario dresses the adventurer, a plain place gets
  *  the statement / resort / cinema registers. Uniform within the subset; every subset is a slice of
@@ -729,6 +866,9 @@ ${
 export function buildSlotBrief(input: CharacterSlotPipelineInput): string {
   const location = input.iconicAnchor || input.userPlace || 'the location';
   const wardrobeMood = wardrobeMoodFor(input.sceneRegister ?? null);
+  // The authored varying element for Create's activity path — see WARDROBE_PALETTES.
+  const wardrobePalette = wardrobePaletteFor();
+  const wardrobeCut = wardrobeCutFor();
 
   // When a location-specific wardrobe anchor is provided (rolled from
   // biome_config.WARDROBE), use it as style GUIDANCE — period/setting
@@ -760,7 +900,22 @@ export function buildSlotBrief(input: CharacterSlotPipelineInput): string {
       } The exact costume text is applied by code, so write the wardrobe field(s) as a SHORT reference only (3-6 words, e.g. "the vampire countess costume") and spend your words on the scene and the action. Let the scene, mood, props and action play off the costumes — the cape catching the lantern light, the hat brim in the fog. The costume is clothing, headwear and props only; the face stays fully clear by code.`
     : (input.wardrobeAnchor
         ? `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: flattering, cool, and distinctive, in pieces true to the period / setting / cultural register of "${location}". One on-location inspiration to draw from: "${input.wardrobeAnchor}". Adapt it into something bold and attractive for each character — flattering silhouette, rich materials, standout details, styled hair — or invent something equally on-location and eye-catching. NEVER plain, dowdy, mundane, frumpy, drab, or merely "historically accurate" — this is a DREAM, so make the outfit sing while staying true to the setting. Avoid generic "linen shirt + chinos" defaults.`
-        : `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: tailored to this exact place, its climate and its register, and built to STAND OUT — a signature piece, a flattering silhouette, named colours and materials, styled hair. A tropical reef, an alpine village, a desert ruin, a modern city and an arctic glacier each call for a different costume. WARDROBE REGISTER for this render: ${wardrobeMood}. NEVER everyday basics: no hoodie, henley, t-shirt, fleece, cargo pants, joggers, sweatpants, puffer vest, generic sneakers, and never the words casual, comfortable, practical or everyday — this is a DREAM, the outfit is part of the story.`) +
+        : `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: tailored to this exact place, its climate and its register, and built to STAND OUT — a signature piece, a flattering silhouette, named colours and materials, styled hair. A tropical reef, an alpine village, a desert ruin, a modern city and an arctic glacier each call for a different costume. ${
+            input.activityWardrobe
+              ? // ACTIVITY-ANCHORED (Create). The sentence this replaces named an unrelated
+                // aesthetic ("retro resort glamour") and Sonnet dutifully merged it with the
+                // place, which is how a snowboarder ends up in a cravat. The activity is the
+                // honest anchor, and Create already has it from the prompt splitter.
+                //
+                // The second half is NOT decoration: PLAIN_CLOTHES hard-bans fleece, puffer
+                // vest, sweater, pullover, jeans, chinos and "practical" in a wardrobe field.
+                // Asking for functional dress without naming the designed synonyms sends
+                // Sonnet straight at those words, burns both retries and lands on the generic
+                // couture fallback — strictly worse than the bug. So the ban list stays
+                // untouched and the brief routes around it instead.
+                `DRESS THEM FOR WHAT THEY ARE DOING${input.action ? `: "${input.action}"` : ''}. Name the real garment the activity demands — a snow shell and insulated trousers, a wetsuit, riding boots, chef's whites, a ballgown — and THEN make it beautiful: cut, materials, one signature detail. Reach for the elevated name, never the basic one (a brushed midlayer not a fleece, a quilted down gilet not a puffer vest, a cable-knit roll-neck not a sweater). PALETTE for this render: ${wardrobePalette} — SPLIT it between them, each leading with a DIFFERENT colour from that range so they coordinate without matching. They are a couple on the same outing, not a matching set: never the same colour head to toe on both. CUT for this render: ${wardrobeCut} — vary the SHAPE, not just the colour, and pick a different GARMENT for each of them; most activities have several correct answers (in snow: a shell, a one-piece suit, bib-and-brace, a parka, an anorak, a gilet over a midlayer), so do not default to the most obvious one twice.`
+              : `WARDROBE REGISTER for this render: ${wardrobeMood}.`
+          } NEVER everyday basics: no hoodie, henley, t-shirt, fleece, cargo pants, joggers, sweatpants, puffer vest, generic sneakers, and never the words casual, comfortable, practical or everyday — this is a DREAM, the outfit is part of the story.`) +
       travelerRule;
 
   const forbiddenList = `━━━ FORBIDDEN IN ANY FIELD — your output will be rejected if you violate ━━━
