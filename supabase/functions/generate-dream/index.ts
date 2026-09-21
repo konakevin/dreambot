@@ -47,6 +47,7 @@ import { mirrorPartnerIntoCast, type RosterPartner } from '../_shared/partnerRol
 import { composeExperimentalCouple } from '../_shared/coupleComposerX.ts';
 import { splitPromptScene, type PromptSceneSplit } from '../_shared/promptSceneSplit.ts';
 import { nextCreateModel } from '../_shared/createModelChain.ts';
+import { rollCreateSceneAxes } from '../_shared/createSceneAxes.ts';
 import { resolveCastForPrompt } from '../_shared/castResolver.ts';
 import { expandScene } from '../_shared/sceneExpander.ts';
 import { rollChaos, applyChaos } from '../_shared/chaosLayer.ts';
@@ -1602,9 +1603,15 @@ Output ONLY the prompt.`;
                 ...(sceneSplit && sceneSplit.source === 'split'
                   ? { setAtOverride: sceneSplit.setting }
                   : {}),
-                timeAxis: '',
-                weatherAxis: '',
-                phenomenaAxis: '',
+                // TIME + WEATHER. Create sent three empty strings here, so every dream of a
+                // given prompt was lit identically and the brief printed "- TIME:" with nothing
+                // after it. Nightly rolls these from the location's BIOME pools; Create has no
+                // biome (the place is whatever the user typed), so it rolls from climate-agnostic
+                // pools that read correctly anywhere. Phenomena stays empty on purpose — the vibe
+                // fragment already owns that register. Off = the original empty strings.
+                ...(castCfg.createSceneAxes
+                  ? rollCreateSceneAxes()
+                  : { timeAxis: '', weatherAxis: '', phenomenaAxis: '' }),
                 // Pass the user's scene as a wardrobe hint too so a themed request
                 // ("as superheroes") reaches the wardrobe slot, not just the scene. With the
                 // split on this is dropped: the same string was reaching the costume brief as

@@ -182,6 +182,10 @@ export interface EngineConfig {
    *  Create never set sceneRegister, so it drew the `casual` pool — resort glamour,
    *  vintage cinema, mid-century elegance — and dressed snowboarders in cravats. */
   createActivityWardrobe: boolean;
+  /** Roll a time of day + weather for Create instead of sending empty axes. Nightly rolls these
+   *  from biome pools; Create had no biome and so sent '' for all three, lighting every dream of a
+   *  prompt identically. */
+  createSceneAxes: boolean;
   /** Holiday DAY-OF date rule (mig 471, HOLIDAY_DAY_OF_PLAN.md §4): local hour at the 08:00 UTC run
    *  from which the day-of is evaluated against the NEXT local date (24 = never). Default 20. */
   dayOfEveningCutoffHour: number;
@@ -272,6 +276,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   createPromptSceneSplit: false,
   createCoupleApprovals: false,
   createActivityWardrobe: false,
+  createSceneAxes: false,
   dayOfEveningCutoffHour: 20,
   dayOfCostumePct: 100,
   holidayPostcardScope: 'day_of',
@@ -437,6 +442,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     createPromptSceneSplit: data.create_prompt_scene_split === true,
     createCoupleApprovals: data.create_couple_approvals === true,
     createActivityWardrobe: data.create_activity_wardrobe === true,
+    createSceneAxes: data.create_scene_axes === true,
     dayOfEveningCutoffHour: clampHour(data.day_of_evening_cutoff_hour, 20),
     dayOfCostumePct: clampPct(data.day_of_costume_pct, DEFAULT_ENGINE_CONFIG.dayOfCostumePct),
     holidayPostcardScope:

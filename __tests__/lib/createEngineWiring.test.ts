@@ -31,6 +31,7 @@ describe('generate-dream reads every create_* switch', () => {
     ['createRetryChangesModel', 'moving model on a re-render'],
     ['createPromptSceneSplit', 'splitting the prompt into setting + action'],
     ['createActivityWardrobe', 'dressing for the activity'],
+    ['createSceneAxes', 'rolling a time of day and weather'],
   ])('reads %s (%s)', (field) => {
     expect(SRC).toContain(field);
   });
@@ -65,6 +66,11 @@ describe('generate-dream calls the modules those switches gate', () => {
 
   it('passes the activity-wardrobe flag into the slot input', () => {
     expect(SRC).toContain('activityWardrobe: true');
+  });
+
+  it('rolls scene axes instead of sending the empty strings it used to', () => {
+    expect(SRC).toContain("from '../_shared/createSceneAxes.ts'");
+    expect(SRC).toContain('rollCreateSceneAxes()');
   });
 });
 
