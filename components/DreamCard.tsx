@@ -841,29 +841,30 @@ export const DreamCard = memo(function DreamCard({
                       toggle with no count; only conversation-first products (X, Threads, Mastodon)
                       publish one. So the rail now says exactly one thing: did YOU repost this.
                       `repost_count` stays in the database untouched; ranking still uses it. */}
-                  {/* TWO signals, because one was not enough (Kevin, 2026-09-20 — "this is too
-                      subtle"). Fill alone failed first: `sync` is two circular arrows with NO enclosed
-                      area, so `sync` vs `sync-outline` differ only in stroke weight and taps registered
-                      in the database while the rail looked inert. Colour alone was next, but
-                      colors.success (#4CAA64) is a muted forest green that sinks into dark artwork. So
-                      now: the theme's BRIGHT green, plus the check badge back in the glyph's hollow
-                      centre. Colour reads at a glance the way the heart above does; the check says
-                      unambiguously that the action landed. */}
+                  {/* WHITE, BOLDER, CHECKED (Kevin, 2026-09-20: "i want it white, is there a way to
+                      just make it checked and bold when reposted?"). Colour is out entirely — green
+                      read either as decoration (a thin line) or as a button glued on (a solid disc),
+                      and it broke the rail's rule that only the heart earns a colour. So the state is
+                      carried by three things that all stay white: the heavier `sync` glyph instead of
+                      `sync-outline`, two extra points of size, and the check in the glyph's hollow
+                      centre. The check is what actually communicates — weight and size alone were
+                      invisible when tried on their own. The wrapper is a FIXED 30pt box so the size
+                      bump cannot nudge the icons below it. */}
                   <View style={s.repostStack}>
                     <Ionicons
                       name={isReposted ? 'sync' : 'sync-outline'}
-                      size={26}
-                      color={isReposted ? REPOSTED_GREEN : '#FFFFFF'}
+                      size={isReposted ? 28 : 26}
+                      color="#FFFFFF"
                       style={ui.sideIcon}
                     />
                     {isReposted && (
                       <View style={s.repostCheck} pointerEvents="none">
                         {/* MCI check-bold: Ionicons has no bold check, and a hairline one is lost
-                            inside a 26pt glyph. */}
+                            inside the glyph. */}
                         <MaterialCommunityIcons
                           name="check-bold"
                           size={11}
-                          color={REPOSTED_GREEN}
+                          color="#FFFFFF"
                           style={ui.sideIcon}
                         />
                       </View>
@@ -1019,13 +1020,8 @@ export const DreamCard = memo(function DreamCard({
 // 0↔1 threshold then becomes a visibility flip, not a remount → no reflow.
 const hiddenCount = { opacity: 0 } as const;
 
-/** The reposted state's green. colors.success (#4CAA64) is the muted forest green used on light
- *  surfaces and it disappears over dark artwork; colors.prompt is the theme's BRIGHT green, which is
- *  what this rail needs to read at a glance over a full-bleed image. */
-const REPOSTED_GREEN = colors.prompt;
-
 const s = StyleSheet.create({
-  repostStack: { alignItems: 'center', justifyContent: 'center' },
+  repostStack: { width: 30, height: 30, alignItems: 'center', justifyContent: 'center' },
   repostCheck: {
     ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
