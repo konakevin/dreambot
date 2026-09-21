@@ -18,7 +18,7 @@ import {
 } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { timeAgo } from '@/lib/timeAgo';
 import { GestureDetector } from 'react-native-gesture-handler';
@@ -841,31 +841,33 @@ export const DreamCard = memo(function DreamCard({
                       toggle with no count; only conversation-first products (X, Threads, Mastodon)
                       publish one. So the rail now says exactly one thing: did YOU repost this.
                       `repost_count` stays in the database untouched; ranking still uses it. */}
-                  {/* SOLID FILL, WHITE GLYPH (Kevin, 2026-09-20: "i feel like it should white, but
-                      maybe somehow fill it solid?"). Three attempts got here, and the failures are the
-                      reason this is shaped the way it is:
-                        1. fill vs outline — `sync` is two circular arrows with NO enclosed area, so the
-                           two variants differ only in stroke weight; taps landed in the database while
-                           the rail looked inert.
-                        2. colors.success — the muted forest green for light surfaces; it sank into dark
-                           artwork.
-                        3. bright green glyph + check — legible, but a thin coloured line over a busy
-                           image still reads as decoration rather than state.
-                      A solid disc cannot be missed at any size, over any image, and the rail already
-                      speaks this language: the admin X at the top is a filled circle, and the inbox
-                      marks a repost with a filled green badge + white glyph, so the two surfaces now
-                      match. The check is gone — the fill IS the state, and a tick inside a 36pt disc
-                      would be clutter.
-
-                      The 36pt box is present in BOTH states with only the background changing, so
-                      toggling can never reflow the icons below it. */}
-                  <View style={[s.repostBadge, isReposted && s.repostBadgeOn]}>
+                  {/* TWO signals, because one was not enough (Kevin, 2026-09-20 — "this is too
+                      subtle"). Fill alone failed first: `sync` is two circular arrows with NO enclosed
+                      area, so `sync` vs `sync-outline` differ only in stroke weight and taps registered
+                      in the database while the rail looked inert. Colour alone was next, but
+                      colors.success (#4CAA64) is a muted forest green that sinks into dark artwork. So
+                      now: the theme's BRIGHT green, plus the check badge back in the glyph's hollow
+                      centre. Colour reads at a glance the way the heart above does; the check says
+                      unambiguously that the action landed. */}
+                  <View style={s.repostStack}>
                     <Ionicons
                       name={isReposted ? 'sync' : 'sync-outline'}
-                      size={24}
-                      color="#FFFFFF"
+                      size={26}
+                      color={isReposted ? REPOSTED_GREEN : '#FFFFFF'}
                       style={ui.sideIcon}
                     />
+                    {isReposted && (
+                      <View style={s.repostCheck} pointerEvents="none">
+                        {/* MCI check-bold: Ionicons has no bold check, and a hairline one is lost
+                            inside a 26pt glyph. */}
+                        <MaterialCommunityIcons
+                          name="check-bold"
+                          size={11}
+                          color={REPOSTED_GREEN}
+                          style={ui.sideIcon}
+                        />
+                      </View>
+                    )}
                   </View>
                 </TouchableOpacity>
               )}
@@ -1023,16 +1025,12 @@ const hiddenCount = { opacity: 0 } as const;
 const REPOSTED_GREEN = colors.prompt;
 
 const s = StyleSheet.create({
-  // Fixed footprint in both states so a toggle never moves the icons below it; only the
-  // background changes.
-  repostBadge: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+  repostStack: { alignItems: 'center', justifyContent: 'center' },
+  repostCheck: {
+    ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  repostBadgeOn: { backgroundColor: REPOSTED_GREEN },
   card: { width: SCREEN_WIDTH, height: SCREEN_HEIGHT, backgroundColor: '#000' },
   // Surface-tinted background under the Image while it decodes/loads —
   // replaces the pure-black gap users were seeing during expo-image's
