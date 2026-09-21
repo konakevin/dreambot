@@ -25,13 +25,8 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 
-/**
- * PALETTES. Gold is the original Rad-or-Bad confetti spectrum: #FFD700 gold, amber, pale yellow,
- * cream, orange, with white for the hottest particles. Love borrows the heart's own red and warms
- * it through pink and rose, so a like throws the colour it already wears instead of a second,
- * unrelated accent. Same geometry either way — only the hues differ.
- */
-export const SPARKLE_GOLD = [
+/** Sparkle palette: the app's gold, warmed and cooled, plus white for the hottest few. */
+const SPARKLE_COLORS = [
   '#FFD700',
   '#FFFFFF',
   '#FFC044',
@@ -40,18 +35,7 @@ export const SPARKLE_GOLD = [
   '#FFF0AA',
   '#FFFFFF',
   '#FFAA33',
-] as const;
-
-export const SPARKLE_LOVE = [
-  '#FF3B6B',
-  '#FFFFFF',
-  '#FF7AA2',
-  '#FFB3C7',
-  '#FF3B6B',
-  '#FFD1DC',
-  '#FFFFFF',
-  '#FF5E86',
-] as const;
+];
 
 // Tuned by eye (Kevin, 2026-09-20: "make it a bit bigger and last longer"). Raising SPREAD and
 // DURATION together is what keeps it reading as a throw: distance alone makes particles look
@@ -71,7 +55,7 @@ interface ParticleConfig {
   angle: number;
   distanceFactor: number;
   size: number;
-  colorIndex: number;
+  color: string;
   delayMs: number;
   rotationDeg: number;
 }
@@ -86,13 +70,13 @@ const PARTICLES: ParticleConfig[] = Array.from({ length: COUNT }, (_, i) => {
     angle: (i / COUNT) * Math.PI * 2 + (r1 - 0.5) * 0.7,
     distanceFactor: 0.45 + r2 * 0.55,
     size: 3.5 + r3 * 4.5,
-    colorIndex: i % SPARKLE_GOLD.length,
+    color: SPARKLE_COLORS[i % SPARKLE_COLORS.length],
     delayMs: Math.floor(r4 * 90),
     rotationDeg: Math.floor(r1 * 360),
   };
 });
 
-function Particle({ config, palette }: { config: ParticleConfig; palette: readonly string[] }) {
+function Particle({ config }: { config: ParticleConfig }) {
   const progress = useSharedValue(0);
 
   useEffect(() => {
@@ -134,7 +118,7 @@ function Particle({ config, palette }: { config: ParticleConfig; palette: readon
           width: config.size,
           height: config.size,
           borderRadius: config.size / 2,
-          backgroundColor: palette[config.colorIndex % palette.length],
+          backgroundColor: config.color,
         },
         style,
       ]}
@@ -145,11 +129,9 @@ function Particle({ config, palette }: { config: ParticleConfig; palette: readon
 interface Props {
   /** Fires once the longest particle has finished, so the parent can unmount this. */
   onDone?: () => void;
-  /** SPARKLE_GOLD (default) or SPARKLE_LOVE — see the palette note above. */
-  palette?: readonly string[];
 }
 
-export function SparkleBurst({ onDone, palette = SPARKLE_GOLD }: Props) {
+export function SparkleBurst({ onDone }: Props) {
   useEffect(() => {
     // Longest particle = max delay + max scaled duration. One timer for the whole burst.
     const longest = 90 + DURATION * 1.2 + 60;
@@ -161,7 +143,7 @@ export function SparkleBurst({ onDone, palette = SPARKLE_GOLD }: Props) {
     // pointerEvents none: the burst must never eat the tap that spawned it, or a double-repost.
     <View style={s.root} pointerEvents="none">
       {PARTICLES.map((config, i) => (
-        <Particle key={i} config={config} palette={palette} />
+        <Particle key={i} config={config} />
       ))}
     </View>
   );
