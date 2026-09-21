@@ -632,23 +632,34 @@ export const DreamCard = memo(function DreamCard({
                   and credits the reposter; @name links to their profile. Shown
                   when the card reached the viewer via a followed user's repost. */}
               {item.surface_type === 'repost' && item.reposter_name && (
-                <View style={s.repostAttribRow}>
-                  <Ionicons name="sync-outline" size={14} color={colors.success} />
-                  <Text style={s.repostAttribText} numberOfLines={1}>
-                    Reposted by{' '}
-                    <Text
-                      style={s.repostAttribLink}
-                      suppressHighlighting
-                      onPress={() => {
-                        if (item.reposter_id) nav.push(`/user/${item.reposter_id}`);
-                      }}
-                    >
-                      @{item.reposter_name}
+                // The SAME pill as the fullscreen inbox context line directly below (Kevin,
+                // 2026-09-21) — same wrap, same pill, same badge, same text style, so identical
+                // position above the metadata and identical padding. Both answer "why am I seeing
+                // this?", so they get one treatment rather than a bare shadowed line here and a
+                // pill there. Styles are SHARED, not copied, so they cannot drift. This keeps its
+                // own JSX rather than using the `contextLine` prop because the @handle taps through
+                // to the reposter's profile, which that prop's plain text cannot do.
+                <View style={s.contextLineWrap}>
+                  <View style={s.contextLinePill}>
+                    <View style={[s.contextLineBadge, { backgroundColor: colors.success }]}>
+                      <Ionicons name="sync-outline" size={11} color="#FFFFFF" />
+                    </View>
+                    <Text style={s.contextLineText} numberOfLines={1}>
+                      Reposted by{' '}
+                      <Text
+                        style={s.repostAttribLink}
+                        suppressHighlighting
+                        onPress={() => {
+                          if (item.reposter_id) nav.push(`/user/${item.reposter_id}`);
+                        }}
+                      >
+                        @{item.reposter_name}
+                      </Text>
+                      {(item.reposters_more ?? 0) > 0
+                        ? ` and ${item.reposters_more} ${item.reposters_more === 1 ? 'other' : 'others'}`
+                        : ''}
                     </Text>
-                    {(item.reposters_more ?? 0) > 0
-                      ? ` and ${item.reposters_more} ${item.reposters_more === 1 ? 'other' : 'others'}`
-                      : ''}
-                  </Text>
+                  </View>
                 </View>
               )}
               {contextLine ? (
@@ -1178,22 +1189,6 @@ const s = StyleSheet.create({
     fontSize: fontScale(13),
     fontWeight: '600',
     flexShrink: 1,
-  },
-  // Repost attribution line ("♻ Reposted by @x") at the top of the post info.
-  repostAttribRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    marginBottom: verticalScale(6),
-  },
-  repostAttribText: {
-    color: '#FFFFFF',
-    fontSize: fontScale(12),
-    fontWeight: '600',
-    opacity: 0.92,
-    textShadowColor: 'rgba(0,0,0,0.85)',
-    textShadowRadius: 3,
-    textShadowOffset: { width: 0, height: 1 },
   },
   // The @reposter handle inside the attribution line — a tappable link to the
   // reposter's profile. Underlined so it reads as a link against the image.
