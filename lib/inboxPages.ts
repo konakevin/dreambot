@@ -120,7 +120,13 @@ export function startIndexFor(pages: readonly InboxPage[], groupKey: string): nu
   return i < 0 ? 0 : i;
 }
 
-/** "5 of 23" — the position line, always over the WHOLE inbox (never restarts inside a batch). */
+/**
+ * "Inbox · 5 of 23" — the position line, always over the WHOLE inbox (never restarts inside a batch).
+ *
+ * NAMED, not just numbered (Kevin, 2026-09-21). Fullscreen inbox pages are the same cards the feed
+ * shows, so a bare "1 of 9" floating over one left no clue which stack you were walking — the feed,
+ * an album, or the inbox. The word is the whole point; the count follows it.
+ */
 export function positionLabel(index: number, total: number): string {
-  return `${index + 1} of ${total}`;
+  return `Inbox · ${index + 1} of ${total}`;
 }

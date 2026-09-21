@@ -87,7 +87,7 @@ describe('buildInboxPages', () => {
     expect(startIndexFor(pages, 'dreamfail:q')).toBe(6);
     expect(startIndexFor(pages, 'share:alice:2026-09-18')).toBe(2);
     expect(startIndexFor(pages, 'nope')).toBe(0);
-    expect(positionLabel(6, pages.length)).toBe('7 of 10');
+    expect(positionLabel(6, pages.length)).toBe('Inbox · 7 of 10');
   });
 });
 

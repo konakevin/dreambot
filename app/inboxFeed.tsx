@@ -364,8 +364,10 @@ export default function InboxFeedScreen() {
     ]
   );
 
-  // Top pill = navigation state only ("8 of 46"): a fixed spot that never moves while you swipe. The context
-  // line rides with the post's metadata at the bottom-left (DreamCard contextLine); card pages ARE the context.
+  // Top pill = navigation state only ("Inbox · 8 of 46"): a fixed spot that never moves while you swipe. It
+  // NAMES the inbox because these pages are the same cards the feed shows, so a bare count gave no clue which
+  // stack you were walking (Kevin, 2026-09-21). The context line rides with the post's metadata at the
+  // bottom-left (DreamCard contextLine); card pages ARE the context.
   const pill = activeIndex !== null ? positionLabel(activeIndex, pages.length) : null;
   const ready = membersReady && postsReady && pages.length > 0;
 
