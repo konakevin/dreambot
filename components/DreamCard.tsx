@@ -822,13 +822,7 @@ export const DreamCard = memo(function DreamCard({
                   </Text>
                 </TouchableOpacity>
               )}
-              {/* Repost — above bookmark. Shown on all posts incl. your own
-                  (Twitter-style self-repost). Stays white in both states; the
-                  reposted state is signalled by a bold white checkmark dropped
-                  into the icon's center (MCI check-bold — Ionicons has no bold
-                  check). Count below mirrors the like/comment rail: floored at 1
-                  when isReposted (your repost counts), opacity-hidden at 0 so the
-                  rail's vertical rhythm never reflows. */}
+              {/* Repost. Binary marker of YOUR state only — see the colour note on the icon. */}
               {canRepost && (
                 <TouchableOpacity
                   style={ui.sideButton}
@@ -845,13 +839,19 @@ export const DreamCard = memo(function DreamCard({
                       follower bump by design (migs 418/419), so the tally advertises a metric the
                       system deliberately caps. Media-first feeds agree: TikTok's repost is a binary
                       toggle with no count; only conversation-first products (X, Threads, Mastodon)
-                      publish one. So the rail now says exactly one thing — did YOU repost this —
-                      the same way Save two icons below already does, fill for on and outline for
-                      off. `repost_count` stays in the database untouched; ranking still uses it. */}
+                      publish one. So the rail now says exactly one thing: did YOU repost this.
+                      `repost_count` stays in the database untouched; ranking still uses it. */}
                   <Ionicons
                     name={isReposted ? 'sync' : 'sync-outline'}
                     size={26}
-                    color="#FFFFFF"
+                    // COLOUR carries the state, not fill (Kevin, 2026-09-20). Fill-vs-outline works for
+                    // the bookmark below because it is a hollow shape that becomes solid; `sync` is two
+                    // circular arrows with NO enclosed area, so its two variants differ only in stroke
+                    // weight and the change was near-invisible — taps registered in the database while
+                    // the rail looked inert. Green is the same colour the inbox already uses for a
+                    // repost, and it only ever appears on posts you personally reposted, so it reads
+                    // like the heart above: white until you act, then colour.
+                    color={isReposted ? colors.success : '#FFFFFF'}
                     style={ui.sideIcon}
                   />
                 </TouchableOpacity>
