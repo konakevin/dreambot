@@ -30,6 +30,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useCardGestures } from '@/hooks/gestures/useCardGestures';
 import { GalleryCarousel, GalleryNav } from '@/components/GalleryCarousel';
+import { Toast } from '@/components/Toast';
 import { ExpandableDescription } from '@/components/dreamCardBits/ExpandableDescription';
 import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
@@ -827,7 +828,17 @@ export const DreamCard = memo(function DreamCard({
                 <TouchableOpacity
                   style={ui.sideButton}
                   onPress={() => {
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    // A toast on the ON direction only (Kevin, 2026-09-20). The checkmark alone was
+                    // easy to miss on a busy image, and a repost is the one rail action whose effect
+                    // happens somewhere the user cannot see — in their followers' feeds — so it is
+                    // worth saying out loud. Nothing on un-repost: removing something needs no
+                    // congratulating, and a toast on every toggle would be noise.
+                    if (!isReposted) {
+                      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                      Toast.show('Reposted to your followers', 'sync-outline');
+                    } else {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    }
                     toggleRepost.mutate({ uploadId: item.id, currentlyReposted: isReposted });
                   }}
                   activeOpacity={0.7}
