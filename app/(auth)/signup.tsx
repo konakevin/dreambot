@@ -13,6 +13,7 @@ import { getPostAuthRoute } from '@/lib/postAuthRoute';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
 import { moderateText } from '@/lib/moderation';
+import { trackSignupCompleted } from '@/lib/analytics';
 
 export default function SignupScreen() {
   const [username, setUsername] = useState('');
@@ -60,11 +61,15 @@ export default function SignupScreen() {
       showAlert('Sign up failed', error.message);
     } else if (data.session) {
       // autoconfirm ON → already logged in, go straight in.
+      trackSignupCompleted({ method: 'email' });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       const dest = await getPostAuthRoute();
       router.replace(dest);
     } else {
-      // autoconfirm OFF (current state) → must confirm via email first.
+      // autoconfirm OFF (current state) → must confirm via email first. The
+      // account row exists either way, so the signup counts here too; it lands
+      // on the anonymous person and merges in when they confirm and identify.
+      trackSignupCompleted({ method: 'email' });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       setAwaitingConfirmation(true);
     }

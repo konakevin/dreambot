@@ -110,6 +110,23 @@ export function trackLoginCompleted(p: { method: AuthMethod }): void {
   capture('login_completed', p);
 }
 
+// One OAuth button ("Continue with Apple") serves BOTH a brand-new account and a
+// returning user, so the signup/login split can't come from which button was
+// tapped — it comes from how old the account is. Supabase stamps `created_at`
+// when the row is minted, and the sign-in that just returned it is necessarily
+// seconds old for a first-time account, so a generous 60s ceiling separates the
+// two with no returning sign-in able to fall inside it. A missing/unparseable
+// created_at degrades to `login_completed` (the safer under-count: it never
+// inflates signups).
+const NEW_ACCOUNT_WINDOW_MS = 60_000;
+
+export function trackAuthCompleted(p: { method: AuthMethod; createdAt?: string }): void {
+  const createdMs = p.createdAt == null ? NaN : Date.parse(p.createdAt);
+  const isNewAccount = Number.isFinite(createdMs) && Date.now() - createdMs < NEW_ACCOUNT_WINDOW_MS;
+  if (isNewAccount) trackSignupCompleted({ method: p.method });
+  else trackLoginCompleted({ method: p.method });
+}
+
 // ── Social — the missing halves (undo actions + comment-likes + safety) ──────
 export function trackPostUnliked(): void {
   capture('post_unliked');

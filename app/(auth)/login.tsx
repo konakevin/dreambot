@@ -14,6 +14,7 @@ import { supabase } from '@/lib/supabase';
 import { signInWithGoogle } from '@/lib/googleAuth';
 import { signInWithApple } from '@/lib/appleAuth';
 import { signInWithFacebook } from '@/lib/facebookAuth';
+import { trackAuthCompleted, trackLoginCompleted } from '@/lib/analytics';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -61,6 +62,7 @@ export default function LoginScreen() {
     if (error) {
       showAlert('Sign in failed', 'Invalid email or password.');
     } else {
+      trackLoginCompleted({ method: 'email' });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       const dest = await getPostAuthRoute();
       router.replace(dest);
@@ -161,7 +163,11 @@ export default function LoginScreen() {
                   onPress={async () => {
                     try {
                       setLoading(true);
-                      await signInWithApple();
+                      const authed = await signInWithApple();
+                      trackAuthCompleted({
+                        method: 'apple',
+                        createdAt: authed.user?.created_at,
+                      });
                       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                       // Resolve onboarding-vs-tabs BEFORE navigating (like the
                       // email path) so a fresh user goes straight to onboarding
@@ -194,7 +200,8 @@ export default function LoginScreen() {
                 onPress={async () => {
                   try {
                     setLoading(true);
-                    await signInWithGoogle();
+                    const authed = await signInWithGoogle();
+                    trackAuthCompleted({ method: 'google', createdAt: authed.user?.created_at });
                     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                     router.replace(await getPostAuthRoute());
                   } catch (err: unknown) {
@@ -218,7 +225,8 @@ export default function LoginScreen() {
                 onPress={async () => {
                   try {
                     setLoading(true);
-                    await signInWithFacebook();
+                    const authed = await signInWithFacebook();
+                    trackAuthCompleted({ method: 'facebook', createdAt: authed.user?.created_at });
                     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                     router.replace(await getPostAuthRoute());
                   } catch (err: unknown) {

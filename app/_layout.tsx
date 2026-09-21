@@ -790,6 +790,10 @@ function AnalyticsIdentity() {
   const initialized = useAuthStore((s) => s.initialized);
   const userId = useAuthStore((s) => s.user?.id);
   const isAdmin = useAuthStore((s) => s.isAdmin);
+  // The last user we identified, so a LOGOUT (identified → no user) can be told
+  // apart from a logged-out COLD START (never identified). Only the former may
+  // reset — see the comment on the reset below.
+  const identifiedUserId = useRef<string | undefined>(undefined);
   useEffect(() => {
     // Wait for the auth session to finish restoring before touching analytics
     // identity. Before `initialized`, `userId` is transiently undefined on EVERY
@@ -803,8 +807,20 @@ function AnalyticsIdentity() {
     setAnalyticsOptOut(isAdmin);
 
     if (!userId) {
-      // Genuinely logged out (hydration done, no user) — clear the identity link.
-      resetAnalytics();
+      // Reset ONLY on a real logout. posthog.reset() mints a BRAND-NEW anonymous
+      // distinct_id, so calling it on every logged-out cold start splits the
+      // launch into two persons: the SDK boots on anon id A and fires
+      // `Application Installed` / `Application Opened` / the first `$screen`,
+      // then auth hydration lands ~0.2-5s later and reset() moves everything
+      // after it to anon id B — which is what later merges into the real user.
+      // Person A is orphaned with 3 events forever, so every funnel starting at
+      // `Application Installed` reads ~0% no matter how well the app converts.
+      // (Measured 2026-09-21: 27 of 28 installs in 30 days were 3-event ghosts,
+      // each with a twin person starting seconds later carrying the real
+      // session — one pair split by 0.12s.) On a cold start with no session
+      // there is no identity to clear, so the reset is pure damage.
+      if (identifiedUserId.current) resetAnalytics();
+      identifiedUserId.current = undefined;
       return;
     }
 
@@ -815,6 +831,7 @@ function AnalyticsIdentity() {
     // Previously the identify was BLOCKED on this fetch, widening the anonymous
     // window on every launch.
     identifyUser(userId);
+    identifiedUserId.current = userId;
     let cancelled = false;
     supabase
       .from('users')

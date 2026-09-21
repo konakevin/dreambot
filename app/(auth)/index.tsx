@@ -15,6 +15,7 @@ import { signInWithGoogle } from '@/lib/googleAuth';
 import { signInWithApple } from '@/lib/appleAuth';
 import { signInWithFacebook } from '@/lib/facebookAuth';
 import { verticalScale, fontScale, verticalScaleClamped } from '@/lib/responsive';
+import { trackAuthCompleted } from '@/lib/analytics';
 
 const MASCOT_SIZE = verticalScaleClamped(130, 100, 150);
 
@@ -65,13 +66,15 @@ export default function WelcomeScreen() {
   async function handleSocialSignIn(provider: 'google' | 'apple' | 'facebook') {
     try {
       setLoading(provider);
-      if (provider === 'google') {
-        await signInWithGoogle();
-      } else if (provider === 'apple') {
-        await signInWithApple();
-      } else {
-        await signInWithFacebook();
-      }
+      const authed =
+        provider === 'google'
+          ? await signInWithGoogle()
+          : provider === 'apple'
+            ? await signInWithApple()
+            : await signInWithFacebook();
+      // This one button is both "sign up" and "sign in" — trackAuthCompleted
+      // splits them on the account's age, not on which screen we're on.
+      trackAuthCompleted({ method: provider, createdAt: authed.user?.created_at });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       const dest = await getPostAuthRoute();
       router.replace(dest);
