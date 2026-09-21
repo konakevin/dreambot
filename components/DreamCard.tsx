@@ -30,7 +30,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useCardGestures } from '@/hooks/gestures/useCardGestures';
 import { GalleryCarousel, GalleryNav } from '@/components/GalleryCarousel';
-import { SparkleBurst } from '@/components/SparkleBurst';
+import { SparkleBurst, SPARKLE_LOVE } from '@/components/SparkleBurst';
 import { ExpandableDescription } from '@/components/dreamCardBits/ExpandableDescription';
 import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
@@ -288,6 +288,8 @@ export const DreamCard = memo(function DreamCard({
   const [retryNonce, setRetryNonce] = useState(0);
   /** Non-zero while a repost sparkle burst is running; the key remounts it so repeat taps re-fire. */
   const [burstKey, setBurstKey] = useState(0);
+  /** Same, for likes. Separate key so a like and a repost can burst at once without cancelling. */
+  const [likeBurstKey, setLikeBurstKey] = useState(0);
   const [showRetryUi, setShowRetryUi] = useState(false);
 
   // Per-card image fit toggle (top-right HUD button). 'cover' is the default
@@ -441,6 +443,10 @@ export const DreamCard = memo(function DreamCard({
       // (onToggleLike). (Kevin 2026-09-11; previously the second double tap
       // toggled the like off.)
       if (!isLiked) onLike();
+      // Fires on EVERY double tap, matching the centre heart directly below: this gesture is
+      // one-way, so a replay on an already-liked post is a deliberate "yes, still liked", not a
+      // state change being celebrated twice.
+      setLikeBurstKey((k) => k + 1);
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       heartScale.value = 0;
       heartOpacity.value = 1;
@@ -775,11 +781,23 @@ export const DreamCard = memo(function DreamCard({
               )}
               <TouchableOpacity
                 style={ui.sideButton}
-                onPress={onToggleLike}
+                onPress={() => {
+                  // ON direction only — this is the one path that unlikes, and a burst on the way
+                  // out would celebrate taking it back.
+                  if (!isLiked) setLikeBurstKey((k) => k + 1);
+                  onToggleLike();
+                }}
                 onLongPress={onLikesPress}
                 delayLongPress={400}
                 activeOpacity={0.7}
               >
+                {likeBurstKey > 0 && (
+                  <SparkleBurst
+                    key={likeBurstKey}
+                    palette={SPARKLE_LOVE}
+                    onDone={() => setLikeBurstKey(0)}
+                  />
+                )}
                 <Ionicons
                   name={isLiked ? 'heart' : 'heart-outline'}
                   size={28}
