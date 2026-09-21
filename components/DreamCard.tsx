@@ -18,7 +18,7 @@ import {
 } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { timeAgo } from '@/lib/timeAgo';
 import { GestureDetector } from 'react-native-gesture-handler';
@@ -838,34 +838,22 @@ export const DreamCard = memo(function DreamCard({
                   }}
                   activeOpacity={0.7}
                 >
-                  <View style={s.repostStack}>
-                    {/* GEOMETRY BEAT SEMANTICS on this rail (Kevin, 2026-09-20). `repeat` is the correct repost glyph
-                        (Twitter/X, Threads, Mastodon) but it is two horizontal arrows stacked, so it is inherently
-                        ~5:3 and read as "squashed" beside the square heart, comment, bookmark and send. The circular
-                        arrows are square by construction; OUTLINE rather than the filled `sync` we had, so it sits
-                        with the four stroke glyphs instead of competing with the solid heart. The cost is knowingly
-                        accepted: this shape says refresh more than it says "again, to my audience". */}
-                    <Ionicons name="sync-outline" size={26} color="#FFFFFF" style={ui.sideIcon} />
-                    {isReposted && (
-                      <View style={s.repostCheck} pointerEvents="none">
-                        <MaterialCommunityIcons
-                          name="check-bold"
-                          size={11}
-                          color="#FFFFFF"
-                          style={ui.sideIcon}
-                        />
-                      </View>
-                    )}
-                  </View>
-                  <Text
-                    style={[
-                      ui.sideCount,
-                      !Math.max(item.repost_count ?? 0, isReposted ? 1 : 0) && hiddenCount,
-                    ]}
-                    numberOfLines={1}
-                  >
-                    {Math.max(item.repost_count ?? 0, isReposted ? 1 : 0)}
-                  </Text>
+                  {/* BINARY STATE, NO COUNT (Kevin, 2026-09-20). This used to render
+                      max(repost_count, isReposted ? 1 : 0) — the real public tally — plus a check
+                      badge over the glyph. Two problems: a number under a rail icon reads as public
+                      social proof and invites optimising it, and reposts here grant a ONE-TIME
+                      follower bump by design (migs 418/419), so the tally advertises a metric the
+                      system deliberately caps. Media-first feeds agree: TikTok's repost is a binary
+                      toggle with no count; only conversation-first products (X, Threads, Mastodon)
+                      publish one. So the rail now says exactly one thing — did YOU repost this —
+                      the same way Save two icons below already does, fill for on and outline for
+                      off. `repost_count` stays in the database untouched; ranking still uses it. */}
+                  <Ionicons
+                    name={isReposted ? 'sync' : 'sync-outline'}
+                    size={26}
+                    color="#FFFFFF"
+                    style={ui.sideIcon}
+                  />
                 </TouchableOpacity>
               )}
               {onToggleSave && (
@@ -1068,12 +1056,6 @@ const s = StyleSheet.create({
   },
   sideActions: { position: 'absolute', right: 12, alignItems: 'center', gap: 16 },
   // Repost icon + centered checkmark overlay for the reposted state.
-  repostStack: { alignItems: 'center', justifyContent: 'center' },
-  repostCheck: {
-    ...StyleSheet.absoluteFillObject,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   visibilityCircle: {
     width: 36,
     height: 36,
