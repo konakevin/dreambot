@@ -829,13 +829,19 @@ export const DreamCard = memo(function DreamCard({
                   style={ui.sideButton}
                   onPress={() => {
                     // A toast on the ON direction only (Kevin, 2026-09-20). The checkmark alone was
-                    // easy to miss on a busy image, and a repost is the one rail action whose effect
-                    // happens somewhere the user cannot see — in their followers' feeds — so it is
-                    // worth saying out loud. Nothing on un-repost: removing something needs no
-                    // congratulating, and a toast on every toggle would be noise.
+                    // easy to miss on a busy image, so the action is worth saying out loud.
+                    //
+                    // THE WORDING IS DELIBERATELY NOT "to your followers". It said that at first and
+                    // Kevin caught it lying: the follower bump is granted ONCE per (user, dream), so
+                    // a re-repost after an un-repost is album-only and never re-surfaces (migs
+                    // 418/419, get_feed's repost_agg requires activations = 1). The RPC returns only
+                    // (reposted, repost_count), so the client cannot tell a first repost from a
+                    // re-activation — and rather than widen the RPC to find out, this says the one
+                    // thing that is true on EVERY path. Nothing on un-repost: removing something
+                    // needs no congratulating.
                     if (!isReposted) {
                       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                      Toast.show('Reposted to your followers', 'sync-outline');
+                      Toast.show('Added to your reposts', 'sync-outline');
                     } else {
                       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     }
