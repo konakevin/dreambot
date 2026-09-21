@@ -10,11 +10,16 @@ import {
   detectSelfInsert,
   DEFAULT_RELATIONSHIP_WORDS,
   DEFAULT_PET_WORDS,
+  DEFAULT_NAME_STOP_WORDS,
+  MIN_CAST_NAME_LENGTH,
 } from '@engine/selfInsertDetector';
 import {
   detectCastRoles,
+  detectCastRefs,
   DEFAULT_RELATIONSHIP_WORDS as CLIENT_REL_WORDS,
   DEFAULT_PET_WORDS as CLIENT_PET_WORDS,
+  DEFAULT_NAME_STOP_WORDS as CLIENT_STOP_WORDS,
+  MIN_CAST_NAME_LENGTH as CLIENT_MIN_NAME,
 } from '../../lib/selfInsertDetect';
 
 const PROMPTS = [
@@ -91,12 +96,35 @@ const PROMPTS = [
   'me and my dog',
   'my dog and me hiking',
   'me and a castle',
+  // cast names — the prompts below run against the CAST fixture too
+  'me and Steph at the beach',
+  'Steph and me on a rooftop',
+  'steph and i in paris',
+  'Steph at the beach',
+  'me and steph and my dog',
+  'me and Dawn at the beach',
+  'a walk at dawn by the river',
+  'me and Bo at the park',
+  'me and Taylor in the rain',
+  'me and The Eiffel Tower',
+];
+
+/** A roster with the shapes that actually bite: a normal name, a name that is also
+ *  scenery (Dawn), one below the length floor (Bo), and one that IS a relationship
+ *  word (Mom) and must therefore never match as a name. */
+const CAST = [
+  { id: 'p1', name: 'Steph' },
+  { id: 'p2', name: 'Dawn' },
+  { id: 'p3', name: 'Bo' },
+  { id: 'p4', name: 'Mom' },
 ];
 
 describe('client detector parity with engine selfInsertDetector', () => {
   it('default word lists are identical', () => {
     expect(CLIENT_REL_WORDS).toBe(DEFAULT_RELATIONSHIP_WORDS);
     expect(CLIENT_PET_WORDS).toBe(DEFAULT_PET_WORDS);
+    expect(CLIENT_STOP_WORDS).toBe(DEFAULT_NAME_STOP_WORDS);
+    expect(CLIENT_MIN_NAME).toBe(MIN_CAST_NAME_LENGTH);
   });
 
   it.each(PROMPTS)('agrees with the engine on: "%s"', (prompt) => {
@@ -115,5 +143,17 @@ describe('client detector parity with engine selfInsertDetector', () => {
     const engine = detectSelfInsert(prompt, words);
     const client = detectCastRoles(prompt, words);
     expect([...client].sort()).toEqual([...engine.referencedRoles].sort());
+  });
+
+  // The client resolves a name to show that person's FACE on the Create screen before
+  // the user spends anything, and the engine resolves it to actually cast them. If the
+  // two ever disagree, the preview becomes a lie — the exact failure this file exists
+  // to prevent, now for people as well as roles.
+  it.each(PROMPTS)('agrees on WHICH cast member is named in: "%s"', (prompt) => {
+    const engine = detectSelfInsert(prompt, { castNames: CAST });
+    const client = detectCastRefs(prompt, { castNames: CAST });
+    expect([...client.roles].sort()).toEqual([...engine.referencedRoles].sort());
+    expect(client.matchedPartnerId).toBe(engine.matchedPartnerId);
+    expect(client.unmatchedName).toBe(engine.unmatchedName);
   });
 });

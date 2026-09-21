@@ -41,6 +41,7 @@ import { saveVibeProfile } from '@/lib/saveVibeProfile';
 import {
   newPartnerId,
   isPartnerEnabled,
+  primaryPartnerOf,
   cleanPartnerNameInput,
   finalizePartnerName,
   PARTNER_NAME_MAX,
@@ -144,6 +145,7 @@ export function DreamCastRoster() {
   const updatePartner = useOnboardingStore((st) => st.updatePartner);
   const removePartner = useOnboardingStore((st) => st.removePartner);
   const setPartnerEnabled = useOnboardingStore((st) => st.setPartnerEnabled);
+  const setPrimaryPartner = useOnboardingStore((st) => st.setPrimaryPartner);
   const beginCastUpload = useOnboardingStore((st) => st.beginCastUpload);
   const endCastUpload = useOnboardingStore((st) => st.endCastUpload);
 
@@ -381,6 +383,26 @@ export function DreamCastRoster() {
     persist();
   };
 
+  /** The full rules behind the one-line note. Kevin, 2026-09-21: "we could also have a
+   *  little circled 'i' icon that explains it a bit more in depth". The heading keeps
+   *  the summary because that is what most people need; this is the opt-in detail, so
+   *  nobody who already understands it has to read past it. */
+  const explainCasting = () =>
+    showAlert(
+      'Who shows up in a dream',
+      'Type a name and we cast that person: "me and Steph at the beach" puts Steph in it.\n\n' +
+        'Say "my partner" or "my friend" instead and we cast your default, marked with a star below.\n\n' +
+        'Nightly dreams ignore both and rotate through everyone switched on, so you wake up to a different pairing.',
+      [{ text: 'Got it' }]
+    );
+
+  const setPrimary = (p: DreamPartner) => {
+    if (p.id === primaryId) return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setPrimaryPartner(p.id);
+    persist();
+  };
+
   const toggleEnabled = (p: DreamPartner, on: boolean) => {
     // The same invariant from the other side. Without this you could remove your photo
     // while the cast was parked (legal), then switch someone back on and land in the
@@ -398,6 +420,17 @@ export function DreamCastRoster() {
   };
 
   const anyBusy = busy !== null;
+
+  const inDreams = partners.filter((p) => isPartnerEnabled(p, activeId));
+  const notInDreams = partners.filter((p) => !isPartnerEnabled(p, activeId));
+  // Read through the SAME function the render mirror uses, never off `activeId`
+  // directly: the pointer can still name someone switched off (it is re-homed on
+  // the next sync, not on read), and a star on a backstage card would be a lie.
+  const primaryId = primaryPartnerOf(inDreams, activeId)?.id ?? null;
+  // With one person in your dreams they are necessarily the default, so the
+  // control would decorate a state that cannot be changed. It appears with the
+  // second member, which is also the first moment the question exists.
+  const showPrimary = inDreams.length > 1;
 
   /** What an in-flight upload is ACTUALLY doing. `busy` is set before the picker even
    *  opens, so a flat "Analyzing…" claimed we were reading a photo that did not exist
@@ -443,10 +476,16 @@ export function DreamCastRoster() {
             busy={isBusy}
           />
           <View style={s.info}>
-            {/* The title identifies the PERSON. With up to 5 in the cast, printing the
-                relationship here would put "Friend" on three cards in a row AND repeat
-                the pills below, so it is a name that falls back to the relationship
-                word when the user has not given one. */}
+            {/* The title identifies the PERSON, so an unnamed card says "Add a name"
+                rather than echoing the relationship (Kevin, 2026-09-21).
+
+                It used to fall back to the relationship word, which was fine while a
+                name was decoration — but a name is now FUNCTIONAL: it is how you
+                summon a specific person in a Create prompt ("me and Steph"), and the
+                relationship is already on the pill directly below, so the word was
+                doing nothing here but making an empty field look finished. A blank
+                invites filling; a label does not. Nothing is gated on it — the star
+                answers "whoever" for anyone who never types one. */}
             {editingId === p.id ? (
               <TextInput
                 style={s.nameInput}
@@ -470,7 +509,7 @@ export function DreamCastRoster() {
                 disabled={isBusy}
               >
                 <Text style={[s.name, !p.name && s.namePlaceholder]} numberOfLines={1}>
-                  {p.name || castRelationshipLabel(p.relationship)}
+                  {p.name || 'Add a name'}
                 </Text>
                 <Ionicons name="pencil" size={13} color={colors.textMuted} />
               </TouchableOpacity>
@@ -512,7 +551,7 @@ export function DreamCastRoster() {
           )}
         </View>
 
-        {/* Second line is the relationship and nothing else. */}
+        {/* Second line: the relationship pills, and at the far end the star. */}
         <View style={s.relRow}>
           {CAST_RELATIONSHIPS.map((rel) => {
             const on = p.relationship === rel.key;
@@ -529,13 +568,58 @@ export function DreamCastRoster() {
               </TouchableOpacity>
             );
           })}
+          {/* THE DEFAULT +1. Deliberately NOT a pill: the pills to its left are
+              "pick one of two attributes", and a third pill-shaped thing would read
+              as a third relationship. Exactly one filled star among hollow ones is
+              the universal "pick one of these" pattern instead.
+
+              No new colour. The screen's four jobs (teal = in your dreams, purple =
+              relationship, pink = warning, neutral = structure) stay as they are:
+              the primary is marked by FILL and WEIGHT, which is the same answer the
+              repost rail landed on after every coloured treatment was worse.
+
+              BOTH states carry words (Kevin, 2026-09-21: "the star icon seems kinda
+              small/unnoticable"). A bare 15pt hollow glyph alone in the row's empty
+              right end read as decoration, not a control — there was nothing to aim
+              at and nothing saying a tap would do anything. The asymmetry now carries
+              the meaning instead of the visibility: the starred card names a STATE
+              ("Default in Create"), the others name the ACTION ("Make default").
+
+              "Default in Create", not "Create default" — Create is a verb, and the
+              badge has to scope itself because a bare "Default" implies it governs
+              nightlies too (it does not). */}
+          {isOn && showPrimary && (
+            <TouchableOpacity
+              style={s.primaryBtn}
+              onPress={() => setPrimary(p)}
+              hitSlop={12}
+              activeOpacity={0.7}
+              disabled={anyBusy}
+              accessibilityRole="button"
+              accessibilityState={{ selected: p.id === primaryId }}
+              accessibilityLabel={
+                p.id === primaryId
+                  ? `${p.name || castRelationshipLabel(p.relationship)} is your default plus one`
+                  : `Make ${p.name || castRelationshipLabel(p.relationship)} your default plus one`
+              }
+            >
+              <Ionicons
+                name={p.id === primaryId ? 'star' : 'star-outline'}
+                size={17}
+                color={p.id === primaryId ? colors.textPrimary : colors.textSecondary}
+              />
+              <Text
+                style={[s.primaryLabel, p.id !== primaryId && s.primaryLabelOff]}
+                numberOfLines={1}
+              >
+                {p.id === primaryId ? 'Default in Create' : 'Make default'}
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     );
   };
-
-  const inDreams = partners.filter((p) => isPartnerEnabled(p, activeId));
-  const notInDreams = partners.filter((p) => !isPartnerEnabled(p, activeId));
 
   return (
     <ScrollView
@@ -655,7 +739,37 @@ export function DreamCastRoster() {
           {partners.length > 0 && (
             <>
               <View style={s.panel}>
-                <Text style={[s.panelHead, s.panelHeadOn]}>IN YOUR DREAMS</Text>
+                <View style={s.panelHeadRow}>
+                  <Text style={[s.panelHead, s.panelHeadOn, s.panelHeadFlush]}>IN YOUR DREAMS</Text>
+                  {showPrimary && (
+                    <TouchableOpacity
+                      onPress={explainCasting}
+                      hitSlop={14}
+                      activeOpacity={0.7}
+                      accessibilityRole="button"
+                      accessibilityLabel="How casting works"
+                    >
+                      <Ionicons
+                        name="information-circle-outline"
+                        size={18}
+                        color={colors.textSecondary}
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
+                {/* Two sentences for the two ways to ask, name first because that is
+                    the one nobody guesses. The nightly caveat moved into the info sheet
+                    beside the heading: people DO assume the star changes their nightlies
+                    (it does not, and should not — a nightly is a surprise that rotates
+                    through everyone here, a Create is a request), but that is the third
+                    thing to learn, not the first. Shown only alongside the control it
+                    explains. */}
+                {showPrimary && (
+                  <Text style={s.panelNote}>
+                    In Create, type a name to cast that person. Say &ldquo;my partner&rdquo; and we
+                    use your default.
+                  </Text>
+                )}
                 {inDreams.length > 0 ? (
                   inDreams.map(renderPartner)
                 ) : (
@@ -763,6 +877,18 @@ const s = StyleSheet.create({
   // to "no accent on structure": YOU is the subject of the whole screen, so it gets
   // the brand's own colour while the parked BACKSTAGE heading stays muted. Headings
   // read teal (the active list) > lavender (you) > muted neutral (parked).
+  // The heading carries its own bottom divider, so the row that now holds the heading
+  // PLUS the info button takes the divider instead and the heading gives it up —
+  // otherwise the rule would stop short at the end of the text.
+  panelHeadRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: verticalScale(12),
+    borderBottomWidth: 1,
+    borderBottomColor: DIVIDER,
+  },
+  panelHeadFlush: { borderBottomWidth: 0 },
   panelHeadSelf: { color: colors.accentLight },
   // The ONLY teal besides the switch, and it means the same thing the switch does.
   panelHeadOn: { color: IN_DREAMS.color },
@@ -868,6 +994,35 @@ const s = StyleSheet.create({
   relPillActive: { backgroundColor: colors.accentBg, borderColor: colors.accent },
   relPillText: { color: colors.textSecondary, fontSize: fontScale(13), fontWeight: '600' },
   relPillTextActive: { color: colors.accentLight },
+  // Pushed to the far end of the relationship row, which had dead space while the
+  // card's top row was already carrying a switch plus two 44pt icon buttons. Padding
+  // plus hitSlop take a 15pt glyph to Apple's 44pt minimum without moving anything.
+  primaryBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    marginLeft: 'auto',
+    paddingHorizontal: 6,
+    paddingVertical: verticalScale(7),
+  },
+  primaryLabel: { color: colors.textPrimary, fontSize: fontScale(12), fontWeight: '700' },
+  // The action reads one step back from the state: same size, lighter weight, the
+  // row's secondary text colour. Loud enough to find, quiet enough that four of them
+  // never compete with the one that is actually set.
+  primaryLabelOff: { color: colors.textSecondary, fontWeight: '600' },
+  // The one line of teaching on this screen, so it sits under the heading it
+  // qualifies rather than floating as a tip.
+  panelNote: {
+    color: colors.subtleOnDark,
+    fontSize: fontScale(12),
+    lineHeight: fontScale(17),
+    // Heading's own horizontal padding, so the note hangs off the same left edge.
+    // It lands UNDER the heading's divider, which makes it read as the panel's
+    // opening line rather than as a subtitle glued to the label.
+    paddingHorizontal: verticalScale(12),
+    paddingTop: verticalScale(10),
+    paddingBottom: verticalScale(2),
+  },
   // Sits inside an empty "IN YOUR DREAMS" group, where it reads as that group's
   // state rather than as a warning tacked on the bottom of the screen.
   hint: { color: colors.subtleOnDark, fontSize: fontScale(13), padding: verticalScale(14) },

@@ -12,7 +12,11 @@
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { parsePolicyMode, type ModelPolicyMode } from './nightlyModelPolicy.ts';
-import { DEFAULT_RELATIONSHIP_WORDS, DEFAULT_PET_WORDS } from './selfInsertDetector.ts';
+import {
+  DEFAULT_RELATIONSHIP_WORDS,
+  DEFAULT_PET_WORDS,
+  DEFAULT_NAME_STOP_WORDS,
+} from './selfInsertDetector.ts';
 
 /** Nightly LOOKS path mode (mig 502): 'off' = legacy chain, 'shadow' = legacy + style_shadow stamps, 'on' = the contract decides. */
 export type NightlyLooksMode = 'off' | 'shadow' | 'on';
@@ -40,6 +44,9 @@ export interface EngineConfig {
   // canonical constants in selfInsertDetector.ts when the DB value is missing.
   relationshipWords: string;
   petWords: string;
+  /** Words a BARE cast-name mention must never hijack (migration 540) — scenery that
+   *  doubles as a name. An explicit "me and X" construction overrides it. */
+  nameStopWords: string;
   // Queue worker concurrency (migration 264). dreamQueueMaxConcurrent is the
   // GLOBAL cap on simultaneously-rendering jobs — the real anti-546 lever; the
   // worker claims only up to (cap − in_progress) per tick. Tunable live so we
@@ -155,6 +162,22 @@ export interface EngineConfig {
   nightlyLegacyLookPct: number;
   /** Couple prompt order (mig 470, characterSlotPrompt.ts): 'legacy' | 'subject_first'. */
   couplePromptStyle: 'legacy' | 'subject_first';
+  // ── CREATE engine switches (migration 541, 2026-09-21) ──────────────────
+  // Four INDEPENDENT levers so each is one variable and each rolls back with a single
+  // row, no deploy. All default OFF: the untouched Create path must stay byte-identical
+  // until a measured batch says otherwise.
+  /** 'experimental' composes couples through coupleComposerX (narrative_fg), the shape
+   *  the flux lab measured at 92% first-try vs the legacy 45% Create still runs. */
+  createCoupleEngine: 'production' | 'experimental';
+  /** A Create re-render moves to a different (never pricier) model instead of re-rolling
+   *  the one that just failed. FLUX_COUPLE_LAB lesson 6. */
+  createRetryChangesModel: boolean;
+  /** Split the user's prompt into a setting and an action instead of spending the whole
+   *  string as the location ("set at a companion snowboarding"). */
+  createPromptSceneSplit: boolean;
+  /** Gate Create couples on the Create-side approval matrix. Inert until the grading
+   *  probe seeds it. */
+  createCoupleApprovals: boolean;
   /** Holiday DAY-OF date rule (mig 471, HOLIDAY_DAY_OF_PLAN.md §4): local hour at the 08:00 UTC run
    *  from which the day-of is evaluated against the NEXT local date (24 = never). Default 20. */
   dayOfEveningCutoffHour: number;
@@ -182,6 +205,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   relationshipRegex: null,
   relationshipWords: DEFAULT_RELATIONSHIP_WORDS,
   petWords: DEFAULT_PET_WORDS,
+  nameStopWords: DEFAULT_NAME_STOP_WORDS,
   dreamQueueMaxConcurrent: 40,
   // HEAVY (dual/face-swap) cap default = 10, the load-tested ceiling of ONE
   // face-swap-dual Fly machine (2GB/1vCPU): 10 = clean, 15 = exhausts/OOMs it
@@ -239,6 +263,10 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   nightlyLookRecency: 7,
   nightlyLegacyLookPct: 35,
   couplePromptStyle: 'legacy',
+  createCoupleEngine: 'production',
+  createRetryChangesModel: false,
+  createPromptSceneSplit: false,
+  createCoupleApprovals: false,
   dayOfEveningCutoffHour: 20,
   dayOfCostumePct: 100,
   holidayPostcardScope: 'day_of',
@@ -289,6 +317,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     relationshipWords:
       (data.relationship_words as string | null) || DEFAULT_ENGINE_CONFIG.relationshipWords,
     petWords: (data.pet_words as string | null) || DEFAULT_ENGINE_CONFIG.petWords,
+    nameStopWords: (data.name_stop_words as string | null) || DEFAULT_ENGINE_CONFIG.nameStopWords,
     dreamQueueMaxConcurrent: Number(
       data.dream_queue_max_concurrent ?? DEFAULT_ENGINE_CONFIG.dreamQueueMaxConcurrent
     ),
@@ -397,6 +426,11 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
       Math.max(0, Math.floor(Number(data.nightly_legacy_look_pct ?? 35) || 0))
     ),
     couplePromptStyle: data.couple_prompt_style === 'subject_first' ? 'subject_first' : 'legacy',
+    createCoupleEngine:
+      data.create_couple_engine === 'experimental' ? 'experimental' : 'production',
+    createRetryChangesModel: data.create_retry_changes_model === true,
+    createPromptSceneSplit: data.create_prompt_scene_split === true,
+    createCoupleApprovals: data.create_couple_approvals === true,
     dayOfEveningCutoffHour: clampHour(data.day_of_evening_cutoff_hour, 20),
     dayOfCostumePct: clampPct(data.day_of_costume_pct, DEFAULT_ENGINE_CONFIG.dayOfCostumePct),
     holidayPostcardScope:

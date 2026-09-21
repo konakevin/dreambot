@@ -64,7 +64,13 @@ export function composeExperimentalCouple(args: {
   const place = clean(input.setAtOverride || input.iconicAnchor || input.userPlace);
   const medium = clean(input.mediumFluxFragment);
   const scene = clean(slots.scene_description);
-  const beat = clean(slots.action);
+  // The beat falls back to input.action for CREATE (2026-09-21). Nightly authors its beat
+  // into `slots.action` via `authorAction`; Create never sets authorAction, and the slot
+  // pipeline force-nulls any un-asked-for `action` key (characterSlotPrompt.ts ~1828), so
+  // Create's rolled pose lives ONLY on `input.action`. Reading slots first keeps nightly
+  // byte-identical; without the fallback a ported Create couple would silently lose its
+  // pose entirely and render two people standing in a scene doing nothing.
+  const beat = clean(slots.action ?? input.action);
   const mood = clean(slots.mood);
   const props = clean(slots.props);
   const vibe = clean(input.vibeFragment);

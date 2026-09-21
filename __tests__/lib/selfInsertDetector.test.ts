@@ -446,3 +446,315 @@ describe('detectSelfInsert', () => {
     });
   });
 });
+
+/**
+ * CAST NAMES — "me and Steph" (Kevin, 2026-09-21).
+ *
+ * The design that makes this cheap: we never EXTRACT a name from the sentence, which
+ * is the hard problem. We already hold the complete candidate list (at most 5 roster
+ * names), so it is a bounded search for each of them. These lock the guards that stop
+ * that search from casting the wrong person.
+ */
+describe('cast-name matching', () => {
+  const CAST = [
+    { id: 'p1', name: 'Steph' },
+    { id: 'p2', name: 'Dawn' },
+    { id: 'p3', name: 'Bo' },
+    { id: 'p4', name: 'Mom' },
+  ];
+  const run = (prompt: string, names = CAST) => detectSelfInsert(prompt, { castNames: names });
+
+  it('a couple construction casts BOTH the user and the named person', () => {
+    const r = run('me and Steph at the beach');
+    expect([...r.referencedRoles].sort()).toEqual(['plus_one', 'self']);
+    expect(r.matchedPartnerId).toBe('p1');
+  });
+
+  it('works in the reverse order too', () => {
+    const r = run('Steph and me on a rooftop');
+    expect([...r.referencedRoles].sort()).toEqual(['plus_one', 'self']);
+    expect(r.matchedPartnerId).toBe('p1');
+  });
+
+  it('a BARE name is a solo of that person, exactly as "my wife at a bbq" is', () => {
+    const r = run('Steph at the beach');
+    expect([...r.referencedRoles]).toEqual(['plus_one']);
+    expect(r.matchedPartnerId).toBe('p1');
+  });
+
+  it('matches case-insensitively, because people type lowercase', () => {
+    expect(run('me and steph in paris').matchedPartnerId).toBe('p1');
+  });
+
+  it('matches whole words only', () => {
+    expect(run('a stephanie lookalike').matchedPartnerId).toBeUndefined();
+  });
+
+  it('duplicate names resolve to the FIRST in roster order', () => {
+    const dupes = [
+      { id: 'first', name: 'Steph' },
+      { id: 'second', name: 'Steph' },
+    ];
+    expect(run('me and Steph', dupes).matchedPartnerId).toBe('first');
+  });
+
+  // ── the guards ──────────────────────────────────────────────────────
+
+  it('a scenery word does NOT cast its namesake on a bare mention', () => {
+    const r = run('a walk at dawn by the river');
+    expect(r.matchedPartnerId).toBeUndefined();
+    expect([...r.referencedRoles]).toEqual([]);
+  });
+
+  it('but an explicit couple construction OVERRIDES the stop list', () => {
+    // "me and Dawn" is a person; "at dawn" is scenery. The construction is the evidence.
+    expect(run('me and Dawn at the beach').matchedPartnerId).toBe('p2');
+  });
+
+  it('names below the length floor never match', () => {
+    expect(run('me and Bo at the park').matchedPartnerId).toBeUndefined();
+  });
+
+  it('a name that IS a relationship word never matches as a NAME', () => {
+    // It still casts through the relationship path, which is the point: matching it
+    // twice would only double the chance of resolving to the wrong person.
+    const r = run('me and my mom at the lake');
+    expect(r.matchedPartnerId).toBeUndefined();
+    expect([...r.referencedRoles].sort()).toEqual(['plus_one', 'self']);
+  });
+
+  it('a name carrying regex metacharacters is escaped, not executed', () => {
+    const odd = [{ id: 'p9', name: 'J.R.' }];
+    expect(() => run('me and J.R. at the ranch', odd)).not.toThrow();
+    expect(run('me and J.R. at the ranch', odd).matchedPartnerId).toBe('p9');
+    // The dots are literal, so they must not act as "any character".
+    expect(run('me and JxRx at the ranch', odd).matchedPartnerId).toBeUndefined();
+  });
+
+  it('with no names supplied, behaviour is byte-for-byte what it always was', () => {
+    const withNames = detectSelfInsert('me and my wife at the beach', { castNames: [] });
+    const without = detectSelfInsert('me and my wife at the beach');
+    expect(withNames).toEqual(without);
+  });
+
+  // ── the name must never reach the model ─────────────────────────────
+
+  it('scrubs the matched name out of the prompt', () => {
+    // Left in, Flux gets a proper noun: a name that collides with a celebrity drags
+    // that face into the render, and an unusual one gets drawn as lettering.
+    const r = run('me and Steph at the beach');
+    expect(r.cleanedPrompt).not.toMatch(/steph/i);
+    expect(r.cleanedPrompt).toContain('a companion');
+  });
+
+  it('does not leave a dangling conjunction where the subject was removed', () => {
+    // Kevin's own test prompt, 2026-09-21. "Show me" is stripped by the verb+me rule,
+    // which takes the subject and leaves "and ..." opening the brief.
+    const r = run('Show me and Steph snowboarding', [{ id: 'p1', name: 'Steph' }]);
+    expect(r.cleanedPrompt).toBe('a companion snowboarding');
+  });
+
+  it('never mistakes the article "an" for a conjunction', () => {
+    // Must be a prompt that actually CLEANS — an imperative ("show me an apple") is not
+    // a self-insert at all and returns the original string untouched, so it would pass
+    // this without ever running the rule.
+    expect(detectSelfInsert('an apple orchard with me in it').cleanedPrompt).toMatch(
+      /^an apple orchard/
+    );
+  });
+
+  it('scrubs every occurrence, not just the first', () => {
+    expect(run('Steph and me, with Steph laughing').cleanedPrompt).not.toMatch(/steph/i);
+  });
+
+  // ── the "not in your cast" note ─────────────────────────────────────
+
+  it('reports a name-shaped word that matched nobody', () => {
+    const r = run('me and Taylor in the rain');
+    expect(r.unmatchedName).toBe('Taylor');
+    expect(r.matchedPartnerId).toBeUndefined();
+  });
+
+  it('stays quiet once a real cast member matched', () => {
+    expect(run('me and Steph at the Eiffel Tower').unmatchedName).toBeUndefined();
+  });
+
+  it('stays quiet on articles and possessives that open a noun phrase', () => {
+    expect(run('me and The Eiffel Tower').unmatchedName).toBeUndefined();
+    expect(run('me and my wife at the beach').unmatchedName).toBeUndefined();
+  });
+
+  it('needs a capital, because a lowercase word is no evidence of a person', () => {
+    // Matching is case-insensitive on purpose; the NOTE is strict on purpose. A missed
+    // note costs nothing, a wrong one is noise.
+    expect(run('me and taylor in the rain').unmatchedName).toBeUndefined();
+  });
+});
+
+/**
+ * CAST-NAME ROBUSTNESS. Everything here is built out of regexes assembled at runtime
+ * from TWO untrusted sources — names the user typed and word lists an admin can edit
+ * live — so the failure modes that matter are a thrown RegExp taking the render down,
+ * and a boundary slip casting the wrong person. Both are silent in production: a
+ * wrong-person render looks like a render.
+ */
+describe('cast-name robustness', () => {
+  const run = (prompt: string, names: unknown[], extra = {}) =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    detectSelfInsert(prompt, { castNames: names as any, ...extra });
+
+  // ── malformed roster data must never throw ──────────────────────────
+
+  it('survives null, undefined and half-built roster entries', () => {
+    const junk = [
+      null,
+      undefined,
+      {},
+      { id: 'a' },
+      { name: 'Steph' },
+      { id: 'b', name: null },
+      { id: 'c', name: 42 },
+      { id: 'd', name: '   ' },
+      { id: 'e', name: 'Steph' },
+    ];
+    expect(() => run('me and Steph', junk)).not.toThrow();
+    // The one WELL-FORMED entry still wins; the entry with no id is skipped.
+    expect(run('me and Steph', junk).matchedPartnerId).toBe('e');
+  });
+
+  it('survives an admin word list that is not valid regex', () => {
+    const names = [{ id: 'p1', name: 'Steph' }];
+    expect(() =>
+      run('me and Steph', names, { relationshipWords: '(unclosed', nameStopWords: '[bad' })
+    ).not.toThrow();
+  });
+
+  it('a malformed list FALLS BACK to the default instead of disabling detection', () => {
+    // Not throwing is only half of it. Silently detecting nothing would be just as bad
+    // and far harder to notice: dreams would quietly stop casting anyone.
+    const broken = run('me and my wife at the beach', [], { relationshipWords: '(unclosed' });
+    expect([...broken.referencedRoles].sort()).toEqual(['plus_one', 'self']);
+
+    const brokenStop = run('a walk at dawn', [{ id: 'p1', name: 'Dawn' }], {
+      nameStopWords: '[bad',
+    });
+    expect(brokenStop.matchedPartnerId).toBeUndefined(); // default stop list still applied
+  });
+
+  it('a VALID admin list is still honoured over the default', () => {
+    // The fallback must not swallow real overrides.
+    const r = run('me and my sidekick on a rooftop', [], { relationshipWords: 'sidekick' });
+    expect([...r.referencedRoles].sort()).toEqual(['plus_one', 'self']);
+  });
+
+  it('an empty or whitespace prompt matches nobody', () => {
+    const names = [{ id: 'p1', name: 'Steph' }];
+    expect(run('', names).matchedPartnerId).toBeUndefined();
+    expect(run('   ', names).matchedPartnerId).toBeUndefined();
+  });
+
+  // ── boundaries: the wrong-person failure mode ───────────────────────
+
+  it('a shorter name never matches inside a longer one', () => {
+    // Roster order puts Ann first, so first-wins would grab her if the right-hand
+    // boundary slipped. It must not: "Anna" is a different person.
+    const names = [
+      { id: 'ann', name: 'Ann' },
+      { id: 'anna', name: 'Anna' },
+    ];
+    expect(run('me and Anna at the lake', names).matchedPartnerId).toBe('anna');
+    expect(run('me and Ann at the lake', names).matchedPartnerId).toBe('ann');
+  });
+
+  it('does not match a name glued to other letters', () => {
+    const names = [{ id: 'p1', name: 'Kit' }];
+    expect(run('a kitchen at night', names).matchedPartnerId).toBeUndefined();
+    expect(run('flying a kite', names).matchedPartnerId).toBeUndefined();
+    expect(run('me and Kit in the garden', names).matchedPartnerId).toBe('p1');
+  });
+
+  it('matches across surrounding punctuation', () => {
+    const names = [{ id: 'p1', name: 'Steph' }];
+    for (const prompt of [
+      'me and Steph, laughing',
+      'me and Steph.',
+      '(Steph and me)',
+      '"Steph and me" at dusk',
+      'a photo of me and Steph',
+    ]) {
+      expect(run(prompt, names).matchedPartnerId).toBe('p1');
+    }
+  });
+
+  it('matches at the very start and the very end of the prompt', () => {
+    const names = [{ id: 'p1', name: 'Steph' }];
+    expect(run('Steph', names).matchedPartnerId).toBe('p1');
+    expect(run('Steph and me at the beach', names).matchedPartnerId).toBe('p1');
+    expect(run('a rooftop in tokyo with me and Steph', names).matchedPartnerId).toBe('p1');
+  });
+
+  // ── the shapes real names actually come in ──────────────────────────
+
+  it('handles accents, apostrophes, hyphens and two-word names', () => {
+    const cases: [string, string][] = [
+      ['José', 'me and José on a boat'],
+      ['Zoë', 'me and Zoë at the market'],
+      ["O'Brien", "me and O'Brien in a pub"],
+      ['Anne-Marie', 'me and Anne-Marie in paris'],
+      ['Sarah Jane', 'me and Sarah Jane at the fair'],
+    ];
+    for (const [name, prompt] of cases) {
+      const r = run(prompt, [{ id: 'p1', name }]);
+      expect(r.matchedPartnerId).toBe('p1');
+      // and the name still gets scrubbed before the prompt reaches a model
+      expect(r.cleanedPrompt.toLowerCase()).not.toContain(name.toLowerCase());
+    }
+  });
+
+  it('is case-insensitive in every direction', () => {
+    const names = [{ id: 'p1', name: 'Steph' }];
+    for (const prompt of ['me and STEPH', 'me and steph', 'me and StEpH']) {
+      expect(run(prompt, names).matchedPartnerId).toBe('p1');
+    }
+  });
+
+  it('a name stored with stray whitespace still matches', () => {
+    expect(run('me and Steph', [{ id: 'p1', name: '  Steph  ' }]).matchedPartnerId).toBe('p1');
+  });
+
+  // ── precedence ──────────────────────────────────────────────────────
+
+  it('a NAME outranks a relationship word in the same prompt', () => {
+    // One plus_one slot, two claims on it. The specific request wins: naming someone
+    // is more deliberate than saying "my partner", which only means the default.
+    const names = [{ id: 'p1', name: 'Steph' }];
+    const r = run('me and my wife and Steph at dinner', names);
+    expect(r.matchedPartnerId).toBe('p1');
+    expect([...r.referencedRoles].sort()).toEqual(['plus_one', 'self']);
+  });
+
+  it('an explicit name casts a BACKSTAGE member too', () => {
+    // The detector is given every NAMED roster member, switched on or not. Asking for
+    // someone by name is a manual request; the switch governs the automatic paths (the
+    // nightly rotation and the starred default). It also keeps the "not in your Dream
+    // Cast" note honest — it would otherwise fire for someone who IS in the cast.
+    expect(run('me and Steph', [{ id: 'parked', name: 'Steph' }]).matchedPartnerId).toBe('parked');
+  });
+
+  // ── nothing leaks when the feature is not in play ───────────────────
+
+  it('a prompt with no cast reference stays completely untouched', () => {
+    const names = [{ id: 'p1', name: 'Steph' }];
+    const r = run('a lighthouse in a storm', names);
+    expect(r.isSelfInsert).toBe(false);
+    expect(r.cleanedPrompt).toBe('a lighthouse in a storm');
+    expect(r.matchedPartnerId).toBeUndefined();
+    expect(r.unmatchedName).toBeUndefined();
+  });
+
+  it('pets still resolve alongside a named person', () => {
+    const r = run('me and Steph and my dog at the park', [{ id: 'p1', name: 'Steph' }]);
+    expect([...r.referencedRoles].sort()).toEqual(['pet', 'plus_one', 'self']);
+    expect(r.matchedPartnerId).toBe('p1');
+  });
+});

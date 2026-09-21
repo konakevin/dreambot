@@ -100,6 +100,33 @@ export function enabledPartners(profile: VibeProfile): DreamPartner[] {
 }
 
 /**
+ * THE primary rule, in one place: who a Create dream casts when the prompt asks
+ * for the +1 in general terms ("me and my partner", "me and my +1").
+ *
+ * The starred member if they are still switched on, otherwise the first one who
+ * is, otherwise nobody (a self-only dream). `active_partner_id` is a POINTER,
+ * not the eligibility rule, so it is only honoured while it names someone
+ * eligible — which is what keeps a stale pointer from casting a member the user
+ * has switched off.
+ *
+ * Exported because the Settings roster draws the star from it: the UI and the
+ * mirror must never disagree about who is primary, and the only way to
+ * guarantee that is for both to read the same function.
+ */
+export function primaryPartnerOf(
+  eligible: DreamPartner[],
+  activeId: string | null | undefined
+): DreamPartner | null {
+  return eligible.find((p) => p.id === activeId) ?? eligible[0] ?? null;
+}
+
+/** `primaryPartnerOf` over a whole profile. The Settings roster has the eligible
+ *  list in hand already and calls the other form; both are the same rule. */
+export function primaryPartner(profile: VibeProfile): DreamPartner | null {
+  return primaryPartnerOf(enabledPartners(profile), profile.active_partner_id);
+}
+
+/**
  * Sync `dream_cast`'s `plus_one` slot (the render mirror) + re-point
  * `active_partner_id` at whoever is mirrored, so the pointer never names a
  * member the user has switched off. Nobody enabled → no plus_one member
@@ -107,8 +134,7 @@ export function enabledPartners(profile: VibeProfile): DreamPartner[] {
  * roster/enabled change, before persisting.
  */
 export function syncActivePartnerMirror(profile: VibeProfile): VibeProfile {
-  const eligible = enabledPartners(profile);
-  const mirrored = eligible.find((p) => p.id === profile.active_partner_id) ?? eligible[0] ?? null;
+  const mirrored = primaryPartner(profile);
   const others = profile.dream_cast.filter((m) => m.role !== 'plus_one');
   const dream_cast = mirrored ? [...others, partnerToPlusOne(mirrored)] : others;
   return { ...profile, dream_cast, active_partner_id: mirrored?.id ?? null };

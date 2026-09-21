@@ -27,6 +27,7 @@ import { showPremiumGate } from '@/lib/premiumGate';
 import { Toast } from '@/components/Toast';
 import { moderateText } from '@/lib/moderation';
 import { isVibeProfile } from '@/types/vibeProfile';
+import { castChoiceRequest } from '@/lib/castChoiceRequest';
 import type { VibeProfile } from '@/types/vibeProfile';
 import { trackDreamCreateStarted, trackDreamCreated, trackDreamFailed } from '@/lib/analytics';
 import {
@@ -391,6 +392,11 @@ export function useDreamCreate() {
             use_exact_prompt: config.useExactPrompt,
             dream_smart: config.dreamSmart,
             force_model: config.forceModel ?? undefined,
+            // Explicit cast pick from the Create chip. Spreads to NOTHING on the
+            // default (auto) path, so the untouched flow is byte-identical to what it
+            // was before the picker existed. Text dreams only: a photo dream swaps the
+            // uploaded photo's face, so the roster is not what it casts.
+            ...castChoiceRequest(config.castChoice),
           };
           if (DREAM_QUEUE_ENABLED) {
             await enqueueDream(textOpts);

@@ -27,6 +27,9 @@ export interface EngineConfig {
   // from these; null → create.tsx falls back to its bundled word-list constants.
   relationshipWords: string | null;
   petWords: string | null;
+  /** Words a BARE cast-name mention must never hijack (migration 540). null falls back
+   *  to DEFAULT_NAME_STOP_WORDS in lib/selfInsertDetect.ts. */
+  nameStopWords: string | null;
   // App-update gate (migration 312). Marketing-version strings; null = no gate.
   // ForceUpdateGate fails open on null/malformed, so these never brick the app.
   minAppVersion: string | null;
@@ -62,6 +65,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   relationshipRegex: null,
   relationshipWords: null,
   petWords: null,
+  nameStopWords: null,
   minAppVersion: null,
   latestAppVersion: null,
   giftingEnabled: false,
@@ -117,6 +121,10 @@ export function useEngineConfig(): EngineConfig {
             ? c.relationship_words
             : DEFAULT_ENGINE_CONFIG.relationshipWords,
         petWords: typeof c.pet_words === 'string' ? c.pet_words : DEFAULT_ENGINE_CONFIG.petWords,
+        nameStopWords:
+          typeof c.name_stop_words === 'string'
+            ? c.name_stop_words
+            : DEFAULT_ENGINE_CONFIG.nameStopWords,
         minAppVersion:
           typeof c.min_app_version === 'string'
             ? c.min_app_version

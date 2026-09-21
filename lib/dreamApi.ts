@@ -63,6 +63,13 @@ export interface GenerateDreamOpts {
    *  doesn't get re-rolled. The Edge Function falls back to its picker if
    *  the value isn't in the medium's `allowed_models`. */
   force_model?: string;
+  /** Explicit cast pick from the Create chip: 'self' = solo, 'dual' = the user plus
+   *  `cast_partner_id`. Absent on the default (auto) path, where the engine detects
+   *  cast roles from the prompt instead. */
+  force_cast_role?: 'self' | 'dual';
+  /** Which roster member fills the +1 slot. Overrides both a NAME matched in the
+   *  prompt and the starred default. */
+  cast_partner_id?: string;
 }
 
 export type PhotoSubjectType = 'person' | 'group' | 'animal' | 'object' | 'scenery' | 'unclear';

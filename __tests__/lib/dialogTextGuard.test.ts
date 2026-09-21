@@ -28,6 +28,7 @@ const DIALOG_FILES = [
   'components/MediumsIntroSheet.tsx',
   'components/SparkleIntroSheet.tsx',
   'components/GroupPhotoIntroSheet.tsx',
+  'components/CastPickerSheet.tsx',
 ];
 
 /** Local StyleSheet keys that mean "this is the dialog's title / body / button label". */

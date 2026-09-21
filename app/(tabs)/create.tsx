@@ -48,7 +48,11 @@ import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale, isTabletDevice } from '@/lib/responsive';
 import { ResponsiveContainer } from '@/components/ResponsiveContainer';
 import { hasAiConsent } from '@/lib/aiConsent';
-import { detectCastRoles } from '@/lib/selfInsertDetect';
+import { detectCastRefs } from '@/lib/selfInsertDetect';
+import { useCastPreview } from '@/hooks/useCastPreview';
+import { CastFaceRow } from '@/components/CastFaceRow';
+import { CastPickerSheet } from '@/components/CastPickerSheet';
+import { castPreviewLabel } from '@/lib/castPreviewLabel';
 import { showAiConsent } from '@/components/AiConsentSheet';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useDreamStore } from '@/store/dream';
@@ -125,6 +129,7 @@ export default function CreateScreen() {
   const { confirm: confirmSurprise, setConfirm: setConfirmSurprise } = useConfirmSurpriseDream();
 
   const [pickerType, setPickerType] = useState<'medium' | 'vibe' | null>(null);
+  const [castPickerOpen, setCastPickerOpen] = useState(false);
   const [previewPhoto, setPreviewPhoto] = useState(false);
   const [photoSourceOpen, setPhotoSourceOpen] = useState(false);
   // kbOpen: a plain boolean for the NON-VISUAL keyboard-dependent logic only
@@ -784,26 +789,100 @@ export default function CreateScreen() {
   // label. Client mirror of the engine's detector (lib/selfInsertDetect.ts)
   // fed the same live-tunable engine_config word lists, so the indicator and
   // the render agree on what counts as a self-reference.
-  const promptCastRoles = useMemo(
+  const castPreview = useCastPreview();
+  const setCastChoice = useDreamStore((st) => st.setCastChoice);
+  const openCastPicker = useCallback(() => {
+    Keyboard.dismiss();
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setCastPickerOpen(true);
+  }, []);
+  const castNames = castPreview.names;
+  const promptCastRefs = useMemo(
     () =>
-      detectCastRoles(config.userPrompt, {
+      detectCastRefs(config.userPrompt, {
         relationshipWords: engineConfig.relationshipWords,
         petWords: engineConfig.petWords,
         selfRefRegex: engineConfig.selfRefRegex,
+        castNames,
+        nameStopWords: engineConfig.nameStopWords,
       }),
     [
       config.userPrompt,
       engineConfig.relationshipWords,
       engineConfig.petWords,
       engineConfig.selfRefRegex,
+      engineConfig.nameStopWords,
+      castNames,
     ]
   );
+  const promptCastRoles = promptCastRefs.roles;
+  // A name-shaped word the user paired themselves with that is in NOBODY's cast.
+  // Surfaced as a note rather than a blocking prompt: we cannot tell a person's name
+  // from a place, a pet or a brand ("me and Rex at the park"), so a gate here would
+  // turn prompts that render perfectly well today into dead ends on a paid action.
+  // Telling them what will actually happen costs nothing and is ignorable.
+  const unmatchedCastName = hasPhoto ? undefined : promptCastRefs.unmatchedName;
+
   // The indicator is a FACE lamp: pets are cast-injected but not face-swapped,
   // so a pet-only reference ("my dog camping") stays gray. New Scene photo
   // dreams always cast the uploaded photo's face. Direct/Restyle never swap
   // (the icon's container renders only for engine dreams, so it's hidden there).
   const faceCastDetected = promptCastRoles.has('self') || promptCastRoles.has('plus_one');
   const faceSwapLit = hasPhoto ? config.photoStyle === 'new_scene' : faceCastDetected;
+
+  // WHO this dream casts, resolved exactly the way the engine resolves it, so the chip
+  // and the render can never disagree. Precedence, strongest first: an explicit pick
+  // from the sheet, then a NAME the prompt matched, then the starred default.
+  //
+  // Always present, never conditional. A chip that only appeared once the prompt
+  // mentioned cast could not be used to ADD anyone — you would have to guess the magic
+  // words before the control that teaches them would show up.
+  const castFaces = useMemo(() => {
+    // A photo dream swaps the uploaded photo's face, not the roster, so the roster
+    // preview would be describing a dream that is not being made.
+    if (hasPhoto) return null;
+
+    const choice = config.castChoice;
+    const pinnedPartner =
+      choice.kind === 'partner'
+        ? (castPreview.partners.find((x) => x.id === choice.id) ?? null)
+        : null;
+
+    // An explicit pick overrides the prompt outright; auto follows it.
+    const wantsSelf = choice.kind === 'auto' ? promptCastRoles.has('self') : true;
+    const plusOne =
+      choice.kind === 'solo'
+        ? null
+        : choice.kind === 'partner'
+          ? pinnedPartner
+          : promptCastRoles.has('plus_one')
+            ? (castPreview.partners.find((x) => x.id === promptCastRefs.matchedPartnerId) ??
+              castPreview.partners.find((x) => x.id === castPreview.defaultPartnerId) ??
+              null)
+            : null;
+
+    // `self` may be absent (no photo added yet) while the role was still detected, so
+    // the label is built from what we can actually SHOW, never from the roles alone.
+    const showSelf = wantsSelf && !!castPreview.self;
+    const members = [showSelf ? castPreview.self : null, plusOne].filter(
+      (x): x is NonNullable<typeof x> => !!x
+    );
+    return {
+      members,
+      // Nobody cast is a real, common state (a pure scene prompt), and saying so is
+      // more useful than hiding the control that would change it.
+      label: castPreviewLabel(showSelf, plusOne) || 'Just the scene',
+      pinned: choice.kind !== 'auto',
+    };
+  }, [
+    hasPhoto,
+    config.castChoice,
+    promptCastRoles,
+    promptCastRefs.matchedPartnerId,
+    castPreview.partners,
+    castPreview.defaultPartnerId,
+    castPreview.self,
+  ]);
 
   // Placeholder text. Mode-dependent: Direct (use_exact_prompt) sends the prompt
   // verbatim to the model with NO transforms on our side — no face swap — so it
@@ -816,6 +895,43 @@ export default function CreateScreen() {
     : hasPhoto
       ? "Set the scene and we'll dream you into it. A glowing forest at dusk? Coffee in a Paris café? Leave blank and we'll pick the scene."
       : 'Describe any dream. Mention "me", "my partner", or "my friend" to cast yourself or your plus-one in it. Or leave this blank for a surprise dream.';
+
+  // WHO is in this dream, rendered in the STICKY FOOTER rather than in the scrolling
+  // form (Kevin, 2026-09-21: "showing the tip below the prompt box doesn't make it very
+  // visible"). Below the prompt it fell under the pinned Dream button the moment the
+  // form was taller than the screen — invisible at exactly the moment it matters, which
+  // is the tap that spends sparkles. The footer measures its own height and feeds both
+  // the scroll offset and the prompt-fill worklet, so growing it here reflows the form
+  // instead of covering it.
+  const castBlock = !castFaces ? null : (
+    <View style={{ marginBottom: verticalScale(4) }}>
+      <CastFaceRow
+        members={castFaces.members}
+        label={castFaces.label}
+        pinned={castFaces.pinned}
+        onPress={openCastPicker}
+      />
+      {/* Only while AUTO: once the user has pinned someone, the prompt's cast words
+          are overridden anyway, so a note about a name it failed to match would be
+          describing a resolution that is no longer in play. */}
+      {!!unmatchedCastName && config.castChoice.kind === 'auto' && (
+        <View className="flex-row items-center" style={{ gap: 7, paddingBottom: verticalScale(6) }}>
+          <Ionicons name="information-circle-outline" size={14} color={colors.textMuted} />
+          <Text
+            style={{
+              flex: 1,
+              fontSize: fontScale(12),
+              lineHeight: fontScale(16),
+              color: colors.textMuted,
+            }}
+          >
+            {unmatchedCastName} isn&apos;t in your Dream Cast, so they won&apos;t be in this dream.
+            Pick someone above, or add them in Settings.
+          </Text>
+        </View>
+      )}
+    </View>
+  );
 
   // Process a picked/captured image asset
   async function processPhotoAsset(asset: ImagePicker.ImagePickerAsset) {
@@ -1840,6 +1956,7 @@ export default function CreateScreen() {
                 instead of pinned to the far bottom like the phone sticky footer. */}
               {isTabletDevice && (
                 <View style={{ marginTop: verticalScale(28) }}>
+                  {castBlock}
                   <GradientButton label="Dream" variant="solid" onPress={handleDream} />
                 </View>
               )}
@@ -1873,6 +1990,7 @@ export default function CreateScreen() {
                 selector now, so the CTA stays clean. iPad: capped to the same
                 centered 600 column as the form so it isn't absurdly wide. */}
               <ResponsiveContainer maxWidth={600}>
+                {castBlock}
                 {/* gestureHandler: this footer rides above the keyboard via
                     KeyboardStickyView's transform; RN-core Touchable measures the
                     UN-transformed position and misses the first tap after typing.
@@ -1891,6 +2009,14 @@ export default function CreateScreen() {
       </View>
 
       {/* Style picker bottom sheet */}
+      <CastPickerSheet
+        visible={castPickerOpen}
+        choice={config.castChoice}
+        partners={castPreview.partners}
+        defaultPartnerId={castPreview.defaultPartnerId}
+        onSelect={setCastChoice}
+        onClose={() => setCastPickerOpen(false)}
+      />
       <StylePickerSheet
         visible={pickerType !== null}
         type={pickerType ?? 'medium'}

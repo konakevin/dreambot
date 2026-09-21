@@ -10,6 +10,7 @@
 
 import { create } from 'zustand';
 import type { PhotoClassification } from '@/lib/dreamApi';
+import type { CastChoice } from '@/lib/castChoiceRequest';
 
 export type DreamFlowMode = 'surprise' | 'photo' | 'prompt';
 
@@ -37,6 +38,9 @@ export type PhotoStyle = 'restyle' | 'new_scene';
  * Only meaningful when photoStyle === 'new_scene'; server maps it to the model.
  */
 export type NewSceneTier = 'standard' | 'best';
+
+/** Re-exported from the picker so the store does not own a second definition. */
+export type { CastChoice };
 
 interface DreamConfig {
   mode: DreamFlowMode;
@@ -70,6 +74,12 @@ interface DreamConfig {
    *  doesn't get re-rolled on flux-dev. Null for non-DLT flows or recipe-less
    *  posts (engine then picks a model). */
   forceModel: string | null;
+  /** WHO this dream casts. `auto` follows the prompt (a name it matched, else the
+   *  starred default); the other two are an explicit pick from the Create chip and
+   *  override the prompt. Per-dream on purpose — the Dream Cast star is the PERSISTENT
+   *  version of this choice, so a pick that outlived its prompt would be a hidden mode
+   *  quietly putting the same person in everything. `reset()` returns it to auto. */
+  castChoice: CastChoice;
 }
 
 interface DreamResult {
@@ -133,6 +143,7 @@ interface DreamStore {
   setMedium: (key: string) => void;
   setVibe: (key: string) => void;
   setPrompt: (text: string) => void;
+  setCastChoice: (choice: CastChoice) => void;
   setStylePrompt: (prompt: string | null) => void;
   setDltRecipe: (recipe: Record<string, unknown> | null) => void;
   setUseExactPrompt: (value: boolean) => void;
@@ -163,6 +174,7 @@ const INITIAL_CONFIG: DreamConfig = {
   selectedMedium: 'surprise_me_face',
   selectedVibe: 'surprise_me',
   userPrompt: '',
+  castChoice: { kind: 'auto' },
   stylePrompt: null,
   dltRecipe: null,
   useExactPrompt: false,
@@ -193,6 +205,7 @@ export const useDreamStore = create<DreamStore>((set) => ({
   setMedium: (key) => set((s) => ({ config: { ...s.config, selectedMedium: key } })),
   setVibe: (key) => set((s) => ({ config: { ...s.config, selectedVibe: key } })),
   setPrompt: (text) => set((s) => ({ config: { ...s.config, userPrompt: text } })),
+  setCastChoice: (choice) => set((s) => ({ config: { ...s.config, castChoice: choice } })),
   setStylePrompt: (prompt) => set((s) => ({ config: { ...s.config, stylePrompt: prompt } })),
   setDltRecipe: (recipe) => set((s) => ({ config: { ...s.config, dltRecipe: recipe } })),
   setUseExactPrompt: (value) => set((s) => ({ config: { ...s.config, useExactPrompt: value } })),

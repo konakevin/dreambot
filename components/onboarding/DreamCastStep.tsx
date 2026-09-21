@@ -6,7 +6,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
-import { Text } from '@/components/AppText';
+import { Text, TextInput } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -15,6 +15,12 @@ import { normalizeImageToJpeg } from '@/lib/normalizeImageToJpeg';
 import { CastPhotoTip } from '@/components/CastPhotoTip';
 import { CAST_RELATIONSHIPS } from '@/constants/castRelationships';
 import { useOnboardingStore } from '@/store/onboarding';
+import {
+  primaryPartner,
+  cleanPartnerNameInput,
+  finalizePartnerName,
+  PARTNER_NAME_MAX,
+} from '@/lib/dreamCastRoster';
 import { supabase } from '@/lib/supabase';
 import { fetchEdge } from '@/lib/edgeFunction';
 import { castSignedUrl, castHasPhoto } from '@/lib/castPhoto';
@@ -118,6 +124,9 @@ function CastSlot({
   onCancel,
   onRelationship,
   uploading,
+  name,
+  onNameChange,
+  onNameCommit,
 }: {
   config: SlotConfig;
   member: DreamCastMember | undefined;
@@ -127,6 +136,11 @@ function CastSlot({
   onCancel: (role: CastRole) => void;
   onRelationship: (rel: CastRelationship) => void;
   uploading: CastRole | null;
+  /** +1 only: the roster name, which lives on partner_library and never on the cast
+   *  member itself (dream_cast is the engine's payload). */
+  name?: string;
+  onNameChange: (raw: string) => void;
+  onNameCommit: () => void;
 }) {
   const isUploading = uploading === config.role;
   // Disable ALL upload buttons whenever ANY upload is in flight — parallel
@@ -230,6 +244,34 @@ function CastSlot({
             {/* Relationship picker for +1 */}
             {showRelationship && (
               <View style={s.relSection}>
+                {/* NAME (Kevin, 2026-09-21). Onboarding never asked for one, so the +1
+                    that "my partner" resolves to in a Create dream arrived unnamed for
+                    every user who never opened Settings — the single most important
+                    cast member, and the only one most people have.
+
+                    OPTIONAL on purpose, not a gate. The star already answers "whoever";
+                    a name is what lets someone say "me and Steph" instead. Blocking the
+                    funnel over it would cost more than it buys, so this asks and moves
+                    on. Only offered once describe-photo has finished, because naming
+                    seeds the roster row from this member and a half-analyzed row would
+                    strand Settings with a member that has no description. */}
+                {isComplete && (
+                  <>
+                    <Text style={s.relLabel}>Their name</Text>
+                    <TextInput
+                      style={s.nameInput}
+                      value={name ?? ''}
+                      onChangeText={onNameChange}
+                      onBlur={onNameCommit}
+                      onSubmitEditing={onNameCommit}
+                      placeholder="Add a name"
+                      placeholderTextColor={colors.textMuted}
+                      maxLength={PARTNER_NAME_MAX}
+                      autoCorrect={false}
+                      returnKeyType="done"
+                    />
+                  </>
+                )}
                 <View style={s.relLabelRow}>
                   <Text style={s.relLabel}>This is my...</Text>
                   {!member.relationship && <Text style={s.relRequired}>(Choose one)</Text>}
@@ -288,6 +330,10 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
   const plusOneMember = dreamCast.find((m) => m.role === 'plus_one');
   const plusOneNeedsRelationship = !!plusOneMember && !plusOneMember.relationship;
   const setCastMember = useOnboardingStore((s) => s.setCastMember);
+  const setPlusOneName = useOnboardingStore((s) => s.setPlusOneName);
+  // Reads straight off the roster, so the field shows whatever Settings would. Before
+  // the row exists (nobody has typed yet) this is undefined, which is the right empty.
+  const plusOneName = useOnboardingStore((s) => primaryPartner(s.profile)?.name);
   const removeCastMember = useOnboardingStore((s) => s.removeCastMember);
   const beginCastUpload = useOnboardingStore((s) => s.beginCastUpload);
   const endCastUpload = useOnboardingStore((s) => s.endCastUpload);
@@ -357,6 +403,17 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /** Typing only cleans (so spaces survive mid-word); the tidy happens on blur, the
+   *  same split the Settings roster uses. Both write through setPlusOneName, which is
+   *  what keeps the name on the ROSTER and out of the engine's cast payload. */
+  function handleNameChange(raw: string) {
+    setPlusOneName(cleanPartnerNameInput(raw));
+  }
+
+  function handleNameCommit() {
+    setPlusOneName(finalizePartnerName(plusOneName));
+  }
 
   function handleRelationship(rel: CastRelationship) {
     const member = getMember('plus_one');
@@ -675,6 +732,9 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
           onRelationship={handleRelationship}
           onCancel={handleCancelUpload}
           uploading={uploading}
+          name={plusOneName}
+          onNameChange={handleNameChange}
+          onNameCommit={handleNameCommit}
         />
       ))}
       <View style={s.privacyNote}>
@@ -876,6 +936,22 @@ const s = StyleSheet.create({
     color: colors.bodyOnDark,
     fontSize: fontScale(14.5),
     fontWeight: '700',
+  },
+  // Matches the Friend/Partner pills it sits above: same fill, same border, same
+  // radius, so the two rows read as one block of "who is this" rather than a form
+  // field bolted onto a picker.
+  nameInput: {
+    color: colors.textPrimary,
+    fontSize: fontScale(15),
+    fontWeight: '600',
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 12,
+    paddingHorizontal: horizontalScale(12),
+    paddingVertical: verticalScale(10),
+    marginTop: verticalScale(8),
+    marginBottom: verticalScale(14),
   },
   // Inline required nudge — draws the eye until they pick (disappears on choice).
   relRequired: {

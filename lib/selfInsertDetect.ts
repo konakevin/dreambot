@@ -26,6 +26,103 @@ export type CastRole = 'self' | 'plus_one' | 'pet';
 export const DEFAULT_RELATIONSHIP_WORDS =
   'plus[\\s-]?one|plus\\s?1|\\+\\s?1|significant other|partner|wife|husband|girlfriend|boyfriend|gf|bf|spouse|fiancée?|fiancé|fiance|fiancee|friend|best friend|bestie|buddy|bff|pal|mate|mom|mum|dad|mother|father|parent|brother|sister|sibling|twin|son|daughter|kid|kids|child|children|cousin|aunt|uncle|niece|nephew|grandma|grandpa|grandmother|grandfather|granny|roommate|neighbour|neighbor|coworker|colleague|teammate|classmate|hubby|wifey|family';
 export const DEFAULT_PET_WORDS = 'dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo';
+// ── Cast names ("me and Steph") ──────────────────────────────────────
+// NOT name EXTRACTION. We never have to work out which token in a sentence is a
+// person, which is the genuinely hard problem — we already hold the complete list
+// of candidates (at most 5 roster names), so this is a bounded SEARCH: does any
+// name the user gave a cast member appear in the prompt as a whole word?
+// MUST match _shared/selfInsertDetector.ts.
+
+/** Names shorter than this never match. Two-letter names collide with ordinary text
+ *  far too often to be worth the rare person they would catch. */
+export const MIN_CAST_NAME_LENGTH = 3;
+
+/** Words a BARE cast-name mention must never hijack. Live source is
+ *  engine_config.name_stop_words. MUST match the Deno module's list. */
+export const DEFAULT_NAME_STOP_WORDS =
+  'dawn|dusk|sky|star|storm|river|ocean|forest|meadow|summer|autumn|winter|spring|rose|ivy|jade|amber|pearl|ruby|opal|angel|faith|hope|grace|joy|misty|crystal|luna|aurora|nova|sierra|savannah|willow|hazel|olive|daisy|lily|violet|iris|heather|brook|wren|robin|fox|bear|wolf|king|queen|prince|art|may|june|dale|glen|cliff|reed|sunny|lucky|champ';
+
+/** A named roster member, as the detector needs it. */
+export interface CastName {
+  id: string;
+  name: string;
+}
+
+/** A user-typed name can legitimately contain regex metacharacters ("J.R.", "A+"),
+ *  which would throw or match wildly if interpolated raw. */
+function escapeRe(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/** `\b` cannot anchor a name that starts or ends with punctuation, so names use the
+ *  same explicit non-word guard the "+1" jargon does. */
+function nameBoundary(literal: string): string {
+  return `(?:^|[^\\w])(?:${literal})(?!\\w)`;
+}
+
+/** Every pattern in the detector is assembled from these alternation lists at RENDER
+ *  time, and an admin can save a malformed one from the dashboard — an uncaught
+ *  SyntaxError there fails the dream, silently, for everyone. Validate the list once
+ *  and fall the WHOLE thing back to its canonical default rather than guarding each
+ *  pattern, so a bad value degrades to known-good behaviour instead of half-working.
+ *  (`buildSelfRegex` has always done this for self_ref_regex; this extends the same
+ *  protection to the word lists.) */
+function safeList(list: string, fallback: string): string {
+  try {
+    new RegExp(`(?:${list})`);
+    return list;
+  } catch {
+    return fallback;
+  }
+}
+
+/** Whole-string test against one of the live alternation lists. */
+function matchesList(word: string, list: string): boolean {
+  try {
+    return new RegExp(`^(?:${list})$`, 'i').test(word);
+  } catch {
+    return false; // an invalid admin list must never take the detector down
+  }
+}
+
+/** The roster names worth testing, in roster order (so first-match-wins is stable
+ *  and matches the "duplicate names are fine, keyed by id" rule). A name that IS a
+ *  relationship or pet word is dropped: those already resolve through their own path,
+ *  so matching them again only doubles the chance of getting it wrong. */
+function matchableNames(names: CastName[], relWords: string, petWords: string): CastName[] {
+  return names.filter((n) => {
+    // The id is the whole point of a match — without one there is nobody to cast, and
+    // a junk entry that matched FIRST would swallow the real person behind it and
+    // resolve to undefined. Checked here, not just at the call site, because this
+    // takes whatever the stored recipe happens to hold.
+    if (!n || typeof n.id !== 'string' || !n.id) return false;
+    const name = typeof n.name === 'string' ? n.name.trim() : '';
+    if (name.length < MIN_CAST_NAME_LENGTH) return false;
+    return !matchesList(name, relWords) && !matchesList(name, petWords);
+  });
+}
+
+// A capitalized word sitting in a "me and ___" slot that matched no cast member. Used
+// ONLY to tell the user their person is not in the cast — never to cast anybody — so
+// it is deliberately strict where matching is lenient: matching is case-insensitive
+// because people type "me and steph", but with no roster hit there is no evidence a
+// lowercase token is a name at all, so the note requires a capital.
+const NAME_LIKE = "[A-Z][a-zA-Z'\u2019-]{2,}";
+const NOT_A_NAME = /^(?:The|A|An|My|Our|His|Her|Their|Its|Some|That|This|Two|Both)$/;
+
+/** The name-shaped word in a "me and ___" slot, or null. */
+export function unnamedCoupleToken(text: string, conn: string): string | null {
+  const patterns = [
+    new RegExp(`\\b[Mm]e\\s+${conn}\\s+(${NAME_LIKE})`),
+    new RegExp(`(?:^|[^\\w])(${NAME_LIKE})\\s+${conn}\\s+me\\b`),
+  ];
+  for (const re of patterns) {
+    const hit = re.exec(text);
+    if (hit && !NOT_A_NAME.test(hit[1])) return hit[1];
+  }
+  return null;
+}
+
 // "my ___" possessives that mean the user's own PERSON — a whitelist, so a
 // generic possessive ("my annoying car") or a bare mid-typing "My" doesn't
 // light the lamp. MUST match the Deno module's list.
@@ -54,6 +151,20 @@ export interface DetectWords {
   petWords?: string | null;
   selfRefRegex?: string | null;
   selfPartWords?: string | null;
+  /** The user's NAMED roster members, so "me and Steph" lights Steph's face. */
+  castNames?: CastName[] | null;
+  /** Live override for DEFAULT_NAME_STOP_WORDS (engine_config.name_stop_words). */
+  nameStopWords?: string | null;
+}
+
+/** What the prompt references. `roles` drives the face lamp; `matchedPartnerId` is
+ *  which roster member a name resolved to, so the Create screen can show that face
+ *  BEFORE the user spends anything; `unmatchedName` is a name-shaped word that
+ *  matched nobody, for the "not in your Dream Cast" note. */
+export interface CastRefs {
+  roles: Set<CastRole>;
+  matchedPartnerId?: string;
+  unmatchedName?: string;
 }
 
 function buildSelfRegex(override?: string | null): RegExp {
@@ -69,12 +180,23 @@ function buildSelfRegex(override?: string | null): RegExp {
 
 /** Which cast roles the prompt references. Empty set = no cast injection. */
 export function detectCastRoles(prompt: string, words: DetectWords = {}): Set<CastRole> {
+  return detectCastRefs(prompt, words).roles;
+}
+
+/** The full read: roles PLUS which named cast member (if any) the prompt resolves to. */
+export function detectCastRefs(prompt: string, words: DetectWords = {}): CastRefs {
   const text = prompt.trim();
   const roles = new Set<CastRole>();
 
-  const relWords = words.relationshipWords || DEFAULT_RELATIONSHIP_WORDS;
-  const petWords = words.petWords || DEFAULT_PET_WORDS;
-  const selfParts = words.selfPartWords || DEFAULT_SELF_PART_WORDS;
+  const relWords = safeList(
+    words.relationshipWords || DEFAULT_RELATIONSHIP_WORDS,
+    DEFAULT_RELATIONSHIP_WORDS
+  );
+  const petWords = safeList(words.petWords || DEFAULT_PET_WORDS, DEFAULT_PET_WORDS);
+  const selfParts = safeList(
+    words.selfPartWords || DEFAULT_SELF_PART_WORDS,
+    DEFAULT_SELF_PART_WORDS
+  );
   // Allow up to two descriptor words between "my" and the noun ("my sexy
   // wife", "my fluffy dog", "my beautiful face") — a bare \s+ missed the
   // adjectived forms entirely.
@@ -111,6 +233,36 @@ export function detectCastRoles(prompt: string, words: DetectWords = {}): Set<Ca
     roles.add('plus_one');
   }
 
+  // ── Cast-name match ────────────────────────────────────────────────
+  // First match wins, in roster order — duplicates are legal (the roster is keyed by
+  // id, never by name), so two people called Steph resolve to the one added first.
+  const names = matchableNames(words.castNames ?? [], relWords, petWords);
+  const stopWords = safeList(
+    words.nameStopWords || DEFAULT_NAME_STOP_WORDS,
+    DEFAULT_NAME_STOP_WORDS
+  );
+  let matchedName: CastName | null = null;
+  let nameInCouple = false;
+  for (const candidate of names) {
+    const lit = escapeRe(candidate.name.trim());
+    if (!new RegExp(nameBoundary(lit), 'i').test(text)) continue;
+    // An explicit couple construction is strong enough evidence to OVERRIDE the stop
+    // list: "me and Rose" is a person, while "roses at dawn" is scenery.
+    const inCouple = new RegExp(
+      `(?:\\b[Mm]e\\s+${CONN}\\s+(?:${lit})(?!\\w)|${nameBoundary(lit)}\\s+${CONN}\\s+me\\b)`,
+      'i'
+    ).test(text);
+    if (!inCouple && matchesList(candidate.name.trim(), stopWords)) continue;
+    matchedName = candidate;
+    nameInCouple = inCouple;
+    break;
+  }
+  if (matchedName) {
+    roles.add('plus_one');
+    // "Steph at the beach" is a solo of Steph, exactly as "my wife at a bbq" is.
+    if (nameInCouple) roles.add('self');
+  }
+
   // 2. Self-pronouns (I, I'm, myself, selfie) — admin-overridable.
   if (SELF_RE.test(text)) roles.add('self');
 
@@ -139,5 +291,13 @@ export function detectCastRoles(prompt: string, words: DetectWords = {}): Set<Ca
     if (isSelf) roles.add('self');
   }
 
-  return roles;
+  // Only worth reporting when nothing matched: with a real cast member found, a second
+  // capitalized word is far more likely to be a place than a missing person.
+  const unmatched = matchedName ? null : unnamedCoupleToken(text, CONN);
+
+  return {
+    roles,
+    ...(matchedName ? { matchedPartnerId: matchedName.id } : {}),
+    ...(unmatched ? { unmatchedName: unmatched } : {}),
+  };
 }

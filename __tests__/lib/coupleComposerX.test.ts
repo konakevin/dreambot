@@ -134,3 +134,60 @@ describe('composeExperimentalCouple', () => {
     expect(isCoupleVariant('album')).toBe(false);
   });
 });
+
+/**
+ * THE BEAT FALLBACK (Kevin, 2026-09-21) — the composer is being ported into CREATE.
+ *
+ * Nightly authors its beat into `slots.action` via `authorAction`. Create never sets
+ * authorAction, and the slot pipeline force-nulls any action key it did not ask for
+ * (characterSlotPrompt.ts ~1828), so Create's rolled pose survives only on `input.action`.
+ * Without the fallback a ported Create couple silently loses its pose and renders two
+ * people standing in a scene doing nothing — the exact complaint that started this work.
+ */
+describe('composeExperimentalCouple — beat fallback for Create', () => {
+  const noSlotAction = { ...slots, action: null };
+
+  it('uses input.action when the slots carry none', () => {
+    const p = composeExperimentalCouple({
+      slots: noSlotAction,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      input: { ...input, action: 'leaning together over the stone balustrade' } as any,
+      variant: 'narrative_fg',
+    });
+    expect(p).toContain('Leaning together over the stone balustrade.');
+  });
+
+  it('slots.action still WINS — nightly must stay byte-identical', () => {
+    const p = composeExperimentalCouple({
+      slots,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      input: { ...input, action: 'SHOULD NOT APPEAR' } as any,
+      variant: 'narrative_fg',
+    });
+    expect(p).toContain('Both seated side by side on the worn stone steps');
+    expect(p).not.toContain('SHOULD NOT APPEAR');
+  });
+
+  it('with neither, the sentence still reads cleanly (no empty beat artefacts)', () => {
+    const p = composeExperimentalCouple({
+      slots: noSlotAction,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      input: { ...input, action: null } as any,
+      variant: 'narrative_fg',
+    });
+    expect(p).not.toMatch(/\.\s*\./);
+    expect(p).toContain('Behind and around them');
+  });
+
+  it('the fallback reaches every narrative variant, not just narrative_fg', () => {
+    for (const variant of ['narrative', 'narrative_asym', 'narrative_faces'] as const) {
+      const p = composeExperimentalCouple({
+        slots: noSlotAction,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        input: { ...input, action: 'resting forearms on the railing' } as any,
+        variant,
+      });
+      expect(p.toLowerCase()).toContain('resting forearms on the railing');
+    }
+  });
+});

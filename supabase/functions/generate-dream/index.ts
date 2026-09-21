@@ -43,6 +43,10 @@ import {
   type NewSceneTier,
 } from '../_shared/newSceneDirective.ts';
 import { detectSelfInsert } from '../_shared/selfInsertDetector.ts';
+import { mirrorPartnerIntoCast, type RosterPartner } from '../_shared/partnerRoll.ts';
+import { composeExperimentalCouple } from '../_shared/coupleComposerX.ts';
+import { splitPromptScene, type PromptSceneSplit } from '../_shared/promptSceneSplit.ts';
+import { nextCreateModel } from '../_shared/createModelChain.ts';
 import { resolveCastForPrompt } from '../_shared/castResolver.ts';
 import { expandScene } from '../_shared/sceneExpander.ts';
 import { rollChaos, applyChaos } from '../_shared/chaosLayer.ts';
@@ -127,6 +131,10 @@ interface RequestBody {
   vibe_key?: string;
   /** Test mode: override the picked Replicate model */
   force_model?: string;
+  /** Which roster member fills the +1 slot, picked explicitly on the Create screen.
+   *  Outranks a NAME matched in the prompt and the starred default: a tap is a
+   *  stronger signal than a regex hit. */
+  cast_partner_id?: string;
   /** Test mode: override which cast member to use for self-insert ('self', 'plus_one', 'pet') */
   force_cast_role?: string;
   /** Client-generated job ID for queue tracking */
@@ -338,6 +346,7 @@ async function handleRequest(req: Request): Promise<Response> {
     input_image,
     photo_style = 'restyle',
     force_cast_role,
+    cast_partner_id,
     style_prompt,
     subject_description,
     subject_type,
@@ -653,6 +662,17 @@ async function handleRequest(req: Request): Promise<Response> {
   // Initialized to '' (not just declared) so the failure-logging path in the
   // outer catch can safely read it even if the throw happened before assignment.
   let finalPrompt = '';
+  // True when the couple composer produced finalPrompt. The retry rungs below prepend
+  // framing text onto finalPrompt; the composer already opens with its own two-shot and
+  // faces line, so a prepend would fight it for the position the lab showed actually
+  // matters (FLUX_COUPLE_LAB lesson 3: face words at the front pull the camera in).
+  let composedCouplePrompt = false;
+  // Set when a re-render moves to a different model, so uploads.model / model_used /
+  // cost_cents report what RENDERED rather than what was picked. Nightly has had this for
+  // ages; Create did not, which is exactly how "uploads.model lies on retries" happens.
+  let modelUsedOverride: string | null = null;
+  /** The model that actually rendered: a retry's move if one happened, else the pick. */
+  const renderedModel = (): string => modelUsedOverride ?? pickedModel;
   // Hoisted DUAL solo-fallback context (paid Create path). When a dual face-swap
   // fails every retry, the recovery re-renders self ALONE via
   // assembleSoloFallbackFromDual (a genuine single-character prompt) instead of
@@ -1284,22 +1304,69 @@ Output ONLY the prompt.`;
       // per-invocation, so this is a free lookup; it falls back to the canonical
       // constants when the DB value is missing.
       const castCfg = await fetchEngineConfig(supabase);
+      // NAMED cast members ("me and Steph"). The roster names are COMPARED against
+      // and never concatenated into a prompt, which is what keeps user-typed text out
+      // of the engine's own instructions; the matched name is then scrubbed from the
+      // prompt by cleanSelfReferences before anything reaches a model.
+      const rosterNames = (vibeProfile?.partner_library ?? [])
+        .filter(
+          (p): p is RosterPartner =>
+            !!p && typeof p.id === 'string' && typeof p.name === 'string' && !!p.name.trim()
+        )
+        .map((p) => ({ id: p.id, name: p.name as string }));
       const selfInsertResult = userSubject
         ? detectSelfInsert(userSubject, {
             relationshipWords: castCfg.relationshipWords,
             petWords: castCfg.petWords,
             selfRefRegex: castCfg.selfRefRegex,
+            castNames: rosterNames,
+            nameStopWords: castCfg.nameStopWords,
           })
-        : { isSelfInsert: false, cleanedPrompt: '', referencedRoles: new Set<string>() };
+        : {
+            isSelfInsert: false,
+            cleanedPrompt: '',
+            referencedRoles: new Set<string>(),
+            // Spelled out so the union with SelfInsertResult keeps these readable on
+            // the no-subject branch (a surprise dream has no prompt to match against).
+            matchedPartnerId: undefined as string | undefined,
+            unmatchedName: undefined as string | undefined,
+          };
+
+      // A NAMED person outranks the starred default: saying "Steph" is a more specific
+      // request than "my partner", so re-point the plus_one mirror at them for this
+      // render only. Nothing downstream changes — castResolver, the dual brief and the
+      // swap pipeline all keep reading the single plus_one slot.
+      //
+      // ORDER MATTERS, the same rule the nightly partner roll follows: this rewrites
+      // dream_cast, so it MUST run BEFORE hydrateCastSources, or the named member's
+      // private storage_path never becomes a signed URL and the face swap silently
+      // drops them.
+      // An explicit pick from the Create chip beats a name the prompt happened to
+      // match, which in turn beats the starred default. Each step is a more specific
+      // statement of intent than the one under it.
+      const requestedPartnerId =
+        typeof cast_partner_id === 'string' && cast_partner_id
+          ? cast_partner_id
+          : selfInsertResult.matchedPartnerId;
+      const namedPartner = requestedPartnerId
+        ? (vibeProfile?.partner_library ?? []).find((p) => p?.id === requestedPartnerId)
+        : undefined;
+      const castForRender = namedPartner
+        ? (mirrorPartnerIntoCast(vibeProfile?.dream_cast ?? [], namedPartner) as DreamCastMember[])
+        : (vibeProfile?.dream_cast ?? []);
+      if (namedPartner) {
+        console.log(
+          `[generate-dream] plus_one re-pointed to partner ${namedPartner.id} (${
+            cast_partner_id ? 'explicit pick' : 'name match'
+          })`
+        );
+      }
 
       // Cast photos live in the PRIVATE `cast-photos` bucket (migration 292);
       // resolve each storage_path to a fresh signed URL up front so all the
       // downstream thumb_url.startsWith('http') gates work unchanged. No-op for
       // legacy members already carrying a public thumb_url.
-      const dreamCast: DreamCastMember[] = await hydrateCastSources(
-        vibeProfile?.dream_cast ?? [],
-        supabase
-      );
+      const dreamCast: DreamCastMember[] = await hydrateCastSources(castForRender, supabase);
       const describedCast = dreamCast.filter((m: DreamCastMember) => m.thumb_url && m.description);
 
       let castMembers: DreamCastMember[] = [];
@@ -1495,6 +1562,18 @@ Output ONLY the prompt.`;
             // scene/wardrobe/mood/props → two clean large faces → reliable swap.
             // Falls back to the legacy buildDualBrief output on any error.
             try {
+              // SETTING vs ACTION (migration 541). Fails open to null on any error, no key or
+              // a switched-off flag, in which case every field below behaves exactly as it did
+              // before — the whole prompt as the place, a pool pose as the beat.
+              let sceneSplit: PromptSceneSplit | null = null;
+              if (castCfg.createPromptSceneSplit && cleanedPrompt) {
+                sceneSplit = await splitPromptScene(
+                  cleanedPrompt,
+                  resolvedCast.length >= 2 ? 2 : 1,
+                  ANTHROPIC_KEY
+                );
+                fallbackReasons.push(`create_scene_split:${sceneSplit.source}`);
+              }
               // Named var (not inline) so a later dual-swap failure can rebuild a
               // SOLO prompt for self from the same input.
               const slotInput: CharacterSlotPipelineInput = {
@@ -1506,16 +1585,33 @@ Output ONLY the prompt.`;
                     age: src?.age ?? null,
                     physicalSummary: src?.physical_summary ?? null,
                     gender: src?.gender ?? null,
+                    // narrative_fg interpolates ethnicity straight into "a <ethnicity> <gender>"
+                    // and, unlike the legacy assembler, never restates race anywhere else — so
+                    // omitting it (as Create did) drops the couple's strongest race anchor.
+                    ethnicity: src?.ethnicity ?? null,
                   };
                 }),
                 iconicAnchor: null,
+                // THE PLACE. Passing the whole prompt here is what produced
+                // "set at a companion snowboarding": characterSlotPrompt spends this string
+                // as the location, in the prompt's highest-attention window AND three times
+                // in the Sonnet brief. With the split on, the setting rides setAtOverride
+                // (the dieted slot nightly uses for scenario seeds) and the verb becomes the
+                // ACTION instead of scenery. Off, this is exactly what it always was.
                 userPlace: cleanedPrompt || null,
+                ...(sceneSplit && sceneSplit.source === 'split'
+                  ? { setAtOverride: sceneSplit.setting }
+                  : {}),
                 timeAxis: '',
                 weatherAxis: '',
                 phenomenaAxis: '',
                 // Pass the user's scene as a wardrobe hint too so a themed request
-                // ("as superheroes") reaches the wardrobe slot, not just the scene.
-                wardrobeAnchor: cleanedPrompt || null,
+                // ("as superheroes") reaches the wardrobe slot, not just the scene. With the
+                // split on this is dropped: the same string was reaching the costume brief as
+                // "one on-location inspiration to draw from: 'a companion snowboarding'" — an
+                // ACTION offered as clothing. The generic wardrobe roll does a better job.
+                wardrobeAnchor:
+                  sceneSplit && sceneSplit.source === 'split' ? null : cleanedPrompt || null,
                 mediumFluxFragment: medium.fluxFragment ?? medium.key,
                 // On the face-swap slot path, prefer the vibe's FACE-SWAP
                 // directive (kawaii etc. carry a "render the human face
@@ -1527,12 +1623,22 @@ Output ONLY the prompt.`;
                   null
                 ),
                 avoidList: vibeProfile?.avoid?.join(', ') ?? '',
+                // The vibe's authored light/palette accent. Create never passed it, so the
+                // composer's tail silently lost it; ResolvedVibe has carried it since mig 504.
+                vibeFragment: vibe.fluxFragment,
+                vibeFragmentPosition: vibe.fragmentPosition,
                 // Create: NEUTRAL pose only — force the relationship-appropriate
                 // partner/companion pool (NOT the 18% playful roll). Create is the
                 // user's OWN prompt, so we tread lightly: no goofy thumbs-up poses
                 // injected onto someone's serious request. (Goofy/elegant scenes are
                 // nightly-only and never touch the user's Create prompt either.)
                 action: await (async () => {
+                  // The USER'S OWN verb wins when we could extract one. Before the split this
+                  // was structurally impossible: the prompt went in as the place and the beat
+                  // was always a neutral pool pose, so "snowboarding" could never become what
+                  // anybody was doing. The pool stays the fallback for a prompt with no action
+                  // in it, which is most scenery prompts.
+                  if (sceneSplit?.action) return sceneSplit.action;
                   const rel = String(
                     castMembers.find((m: DreamCastMember) => m.role === 'plus_one')?.relationship ??
                       ''
@@ -1553,6 +1659,29 @@ Output ONLY the prompt.`;
               sonnetRawResponse = slotResult.rawResponse;
               finalPrompt = slotResult.assembledPrompt;
               fallbackReasons.push(...slotResult.fallbackReasons);
+              // ── THE COUPLE COMPOSER (migration 541) ──────────────────────────────
+              // Create has been assembling couples in the legacy fragment-list shape that
+              // FLUX_COUPLE_LAB.md measured at 45% first-try dual-swap hold; narrative_fg —
+              // one left-to-right paragraph, the couple named in the FOREGROUND before the
+              // scene, face words last — measured 92%. Nightly has run it since 2026-09-18;
+              // this is the same composer, same variant, called directly.
+              //
+              // Deliberately NOT routed through _shared/nightlyLooksPath.ts: LOOKS_MINIMAL is
+              // true there, which is a documented fix graveyard (four shipped fixes reached
+              // zero renders behind it, __tests__/lib/looksMinimalInertFixGuard.test.ts).
+              if ('left_wardrobe' in slotResult.slots) {
+                if (castCfg.createCoupleEngine === 'experimental') {
+                  finalPrompt = composeExperimentalCouple({
+                    slots: slotResult.slots,
+                    input: slotInput,
+                    variant: 'narrative_fg',
+                  });
+                  composedCouplePrompt = true;
+                  fallbackReasons.push('create_couple_engine:experimental:narrative_fg');
+                } else {
+                  fallbackReasons.push('create_couple_engine:production');
+                }
+              }
               // Capture self's side + the dual slots so a dual-swap failure can
               // re-render self ALONE (never a faceless couple). Only when the
               // slots are genuinely dual ('left_wardrobe' present).
@@ -2000,6 +2129,33 @@ Output ONLY the prompt.`;
               return r.aSide ? sidesToGenders(r.aSide, sideGenders.left, sideGenders.right) : null;
             }
           : undefined;
+      // THE RETRY MODEL (migration 541). Create captured pickedModel once and handed it to
+      // every rung, so a failing couple burned three renders on the model that had just
+      // failed — FLUX_COUPLE_LAB lesson 6, "a repeated model is not a fallback". The pool
+      // is the style's DreamSmart set (so the DreamSmart promise holds), capped at the
+      // charged model's cost (so price-shown stays price-charged), and frozen on a DLT
+      // replay (which exists to reproduce an exact look). Falls back to the current model
+      // on every degenerate case, which is today's behaviour.
+      // Re-read rather than reach for the cast block's `castCfg`, which is scoped inside
+      // the prompt-building branch. fetchEngineConfig is 60s-cached per isolate, so this
+      // is the same object the branch above already resolved.
+      const swapCfg = await fetchEngineConfig(supabase);
+      const triedModels: string[] = [pickedModel];
+      const retryModel = (): string => {
+        if (!swapCfg.createRetryChangesModel) return pickedModel;
+        const moved = nextCreateModel({
+          tried: triedModels,
+          candidates: smartDreamCfg?.models ?? [],
+          costOf: getSparkleCost,
+          frozen: isDLT,
+        });
+        fallbackReasons.push(moved.stamp);
+        if (!moved.model) return triedModels[triedModels.length - 1];
+        triedModels.push(moved.model);
+        modelUsedOverride = moved.model;
+        return moved.model;
+      };
+
       const result = await genderSafeDualSwap(
         tempUrl,
         {
@@ -2068,7 +2224,7 @@ Output ONLY the prompt.`;
                       openaiKey: OPENAI_KEY,
                       geminiKey: GEMINI_KEY,
                     },
-                    pickedModel,
+                    retryModel(),
                     'png'
                   );
                   return { url: rr.url, predictionId: rr.predictionId };
@@ -2096,13 +2252,17 @@ Output ONLY the prompt.`;
               effectiveMode,
               // Stage 5a: final retry MUTATES the prompt — prepend face-separation
               // framing (subject-led, Hard-Rule safe) instead of re-rolling the
-              // same prompt for a third identical layout.
-              attempt >= 2
+              // same prompt for a third identical layout. NOT when the couple composer
+              // wrote the prompt: it already opens with its own two-shot and carries the
+              // faces line deliberately LATE, and the lab measured that face words at the
+              // front pull the camera in (lesson 3, 22% held vs 70%). Prepending here
+              // would rebuild the exact failure the composer exists to avoid.
+              attempt >= 2 && !composedCouplePrompt
                 ? `two people side by side, both faces clearly visible and unobstructed, heads apart, ${finalPrompt}`
                 : finalPrompt,
               effectiveInputImage,
               { replicateToken: REPLICATE_TOKEN, openaiKey: OPENAI_KEY, geminiKey: GEMINI_KEY },
-              pickedModel,
+              retryModel(),
               'jpg'
             );
             return { url: cg.url, predictionId: cg.predictionId };
@@ -2362,8 +2522,10 @@ Output ONLY the prompt.`;
         recipe_snapshot: asJsonbObject(vibe_profile),
         rolled_axes: { ...logAxes, timings },
         enhanced_prompt: finalPrompt,
-        model_used: pickedModel,
-        cost_cents: getCostCents(pickedModel),
+        // What actually RENDERED, not what was picked. A retry that moved model and kept
+        // reporting the original is precisely how "uploads.model lies on retries" happens.
+        model_used: renderedModel(),
+        cost_cents: getCostCents(renderedModel()),
         status: 'completed',
         sonnet_brief: sonnetBrief,
         sonnet_raw_response: sonnetRawResponse,
@@ -2392,7 +2554,7 @@ Output ONLY the prompt.`;
     if (resolvedMediumKey && resolvedVibeKey) {
       try {
         recipeForInsert = buildRecipe({
-          model: pickedModel,
+          model: renderedModel(),
           mediumKey: resolvedMediumKey,
           vibeKey: resolvedVibeKey,
           aiPrompt: finalPrompt,
@@ -2478,7 +2640,7 @@ Output ONLY the prompt.`;
             // Which AI model rendered this — drives the model badge on
             // DreamCard (migration 211, 2026-05-30). pickedModel resolves
             // to force_model when provided, else the picker's choice.
-            model: pickedModel || null,
+            model: renderedModel() || null,
             face_swap_mode: faceSwapMode,
             is_public: false,
             width: 768,

@@ -7,7 +7,12 @@ import type {
   DreamPartner,
 } from '@/types/vibeProfile';
 import { DEFAULT_VIBE_PROFILE, MAX_DREAM_PARTNERS } from '@/types/vibeProfile';
-import { syncActivePartnerMirror, migrateLegacyPlusOne } from '@/lib/dreamCastRoster';
+import {
+  syncActivePartnerMirror,
+  migrateLegacyPlusOne,
+  isPartnerEnabled,
+  primaryPartner,
+} from '@/lib/dreamCastRoster';
 
 const MAX_SEEDS_PER_CATEGORY = 10;
 // Locations are effectively UNCAPPED (2026-06-18, Kevin): the old 10/25 limit had
@@ -61,6 +66,15 @@ interface OnboardingStore {
   /** Tick/untick a roster member for dreams. Several can be on at once — the
    *  nightly engine rolls among them (MULTI_CAST_PLUS_ONE_PLAN.md). */
   setPartnerEnabled: (id: string, enabled: boolean) => void;
+  /** Star a roster member as the primary +1: who a Create dream casts when the
+   *  prompt names the +1 in general terms ("me and my partner"). Nightly is
+   *  unaffected — it rolls among everyone enabled. */
+  setPrimaryPartner: (id: string) => void;
+  /** Name the onboarding +1. Onboarding writes dream_cast, but a name may only live
+   *  on the ROSTER (dream_cast is the engine's payload and must never carry
+   *  user-typed text), so this seeds the roster row early via the same lazy
+   *  migration that would otherwise run on the next load. */
+  setPlusOneName: (name: string | undefined) => void;
 
   /** Number of cast-photo uploads (storage upload + describe) currently in
    *  flight. The first-dream cutoff (SaveContinueStep) waits for this to reach 0
@@ -165,7 +179,40 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   setCastMember: (member) =>
     set((s) => {
       const filtered = s.profile.dream_cast.filter((m) => m.role !== member.role);
-      return { profile: { ...s.profile, dream_cast: [...filtered, member] } };
+      const dream_cast = [...filtered, member];
+      // Onboarding writes the +1 STRAIGHT into dream_cast, while the roster keeps the
+      // same person as a partner_library row. Normally that row does not exist yet
+      // (migrateLegacyPlusOne seeds it on the next load), but naming someone in
+      // onboarding creates it early — and from then on a photo REPLACE has to land on
+      // both records or Settings keeps showing the photo they just swapped out. Only
+      // the described fields cross over; id, name and enabled belong to the roster.
+      // Self and pet never have a roster row, so they short-circuit.
+      const target = member.role === 'plus_one' ? primaryPartner(s.profile) : null;
+      if (!target) return { profile: { ...s.profile, dream_cast } };
+      return {
+        profile: {
+          ...s.profile,
+          dream_cast,
+          partner_library: (s.profile.partner_library ?? []).map((p) =>
+            p.id === target.id
+              ? {
+                  ...p,
+                  ...(member.storage_path ? { storage_path: member.storage_path } : {}),
+                  ...(member.thumb_url ? { thumb_url: member.thumb_url } : {}),
+                  description: member.description,
+                  ...(member.gender ? { gender: member.gender } : {}),
+                  ...(typeof member.age === 'number' ? { age: member.age } : {}),
+                  ...(member.physical_summary ? { physical_summary: member.physical_summary } : {}),
+                  ...(member.ethnicity ? { ethnicity: member.ethnicity } : {}),
+                  // dream_cast allows a legacy 'family'; the roster is partner|friend only.
+                  ...(member.relationship === 'partner' || member.relationship === 'friend'
+                    ? { relationship: member.relationship }
+                    : {}),
+                }
+              : p
+          ),
+        },
+      };
     }),
 
   removeCastMember: (role) =>
@@ -236,6 +283,42 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
           ...s.profile,
           partner_library: [...lib.filter((p) => p.id !== id), { ...target, enabled }],
           active_partner_id: active,
+        }),
+      };
+    }),
+
+  setPrimaryPartner: (id) =>
+    set((s) => {
+      const lib = s.profile.partner_library ?? [];
+      const target = lib.find((p) => p.id === id);
+      // Only an ENABLED member can hold the star: syncActivePartnerMirror re-homes
+      // the pointer away from anyone switched off, so accepting a backstage id here
+      // would set a value that silently bounces to someone else. The UI hides the
+      // control there; this is the same rule from the store's side.
+      if (!target || !isPartnerEnabled(target, s.profile.active_partner_id)) return s;
+      // Deliberately does NOT reorder, unlike setPartnerEnabled. Starring is a
+      // statement about one member, not a move between groups, and having the card
+      // jump under your finger would read as a shuffle.
+      return {
+        profile: syncActivePartnerMirror({ ...s.profile, active_partner_id: id }),
+      };
+    }),
+
+  setPlusOneName: (name) =>
+    set((s) => {
+      // Seeding through migrateLegacyPlusOne (rather than minting a row here) is what
+      // keeps onboarding and Settings on ONE record: it is idempotent, so a profile
+      // that already has a roster is untouched, and a profile that does not gets the
+      // exact row the next load would have built anyway.
+      const migrated = migrateLegacyPlusOne(s.profile);
+      const target = primaryPartner(migrated);
+      if (!target) return s;
+      return {
+        profile: syncActivePartnerMirror({
+          ...migrated,
+          partner_library: (migrated.partner_library ?? []).map((p) =>
+            p.id === target.id ? { ...p, name } : p
+          ),
         }),
       };
     }),
