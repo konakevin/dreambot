@@ -30,6 +30,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useCardGestures } from '@/hooks/gestures/useCardGestures';
 import { GalleryCarousel, GalleryNav } from '@/components/GalleryCarousel';
+import { SparkleBurst } from '@/components/SparkleBurst';
 import { ExpandableDescription } from '@/components/dreamCardBits/ExpandableDescription';
 import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
@@ -285,6 +286,8 @@ export const DreamCard = memo(function DreamCard({
   const retryCountRef = useRef(0);
   const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [retryNonce, setRetryNonce] = useState(0);
+  /** Non-zero while a repost sparkle burst is running; the key remounts it so repeat taps re-fire. */
+  const [burstKey, setBurstKey] = useState(0);
   const [showRetryUi, setShowRetryUi] = useState(false);
 
   // Per-card image fit toggle (top-right HUD button). 'cover' is the default
@@ -827,7 +830,14 @@ export const DreamCard = memo(function DreamCard({
                 <TouchableOpacity
                   style={ui.sideButton}
                   onPress={() => {
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    // Celebrate the ON direction only. A burst on un-repost would reward taking it
+                    // back, and firing on every toggle makes the effect cheap.
+                    if (!isReposted) {
+                      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                      setBurstKey((k) => k + 1);
+                    } else {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    }
                     toggleRepost.mutate({ uploadId: item.id, currentlyReposted: isReposted });
                   }}
                   activeOpacity={0.7}
@@ -851,6 +861,9 @@ export const DreamCard = memo(function DreamCard({
                       invisible when tried on their own. The wrapper is a FIXED 30pt box so the size
                       bump cannot nudge the icons below it. */}
                   <View style={s.repostStack}>
+                    {/* Keyed so each repost mounts a FRESH burst; dropped on completion so the feed
+                        carries no idle animated nodes (see SparkleBurst's cost note). */}
+                    {burstKey > 0 && <SparkleBurst key={burstKey} onDone={() => setBurstKey(0)} />}
                     <Ionicons
                       name={isReposted ? 'sync' : 'sync-outline'}
                       size={isReposted ? 28 : 26}
