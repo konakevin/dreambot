@@ -18,7 +18,7 @@ import {
 } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { timeAgo } from '@/lib/timeAgo';
 import { GestureDetector } from 'react-native-gesture-handler';
@@ -841,19 +841,34 @@ export const DreamCard = memo(function DreamCard({
                       toggle with no count; only conversation-first products (X, Threads, Mastodon)
                       publish one. So the rail now says exactly one thing: did YOU repost this.
                       `repost_count` stays in the database untouched; ranking still uses it. */}
-                  <Ionicons
-                    name={isReposted ? 'sync' : 'sync-outline'}
-                    size={26}
-                    // COLOUR carries the state, not fill (Kevin, 2026-09-20). Fill-vs-outline works for
-                    // the bookmark below because it is a hollow shape that becomes solid; `sync` is two
-                    // circular arrows with NO enclosed area, so its two variants differ only in stroke
-                    // weight and the change was near-invisible — taps registered in the database while
-                    // the rail looked inert. Green is the same colour the inbox already uses for a
-                    // repost, and it only ever appears on posts you personally reposted, so it reads
-                    // like the heart above: white until you act, then colour.
-                    color={isReposted ? colors.success : '#FFFFFF'}
-                    style={ui.sideIcon}
-                  />
+                  {/* TWO signals, because one was not enough (Kevin, 2026-09-20 — "this is too
+                      subtle"). Fill alone failed first: `sync` is two circular arrows with NO enclosed
+                      area, so `sync` vs `sync-outline` differ only in stroke weight and taps registered
+                      in the database while the rail looked inert. Colour alone was next, but
+                      colors.success (#4CAA64) is a muted forest green that sinks into dark artwork. So
+                      now: the theme's BRIGHT green, plus the check badge back in the glyph's hollow
+                      centre. Colour reads at a glance the way the heart above does; the check says
+                      unambiguously that the action landed. */}
+                  <View style={s.repostStack}>
+                    <Ionicons
+                      name={isReposted ? 'sync' : 'sync-outline'}
+                      size={26}
+                      color={isReposted ? REPOSTED_GREEN : '#FFFFFF'}
+                      style={ui.sideIcon}
+                    />
+                    {isReposted && (
+                      <View style={s.repostCheck} pointerEvents="none">
+                        {/* MCI check-bold: Ionicons has no bold check, and a hairline one is lost
+                            inside a 26pt glyph. */}
+                        <MaterialCommunityIcons
+                          name="check-bold"
+                          size={11}
+                          color={REPOSTED_GREEN}
+                          style={ui.sideIcon}
+                        />
+                      </View>
+                    )}
+                  </View>
                 </TouchableOpacity>
               )}
               {onToggleSave && (
@@ -1004,7 +1019,18 @@ export const DreamCard = memo(function DreamCard({
 // 0↔1 threshold then becomes a visibility flip, not a remount → no reflow.
 const hiddenCount = { opacity: 0 } as const;
 
+/** The reposted state's green. colors.success (#4CAA64) is the muted forest green used on light
+ *  surfaces and it disappears over dark artwork; colors.prompt is the theme's BRIGHT green, which is
+ *  what this rail needs to read at a glance over a full-bleed image. */
+const REPOSTED_GREEN = colors.prompt;
+
 const s = StyleSheet.create({
+  repostStack: { alignItems: 'center', justifyContent: 'center' },
+  repostCheck: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   card: { width: SCREEN_WIDTH, height: SCREEN_HEIGHT, backgroundColor: '#000' },
   // Surface-tinted background under the Image while it decodes/loads —
   // replaces the pure-black gap users were seeing during expo-image's
