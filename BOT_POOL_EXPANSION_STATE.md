@@ -431,16 +431,20 @@ EarthBot and OceanBot were dropped entirely: both are at their pool ceilings.
 - [ ] circus big top → `theme-park` ⚠ see flag 1
 - [ ] desert archaeology dig → new
 
-### ChibiBot (8) — all → `creature-adventures`, which is already tag-bucketed
+### ChibiBot (8) — SPREAD ACROSS 8 DIFFERENT PATHS (Kevin, 2026-09-22)
 
-- [ ] train ride
-- [ ] ferry crossing
-- [ ] rainy afternoon in a bookshop
-- [ ] farmers market
-- [ ] kite festival
-- [ ] bake sale
-- [ ] hot-spring soak
-- [ ] stargazing at an observatory
+Do NOT stack these in `creature-adventures`. That path airs ~25 times a year, and a topic's share of
+renders equals its share of entries, so eight more topics in one pool would drop every existing topic
+from ~3.6 renders a year to ~1.2 and give each new one only ~2. One per path instead.
+
+- [ ] train ride → `creature-adventures`
+- [ ] ferry crossing → `aquatic-village`
+- [ ] rainy afternoon in a bookshop → `rainy-interior`
+- [ ] farmers market → `cottagecore-village`
+- [ ] kite festival → `cozy-landscape`
+- [ ] bake sale → `sunny-village`
+- [ ] hot-spring soak → `bath-time`
+- [ ] stargazing at an observatory → `night-meadow`
 
 ### DinoBot (7)
 
