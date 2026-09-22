@@ -24,6 +24,11 @@ interface AlertOptions {
   /** Renders a tappable "don't show again" checkbox above the buttons. Its
    *  checked state is passed to each button's onPress. */
   checkbox?: { label: string };
+  /** Default true. Set false for a dialog that must be ANSWERED: tapping the scrim (and
+   *  Android's hardware back) no longer closes it, so the only ways out are its own buttons.
+   *  Use it only where dismissing would leave something genuinely unfinished — a dialog the
+   *  user can ignore should stay dismissible, because a trap is worse than a nag. */
+  dismissible?: boolean;
 }
 
 interface AlertState {
@@ -32,6 +37,7 @@ interface AlertState {
   message: string;
   buttons: AlertButton[];
   checkbox?: { label: string };
+  dismissible: boolean;
 }
 
 // Global ref so showAlert can be called from anywhere (no hook required)
@@ -60,6 +66,7 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
     title: '',
     message: '',
     buttons: [],
+    dismissible: true,
   });
   const [dontShowAgain, setDontShowAgain] = useState(false);
 
@@ -72,6 +79,7 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
         message,
         buttons: buttons ?? [{ text: 'OK' }],
         checkbox: options?.checkbox,
+        dismissible: options?.dismissible !== false,
       });
     },
     []
@@ -106,8 +114,18 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
   return (
     <>
       {children}
-      <Modal visible={alert.visible} transparent animationType="fade" statusBarTranslucent>
-        <Pressable style={styles.overlay} onPress={dismiss}>
+      <Modal
+        visible={alert.visible}
+        transparent
+        animationType="fade"
+        statusBarTranslucent
+        // Android's hardware back. Swallowed rather than left undefined on a non-dismissible
+        // dialog, so back is a no-op instead of an unhandled close.
+        onRequestClose={alert.dismissible ? dismiss : () => {}}
+      >
+        {/* The scrim still CAPTURES the tap either way — that is what keeps the screen behind
+            inert — it just stops closing the dialog when this one must be answered. */}
+        <Pressable style={styles.overlay} onPress={alert.dismissible ? dismiss : undefined}>
           <Pressable style={styles.card} onPress={() => {}}>
             {alert.title ? <Text style={dialogText.title}>{alert.title}</Text> : null}
             {alert.message ? <Text style={dialogText.body}>{alert.message}</Text> : null}
