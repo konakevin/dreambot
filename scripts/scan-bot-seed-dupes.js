@@ -39,57 +39,9 @@ const JSON_OUT = flag('--json');
 const VERBOSE = argv.includes('-v') || argv.includes('--verbose');
 const STRICT = argv.includes('--strict');
 
-// Mirrors seedGenHelper.js STOPWORDS closely enough to be comparable.
-const STOP = new Set(
-  ('the a an and or of in on at to for with from into onto over under above below its their his her' +
-    ' this that these those is are was were be been being as by but not no nor so than then there here' +
-    ' while when where which who whom whose what how why all any both each few more most other some such' +
-    ' only own same too very can will just should now across against along around behind beside between' +
-    ' beyond during except inside near off out outside through toward towards up upon within without' +
-    ' while after before again once about above against').split(/\s+/)
-);
-
-const textOf = (e) => {
-  if (typeof e === 'string') return e;
-  if (e && typeof e === 'object') return e.description || e.text || e.entry || e.scene || e.name || '';
-  return String(e ?? '');
-};
-
-/** Canonical identity, matching purge-bot-seed-dupes.js exactly. Objects compare on ALL fields
- *  (key-sorted), so a shared description serving two different tag buckets is NOT a duplicate:
- *  chibibot has an egret tagged ["ARCTIC"] and ["ARCTIC","BIRD"], earthbot a fjord tagged
- *  arctic-polar and coastal-temperate. Those are reported as description collisions instead. */
-function identity(e) {
-  if (typeof e === 'string') return 'S:' + e.toLowerCase().replace(/\s+/g, ' ').trim();
-  if (e && typeof e === 'object') {
-    const sorted = Object.keys(e)
-      .sort()
-      .reduce((o, k) => {
-        o[k] = Array.isArray(e[k]) ? [...e[k]].sort() : e[k];
-        return o;
-      }, {});
-    return 'O:' + JSON.stringify(sorted).toLowerCase();
-  }
-  return 'X:' + String(e);
-}
-
-/** Body after a CAPS title prefix, with Rich-Scene-Seed bloat stripped (as the generators do). */
-const bodyOf = (s) => {
-  const noBloat = s.split(/\sFOREGROUND:/)[0];
-  const parts = noBloat.split(/\s+[—–]\s+/);
-  return parts.length > 1 ? parts.slice(1).join(' ') : noBloat;
-};
-
-function sigTokens(s, take) {
-  const toks = bodyOf(s)
-    .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, ' ')
-    .split(/\s+/)
-    .filter((w) => w.length > 4 && !STOP.has(w));
-  const uniq = [];
-  for (const w of toks) if (!uniq.includes(w)) uniq.push(w);
-  return uniq.slice(0, take).sort().join('|');
-}
+// One implementation of "is this a duplicate", shared with purge-bot-seed-dupes.js and
+// locked by __tests__/lib/seedDupeLint.test.ts so the two can never drift apart.
+const { auditPool } = require('./lib/seedDupeLint');
 
 let wiredIndex = null;
 if (WIRED) {
@@ -113,47 +65,17 @@ for (const bot of (ONLY ? [ONLY] : fs.readdirSync(ROOT)).sort()) {
       continue;
     }
     if (!Array.isArray(data)) continue;
-    const texts = data.map(textOf).filter((t) => t && t.trim());
-    const seenE = new Map();
-    const seenS = new Map();
-    const seenC = new Set();
-    const seenDesc = new Set();
-    const exact = [];
-    const sig = [];
-    let descCollisions = 0;
-    data.forEach((raw, i) => {
-      const t = texts[i];
-      if (!t) return;
-      const e = identity(raw);
-      if (seenE.has(e)) exact.push(t.slice(0, 90));
-      else {
-        seenE.set(e, 1);
-        // same description, different tags: legitimate on a tag-filtered pool, but it means the
-        // entry is served twice to any path whose filter matches both. Worth a human look.
-        const d = t.toLowerCase().replace(/\s+/g, ' ').trim();
-        if (seenDesc.has(d)) descCollisions++;
-        else seenDesc.add(d);
-      }
-    });
-    for (const t of texts) {
-      const s = sigTokens(t, 12);
-      if (s.length > 10) {
-        if (seenS.has(s)) sig.push(t.slice(0, 90));
-        else seenS.set(s, 1);
-      }
-      seenC.add(sigTokens(t, 6));
-    }
+    const r = auditPool(data);
     pools.push({
       bot,
       pool: name,
-      n: texts.length,
-      exact: exact.length,
-      descCollisions,
-      sig: sig.length,
-      coarseUnique: seenC.size,
-      coarsePct: texts.length ? Math.round((1 - seenC.size / texts.length) * 100) : 0,
-      samplesExact: exact.slice(0, 3),
-      samplesSig: sig.slice(0, 3),
+      n: r.n,
+      exact: r.exact,
+      descCollisions: r.descCollisions,
+      sig: r.signature,
+      coarseUnique: r.coarseUnique,
+      coarsePct: r.coarsePct,
+      samplesExact: r.exactSamples,
     });
   }
 }

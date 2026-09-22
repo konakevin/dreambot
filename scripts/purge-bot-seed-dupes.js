@@ -42,22 +42,10 @@ if (WIRED) {
   wiredIndex = new Map(data.map((r) => [r.bot, new Set(r.reachable)]));
 }
 
-/** Canonical identity of an entry. Strings: normalised text. Objects: ALL fields, key-sorted, so
- *  two tagged entries are only equal when their tags match too (a shared description serving two
- *  different buckets is NOT a duplicate). */
-function identity(e) {
-  if (typeof e === 'string') return 'S:' + e.toLowerCase().replace(/\s+/g, ' ').trim();
-  if (e && typeof e === 'object') {
-    const sorted = Object.keys(e)
-      .sort()
-      .reduce((o, k) => {
-        o[k] = Array.isArray(e[k]) ? [...e[k]].sort() : e[k];
-        return o;
-      }, {});
-    return 'O:' + JSON.stringify(sorted).toLowerCase();
-  }
-  return 'X:' + String(e);
-}
+// One implementation of identity, shared with scan-bot-seed-dupes.js and locked by
+// __tests__/lib/seedDupeLint.test.ts. Objects compare on ALL fields, so a shared description
+// serving two different tag buckets is NOT a duplicate and is never removed.
+const { identity } = require('./lib/seedDupeLint');
 
 const stamp = Date.now();
 const results = [];
