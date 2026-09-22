@@ -55,6 +55,9 @@ module.exports = {
   TINY_JOURNEY_BEATS: load('tiny_journey_beats'),
   TINY_WORLDS: load('tiny_worlds'),
   TINY_CREW: load('tiny_crew'),
+  // pastel-village's MANDATORY verb-led villagers (2026-09-22) — see gen-village-folk.js for why
+  // TINY_CREATURES could not be reused here: its entries are static poses, not actions.
+  TINY_VILLAGE_FOLK: load('tiny_village_folk'),
   // Stage N (SHADOW) — festival/village scene paths, each SCENE + cute critter
   // CAST (verb-led, cute-only allow-list). Scene = the layered constructed
   // world; cast = warm life dropped in ~75%/~35%.

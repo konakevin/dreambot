@@ -257,6 +257,12 @@ function auditBot(bot) {
   const litRefs = new Set(
     [...allSrc.matchAll(/['"`]([A-Za-z0-9_]{3,})['"`]/g)].map((m) => m[1].toLowerCase())
   );
+  // A pool required by FULL PATH — `require('../seeds/farmbot_red_barn_scenes.json')`, how every
+  // FarmBot place path loads its bespoke pool — is not a bare quoted token, so the scan above
+  // misses it entirely and the file lands in ORPHAN ("safe to delete"). It is DORMANT: a parked
+  // path still requires it. Harvesting these was the difference between 84 orphans and 63, and
+  // deleting the 21 FarmBot files would have broken every one of those paths on re-activation.
+  for (const m of allSrc.matchAll(/seeds\/([A-Za-z0-9_.-]+)\.json/g)) litRefs.add(m[1].toLowerCase());
   const notLive = onDisk.filter((f) => !reachable.has(f));
   const dormant = notLive.filter((f) => litRefs.has(f.toLowerCase()));
   const dormantSet = new Set(dormant);

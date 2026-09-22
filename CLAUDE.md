@@ -135,8 +135,8 @@ is untouched. Rollback = `active = false`, no deploy. Use a PIN for routing — 
 
 ## Bots
 
-18 image-gen bots (bloombot, brickbot, chibibot, dinobot, dragonbot, earthbot, faebot, gothbot, mangabot,
-mechbot, oceanbot, pixelbot, retrobot, starbot, steambot, tinybot, toybot, yumbot) post to the public feed
+18 image-gen bots (bloombot, brickbot, chibibot, dinobot, dragonbot, dreambot, earthbot, faebot, farmbot,
+gothbot, mangabot, oceanbot, pixelbot, starbot, steambot, tinybot, toybot, yumbot) post to the public feed
 **2×/day** (per-bot, DB-tunable via `bot_schedules.posts_per_day`; fleet-wide set to 3 on
 2026-08-06, then down to 2 on 2026-08-20). Cadence is DB-driven: `.github/workflows/bots-dispatcher.yml` (hourly, changed from
 15 min 2026-09-09) reads `bot_schedules` for due bots → `scripts/run-bot.js`. Each bot is a self-contained module under

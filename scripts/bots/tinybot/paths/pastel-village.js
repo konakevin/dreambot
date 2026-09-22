@@ -4,10 +4,15 @@ const blocks = require('../shared-blocks');
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.PASTEL_VILLAGE, 'pastel_village');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
-  const includeCreature = Math.random() < 0.55;
-  const creature = includeCreature
-    ? picker.pickWithRecency(pools.TINY_CREATURES, 'tiny_creature')
-    : null;
+
+  // MANDATORY verb-led cast, 2026-09-22. This path used to roll ONE optional static creature at
+  // 55% ("perched on a rose petal"), which is the measured defect class: a hero object in heavy
+  // bokeh with nothing happening (flags 8/24 with no living subject vs 4/24 with one). Same fix
+  // as tiny-vehicles/TINY_CREW — always at least one villager, caught mid-action, sometimes two.
+  const folk = [picker.pickWithRecency(pools.TINY_VILLAGE_FOLK, 'tiny_village_folk')];
+  if (Math.random() < 0.4) {
+    folk.push(picker.pickWithRecency(pools.TINY_VILLAGE_FOLK, 'tiny_village_folk'));
+  }
 
   return `You are a master diorama-artist writing PASTEL FAIRY-TALE VILLAGE scenes for TinyBot. Handmade-resin-diorama-scale fairy-tale architectures in soft PINK / LAVENDER / MAGENTA / LILAC / PEARL-WHITE palette with WARM-GOLDEN WINDOW-GLOW as the focal contrast. Dreamy snow-globe pastel-cottagecore aesthetic — a soft little world to escape into. Output wraps with style prefix + suffix.
 
@@ -44,7 +49,11 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
 ━━━ THE PASTEL VILLAGE SCENE ━━━
 ${scene}
-${creature ? `\n━━━ OPTIONAL TINY INHABITANT (chubby bunny preferred — never realistic woodland animals) ━━━\n${creature}` : ''}
+
+━━━ THE VILLAGERS — MANDATORY, AND THEY ARE MID-ACTION ━━━
+${folk.map((f) => `• ${f}`).join('\n')}
+
+Somebody LIVES here and is busy right now. Write ${folk.length === 1 ? 'this villager' : 'these villagers'} into the frame doing exactly what they're doing, TOUCHING the village — at the door, the window-box, the stoop, the laundry-line, the lantern, the stair. ${folk.length > 1 ? 'The two of them share the moment (passing something, calling across, working the same line) rather than standing in separate corners. ' : ''}They stay small and readable, a warm little life inside the architecture — never a big foreground mascot, never posed for the camera.
 
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}
@@ -61,10 +70,10 @@ ${sharedDNA.colorPalette}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ PASTEL-VILLAGE DNA ━━━
-Architectural fairy-tale hero subjects: turreted pink cottages, lavender treehouse-tiers, conical-roofed mushroom-houses (purple / lilac / pink), pastel-painted shingles, stained-glass-style golden windows, wraparound balconies, fairy-tale spires. Settings: cherry blossom groves, falling petals everywhere, floating cloud-islands, soft moss banks, dreamy bokeh pastel sky. Magic: fairy-light sparkle particulate, warm-glow leaking from every window into the pink/lavender ambient. Sometimes tiny chubby bunnies as inhabitants (never realistic woodland animals).
+Architectural fairy-tale hero subjects: turreted pink cottages, lavender treehouse-tiers, conical-roofed mushroom-houses (purple / lilac / pink), pastel-painted shingles, stained-glass-style golden windows, wraparound balconies, fairy-tale spires. Settings: cherry blossom groves, falling petals everywhere, floating cloud-islands, soft moss banks, dreamy bokeh pastel sky. Magic: fairy-light sparkle particulate, warm-glow leaking from every window into the pink/lavender ambient. ALWAYS at least one chubby villager (bunny / hedgehog / mouse / pixie — never realistic woodland animals) caught mid-chore somewhere in the architecture.
 
 ━━━ COMPOSITION ━━━
-The pastel architecture is the HERO subject (40-65% of frame). Soft dreamy-bokeh pastel background. Cherry blossoms scattered in foreground or framing the architecture. Warm golden window-glow as the focal contrast against the cool-pink ambient. Twilight / dusk / golden-hour lighting (NEVER harsh midday, NEVER dark night).
+The pastel architecture is the HERO subject (40-65% of frame). Soft dreamy-bokeh pastel background — but the villagers stay in the SHARP zone with the architecture they're touching, never dissolved into the blur. Cherry blossoms scattered in foreground or framing the architecture. Warm golden window-glow as the focal contrast against the cool-pink ambient. Twilight / dusk / golden-hour lighting (NEVER harsh midday, NEVER dark night).
 
 ━━━ FAILURE CONDITIONS ━━━
 • If render reads as brown / beige / wooden / rustic-cottage → FAILED (pastel-pink/lavender only)
@@ -72,6 +81,7 @@ The pastel architecture is the HERO subject (40-65% of frame). Soft dreamy-bokeh
 • If sky is blue or grass is green-dominant → FAILED (pink/lavender atmospheric tint)
 • If architecture looks like real-world cottage / barn / European-village → FAILED (handmade-resin-fairytale-diorama only)
 • If humans visible → FAILED
+• If the village is EMPTY — no villager doing anything, just a building in blur → FAILED
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases.`;
 };
