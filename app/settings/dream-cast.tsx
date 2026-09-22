@@ -41,8 +41,22 @@ export default function DreamCastStepSettings() {
   // Disable the iOS swipe-back gesture while analyzing, or while any cast member is
   // unnamed (beforeRemove can't reliably cancel a native swipe mid-gesture). ONE owner for
   // gestureEnabled on this screen — a second setOptions elsewhere would race this one.
+  //
+  // BOTH gestures, exactly as settings/locations.tsx does for its own required-selection
+  // guard: the settings group is a root MODAL_SWIPEABLE card, so turning off only the INNER
+  // gesture hands the swipe to the PARENT, which dismisses the whole settings stack instead
+  // of popping one screen. That is not a block, it is a bigger exit (Kevin, 2026-09-21: "it
+  // is still letting me swipe away from the cast screen without naming an uploaded cast
+  // member photo"). Restore the parent's swipe on leave so the rest of settings keeps it.
   useEffect(() => {
-    navigation.setOptions({ gestureEnabled: !analyzing && unnamedCount === 0 });
+    const enabled = !analyzing && unnamedCount === 0;
+    navigation.setOptions({ gestureEnabled: enabled, fullScreenGestureEnabled: enabled });
+    navigation
+      .getParent()
+      ?.setOptions({ gestureEnabled: enabled, fullScreenGestureEnabled: enabled });
+    return () => {
+      navigation.getParent()?.setOptions({ gestureEnabled: true, fullScreenGestureEnabled: true });
+    };
   }, [navigation, analyzing, unnamedCount]);
 
   // Backstop for the header chevron / Android hardware back / any programmatic
