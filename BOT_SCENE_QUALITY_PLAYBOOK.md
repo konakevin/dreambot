@@ -3263,7 +3263,28 @@ The biggest discovery of the BrickBot migration. Flux's "LEGO MOC photography" t
 
 **Apply this to:** every BrickBot path. If a path is more intimate-tabletop-feel (e.g., macro-display, girly, lego-masters convention table) it may want the OPPOSITE — embrace tilt-shift, drop the deep-focus prefix. Path-by-path call.
 
-### CRITICAL LESSON 2 — BrickBot rule: NEVER LEGO Star Wars
+### ~~CRITICAL LESSON 2 — BrickBot rule: NEVER LEGO Star Wars~~ → **REVERSED 2026-09-22**
+
+> **⚠️ THIS RULE IS DEAD. Kevin, 2026-09-22:** *"i want to actually reverse course on brickbot - it's ok
+> if it shows star wars or any other worlds from pop culture - the fair use laws for lego and those
+> properties is fine for now."* Licensed pop-culture IP is IN SCOPE for every BrickBot path: Star Wars
+> (X-wing / TIE / Falcon / Star Destroyer / stormtroopers / Mandalorian / beskar / Jedi / Imperial) and
+> pop-culture worlds generally. The reasoning is LEGO-specific — LEGO sells licensed sets, so a LEGO
+> Star Wars diorama is a real product, not a knockoff. **Do NOT strip these references from pools,
+> registers, recipes or templates, and do not re-add the ban.** Live entries that are now fine:
+> `brickbot_space_palette` "Stormtrooper-white … Star-Wars-Imperial-coded", `brickbot_space_register`
+> "MANDALORIAN-CODED PRIVATEER … beskar-style armour, T-visor helmet", `brickbot_girly_register`
+> "DISNEY-PRINCESS SPARKLE SIGNATURE". "For now" is load-bearing: it is a provisional call on legal
+> exposure, so revisit if the app's posture changes.
+>
+> **What did NOT change:** hard-SF realism (Mass Effect / Expanse / Star Citizen / cyberpunk-space) is
+> STILL OUT — that is a render-quality rule (photoreal-drift kills the "everything is brick" signal),
+> not an IP rule. And the taste calibration still holds: Kevin's heart set was 10/10 iconic LEGO
+> heritage, 0 hard-SF, so allowing pop-culture IP must not crowd out Classic Space / Blacktron / M-Tron
+> / Ice Planet. **This reversal is BrickBot-scoped** and does not clear ToyBot's trademark-lookalike
+> flags (a mouse-ear vinyl figure was in Kevin's own quarantine list).
+
+The superseded rule, kept for history:
 
 Per `feedback_no_star_wars_brickbot.md` memory: Kevin explicitly rejected LEGO Star Wars register/vehicle classes from BrickBot. Strip ALL Star Wars references (X-wings / TIEs / Falcon / Star Destroyers / stormtroopers / Mandalorian / Beskar / Jedi / Rebels / Imperial) from pools, recipes, and templates. Use original LEGO Space themes instead (Classic Space / Blacktron / M-Tron / Galaxy Squad etc.) + non-licensed retro-fantasy (Tintin / Foundation / Apollo).
 
@@ -3411,7 +3432,7 @@ Cloning the pirates + space migration pattern:
    - `lighting` — axis-clean source/dir/color (100)
    - `palette` — axis-clean color combos (100)
    - `weather_drama` or `cosmic_phenomenon` (50%-gated) — conditional environmental drama (50)
-3. **Bespoke recipes per pool** — anchored on path-specific iconic canon (LEGO Pirates / LEGO Space / LEGO Castle / LEGO Western / etc.). NEVER use Star Wars. NEVER use Mass Effect / Expanse / Star Citizen. Always include "STARSHIP" qualifier on naval-overlap ship-class names.
+3. **Bespoke recipes per pool** — anchored on path-specific iconic canon (LEGO Pirates / LEGO Space / LEGO Castle / LEGO Western / etc.). Star Wars and pop-culture IP are ALLOWED as of 2026-09-22 (see the reversal above); NEVER use Mass Effect / Expanse / Star Citizen (photoreal-drift). Always include "STARSHIP" qualifier on naval-overlap ship-class names.
 4. **Template structure** — clone BRICKBOT_PIRATES or BRICKBOT_SPACE template with bespoke vocabulary swap. Camera_framing flagged as MANDATORY DRIVING AXIS. Minifig pose variety mandates tied to camera keywords. No-vehicle hard-bifurcation block (if vehicle_class is no-vehicle, ZERO ships rendered). AFOL convention-tier mandate (NOT Lego.com hero shot). Hoisted ZERO REAL HANDS block.
 5. **promptPrefixByPath** — add `cinematic widescreen film frame, deep focus front-to-back, edge-to-edge sharpness, expansive establishing shot` if path benefits from establishing-shot composition. Omit if path is intimate-tabletop (macro-display, lego-masters).
 6. **twoPassPolish.skipPaths** — always add the new path (axis-system default).
@@ -3432,11 +3453,11 @@ Cloning the pirates + space migration pattern:
 | Naval-pirate frigate when no-vehicle was supposed to fire               | "no-vehicle (...)" entry without strong scene anchor in description body                             | Add tension-descriptor + specific scene detail to every no-vehicle entry                      |
 | Boring "scene establishing" no-vehicle renders                          | Bare "no-vehicle (bridge interior)" entries describe SETTING but not ACTION                          | Embed mid-X action-tension into every no-vehicle entry's bracketed phrase + body              |
 | 5/5 ships heavy or 5/5 no-vehicle heavy                                 | Pool ratio off (>70% one or the other)                                                               | Surgical-drop entries to rebalance to 50-55% ships / 45-50% no-vehicle                        |
-| Star Wars LEGO renders (X-wing / TIE / stormtrooper)                    | Pool has Star Wars register/vehicle_class entries                                                    | PURGE — Star Wars is OUT of scope for BrickBot                                                |
+| ~~Star Wars LEGO renders~~ (no longer a failure)                        | n/a                                                                                                  | ALLOWED as of 2026-09-22 (Kevin reversed the ban; see CRITICAL LESSON 2 above)                |
 
 ### Hard rules for BrickBot path migrations
 
-- **NEVER LEGO Star Wars.** Strip every Star Wars reference from pools, recipes, templates BEFORE first render.
+- **Star Wars and pop-culture IP are ALLOWED** (reversed 2026-09-22). The old "never LEGO Star Wars" rule is dead; do not strip those references or re-add the ban.
 - **NEVER hard-SF realism registers** (Mass Effect / Expanse / Star Citizen / cyberpunk-space / solarpunk-space). They photoreal-drift.
 - **ALWAYS** include "STARSHIP" or "interstellar" qualifier when an entry names a ship-class with naval counterparts.
 - **ALWAYS** flag camera_framing as MANDATORY DRIVING AXIS in the template + pair with minifig pose variety mandates.

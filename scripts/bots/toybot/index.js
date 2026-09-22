@@ -676,7 +676,10 @@ module.exports = {
     // faithful xerox — already in chaos.skipPaths + sensory skipPaths (both off),
     // modelByPath (flux-1.1) + mediumByPath (bespoke look) preserved).
     'board-game-world',
-    'wooden-toy-land',
+    // 'wooden-toy-land' — DEACTIVATED 2026-09-22 (Kevin: "i don't like those renders").
+    // Live renders skewed bare: a carved object on an empty surface with no inhabitant and no
+    // story beat, which is the same object-portrait defect the tiny-vehicles rework fixed.
+    // Builder + pools + seeds + skip-list entries all preserved for a clean re-enable.
     'tin-toy-parade',
   ],
 
