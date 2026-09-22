@@ -19,17 +19,188 @@ node scripts/sweep-bot-seed-defects.js --wired /tmp/wiring.json    # known bad-r
 
 ---
 
+## 0. AGENT HANDOFF — read this section first
+
+You are picking up a multi-stage bot content expansion. Nothing here assumes you were in the session
+that planned it. Work through this section top to bottom, then execute section 2's stages in order.
+
+### 0.1 Before you touch anything
+
+1. **Read `CLAUDE.md`** (repo root). It is the governing file.
+2. **Read `BOT_SCENE_QUALITY_PLAYBOOK.md` IN FULL.** This is a standing repo rule, not optional, and it
+   applies before ANY bot work including merely answering how a bot works. It is ~4,000 lines and every
+   hard rule in it was paid for with a broken batch. Do not skim it and do not substitute this file.
+3. **Read this whole file.**
+4. Do NOT start the dev environment. Do NOT run `git checkout`, `git restore`, `git clean` or
+   `git stash` at any point: an agent once reverted uncommitted pool edits that way.
+
+### 0.2 The mission in one paragraph
+
+Kevin asked to "inflate every seed pool for every bot by 100 entries" to make the bots more diverse and
+fun. Measurement showed a flat +100 would be ~303,000 new entries that nobody would ever see: the fleet
+holds 440,120 entries, the near-duplicate rate is only 2-11%, and each live path posts just 6-20 times
+per 90 days, so a given entry resurfaces about once every five years. Kevin agreed to a **targeted**
+plan instead: purge what is broken, deepen only the genuinely thin pools, and add new _registers_ rather
+than more of the same. The full reasoning is in section 1.
+
+### 0.3 What is already DONE (do not redo)
+
+| Commit     | What                                                                                                         |
+| ---------- | ------------------------------------------------------------------------------------------------------------ |
+| `7b834ac4` | Phase 0 audit tooling (3 scripts), this tracker, ToyBot `wooden-toy-land` deactivation, BrickBot IP reversal |
+| `990d1d86` | The duplicate purge: 5,164 entries removed from 225 pools                                                    |
+
+- **Step 0 is 3 of 5 done.** The three audit scripts exist and have been run. Still open: wire the dupe
+  scanner into `package.json` `check`, and write its jest test. See section 3.
+- **Step 1a (duplicate purge) is DONE.** See section 2b.
+- **Steps 1b, 2a, 2b, 2c and 3 are NOT started.** Zero seed entries have been generated or rewritten.
+- Spend so far: **$0**. Everything completed to date was measurement and deletion.
+
+### 0.4 Decisions Kevin has already made (treat as settled)
+
+- **Targeted plan, not a flat +100.** Confirmed 2026-09-22.
+- **Buckets only, no new paths** ("option 1"), with ONE sanctioned exception: StarBot and DragonBot get
+  new CHARACTER paths (section 6c). A _bucket_ is a named sub-theme inside an existing pool; a _path_ is
+  a whole show with its own archetype, template, wiring and QA. Candidates that fit no existing pool are
+  "homeless": list them with a price per path and hand them to Kevin, build nothing.
+- **Tasteful-adult is the line** on the new character paths: glam, alluring, stylized, skin allowed,
+  never explicit and never pin-up-posed. Do not de-glam (the SteamBot over-correction), and do not cross
+  into cheesecake (flux NSFW-fails it, and these post to a public feed).
+- **BrickBot may render Star Wars and other pop-culture worlds.** The old "NEVER LEGO Star Wars" rule is
+  DEAD (Kevin: "the fair use laws for lego and those properties is fine for now"). Do not strip those
+  entries and do not re-add the ban. Hard-SF realism (Mass Effect / Expanse / Star Citizen) is still out,
+  but for photoreal drift, not IP.
+- **ToyBot `wooden-toy-land` is deactivated** and stays that way ("i don't like those renders").
+- **MechBot and RetroBot are dark** (`active = false` since June) and are not expansion targets.
+
+### 0.5 The tooling (all four scripts are committed)
+
+```sh
+# 1. Which pools does a LIVE path actually read? Three tiers: wired / dormant / orphan.
+node scripts/audit-bot-pool-wiring.js --json /tmp/wiring.json
+node scripts/audit-bot-pool-wiring.js --bot starbot          # one bot, lists its orphans
+
+# 2. Duplicates + near-dupes + per-pool saturation. Exits 1 on exact dupes.
+node scripts/scan-bot-seed-dupes.js --wired /tmp/wiring.json --json /tmp/dupes.json
+node scripts/scan-bot-seed-dupes.js --bot gothbot -v         # per-pool detail + samples
+
+# 3. Known bad-render phrase families. DIAGNOSTIC ONLY, never rewrites.
+node scripts/sweep-bot-seed-defects.js --wired /tmp/wiring.json --json /tmp/defects.json
+node scripts/sweep-bot-seed-defects.js --family text_prior -v
+
+# 4. Removes exact duplicates. Dry run by default; --apply writes + backs up.
+node scripts/purge-bot-seed-dupes.js --wired /tmp/wiring.json          # dry run
+```
+
+Regenerate the JSON artifacts yourself. The ones from the planning session lived in a session scratchpad
+and are gone.
+
+### 0.6 Hard-won gotchas that will bite you
+
+- **New entries get FRONT-LOADED into the public feed.** The picker is a persisted shuffle bag keyed by
+  entry TEXT (`bot_dedup`, migration 123). If an axis is 90 of 100 used and you add 100, the next ~110
+  picks draw ONLY from the new entries. A weak batch does not trickle out, it dominates that axis for
+  weeks. This is why the post-scale sweep is mandatory rather than nice-to-have.
+- **Append, never regen.** `--count 100` on a `gen-<bot>-pool.js` means exactly +100. A regen discards
+  approved entries AND orphans that pool's rotation history (the dedup rows key on text, so rewriting an
+  entry frees it to reappear immediately).
+- **Two generator pipelines exist.** 16 monolithic `scripts/gen-<bot>-pool.js` (flags: `--pool`,
+  `--count`, `--target`, `--dry-run`), and ~1,740 per-pool scripts under `scripts/gen-seeds/<bot>/` that
+  call `scripts/lib/seedGenHelper.js` and take no flags except the `SEED_TOTAL` env var. There is NO
+  monolithic generator for alphabot, farmbot, mangabot, retrobot, tinybot or yumbot.
+- **A stale memory says "NEVER use seedGenHelper".** That memory predates the 2026-06-05 patch that fixed
+  the anti-prompt bloat. `seedGenHelper` is fine now; 1,140 of those scripts already pass `append: true`.
+- **Dormant pools are a money trap.** ~460 pools (~67,500 entries) are still `load()`ed but no live path
+  picks them, left behind by each axis migration. Growing one changes nothing. Always filter through
+  `--wired`.
+- **Symbol name does not always equal file name.** e.g. brickbot `BRICKBOT_CRAZY_ISLANDS_*` →
+  `brickbot_islands_*`, gothbot `FEMALE_ACCESSORIES` → `goth_woman_accessories`. The wiring audit
+  resolves these; do not hand-map them.
+- **Two non-standard loaders** the wiring audit special-cases: pixelbot scene paths via
+  `scene.loadScenePools('<prefix>', SLOTS)`, and brickbot's generated legacy triplets.
+- **Never purge an entry that shares a description but differs in tags.** On a tag-filtered pool that is
+  legitimate (chibibot has an egret tagged `["ARCTIC"]` and `["ARCTIC","BIRD"]`). Both the purge and the
+  scanner compare full objects key-sorted. Four such entries exist and are reported as warnings.
+- **Respect the documented ceilings.** race 50, class 36-50, hairstyle 44-50, accessory 49-98, gated
+  drama 50, eyes/skin/hair_color 100. Padding an atomic axis to 200 manufactures near-duplicates.
+- **335 pools are already >=20% same-idea.** A +100 there under-delivers; cap at +50 or split the recipe.
+- **Structural pools are NOT expansion targets**: palette, lighting, camera, framing, atmosphere, sky,
+  eyes, hair, wardrobe, makeup, and the 273 sensory-fragment files.
+- **Sonnet re-derives every banned noun at production scale.** PixelBot's scale-up reintroduced 101
+  already-fixed defects with hardened recipes. Budget a sweep after EVERY scale-up.
+- **The format-drift scan is mandatory after scaling**: compare the share of entries carrying the
+  recipe's format marker in the tested entries vs the new ones. If tested is >=80% and new is <80%, that
+  pool drifted: tighten the recipe, truncate back to the clean entries, regen.
+- **Equal share per sub-theme.** One focused Sonnet call per bucket, never one big call with a
+  distribution mandate, then tally per bucket. This is a Kevin hard rule.
+
+### 0.7 How to work with Kevin
+
+- **Test renders go up as SHADOW posts and he reviews them in the app.** Never build a `/tmp` HTML
+  contact sheet and never narrate your own verdict from reading a JPEG. You may look at renders for
+  mechanical checks (did it error, which model, did the prompt carry the intended tokens, did a known
+  failure mode recur); the LOOK is his call.
+- **Seed 25 to test, scale only after he signs off.** "These look good" is NOT "scale it": wait for a
+  separate scale instruction.
+- **One variable per round, cap at 3 rounds**, then restructure rather than fixing one more thing.
+- **Throttle**: renders ≤3 concurrent and gated on DB connection headroom
+  (`const { waitForHeadroom } = require('./lib/poolHeadroom'); await waitForHeadroom({ min: 25, label })`).
+  Avoid the top of the hour and the 08:00 UTC nightly window. Generation is API-bound: ~6 parallel
+  workers max, and re-verify every pool count afterwards because stragglers are documented.
+- **Commits**: explicit paths only, never `git add -A`. Check `git diff --cached --name-only` as its own
+  step before committing, and read the staged diff: this is a shared working tree and other agents' WIP
+  lives in it. Work on `main`, no feature branches.
+- **Narrate as you go**: what you found, what you are changing, the proof, what is next.
+- In user-facing copy and prose, do not use em dashes.
+
+### 0.8 Resolve these three unknowns BEFORE spending money
+
+1. **Generator-recipe coverage.** Do all 178 Stage 1b target pools still have a working recipe? Some may
+   be hand-authored or have had their gen script deleted. This is a static check and it could move Stage
+   1b's cost. Report coverage before generating.
+2. **Bucket-to-pool assignment + the homeless list.** The 128 candidates in section 6 have NOT been
+   assigned to target pools. Only ChibiBot's `creature_adventures_scenes` and YumBot's
+   `meal_types_scenes` are already tag-bucketed, so those drop straight in. For the other 14 bots, assign
+   each candidate to a specific existing pool. Any candidate with no natural home (BloomBot's "alpine
+   wildflower meadow" is the likely case, since none of its 24 paths owns mountain meadows) goes on the
+   homeless list with a per-path price, roughly $11-14 of API plus a build and 1-3 review rounds. Hand
+   that list to Kevin and build nothing from it.
+3. **Narrow the two noisy defect families.** `dullness` and `grim_on_cute_bot` currently flag a rotting
+   log, a blood-moon and a line of dewdrops on a petal. Add allowlists and re-validate by sampling
+   before any rewrite pass uses them.
+
+### 0.9 Rollback
+
+Every stage is independently revertable, and nothing here touches the production nightly engine, the
+dream queue, or any app code.
+
+- Seed edits: plain git revert of that stage's commit. The purge also wrote `.bak-<ts>` files before
+  writing, though those were removed after verification since the commit is the real backup.
+- `wooden-toy-land`: uncomment one line in `scripts/bots/toybot/index.js`.
+- A bot that will not load after an edit: `node -e "require('./scripts/bots/<bot>')"` names the bad pool.
+- Stop a bot posting entirely while you investigate: `bot_schedules.active = false` for that bot.
+
+### 0.10 Definition of done
+
+Section 2's stages all executed, plus: the dupe scanner wired into CI with a jest test; the sweep
+reporting zero across every family it covers; the 84 orphan files deleted; 178 pools at ~200 real unique
+entries; TinyBot's four worst paths reworked; 24 new look-register entries live on 4 bots; the approved
+buckets seeded, shadow-reviewed and scaled; and this file's checkboxes and decision log updated so the
+next agent inherits measured state rather than a story.
+
+---
+
 ## 1. Why this exists (what was measured, 2026-09-22)
 
-| Measurement | Value |
-| --- | --- |
-| Live public bots | 18 (MechBot + RetroBot are `active = false` since June; OutlawBot is private with all 22 seed files missing) |
-| Pool files, live bots | 3,027 (whole tree incl. dark bots + AlphaBot: 3,511) |
-| Entries, live bots | 440,120 (whole tree: 501,759) |
-| Median pool size | 126 entries; 1,390 pools are already at 200+ |
-| Near-duplicate rate | 2% to 11% per bot (MangaBot 11% is the worst, and the largest at 57,936 entries) |
-| Real posting rate | 6 to 20 renders per path per 90 days |
-| Pools loaded but never referenced by a live path | ~330 symbols, ~55,000 entries, plus 48 dead files |
+| Measurement                                      | Value                                                                                                        |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| Live public bots                                 | 18 (MechBot + RetroBot are `active = false` since June; OutlawBot is private with all 22 seed files missing) |
+| Pool files, live bots                            | 3,027 (whole tree incl. dark bots + AlphaBot: 3,511)                                                         |
+| Entries, live bots                               | 440,120 (whole tree: 501,759)                                                                                |
+| Median pool size                                 | 126 entries; 1,390 pools are already at 200+                                                                 |
+| Near-duplicate rate                              | 2% to 11% per bot (MangaBot 11% is the worst, and the largest at 57,936 entries)                             |
+| Real posting rate                                | 6 to 20 renders per path per 90 days                                                                         |
+| Pools loaded but never referenced by a live path | ~330 symbols, ~55,000 entries, plus 48 dead files                                                            |
 
 **The conclusion that shaped this plan.** A flat "+100 entries on every pool" would be ~303,000 new
 entries, and by the posting math nobody would ever see the difference: with 5+ axes at 200 entries, a
@@ -54,16 +225,17 @@ plus ~1 cent of Sonnet per brief. Planning number: **1.2 cents per seed entry, 5
 
 **REVISED after Phase 0 ran (see section 2b). The estimates below are the measured ones.**
 
-| # | Task | New entries | Test renders | Est. cost | Wall clock | Needs Kevin |
-| --- | --- | --- | --- | --- | --- | --- |
-| 0 | Safety net: 3 audit scripts | 0 | 0 | **$0** | DONE 2026-09-22 | no |
-| 1a | ~~Purge exact duplicates~~ **DONE** (5,164 removed from 225 pools) | 0 | 0 | **$0** | done | no |
-| 1b | Top up the 178 clean wired content pools under 120 entries | 17,433 | ~45 | **~$212** | ~5 h | no |
-| 2a | Expand look registers (4 thinnest bots, hand-authored) | ~24 (by hand) | ~24 | **~$2** | ~half a day | approve looks |
-| 2b | New buckets, MVP at 25 each (~85 approved of 128 candidates) | 2,125 | ~200 | **~$38** | review-gated | yes, per bucket |
-| 2c | Scale approved buckets to ~120 each | ~8,075 | ~50 | **~$100** | ~3 h | no |
-| 3 | Tail sweep: rewrite the ~2,500 validated defect entries | ~2,500 rewrites | ~50 | **~$33** | ~4 h | no |
-| | **Everything** | **~30,000** | **~370** | **~$385** | | |
+| #   | Task                                                               | New entries     | Test renders | Est. cost | Wall clock      | Needs Kevin     |
+| --- | ------------------------------------------------------------------ | --------------- | ------------ | --------- | --------------- | --------------- |
+| 0   | Safety net: 3 audit scripts                                        | 0               | 0            | **$0**    | DONE 2026-09-22 | no              |
+| 1a  | ~~Purge exact duplicates~~ **DONE** (5,164 removed from 225 pools) | 0               | 0            | **$0**    | done            | no              |
+| 1b  | Top up the 178 clean wired content pools under 120 entries         | 17,433          | ~45          | **~$212** | ~5 h            | no              |
+| 2a  | Expand look registers (4 thinnest bots, hand-authored)             | ~24 (by hand)   | ~24          | **~$2**   | ~half a day     | approve looks   |
+| 2b  | New buckets, MVP at 25 each (~85 approved of 128 candidates)       | 2,125           | ~200         | **~$38**  | review-gated    | yes, per bucket |
+| 2c  | Scale approved buckets to ~120 each                                | ~8,075          | ~50          | **~$100** | ~3 h            | no              |
+| 3   | Tail sweep: rewrite the ~2,500 validated defect entries            | ~2,500 rewrites | ~50          | **~$33**  | ~4 h            | no              |
+| 4   | StarBot + DragonBot character paths (section 6c) — 14 new paths    | ~9,800          | ~150         | **~$130** | review-gated    | yes, per path   |
+|     | **Everything**                                                     | **~40,000**     | **~520**     | **~$515** |                 |                 |
 
 Add roughly 25% contingency for failed batches, stragglers and re-rounds: **plan on $475 to $500 for the
 full run.** Renders are capped at 3 concurrent and gated on DB connection headroom, so ~370 renders is
@@ -113,18 +285,18 @@ Only 9 of them are also expansion targets; those get +50 at most, or a recipe sp
 `dullness` and `grim_on_cute_bot` families are too noisy to act on as-is (they flag a rotting log, a
 blood-moon, a line of dewdrops) and need narrowing before use. Validated, actionable:
 
-| Finding | Count | Note |
-| --- | --- | --- |
-| ~~Star Wars / Disney IP in BrickBot pools~~ | **0 (dropped)** | **NOT a defect.** Kevin reversed the ban 2026-09-22: *"it's ok if it shows star wars or any other worlds from pop culture - the fair use laws for lego and those properties is fine for now."* The 176 flagged entries stay. The playbook's BrickBot CRITICAL LESSON 2 + hard-rules list, and both BrickBot IP memories, were rewritten the same day, and `sweep-bot-seed-defects.js` now exempts brickbot from the `ip_lookalike` family. |
-| Other IP-lookalike (ToyBot/YumBot/ChibiBot) | 769 | Mostly ToyBot pools named for the IP itself (`vinyl_funko_cast` 202, `barbie_storytelling` 154). Matches Kevin's quarantine note about "a mouse-ear vinyl figure". Needs a product decision, not a sweep. |
-| Firearms in high fantasy | 305 | DragonBot / GothBot / MangaBot / StarBot |
-| Weathervane / compass rose (renders readable text) | 329 | Fleet-wide |
-| Viewer-posture verbs in vantage/camera pools | 323 | The PixelBot "girl face-down in the water" defect class |
-| Pirate-era tropes on strict-fantasy bots | 160 | DragonBot `artsy_girl_outfit` still has "PIRATE CORSAIR / Swashbuckler", the frozen path flagged-not-touched in the June purge |
-| Human roles on a no-human bot | 182 | ChibiBot / TinyBot / YumBot "vendor", "shopkeeper", "villagers" |
-| Light or sky described as a solid object | 132 | Fleet-wide |
-| CJK characters | 90 | Fleet-wide |
-| Greek-myth creatures on high-fantasy bots | 24 | pegasus / cerberus / cyclops / sphinx |
+| Finding                                            | Count           | Note                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| -------------------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| ~~Star Wars / Disney IP in BrickBot pools~~        | **0 (dropped)** | **NOT a defect.** Kevin reversed the ban 2026-09-22: _"it's ok if it shows star wars or any other worlds from pop culture - the fair use laws for lego and those properties is fine for now."_ The 176 flagged entries stay. The playbook's BrickBot CRITICAL LESSON 2 + hard-rules list, and both BrickBot IP memories, were rewritten the same day, and `sweep-bot-seed-defects.js` now exempts brickbot from the `ip_lookalike` family. |
+| Other IP-lookalike (ToyBot/YumBot/ChibiBot)        | 769             | Mostly ToyBot pools named for the IP itself (`vinyl_funko_cast` 202, `barbie_storytelling` 154). Matches Kevin's quarantine note about "a mouse-ear vinyl figure". Needs a product decision, not a sweep.                                                                                                                                                                                                                                  |
+| Firearms in high fantasy                           | 305             | DragonBot / GothBot / MangaBot / StarBot                                                                                                                                                                                                                                                                                                                                                                                                   |
+| Weathervane / compass rose (renders readable text) | 329             | Fleet-wide                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Viewer-posture verbs in vantage/camera pools       | 323             | The PixelBot "girl face-down in the water" defect class                                                                                                                                                                                                                                                                                                                                                                                    |
+| Pirate-era tropes on strict-fantasy bots           | 160             | DragonBot `artsy_girl_outfit` still has "PIRATE CORSAIR / Swashbuckler", the frozen path flagged-not-touched in the June purge                                                                                                                                                                                                                                                                                                             |
+| Human roles on a no-human bot                      | 182             | ChibiBot / TinyBot / YumBot "vendor", "shopkeeper", "villagers"                                                                                                                                                                                                                                                                                                                                                                            |
+| Light or sky described as a solid object           | 132             | Fleet-wide                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| CJK characters                                     | 90              | Fleet-wide                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Greek-myth creatures on high-fantasy bots          | 24              | pegasus / cerberus / cyclops / sphinx                                                                                                                                                                                                                                                                                                                                                                                                      |
 
 **Quarantine reality check (180 days, joined to path).** Kevin's own audit counts were exactly right
 (TinyBot 12, ToyBot 9) but the "/48" denominators were his review sample, not total posts. Per post:
@@ -159,15 +331,19 @@ blood-moon, a line of dewdrops) and need narrowing before use. Validated, action
 
 ## 3. Step 0: safety net (do this first, always)
 
-- [ ] `scripts/scan-bot-seed-dupes.js`: walk every `seeds/*.json`, report exact duplicates, signature
-      near-duplicates, and single-theme concentration per pool. Exit non-zero on findings.
-- [ ] Wire it as `scan:bot-seed-dupes` into `package.json` `check` (so pre-commit and CI both run it).
-- [ ] Jest test for the checker's logic, modelled on `__tests__/lib/holidayPoolLint.test.ts`.
-- [ ] `scripts/audit-bot-pool-wiring.js`: for each pool file, is it referenced by a live path. Output the
-      authoritative Step 1 target list (this is what replaces the estimate in section 4).
-- [ ] `scripts/sweep-bot-seed-defects.js`: the known regex families, printing the matched token not the
-      whole entry (weathervane/compass, halo ring, light-as-column/pillar/bar, masonry in geology pools,
-      posture verbs in camera pools, off-genre tropes, CJK characters, `as a [jewel/gem]` similes).
+- [x] `scripts/scan-bot-seed-dupes.js` — BUILT + RUN 2026-09-22. Reports exact dupes, signature
+      near-dupes, same-description-different-tags collisions, and per-pool saturation. Exits non-zero on
+      exact dupes only; currently exits 0 (post-purge).
+- [ ] **STILL OPEN.** Wire it as `scan:bot-seed-dupes` into `package.json` `check` (pre-commit + CI).
+      Was unsafe before the purge (it failed on 5,168 dupes); safe now.
+- [ ] **STILL OPEN.** Jest test for the checker's logic, modelled on
+      `__tests__/lib/holidayPoolLint.test.ts`, so the identity rules cannot silently drift.
+- [x] `scripts/audit-bot-pool-wiring.js` — BUILT + RUN 2026-09-22. Three tiers (wired / dormant /
+      orphan), resolves pixelbot's templated loader, brickbot's generated triplets, seasonal requires and
+      alphabot's cross-bot path requires. Produced the authoritative target list in section 4.
+- [x] `scripts/sweep-bot-seed-defects.js` — BUILT + RUN 2026-09-22. 14 scoped families. Diagnostic
+      only, never rewrites. 4,835 raw flags, ~2,500 validated by sampling; `dullness` and
+      `grim_on_cute_bot` still need narrowing before anyone acts on them.
 
 Why first: today the only duplicate protection is inside whichever script writes the entries. A hand
 edit, a different script, or two agents growing one pool would all go uncaught.
@@ -191,16 +367,16 @@ pools on live bots, 186 are under 120 entries; 177 of those are clean enough to 
 already >=20% same-idea (cap those at +50 or split the recipe). Topping the 177 up to ~200 is
 **17,333 entries, about $208**.
 
-| Bot | Pools | Entries to add | Bot | Pools | Entries to add |
-| --- | --- | --- | --- | --- | --- |
-| yumbot | 31 | 3,097 | farmbot | 8 | 690 |
-| starbot | 26 | 2,591 | faebot | 7 | 700 |
-| gothbot | 24 | 2,400 | toybot | 4 | 400 |
-| pixelbot | 18 | 1,800 | dreambot | 3 | 300 |
-| steambot | 16 | 1,516 | dragonbot | 2 | 174 |
-| bloombot | 14 | 1,304 | earthbot | 2 | 200 |
-| brickbot | 10 | 966 | tinybot | 2 | 200 |
-| chibibot | 10 | 995 | | | |
+| Bot      | Pools | Entries to add | Bot       | Pools | Entries to add |
+| -------- | ----- | -------------- | --------- | ----- | -------------- |
+| yumbot   | 31    | 3,097          | farmbot   | 8     | 690            |
+| starbot  | 26    | 2,591          | faebot    | 7     | 700            |
+| gothbot  | 24    | 2,400          | toybot    | 4     | 400            |
+| pixelbot | 18    | 1,800          | dreambot  | 3     | 300            |
+| steambot | 16    | 1,516          | dragonbot | 2     | 174            |
+| bloombot | 14    | 1,304          | earthbot  | 2     | 200            |
+| brickbot | 10    | 966            | tinybot   | 2     | 200            |
+| chibibot | 10    | 995            |           |       |                |
 
 - [x] 1a: purge the exact duplicates — DONE 2026-09-22, 5,164 entries out of 225 pools, $0
 - [ ] 1b: top up the 177 clean wired pools toward 200
@@ -218,12 +394,12 @@ anime looks beat 25 generated ones). Each entry must be pure rendering technique
 palette, finish, studio reference) with **zero** time-of-day, weather, season or lighting words, and zero
 subject anatomy. Verify one render per new look before it ships.
 
-| Bot | Current size | Bot | Current size |
-| --- | --- | --- | --- |
-| yumbot | 24 | chibibot | 12 |
-| bloombot | 12 | mangabot | 12 |
-| gothbot | 8 | farmbot | 6 |
-| pixelbot | 6 | steambot | 6 |
+| Bot      | Current size | Bot      | Current size |
+| -------- | ------------ | -------- | ------------ |
+| yumbot   | 24           | chibibot | 12           |
+| bloombot | 12           | mangabot | 12           |
+| gothbot  | 8            | farmbot  | 6            |
+| pixelbot | 6            | steambot | 6            |
 
 - [ ] farmbot 6 → 12
 - [ ] pixelbot 6 → 12 (era sub-styles per Kevin's 2026-09-19 steer, incl. the early-high-def look)
@@ -245,6 +421,7 @@ that bot's live paths and existing tags, so none duplicate current coverage.
 Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, then scale to ~120.
 
 ### BloomBot
+
 - [ ] alpine wildflower meadow
 - [ ] coastal cliff bloom over surf
 - [ ] orchid cloud-forest (epiphytes on mossy branches)
@@ -255,6 +432,7 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
 - [ ] floating flower barges on a canal
 
 ### BrickBot
+
 - [ ] airfield with biplanes
 - [ ] construction site (cranes, diggers)
 - [ ] harbor docks and container cranes
@@ -266,6 +444,7 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
 - Deliberately omitted: LEGO farm (FarmBot's lane by Kevin's call) and LEGO dino island (DinoBot's).
 
 ### ChibiBot
+
 - [ ] train ride
 - [ ] ferry crossing
 - [ ] rainy afternoon in a bookshop
@@ -276,6 +455,7 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
 - [ ] stargazing at an observatory
 
 ### DinoBot
+
 - [ ] courtship display (crests, fans, feather display)
 - [ ] juvenile play
 - [ ] den and burrow life
@@ -286,6 +466,7 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
 - [ ] mountain forest at the snowline
 
 ### DragonBot
+
 - [ ] market day in a fantasy city
 - [ ] merchant caravan on a mountain road
 - [ ] cliff monastery
@@ -296,6 +477,7 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
 - [ ] battlefield aftermath (quiet, not gore)
 
 ### DreamBot (buckets go in the dream-world axis)
+
 - [ ] origami paper world
 - [ ] music-box world
 - [ ] clockwork garden
@@ -306,6 +488,7 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
 - [ ] jellybean tide pools
 
 ### FaeBot
+
 - [ ] autumn seed gathering
 - [ ] acorn boat regatta
 - [ ] mushroom apothecary interior
@@ -316,6 +499,7 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
 - [ ] first frost morning
 
 ### FarmBot
+
 - [ ] apiary and beekeeping
 - [ ] lambing season
 - [ ] sheep-shearing day
@@ -328,6 +512,7 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
   modern bridal imagery into any render).
 
 ### GothBot
+
 - [ ] opera house box
 - [ ] bell tower vigil
 - [ ] séance parlour
@@ -338,6 +523,7 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
 - [ ] glasshouse of black roses
 
 ### MangaBot
+
 - [ ] onsen evening (yukata, exterior)
 - [ ] convenience store at night
 - [ ] game-center arcade
@@ -348,6 +534,7 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
 - [ ] karaoke box at night
 
 ### PixelBot
+
 - [ ] castle town gate
 - [ ] desert oasis caravan
 - [ ] ice cavern
@@ -358,6 +545,7 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
 - [ ] misty bamboo path
 
 ### StarBot
+
 - [ ] space elevator base
 - [ ] solar sail regatta
 - [ ] terminator line world (the day and night boundary)
@@ -370,6 +558,7 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
   gliding momentum) after the chore-and-contortion purge.
 
 ### SteamBot
+
 - [ ] pneumatic post office
 - [ ] printing press workshop
 - [ ] apothecary and chemist
@@ -381,6 +570,7 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
 - Deliberately omitted: boiler room (the crisis-busywork register Kevin rejected).
 
 ### TinyBot (no humans; each role must be cast affirmatively as a critter)
+
 - [ ] tiny library
 - [ ] tiny train station
 - [ ] tiny bakery
@@ -391,6 +581,7 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
 - [ ] tiny teahouse
 
 ### ToyBot
+
 - [ ] paper-craft diorama
 - [ ] marble run contraption
 - [ ] pop-up book scene
@@ -401,6 +592,7 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
 - [ ] snow globe world
 
 ### YumBot
+
 - [ ] ramen counter at night
 - [ ] bakery at dawn
 - [ ] diner booth
@@ -411,11 +603,118 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
 - [ ] bento lunchbox
 
 ### EarthBot and OceanBot (optional, buckets are the wrong instrument here)
+
 Both are essentially at their pool ceilings (EarthBot has 2 content pools under 120, OceanBot 6). The
 honest gaps are regional or habitat rather than thematic.
+
 - [ ] EarthBot: Arabian desert / Himalayan high altitude / Madagascar or Socotra endemic flora
 - [ ] OceanBot: mangrove nursery / hydrothermal vents / sardine run / seagrass meadow / estuary river
       mouth / tide-pool macro
+
+---
+
+## 6c. Step 4: StarBot + DragonBot CHARACTER paths (Kevin's explicit exception to "buckets only")
+
+Kevin, 2026-09-22: _"i am particularly interested in adding some more exciting character paths to each
+that add some spice and variety - drastic and very stylized looks are ok, so is 'sex appeal', i'm looking
+to add some flash, and more 'beauty' both in terms of characters and environments to both bots - lush,
+inspiring visuals, with really interesting, cool looking characters that are interesting/sexy/tough/etc.
+... i want to see the actual characters who inhabit both worlds."_
+
+These are **new paths**, not buckets, and they are the one sanctioned exception to the buckets-only rule.
+
+### Why the gap is real
+
+DragonBot's 7 character paths are all one register: adventurer / explorer / action-scenes, each split
+male and female, plus the frozen `artsy-girl`. Every one is "a capable person in sleek gear out in the
+wild". There is no court, no performer, no champion, no one who lives in that world rather than travels
+through it. StarBot's are suited explorers plus three cyborg paths, with `space-femme` the only glam
+path on either bot.
+
+### The reference: AlphaBot `pulp-femme`
+
+Kevin pointed at this path as the target for how maxed-out the styling should be. Clone its FIVE levers,
+not just its look:
+
+1. **An era/style-locked medium fragment**, code-only, per path. `pulp-femme`'s is _"Vintage 1960s-70s
+   pulp sci-fi ILLUSTRATION, retro-futurist airbrush painting: bold saturated atomic-age palette, glossy
+   space-age glamour, clean confident linework, campy and cinematic with a wink."_ Note it says
+   ILLUSTRATION / painting and deliberately NOT cover/poster, which makes Flux render garbled title text.
+2. **An explicit permission block** in the template (`CRANK THE IMAGINATION — GO BIG`): _"maximalist and
+   a little UNHINGED … gloriously, gorgeously bananas"_, immediately fenced by a taste guard: _"never
+   gross, never crude, never lazy or cheap-looking."_ The freedom and the guardrail always travel
+   together.
+3. **The character decomposed into atomic, gender-locked trait axes** (being, hair colour, hairstyle,
+   outfit, pose) so the figure varies without drifting androgynous.
+4. **A persona line, not just a description**: _"confident pin-up glamour: flirty, self-assured, a
+   twinkle of mischief."_ This is what gives the renders attitude.
+5. **The environment gets its own mandate to be a dense SET built around the character**, plus separate
+   sky, lighting and shot axes. Kevin asked these to "highly lean into their environments", so this block
+   gets MORE weight here than it has on `pulp-femme`.
+
+Seeds are written maximalist too: _"a dusty retro space-saloon with swinging chrome doors, a robot
+piano-player, and ray-gun-toting patrons at the bar"_, with a ~70%-gated wild-prop / sight-gag pool.
+
+### The taste line
+
+**Tasteful-adult**, the same standard already set on Wild West. Gorgeous, alluring, stylized, skin
+allowed, never explicit and never pin-up-posed. This is a practical line as much as an editorial one:
+flux-1.1 NSFW-fails dense cheesecake renders, and these post to a public feed on an App Store app. The
+existing hard bans stay (no chainmail bikini, no cleavage-as-the-focus, no sultry/seductive language, no
+bare-thigh pin-up seated pose), but do NOT de-glam: the SteamBot lesson was that Kevin wants the women
+GLAM, and over-correcting produced lifeless renders.
+
+### Architecture per path
+
+- **Reuse the existing atomic appearance pools read-only** (DragonBot `WARRIOR_SKIN` 100, `WARRIOR_EYES`
+  100, `WARRIOR_HAIR_COLOR` 89, `FANTASY_RACE` 50). Do NOT edit or expand them: they are shared with the
+  FROZEN `artsy-girl` path, and the playbook flagged rather than touched them for exactly this reason.
+  Reuse cuts each new path to roughly 5 bespoke pools instead of 12.
+- **Bespoke per path**: persona/role, outfit, pose-or-action, setting (the lush environment), a
+  **render-style axis** (the `space-femme` mechanism — this is what makes the stylization vary per render
+  rather than baking one look), and a ~40-70% gated wildcard layer.
+- `promptPrefixByPath` stays **EMPTY**. This is the #1 character-path lesson: a stuffed wrapper gridlocks
+  diversity and every render comes back the same pale heroine.
+- **Gender-locked template per path**, never one neutral template serving both.
+- Two-pass polish OFF, chaos OFF (curated composition).
+- Watch the homogenization triad: the template must not inject a fixed adjective, the action axis must
+  never dictate a garment, and the persona pool must carry role and demeanour only, never clothing.
+- No `[age] man/woman` framing (race or species leads) and no real-world ethnicity labels.
+
+### The approved paths
+
+**DragonBot (6):**
+
+- [ ] Sorceress Ascendant — one sorceress at the peak of her power, the magic IS the couture and the
+      light source. Distinct from `arcane-halls`, which is any caster mid-spell.
+- [ ] Blade Dancer — an elegant lethal duelist mid-flourish in silk and steel, moonlit courtyard.
+- [ ] Drake-Bonded — a ceremonial priestess or priest with their dragon in frame as co-star.
+- [ ] Monster Hunter — the Witcher register: scarred, oiled leather, trophies, lantern-lit square.
+- [ ] Shadow Court Assassin — a dark-elf assassin in silks and blades on a rooftop, faerie-fire glow.
+- [ ] The Muse — a charismatic bard or dancer performing, warm tavern or festival light, crowd reacting.
+
+**StarBot (8):**
+
+- [ ] Orbital Court — ring-habitat aristocracy in couture with holographic fabrics, glass promenade.
+- [ ] Bounty Hunter — armored, scarred, trophies on the belt, neon dock behind.
+- [ ] Smuggler Captain — a charismatic rogue on a landing ramp, alien port beyond.
+- [ ] Star Navigator — an augmented navigator wired into the ship, glowing implants, a cocoon of light.
+- [ ] Xeno Monarch — genuinely non-human royalty in regalia, which also breaks Flux's humanoid default.
+- [ ] Crew Poster — an ensemble of 3-4 distinct characters posed like a movie one-sheet.
+- [ ] Neon Dock — street-level station life, spacers and vendors, rain-slick neon.
+- [ ] Out of the Suit — a pilot with the helmet off in the cockpit glow, sweat and hair.
+
+### Build order and cost
+
+Start with **three per bot** to prove the register before committing to all 14: DragonBot's Sorceress
+Ascendant, Blade Dancer and The Muse; StarBot's Orbital Court, Bounty Hunter and Crew Poster. Each path:
+5 bespoke pools at MVP-25 (~$1.50), 6 shadow renders per round with up to 3 rounds, then on Kevin's
+sign-off scale to production (~700 entries, ~$7). About **$10 per path plus renders**, so roughly $60 for
+the first six and **~$130 for all fourteen**.
+
+StarBot-specific trap: its vocabulary literalizes. `rail`, `canyon`, `surface` and `tower` all render
+their terrestrial prior. Scan every new StarBot seed noun for its strongest training prior before
+shipping.
 
 ---
 
@@ -459,10 +758,11 @@ already built once and removed for gutting good pools.
 
 ## 9. Decision log
 
-| Date | Decision |
-| --- | --- |
-| 2026-09-22 | Kevin chose the targeted expansion over a flat +100 on every pool, after the measurement showed 440k existing entries, a 2-11% duplicate rate, and a posting rate too low for extra depth to be visible. |
-| 2026-09-22 | Bucket candidate list drafted (128 candidates across 16 bots) and written here for Kevin's cuts. |
-| 2026-09-22 | ToyBot `wooden-toy-land` DEACTIVATED (Kevin: "i don't like those renders"). It was the fleet's worst flag rate at 2 of 11 posts. Commented out of `paths[]`; builder, pools, seeds and skip-list entries preserved. |
-| 2026-09-22 | BrickBot IP ban REVERSED (Kevin: pop-culture worlds are fine, LEGO fair use is acceptable for now). Playbook CRITICAL LESSON 2 + BrickBot hard-rules list + failure-mode table rewritten; `feedback_no_star_wars_brickbot.md` and `feedback_brickbot_licensed_ip_scope.md` updated; brickbot exempted from the sweeper's IP family. Hard-SF realism stays OUT (render quality, not IP). |
+| Date       | Decision                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-22 | Kevin chose the targeted expansion over a flat +100 on every pool, after the measurement showed 440k existing entries, a 2-11% duplicate rate, and a posting rate too low for extra depth to be visible.                                                                                                                                                                                                                                |
+| 2026-09-22 | Bucket candidate list drafted (128 candidates across 16 bots) and written here for Kevin's cuts.                                                                                                                                                                                                                                                                                                                                        |
+| 2026-09-22 | ToyBot `wooden-toy-land` DEACTIVATED (Kevin: "i don't like those renders"). It was the fleet's worst flag rate at 2 of 11 posts. Commented out of `paths[]`; builder, pools, seeds and skip-list entries preserved.                                                                                                                                                                                                                     |
+| 2026-09-22 | BrickBot IP ban REVERSED (Kevin: pop-culture worlds are fine, LEGO fair use is acceptable for now). Playbook CRITICAL LESSON 2 + BrickBot hard-rules list + failure-mode table rewritten; `feedback_no_star_wars_brickbot.md` and `feedback_brickbot_licensed_ip_scope.md` updated; brickbot exempted from the sweeper's IP family. Hard-SF realism stays OUT (render quality, not IP).                                                 |
+| 2026-09-22 | StarBot + DragonBot CHARACTER PATHS approved as an explicit exception to buckets-only (Kevin: "i want to see the actual characters who inhabit both worlds", flash, beauty, stylization and sex appeal welcome). 6 DragonBot + 8 StarBot paths listed in section 6c, built on the AlphaBot `pulp-femme` formula Kevin pointed at. Taste line set at tasteful-adult.                                                                     |
 | 2026-09-22 | Phase 0 run. Three audit scripts built. Key results: 5,168 exact duplicate entries in wired pools (free purge), real expansion target is 177 pools not 217, Star Wars / Disney IP found live in BrickBot pools against a playbook hard rule, TinyBot confirmed as the only ongoing bot-wide flag problem, FarmBot's 9.2% flag rate closed out as a one-time cull of already-deactivated paths. Full-run estimate revised down to ~$385. |
