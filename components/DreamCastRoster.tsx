@@ -45,7 +45,6 @@ import {
   isPartnerEnabled,
   primaryPartnerOf,
   isNameTaken,
-  unnamedPartners,
   cleanPartnerNameInput,
   finalizePartnerName,
   PARTNER_NAME_MAX,
@@ -138,7 +137,13 @@ function CastThumb({
   );
 }
 
-export function DreamCastRoster() {
+interface DreamCastRosterProps {
+  /** Fires as the name field opens and closes, so the screen can hold the back gesture while a
+   *  name is being typed. */
+  onEditingChange?: (editing: boolean) => void;
+}
+
+export function DreamCastRoster({ onEditingChange }: DreamCastRosterProps) {
   const navigation = useNavigation();
   const user = useAuthStore((st) => st.user);
   const self = useOnboardingStore((st) => st.profile.dream_cast.find((m) => m.role === 'self'));
@@ -173,6 +178,20 @@ export function DreamCastRoster() {
   // display/edit mode gives us a pencil that HUGS the name (a flex input would push
   // any adjacent icon to the far right) and a natural place to land after an upload.
   const [editingId, setEditingId] = useState<string | null>(null);
+  // THE NAME BEING TYPED LIVES HERE, NOT IN THE STORE. It used to be written to the store on
+  // every keystroke, which meant an UNVALIDATED name was live and savable the whole time you
+  // typed, and the only thing that rejected a duplicate was the TextInput's onBlur. Blur is not
+  // a reliable hook: switching a member off moves their card from IN YOUR DREAMS to BACKSTAGE,
+  // and those are two separate lists — so the input UNMOUNTS, never blurs, and the toggle's own
+  // persist() saved the duplicate (Kevin, 2026-09-21: "if the user fat fingers the 'tap away'
+  // from the box onto the toggle"). A draft cannot leak: the store only ever receives a name
+  // that commitDraft() has already approved.
+  //
+  // Mirrored into a ref as well as state because persist() flushes it, and persist is called
+  // from async paths where the render-time value would be stale. State drives the input, the
+  // ref is the truth at flush time.
+  const [draft, setDraft] = useState('');
+  const draftRef = useRef<{ id: string; text: string } | null>(null);
   // The just-picked local photo, shown immediately (with an analyzing spinner)
   // while the upload+describe runs — so a photo appears the instant you pick it.
   const [pending, setPending] = useState<{ key: string; uri: string } | null>(null);
@@ -184,6 +203,11 @@ export function DreamCastRoster() {
 
   const queryClient = useQueryClient();
   const persist = async () => {
+    // EVERY control on this screen funnels through persist(), so flushing here is what makes
+    // the name rules hold no matter which control ends the edit — the toggle, a relationship
+    // pill, the star, a remove. Validating in onBlur alone was whack-a-mole with one mole
+    // permanently missed (the unmounting row above).
+    commitDraft();
     if (!user) return;
     try {
       await saveVibeProfile(user.id, useOnboardingStore.getState().profile);
@@ -334,11 +358,11 @@ export function DreamCastRoster() {
         enabled: !!self,
       })
     );
-    // Ask for the name at the one moment the user is definitely thinking about who
-    // this is: the card appears with its name field focused and the keyboard up.
-    // Typing names them, tapping away keeps the Friend/Partner fallback. No modal,
-    // and nothing to dismiss for people who do not care.
-    setEditingId(id);
+    // Ask for the name at the one moment the user is definitely thinking about who this is:
+    // the card appears with its name field focused and the keyboard up. Tapping away without
+    // typing no longer just falls back to the relationship word — requireName asks for it
+    // there and then, because a nameless member is one the user can never summon.
+    beginEditing(id);
   };
 
   const replacePartner = (p: DreamPartner) =>
@@ -375,33 +399,128 @@ export function DreamCastRoster() {
     ]);
   };
 
-  /** Typing only touches the store (cheap); the tidy + save happen on blur. */
-  const setName = (p: DreamPartner, raw: string) =>
-    updatePartner(p.id, { name: cleanPartnerNameInput(raw) });
+  /** Open the name field on a card, seeded with whatever that member is called today. */
+  const beginEditing = (id: string, current?: string) => {
+    // Commit whoever was being edited BEFORE taking the draft over. Tapping a second card's
+    // pencil unmounts the first card's input without blurring it, so this is the only thing
+    // standing between that tap and a silently discarded name. (It survived before this change
+    // only because every keystroke was written straight to the store, which is the very thing
+    // that let an unvalidated duplicate be saved.)
+    if (draftRef.current && draftRef.current.id !== id) commitDraft();
+    draftRef.current = { id, text: current ?? '' };
+    setDraft(current ?? '');
+    setEditingId(id);
+  };
 
-  const commitName = (p: DreamPartner) => {
-    const next = finalizePartnerName(p.name);
-    // UNIQUE per account (Kevin, 2026-09-21). A duplicate makes "show me and Steph"
-    // resolve by first-match-wins, which is a coin flip the user cannot see. Refuse at
-    // the moment of typing rather than silently renaming or silently picking one.
-    if (next && isNameTaken(useOnboardingStore.getState().profile, next, p.id)) {
-      Toast.show(
-        `You already have a ${next}. Names need to be unique.`,
-        'alert-circle-outline',
-        4000
-      );
-      updatePartner(p.id, { name: undefined });
-      persist();
-      return;
-    }
-    updatePartner(p.id, { name: next });
+  /**
+   * NAME IT OR REMOVE THEM (Kevin, 2026-09-21: "make them name it right there, or remove it").
+   *
+   * The requirement used to be enforced on the way OUT — a dialog when you tried to leave the
+   * screen, plus a blocked back gesture to make sure you saw it. That is the latest possible
+   * moment to ask and the furthest from the decision, so it read as an obstacle rather than a
+   * step. Asking HERE, the instant an unnamed member's field is left empty, is the same rule one
+   * link earlier in the chain: you are still looking at the face you just uploaded.
+   *
+   * Raised whenever a name field is left with nothing usable in it — a fresh upload and a name
+   * someone just wiped are the same state. Nothing is written when it fires, so a member who
+   * already had a name still has it, and "Name them" hands the field back with it.
+   */
+  const requireName = (p: DreamPartner, why?: string) =>
+    showAlert(
+      // The title names the PROBLEM, because the two ways to reach this dialog are different
+      // problems with the same two answers: nothing typed at all, or a name that is already
+      // taken. `why` is only ever passed by the duplicate branch.
+      why ? 'Duplicate Name' : 'Name Required',
+      `${why ?? 'Everyone in your cast needs a name.'} It is how you cast them in a dream: "me and Ken at the beach".`,
+      [
+        { text: 'Name them', style: 'cancel', onPress: () => beginEditing(p.id, p.name) },
+        {
+          text: 'Remove them',
+          style: 'destructive',
+          onPress: async () => {
+            await removeCastFile(p).catch(() => {});
+            removePartner(p.id);
+            await persist();
+          },
+        },
+      ],
+      // Not dismissible: tapping the scrim would leave exactly the state this dialog exists to
+      // prevent — a member with a face and no name, who can never be summoned. Name them or
+      // remove them are the only two answers, so they are the only two ways out.
+      { dismissible: false }
+    );
+
+  /** Blur / return key. persist() is what commits, so this stays a one-liner and the field's own
+   *  exit cannot disagree with every other route out of it. */
+  const endEditing = () => {
     persist();
   };
 
-  /** Leave edit mode, tidying and saving whatever was typed. */
-  const stopEditing = (p: DreamPartner) => {
-    commitName(p);
+  /**
+   * End the in-progress name edit and VALIDATE it. The single choke point: the store receives a
+   * name only from here, and persist() runs it first, so no control can save an unapproved one.
+   *
+   * Writes the store but never saves — its caller is already on its way to a save.
+   *
+   * Returns TRUE if it put the Name Required dialog on screen, so a caller that was on its way
+   * somewhere (the header chevron, Android back) can stay put instead.
+   *
+   * "On blur" means leaving the FIELD, by any route — tapping a control, the chevron, the back
+   * gesture — not the TextInput's onBlur event specifically (Kevin, 2026-09-21: "that's what I
+   * meant by 'on blur' only, but I think you took it too literally"). Every route lands here,
+   * so every route asks. The one thing that does not is an upload still in flight, below.
+   */
+  const commitDraft = (): boolean => {
+    const d = draftRef.current;
+    if (!d) return false;
+    // Not while the photo is still analyzing. addNewPartner opens the field the moment you pick
+    // a photo (so the keyboard is up as the card appears), which means the upload's own success
+    // persist() would otherwise flush an empty draft and demand a name before the user has been
+    // shown anything to type into. Read the counter LIVE from the store: `busy` here is the
+    // value from the render that created this closure, which is still null.
+    if (useOnboardingStore.getState().castUploadsInFlight > 0) return false;
+
+    draftRef.current = null;
     setEditingId(null);
+    setDraft('');
+
+    const profile = useOnboardingStore.getState().profile;
+    const p = (profile.partner_library ?? []).find((m) => m.id === d.id);
+    if (!p) return false; // removed while their name was being typed
+
+    const next = finalizePartnerName(d.text);
+
+    // AN EMPTY FIELD ALWAYS ASKS — a fresh upload and a name someone just wiped are the same
+    // state, and it is the state the whole rule exists to prevent (Kevin, 2026-09-21: "later if
+    // they go in to edit it and tap away while empty, it should also trigger the same dialog").
+    // Nothing is written either way, so a member who already had a name keeps it: "Name them"
+    // hands the field back with that name still in it, rather than an empty box that would just
+    // raise this dialog again on the next tap away.
+    if (!next) {
+      requireName(p);
+      return true;
+    }
+
+    // UNIQUE per account (Kevin, 2026-09-21). A duplicate makes "show me and Steph" resolve by
+    // first-match-wins, which is a coin flip the user cannot see.
+    if (isNameTaken(profile, next, d.id)) {
+      const why = `You already have a ${next}. Names need to be unique.`;
+      // One message, never two. A member who already HAS a name just keeps it, and a toast is
+      // the right weight for "that edit didn't take". A member who has none still owes us one,
+      // so the reason goes in the dialog that asks for it.
+      if (p.name) {
+        // They still have a name to fall back on, so the edit simply did not take. 5s, not the
+        // 4 it shipped with (Kevin, 2026-09-21): two sentences AND an explanation of a refusal
+        // needs longer on screen than a toast that just confirms something.
+        Toast.show(why, 'alert-circle-outline', 5000);
+        return false;
+      }
+      requireName(p, why);
+      return true;
+    }
+
+    updatePartner(d.id, { name: next });
+    return false;
   };
 
   const setRelationship = (p: DreamPartner, rel: 'friend' | 'partner') => {
@@ -449,54 +568,34 @@ export function DreamCastRoster() {
 
   const anyBusy = busy !== null;
 
-  // EVERY member must be named before you can leave (Kevin, 2026-09-21). Names are what
-  // make "show me and ___" work, and a nameless member is one the user can never summon —
-  // they just silently never appear unless they happen to be the default. Blocking the
-  // back gesture is deliberately the most insistent pattern on this screen, because the
-  // alternative is a roster that looks complete and half-works.
+  // NO EXIT GUARD ON THE ROSTER. Requiring the name on the way OUT — a dialog on leave, plus a
+  // blocked back gesture so you could not miss it — asked at the latest possible moment and the
+  // furthest from the decision (Kevin, 2026-09-21: "move it further left in the chain to when
+  // they first upload the photo - make them name it right there, or remove it"). Leaving this
+  // screen with an unnamed member on the roster is no longer blocked at all.
   //
-  // The escape hatch is REMOVE, not skip: if you do not want to name them, you did not
-  // want them in your cast.
-  const unnamed = unnamedPartners(useOnboardingStore.getState().profile);
-
-  // The swipe gesture is disabled by the SCREEN (app/settings/dream-cast.tsx), which
-  // already owns it for the analyzing case — two effects calling setOptions on the same
-  // screen would fight and the last one mounted would win. This listener is the backstop
-  // for the header chevron and Android's hardware back, where beforeRemove works cleanly.
+  // What IS still caught is leaving the FIELD: navigating away is one of the ways to tap away
+  // from an open name input, and it was the one route that flushed nothing, so the chevron
+  // walked straight past the rule ("now i can tap the < icon immediately from the input and it
+  // navigates away with it not set"). Gated on an OPEN DRAFT, so it is dormant unless the user
+  // is literally mid-name — not a scan of the roster like the guard it replaced.
   useEffect(() => {
-    if (unnamed.length === 0) return;
     const sub = navigation.addListener('beforeRemove', (e) => {
-      // Re-read at fire time: the list above is a render-time snapshot and the user may
-      // have just named the last one.
-      const still = unnamedPartners(useOnboardingStore.getState().profile);
-      if (still.length === 0) return;
-      e.preventDefault();
-      const who =
-        still.length === 1
-          ? 'Someone in your cast still needs a name.'
-          : `${still.length} of your cast still need names.`;
-      showAlert(
-        'Name your cast first',
-        `${who} A name lets you say “me and Alex at the beach” in a dream.`,
-        [
-          { text: 'Name them', style: 'cancel' },
-          {
-            text: still.length === 1 ? 'Remove them' : 'Remove them all',
-            style: 'destructive',
-            onPress: async () => {
-              for (const p of still) {
-                await removeCastFile(p).catch(() => {});
-                removePartner(p.id);
-              }
-              await persist();
-              navigation.dispatch(e.data.action);
-            },
-          },
-        ]
-      );
+      if (!draftRef.current) return;
+      if (commitDraft()) e.preventDefault();
+      else persist();
     });
     return sub;
-  }, [unnamed.length, navigation, removePartner]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation]);
+
+  // The SCREEN owns the back gesture (one setOptions owner), so tell it when a name is being
+  // typed: it turns the swipe off and answers it with handleBack instead, which routes through
+  // the listener above. Without that, a swipe would commit, get preventDefault'd, and slide
+  // back with the dialog over it — the exact behaviour Kevin flagged on the first pass.
+  useEffect(() => {
+    onEditingChange?.(editingId !== null);
+  }, [editingId, onEditingChange]);
 
   // Everyone visible has a photo: the self slot and every roster member. `busy` is
   // excluded on purpose — mid-upload is not "missing", and flipping the card open for the
@@ -522,27 +621,34 @@ export function DreamCastRoster() {
   const busyLabel = (key: string) =>
     pending?.key === key ? 'Analyzing photo…' : 'Opening your photos…';
 
-  /** The busy line, plus the X that aborts the analyze. The X appears only once a photo has actually
-   *  been PICKED — while the picker is still opening there is nothing to cancel and the picker has its
-   *  own. Written as a function, not a nested component, so the row does not remount every render. */
-  const busyStatus = (key: string) => (
-    <View style={s.statusRow}>
-      <Text style={s.status}>{busyLabel(key)}</Text>
-      {pending?.key === key && (
-        <TouchableOpacity
-          onPress={cancelUpload}
-          // 18pt glyph + 13pt each side = a 44pt target, Apple's minimum. hitSlop extends the touch
-          // area OUTSIDE the view, so nothing on screen moves.
-          hitSlop={13}
-          activeOpacity={0.7}
-          accessibilityRole="button"
-          accessibilityLabel="Cancel analyzing this photo"
-        >
-          <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
-        </TouchableOpacity>
-      )}
-    </View>
-  );
+  /** The busy line. Just the words — the X that aborts the analyze is a CONTROL, and on this
+   *  screen controls live in the row's right-hand column, never in the text column (busyCancel). */
+  const busyStatus = (key: string) => <Text style={s.status}>{busyLabel(key)}</Text>;
+
+  /** The X that aborts the analyze, in the SAME control slot the idle cards use. It used to sit
+   *  inline after the status text, which wedged it under the name instead of floating it to the
+   *  card's edge like every other control (Kevin, 2026-09-21: "the 'x' icon is shoved underneath
+   *  the text, but it would look better floated out to the right, the same way it is in the cards
+   *  above it"). Same glyph, size and slot as those, so the control column lines up down the whole
+   *  screen whether a row is idle or working. The accessibility label keeps the ACTION distinct:
+   *  this one cancels an analyze, it does not remove anybody.
+   *
+   *  Appears only once a photo has actually been PICKED — while the picker is still opening there
+   *  is nothing to cancel and the picker has its own. A function, not a nested component, so the
+   *  row does not remount every render. */
+  const busyCancel = (key: string) =>
+    pending?.key === key ? (
+      <TouchableOpacity
+        style={s.ctrl}
+        onPress={cancelUpload}
+        hitSlop={11} // 22pt glyph -> 44pt target (Apple minimum)
+        activeOpacity={0.7}
+        accessibilityRole="button"
+        accessibilityLabel="Cancel analyzing this photo"
+      >
+        <Ionicons name="close-circle-outline" size={ICON} color={colors.textSecondary} />
+      </TouchableOpacity>
+    ) : null;
 
   /** One roster card. Rendered by both groups, identical in each — which is the
    *  point: what changes is WHICH LIST the person is in, not how the card looks. */
@@ -572,10 +678,14 @@ export function DreamCastRoster() {
             {editingId === p.id ? (
               <TextInput
                 style={s.nameInput}
-                value={p.name ?? ''}
-                onChangeText={(t) => setName(p, t)}
-                onBlur={() => stopEditing(p)}
-                onSubmitEditing={() => stopEditing(p)}
+                value={draft}
+                onChangeText={(t) => {
+                  const clean = cleanPartnerNameInput(t);
+                  draftRef.current = { id: p.id, text: clean };
+                  setDraft(clean);
+                }}
+                onBlur={endEditing}
+                onSubmitEditing={endEditing}
                 placeholder="Add a name"
                 placeholderTextColor={colors.textMuted}
                 maxLength={PARTNER_NAME_MAX}
@@ -586,7 +696,7 @@ export function DreamCastRoster() {
             ) : (
               <TouchableOpacity
                 style={s.nameBtn}
-                onPress={() => setEditingId(p.id)}
+                onPress={() => beginEditing(p.id, p.name)}
                 hitSlop={8}
                 activeOpacity={0.7}
                 disabled={isBusy}
@@ -601,6 +711,7 @@ export function DreamCastRoster() {
                 every state, so it taught nothing. */}
             {isBusy && busyStatus(p.id)}
           </View>
+          {isBusy && busyCancel(p.id)}
           {!isBusy && (
             <>
               {/* The switch IS the state, so the card needs no outline, tint or
@@ -808,6 +919,7 @@ export function DreamCastRoster() {
                   <Text style={s.name}>You</Text>
                   {busyStatus('self')}
                 </View>
+                {busyCancel('self')}
               </View>
             ) : (
               <TouchableOpacity
@@ -887,6 +999,7 @@ export function DreamCastRoster() {
                     <Text style={s.name}>New cast member</Text>
                     {busyStatus('new')}
                   </View>
+                  {busyCancel('new')}
                 </View>
               </View>
             ) : (
@@ -1023,7 +1136,6 @@ const s = StyleSheet.create({
   },
   // subtleOnDark, not textSecondary: this is descriptive copy meant to be READ, and
   // the grey greys were disappearing into the panel.
-  statusRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   status: { color: colors.subtleOnDark, fontSize: fontScale(13), marginTop: verticalScale(2) },
   // Neutral, not accent. Six purple rings were spending the accent on the one thing
   // on the card nobody can interact with, which was most of the screen's noise.
