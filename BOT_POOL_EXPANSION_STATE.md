@@ -1,7 +1,8 @@
 # BOT_POOL_EXPANSION_STATE.md
 
 **Status of record for the 2026-09 bot pool expansion.** Both the plan and the progress tracker.
-Nothing in here has been executed yet. Created 2026-09-22.
+Created 2026-09-22. Step 0 (audit tooling) and step 1a (duplicate purge) are DONE; everything else is
+still unexecuted.
 
 **To resume after a context roll-over or a killed run:** read this file top to bottom, find the first
 unchecked box, continue there. The checkboxes plus live pool counts are the source of truth, not
@@ -56,8 +57,8 @@ plus ~1 cent of Sonnet per brief. Planning number: **1.2 cents per seed entry, 5
 | # | Task | New entries | Test renders | Est. cost | Wall clock | Needs Kevin |
 | --- | --- | --- | --- | --- | --- | --- |
 | 0 | Safety net: 3 audit scripts | 0 | 0 | **$0** | DONE 2026-09-22 | no |
-| 1a | Purge 5,168 exact duplicate entries from wired pools | 0 | 0 | **$0** | ~1 h | no |
-| 1b | Top up the 177 clean wired content pools under 120 entries | 17,333 | ~45 | **~$211** | ~5 h | no |
+| 1a | ~~Purge exact duplicates~~ **DONE** (5,164 removed from 225 pools) | 0 | 0 | **$0** | done | no |
+| 1b | Top up the 178 clean wired content pools under 120 entries | 17,433 | ~45 | **~$212** | ~5 h | no |
 | 2a | Expand look registers (4 thinnest bots, hand-authored) | ~24 (by hand) | ~24 | **~$2** | ~half a day | approve looks |
 | 2b | New buckets, MVP at 25 each (~85 approved of 128 candidates) | 2,125 | ~200 | **~$38** | review-gated | yes, per bucket |
 | 2c | Scale approved buckets to ~120 each | ~8,075 | ~50 | **~$100** | ~3 h | no |
@@ -79,11 +80,31 @@ scene pool" left behind by each migration), and **84 files / 8,059 entries are t
 literal reference anywhere, safe to delete. The earlier "217 expansion targets" estimate was inflated
 because it counted dormant pools: the real figure is **177**.
 
-**Duplicates (the biggest free win).** The wired pools contain **5,168 EXACT duplicate entries** across
-227 pools, plus 10,367 signature near-dupes. Worst offenders: `gothbot/hair_colors` 100 of 200,
-`yumbot/chef_lighting` 89 of 200, `mangabot/festival_nights_outfit` 83 of 200, and eleven more MangaBot
-pools at 55-85 each. Several pools that look like 200 are effectively 100-140. Purging costs nothing
-and recovers real variety, so it goes FIRST.
+**Duplicates: FOUND AND PURGED 2026-09-22.** The wired pools contained **5,168 exact duplicate
+entries** (byte-identical copies within the same file) across 227 pools, from append-mode generation
+that ran more than once: the x3 and x4 multiplicities are the tell. Same condition FLEET_POOL_BACKFILL.md
+hit in June ("castle_hero had 158 unique of 200 … quietly polluting renders for months").
+
+`purge-bot-seed-dupes.js --apply` removed **5,164 entries from 225 pools**, keeping the first copy of
+each. Wired entries on live bots went 366,014 → 360,891. Biggest corrections: `gothbot/hair_colors`
+200 → 100, `yumbot/chef_lighting` 200 → 111, `mangabot/kawaii_archetype` 200 → 129,
+`chibibot/cute_creatures_unified` 400 → 341. All 12 touched bot modules still load; every file was
+backed up, prettier-formatted to repo style, then the backups removed (git is the real backup).
+
+Four entries were deliberately NOT removed, and the scanner now reports them as a warning rather than an
+error: same description, different tags, which is legitimate on a tag-filtered pool (chibibot has an
+egret tagged `["ARCTIC"]` and `["ARCTIC","BIRD"]`; earthbot has a fjord serving both `arctic-polar` and
+`coastal-temperate`). They are still served twice to any path whose filter matches both, so they are
+worth a human look. Both the scanner and the purge now compare full objects, key-sorted.
+
+- [ ] Optional follow-on: refill the 127 shrunk CONTENT pools back to their prior nominal size,
+      **1,892 entries, ~$23**. Do NOT blanket-refill the 97 shrunk structural pools (~$21): most have
+      documented ceilings far below 200, and padding them just manufactures near-duplicates.
+- [ ] Wire `scan-bot-seed-dupes.js` into `package.json` `check` as `scan:bot-seed-dupes`. It exits 0
+      now, so the gate is safe to add (it was not before the purge).
+
+10,367 signature near-dupes remain and are deliberately untouched: those need human judgement, and a
+fleet-wide auto-thinner was already built once and demoted to a flagger for gutting good pools.
 
 **Saturation.** 335 pools (>=50 entries) are already >=20% same-idea, so a +100 there under-delivers.
 Only 9 of them are also expansion targets; those get +50 at most, or a recipe split.
@@ -181,7 +202,7 @@ already >=20% same-idea (cap those at +50 or split the recipe). Topping the 177 
 | brickbot | 10 | 966 | tinybot | 2 | 200 |
 | chibibot | 10 | 995 | | | |
 
-- [ ] 1a: purge the 5,168 exact duplicates first (free, and it changes several pools' real size)
+- [x] 1a: purge the exact duplicates — DONE 2026-09-22, 5,164 entries out of 225 pools, $0
 - [ ] 1b: top up the 177 clean wired pools toward 200
 - [ ] Re-count all touched pools, re-run stragglers
 - [ ] Step 0 dedupe + defect sweep, fix findings

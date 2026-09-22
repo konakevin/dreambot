@@ -637,19 +637,11 @@
   },
   {
     "tags": ["MARINE"],
-    "description": "Baby dumbo octopus: pale lavender round body with two oversized ear-fins flapping like elephant ears, eight tiny curling arms, enormous shimmering pearl-grey dewy eyes, blushing cheeks, floating with ear-fins mid-flap and arms tucked beneath in a peaceful drift"
-  },
-  {
-    "tags": ["MARINE"],
     "description": "Baby frogfish hatchling: lumpy textured tangerine body with warty skin-flaps, pectoral fins bent like tiny elbows, enormous forward-facing soft amber dewy eyes, blushing cheeks, perched upright on its elbow-fins with a tiny lure-filament dangling from its forehead like a curious antenna"
   },
   {
     "tags": ["MARINE"],
     "description": "Baby ribbon eel juvenile: electric cobalt-blue ribbon body with a vivid yellow dorsal-fin fringe running its entire length, flared nostril-tubes like two tiny flower petals, enormous shimmering teal dewy eyes, blushing cheeks, body looped in a graceful S-curve with mouth open in a gentle gape-smile"
-  },
-  {
-    "tags": ["MARINE"],
-    "description": "Baby giant Pacific octopus hatchling: translucent rose-blush skin with faint rust freckle-spots, eight thread-thin curling arms each tipped with a single tiny sucker, enormous shimmering copper dewy eyes, blushing cheeks, arms spread in a delicate eight-point star with body hovering at the centre"
   },
   {
     "tags": ["ARCTIC", "MARINE"],
@@ -660,32 +652,12 @@
     "description": "Baby musk ox calf: shaggy chocolate-brown qiviut coat nearly hiding its entire round body, tiny pale-tipped nub horns, enormous warm brown dewy eyes barely visible through fluffy fringe, blushing cheeks, standing with all four stumpy legs planted wide in a sturdy proud stance"
   },
   {
-    "tags": ["ARCTIC", "BIRD"],
-    "description": "Baby little auk chick: soot-black-and-white downy fluff, stubby rounded bill, enormous glassy dark dewy eyes, blushing cheeks, sitting in a perfect round puffball with tiny flipper-wings pressed flat and head sunk deep into its own neck-fluff"
-  },
-  {
     "tags": ["JUNGLE"],
     "description": "Baby proboscis monkey: warm cinnamon fur, disproportionately large bulbous pink rubbery nose filling half its round face, enormous wide amber dewy eyes, blushing cheeks, seated with pot-bellied tummy forward and both small hands resting on its round knees"
   },
   {
-    "tags": ["JUNGLE"],
-    "description": "Baby tapir calf: rich chocolate-brown body dappled with cream polka-dot-and-stripe markings, flexible rubbery mini-trunk twitching upward, enormous round dark dewy eyes, blushing cheeks, standing on stumpy rounded legs with trunk curled in a shy question-mark shape"
-  },
-  {
-    "tags": ["JUNGLE", "BIRD"],
-    "description": "Baby Victoria crowned pigeon chick: plump slate-blue-grey plush body, just-sprouting lacy electric-blue fan crest atop its round head, vivid red-ringed enormous dewy eyes, blushing cheeks, standing with crest slightly askew and tiny feet planted wide in a regal but wobbly stance"
-  },
-  {
-    "tags": ["FANTASY", "LAND"],
-    "description": "Baby qilin fawn: shimmering jade-green overlapping scales on a delicate fawn form, single opalescent spiralling horn, flame-tipped hooves leaving tiny glowing gold prints, enormous luminous violet dewy eyes, blushing cheeks, one hoof raised mid-delicate-step with mane wisping softly upward"
-  },
-  {
     "tags": ["FANTASY", "ANY"],
     "description": "Baby nue chimera-kit: soft cloud-white body with a round monkey face, tiny tanuki-striped tail coiling behind, faint tiger-stripe shimmer across its plush back, enormous dreamy violet dewy eyes, blushing cheeks, curled in a floating tuck with all four paws tucked neatly beneath"
-  },
-  {
-    "tags": ["FANTASY", "ANY"],
-    "description": "Baby Slavic firebird chick: plumage blazing in gradient scarlet to gold to white-hot at each feather tip, tiny jewelled crest, enormous luminous copper dewy eyes, blushing cheeks, perched with wings fanned wide and every feather-tip trailing a tiny safe harmless glimmer"
   },
   {
     "tags": ["LAND"],
@@ -929,19 +901,11 @@
   },
   {
     "tags": ["LAND"],
-    "description": "Baby fossa pup: sleek warm-rufous plush fur, long sinuous tail half again its body length, enormous forward-facing golden dewy eyes, tiny rounded ears, blushing cheeks, crouching on all four compact paws with tail held in a graceful raised arc and head tilted in bright curiosity"
-  },
-  {
-    "tags": ["LAND"],
     "description": "Baby chevrotain mouse-deer fawn: warm tawny coat spotted with cream dots, delicate matchstick legs proportionally tiny, enormous liquid-brown dewy eyes nearly as wide as its petite face, blushing cheeks, frozen mid-tiptoe with one hairpin hoof raised and ears flicked fully forward"
   },
   {
     "tags": ["LAND"],
     "description": "Baby sand cat kitten: pale sandy-cream plush fur, extraordinarily broad flat head with enormous low-set rounded ears, huge luminous mint-green dewy eyes, blushing cheeks, settled in a loaf pose with all four paws tucked beneath and ears swivelled sideways in drowsy alert"
-  },
-  {
-    "tags": ["LAND"],
-    "description": "Baby corsac fox kit: pale silvery-gold plush fur with a cream throat-patch, rounded compact ears set wide apart, enormous soft dove-grey dewy eyes, blushing cheeks, seated in a tight round loaf with fluffy tail wrapped completely around its stubby paws like a cosy blanket"
   },
   {
     "tags": ["LAND"],
@@ -956,44 +920,12 @@
     "description": "Chibi java sparrow fledgling: plump pearl-grey body, bold black cap framing a vivid coral-pink conical beak, enormous glittering dark dewy eyes, blushing cheeks, perched with feet clamped tight on a seed-head stalk and wings pressed neatly to its perfectly round sides"
   },
   {
-    "tags": ["BIRD", "JUNGLE"],
-    "description": "Baby sun conure chick: round body blanketed in soft orange-yellow down with just-emerging green wing-tips, tiny curved beak, enormous shining dark dewy eyes, blushing cheeks, clinging sideways to a branch with zygodactyl feet and one stubby wing fanned outward"
-  },
-  {
-    "tags": ["MARINE"],
-    "description": "Baby chambered nautilus hatchling: creamy-white spiral shell painted with bold rust-orange flame stripes, dozens of tiny pastel tentacles fanning from the opening like a frilly crown, enormous soft pearlescent dewy eyes, blushing cheeks, shell tilted in a curious lopsided float"
-  },
-  {
-    "tags": ["MARINE"],
-    "description": "Baby cuttlefish hatchling: oval pearl-white mantle rippling with soft iridescent colour-pulse waves, two enormous W-pupil dewy eyes dominating its tiny face, blushing cheeks, hovering upright with frilled skirt-fin undulating gently and two tentacles raised like curious antennae"
-  },
-  {
     "tags": ["MARINE"],
     "description": "Baby pygmy seahorse: blush-pink rounded body studded with matching coral-pink tubercle bumps, swirling prehensile tail coiled tightly, enormous glassy ruby dewy eyes, blushing cheeks, clinging to a pink sea-fan frond with body curled in a proud tiny question-mark shape"
   },
   {
     "tags": ["ARCTIC"],
-    "description": "Baby ribbon seal pup: glossy black newborn coat banded with a single broad creamy-white ribbon encircling its round neck, enormous liquid-dark dewy eyes, whisker-studded blunt snout, blushing cheeks, lying on its belly with both foreflippers splayed in a cheerful open-arm pose"
-  },
-  {
-    "tags": ["ARCTIC"],
     "description": "Baby Pallas's cat kitten: extraordinarily thick ash-grey plush coat puffed to twice its actual size, flat-set rounded ears, enormous pale-gold dewy eyes with round pupils, blushing cheeks, sitting in a perfect bread-loaf pose with all paws tucked deep beneath its magnificent fluff"
-  },
-  {
-    "tags": ["JUNGLE"],
-    "description": "Baby aye-aye: dense charcoal-grey wild-tuft fur with a cream face, one elongated skeletal middle finger raised in curious exploration, bat-like oversized rounded ears, enormous round luminous amber dewy eyes, blushing cheeks, clinging to a branch and peering with wide-eyed wonder"
-  },
-  {
-    "tags": ["JUNGLE"],
-    "description": "Baby golden lion tamarin: vivid flame-orange silky mane radiating around a tiny dark face, enormous round amber dewy eyes, blushing cheeks, clinging to a mossy branch with all four long-fingered clawed paws and fluffy tail looped lazily behind in a relaxed curl"
-  },
-  {
-    "tags": ["JUNGLE"],
-    "description": "Baby emerald tree boa hatchling: vivid coral-red juvenile colouring with scattered cream blotches, perfectly coiled in a tight rosette around a branch with head resting atop the coil, enormous round rose-gold dewy eyes, blushing cheeks, tiny tongue tip just peeking out in a cute flicker"
-  },
-  {
-    "tags": ["FANTASY", "LAND"],
-    "description": "Baby cait sith kitten: inky-black plush coat with a single white star-blaze on its chest, crown of soft clover-green fairy light hovering between its ears, enormous luminous emerald dewy eyes, blushing cheeks, seated with tail coiled neatly and one paw raised mid-beckoning wave"
   },
   {
     "tags": ["FANTASY", "LAND"],
@@ -1002,10 +934,6 @@
   {
     "tags": ["FANTASY", "MARINE"],
     "description": "Baby hippocampus foal: gleaming cobalt-blue horse-head and graceful arching neck flowing into a shimmering scaled fish-tail, tiny crest-fin rippling along its neck, enormous pearlescent sea-glass dewy eyes, blushing cheeks, tail curled in a proud spiral with tiny front hooves pawing gently at nothing"
-  },
-  {
-    "tags": ["FANTASY", "ANY"],
-    "description": "Baby tsukumogami teapot-spirit: round porcelain-white body painted with indigo wave motifs, two stubby ceramic arm-handles raised in a cheerful double shrug, tiny curved spout-nose, enormous warm amber glowing dewy eyes, blushing cheeks, tottering on two stumpy ceramic feet mid-happy-waddle"
   },
   {
     "tags": ["LAND"],
@@ -1017,51 +945,15 @@
   },
   {
     "tags": ["LAND"],
-    "description": "Baby aardvark pup: dusty-rose wrinkled skin with sparse pale bristle-fur, enormous elongated rubbery snout, satellite-dish ears taller than its round head, huge round dark dewy eyes, blushing cheeks, standing on stubby legs with snout pressed inquisitively to the ground"
-  },
-  {
-    "tags": ["LAND"],
     "description": "Baby gerenuk fawn: warm cinnamon coat with cream underside, impossibly slender giraffe-like neck, enormous luminous dark-caramel dewy eyes, blushing cheeks, standing on spindly legs with tiny rounded ears splayed wide in delighted surprise and head tilted in wonder"
-  },
-  {
-    "tags": ["LAND"],
-    "description": "Baby Tasmanian devil joey: glossy jet-black plush fur with a single crisp white chest crescent, oversized round head dwarfing its stubby body, enormous soft dark dewy eyes, blushing cheeks, sitting upright with both pudgy forepaws pressed firmly together in a solemn little bow"
-  },
-  {
-    "tags": ["LAND"],
-    "description": "Baby greater glider joey: thick silver-grey plush coat, enormous forward-facing luminous amber dewy eyes, patagium membrane folded like a soft cape at its sides, blushing cheeks, clinging to a eucalyptus branch with all four gripping paws and round fluffy tail curled upward"
-  },
-  {
-    "tags": ["BIRD", "LAND"],
-    "description": "Baby shoebill chick: grey downy puffball body, disproportionately enormous pale-yellow shoe-shaped beak, forward-facing wide dark dewy eyes, blushing cheeks, standing solemnly with wings slightly spread and beak tilted skyward in accidental grandeur"
-  },
-  {
-    "tags": ["BIRD", "LAND"],
-    "description": "Chibi bee-eater fledgling: soft rainbow plumage of emerald, cobalt, and russet just emerging from fluffy down, slender curved beak, enormous glittering amber dewy eyes, blushing cheeks, perched with both feet clamped to a thin wire and head tilted in vivid inquisitive display"
   },
   {
     "tags": ["MARINE"],
     "description": "Baby vampire squid juvenile: deep velvet-plum round mantle with white constellation-dot markings, webbed arms spread like a tiny cloak, enormous luminous blue dewy eyes glowing softly, blushing cheeks, floating upright with webbed arms half-spread in a welcoming embrace"
   },
   {
-    "tags": ["MARINE"],
-    "description": "Baby mimic octopus hatchling: creamy-white body banded with soft brown stripes, eight expressive curling arms each tipped with a curious sucker rosette, enormous shimmering hazel dewy eyes, blushing cheeks, two arms raised skyward mid-stretch in a tiny ta-da pose"
-  },
-  {
-    "tags": ["MARINE"],
-    "description": "Baby sea angel pteropod: translucent crystal-clear gelatinous body with two broad winglike parapodia fanning slowly, faint violet bioluminescent organs visible within, enormous soft luminous silver dewy eyes, blushing cheeks, hovering mid-water with wings at their widest ethereal spread"
-  },
-  {
-    "tags": ["ARCTIC", "MARINE"],
-    "description": "Baby ringed seal pup: creamy-white newborn coat patterned with faint dark ring-spots, enormous liquid-black dewy eyes, whisker-bristled blunt snout, blushing cheeks, propped on rounded foreflippers with head tilted and round belly pressed flat against an imaginary ice floe"
-  },
-  {
     "tags": ["ARCTIC"],
     "description": "Baby hooded seal pup: pewter-grey spotted plush coat, tiny blunt whisker-studded snout, enormous liquid onyx dewy eyes, blushing cheeks, lying belly-flat with both round foreflippers pressed together under its chin in a perfectly content resting pose"
-  },
-  {
-    "tags": ["JUNGLE"],
-    "description": "Baby spectacled bear cub: glossy black fur with a creamy-white spectacle ring around each enormous round dewy eye, stubby round ears, blushing cheeks, seated with oversized forepaws flopped open on its round belly and head tilted in sleepy contentment"
   },
   {
     "tags": ["JUNGLE"],
@@ -1072,40 +964,12 @@
     "description": "Baby okapi fawn: rich chestnut body with bold zebra-striped white-and-black legs, oversized donkey-like ears, enormously long blue tongue just peeking out, huge liquid-brown dewy eyes, blushing cheeks, standing with one striped leg daintily raised mid-step"
   },
   {
-    "tags": ["JUNGLE", "BIRD"],
-    "description": "Baby superb lyrebird chick: warm russet-brown downy body, just-sprouting lyre-shaped tail-wire filaments decoratively crossed behind it, enormous soft dark dewy eyes, blushing cheeks, standing with one foot raised and vestigial tail-wires fanned in an accidental elegant display"
-  },
-  {
-    "tags": ["FANTASY", "LAND"],
-    "description": "Baby peryton fawn: warm chestnut deer coat with just-sprouting emerald-tipped antler-nubs, broad feathered wings folded oversized against its tiny body, luminous rose-gold dewy eyes, blushing cheeks, one hoof raised mid-step with wing-tips trailing tiny glowing green leaf-sparks"
-  },
-  {
     "tags": ["FANTASY", "LAND"],
     "description": "Baby cait sith kitten: inky-black plush coat with a single white star-blaze on its chest, crown of soft clover-green fairy light hovering between its ears, enormous luminous emerald dewy eyes, blushing cheeks, seated with tail coiled neatly and one paw raised in a mid-beckoning wave"
   },
   {
-    "tags": ["FANTASY", "ANY"],
-    "description": "Baby tsukumogami teapot-spirit: round porcelain-white body painted with indigo wave motifs, two stubby ceramic arm-handles raised in a cheerful double shrug, tiny curved spout-nose, enormous warm amber glowing dewy eyes, blushing cheeks, tottering on two stumpy ceramic feet mid-happy-waddle"
-  },
-  {
-    "tags": ["FANTASY", "ANY"],
-    "description": "Baby will-o-wisp sprite: translucent soft aquamarine flame-body with a wisping tail in place of legs, two tiny wisp-ribbon arms curling inward, enormous luminous white dewy eyes ringed in pale gold, blushing cheeks, bobbing gently mid-air with flame-tail spiralling in a slow cosy loop"
-  },
-  {
     "tags": ["LAND"],
     "description": "Baby dik-dik fawn: warm tawny-rufous coat with creamy underbelly, comically elongated flexible snout, enormous luminous dark-amber dewy eyes nearly half its tiny face, blushing cheeks, frozen mid-tiptoe on matchstick legs with both satellite ears swivelled fully forward"
-  },
-  {
-    "tags": ["LAND"],
-    "description": "Baby viscacha pup: dense pewter-grey plush fur, enormous jackrabbit ears laid sideways, thick fluffy tail coiled over its round back, huge soft hazel dewy eyes, blushing cheeks, sitting perfectly upright on haunches with tiny forepaws resting on its plump belly"
-  },
-  {
-    "tags": ["LAND"],
-    "description": "Baby European water vole: dense chestnut-brown velvet fur, blunt whiskered snout, tiny rounded ears nearly hidden in cheek-fluff, enormous glassy dark dewy eyes, blushing cheeks, seated upright clutching a single blade of grass in both miniature paws"
-  },
-  {
-    "tags": ["LAND"],
-    "description": "Baby European polecat kit: rich mahogany-brown fur with a bold cream face-mask, bright inquisitive dark dewy eyes, tiny rounded ears, blushing cheeks, rearing upright on hind legs with stubby forepaws pressed together in eager curiosity"
   },
   {
     "tags": ["LAND"],
@@ -1120,56 +984,8 @@
     "description": "Chibi long-tailed tit fledgling: cotton-ball white-and-blush body, impossibly long black-and-white graduated tail twice its body length, pinprick conical beak, enormous glittering ruby-ringed dewy eyes, blushing cheeks, clinging sideways to a twig with wings fluttering"
   },
   {
-    "tags": ["BIRD", "LAND"],
-    "description": "Chibi resplendent trogon fledgling: vivid emerald-green back feathers just emerging from soft grey down, crimson breast-bib like a spilled berry, tiny hooked beak, enormous glittering gold-ringed dewy eyes, blushing cheeks, perched with wings loosely fanned and head cocked in bright wonder"
-  },
-  {
-    "tags": ["BIRD", "JUNGLE"],
-    "description": "Baby hornbill chick: round ivory-white downy puffball body, comically oversized pale-yellow casque-beak still soft and slightly floppy at the tip, enormous round shining dark dewy eyes, blushing cheeks, perched with beak tilted skyward and stubby wings held out for balance"
-  },
-  {
-    "tags": ["MARINE"],
-    "description": "Baby flamboyant cuttlefish hatchling: stubby rectangular cream mantle rippling with vivid magenta and gold bioluminescent pulse-waves, two enormous W-shaped pupil dewy eyes, blushing cheeks, crawling upright on four tiny arm-tips with frilled skirt-fin fanned in a proud colourful display"
-  },
-  {
-    "tags": ["MARINE"],
-    "description": "Baby sea angel pteropod: translucent crystal-clear gelatinous body with two broad winglike parapodia fanning slowly, faint violet bioluminescent organs visible within, enormous soft luminous silver dewy eyes, blushing cheeks, hovering mid-water with wings at their widest ethereal spread"
-  },
-  {
-    "tags": ["MARINE"],
-    "description": "Baby decorator crab hatchling: round pale-cream carapace adorned with three tiny self-applied anemone pom-poms like a living hat, oversized stalked dewy eyes each glittering aquamarine, blushing cheeks, one claw raised mid-pat as if carefully placing another tiny decoration"
-  },
-  {
-    "tags": ["ARCTIC", "MARINE"],
-    "description": "Baby ringed seal pup: creamy-white newborn coat patterned with faint dark ring-spots, enormous liquid-black dewy eyes, whisker-bristled blunt snout, blushing cheeks, propped on rounded foreflippers with head tilted and round belly pressed flat against an imaginary ice floe"
-  },
-  {
-    "tags": ["ARCTIC", "BIRD"],
-    "description": "Baby razorbill chick: dense charcoal-and-white downy fluff, stubby laterally flattened beak with a faint white line etching, enormous glassy round dark dewy eyes, blushing cheeks, sitting in a compact upright puffball with tiny flipper-wings held stiffly at its sides like proud epaulettes"
-  },
-  {
     "tags": ["ARCTIC"],
     "description": "Baby hooded seal pup: pewter-grey spotted plush coat, tiny blunt whisker-studded snout, enormous liquid onyx dewy eyes, blushing cheeks, lying belly-flat on an imaginary ice floe with both round foreflippers pressed together under its chin in a perfectly content resting pose"
-  },
-  {
-    "tags": ["JUNGLE"],
-    "description": "Baby clouded monitor lizard hatchling: rich chocolate-brown skin dappled with cream-yellow cloud blotches, long whip tail banded in soft gold, enormous round amber dewy eyes, blushing cheeks, posed mid-waddle with one stubby foreleg raised and tiny forked tongue peeking out"
-  },
-  {
-    "tags": ["JUNGLE"],
-    "description": "Baby glasswing butterfly caterpillar: plump lime-green segmented body with vivid yellow racing stripes, tiny rounded false-eyes on its forehead segment, enormous shining real dewy eyes below, blushing cheeks, arched mid-inch-along with front segments raised in a curious bow"
-  },
-  {
-    "tags": ["FANTASY", "LAND"],
-    "description": "Baby carbuncle spirit-fox: sleek ruby-red plush fur, single faceted gemstone glowing rose-gold set in its smooth forehead, oversized luminous crimson dewy eyes, blushing cheeks, seated with all four paws neatly together and gem pulsing a gentle warm light around it"
-  },
-  {
-    "tags": ["FANTASY", "LAND"],
-    "description": "Baby qilin fawn: shimmering jade-green overlapping scales on a delicate fawn form, single opalescent spiralling horn, flame-tipped hooves leaving tiny glowing gold prints, enormous luminous violet dewy eyes, blushing cheeks, one hoof raised mid-delicate-step with mane wisping softly upward"
-  },
-  {
-    "tags": ["FANTASY", "MARINE"],
-    "description": "Baby kappa hatchling: round jade-green turtle-shelled body, webbed mitten-feet, flat saucer-dip of water balanced perfectly on its smooth-domed head, enormous earnest dark dewy eyes, blushing cheeks, seated cross-legged with both webbed hands pressed together in a polite formal bow"
   },
   {
     "tags": ["FANTASY", "ANY"],
@@ -1269,18 +1085,6 @@
   },
   {
     "tags": ["LAND"],
-    "description": "Baby mink kit: glossy dark-chocolate plush fur with a tiny cream chin-spot, lithe elongated body, enormous round obsidian dewy eyes, blushing cheeks, rearing upright on hind legs with slender forepaws tucked daintily against its chest in bright-eyed curiosity"
-  },
-  {
-    "tags": ["LAND"],
-    "description": "Baby pika: round caramel-grey plush body with no visible tail, oversized rounded ears edged in pale cream, enormous glassy dark-hazel dewy eyes, blushing cheeks, sitting bolt-upright on a pebble with a single dried wildflower stem clutched in both tiny paws"
-  },
-  {
-    "tags": ["LAND"],
-    "description": "Baby saiga antelope calf: warm buff-cream plush coat, distinctively bulbous flexible mini-trunk nose wriggling gently, oversized dark-caramel dewy eyes, blushing cheeks, standing on wobbly matchstick legs with both satellite ears splayed wide in cheerful bewilderment"
-  },
-  {
-    "tags": ["LAND"],
     "description": "Baby hyrax pup: compact tawny-brown plush body like a round cushion, tiny rounded ears, blunt rubbery snout, enormous soft amber dewy eyes, blushing cheeks, sitting hunched with all four stubby legs tucked beneath its barrel body and nose twitching in content alertness"
   },
   {
@@ -1289,15 +1093,7 @@
   },
   {
     "tags": ["BIRD", "LAND"],
-    "description": "Chibi painted bunting fledgling: mossy-green back feathers just giving way to patches of vivid scarlet and cobalt, tiny conical beak, enormous glittering obsidian dewy eyes, blushing cheeks, perched gripping a seed-stalk with head cocked in dazzled wonder"
-  },
-  {
-    "tags": ["BIRD", "LAND"],
     "description": "Baby kiwi chick: round dark-brown bristly hair-feather body on enormous pale stumpy feet, whisker-like sensory bristles framing a long curved beak, tiny vestigial wing-nubs, huge soft dark dewy eyes, blushing cheeks, mid-shuffle with one oversized foot raised"
-  },
-  {
-    "tags": ["MARINE"],
-    "description": "Baby boxfish hatchling: perfect cube-shaped vivid lemon-yellow body with electric-blue polka spots, tiny protruding tube-lips, enormous round shimmering dark dewy eyes, blushing cheeks, hovering mid-water with four tiny fan-fins fluttering at its boxy corners"
   },
   {
     "tags": ["MARINE"],
@@ -1314,38 +1110,6 @@
   {
     "tags": ["ARCTIC", "MARINE"],
     "description": "Baby narwhal calf: smooth powder-blue rounded body, single pastel-coral spiralled tusk just budding at a bashful sideways tilt, tiny crescent tail-flukes, enormous dewy silver eyes, blushing cheeks, floating upright with flippers tucked in a contented shrug"
-  },
-  {
-    "tags": ["JUNGLE"],
-    "description": "Baby fishing cat kitten: warm olive-grey plush fur dappled with dark oval spots, slightly webbed oversized paws, enormous round teal-green dewy eyes, blushing cheeks, crouched low with one broad paw pressed flat to an imaginary water surface in a frozen playful pat-pose"
-  },
-  {
-    "tags": ["JUNGLE", "BIRD"],
-    "description": "Baby cock-of-the-rock chick: round tangerine-orange downy body with just-sprouting disc-shaped crest feathers fanning forward over its tiny beak, enormous glittering dark dewy eyes, blushing cheeks, perched upright with stubby wings half-fanned in an unintentionally dramatic display"
-  },
-  {
-    "tags": ["FANTASY", "LAND"],
-    "description": "Baby xiezhi cub: compact cream-white lion-cub form, single opalescent spiral horn jutting from its broad forehead, flame-tipped mane still downy and soft, enormous luminous gold dewy eyes, blushing cheeks, seated with both forepaws pressed flat and horn tilted in a curious bow"
-  },
-  {
-    "tags": ["FANTASY", "MARINE"],
-    "description": "Baby ryūjin sea-dragon wyrmling: cobalt-blue scaled serpentine body with pearl-white underbelly, wispy whisker-tendrils framing an oversized round face, tiny jewelled coral crown, enormous luminous aquamarine dewy eyes, blushing cheeks, coiling upright with one tiny clawed paw raised"
-  },
-  {
-    "tags": ["FANTASY", "ANY"],
-    "description": "Baby futakuchi spirit-tanuki: round warm-caramel plush tanuki body, oversized leafy straw hat, a second tiny smiling mouth hidden in the fluff at the back of its round head, enormous amber dewy eyes on the front face, blushing cheeks, waddling with a tiny coin purse swinging from one paw"
-  },
-  {
-    "tags": ["FANTASY", "ANY"],
-    "description": "Baby enkidu wild-cub: compact tawny lion-cub body laced with thin vine-tendril markings glowing soft green, tiny leaf-cluster crown nestled between rounded ears, enormous forest-amber dewy eyes, blushing cheeks, crouching with both forepaws wide and vine-markings pulsing a gentle warmth"
-  },
-  {
-    "tags": ["BIRD", "JUNGLE"],
-    "description": "Baby sunbird chick: round downy olive-green body, just-emerging iridescent violet throat-patch catching imaginary light, slender curved beak, enormous glittering dark dewy eyes, blushing cheeks, clinging to a nectar-flower stem with both tiny feet and head tilted in nectar-seeking wonder"
-  },
-  {
-    "tags": ["MARINE"],
-    "description": "Baby flame scallop hatchling: vivid scarlet ribbed shell slightly ajar, dozens of electric-blue iridescent eye-dots lining the mantle edge, tiny wisp-tentacles trailing, enormous central paired dewy eyes glowing soft gold, blushing cheeks, shell pulsing gently open and closed like a tiny heartbeat"
   },
   {
     "tags": ["ARCTIC", "BIRD"],

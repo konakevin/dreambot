@@ -55,7 +55,23 @@ const textOf = (e) => {
   return String(e ?? '');
 };
 
-const exactKey = (s) => s.toLowerCase().replace(/\s+/g, ' ').trim();
+/** Canonical identity, matching purge-bot-seed-dupes.js exactly. Objects compare on ALL fields
+ *  (key-sorted), so a shared description serving two different tag buckets is NOT a duplicate:
+ *  chibibot has an egret tagged ["ARCTIC"] and ["ARCTIC","BIRD"], earthbot a fjord tagged
+ *  arctic-polar and coastal-temperate. Those are reported as description collisions instead. */
+function identity(e) {
+  if (typeof e === 'string') return 'S:' + e.toLowerCase().replace(/\s+/g, ' ').trim();
+  if (e && typeof e === 'object') {
+    const sorted = Object.keys(e)
+      .sort()
+      .reduce((o, k) => {
+        o[k] = Array.isArray(e[k]) ? [...e[k]].sort() : e[k];
+        return o;
+      }, {});
+    return 'O:' + JSON.stringify(sorted).toLowerCase();
+  }
+  return 'X:' + String(e);
+}
 
 /** Body after a CAPS title prefix, with Rich-Scene-Seed bloat stripped (as the generators do). */
 const bodyOf = (s) => {
@@ -101,12 +117,25 @@ for (const bot of (ONLY ? [ONLY] : fs.readdirSync(ROOT)).sort()) {
     const seenE = new Map();
     const seenS = new Map();
     const seenC = new Set();
+    const seenDesc = new Set();
     const exact = [];
     const sig = [];
-    for (const t of texts) {
-      const e = exactKey(t);
+    let descCollisions = 0;
+    data.forEach((raw, i) => {
+      const t = texts[i];
+      if (!t) return;
+      const e = identity(raw);
       if (seenE.has(e)) exact.push(t.slice(0, 90));
-      else seenE.set(e, 1);
+      else {
+        seenE.set(e, 1);
+        // same description, different tags: legitimate on a tag-filtered pool, but it means the
+        // entry is served twice to any path whose filter matches both. Worth a human look.
+        const d = t.toLowerCase().replace(/\s+/g, ' ').trim();
+        if (seenDesc.has(d)) descCollisions++;
+        else seenDesc.add(d);
+      }
+    });
+    for (const t of texts) {
       const s = sigTokens(t, 12);
       if (s.length > 10) {
         if (seenS.has(s)) sig.push(t.slice(0, 90));
@@ -119,6 +148,7 @@ for (const bot of (ONLY ? [ONLY] : fs.readdirSync(ROOT)).sort()) {
       pool: name,
       n: texts.length,
       exact: exact.length,
+      descCollisions,
       sig: sig.length,
       coarseUnique: seenC.size,
       coarsePct: texts.length ? Math.round((1 - seenC.size / texts.length) * 100) : 0,
@@ -166,6 +196,14 @@ console.log(
 const saturated = live.filter((p) => p.n >= 50 && p.coarsePct >= 20).sort((a, b) => b.coarsePct - a.coarsePct);
 console.log(`\nNEAR-CEILING POOLS (>=50 entries, >=20% same-idea): ${saturated.length}`);
 for (const p of saturated.slice(0, 15)) console.log(`  ${p.coarsePct}%  ${p.bot}/${p.pool} (${p.n})`);
+
+const collide = live.filter((p) => p.descCollisions > 0);
+if (collide.length) {
+  console.log(
+    `\nSAME DESCRIPTION, DIFFERENT TAGS (not duplicates, but served twice to any path whose filter matches both): ${collide.reduce((s, p) => s + p.descCollisions, 0)}`
+  );
+  for (const p of collide) console.log(`  ${p.bot}/${p.pool}: ${p.descCollisions}`);
+}
 
 const worst = live.filter((p) => p.exact > 0).sort((a, b) => b.exact - a.exact);
 if (worst.length) {
