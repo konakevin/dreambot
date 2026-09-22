@@ -32,6 +32,7 @@ function Row({
   member,
   icon,
   title,
+  badge,
   subtitle,
   isDefault,
 }: {
@@ -40,6 +41,10 @@ function Row({
   member?: CastFaceRef;
   icon?: keyof typeof Ionicons.glyphMap;
   title: string;
+  /** A quiet accent word beside the title (e.g. "(Recommended)"). Deliberately NOT part of
+   *  `title`: at the title's own weight and colour it competes with the row's name instead of
+   *  annotating it. */
+  badge?: string;
   subtitle?: string;
   /** Marks the starred default so its subtitle reads as a badge, not a caption. */
   isDefault?: boolean;
@@ -60,9 +65,16 @@ function Row({
         </View>
       )}
       <View style={s.rowText}>
-        <Text style={s.rowTitle} numberOfLines={1}>
-          {title}
-        </Text>
+        <View style={s.rowTitleLine}>
+          <Text style={s.rowTitle} numberOfLines={1}>
+            {title}
+          </Text>
+          {!!badge && (
+            <Text style={s.rowBadge} numberOfLines={1}>
+              {badge}
+            </Text>
+          )}
+        </View>
         {!!subtitle && (
           // The DEFAULT marker earns a star and the accent colour; a plain grey caption
           // made the one row that answers "which of these is my default?" look like any
@@ -130,7 +142,12 @@ export function CastPickerSheet({
               selected={castChoiceEquals(choice, { kind: 'auto' })}
               onPress={() => pick({ kind: 'auto' })}
               icon="text-outline"
+              // Says so in the row itself rather than only by being pre-selected: the sheet
+              // opens on whatever you picked LAST, so a returning user sees the tick on their
+              // own choice and nothing tells them which one this screen was built around
+              // (Kevin, 2026-09-21). Capitalised to match the AI model picker's "Recommended.".
               title="Auto"
+              badge="(Recommended)"
               subtitle="My default, or a name I type"
             />
             <Row
@@ -208,6 +225,17 @@ const s = StyleSheet.create({
     justifyContent: 'center',
   },
   rowText: { flex: 1 },
+  rowTitleLine: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  // Accent, a step down in size and weight: it annotates the name rather than being read as
+  // part of it (Kevin, 2026-09-21: "Recommended seems too bright, should be more of an
+  // accent?"). Same accentLight the default marker uses, so secondary information on this
+  // sheet has ONE colour.
+  rowBadge: {
+    color: colors.accentLight,
+    fontSize: fontScale(12),
+    fontWeight: '600',
+    flexShrink: 0,
+  },
   rowTitle: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
   rowSubtitleRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   rowSubtitle: { color: colors.textMuted, fontSize: fontScale(12), fontWeight: '600' },
