@@ -17,8 +17,11 @@
  * scrubs a matched name out of the prompt).
  */
 
+import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { Image } from 'expo-image';
 import { supabase } from '@/lib/supabase';
+import { castSignedUrl } from '@/lib/castPhoto';
 import { useAuthStore } from '@/store/auth';
 import { isVibeProfile } from '@/types/vibeProfile';
 import { enabledPartners, primaryPartnerOf } from '@/lib/dreamCastRoster';
@@ -107,6 +110,34 @@ export function useCastPreview(): CastPreview {
       };
     },
   });
+
+  // WARM THE FACES BEFORE THEY ARE ASKED FOR. A cast avatar mounts the instant a typed
+  // name resolves to someone, and cold it costs two round trips in series — mint a
+  // signed URL, then download the image at a URL the image cache has never seen. Doing
+  // that work here, once, as soon as the roster is known, means the face is already in
+  // both caches by the time the user finishes typing it. castSignedUrl dedupes and
+  // caches by path, so this races nothing and repeats nothing.
+  //
+  // Fire-and-forget on purpose: a failed warm-up must never surface: the avatar resolves
+  // for itself on mount exactly as before, just slower.
+  const partners = data?.partners;
+  const self = data?.self;
+  useEffect(() => {
+    let alive = true;
+    const paths = [...(partners ?? []), ...(self ? [self] : [])]
+      .map((m) => m.storage_path)
+      .filter((p): p is string => !!p);
+    if (paths.length === 0) return;
+    (async () => {
+      const urls = (await Promise.all(paths.map((p) => castSignedUrl(p)))).filter(
+        (u): u is string => !!u
+      );
+      if (alive && urls.length > 0) Image.prefetch(urls).catch(() => {});
+    })().catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [partners, self]);
 
   return data ?? EMPTY;
 }

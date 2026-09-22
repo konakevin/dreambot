@@ -9,7 +9,7 @@
 
 import { useEffect, useState } from 'react';
 import { Image } from 'expo-image';
-import { castSignedUrl } from '@/lib/castPhoto';
+import { castSignedUrl, cachedCastUrl } from '@/lib/castPhoto';
 import { colors } from '@/constants/theme';
 
 export interface CastAvatarMember {
@@ -28,7 +28,18 @@ export function CastAvatar({
    *  rather than two separate badges. */
   overlap?: boolean;
 }) {
-  const [uri, setUri] = useState<string | null>(null);
+  // Seeded from the cache SYNCHRONOUSLY, so a face already resolved this session paints
+  // on the very first frame. This avatar mounts the instant a typed name resolves to
+  // someone, and an effect-only resolve meant the ring appeared first and the face a
+  // beat later — the lag was the mint and the download, but the empty ring is what made
+  // it look like the app had not noticed the name yet.
+  const [uri, setUri] = useState<string | null>(() =>
+    member.storage_path
+      ? cachedCastUrl(member.storage_path)
+      : member.thumb_url?.startsWith('http')
+        ? member.thumb_url
+        : null
+  );
   useEffect(() => {
     let alive = true;
     (async () => {
