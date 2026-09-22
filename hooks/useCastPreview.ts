@@ -24,7 +24,8 @@ import { supabase } from '@/lib/supabase';
 import { castSignedUrl } from '@/lib/castPhoto';
 import { useAuthStore } from '@/store/auth';
 import { isVibeProfile } from '@/types/vibeProfile';
-import { enabledPartners, primaryPartnerOf } from '@/lib/dreamCastRoster';
+import { enabledPartners, primaryPartnerOf, migrateLegacyPlusOne } from '@/lib/dreamCastRoster';
+import { saveVibeProfile } from '@/lib/saveVibeProfile';
 import type { CastName } from '@/lib/selfInsertDetect';
 
 /** Enough to render a face and label it. */
@@ -53,6 +54,9 @@ export interface CastPreview {
 
 const EMPTY: CastPreview = { names: [], self: null, partners: [], defaultPartnerId: null };
 
+/** Users healed this session, so a refetch cannot re-issue the write. */
+const healed = new Set<string>();
+
 export function useCastPreview(): CastPreview {
   const user = useAuthStore((s) => s.user);
 
@@ -75,8 +79,28 @@ export function useCastPreview(): CastPreview {
         .select('recipe')
         .eq('user_id', user!.id)
         .single();
-      const raw = row?.recipe as unknown;
-      if (!isVibeProfile(raw)) return EMPTY;
+      const stored = row?.recipe as unknown;
+      if (!isVibeProfile(stored)) return EMPTY;
+
+      // HEAL A ROSTER THAT ONLY EXISTS IN dream_cast. Onboarding writes the +1 straight
+      // into the render mirror and never mints a roster row, so this screen's picker
+      // showed nothing at all for anyone who had not been into Settings — 13 of 79
+      // recipes, measured 2026-09-22 (Kevin: "i uploaded a cast pic for myself and my +1
+      // during onboarding, but after that i went into create and this is what it shows").
+      // The photos were never lost; the roster the picker reads was simply never written.
+      const raw = migrateLegacyPlusOne(stored);
+
+      // PERSIST the heal once, rather than migrating on every read. migrateLegacyPlusOne
+      // mints a fresh id each call, and an id that changes between refetches would drop
+      // the user's own pick (castChoiceEquals stops matching) and would not resolve
+      // server-side either, since the engine looks cast_partner_id up in partner_library.
+      // saveVibeProfile normalises too, so this only has to fire for someone who is not
+      // otherwise saving. Fire-and-forget and once per session: a failure just means the
+      // next launch tries again, which is strictly better than a retry loop.
+      if (raw !== stored && !healed.has(user!.id)) {
+        healed.add(user!.id);
+        saveVibeProfile(user!.id, raw).catch(() => healed.delete(user!.id));
+      }
 
       // Roster ORDER is load-bearing: matching is first-wins, so two members sharing a
       // name must resolve to the one added first, on the client exactly as on the

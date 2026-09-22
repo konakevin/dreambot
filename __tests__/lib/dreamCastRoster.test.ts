@@ -700,3 +700,72 @@ describe('setCastMember keeps the +1 roster row in step', () => {
     expect(plusOne(st().profile)?.storage_path).toBe('p-x.jpg');
   });
 });
+
+/**
+ * THE MIRROR MUST NOT ANSWER A QUESTION THE USER STILL HAS TO ANSWER.
+ *
+ * A roster row must carry a relationship (DreamPartner requires one, so
+ * migrateLegacyPlusOne invents 'friend' for a legacy +1 that never had one), while a
+ * dream_cast member need not. Copying that invention onto the mirror lit up the
+ * Friend pill in onboarding by itself: the pills read the cast member, and typing a NAME
+ * was enough to seed the roster, sync the mirror and select a relationship nobody chose
+ * (Kevin, 2026-09-22: "once they fill it in, the relationship is getting auto selected,
+ * but it should remain unselected with the 'required' text above it").
+ */
+describe('syncActivePartnerMirror: an unanswered relationship stays unanswered', () => {
+  const partner = (over: Partial<DreamPartner> = {}): DreamPartner => ({
+    id: 'p1',
+    description: 'her',
+    relationship: 'friend',
+    enabled: true,
+    ...over,
+  });
+
+  it('does not stamp a relationship onto a plus_one that had none', () => {
+    const out = syncActivePartnerMirror(
+      base({
+        dream_cast: [
+          { role: 'self', description: 'me' },
+          { role: 'plus_one', description: 'her' }, // no relationship: not yet chosen
+        ],
+        partner_library: [partner()],
+        active_partner_id: 'p1',
+      })
+    );
+    expect(out.dream_cast.find((m) => m.role === 'plus_one')?.relationship).toBeUndefined();
+  });
+
+  it('keeps a relationship the user DID choose', () => {
+    const out = syncActivePartnerMirror(
+      base({
+        dream_cast: [{ role: 'plus_one', description: 'her', relationship: 'partner' }],
+        partner_library: [partner({ relationship: 'partner' })],
+        active_partner_id: 'p1',
+      })
+    );
+    expect(out.dream_cast.find((m) => m.role === 'plus_one')?.relationship).toBe('partner');
+  });
+
+  it('takes the roster value when there is no plus_one to preserve', () => {
+    // First mirror of a roster member added in Settings — nothing to carry forward.
+    const out = syncActivePartnerMirror(
+      base({
+        dream_cast: [{ role: 'self', description: 'me' }],
+        partner_library: [partner({ relationship: 'partner' })],
+        active_partner_id: 'p1',
+      })
+    );
+    expect(out.dream_cast.find((m) => m.role === 'plus_one')?.relationship).toBe('partner');
+  });
+
+  it('still never mirrors the NAME, whatever the relationship does', () => {
+    const out = syncActivePartnerMirror(
+      base({
+        dream_cast: [{ role: 'plus_one', description: 'her' }],
+        partner_library: [partner({ name: 'Steph' })],
+        active_partner_id: 'p1',
+      })
+    );
+    expect(JSON.stringify(out.dream_cast)).not.toContain('Steph');
+  });
+});

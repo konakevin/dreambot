@@ -62,9 +62,24 @@ export function finalizePartnerName(raw: string | null | undefined): string | un
   return cleaned.length > 0 ? cleaned : undefined;
 }
 
-/** The plus_one cast member that mirrors a partner (drops the roster-only id AND
- *  the user-typed `name` — the render pipeline must never see either). */
-function partnerToPlusOne(p: DreamPartner): DreamCastMember {
+/**
+ * The plus_one cast member that mirrors a partner (drops the roster-only id AND the
+ * user-typed `name` — the render pipeline must never see either).
+ *
+ * `prev` is the plus_one member being replaced, and it exists for ONE reason: a roster row
+ * must carry a relationship (the type requires it, so migrateLegacyPlusOne invents
+ * 'friend' for a legacy +1 that never had one), while a dream_cast member need not. Copying
+ * the invention onto the mirror silently ANSWERED a question the user still had to answer:
+ * onboarding shows the Friend/Partner pills unselected with "(Choose one)" beside them, and
+ * typing a name was enough to seed the roster, sync the mirror, and light up Friend on its
+ * own (Kevin, 2026-09-22: "once they fill it in, the relationship is getting auto selected,
+ * but it should remain unselected").
+ *
+ * So an absence is preserved as an absence. A member who HAS a relationship keeps it, and a
+ * fresh mirror with no predecessor takes the roster's value as before.
+ */
+function partnerToPlusOne(p: DreamPartner, prev?: DreamCastMember): DreamCastMember {
+  const keepUnset = !!prev && !prev.relationship;
   return {
     role: 'plus_one',
     ...(p.storage_path ? { storage_path: p.storage_path } : {}),
@@ -74,7 +89,7 @@ function partnerToPlusOne(p: DreamPartner): DreamCastMember {
     ...(typeof p.age === 'number' ? { age: p.age } : {}),
     ...(p.physical_summary ? { physical_summary: p.physical_summary } : {}),
     ...(p.ethnicity ? { ethnicity: p.ethnicity } : {}),
-    relationship: p.relationship,
+    ...(keepUnset ? {} : { relationship: p.relationship }),
   };
 }
 
@@ -161,8 +176,9 @@ export function primaryPartner(profile: VibeProfile): DreamPartner | null {
  */
 export function syncActivePartnerMirror(profile: VibeProfile): VibeProfile {
   const mirrored = primaryPartner(profile);
+  const prev = profile.dream_cast.find((m) => m.role === 'plus_one');
   const others = profile.dream_cast.filter((m) => m.role !== 'plus_one');
-  const dream_cast = mirrored ? [...others, partnerToPlusOne(mirrored)] : others;
+  const dream_cast = mirrored ? [...others, partnerToPlusOne(mirrored, prev)] : others;
   return { ...profile, dream_cast, active_partner_id: mirrored?.id ?? null };
 }
 

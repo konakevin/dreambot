@@ -117,7 +117,7 @@ export default function WelcomeGiftScreen() {
         <Image source={mascot} style={s.mascot} contentFit="contain" />
 
         {/* Gradient wordmark hero — matches onboarding's brand treatment. */}
-        <Text style={s.eyebrow}>You&rsquo;re in</Text>
+        <Text style={s.eyebrow}>You&rsquo;re in!</Text>
         <GradientTitle size={38} weight={700} letterSpacing={-0.5}>
           Welcome
         </GradientTitle>
@@ -127,7 +127,16 @@ export default function WelcomeGiftScreen() {
             as the headline feature, with the free-trial term on the pill + a
             quiet footnote so the user knows it's a trial that continues on a
             paid plan. {proTrialDays} is engine_config-driven (same window the
-            gates read). */}
+            gates read).
+
+            The body is an INTRODUCTION to the mechanic, not just a tagline
+            (Kevin, 2026-09-22). "A fresh dream waiting each morning" said it was
+            nice without saying what happens, so nothing told a brand-new user
+            that this runs on its own, that it arrives daily, or that it lands
+            somewhere they can go and look. Naming the Dreams album is the part
+            that turns it into an instruction. "Starring you and your cast" is
+            the only place this screen says a nightly has the USER in it, which
+            is what makes it worth waking up for — cut that clause last. */}
         <View style={s.nightlyCard}>
           <View style={s.cardHead}>
             <Text style={s.cardEmoji}>🌙</Text>
@@ -137,7 +146,7 @@ export default function WelcomeGiftScreen() {
             </View>
           </View>
           <Text style={s.cardBody}>
-            {`A fresh dream waiting each morning. Free during your trial, then yours on a ${PLAN_NAME_BASIC} or ${PLAN_NAME_PRO} plan.`}
+            {`A new dream lands in your Dreams album every morning, starring you and your cast. Free during your trial, then yours on a ${PLAN_NAME_BASIC} or ${PLAN_NAME_PRO} plan.`}
           </Text>
         </View>
 

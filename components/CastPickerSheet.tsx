@@ -104,12 +104,15 @@ function Row({
 export function CastPickerSheet({
   visible,
   choice,
+  self,
   partners,
   onSelect,
   onClose,
 }: {
   visible: boolean;
   choice: CastChoice;
+  /** The user's own cast photo, for the "Just me" row. Null until they add one. */
+  self: CastFaceRef | null;
   /** Every roster member, switched on or not: picking someone is a direct request, and
    *  the switch governs the automatic paths (nightly rotation, the default) instead. */
   partners: CastFaceRef[];
@@ -190,7 +193,12 @@ export function CastPickerSheet({
               <Row
                 selected={castChoiceEquals(choice, { kind: 'solo' })}
                 onPress={() => pick({ kind: 'solo' })}
-                icon="person-outline"
+                // The user's OWN face, not a generic glyph (Kevin, 2026-09-22: "'Just me'
+                // should show the users own selfie cast pic, why the little placeholder?").
+                // Every other row that names a person shows that person, and this row names
+                // the person they know best. The icon is the fallback for the one state
+                // where there is no face yet: they have not added their photo.
+                {...(self ? { member: self } : { icon: 'person-outline' as const })}
                 title="Just me"
               />
               {partners.map((p) => (

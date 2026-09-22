@@ -28,6 +28,7 @@ import { hasAiConsent } from '@/lib/aiConsent';
 import { showAiConsent } from '@/components/AiConsentSheet';
 import { useAuthStore } from '@/store/auth';
 import { showAlert } from '@/components/CustomAlert';
+import { Toast } from '@/components/Toast';
 import { castRejectCopy } from '@/lib/castRejectCopy';
 import { colors } from '@/constants/theme';
 import { verticalScale, horizontalScale, fontScale, screen } from '@/lib/responsive';
@@ -116,6 +117,22 @@ async function removeCastFile(m: {
   return null;
 }
 
+/**
+ * Has describe-photo actually finished with this member?
+ *
+ * Shared by the slot (which only reveals the name field once it is true) and the step's
+ * Continue gate (which only demands a name once the field exists) — two readers that
+ * MUST agree, or the gate asks for something there is nowhere to type.
+ */
+function castMemberComplete(member: DreamCastMember | undefined, isPet: boolean): boolean {
+  return !!(
+    member &&
+    member.description &&
+    member.description.length >= 20 &&
+    (isPet || (member.gender && typeof member.age === 'number'))
+  );
+}
+
 function CastSlot({
   config,
   member,
@@ -127,6 +144,7 @@ function CastSlot({
   name,
   onNameChange,
   onNameCommit,
+  lockedReason,
 }: {
   config: SlotConfig;
   member: DreamCastMember | undefined;
@@ -141,6 +159,9 @@ function CastSlot({
   name?: string;
   onNameChange: (raw: string) => void;
   onNameCommit: () => void;
+  /** Why this slot cannot be uploaded to yet. Present = the button is off and this is
+   *  shown in its place; a disabled control with no reason is just a dead button. */
+  lockedReason?: string;
 }) {
   const isUploading = uploading === config.role;
   // Disable ALL upload buttons whenever ANY upload is in flight — parallel
@@ -153,12 +174,7 @@ function CastSlot({
   // dual face-swap renders silently degrade. Surface the failure clearly so
   // the user re-uploads instead of trusting a fake "Ready for dreams".
   const isPet = config.role === 'pet';
-  const isComplete = !!(
-    member &&
-    member.description &&
-    member.description.length >= 20 &&
-    (isPet || (member.gender && typeof member.age === 'number'))
-  );
+  const isComplete = castMemberComplete(member, isPet);
 
   // Resolve a fetchable URI for the thumbnail. Private cast photos
   // (`storage_path`) need a freshly-minted signed URL; legacy members carry a
@@ -261,7 +277,15 @@ function CastSlot({
                     Settings with a member that has no description. */}
                 {isComplete && (
                   <>
-                    <Text style={s.relLabel}>Their name</Text>
+                    <View style={s.relLabelRow}>
+                      <Text style={s.relLabel}>Their name</Text>
+                      {/* Same "(…)" hint the relationship picker uses, so the two required
+                          fields on this card announce themselves the same way. A name is
+                          load-bearing now — it is the only advertised way to cast a
+                          specific person — so asking for it here beats discovering it at
+                          the Continue tap (Kevin, 2026-09-22). */}
+                      {!finalizePartnerName(name) && <Text style={s.relRequired}>(Required)</Text>}
+                    </View>
                     <TextInput
                       style={s.nameInput}
                       value={name ?? ''}
@@ -305,13 +329,24 @@ function CastSlot({
           </>
         ) : (
           <TouchableOpacity
-            style={[s.uploadButton, anyUploading && !isUploading ? { opacity: 0.4 } : null]}
+            style={[
+              s.uploadButton,
+              (anyUploading && !isUploading) || lockedReason ? { opacity: 0.4 } : null,
+            ]}
             onPress={() => onUpload(config.role)}
-            disabled={anyUploading}
+            disabled={anyUploading || !!lockedReason}
             activeOpacity={0.7}
           >
             {isUploading ? (
               <ActivityIndicator size="small" color={colors.accent} />
+            ) : lockedReason ? (
+              // The reason goes IN the button, because that is what the user is aiming at.
+              // A dim control with the explanation somewhere else is how you get a person
+              // tapping the same dead thing twice.
+              <>
+                <Ionicons name="lock-closed" size={16} color={colors.textSecondary} />
+                <Text style={s.uploadLockedText}>{lockedReason}</Text>
+              </>
             ) : (
               <>
                 <Ionicons name="camera" size={18} color={colors.accent} />
@@ -333,12 +368,34 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
   // slot). Only applies while a +1 exists without a relationship.
   const plusOneMember = dreamCast.find((m) => m.role === 'plus_one');
   const plusOneNeedsRelationship = !!plusOneMember && !plusOneMember.relationship;
+  // A +1 WITHOUT A SELF PHOTO IS NOT A VALID CAST (Kevin, 2026-09-22: "we allow them to
+  // upload just a +1 without a self pic, this is invalid"). It is the same invariant the
+  // Settings roster already enforces from the other side — toggling someone on with no
+  // self photo is refused with "Add your photo first. Without it, nobody gets cast." —
+  // because with no self photo chaosTier drops to scene territory and the engine casts
+  // NOBODY, +1 included. Onboarding was the one door with no lock on it.
+  //
+  // Gated on COMPLETE, not merely present: a self photo still being described has no
+  // gender or age yet, and those are what the +1's own swap is composed against.
+  const selfReady = castMemberComplete(
+    dreamCast.find((m) => m.role === 'self'),
+    false
+  );
   const setCastMember = useOnboardingStore((s) => s.setCastMember);
   const setPlusOneName = useOnboardingStore((s) => s.setPlusOneName);
   // Reads straight off the roster, so the field shows whatever Settings would. Before
   // the row exists (nobody has typed yet) this is undefined, which is the right empty.
   const plusOneName = useOnboardingStore((s) => primaryPartner(s.profile)?.name);
+  // A cast photo with no name can be summoned by nothing the app teaches: naming is now
+  // the only advertised way to cast a specific person, and the "default cast member" that
+  // used to answer "whoever" came out of the UI the same day (Kevin, 2026-09-22).
+  // Deliberately NOT folded into the footer's `disabled` like the relationship above: a
+  // dim button is a silent refusal, and handleNext says which field it wants. What this
+  // DOES gate is the pager swipe, which would otherwise walk straight past the question.
+  const plusOneNeedsName =
+    castMemberComplete(plusOneMember, false) && !finalizePartnerName(plusOneName);
   const removeCastMember = useOnboardingStore((s) => s.removeCastMember);
+  const removePartner = useOnboardingStore((s) => s.removePartner);
   const beginCastUpload = useOnboardingStore((s) => s.beginCastUpload);
   const endCastUpload = useOnboardingStore((s) => s.endCastUpload);
   const setScrollLocked = useOnboardingStore((s) => s.setScrollLocked);
@@ -357,11 +414,15 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
   // leaving the step aborts the in-flight upload + describe-photo call and
   // leaves a half-broken cast member. Onboarding pager only (the embedded
   // Edit Profile variant isn't in the pager and has no footer).
+  //
+  // …and while the +1 still needs a name, or the swipe would be a way past a question the
+  // Continue button asks. A guard on the button alone is only half a guard whenever the
+  // screen it guards can also be left by dragging it.
   useEffect(() => {
     if (embedded) return;
-    setScrollLocked(uploading !== null);
+    setScrollLocked(uploading !== null || plusOneNeedsName);
     return () => setScrollLocked(false);
-  }, [embedded, uploading, setScrollLocked]);
+  }, [embedded, uploading, plusOneNeedsName, setScrollLocked]);
 
   function getMember(role: CastRole): DreamCastMember | undefined {
     return dreamCast.find((m) => m.role === role);
@@ -653,7 +714,44 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
    */
   function handleNext() {
     const hasSelf = dreamCast.some((m) => m.role === 'self');
-    const hasPlusOne = dreamCast.some((m) => m.role === 'plus_one');
+    const plusOne = dreamCast.find((m) => m.role === 'plus_one');
+    const hasPlusOne = !!plusOne;
+
+    // A CAST PHOTO WITHOUT A NAME CANNOT BE SUMMONED (Kevin, 2026-09-22: "we need to make
+    // them name their partner during onboarding ... don't let them advance in the
+    // onboarding steps if they have an unnamed cast photo").
+    //
+    // The name used to be optional here, justified by a "default cast member" the user
+    // could point at instead — and that signposting came out of the app the same day, so
+    // a name is now the ONLY advertised way to cast a specific person. An unnamed +1 from
+    // onboarding was reachable by nothing the app still teaches, which is the exact state
+    // Settings already refuses to let you leave in.
+    //
+    // plusOneNeedsName is gated on the member being COMPLETE, not merely on the photo
+    // existing: the name field only appears once describe-photo has finished, so demanding
+    // a name before then would be asking for something there is nowhere to type.
+    if (plusOneNeedsName) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+      showAlert(
+        'Name Required',
+        'Give your +1 a name so you can cast them in a dream: "me and Ken at the beach".',
+        [
+          { text: 'Name them', style: 'cancel' },
+          {
+            text: 'Remove them',
+            style: 'destructive',
+            onPress: () => {
+              handleRemove('plus_one');
+            },
+          },
+        ],
+        // The same non-dismissible treatment the Settings roster uses: tapping the scrim
+        // would leave exactly the state this is here to prevent.
+        { dismissible: false }
+      );
+      return;
+    }
+
     if (hasSelf && hasPlusOne) {
       onNext();
       return;
@@ -686,9 +784,28 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
     uploadAbortRef.current?.abort();
     uploadAbortRef.current = null;
     removeCastMember(role);
+    if (role === 'plus_one') forgetPlusOne();
     setUploading(null);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     fdlog(`castUpload CANCELLED role=${role}`);
+  }
+
+  /**
+   * Removing the +1's photo removes the PERSON, roster row and all.
+   *
+   * The name lives on the roster row, not on the cast member, so clearing only the cast
+   * member left the name behind — re-upload and the new face inherited the old person's
+   * name (Kevin, 2026-09-22: "if i delete the photo for my +1 and then re-upload it, it
+   * restores the previous name ... should be a clean start each time").
+   *
+   * Worse than stale text: the orphaned row still holds the storage_path of the file we
+   * just deleted, and it is the roster that rebuilds the mirror. The next thing to call
+   * syncActivePartnerMirror (naming someone, toggling anything) would have resurrected the
+   * +1 from that row, pointing at a file that no longer exists.
+   */
+  function forgetPlusOne() {
+    const partner = primaryPartner(useOnboardingStore.getState().profile);
+    if (partner) removePartner(partner.id);
   }
 
   async function handleRemove(role: CastRole) {
@@ -702,6 +819,22 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
     // the Replicate layer. If storage delete fails, we keep the recipe
     // entry intact so the user can retry — they'll see the cast tile in
     // their UI unchanged.
+    // THE SAME INVARIANT FROM THE OTHER SIDE. Blocking the +1 upload until a self photo
+    // exists is only half a lock if the self photo can then be pulled out from under it —
+    // you would be right back at a +1 with nobody to dream alongside. The Settings roster
+    // refuses this too ("Your cast can't dream without you. Move them backstage first.");
+    // onboarding has no backstage, so here the escape is removing the +1.
+    if (role === 'self' && getMember('plus_one')) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+      Toast.show(
+        "Your +1 can't dream without you. Remove them first.",
+        'people-outline',
+        // 4s rather than the 3s default: a rule the user did not know about needs reading
+        // time, unlike a confirmation of something they just did.
+        4000
+      );
+      return;
+    }
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     const member = getMember(role);
     if (member && (member.storage_path || member.thumb_url)) {
@@ -713,6 +846,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
       }
     }
     removeCastMember(role);
+    if (role === 'plus_one') forgetPlusOne();
   }
 
   // When embedded (Edit Profile inline), skip the outer ScrollView, the
@@ -739,6 +873,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
           name={plusOneName}
           onNameChange={handleNameChange}
           onNameCommit={handleNameCommit}
+          lockedReason={slot.role === 'plus_one' && !selfReady ? 'Add your photo first' : undefined}
         />
       ))}
       <View style={s.privacyNote}>
@@ -892,6 +1027,12 @@ const s = StyleSheet.create({
   },
   uploadButtonText: {
     color: colors.accent,
+    fontSize: fontScale(14),
+    fontWeight: '600',
+  },
+  // Neutral, not accent: this is the button explaining why it is off, not inviting a tap.
+  uploadLockedText: {
+    color: colors.textSecondary,
     fontSize: fontScale(14),
     fontWeight: '600',
   },

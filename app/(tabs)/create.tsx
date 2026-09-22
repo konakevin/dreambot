@@ -2045,6 +2045,7 @@ export default function CreateScreen() {
       <CastPickerSheet
         visible={castPickerOpen}
         choice={config.castChoice}
+        self={castPreview.self}
         partners={castPreview.partners}
         onSelect={setCastChoice}
         onClose={() => setCastPickerOpen(false)}
