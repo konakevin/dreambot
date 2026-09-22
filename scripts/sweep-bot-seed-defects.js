@@ -65,26 +65,41 @@ const FAMILIES = [
     re: /\b(stacked in (?:thick )?(?:horizontal )?layers|stacked courses|cut faces|keystone|dressed stone|brickwork|coursed)\b/i,
   },
   {
+    // NARROWED 2026-09-22: scoped OFF character-path "composition" pools, where describing the
+    // subject's pose is correct (mecha_pilots_composition, druid_adventure_composition). The real
+    // defect is a SCENE camera/vantage pool describing the VIEWER, which paints a person.
     key: 'posture_verb_in_camera',
-    why: 'a camera entry describing the VIEWER’s posture paints a person in that posture',
-    scope: CAMERA,
+    why: 'a scene camera/vantage entry describing the VIEWER’s posture paints a person in that posture',
+    scope: /(vantage|_camera$|_camera_|camera_framing)/i,
     re: /\b(lying (?:low|flat|down)|sprawled|kneeling|crouching|crouched|perched on|sitting on|standing (?:in|on|at)|from the saddle of)\b/i,
   },
   {
+    // NARROWED 2026-09-22: excluded closeup/portrait/poster pools, which are close BY DESIGN
+    // (gothbot goth-closeup is a dark-seductress closeup path). The OceanBot rule is about a
+    // framing-as-LAW pool on a SCENE path dissolving the hero into a body part or texture.
     key: 'framing_macro',
-    why: 'framing-as-law entries that subordinate the hero to a body part or texture macro',
-    scope: CAMERA,
+    why: 'a scene framing pool that subordinates the hero to a body part or texture macro',
+    scope: /^(?!.*(closeup|portrait|poster)).*(camera_framing|_framing$|vantage)/i,
     re: /\b(extreme close|close-detail|close detail|macro on|polyp macro|glow detail|gripping|knuckles|fingers (?:curled|gripping|wrapped)|dissolving entirely|body dissolv|fills the frame entirely)\b/i,
   },
   {
+    // NARROWED 2026-09-22: architecture similes are PixelBot's charm and scored 5.0 ("a palm-thatch
+    // roof shaped like a wide hat"). The law only bites on natural forms (cloud, headland, rock),
+    // where the literal object is absurd.
     key: 'simile_literalized',
-    why: 'a simile or borrowed adjective renders the literal object (cloud like a whale -> a whale)',
+    why: 'a simile on a NATURAL form renders the literal object (cloud like a whale -> a whale)',
+    scope: /(sky|cloud|air|weather|landform|terrain|rock|shore|headland|vista|horizon|reflection)/i,
     re: /\b(shaped like a|curling like a|like a sleeping|as a (?:jewel|gem|bead|coin)|coins of (?:light|sunlight)|feathered streak)\b/i,
   },
   {
+    // NARROWED 2026-09-22 after sampling: the first cut flagged a snow-globe's "glass-clear dome
+    // of air", a charming "line of five water-beads on a petal edge" and "bleached white" coral
+    // rubble. Scoped to sky/light/hero axes, where a flat value is what actually makes a render
+    // boring, and the material false positives are excluded below.
     key: 'dullness',
-    why: 'the flattest value of every axis: blank sky, bleached light, rows of identical objects',
-    re: /\b(overcast sheet|clear dome|featureless (?:sheet|sky|expanse)|flat featureless|bleached (?:white|midday)|minimal shadow|a row of (?:five|six|four|equal)|a line of (?:five|six|four))\b/i,
+    why: 'the flattest value of a sky/light/hero axis: blank sky, bleached light, rows of identical objects',
+    scope: /(sky|light|backdrop|vista|scene|hero|subject|landform|horizon)/i,
+    re: /\b(overcast sheet|featureless (?:sheet|sky|expanse)|flat featureless|bleached (?:white|midday) (?:light|sky|sun)|minimal shadow|a row of (?:five|six|four|equal)|a line of (?:five|six|four) (?:identical|equal|matching))\b/i,
   },
   {
     key: 'heavy_blur',
@@ -105,12 +120,18 @@ const FAMILIES = [
     key: 'grim_on_cute_bot',
     why: 'Kevin quarantine audit 2026-09: dark gritty scenes on a bright-and-cute bot',
     bots: ['toybot', 'chibibot', 'yumbot', 'tinybot'],
-    re: /\b(gritty|grimdark|blood|gore|corpse|rotting|decaying|menacing|sinister|nightmarish|dread)\b/i,
+    // NARROWED 2026-09-22: "rotting log/stump" is ordinary woodland and "blood-moon" is an
+    // ordinary night sky. Both were flagged by the first cut. Require the grim word to attach to
+    // something that is actually grim.
+    re: /\b(grimdark|gore|corpse|cadaver|entrails|nightmarish|sinister|menacing (?:figure|shape|presence)|blood(?:y|-soaked| pool| smear)|rotting (?:flesh|carcass|corpse))\b/i,
   },
   {
+    // NARROWED 2026-09-22: restricted to the STRICT-HIGH-FANTASY bots. A flintlock pistol is canon
+    // for GothBot's vampire hunters (Bloodborne / Castlevania) and a sidearm is canon on StarBot,
+    // so flagging those was wrong. DragonBot's purge of 73 pirate/Greek seeds is the real rule.
     key: 'off_genre_trope',
-    why: 'Sonnet smuggles adjacent tropes in at scale; each one breaks the bot’s lane',
-    bots: ['dragonbot', 'faebot', 'gothbot', 'starbot', 'mangabot'],
+    why: 'off-genre tropes on a STRICT high-fantasy bot (pirates, firearms, Greek myth)',
+    bots: ['dragonbot', 'faebot'],
     re: /\b(tricorn|flintlock|musket|cutlass|treasure map|powdered wig|frock coat|pegasus|cerberus|cyclops|sphinx|revolver|pistol|cowboy)\b/i,
   },
   {
@@ -126,7 +147,11 @@ const FAMILIES = [
   },
 ];
 
-const ALLOW = /\b(dragonfl|saucer magnolia|solar disc|disc clears|plateau|crest of (?:the )?(?:ridge|hill|wave)|cresting)\b/i;
+// Verified-innocent matches, found by sampling the first sweep's output. Each one is a real
+// entry that reads correctly and must survive: a dragonfly, a saucer magnolia, the sun's disc,
+// a rotting log in a wood, a blood-moon eclipse, coral rubble bleached by the sea.
+const ALLOW =
+  /\b(dragonfl|saucer magnolia|solar disc|disc clears|plateau|crest of (?:the )?(?:ridge|hill|wave)|cresting|rotting (?:log|stump|wood|bark|leaves)|blood[- ]?moon|blood[- ]orange|clear dome of air|bleached white (?:fragments|coral|shell|bone|driftwood))\b/i;
 
 const textOf = (e) => {
   if (typeof e === 'string') return e;
