@@ -409,41 +409,29 @@ subject anatomy. Verify one render per new look before it ships.
 
 ---
 
-## 6. Step 2b: candidate buckets (Kevin strikes what he does not want)
+## 6. Step 2b: the FINAL bucket list (approved by Kevin 2026-09-22)
 
-A bucket is a named sub-theme inside one pool. Already how several pools are built: ChibiBot's
-`creature_adventures_scenes` is 7 buckets at 15 each (water-park, park-playground, pool-party,
-backyard-cookout, arcade, movie-theater, aquarium); YumBot's `meal_types_scenes` is 6 at 34 each
-(breakfast, high-tea, picnic, coffee-shop, food-truck, midnight-snack). Each bucket is seeded by its own
-focused Sonnet call at an equal share, per the standing rule. Every candidate below was checked against
-that bot's live paths and existing tags, so none duplicate current coverage.
+These are Kevin's cuts, verbatim. 75 buckets across 15 bots. A bucket is a named sub-theme seeded into
+an EXISTING pool by one focused Sonnet call at an equal share, 25 entries first, shadow-rendered for
+Kevin, then scaled to ~120 on his sign-off. `→` marks the path whose pool it extends.
 
-Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, then scale to ~120.
+EarthBot and OceanBot were dropped entirely: both are at their pool ceilings.
 
-### BloomBot
+### BloomBot (4)
 
-- [ ] alpine wildflower meadow
-- [ ] coastal cliff bloom over surf
-- [ ] orchid cloud-forest (epiphytes on mossy branches)
-- [ ] carnivorous bog (pitchers, sundew)
-- [ ] tundra bloom (short arctic season)
-- [ ] blossoming fruit orchard with petal drift
-- [ ] lavender or tulip terrace rows
-- [ ] floating flower barges on a canal
+- [ ] alpine wildflower meadow → new biome, no alpine coverage exists
+- [ ] coastal cliff bloom over surf → new
+- [ ] orchid cloud-forest, epiphytes on mossy branches → new
+- [ ] floating flower barges on a canal → `water-garden`
 
-### BrickBot
+### BrickBot (4)
 
-- [ ] airfield with biplanes
-- [ ] construction site (cranes, diggers)
-- [ ] harbor docks and container cranes
-- [ ] race day pit lane
-- [ ] circus big top
-- [ ] volcano research base
-- [ ] desert archaeology dig
-- [ ] stadium match day
-- Deliberately omitted: LEGO farm (FarmBot's lane by Kevin's call) and LEGO dino island (DinoBot's).
+- [ ] airfield with biplanes → new
+- [ ] hot air balloon festival and skies (launch parties, scenic) → new, Kevin's addition
+- [ ] circus big top → `theme-park` ⚠ see flag 1
+- [ ] desert archaeology dig → new
 
-### ChibiBot
+### ChibiBot (8) — all → `creature-adventures`, which is already tag-bucketed
 
 - [ ] train ride
 - [ ] ferry crossing
@@ -454,162 +442,120 @@ Process per survivor: 25 entries, shadow posts reviewed in the app, sign-off, th
 - [ ] hot-spring soak
 - [ ] stargazing at an observatory
 
-### DinoBot
+### DinoBot (7)
 
-- [ ] courtship display (crests, fans, feather display)
-- [ ] juvenile play
-- [ ] den and burrow life
-- [ ] undergrowth small-dino scale
-- [ ] tidal flat with tracks
-- [ ] amber forest (resin, conifers)
-- [ ] high desert dunes
-- [ ] mountain forest at the snowline
+- [ ] courtship display (crests, fans, feather display) → new
+- [ ] den and burrow life → new
+- [ ] undergrowth small-dino scale → new scale register
+- [ ] tidal flat with tracks → new
+- [ ] amber forest (resin, conifers) → new
+- [ ] high desert dunes → `paleo-landscape`
+- [ ] mountain forest at the snowline → `paleo-landscape`
 
-### DragonBot
+### FaeBot (6)
 
-- [ ] market day in a fantasy city
-- [ ] merchant caravan on a mountain road
-- [ ] cliff monastery
-- [ ] siege camp at night
-- [ ] tourney grounds
-- [ ] fjord fishing village
-- [ ] watchtower on a pass
-- [ ] battlefield aftermath (quiet, not gore)
+- [ ] autumn seed gathering → new
+- [ ] acorn boat regatta → new
+- [ ] mushroom apothecary interior → new, FaeBot has no interior register
+- [ ] star-charting on a hill → new
+- [ ] honey harvest → new
+- [ ] mossy bridge crossing → `enchanted-vista`
 
-### DreamBot (buckets go in the dream-world axis)
+### FarmBot (8)
 
-- [ ] origami paper world
-- [ ] music-box world
-- [ ] clockwork garden
-- [ ] mirror lake
-- [ ] balloon festival sky
-- [ ] bookshelf canyon
-- [ ] teacup archipelago
-- [ ] jellybean tide pools
+- [ ] apiary and beekeeping → new
+- [ ] lambing season → new
+- [ ] sheep-shearing day → new
+- [ ] hay baling in summer → new
+- [ ] dairy and cheesemaking → `artisan-workshop`
+- [ ] stable morning with horses → `barn-animal-shelter-interior`
+- [ ] greenhouse seedlings → `spring-planting-day`
+- [ ] herb-drying loft → `artisan-workshop`
 
-### FaeBot
+### GothBot (3)
 
-- [ ] autumn seed gathering
-- [ ] acorn boat regatta
-- [ ] mushroom apothecary interior
-- [ ] star-charting on a hill
-- [ ] honey harvest
-- [ ] mossy bridge crossing
-- [ ] sheltering from rainfall under leaves
-- [ ] first frost morning
+- [ ] catacomb library → `the-sanctum`
+- [ ] moonlit lake boat → `twilight-gothic`
+- [ ] glasshouse of black roses → `the-frost-garden` ⚠ see flag 2
 
-### FarmBot
+### MangaBot (4)
 
-- [ ] apiary and beekeeping
-- [ ] lambing season
-- [ ] sheep-shearing day
-- [ ] hay baling in summer
-- [ ] dairy and cheesemaking
-- [ ] stable morning with horses
-- [ ] greenhouse seedlings
-- [ ] herb-drying loft
-- Deliberately omitted: snow (first-snowfall was deactivated on purpose) and weddings (the noun drags
-  modern bridal imagery into any render).
+- [ ] onsen evening (yukata, exterior) → new
+- [ ] convenience store at night → `slice-of-life`
+- [ ] game-center arcade → new
+- [ ] cicada summer on shrine steps → `slice-of-life`
 
-### GothBot
+### PixelBot (9)
 
-- [ ] opera house box
-- [ ] bell tower vigil
-- [ ] séance parlour
-- [ ] catacomb library
-- [ ] moonlit lake boat
-- [ ] mourning portrait atelier
-- [ ] rain on a carriage window
-- [ ] glasshouse of black roses
+Tests for every PixelBot entry: does it duplicate an existing path, does it read whimsical/magical
+rather than realistic geography (that is EarthBot's lane), and does every axis carry a feature (the
+anti-dullness rule). Built furniture is NOT required: `pixel-vista`'s passing references are a dune sea,
+a slot canyon and an alpenglow peak.
 
-### MangaBot
+- [ ] castle town gate → new
+- [ ] desert oasis caravan → `pixel-vista`, with the caravan as the life accent
+- [ ] ice cavern → new, interiors are not covered by any vista path; needs a magical feature (a glowing heart) so it does not read as geology
+- [ ] volcano forge interior → new
+- [ ] observatory tower → new
+- [ ] moonlit lake → ⚠ see flag 3
+- [ ] floating market canal → new
+- [ ] balloon festival sky → `pixel-skyward`
+- [ ] Pan Am / Hawaiian retro airline travel-poster ads for tropical destinations, in pixels → ⚠ see flag 4
 
-- [ ] onsen evening (yukata, exterior)
-- [ ] convenience store at night
-- [ ] game-center arcade
-- [ ] ramen counter at midnight
-- [ ] cicada summer on shrine steps
-- [ ] sports club practice
-- [ ] new year shrine visit
-- [ ] karaoke box at night
+### SteamBot (5)
 
-### PixelBot
+- [ ] apothecary and chemist → `cozy-steampunk`
+- [ ] rooftop telegraph skyline → new
+- [ ] brass glasshouse botanicals → new
+- [ ] steam tram street → `steam-transport`
+- [ ] dirigible repair scaffold → `skydock-harbor`
 
-- [ ] castle town gate
-- [ ] desert oasis caravan
-- [ ] ice cavern
-- [ ] volcano forge interior
-- [ ] observatory tower
-- [ ] moonlit lake
-- [ ] floating market canal
-- [ ] misty bamboo path
-
-### StarBot
-
-- [ ] space elevator base
-- [ ] solar sail regatta
-- [ ] terminator line world (the day and night boundary)
-- [ ] pulsar observatory
-- [ ] Dyson swarm under construction
-- [ ] ocean moon under the ice
-- [ ] ringed shepherd moons
-- [ ] first landing on a colony world
-- Do NOT add buckets to `spacewalk`: its 60 entries are two deliberately locked registers (poised awe,
-  gliding momentum) after the chore-and-contortion purge.
-
-### SteamBot
-
-- [ ] pneumatic post office
-- [ ] printing press workshop
-- [ ] apothecary and chemist
-- [ ] rooftop telegraph skyline
-- [ ] brass glasshouse botanicals
-- [ ] steam tram street
-- [ ] watchmaker arcade
-- [ ] dirigible repair scaffold
-- Deliberately omitted: boiler room (the crisis-busywork register Kevin rejected).
-
-### TinyBot (no humans; each role must be cast affirmatively as a critter)
+### TinyBot (5) — ⚠ see flag 5, sequence these AFTER the story-beat rework
 
 - [ ] tiny library
 - [ ] tiny train station
-- [ ] tiny bakery
-- [ ] tiny bathhouse
 - [ ] tiny observatory
 - [ ] tiny greenhouse
 - [ ] tiny lighthouse
-- [ ] tiny teahouse
 
-### ToyBot
+### ToyBot (4)
 
-- [ ] paper-craft diorama
-- [ ] marble run contraption
-- [ ] pop-up book scene
-- [ ] bath toy flotilla
-- [ ] sand toy beachworks
-- [ ] kite and paper plane sky
-- [ ] puppet theatre stage
-- [ ] snow globe world
+- [ ] bath toy flotilla → new
+- [ ] sand toy beachworks → new
+- [ ] puppet theatre stage → new
+- [ ] snow globe world → new
 
-### YumBot
+### YumBot (8)
 
-- [ ] ramen counter at night
-- [ ] bakery at dawn
-- [ ] diner booth
-- [ ] ice cream parlor
-- [ ] hot pot table
-- [ ] sushi counter
-- [ ] brunch patio
-- [ ] bento lunchbox
+- [ ] bakery at dawn → `meal-types`
+- [ ] diner booth → `meal-types`
+- [ ] ice cream parlor → `meal-types`
+- [ ] brunch patio → `meal-types`
+- [ ] bento lunchbox → `meal-types`
+- [ ] ramen counter at night → `cuisine` (global cuisines, not meal occasions)
+- [ ] hot pot table → `cuisine`
+- [ ] sushi counter → `cuisine`
 
-### EarthBot and OceanBot (optional, buckets are the wrong instrument here)
+### Five flags to resolve before seeding
 
-Both are essentially at their pool ceilings (EarthBot has 2 content pools under 120, OceanBot 6). The
-honest gaps are regional or habitat rather than thematic.
-
-- [ ] EarthBot: Arabian desert / Himalayan high altitude / Madagascar or Socotra endemic flora
-- [ ] OceanBot: mangrove nursery / hydrothermal vents / sardine run / seagrass meadow / estuary river
-      mouth / tide-pool macro
+1. **BrickBot circus big top** overlaps `theme-park`, which already owns amusement-park and carnival.
+   Seed it as a bucket there and check the existing entries first, or it duplicates.
+2. **GothBot glasshouse of black roses** overlaps `the-frost-garden`, described as "a CURSED FROZEN
+   gothic GARDEN / CONSERVATORY — black-rose courts". Check that pool before seeding; it may already
+   be covered.
+3. **PixelBot moonlit lake** overlaps `pixel-harbor`'s moon-on-water reflections. Either seed it there
+   with a distinguishing feature, or cut.
+4. **PixelBot retro airline poster ads: two known traps.** (a) The pulp-femme lesson is that saying
+   "poster" or "cover" makes Flux render garbled title text, and PixelBot has its own version of this
+   (naming "LEGO Architecture Skylines" made it print SKYLINES on a building). A travel poster's charm
+   IS its lettering, which Flux cannot spell. (b) "Pan Am" is a live trademark; the BrickBot IP reversal
+   was explicitly BrickBot-scoped. Recommended approach: render the SCENE a travel poster would depict,
+   in poster-like composition and palette, with signage explicitly blank or pictorial, and no brand name
+   in the prompt. Needs Kevin's OK on that reframing.
+5. **TinyBot's five are sequenced AFTER the story-beat rework** (section 2b, Stage B2). TinyBot's live
+   defect is the always-on "extreme macro, extreme shallow depth" wrapper plus thin one-object seeds,
+   which is what produced the bare blurred renders Kevin flagged. Seeding five more places first would
+   inherit that defect.
 
 ---
 
