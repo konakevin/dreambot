@@ -52,7 +52,7 @@ import { detectCastRefs } from '@/lib/selfInsertDetect';
 import { useCastPreview } from '@/hooks/useCastPreview';
 import { CastFaceRow } from '@/components/CastFaceRow';
 import { CastPickerSheet } from '@/components/CastPickerSheet';
-import { castPreviewLabel } from '@/lib/castPreviewLabel';
+import { castPreviewLabel, castScenePlaceholder } from '@/lib/castPreviewLabel';
 import { showAiConsent } from '@/components/AiConsentSheet';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useDreamStore } from '@/store/dream';
@@ -837,16 +837,22 @@ export default function CreateScreen() {
   // Always present, never conditional. A chip that only appeared once the prompt
   // mentioned cast could not be used to ADD anyone — you would have to guess the magic
   // words before the control that teaches them would show up.
+  // Hoisted out of castFaces because the PLACEHOLDER names this person too, and the box
+  // telling you we will dream in someone the chip below is not showing would be the same
+  // class of lie the chip exists to prevent. One resolution, two readers.
+  const pinnedPartner = useMemo(() => {
+    const choice = config.castChoice;
+    return choice.kind === 'partner'
+      ? (castPreview.partners.find((x) => x.id === choice.id) ?? null)
+      : null;
+  }, [config.castChoice, castPreview.partners]);
+
   const castFaces = useMemo(() => {
     // A photo dream swaps the uploaded photo's face, not the roster, so the roster
     // preview would be describing a dream that is not being made.
     if (hasPhoto) return null;
 
     const choice = config.castChoice;
-    const pinnedPartner =
-      choice.kind === 'partner'
-        ? (castPreview.partners.find((x) => x.id === choice.id) ?? null)
-        : null;
 
     // An explicit pick overrides the prompt outright; auto follows it.
     const wantsSelf = choice.kind === 'auto' ? promptCastRoles.has('self') : true;
@@ -857,6 +863,10 @@ export default function CreateScreen() {
           ? pinnedPartner
           : promptCastRoles.has('plus_one')
             ? (castPreview.partners.find((x) => x.id === promptCastRefs.matchedPartnerId) ??
+              // STILL MIRRORS THE ENGINE. The UI no longer advertises "my partner" as a way
+              // to ask (2026-09-22), but the engine still resolves it to this member, so the
+              // chip has to keep resolving it too. A preview that stopped showing a face the
+              // render will still swap in would be the exact lie this chip exists to catch.
               castPreview.partners.find((x) => x.id === castPreview.defaultPartnerId) ??
               null)
             : null;
@@ -876,6 +886,7 @@ export default function CreateScreen() {
   }, [
     hasPhoto,
     config.castChoice,
+    pinnedPartner,
     promptCastRoles,
     promptCastRefs.matchedPartnerId,
     castPreview.partners,
@@ -889,11 +900,28 @@ export default function CreateScreen() {
   // DreamBot mode runs the engine: the no-photo box teaches the real-face system
   // (first-person + relationship words pull the user's dream-cast photos — self +
   // plus_one — into the render as a face swap).
+  //
+  // The AUTO line teaches NAMES now, not the relationship words it used to list (Kevin,
+  // 2026-09-22). A name is the stronger tool: relationship words all collapse to the same
+  // starred default, so only a name chooses WHO. Listing "my partner" and "my friend"
+  // spent most of the sentence on the half that cannot pick a person. Cut from 145
+  // characters to 76. NOTE the surprise-dream line went with it, and this box was the only
+  // place an empty prompt was taught to mean anything — that feature now goes untaught
+  // until it is surfaced somewhere else.
+  //
+  // An EXPLICIT pick gets a different line, because the question has changed. On Auto the
+  // prompt decides who appears, so the box has to teach that; once someone has picked from
+  // the sheet, repeating it would be instructions for a control they just finished using.
+  // All that is left to ask for is the scene (castScenePlaceholder).
   const placeholder = effectiveExactPrompt
     ? 'Describe any scene. Your prompt goes straight to the model. No Dream Cast, styles, or vibes in Direct mode.'
     : hasPhoto
       ? "Set the scene and we'll dream you into it. A glowing forest at dusk? Coffee in a Paris café? Leave blank and we'll pick the scene."
-      : 'Describe any dream. Mention "me", "my partner", or "my friend" to cast yourself or your plus-one in it. Or leave this blank for a surprise dream.';
+      : config.castChoice.kind === 'solo'
+        ? castScenePlaceholder(null)
+        : config.castChoice.kind === 'partner' && pinnedPartner
+          ? castScenePlaceholder(pinnedPartner)
+          : 'Describe any dream. Mention "me" or a cast member\'s name to place them in it.';
 
   // WHO is in this dream, rendered in the STICKY FOOTER rather than in the scrolling
   // form (Kevin, 2026-09-21: "showing the tip below the prompt box doesn't make it very
@@ -2018,7 +2046,6 @@ export default function CreateScreen() {
         visible={castPickerOpen}
         choice={config.castChoice}
         partners={castPreview.partners}
-        defaultPartnerId={castPreview.defaultPartnerId}
         onSelect={setCastChoice}
         onClose={() => setCastPickerOpen(false)}
       />

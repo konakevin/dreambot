@@ -73,7 +73,7 @@ export const CREATE_INFO: InfoStepConfig = {
       // Two identical icons in one list makes both cards harder to find again.
       icon: 'people-circle',
       title: 'Who’s in it',
-      body: 'Every dream stars you. Pick who joins you in the Cast field, or just name them: “me and Alex at the beach”. Say “my partner” and we use your default.',
+      body: 'Every dream stars you. Pick who joins you in the Cast field, or just name them in your prompt: “me and Ken at the beach”.',
     },
     {
       icon: 'color-wand',

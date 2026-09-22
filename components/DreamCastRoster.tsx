@@ -43,7 +43,6 @@ import { saveVibeProfile } from '@/lib/saveVibeProfile';
 import {
   newPartnerId,
   isPartnerEnabled,
-  primaryPartnerOf,
   isNameTaken,
   cleanPartnerNameInput,
   finalizePartnerName,
@@ -54,7 +53,7 @@ import { CastPhotoTip } from '@/components/CastPhotoTip';
 import { Toast } from '@/components/Toast';
 import { TitleText } from '@/components/TitleText';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
-import { CAST_RELATIONSHIPS, castRelationshipLabel } from '@/constants/castRelationships';
+import { CAST_RELATIONSHIPS } from '@/constants/castRelationships';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { MAX_DREAM_PARTNERS, type DreamPartner } from '@/types/vibeProfile';
 
@@ -155,7 +154,6 @@ export function DreamCastRoster({ onEditingChange }: DreamCastRosterProps) {
   const updatePartner = useOnboardingStore((st) => st.updatePartner);
   const removePartner = useOnboardingStore((st) => st.removePartner);
   const setPartnerEnabled = useOnboardingStore((st) => st.setPartnerEnabled);
-  const setPrimaryPartner = useOnboardingStore((st) => st.setPrimaryPartner);
   const beginCastUpload = useOnboardingStore((st) => st.beginCastUpload);
   const endCastUpload = useOnboardingStore((st) => st.endCastUpload);
 
@@ -538,17 +536,10 @@ export function DreamCastRoster({ onEditingChange }: DreamCastRosterProps) {
     showAlert(
       'Who shows up in a dream',
       'Type a name and we cast that person: "me and Steph at the beach" puts Steph in it. That is why every cast member needs a unique name.\n\n' +
-        'Say "my partner", "my friend" or "+1" instead and we cast your DEFAULT — the one starred below. That is also what Create\'s "Auto" setting follows.\n\n' +
-        'Nightly dreams ignore both and rotate through everyone switched on, so you wake up to a different pairing.',
+        'Or pick someone in the Cast field above the prompt, and they are in it whatever you type.\n\n' +
+        'Nightly dreams ignore both and rotate through everyone switched on here, so you wake up to a different pairing.',
       [{ text: 'Got it' }]
     );
-
-  const setPrimary = (p: DreamPartner) => {
-    if (p.id === primaryId) return;
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setPrimaryPartner(p.id);
-    persist();
-  };
 
   const toggleEnabled = (p: DreamPartner, on: boolean) => {
     // The same invariant from the other side. Without this you could remove your photo
@@ -605,14 +596,6 @@ export function DreamCastRoster({ onEditingChange }: DreamCastRosterProps) {
 
   const inDreams = partners.filter((p) => isPartnerEnabled(p, activeId));
   const notInDreams = partners.filter((p) => !isPartnerEnabled(p, activeId));
-  // Read through the SAME function the render mirror uses, never off `activeId`
-  // directly: the pointer can still name someone switched off (it is re-homed on
-  // the next sync, not on read), and a star on a backstage card would be a lie.
-  const primaryId = primaryPartnerOf(inDreams, activeId)?.id ?? null;
-  // With one person in your dreams they are necessarily the default, so the
-  // control would decorate a state that cannot be changed. It appears with the
-  // second member, which is also the first moment the question exists.
-  const showPrimary = inDreams.length > 1;
 
   /** What an in-flight upload is ACTUALLY doing. `busy` is set before the picker even
    *  opens, so a flat "Analyzing…" claimed we were reading a photo that did not exist
@@ -762,54 +745,17 @@ export function DreamCastRoster({ onEditingChange }: DreamCastRosterProps) {
               </TouchableOpacity>
             );
           })}
-          {/* THE DEFAULT +1. Deliberately NOT a pill: the pills to its left are
-              "pick one of two attributes", and a third pill-shaped thing would read
-              as a third relationship. Exactly one filled star among hollow ones is
-              the universal "pick one of these" pattern instead.
+          {/* NO DEFAULT STAR. Naming is how you cast someone now, so "the default +1" was
+              a second, quieter answer to a question a name already answers out loud — and
+              the only way to discover it was to read a badge (Kevin, 2026-09-22: "we don't
+              need the default cast member anymore ... we at least don't need to support it
+              in the UI signposting").
 
-              No new colour. The screen's four jobs (teal = in your dreams, purple =
-              relationship, pink = warning, neutral = structure) stay as they are:
-              the primary is marked by FILL and WEIGHT, which is the same answer the
-              repost rail landed on after every coloured treatment was worse.
-
-              BOTH states carry words (Kevin, 2026-09-21: "the star icon seems kinda
-              small/unnoticable"). A bare 15pt hollow glyph alone in the row's empty
-              right end read as decoration, not a control — there was nothing to aim
-              at and nothing saying a tap would do anything. The asymmetry now carries
-              the meaning instead of the visibility: the starred card names a STATE
-              ("Default in Create"), the others name the ACTION ("Make default").
-
-              "Default in Create", not "Create default" — Create is a verb, and the
-              badge has to scope itself because a bare "Default" implies it governs
-              nightlies too (it does not). */}
-          {isOn && showPrimary && (
-            <TouchableOpacity
-              style={s.primaryBtn}
-              onPress={() => setPrimary(p)}
-              hitSlop={12}
-              activeOpacity={0.7}
-              disabled={anyBusy}
-              accessibilityRole="button"
-              accessibilityState={{ selected: p.id === primaryId }}
-              accessibilityLabel={
-                p.id === primaryId
-                  ? `${p.name || castRelationshipLabel(p.relationship)} is your default plus one`
-                  : `Make ${p.name || castRelationshipLabel(p.relationship)} your default plus one`
-              }
-            >
-              <Ionicons
-                name={p.id === primaryId ? 'star' : 'star-outline'}
-                size={17}
-                color={p.id === primaryId ? colors.accentLight : colors.textSecondary}
-              />
-              <Text
-                style={[s.primaryLabel, p.id !== primaryId && s.primaryLabelOff]}
-                numberOfLines={1}
-              >
-                {p.id === primaryId ? 'Default in Create' : 'Make default'}
-              </Text>
-            </TouchableOpacity>
-          )}
+              `active_partner_id` itself is untouched: it is not only a Create tiebreaker,
+              it is part of the ENABLED test for legacy members (dreamCastRoster's
+              isPartnerEnabled) and nightly reads it through partnerRoll. The store keeps
+              pointing it at a sensible member on its own; what is gone is asking the user
+              to aim it. */}
         </View>
       </View>
     );
@@ -941,7 +887,7 @@ export function DreamCastRoster({ onEditingChange }: DreamCastRosterProps) {
                   <Text style={[s.panelHead, s.panelHeadLive, s.panelHeadFlush]}>
                     IN YOUR DREAMS
                   </Text>
-                  {showPrimary && (
+                  {inDreams.length > 0 && (
                     <TouchableOpacity
                       onPress={explainCasting}
                       hitSlop={14}
@@ -957,18 +903,15 @@ export function DreamCastRoster({ onEditingChange }: DreamCastRosterProps) {
                     </TouchableOpacity>
                   )}
                 </View>
-                {/* Two sentences for the two ways to ask, name first because that is
-                    the one nobody guesses. The nightly caveat moved into the info sheet
-                    beside the heading: people DO assume the star changes their nightlies
-                    (it does not, and should not — a nightly is a surprise that rotates
-                    through everyone here, a Create is a request), but that is the third
-                    thing to learn, not the first. Shown only alongside the control it
-                    explains. */}
-                {showPrimary && (
-                  <Text style={s.panelNote}>
-                    In Create, type a name to cast that person. On Auto, &ldquo;my partner&rdquo; or
-                    &ldquo;my friend&rdquo; casts whoever is your default below.
-                  </Text>
+                {/* One sentence now, for the one way to ask. It used to carry a second
+                    about "my partner" resolving to a starred default, which was the half
+                    nobody could guess and the half that could not choose a person. The
+                    nightly caveat lives in the info sheet beside the heading, because
+                    people DO assume this screen's controls change their nightlies (they do
+                    not, and should not — a nightly is a surprise that rotates through
+                    everyone here, a Create is a request). */}
+                {inDreams.length > 0 && (
+                  <Text style={s.panelNote}>In Create, type a name to cast that person.</Text>
                 )}
                 {inDreams.length > 0 ? (
                   inDreams.map(renderPartner)
@@ -1201,21 +1144,11 @@ const s = StyleSheet.create({
   // Pushed to the far end of the relationship row, which had dead space while the
   // card's top row was already carrying a switch plus two 44pt icon buttons. Padding
   // plus hitSlop take a 15pt glyph to Apple's 44pt minimum without moving anything.
-  primaryBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    marginLeft: 'auto',
-    paddingHorizontal: 6,
-    paddingVertical: verticalScale(7),
-  },
   // Accent purple, not white: white was a ninth colour on a screen whose own rule is four
   // jobs, and the star is a STATE marker, which is what the accent already means here.
-  primaryLabel: { color: colors.accentLight, fontSize: fontScale(12), fontWeight: '700' },
   // The action reads one step back from the state: same size, lighter weight, the
   // row's secondary text colour. Loud enough to find, quiet enough that four of them
   // never compete with the one that is actually set.
-  primaryLabelOff: { color: colors.textSecondary, fontWeight: '600' },
   // The one line of teaching on this screen, so it sits under the heading it
   // qualifies rather than floating as a tip.
   panelNote: {

@@ -31,6 +31,30 @@ function refer(member: LabelMember, leading: boolean): string {
   return leading ? 'Your friend' : 'your friend';
 }
 
+/**
+ * The prompt box's placeholder once the user has PICKED a cast from the sheet.
+ *
+ * On Auto the placeholder has to teach the mechanic ("mention me or a cast member's
+ * name"), because the prompt is what decides who appears. An explicit pick already
+ * answered that question, so repeating it there would be instructions for a control the
+ * user has just finished using. What is left to ask for is the scene — which is also
+ * the input the engine most wants, since a picked cast plus a place and an action is a
+ * complete brief (Kevin, 2026-09-22: "depending on which dropdown selection i make, we
+ * should update the placeholder text").
+ *
+ * Phrased to match the PHOTO placeholder's "Set the scene and we'll dream you into it",
+ * so the three states of this one box read as one voice rather than three authors.
+ *
+ * `null` means solo ("Just me"). An unnamed member falls back through `refer` to "your
+ * friend" / "your partner", which keeps the sentence true for legacy members who never
+ * got a name.
+ */
+export function castScenePlaceholder(plusOne: LabelMember | null): string {
+  return plusOne
+    ? `Describe the scene. We'll dream you and ${refer(plusOne, false)} into it.`
+    : "Describe the scene. We'll dream you into it.";
+}
+
 export function castPreviewLabel(hasSelf: boolean, plusOne: LabelMember | null): string {
   if (hasSelf && plusOne) return `You and ${refer(plusOne, false)}`;
   if (hasSelf) return 'You';

@@ -11,7 +11,17 @@
  * There is only ever one answer on screen.
  */
 
-import { View, StyleSheet, Modal, TouchableOpacity, ScrollView } from 'react-native';
+import { useState } from 'react';
+import {
+  View,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  ScrollView,
+  type NativeSyntheticEvent,
+  type NativeScrollEvent,
+} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { Text } from '@/components/AppText';
 import { CastAvatar } from '@/components/CastAvatar';
@@ -20,6 +30,12 @@ import { colors } from '@/constants/theme';
 import { isTabletDevice, verticalScale, fontScale } from '@/lib/responsive';
 import type { CastFaceRef } from '@/hooks/useCastPreview';
 import { castChoiceEquals, type CastChoice } from '@/lib/castChoiceRequest';
+
+/** How tall the option list may get before it scrolls. ONE constant, because the fade
+ *  that says "there is more below" is decided by comparing content height against it —
+ *  a second copy would drift and the fade would start lying in one direction or the
+ *  other. */
+const LIST_MAX_HEIGHT = verticalScale(300);
 
 /** What to call a roster member with no name of their own. */
 function fallbackLabel(member: CastFaceRef): string {
@@ -34,7 +50,6 @@ function Row({
   title,
   badge,
   subtitle,
-  isDefault,
 }: {
   selected: boolean;
   onPress: () => void;
@@ -46,8 +61,6 @@ function Row({
    *  annotating it. */
   badge?: string;
   subtitle?: string;
-  /** Marks the starred default so its subtitle reads as a badge, not a caption. */
-  isDefault?: boolean;
 }) {
   return (
     <TouchableOpacity
@@ -76,13 +89,8 @@ function Row({
           )}
         </View>
         {!!subtitle && (
-          // The DEFAULT marker earns a star and the accent colour; a plain grey caption
-          // made the one row that answers "which of these is my default?" look like any
-          // other subtitle. The star is deliberately the SAME symbol the Settings roster
-          // uses for the default, so it means one thing across both screens.
           <View style={s.rowSubtitleRow}>
-            {isDefault && <Ionicons name="star" size={10} color={colors.accentLight} />}
-            <Text style={[s.rowSubtitle, isDefault && s.rowSubtitleDefault]} numberOfLines={1}>
+            <Text style={s.rowSubtitle} numberOfLines={1}>
               {subtitle}
             </Text>
           </View>
@@ -97,7 +105,6 @@ export function CastPickerSheet({
   visible,
   choice,
   partners,
-  defaultPartnerId,
   onSelect,
   onClose,
 }: {
@@ -106,13 +113,29 @@ export function CastPickerSheet({
   /** Every roster member, switched on or not: picking someone is a direct request, and
    *  the switch governs the automatic paths (nightly rotation, the default) instead. */
   partners: CastFaceRef[];
-  defaultPartnerId: string | null;
   onSelect: (choice: CastChoice) => void;
   onClose: () => void;
 }) {
   const pick = (next: CastChoice) => {
     onSelect(next);
     onClose();
+  };
+
+  // IS THERE MORE BELOW? The list is capped so a full roster cannot push the sheet off a
+  // small phone, and at five cast members it is seven rows — but the cap happened to cut
+  // cleanly BETWEEN rows, so the list looked finished (Kevin, 2026-09-22: "they scroll off
+  // the dialog and it's not obvious you can scroll down"). Nothing on screen said
+  // otherwise, and `bounces={false}` had removed the one free cue.
+  //
+  // Tracked rather than assumed, because the answer changes with the roster size, the
+  // device and the scroll position: a permanent fade would be lying to the four people
+  // whose list fits, and a fade that stayed put at the bottom would lie to everyone.
+  const [more, setMore] = useState(false);
+  const onScrollGeometry = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const { contentOffset, contentSize, layoutMeasurement } = e.nativeEvent;
+    // 4pt of slack: iOS reports fractional offsets, so an exact comparison leaves the
+    // fade flickering on at the very bottom.
+    setMore(contentOffset.y + layoutMeasurement.height < contentSize.height - 4);
   };
 
   return (
@@ -126,53 +149,73 @@ export function CastPickerSheet({
       <TouchableOpacity style={s.overlay} activeOpacity={1} onPress={onClose}>
         <TouchableOpacity style={s.card} activeOpacity={1}>
           <Text style={dialogText.title}>Pick your dream cast</Text>
-          {/* "On Auto, your prompt decides" was misleading (Kevin, 2026-09-21): "the
-              prompt doesn't decide, it just references whoever is the default partner
-              regardless if we say my wife, my friend, my partner ... but it does honor
-              names". Every relationship word collapses to the same plus-one slot, so only
-              a NAME changes who. Saying so is both the honest version and the only place
-              the name feature is taught. */}
+          {/* NAMES ONLY. This used to teach "my friend" / "my partner" as a second way to
+              ask, which was the half that could not actually choose anybody: every
+              relationship word collapses to the same plus-one slot, so only a NAME changes
+              who is in the dream (Kevin, 2026-09-22: "we don't want to support that ... we
+              are only using the cast member naming now"). The engine still understands
+              those phrases; we simply stop advertising a worse way to ask.
+
+              So the two rows below are the two real choices: let the prompt decide, or
+              decide here and ignore the prompt. */}
           <Text style={dialogText.body}>
-            On Auto you can use names or phrases like &ldquo;my friend&rdquo; or &ldquo;my
-            partner&rdquo; to reference your default cast member.
+            On Auto, type someone&rsquo;s name in your prompt to cast them. Or pick below and they
+            are in it whatever you type.
           </Text>
 
-          <ScrollView style={s.list} contentContainerStyle={s.listInner} bounces={false}>
-            <Row
-              selected={castChoiceEquals(choice, { kind: 'auto' })}
-              onPress={() => pick({ kind: 'auto' })}
-              icon="text-outline"
-              // Says so in the row itself rather than only by being pre-selected: the sheet
-              // opens on whatever you picked LAST, so a returning user sees the tick on their
-              // own choice and nothing tells them which one this screen was built around
-              // (Kevin, 2026-09-21). Capitalised to match the AI model picker's "Recommended.".
-              title="Auto"
-              badge="(Recommended)"
-              subtitle="My default, or a name I type"
-            />
-            <Row
-              selected={castChoiceEquals(choice, { kind: 'solo' })}
-              onPress={() => pick({ kind: 'solo' })}
-              icon="person-outline"
-              title="Just me"
-            />
-            {partners.map((p) => (
+          {/* The fade sits OVER the list, so the wrapper is what the layout sees. */}
+          <View style={s.listWrap}>
+            <ScrollView
+              style={s.list}
+              contentContainerStyle={s.listInner}
+              // Bounce is the second half of the answer: the fade advertises the extra rows
+              // before you touch anything, the rubber band confirms them the moment you do.
+              // It was off, which cost a cue and bought nothing.
+              onContentSizeChange={(_w, h) => setMore(h > LIST_MAX_HEIGHT + 4)}
+              onScroll={onScrollGeometry}
+              scrollEventThrottle={16}
+            >
               <Row
-                key={p.id}
-                selected={castChoiceEquals(choice, { kind: 'partner', id: p.id })}
-                onPress={() => pick({ kind: 'partner', id: p.id })}
-                member={p}
-                title={`You and ${p.name ?? fallbackLabel(p).toLowerCase()}`}
-                subtitle={p.id === defaultPartnerId ? 'Your default' : undefined}
-                isDefault={p.id === defaultPartnerId}
+                selected={castChoiceEquals(choice, { kind: 'auto' })}
+                onPress={() => pick({ kind: 'auto' })}
+                icon="text-outline"
+                // Says so in the row itself rather than only by being pre-selected: the sheet
+                // opens on whatever you picked LAST, so a returning user sees the tick on their
+                // own choice and nothing tells them which one this screen was built around
+                // (Kevin, 2026-09-21). Capitalised to match the AI model picker's "Recommended.".
+                title="Auto"
+                badge="(Recommended)"
+                subtitle="Whoever I name in my prompt"
               />
-            ))}
-            {partners.length === 0 && (
-              <Text style={s.empty}>
-                Add loved ones to your Dream Cast in Settings and they can star in your dreams.
-              </Text>
+              <Row
+                selected={castChoiceEquals(choice, { kind: 'solo' })}
+                onPress={() => pick({ kind: 'solo' })}
+                icon="person-outline"
+                title="Just me"
+              />
+              {partners.map((p) => (
+                <Row
+                  key={p.id}
+                  selected={castChoiceEquals(choice, { kind: 'partner', id: p.id })}
+                  onPress={() => pick({ kind: 'partner', id: p.id })}
+                  member={p}
+                  title={`You and ${p.name ?? fallbackLabel(p).toLowerCase()}`}
+                />
+              ))}
+              {partners.length === 0 && (
+                <Text style={s.empty}>
+                  Add loved ones to your Dream Cast in Settings and they can star in your dreams.
+                </Text>
+              )}
+            </ScrollView>
+            {more && (
+              <LinearGradient
+                colors={[`${colors.surface}00`, colors.surface]}
+                style={s.listFade}
+                pointerEvents="none"
+              />
             )}
-          </ScrollView>
+          </View>
 
           <TouchableOpacity onPress={onClose} activeOpacity={0.7} style={s.close}>
             <Text style={dialogText.buttonSecondary}>Close</Text>
@@ -203,7 +246,18 @@ const s = StyleSheet.create({
   },
   // Capped so a full roster plus the two fixed options cannot push the sheet past the
   // screen on a small phone; it scrolls instead.
-  list: { maxHeight: verticalScale(300) },
+  list: { maxHeight: LIST_MAX_HEIGHT },
+  listWrap: { position: 'relative' },
+  // Short enough to read as an edge treatment rather than a dimmed row, tall enough that
+  // the clipped row underneath is unmistakably a row. pointerEvents none, so it never eats
+  // a tap meant for the option it is sitting on.
+  listFade: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: verticalScale(28),
+  },
   listInner: { gap: verticalScale(6) },
   row: {
     flexDirection: 'row',
@@ -239,7 +293,6 @@ const s = StyleSheet.create({
   rowTitle: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
   rowSubtitleRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   rowSubtitle: { color: colors.textMuted, fontSize: fontScale(12), fontWeight: '600' },
-  rowSubtitleDefault: { color: colors.accentLight, fontWeight: '700' },
   empty: {
     color: colors.textMuted,
     fontSize: fontScale(13),

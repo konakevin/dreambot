@@ -249,12 +249,16 @@ function CastSlot({
                     every user who never opened Settings — the single most important
                     cast member, and the only one most people have.
 
-                    OPTIONAL on purpose, not a gate. The star already answers "whoever";
-                    a name is what lets someone say "me and Steph" instead. Blocking the
-                    funnel over it would cost more than it buys, so this asks and moves
-                    on. Only offered once describe-photo has finished, because naming
-                    seeds the roster row from this member and a half-analyzed row would
-                    strand Settings with a member that has no description. */}
+                    OPTIONAL on purpose, not a gate: blocking the funnel over it would cost
+                    more than it buys, so this asks and moves on. ⚠️ That trade got worse on
+                    2026-09-22, when the default-cast-member signposting came out of the UI:
+                    a name is now the ONLY advertised way to cast a specific person, so an
+                    unnamed +1 from onboarding can be summoned by nothing the app still
+                    teaches. Settings requires a name; this step does not.
+
+                    Only offered once describe-photo has finished, because naming seeds the
+                    roster row from this member and a half-analyzed row would strand
+                    Settings with a member that has no description. */}
                 {isComplete && (
                   <>
                     <Text style={s.relLabel}>Their name</Text>

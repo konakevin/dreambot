@@ -7,7 +7,7 @@
  * right and the render is not. Neither throws, so only tests catch them.
  */
 
-import { castPreviewLabel } from '@/lib/castPreviewLabel';
+import { castPreviewLabel, castScenePlaceholder } from '@/lib/castPreviewLabel';
 import { castChoiceRequest, castChoiceEquals, type CastChoice } from '@/lib/castChoiceRequest';
 import { useDreamStore } from '@/store/dream';
 
@@ -134,5 +134,53 @@ describe('reset() keeps the cast pick', () => {
     st.setCastChoice({ kind: 'auto' });
     st.reset();
     expect(useDreamStore.getState().config.castChoice).toEqual({ kind: 'auto' });
+  });
+});
+
+/**
+ * THE PROMPT BOX ASKS A DIFFERENT QUESTION ONCE THE CAST IS PICKED.
+ *
+ * On Auto the prompt is what decides who appears, so the placeholder has to teach that
+ * ("mention me or a cast member's name"). An explicit pick from the sheet has already
+ * answered it, and repeating the instruction there would be teaching a control the user
+ * just finished using. What is left to ask for is the scene (Kevin, 2026-09-22:
+ * "depending on which dropdown selection i make, we should update the placeholder text").
+ */
+describe('castScenePlaceholder', () => {
+  it('asks for the scene, in the same voice as the photo placeholder', () => {
+    // The photo box already says "Set the scene and we'll dream you into it". Three
+    // states of one box should read as one voice, not three authors.
+    expect(castScenePlaceholder(null)).toBe("Describe the scene. We'll dream you into it.");
+  });
+
+  it('names the picked member', () => {
+    expect(castScenePlaceholder({ name: 'Stephie', relationship: 'friend' })).toBe(
+      "Describe the scene. We'll dream you and Stephie into it."
+    );
+  });
+
+  it('reproduces a name exactly, never re-casing it', () => {
+    // Same rule castPreviewLabel follows: a name is reproduced byte for byte however it
+    // was typed, because "mcKenna" is somebody's actual spelling.
+    expect(castScenePlaceholder({ name: 'mcKenna' })).toContain('you and mcKenna into it');
+  });
+
+  it('falls back to the relationship for a member who was never named', () => {
+    // Legacy members only: naming is required for anyone added now.
+    expect(castScenePlaceholder({ relationship: 'partner' })).toBe(
+      "Describe the scene. We'll dream you and your partner into it."
+    );
+    expect(castScenePlaceholder({ relationship: 'friend' })).toBe(
+      "Describe the scene. We'll dream you and your friend into it."
+    );
+  });
+
+  it('treats a whitespace-only name as no name', () => {
+    expect(castScenePlaceholder({ name: '   ', relationship: 'friend' })).toContain('your friend');
+  });
+
+  it('stays mid-sentence lowercase on the fallback', () => {
+    // "We'll dream you and Your friend into it" would read as a proper noun.
+    expect(castScenePlaceholder({ relationship: 'friend' })).not.toContain('Your friend');
   });
 });
