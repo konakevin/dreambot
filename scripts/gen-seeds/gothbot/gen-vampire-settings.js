@@ -3,6 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_settings.json',
   total: 100,
+  append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
   batch: 12,
   metaPrompt: (
     n

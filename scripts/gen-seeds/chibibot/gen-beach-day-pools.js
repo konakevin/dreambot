@@ -21,6 +21,7 @@ const DIR = 'scripts/bots/chibibot/seeds/';
   await generatePool({
     outPath: DIR + 'chibibot_beach_day_activity.json',
     total: 50,
+    append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
     batch: 25,
     metaPrompt: (n) => `You are writing ${n} ACTIVITY phrases for ChibiBot's creature-beach-day path — what a little band of chibi creature FRIENDS is doing TOGETHER at a real-world beach. The specific animals come from a SEPARATE axis, so do NOT name any species — use "they / their / the friends" for the group.
 
@@ -42,6 +43,7 @@ HARD BANS: NO species names, NO humans or people anywhere (background figures ar
   await generatePool({
     outPath: DIR + 'chibibot_beach_day_detail.json',
     total: 35,
+    append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
     batch: 25,
     metaPrompt: (n) => `You are writing ${n} SETTING DETAILS for ChibiBot's creature-beach-day path — concrete beach elements that build the PLACE in the midground/background (the template stacks THREE per render for a lived-in beach).
 
@@ -63,6 +65,7 @@ HARD BANS: NO humans or people anywhere (any background figures are tiny chibi a
   await generatePool({
     outPath: DIR + 'chibibot_beach_day_prop.json',
     total: 24,
+    append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
     batch: 24,
     metaPrompt: (n) => `You are writing ${n} small PROP charms for ChibiBot's creature-beach-day path — a little object one of the chibi creature friends holds or wears.
 
@@ -85,6 +88,7 @@ HARD BANS: NO humans, NO weapons. Keep it wholesome and tiny. Return ONLY a JSON
   await generatePool({
     outPath: DIR + 'chibibot_beach_day_surprise.json',
     total: 24,
+    append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
     batch: 24,
     metaPrompt: (n) => `You are writing ${n} SURPRISE background details for ChibiBot's creature-beach-day path — a tiny tucked-away delightful detail in the midground/background of a beach.
 

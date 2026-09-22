@@ -3,6 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mechbot/seeds/cyborg_male_internal.json',
   total: 25,
+  append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
   batch: 25,
   metaPrompt: (
     n

@@ -83,7 +83,7 @@ const RECIPES = [
     outPath: path.join(SEEDS_DIR, 'farmbot_duck_pond_scenes.json'),
     total: 100,
     batch: 20,
-    append: false,
+    append: true,
     banHumanLanguage: true,
     metaPrompt: (n) => `Generate ${n} distinct FARM-POND ANIMAL-LIFE scene
 descriptions for a cozy farm-life bot. This is "the duck pond" path — a
@@ -130,7 +130,7 @@ ${STANDING_BANS.replace('${n}', String(n))}`,
     outPath: path.join(SEEDS_DIR, 'farmbot_duck_pond_feeding.json'),
     total: 20,
     batch: 20,
-    append: false,
+    append: true,
     banHumanLanguage: true,
     metaPrompt: (n) => `Generate ${n} distinct "FEEDING THE DUCKS" scene
 descriptions for a cozy farm-life bot's duck-pond path (this is content

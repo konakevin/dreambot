@@ -3,6 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/yumbot_meal_types_companions.json',
   total: 25,
+  append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} TINY COMPANION descriptions for YumBot meal-types renders. Each companion is a tiny kawaii creature or critter that sits near (NOT on top of) the kawaii food subject as a small delight — bird / bug / animal / plushie / paper-craft / sprite. They scale-prove the cuteness without stealing the scene.
 

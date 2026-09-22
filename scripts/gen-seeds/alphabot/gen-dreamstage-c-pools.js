@@ -13,6 +13,7 @@ const DIR = 'scripts/bots/alphabot/seeds/';
   await generatePool({
     outPath: DIR + 'alphabot_pocket_planets_scene.json',
     total: 25,
+    append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
     batch: 25,
     metaPrompt: (
       n
@@ -44,6 +45,7 @@ JSON array of ${n} strings. No preamble, no numbering.`,
   await generatePool({
     outPath: DIR + 'alphabot_pocket_planets_sky.json',
     total: 25,
+    append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
     batch: 25,
     metaPrompt: (
       n
@@ -60,6 +62,7 @@ JSON array of ${n} strings. No preamble, no numbering.`,
   await generatePool({
     outPath: DIR + 'alphabot_dream_express_scene.json',
     total: 25,
+    append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
     batch: 25,
     metaPrompt: (
       n
@@ -91,6 +94,7 @@ JSON array of ${n} strings. No preamble, no numbering.`,
   await generatePool({
     outPath: DIR + 'alphabot_dream_express_sky.json',
     total: 25,
+    append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
     batch: 25,
     metaPrompt: (
       n
@@ -107,6 +111,7 @@ JSON array of ${n} strings. No preamble, no numbering.`,
   await generatePool({
     outPath: DIR + 'alphabot_cloud_harbor_scene.json',
     total: 25,
+    append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
     batch: 25,
     metaPrompt: (
       n
@@ -138,6 +143,7 @@ JSON array of ${n} strings. No preamble, no numbering.`,
   await generatePool({
     outPath: DIR + 'alphabot_cloud_harbor_sky.json',
     total: 25,
+    append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
     batch: 25,
     metaPrompt: (
       n
@@ -154,6 +160,7 @@ JSON array of ${n} strings. No preamble, no numbering.`,
   await generatePool({
     outPath: DIR + 'alphabot_dreamscape_nocturne_scene.json',
     total: 25,
+    append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
     batch: 25,
     metaPrompt: (
       n
@@ -185,6 +192,7 @@ JSON array of ${n} strings. No preamble, no numbering.`,
   await generatePool({
     outPath: DIR + 'alphabot_dreamscape_nocturne_sky.json',
     total: 25,
+    append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
     batch: 25,
     metaPrompt: (
       n

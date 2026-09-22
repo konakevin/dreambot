@@ -2,10 +2,13 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 
 // Total + append: tune for iteration vs prod.
-//   Quick iteration: TOTAL=25 APPEND=false (overwrites — fast smoke test)
-//   Production:      TOTAL=200 APPEND=false (full regen)
+//   Quick iteration: TOTAL=25 APPEND=false (overwrites — fast smoke test, destructive)
+//   Production:      TOTAL=200 (grows to 200, keeping approved entries — the default)
 const TOTAL = parseInt(process.env.TOTAL, 10) || 25;
-const APPEND = process.env.APPEND === 'true';
+// Default is GROW (append). A destructive full regen is opt-in with APPEND=false, because in a
+// shared repo the safe path has to be the default: overwriting throws away approved entries and
+// silently resets the pool's shuffle-bag rotation.
+const APPEND = process.env.APPEND !== 'false';
 
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/miniature_dungeon_scenes.json',

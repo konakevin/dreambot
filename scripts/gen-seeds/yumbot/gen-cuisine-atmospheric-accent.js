@@ -3,6 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/yumbot_cuisine_atmospheric_accent.json',
   total: 25,
+  append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC ACCENT moments for YumBot cuisine renders. Each entry is a tiny atmospheric flourish — steam from a pasta bowl / sugar dust on patisserie / cinnamon shake on bun / saffron-dust drift / mint-tea steam curl / etc.
 

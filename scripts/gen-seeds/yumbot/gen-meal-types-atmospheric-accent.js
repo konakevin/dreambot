@@ -3,6 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/yumbot_meal_types_atmospheric_accent.json',
   total: 25,
+  append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC ACCENT moments for YumBot meal-types renders. Each entry is a tiny atmospheric flourish that makes the scene feel ALIVE — steam wisps, sparkle particles, drifting flour dust, butter melt-drip, syrup pour mid-air, condensation beads, neon haze, candle flicker, etc.
 

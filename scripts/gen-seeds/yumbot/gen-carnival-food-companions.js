@@ -3,6 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/yumbot_carnival_food_companions.json',
   total: 25,
+  append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} TINY COMPANION descriptions for YumBot carnival-food renders. Each companion is a tiny kawaii critter / sprite contextually fit to carnival scenes (carnival-bird / midway-mouse / circus-cat / sparkle-sprite).
 

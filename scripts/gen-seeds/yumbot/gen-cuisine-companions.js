@@ -3,6 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/yumbot_cuisine_companions.json',
   total: 25,
+  append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} TINY COMPANION descriptions for YumBot cuisine renders. Each companion is a tiny kawaii critter / plushie / sprite near the kawaii food subject — culturally hint-coded where possible (a tiny mouse for French / a parakeet for Indian / a koi for Korean, etc.) but generic-cute fallbacks work too.
 

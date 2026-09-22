@@ -3,6 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/yumbot_fruits_veggies_companions.json',
   total: 25,
+  append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} TINY COMPANION descriptions for YumBot fruits-and-veggies renders. Each companion is a tiny kawaii critter / sprite hint-coded to the organic environment (garden snail / bee / butterfly / forest mushroom-sprite / market pigeon / orchard squirrel / etc.).
 

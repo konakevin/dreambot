@@ -12,7 +12,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 
 const TOTAL = parseInt(process.env.TOTAL, 10) || 40;
-const APPEND = process.env.APPEND === 'true';
+// Default is GROW (append). A destructive full regen is opt-in with APPEND=false, because in a
+// shared repo the safe path has to be the default: overwriting throws away approved entries and
+// silently resets the pool's shuffle-bag rotation.
+const APPEND = process.env.APPEND !== 'false';
 
 generatePool({
   outPath: 'scripts/bots/tinybot/seeds/biome_axis.json',

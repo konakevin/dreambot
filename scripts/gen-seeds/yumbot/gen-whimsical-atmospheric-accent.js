@@ -3,6 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/yumbot_whimsical_atmospheric_accent.json',
   total: 25,
+  append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC ACCENT moments for YumBot whimsical-concept renders. Each entry is a tiny atmospheric flourish that makes the scene feel ALIVE — flashbulb pop, sparkle particles, drifting bubbles, steam from spa, musical-note swirl, chalk dust, confetti, etc.
 

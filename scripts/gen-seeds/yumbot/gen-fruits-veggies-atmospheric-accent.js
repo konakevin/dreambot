@@ -3,6 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/yumbot_fruits_veggies_atmospheric_accent.json',
   total: 25,
+  append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC ACCENT moments for YumBot fruits-and-veggies renders. Each entry is a small atmospheric flourish — pollen drift / dew-sparkle / falling leaf / blossom-shower / forest-spore drift / market-haze.
 

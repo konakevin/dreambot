@@ -3,6 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/yumbot_places_companions.json',
   total: 25,
+  append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} TINY COMPANION descriptions for YumBot unexpected-places renders. Each companion is a tiny kawaii critter / plushie / sprite, contextually hint-coded to the venues where possible (snail for greenhouse / library-mouse / aquarium-fish / etc.).
 

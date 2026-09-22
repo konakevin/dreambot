@@ -4,7 +4,7 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_foe.json',
   total: 30,
   batch: 30,
-  append: false,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (
     n

@@ -12,6 +12,11 @@
  * The fix path is the surgical harness (fix-earthbot-clouds.js / fix-dragonbot-human-language.js):
  * rewrite ONLY flagged entries, re-validate, retry once, then drop.
  *
+ * NOT a family here, deliberately: brand / trademark lookalikes. Kevin dropped de-branding
+ * enforcement fleet-wide on 2026-09-22 ("relax the debranding restrictions all around, we no
+ * longer care about enforcing that, let the prompts or renders fall where they may"). Funko,
+ * Barbie, Sackboy, Star Wars and Disney references are all fine now. Do not re-add this family.
+ *
  * Families are SCOPED so we do not flag correct usage: "disc" is wrong on a cloud and right on
  * the sun, "perched" is wrong on a fish and right on a bird, posture verbs are wrong in a camera
  * pool and right in an action pool.
@@ -108,15 +113,6 @@ const FAMILIES = [
     re: /\b(extreme shallow depth|heavy blur|heavily blurred|blurred into|dissolving into bokeh|out of focus|extreme macro lens)\b/i,
   },
   {
-    // brickbot is deliberately EXCLUDED: Kevin reversed the LEGO-Star-Wars ban on 2026-09-22
-    // ("the fair use laws for lego and those properties is fine for now"), so pop-culture IP is in
-    // scope there. This family is about knockoff-looking toys on the non-LEGO bots.
-    key: 'ip_lookalike',
-    why: 'Kevin quarantine audit 2026-09: toys that read as trademarked characters (brickbot exempt)',
-    bots: ['toybot', 'chibibot', 'yumbot'],
-    re: /\b(sackboy|mouse[- ]ear|mickey|minnie|disney|pixar|funko|pop ?mart|care bear|transformers|pokemon|hello kitty|barbie|lego star wars|x-wing|stormtrooper|mandalorian|jedi)\b/i,
-  },
-  {
     key: 'grim_on_cute_bot',
     why: 'Kevin quarantine audit 2026-09: dark gritty scenes on a bright-and-cute bot',
     bots: ['toybot', 'chibibot', 'yumbot', 'tinybot'],
@@ -150,14 +146,31 @@ const FAMILIES = [
 // Verified-innocent matches, found by sampling the first sweep's output. Each one is a real
 // entry that reads correctly and must survive: a dragonfly, a saucer magnolia, the sun's disc,
 // a rotting log in a wood, a blood-moon eclipse, coral rubble bleached by the sea.
+// Added after the first rewrite pass lost a little precision on two of them: a "sundial shell" is a
+// real species (Architectonica), not a timepiece, and a "22° halo" genuinely IS a ring, so calling
+// it an arc is less accurate than the original.
 const ALLOW =
-  /\b(dragonfl|saucer magnolia|solar disc|disc clears|plateau|crest of (?:the )?(?:ridge|hill|wave)|cresting|rotting (?:log|stump|wood|bark|leaves)|blood[- ]?moon|blood[- ]orange|clear dome of air|bleached white (?:fragments|coral|shell|bone|driftwood))\b/i;
+  /\b(dragonfl|saucer magnolia|solar disc|disc clears|plateau|crest of (?:the )?(?:ridge|hill|wave)|cresting|rotting (?:log|stump|wood|bark|leaves)|blood[- ]?moon|blood[- ]orange|clear dome of air|bleached white (?:fragments|coral|shell|bone|driftwood)|sundial shell|sundial shells|\d+°\s*halo)\b/i;
 
 const textOf = (e) => {
   if (typeof e === 'string') return e;
   if (e && typeof e === 'object') return e.description || e.text || e.entry || e.scene || e.name || '';
   return String(e ?? '');
 };
+
+/** Does this entry trip this family, in this pool, on this bot? Shared with the fixer. */
+function matches(fam, bot, pool, text) {
+  if (fam.bots && !fam.bots.includes(bot)) return null;
+  if (fam.scope && !fam.scope.test(pool)) return null;
+  const m = String(text).match(fam.re);
+  if (!m || ALLOW.test(m[0])) return null;
+  return m[0];
+}
+
+module.exports = { FAMILIES, ALLOW, matches };
+
+// Required for its rules (by fix-bot-seed-defects.js) rather than run: stop here.
+if (require.main !== module) return;
 
 let wiredIndex = null;
 if (WIRED) {

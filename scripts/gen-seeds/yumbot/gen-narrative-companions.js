@@ -3,6 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/yumbot_narrative_companions.json',
   total: 25,
+  append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} TINY COMPANION descriptions for YumBot narrative-action renders. Each companion is a tiny kawaii critter / plushie / sprite, contextually hint-coded to the action scenes (kitchen-mouse for baking / garden-bee for harvest / shop-cat for window / parade-bird for parade / tea-party-mouse / delivery-fairy).
 

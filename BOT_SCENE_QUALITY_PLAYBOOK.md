@@ -3281,8 +3281,10 @@ The biggest discovery of the BrickBot migration. Flux's "LEGO MOC photography" t
 > STILL OUT — that is a render-quality rule (photoreal-drift kills the "everything is brick" signal),
 > not an IP rule. And the taste calibration still holds: Kevin's heart set was 10/10 iconic LEGO
 > heritage, 0 hard-SF, so allowing pop-culture IP must not crowd out Classic Space / Blacktron / M-Tron
-> / Ice Planet. **This reversal is BrickBot-scoped** and does not clear ToyBot's trademark-lookalike
-> flags (a mouse-ear vinyl figure was in Kevin's own quarantine list).
+> / Ice Planet. **EXTENDED FLEET-WIDE 2026-09-22:** Kevin dropped de-branding enforcement on every bot
+> ("relax the debranding restrictions all around, we no longer care about enforcing that, let the
+> prompts or renders fall where they may"). ToyBot's Funko / Barbie / Sackboy paths stay exactly as
+> they are, and no bot needs brand references stripped.
 
 The superseded rule, kept for history:
 

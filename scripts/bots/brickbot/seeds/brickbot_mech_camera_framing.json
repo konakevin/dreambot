@@ -93,7 +93,7 @@
   "HANGAR-GANTRY-LOOKING-UP — camera nestled between Technic-beam catwalk supports angling upward at the mech being armored, a crew-minifig welder sparking in mid-ground, overhead rod-light strips raking down",
   "HANGAR-CRANE-OVERHEAD — camera mounted high on the gantry rail looking down at the mech's open back-panel, two technician-minifigs suspended on harnesses, the hangar floor grid a vast drop below",
   "HANGAR-SIDE-GANTRY-CLOSE — camera at catwalk level beside the mech's shoulder-plate, a Technic-pin wrench floating in foreground, the mech's full torso filling mid-ground, hangar bay doors cracked open behind",
-  "COCKPIT-HATCH-PILOT-EGRESS — camera framing the open cockpit hatch edge-on, pilot-minifig mid-climb gripping the brick rim, the mech's greebled chest plating spread wide below, battle-scarred terrain distant",
+  "COCKPIT-HATCH-PILOT-EGRESS — camera framing the open cockpit hatch edge-on, pilot-minifig mid-climb with head and upper body clearly readable above the brick rim, the mech's greebled chest plating spread wide below, battle-scarred terrain distant.",
   "COCKPIT-SIDE-OPEN-CHEST — camera hovering beside the hinged cockpit door at chest height, the interior control-stud panel visible inside, a second mech looming in the far background across the brick battlefield",
   "COCKPIT-HATCH-GROUND-ANGLE — camera low and to the side as the cockpit clamshell swings open, pilot-minifig descending a clip-on ladder, the mech's full leg-column stretching downward into foreground shadow",
   "SHOULDER-CANNON-BARREL-CLOSE — camera inches from the shoulder-mounted cannon muzzle, trans-orange charge glowing inside the barrel tip, the mech's wide armored chest spread below, smoking battlefield in distance",
@@ -103,7 +103,7 @@
   "FOOT-STOMP-CRATER-LOW — camera planted in a tile-crater foreground, the mech's studded sole hovering overhead mid-frame, a fleeing supply vehicle tiny in the distant right background",
   "ANKLE-JOINT-SIDE-MACRO — camera tight on the Technic-pin ankle assembly from ground level, a minifig crew beside it rendered ant-sized, the mech's full knee and thigh stack ascending out of frame",
   "BATTLEFIELD-WIDE-LOW-SWEEP — camera scraping the brick battlefield floor, shattered tile fragments scattered in foreground, three mechs mid-stride across mid-ground, a burning supply-depot silhouetted on the far horizon",
-  "BATTLEFIELD-MULTI-MECH-WIDE — camera low at rubble level shooting across a broad brick plain, two mechs trading fire on the left, a third crouching behind a plate-stack barricade on the right, smoke-tiles rising",
+  "BATTLEFIELD-MULTI-MECH-WIDE — camera set low at rubble level shooting across a broad brick plain, two mechs trading fire on the left, a third positioned behind a plate-stack barricade on the right, smoke-tiles rising",
   "BATTLEFIELD-CHARGE-WIDE — camera low behind a lead mech's heel as it charges forward, two enemy mechs waiting in the mid-ground, tiny minifig infantry scattered across the brick terrain between them",
   "PILOT-HUD-COCKPIT-OUT — camera placed inside the cockpit canopy looking outward through the trans-clear brick windscreen, control studs framing the lower view, an opposing mech looming large in the external mid-ground",
   "PILOT-INTERIOR-FORWARD — camera behind the pilot-minifig's helmet looking through the brick canopy bow, HUD-sticker panels flanking the foreground sides, a charging enemy titan filling the canopy center ahead",
@@ -126,7 +126,7 @@
   "HANGAR-GANTRY-LOOKING-UP — camera between Technic-beam catwalk supports angled up at the mech being armored, a welder-minifig's trans-orange spark-burst mid-ground, overhead floodlight panels raking down the greebled hull",
   "HANGAR-CRANE-OVERHEAD-RIG — camera under a Technic crane-arm mid-frame, armored chest-plate suspended on chains mid-ground, mech's open torso-cavity below filled with crew-minifigs fitting internals",
   "HANGAR-FLOOR-LOOKING-UP — camera at hangar-floor baseplate between two landing-struts, the mech looming overhead in full silhouette, a checkerboard tile floor receding to distant hangar-door in background",
-  "COCKPIT-HATCH-PILOT-OUT — camera tight at open chest-hatch, pilot-minifig mid-egress gripping the hatch-lip foreground, the mech's entire greebled chest-panel filling three-quarters of the frame behind",
+  "COCKPIT-HATCH-PILOT-OUT — camera pulled to chest-height showing the open chest-hatch, pilot-minifig mid-egress with helmet and torso clearly visible above the hatch-lip, the mech's entire greebled chest-panel filling three-quarters of the frame behind",
   "COCKPIT-SIDE-CHEST-OPEN — camera level with the open cockpit-bay, ejected canopy-panel foreground left, pilot half-out mid-ground, the mech's towering shoulder-stack and battlefield stretching behind",
   "COCKPIT-EGRESS-LOW-ANGLE — camera below the open hatch shooting upward, pilot-minifig dangling from ladder-rungs mid-frame, the mech's barrel-chest and raised weapon-arm dominating the upper background",
   "SHOULDER-CANNON-BARREL-DOWN — camera perched near the shoulder-mounted cannon barrel, looking down along its length at the mech's spread chest below, tiny ground-crew minifigs ant-sized at the feet proving scale",
@@ -160,7 +160,7 @@
   "HANGAR-SIDE-SCAFFOLD — camera from a scaffold-platform level with the mech's shoulder, Technic-arm crane swinging a chest-plate into position foreground, the hangar's full bay depth receding behind the titan",
   "HANGAR-BELLY-SERVICE — camera low beneath the mech looking up at exposed undercarriage Technic innards, two service-minifigs clinging to a pipe-run, the hangar ceiling grid framing the top",
   "COCKPIT-HATCH-EGRESS — camera close to the open chest-hatch, pilot-minifig mid-climb with one leg still inside, the greebled cockpit interior visible behind, the mech's armored torso filling the entire frame",
-  "COCKPIT-SIDE-OPEN-WIDE — camera at cockpit-height beside the open hatch, pilot leaning out gripping the frame, the mech's full shoulder-to-hip visible left, a burning brick outpost smouldering in the background",
+  "COCKPIT-SIDE-OPEN-WIDE — camera at cockpit-height beside the open hatch, pilot leaning out with face and torso visible above the frame, the mech's full shoulder-to-hip silhouette clear on the left, a burning brick outpost smouldering in the background.",
   "COCKPIT-CHEST-REVEAL — camera just below the open cockpit bay looking up into it, exposed wiring and a seated pilot visible inside, the mech's neck-joint and sensor-head crowning the top of frame",
   "SHOULDER-CANNON-HIGH — camera mounted near the shoulder-cannon barrel looking down across the mech's armored chest, the cannon's trans-blue charging cell foreground, a distant enemy mech tiny below",
   "SHOULDER-MOUNT-BARREL-END — camera at the cannon muzzle aiming along the barrel across the mech's broad chest, two tiny crewmen securing ammunition blocks, a cratered battlefield stretching below",
@@ -198,5 +198,5 @@
   "SHOULDER-CANNON-BARREL — camera hugged beside the massive shoulder-mounted barrel, its brick-studded length pointing hard left, the mech's chest and opposite arm dropping away below into battlefield foreground debris",
   "SHOULDER-MOUNT-HIGH-ANGLE — lens perched just above the shoulder-cannon housing, twin barrels aimed toward the horizon, the mech's head-unit mid-frame and distant enemy titan a tiny silhouette far right",
   "SHOULDER-WEAPON-CREW — camera behind a crew-minifig loading a round into the shoulder-cannon breech, the weapon's muzzle extending into smoky mid-ground, the second mech target visible at extreme background",
-  "LEG-FOOT-MACRO-STOMP — extreme low at brick-foot level, each stud on the sole filling the foreground, a minifig technician crouched at ankle-joint dwarfed, the mech's leg column climbing out of frame"
+  "LEG-FOOT-MACRO-STOMP — extreme low at brick-foot level, each stud on the sole filling the foreground, a minifig technician at ankle-joint dwarfed, the mech's leg column climbing out of frame"
 ]

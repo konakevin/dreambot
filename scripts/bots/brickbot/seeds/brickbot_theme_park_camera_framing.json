@@ -91,7 +91,7 @@
   "FERRIS-WHEEL-GONDOLA-EDGE — camera perched at the gondola lip looking inward along the spoke-array, painted hub medallion centered, the whole brick park layout visible in the wheel's open heart",
   "FERRIS-WHEEL-GROUND-RING — camera resting on the boarding-platform rail, wheel-base machinery in sharp foreground, gondolas climbing the far arc, string-lit ticket-booth glowing stage-left",
   "MIDWAY-DOWN-THE-GAME-ROW — camera low at shin-height down the striped-stall lane, prize-wall plush-stacks and string-lights receding to a vanishing-point arch, minifig crowds pressing either side",
-  "MIDWAY-DUCK-POND-ANGLE — camera crouched behind the rubber-duck trough, ring-toss booth mid-ground, balloon-arch spanning the lane beyond, prize-banners flapping from every stall cornice",
+  "MIDWAY-DUCK-POND-ANGLE — camera set low behind the rubber-duck trough, ring-toss booth mid-ground, balloon-arch spanning the lane beyond, prize-banners flapping from every stall cornice",
   "MIDWAY-PRIZE-WALL-CLOSEUP — camera nosing into a towering prize-wall of brick-built stuffed creatures, barker minifig gesturing at mid-ground, the ski-ball alley receding behind neon stall-lights",
   "RIDE-ENTRANCE-THROUGH-THE-ARCH — camera just inside the park-entrance gate, ornate brick arch overhead, ticket-booth flanking left, midway lane stretching deep with ride-silhouettes beyond",
   "RIDE-ENTRANCE-COASTER-GATE — camera at queue-rail level through the coaster-entrance totem-arch, track loop visible mid-ground, loading-platform awning and waiting minifig rows beyond",
@@ -132,7 +132,7 @@
   "MIDWAY-DOWN-THE-GAME-ROW — camera low at shin-height down the striped-stall lane, prize-walls and string-lights receding to a vanishing-point arch, minifig crowds pressing in from either side, balloon clusters bobbing above",
   "MIDWAY-PRIZE-WALL-STARE — camera tight on the near stall's towering plush-brick prize-wall, the operator minifig mid-pitch, lane receding behind showing three more stalls and a distant coaster fin cutting the skyline",
   "MIDWAY-RING-TOSS-ANGLE — camera at bottle-top level looking down the ring-toss counter, glass bottles in tight rows, the lane stretching back past dart-throw booths, carnival-stripe canopies forming a color tunnel overhead",
-  "RIDE-ENTRANCE-ARCH-THROUGH — camera standing at the park's main gate, brick arch overhead spelling the park name in giant stud-letters, midway corridor receding with ferris wheel centered dead in the vanishing distance",
+  "RIDE-ENTRANCE-ARCH-THROUGH — camera placed at the park's main gate, brick arch overhead spelling the park name in giant stud-letters, midway corridor receding with ferris wheel centered dead in the vanishing distance",
   "RIDE-ENTRANCE-TICKET-BOOTH — camera low behind the ticket-booth window, the entry arch framing a minifig family approaching, coaster silhouette visible over the arch parapet, string-light garlands swaying above the queue lane",
   "RIDE-ENTRANCE-DARK-RIDE-DOOR — camera at the padded dark-ride entrance doors, neon-stud signage overhead, brick car disappearing through the rubber flaps, waiting-queue minifigs snaking back into the outdoor midway behind",
   "OVERHEAD-AERIAL-FULL-PARK — camera directly overhead at maximum altitude, the entire brick park laid flat below, coaster spine a white squiggle, ferris wheel a perfect circle, midway a striped spine bisecting the plot",
@@ -170,7 +170,7 @@
   "FERRIS-WHEEL-GROUND-RING — camera at the boarding-platform level, one empty gondola filling the foreground frame, the rising wheel curving upward behind it, string-light garlands looping spoke to spoke",
   "MIDWAY-DOWN-THE-GAME-ROW — camera low at shin-height down the striped-stall lane, prize-walls and string-lights receding to a vanishing-point arch, minifig crowds pressing in on either side",
   "MIDWAY-BALLOON-DART-STALL — camera behind the dart-board wall looking outward along the game-row lane, balloon clusters framing the shot, the ferris wheel visible at the far midway terminus",
-  "MIDWAY-RING-TOSS-ANGLE — camera crouched at bottle-ring level down a tilted stall counter, ring projectiles mid-arc, prize-stuffed shelves towering behind the vendor minifig, the lane receding beyond",
+  "MIDWAY-RING-TOSS-ANGLE — camera set at bottle-ring level down a tilted stall counter, ring projectiles mid-arc, prize-stuffed shelves towering behind the vendor minifig, the lane receding beyond",
   "RIDE-ENTRANCE-ARCH-GATE — camera just inside the park's main entrance gate looking inward, iron-brick arch overhead, the midway corridor stretching deep with ride silhouettes receding to a bright center plaza",
   "RIDE-ENTRANCE-COASTER-QUEUE — camera low inside the coaster queue-house tunnel, zigzag rope-stanchions leading toward the loading-platform, the coaster lift-hill visible through the far boarding-gate opening",
   "RIDE-ENTRANCE-FUNHOUSE-DOOR — camera at the funhouse entry door threshold looking in, warped neon-brick walls framing a crooked interior corridor, the exit arch glowing at the distorted far end",
@@ -198,5 +198,5 @@
   "FUNHOUSE-MAZE-JUNCTION — camera at a four-way mirror-maze junction, brick reflections multiplying infinitely in all directions, a single disoriented minifig frozen at the center deciding which reflected path is real",
   "FIREWORKS-UP-SHOT-PARK-CENTER — camera flat at park-center flagpole base looking straight up, brick firework-burst rosettes exploding overhead, the ferris wheel and coaster silhouetted against the lit sky around them",
   "LOG-FLUME-SPLASH-MOMENT — camera locked at the splash-pool's edge as the log-car hits the water-plate at the bottom of the plunge, bow-wave of clear-brick water sheets outward, drenched minifigs arms raised",
-  "COASTER-POV-CREST-RAIL — camera pinned at the front-car tip-over point, lap-bar gripping minifigs silhouetted against open air, the entire brick midway sprawling in steep forced-perspective below the plunge rail"
+  "COASTER-POV-CREST-RAIL — camera pinned at the front-car tip-over point, minifigs silhouetted in their seats against open air, the entire brick midway sprawling in steep forced-perspective below the plunge rail"
 ]

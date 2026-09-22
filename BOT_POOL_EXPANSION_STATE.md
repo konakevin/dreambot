@@ -379,7 +379,20 @@ already >=20% same-idea (cap those at +50 or split the recipe). Topping the 177 
 | chibibot | 10    | 995            |           |       |                |
 
 - [x] 1a: purge the exact duplicates — DONE 2026-09-22, 5,164 entries out of 225 pools, $0
-- [ ] 1b: top up the 177 clean wired pools toward 200
+- [ ] 1b: top up the clean wired pools toward 200. **Generator coverage audited 2026-09-22**
+      (`node scripts/audit-seed-recipe-coverage.js --wired /tmp/wiring.json --max 120`). Of 254 thin
+      wired content pools, excluding the private/broken bots: - **107 grow safely today** via a monolithic recipe: `node scripts/gen-<bot>-pool.js --pool X
+      --count 100` means exactly +100. Biggest holders: mechbot 32, gothbot 20, bloombot 14,
+      starbot 11, brickbot 10. - **24 grow safely** via a `gen-seeds/**` script that already passes `append: true`:
+      `SEED_TOTAL=<current+100> node <script>`. - **51 are `gen-seeds/**`scripts that default to`append: false`, i.e. OVERWRITE.** Running
+      one naively DESTROYS its proven entries. Each needs `append: true`set first. yumbot (33)
+      and farmbot (12) hold most of these.
+    - **43 have NO committed generator at all** and cannot be batch-grown: 17 are PixelBot scene
+      pools (verified: nothing in`scripts/`references`pixelbot_pixel_vista_landform`and
+      friends, so the 2026-09-19 scale-up was done with uncommitted in-session scripts), plus
+      small satellites like`faebot_druid_companion`(12) and`faebot_forest_elder_story_beat`
+      (22). These need a recipe authored before they can grow, which is real work rather than a
+      batch, so they are the last thing to do in Stage C, not the first.
 - [ ] Re-count all touched pools, re-run stragglers
 - [ ] Step 0 dedupe + defect sweep, fix findings
 - [ ] 3 verification renders per touched bot (shadow posts, reviewed in the app)

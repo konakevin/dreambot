@@ -3,6 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/yumbot/seeds/yumbot_fast_food_companions.json',
   total: 25,
+  append: true, // grow-to-N. WITHOUT this, generatePool OVERWRITES the pool.
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} TINY COMPANION descriptions for YumBot fast-food renders. Each companion is a tiny kawaii critter / sprite contextually hint-coded to fast-food scenes (sidewalk pigeon / diner-cat / drive-thru-bird / counter-mouse / curb-squirrel).
 

@@ -15,6 +15,9 @@
  *   --shadow          # with --post: post HIDDEN (shadow=true, is_public/is_posted=false),
  *                     # even for a LIVE path — the standing rule for test batches
  *   --dry-run         # skip flux + download (brief-only debug)
+ *   --pool-override SYMBOL=file.json[,SYM2=f2.json]
+ *                     # swap a pool's contents IN MEMORY for this run only — the way to QA a new
+ *                     # BUCKET, whose 25 entries would otherwise surface in only a fraction of rolls
  *
  * Examples:
  *   node scripts/iter-bot.js --bot gothbot --count 10 --mode random --label smoke
@@ -80,6 +83,42 @@ function arg(name, fallback) {
     if (mode !== 'random' && mode !== 'mixed') forced[mode] = model;
     bot.modelByPath = forced;
     console.log(`⚡ model forced to: ${model}`);
+  }
+
+  // Force pool override — swap a pool's contents IN MEMORY for this run only.
+  //   --pool-override SYMBOL=path/to/entries.json[,SYMBOL2=...]
+  //
+  // Why this exists: QA on a new BUCKET is otherwise impossible to target. A bucket is 25 new
+  // entries inside an existing pool, so it only surfaces in a fraction of rolls and a 6-render
+  // batch might show it once. The alternative — temporarily truncating the live seed file — would
+  // corrupt a real post if the hourly dispatcher fired mid-test. This mutates the loaded array in
+  // place (pools.js exports the array by reference, and require() is cached, so the engine sees
+  // it) and never touches disk.
+  const poolOverride = arg('pool-override', null);
+  if (poolOverride && typeof poolOverride === 'string') {
+    const pools = require(path.resolve(`scripts/bots/${botName}/pools.js`));
+    for (const spec of poolOverride.split(',')) {
+      const [symbol, file] = spec.split('=').map((x) => (x || '').trim());
+      const target = pools[symbol];
+      if (!Array.isArray(target)) {
+        console.error(`--pool-override: ${botName} has no array pool named "${symbol}"`);
+        process.exit(2);
+      }
+      let next;
+      try {
+        next = JSON.parse(require('fs').readFileSync(file, 'utf8'));
+      } catch (err) {
+        console.error(`--pool-override: cannot read ${file}: ${err.message}`);
+        process.exit(2);
+      }
+      if (!Array.isArray(next) || !next.length) {
+        console.error(`--pool-override: ${file} must be a non-empty JSON array`);
+        process.exit(2);
+      }
+      target.length = 0;
+      target.push(...next);
+      console.log(`⚡ pool ${symbol} overridden in memory: ${next.length} entries from ${file}`);
+    }
   }
 
   const outDir = `/tmp/${botName}-${label}`;
