@@ -74,15 +74,34 @@ differently.
    nohup eas build --local -p ios --profile production --non-interactive \
      --output ./build-<X.Y.Z>.ipa > /tmp/eas-build-<X.Y.Z>.log 2>&1 &
    ```
-   Poll the log until the IPA lands (~15-30 min). A plain `run_in_background` Bash call may be
-   permission-denied here — the detached `nohup … &` form launches and returns immediately.
-5. **Submit:**
+   A plain `run_in_background` Bash call may be permission-denied for the LAUNCH itself — the
+   detached `nohup … &` form launches and returns immediately.
+
+   **Then ARM A WATCH on it and carry straight on to the submit when it lands. Do NOT check
+   the log once and hand back a "still building" status** (Kevin, 2026-09-22: "why didn't you
+   catch it and auto submit it on your own? this is supposed to happen during the release
+   skill process"). The build takes 15-30 min, and a status report parks the pipeline until he
+   thinks to ask — the IPA sat finished for minutes that way. Immediately after launching:
+   ```sh
+   # Bash tool, run_in_background: true — completion re-invokes you
+   until ! ps -p <pid> >/dev/null 2>&1; do sleep 5; done; echo DONE; tail -20 /tmp/eas-build-<X.Y.Z>.log
+   ```
+   Watch the SUBMIT the same way. The whole pipeline through step 7 runs without him prompting
+   between steps; the first thing he should have to do is the ASC web UI.
+5. **Verify the IPA before submitting** — `unzip` it and confirm `CFBundleShortVersionString`
+   is the version you just tagged AND that the env vars actually baked in (a real `phc_…`
+   PostHog key and the Supabase project ref present in the bundle, no literal
+   `$EXPO_PUBLIC_*`). `eas.json`'s `"$VAR"` form only expands for legacy secrets, and a
+   clobber ships analytics dead to a release build with nothing in the log to say so
+   (`project_eas_env_literal_clobber`). Takes seconds; catches a whole release.
+
+6. **Submit:**
    ```sh
    eas submit -p ios --profile production --path ./build-<X.Y.Z>.ipa --non-interactive
    ```
-6. **Log the row in `RELEASES.md`** — build number from `eas build:list --limit 1`, status
+7. **Log the row in `RELEASES.md`** — build number from `eas build:list --limit 1`, status
    "Submitted (processing at Apple)" for now.
-7. **Write the App Store release notes and hand them to Kevin — every submit, unasked**
+8. **Write the App Store release notes and hand them to Kevin — every submit, unasked**
    (Kevin, 2026-09-19). The moment the submit lands, produce the "What's New" text for this
    version and print it IN CHAT as a plain bulleted list he can paste straight into ASC. Do not
    bury it in a file, and do not wait to be asked.
@@ -97,14 +116,14 @@ differently.
      Fold it into one benefit line ("Better nightly dreams"), never a changelog of the engine.
    - **Length:** 4-7 bullets. Lead with the headline feature, close with a polish/reliability
      line that sweeps up the small stuff.
-   - The `RELEASES.md` row (step 6) stays the ENGINEERING record — detailed, internal, with
+   - The `RELEASES.md` row (step 7) stays the ENGINEERING record — detailed, internal, with
      migration numbers. These notes are the opposite audience. Never paste one into the other.
-8. **Hand off to Kevin, explicitly:** attach the processed build to the version in ASC,
+9. **Hand off to Kevin, explicitly:** attach the processed build to the version in ASC,
    screenshots (iPhone 6.7" required; iPad 13" required — `supportsTablet: true` — slots only
    appear after an iPad-capable build processes), review notes, **Submit for Review**. Apple's
    24-48h clock doesn't start until that click. Tell him this plainly rather than implying the
    release is "done" — it isn't, until Apple approves.
-9. **Once Kevin confirms it's live / "Ready for Sale" in ASC** (you have no way to poll this
+10. **Once Kevin confirms it's live / "Ready for Sale" in ASC** (you have no way to poll this
    yourself — wait for him to say so): update the `RELEASES.md` row status to "Released," then
    run the app update gate decision above (soft nudge is the safe default), then continue to
    the feature-launch section below if this release ships a gated feature.
