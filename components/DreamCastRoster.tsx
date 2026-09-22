@@ -458,6 +458,11 @@ export function DreamCastRoster() {
   // The escape hatch is REMOVE, not skip: if you do not want to name them, you did not
   // want them in your cast.
   const unnamed = unnamedPartners(useOnboardingStore.getState().profile);
+
+  // The swipe gesture is disabled by the SCREEN (app/settings/dream-cast.tsx), which
+  // already owns it for the analyzing case — two effects calling setOptions on the same
+  // screen would fight and the last one mounted would win. This listener is the backstop
+  // for the header chevron and Android's hardware back, where beforeRemove works cleanly.
   useEffect(() => {
     if (unnamed.length === 0) return;
     const sub = navigation.addListener('beforeRemove', (e) => {
@@ -466,10 +471,13 @@ export function DreamCastRoster() {
       const still = unnamedPartners(useOnboardingStore.getState().profile);
       if (still.length === 0) return;
       e.preventDefault();
-      const who = still.length === 1 ? 'one cast member' : `${still.length} cast members`;
+      const who =
+        still.length === 1
+          ? 'Someone in your cast still needs a name.'
+          : `${still.length} of your cast still need names.`;
       showAlert(
         'Name your cast first',
-        `You have ${who} without a name. Naming them is how you say “me and them” in a dream — without it they can only show up as your default.`,
+        `${who} A name lets you say “me and Alex at the beach” in a dream.`,
         [
           { text: 'Name them', style: 'cancel' },
           {
@@ -742,10 +750,10 @@ export function DreamCastRoster() {
           {/* Three panels, one shape. Each section's heading lives INSIDE its panel,
           above a divider, so the label is visibly attached to the rows it names
           instead of floating over them. The coloured left rail is the section's
-          identity: purple for you, teal for the cast that appears in dreams,
+          identity: pink for you, teal for the cast that appears in dreams,
           neutral for the ones sitting out. */}
           <View style={s.panel}>
-            <Text style={[s.panelHead, s.panelHeadSelf]}>YOU</Text>
+            <Text style={[s.panelHead, s.panelHeadLive]}>YOU</Text>
             {self ? (
               <View style={[s.member, s.row]}>
                 <CastThumb
@@ -818,7 +826,9 @@ export function DreamCastRoster() {
             <>
               <View style={s.panel}>
                 <View style={s.panelHeadRow}>
-                  <Text style={[s.panelHead, s.panelHeadOn, s.panelHeadFlush]}>IN YOUR DREAMS</Text>
+                  <Text style={[s.panelHead, s.panelHeadLive, s.panelHeadFlush]}>
+                    IN YOUR DREAMS
+                  </Text>
                   {showPrimary && (
                     <TouchableOpacity
                       onPress={explainCasting}
@@ -967,9 +977,13 @@ const s = StyleSheet.create({
     borderBottomColor: DIVIDER,
   },
   panelHeadFlush: { borderBottomWidth: 0 },
-  panelHeadSelf: { color: colors.accentLight },
+  // ONE green for both LIVE sections (Kevin, 2026-09-21). YOU and IN YOUR DREAMS are the
+  // two groups that actually appear in dreams, so they share the colour that already means
+  // exactly that on this screen — the same teal as the switches. Giving them different
+  // hues implied a distinction that does not exist. BACKSTAGE keeps the muted neutral,
+  // which is the real distinction: it is the group that does NOT appear.
+  panelHeadLive: { color: IN_DREAMS.color },
   // The ONLY teal besides the switch, and it means the same thing the switch does.
-  panelHeadOn: { color: IN_DREAMS.color },
   // Members are rows inside the panel, divided by the same hairline as the heading.
   member: { padding: verticalScale(12) },
   memberDivided: { borderBottomWidth: 1, borderBottomColor: DIVIDER },

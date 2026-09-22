@@ -62,7 +62,18 @@ export const CREATE_INFO: InfoStepConfig = {
     {
       icon: 'sparkles',
       title: 'DreamBot mode',
-      body: 'Mention yourself (“me”) or your +1 (“my partner”) and your Dream Cast is painted right into the dream. Add styles and vibes to shape the look.',
+      body: 'Describe any dream and we build it around you. Add styles and vibes to shape the look.',
+    },
+    {
+      // Added 2026-09-21. The old DreamBot card said "your +1 (my partner)", written when
+      // there was exactly one partner and no way to choose. There is now a roster of up to
+      // five, a Cast field above the prompt, and typing a NAME casts that specific person —
+      // none of which was mentioned anywhere a user would meet it.
+      // A DIFFERENT people glyph from "Cast any photo" below, which already uses `people`.
+      // Two identical icons in one list makes both cards harder to find again.
+      icon: 'people-circle',
+      title: 'Who’s in it',
+      body: 'Every dream stars you. Pick who joins you in the Cast field, or just name them: “me and Alex at the beach”. Say “my partner” and we use your default.',
     },
     {
       icon: 'color-wand',

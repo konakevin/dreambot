@@ -8,6 +8,7 @@ import { DreamCastRoster } from '@/components/DreamCastRoster';
 import { GradientTitle } from '@/components/GradientTitle';
 import { useAutoSaveProfile } from '@/hooks/useAutoSaveProfile';
 import { useOnboardingStore } from '@/store/onboarding';
+import { unnamedPartners } from '@/lib/dreamCastRoster';
 import { Toast } from '@/components/Toast';
 import { colors } from '@/constants/theme';
 
@@ -22,17 +23,27 @@ export default function DreamCastStepSettings() {
   // few seconds. (The onboarding pager already locks swiping for the same reason.)
   const castUploadsInFlight = useOnboardingStore((s) => s.castUploadsInFlight);
   const analyzing = castUploadsInFlight > 0;
+  // …and for the same reason, block it while anyone is unnamed (Kevin, 2026-09-21: "i can
+  // swipe away from the cast screen, and after it's swiped, i then get the dialog"). The
+  // roster's beforeRemove listener does stop the navigation, but preventDefault only fires
+  // once the gesture has COMMITTED, so the screen visibly slides away and the alert lands
+  // over whatever is underneath. Turning the gesture off means there is nothing to undo.
+  //
+  // Selector returns a NUMBER, not the array: a fresh array every call would fail
+  // useSyncExternalStore's snapshot check and loop.
+  const unnamedCount = useOnboardingStore((s) => unnamedPartners(s.profile).length);
 
   useEffect(() => {
     useOnboardingStore.getState().setIsEditing(true);
   }, []);
   useAutoSaveProfile();
 
-  // Disable the iOS swipe-back gesture while analyzing (beforeRemove can't
-  // reliably cancel a native swipe mid-gesture).
+  // Disable the iOS swipe-back gesture while analyzing, or while any cast member is
+  // unnamed (beforeRemove can't reliably cancel a native swipe mid-gesture). ONE owner for
+  // gestureEnabled on this screen — a second setOptions elsewhere would race this one.
   useEffect(() => {
-    navigation.setOptions({ gestureEnabled: !analyzing });
-  }, [navigation, analyzing]);
+    navigation.setOptions({ gestureEnabled: !analyzing && unnamedCount === 0 });
+  }, [navigation, analyzing, unnamedCount]);
 
   // Backstop for the header chevron / Android hardware back / any programmatic
   // removal — block + nudge while analyzing. Reads the store fresh so the
