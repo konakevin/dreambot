@@ -4368,8 +4368,18 @@ Output ONLY the prompt.`;
       // nightly cron → single self-swap).
       const s0 = faceSwapSources[0];
       const s1 = faceSwapSources[1];
-      const selfSrc = faceSwapSources.find((s) => s.role === 'self')?.sourceUrl ?? s0.sourceUrl;
-      const selfGender = faceSwapSources.find((s) => s.role === 'self')?.gender ?? null;
+      // ONE resolution of the self member — the solo fallback's SOURCE and its GENDER must
+      // name the same person. They were two separate .find() calls and only the SOURCE
+      // carried a positional fallback, so on a 2-member face-swap cast with no `self` role
+      // the solo rebuild pasted s0's face while grading the render against castGender null.
+      // A null cast gender can never soft-accept a 2+-face solo render (singleSwapGuard
+      // judge(): `allMatch` requires a non-null gender, so 2+ faces is always 'hard'), so
+      // the guard refused, the cascade threw, and the user was REFUNDED a dream that was
+      // perfectly renderable. Single-face renders were unaffected — judge() skips the
+      // mismatch check when castGender is null — which is why this stayed quiet.
+      const selfRef = faceSwapSources.find((s) => s.role === 'self') ?? s0;
+      const selfSrc = selfRef.sourceUrl;
+      const selfGender = selfRef.gender ?? null;
       // Reserve a solo-fallback window: the DUAL phase (swap + re-renders) must
       // finish by dualDeadlineMs, so the degrade solo render+swap always has
       // SOLO_FALLBACK_RESERVE_MS left to run to completion (never scene-only).

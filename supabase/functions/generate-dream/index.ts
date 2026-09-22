@@ -2110,7 +2110,20 @@ Output ONLY the prompt.`;
       // outcome 'cascade' → throw → the outer catch refunds the sparkle.
       const s0 = faceSwapSources[0];
       const s1 = faceSwapSources[1];
-      const selfGender = genderFromLock(faceSwapSources.find((s) => s.role === 'self')?.genderLock);
+      // ONE resolution of the self member — the solo fallback's SOURCE and its GENDER must
+      // name the same person. They were two separate .find() calls and only the SOURCE
+      // carried a positional fallback, so on a 2-member face-swap cast with no `self` role
+      // the solo rebuild pasted s0's face while grading the render against castGender null.
+      // A null cast gender can never soft-accept a 2+-face solo render (singleSwapGuard
+      // judge(): `allMatch` requires a non-null gender, so 2+ faces is always 'hard'), so
+      // the guard refused, the cascade threw, and the user was REFUNDED a dream that was
+      // perfectly renderable. Single-face renders were unaffected — judge() skips the
+      // mismatch check when castGender is null — which is why this stayed quiet.
+      // Reachable in Create: castMembers comes from the self-insert parser's
+      // referencedRoles, which can resolve {plus_one, pet} with no `self` — the same class
+      // of miss the 2026-07-10 forensic breadcrumb above records.
+      const selfRef = faceSwapSources.find((s) => s.role === 'self') ?? s0;
+      const selfGender = genderFromLock(selfRef.genderLock);
       // Reserve a solo-fallback window (see module consts): the DUAL phase must
       // finish by dualDeadlineMs so the degrade solo render+swap has a guaranteed
       // window — self-only never loses to a budget-starved scene/refund.
@@ -2279,7 +2292,7 @@ Output ONLY the prompt.`;
             );
             return { url: cg.url, predictionId: cg.predictionId };
           },
-          selfSource: faceSwapSources.find((s) => s.role === 'self')?.sourceUrl ?? s0.sourceUrl,
+          selfSource: selfRef.sourceUrl,
           log: (m) => console.log(`[generate-dream] ${m}`),
         },
         {
