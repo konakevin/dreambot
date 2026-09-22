@@ -13,6 +13,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
+import { useNavigation } from 'expo-router';
 import {
   View,
   TouchableOpacity,
@@ -27,6 +28,7 @@ import { Text, TextInput } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { useQueryClient } from '@tanstack/react-query';
 import { useOnboardingStore } from '@/store/onboarding';
 import { useAuthStore } from '@/store/auth';
 import { castSignedUrl } from '@/lib/castPhoto';
@@ -42,6 +44,8 @@ import {
   newPartnerId,
   isPartnerEnabled,
   primaryPartnerOf,
+  isNameTaken,
+  unnamedPartners,
   cleanPartnerNameInput,
   finalizePartnerName,
   PARTNER_NAME_MAX,
@@ -135,6 +139,7 @@ function CastThumb({
 }
 
 export function DreamCastRoster() {
+  const navigation = useNavigation();
   const user = useAuthStore((st) => st.user);
   const self = useOnboardingStore((st) => st.profile.dream_cast.find((m) => m.role === 'self'));
   const partners = useOnboardingStore((st) => st.profile.partner_library) ?? EMPTY_PARTNERS;
@@ -177,12 +182,21 @@ export function DreamCastRoster() {
   const uploadRunRef = useRef(0);
   const uploadAbortRef = useRef<AbortController | null>(null);
 
+  const queryClient = useQueryClient();
   const persist = async () => {
     if (!user) return;
     try {
       await saveVibeProfile(user.id, useOnboardingStore.getState().profile);
     } catch (e) {
       if (__DEV__) console.warn('[roster] save failed (auto-save will retry):', e);
+    } finally {
+      // Create caches this roster (useCastPreview). Without this, starring someone here
+      // left the Create chip naming the PREVIOUS default for up to five minutes — the
+      // save was correct and the render would have cast the right person, but the one
+      // thing the chip exists to do is not lie about who is in the dream. Invalidate in
+      // `finally` so a failed save still refetches rather than leaving the screen
+      // confidently showing local state the server never took.
+      queryClient.invalidateQueries({ queryKey: ['castPreview'] });
     }
   };
 
@@ -366,7 +380,21 @@ export function DreamCastRoster() {
     updatePartner(p.id, { name: cleanPartnerNameInput(raw) });
 
   const commitName = (p: DreamPartner) => {
-    updatePartner(p.id, { name: finalizePartnerName(p.name) });
+    const next = finalizePartnerName(p.name);
+    // UNIQUE per account (Kevin, 2026-09-21). A duplicate makes "show me and Steph"
+    // resolve by first-match-wins, which is a coin flip the user cannot see. Refuse at
+    // the moment of typing rather than silently renaming or silently picking one.
+    if (next && isNameTaken(useOnboardingStore.getState().profile, next, p.id)) {
+      Toast.show(
+        `You already have a ${next}. Names need to be unique.`,
+        'alert-circle-outline',
+        4000
+      );
+      updatePartner(p.id, { name: undefined });
+      persist();
+      return;
+    }
+    updatePartner(p.id, { name: next });
     persist();
   };
 
@@ -390,8 +418,8 @@ export function DreamCastRoster() {
   const explainCasting = () =>
     showAlert(
       'Who shows up in a dream',
-      'Type a name and we cast that person: "me and Steph at the beach" puts Steph in it.\n\n' +
-        'Say "my partner" or "my friend" instead and we cast your default, marked with a star below.\n\n' +
+      'Type a name and we cast that person: "me and Steph at the beach" puts Steph in it. That is why every cast member needs a unique name.\n\n' +
+        'Say "my partner", "my friend" or "+1" instead and we cast your DEFAULT — the one starred below. That is also what Create\'s "Auto" setting follows.\n\n' +
         'Nightly dreams ignore both and rotate through everyone switched on, so you wake up to a different pairing.',
       [{ text: 'Got it' }]
     );
@@ -421,6 +449,53 @@ export function DreamCastRoster() {
 
   const anyBusy = busy !== null;
 
+  // EVERY member must be named before you can leave (Kevin, 2026-09-21). Names are what
+  // make "show me and ___" work, and a nameless member is one the user can never summon —
+  // they just silently never appear unless they happen to be the default. Blocking the
+  // back gesture is deliberately the most insistent pattern on this screen, because the
+  // alternative is a roster that looks complete and half-works.
+  //
+  // The escape hatch is REMOVE, not skip: if you do not want to name them, you did not
+  // want them in your cast.
+  const unnamed = unnamedPartners(useOnboardingStore.getState().profile);
+  useEffect(() => {
+    if (unnamed.length === 0) return;
+    const sub = navigation.addListener('beforeRemove', (e) => {
+      // Re-read at fire time: the list above is a render-time snapshot and the user may
+      // have just named the last one.
+      const still = unnamedPartners(useOnboardingStore.getState().profile);
+      if (still.length === 0) return;
+      e.preventDefault();
+      const who = still.length === 1 ? 'one cast member' : `${still.length} cast members`;
+      showAlert(
+        'Name your cast first',
+        `You have ${who} without a name. Naming them is how you say “me and them” in a dream — without it they can only show up as your default.`,
+        [
+          { text: 'Name them', style: 'cancel' },
+          {
+            text: still.length === 1 ? 'Remove them' : 'Remove them all',
+            style: 'destructive',
+            onPress: async () => {
+              for (const p of still) {
+                await removeCastFile(p).catch(() => {});
+                removePartner(p.id);
+              }
+              await persist();
+              navigation.dispatch(e.data.action);
+            },
+          },
+        ]
+      );
+    });
+    return sub;
+  }, [unnamed.length, navigation, removePartner]);
+
+  // Everyone visible has a photo: the self slot and every roster member. `busy` is
+  // excluded on purpose — mid-upload is not "missing", and flipping the card open for the
+  // seconds an analyze takes would be a flicker, not a help.
+  const photosComplete =
+    !!self && partners.length > 0 && partners.every((p) => !!p.storage_path || !!p.thumb_url);
+
   const inDreams = partners.filter((p) => isPartnerEnabled(p, activeId));
   const notInDreams = partners.filter((p) => !isPartnerEnabled(p, activeId));
   // Read through the SAME function the render mirror uses, never off `activeId`
@@ -437,7 +512,7 @@ export function DreamCastRoster() {
    *  yet -- which is what the refresh button showed. `pending` only arrives once one
    *  has been chosen, and that is the real boundary between the two stages. */
   const busyLabel = (key: string) =>
-    pending?.key === key ? 'Analyzing your photo…' : 'Opening your photos…';
+    pending?.key === key ? 'Analyzing photo…' : 'Opening your photos…';
 
   /** The busy line, plus the X that aborts the analyze. The X appears only once a photo has actually
    *  been PICKED — while the picker is still opening there is nothing to cancel and the picker has its
@@ -606,7 +681,7 @@ export function DreamCastRoster() {
               <Ionicons
                 name={p.id === primaryId ? 'star' : 'star-outline'}
                 size={17}
-                color={p.id === primaryId ? colors.textPrimary : colors.textSecondary}
+                color={p.id === primaryId ? colors.accentLight : colors.textSecondary}
               />
               <Text
                 style={[s.primaryLabel, p.id !== primaryId && s.primaryLabelOff]}
@@ -659,7 +734,10 @@ export function DreamCastRoster() {
           {/* Same guidance onboarding leads with, for the same reason: a straight-on,
           well-lit shot is the biggest lever on face-swap quality, and every upload
           on this screen is subject to it. */}
-          <CastPhotoTip />
+          {/* Collapses once every face on screen has a usable photo — the advice has done its
+          job and stops being the loudest block above your actual cast. Expands again the
+          moment anyone is missing one, which is exactly when it is worth the space. */}
+          <CastPhotoTip satisfied={photosComplete} />
 
           {/* Three panels, one shape. Each section's heading lives INSIDE its panel,
           above a divider, so the label is visibly attached to the rows it names
@@ -766,8 +844,8 @@ export function DreamCastRoster() {
                     explains. */}
                 {showPrimary && (
                   <Text style={s.panelNote}>
-                    In Create, type a name to cast that person. Say &ldquo;my partner&rdquo; and we
-                    use your default.
+                    In Create, type a name to cast that person. On Auto, &ldquo;my partner&rdquo; or
+                    &ldquo;my friend&rdquo; casts whoever is your default below.
                   </Text>
                 )}
                 {inDreams.length > 0 ? (
@@ -1005,7 +1083,9 @@ const s = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: verticalScale(7),
   },
-  primaryLabel: { color: colors.textPrimary, fontSize: fontScale(12), fontWeight: '700' },
+  // Accent purple, not white: white was a ninth colour on a screen whose own rule is four
+  // jobs, and the star is a STATE marker, which is what the accent already means here.
+  primaryLabel: { color: colors.accentLight, fontSize: fontScale(12), fontWeight: '700' },
   // The action reads one step back from the state: same size, lighter weight, the
   // row's secondary text colour. Loud enough to find, quiet enough that four of them
   // never compete with the one that is actually set.

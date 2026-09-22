@@ -20,6 +20,8 @@ import {
   enabledPartners,
   primaryPartner,
   primaryPartnerOf,
+  isNameTaken,
+  unnamedPartners,
   cleanPartnerNameInput,
   finalizePartnerName,
   PARTNER_NAME_MAX,
@@ -273,21 +275,48 @@ describe('roster names', () => {
     expect(finalizePartnerName('Mom')).toBe('Mom');
   });
 
-  it('duplicate names are fine — the roster is keyed by id, never by name', () => {
-    // Kevin 2026-09-15: "i can have multiple friends named 'steph' or whatever."
-    // Nothing dedupes names anywhere, and this locks that in: a uniqueness check
-    // added later would start silently rejecting or renaming real people.
-    const st = useOnboardingStore.getState();
-    st.reset();
-    st.loadProfile(base({ dream_cast: [{ role: 'self', description: 'me' }] }));
-    st.addPartner(partner('a'));
-    st.addPartner(partner('b'));
-    st.updatePartner('a', { name: 'Steph' });
-    st.updatePartner('b', { name: 'Steph' });
-    const lib = useOnboardingStore.getState().profile.partner_library ?? [];
-    expect(lib.map((x) => x.name)).toEqual(['Steph', 'Steph']);
-    expect(lib.map((x) => x.id)).toEqual(['a', 'b']);
-    expect(finalizePartnerName('Steph')).toBe('Steph');
+  it('duplicate names are REJECTED — reversing the 2026-09-15 call', () => {
+    // Kevin 2026-09-15: "i can have multiple friends named 'steph' or whatever." That was
+    // right while names were display-only. Reversed 2026-09-21 because names became
+    // load-bearing: "show me and Steph" has to resolve to exactly one person, and with two
+    // Stephs the only possible rule is first-match-wins, which is indistinguishable from a
+    // bug when it picks the wrong one.
+    //
+    // The store still stores whatever it is given — uniqueness is enforced at the moment of
+    // TYPING (DreamCastRoster's commitName), so this locks the PREDICATE the UI calls.
+    const profile = base({
+      partner_library: [
+        { ...partner('a'), name: 'Steph' },
+        { ...partner('b'), name: 'Kevin' },
+      ],
+    });
+    expect(isNameTaken(profile, 'Steph', 'b')).toBe(true);
+    // case-insensitive: "steph" and "Steph" are the same person to everyone but a string
+    expect(isNameTaken(profile, 'steph', 'b')).toBe(true);
+    expect(isNameTaken(profile, '  STEPH  ', 'b')).toBe(true);
+    // renaming someone to what they are already called is not a collision with themselves
+    expect(isNameTaken(profile, 'Steph', 'a')).toBe(false);
+    expect(isNameTaken(profile, 'Hannah', 'b')).toBe(false);
+    // an empty name is never "taken" — that is the unnamed case, handled separately
+    expect(isNameTaken(profile, '   ', 'b')).toBe(false);
+  });
+
+  it('unnamedPartners finds exactly the members that cannot be summoned by name', () => {
+    // Every member must be named before the user can leave the roster: a nameless member
+    // can only ever appear as the default, which makes the cast look complete and
+    // half-work.
+    const profile = base({
+      partner_library: [
+        { ...partner('a'), name: 'Steph' },
+        partner('b'),
+        { ...partner('c'), name: '   ' },
+      ],
+    });
+    expect(unnamedPartners(profile).map((p) => p.id)).toEqual(['b', 'c']);
+    expect(
+      unnamedPartners(base({ partner_library: [{ ...partner('a'), name: 'Steph' }] }))
+    ).toEqual([]);
+    expect(unnamedPartners(base())).toEqual([]);
   });
 
   it('blank on blur means "no name", so the card falls back to the relationship', () => {

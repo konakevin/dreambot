@@ -872,7 +872,6 @@ export default function CreateScreen() {
       // Nobody cast is a real, common state (a pure scene prompt), and saying so is
       // more useful than hiding the control that would change it.
       label: castPreviewLabel(showSelf, plusOne) || 'Just the scene',
-      pinned: choice.kind !== 'auto',
     };
   }, [
     hasPhoto,
@@ -903,19 +902,44 @@ export default function CreateScreen() {
   // is the tap that spends sparkles. The footer measures its own height and feeds both
   // the scroll offset and the prompt-fill worklet, so growing it here reflows the form
   // instead of covering it.
+  // WHO IS IN THIS DREAM — a labelled field, directly above the prompt (Kevin,
+  // 2026-09-21: "i think its all too hidden ... would it almost be easier to simplify
+  // the UI and just make them tap a little cast pic icon").
+  //
+  // It lived in the sticky Dream footer as a line of grey text. The resolution logic was
+  // already what he described — an explicit pick wins, then a typed name, then the
+  // starred default — but a caption above the CTA does not read as something you can
+  // change, and it sat a whole screen away from the prompt that talks about these people.
+  // Moving it up puts the reading order right: choose who, then describe what happens.
+  //
+  // Rendered OUTSIDE the keyboard-collapse container on purpose: the controls above fold
+  // away while typing to give the prompt room, and this is the one that must stay visible
+  // exactly then, because the sentence being typed refers to it.
   const castBlock = !castFaces ? null : (
-    <View style={{ marginBottom: verticalScale(4) }}>
+    <View className="mb-4">
+      {/* "Cast", not "In this dream" (Kevin, 2026-09-21). Every other label on this
+          screen — STYLE, VIBE, AI MODEL, MODE — is a NOUN naming a thing you pick, so a
+          phrase describing content read as a section heading and made the box under it
+          look like output rather than input. "Cast" also matches what Settings already
+          calls this ("Dream Cast"), so it is the word the user has already met. */}
+      <View className="flex-row items-center mb-1.5 ml-1">
+        <FormLabel>Cast</FormLabel>
+      </View>
       <CastFaceRow
         members={castFaces.members}
         label={castFaces.label}
-        pinned={castFaces.pinned}
+        accent={
+          faceSwapLit && !isRestyle
+            ? mediumFaceSwaps
+              ? MEDIUM_BADGE.face.color
+              : MEDIUM_BADGE.art.color
+            : undefined
+        }
         onPress={openCastPicker}
       />
-      {/* Only while AUTO: once the user has pinned someone, the prompt's cast words
-          are overridden anyway, so a note about a name it failed to match would be
-          describing a resolution that is no longer in play. */}
+      {/* The "not in your cast" note rides with the field it belongs to. */}
       {!!unmatchedCastName && config.castChoice.kind === 'auto' && (
-        <View className="flex-row items-center" style={{ gap: 7, paddingBottom: verticalScale(6) }}>
+        <View className="flex-row items-center mt-1.5 ml-1" style={{ gap: 7 }}>
           <Ionicons name="information-circle-outline" size={14} color={colors.textMuted} />
           <Text
             style={{
@@ -1283,33 +1307,12 @@ export default function CreateScreen() {
                       not mediums). INTERNAL naming stays "medium" everywhere:
                       keys, columns, types, analytics. Display copy only. */}
                       <FormLabel>Style</FormLabel>
-                      {/* Live face-swap lamp. Gray = no cast reference in the
-                      prompt; lit = this dream casts YOU, colored by the medium
-                      family (Real Face teal / Dream Art pink — the MEDIUM_BADGE
-                      colors from the medium picker). New Scene photo dreams are
-                      always lit. Hidden for Restyle (img2img — never swaps; the
-                      Direct case is already excluded by this section's guard).
-                      Tap opens the face-vs-art teaching sheet. */}
-                      {!isRestyle && (
-                        <TouchableOpacity
-                          onPress={handleModeInfo}
-                          activeOpacity={0.7}
-                          hitSlop={10}
-                          className="ml-1.5"
-                        >
-                          <Ionicons
-                            name={faceSwapLit ? 'happy' : 'happy-outline'}
-                            size={15}
-                            color={
-                              faceSwapLit
-                                ? mediumFaceSwaps
-                                  ? MEDIUM_BADGE.face.color
-                                  : MEDIUM_BADGE.art.color
-                                : (colors.textMuted ?? colors.textSecondary)
-                            }
-                          />
-                        </TouchableOpacity>
-                      )}
+                      {/* The face-swap lamp used to live here. It moved down to the
+                      cast row above the Dream button (Kevin, 2026-09-21): it announced
+                      "this dream uses a real face" from the top-left while the answer
+                      to WHOSE face sat at the bottom of the screen, so the same fact
+                      was stated twice, a screen apart. The FACE / Dream Art badge on
+                      the picker below still marks the medium's type. */}
                     </View>
                     <TouchableOpacity
                       className="flex-row items-center justify-between px-4 py-3 rounded-xl"
@@ -1842,6 +1845,10 @@ export default function CreateScreen() {
                 </View>
               )}
 
+              {/* Direct mode sends the prompt verbatim with NO cast, so the picker is
+              hidden there rather than offering a choice that is ignored. */}
+              {!isRestyle && !effectiveExactPrompt && castBlock}
+
               {/* Prompt input — hidden when a photo is in Restyle mode, since
               that path is medium+vibe only (no prompt influence). The
               underlying `config.userPrompt` is preserved so flipping back
@@ -1956,7 +1963,6 @@ export default function CreateScreen() {
                 instead of pinned to the far bottom like the phone sticky footer. */}
               {isTabletDevice && (
                 <View style={{ marginTop: verticalScale(28) }}>
-                  {castBlock}
                   <GradientButton label="Dream" variant="solid" onPress={handleDream} />
                 </View>
               )}
@@ -1990,7 +1996,6 @@ export default function CreateScreen() {
                 selector now, so the CTA stays clean. iPad: capped to the same
                 centered 600 column as the form so it isn't absurdly wide. */}
               <ResponsiveContainer maxWidth={600}>
-                {castBlock}
                 {/* gestureHandler: this footer rides above the keyboard via
                     KeyboardStickyView's transform; RN-core Touchable measures the
                     UN-transformed position and misses the first tap after typing.

@@ -515,10 +515,25 @@ describe('cast-name matching', () => {
     expect(run('me and Bo at the park').matchedPartnerId).toBeUndefined();
   });
 
-  it('a name that IS a relationship word never matches as a NAME', () => {
-    // It still casts through the relationship path, which is the point: matching it
-    // twice would only double the chance of resolving to the wrong person.
-    const r = run('me and my mom at the lake');
+  it('a DELIBERATE name wins over the generic relationship word', () => {
+    // REVERSED 2026-09-21. These names used to be dropped, on the reasoning that the
+    // relationship path already handles them. Two things killed that: names are now
+    // REQUIRED and UNIQUE, so "Mom" is a deliberate choice rather than a collision; and
+    // the drop did not fall back gracefully — the BARE form has no relationship-path
+    // equivalent, so "show me and mom" cast NOBODY and she vanished from her own dream.
+    const cast = [{ id: 'mum', name: 'Mom' }];
+    expect(run('me and my mom at the lake', cast).matchedPartnerId).toBe('mum');
+    // the bare form is the one that used to lose her entirely
+    const bare = run('me and mom at the lake', cast);
+    expect(bare.matchedPartnerId).toBe('mum');
+    expect([...bare.referencedRoles].sort()).toEqual(['plus_one', 'self']);
+  });
+
+  it('a relationship word with NO matching name still falls to the default', () => {
+    // The generic path is untouched: with nobody named "brother", the word resolves the
+    // way it always did — plus_one with no specific person, which the engine fills from
+    // the starred default.
+    const r = run('me and my brother at the lake', [{ id: 'p1', name: 'Steph' }]);
     expect(r.matchedPartnerId).toBeUndefined();
     expect([...r.referencedRoles].sort()).toEqual(['plus_one', 'self']);
   });

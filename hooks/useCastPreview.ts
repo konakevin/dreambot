@@ -56,9 +56,16 @@ export function useCastPreview(): CastPreview {
   const { data } = useQuery({
     queryKey: ['castPreview', user?.id],
     enabled: !!user,
-    // The roster changes rarely and only from Settings, so a long window keeps this off
-    // the critical path of opening Create.
-    staleTime: 5 * 60 * 1000,
+    // The roster changes rarely and only from Settings, so a window keeps this off the
+    // critical path of opening Create. Kept SHORT and paired with an explicit
+    // invalidation from the Settings roster (DreamCastRoster's persist): a five-minute
+    // window with no invalidation meant starring a new default left the Create chip
+    // naming the old one until it expired.
+    staleTime: 30 * 1000,
+    // Coming back to the Create tab after editing the roster is the exact moment this
+    // must be right, and it is the cheapest place to catch anything the invalidation
+    // missed (a save from another device, a hot reload).
+    refetchOnMount: 'always',
     queryFn: async (): Promise<CastPreview> => {
       const { data: row } = await supabase
         .from('user_recipes')

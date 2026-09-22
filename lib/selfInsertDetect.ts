@@ -89,16 +89,14 @@ function matchesList(word: string, list: string): boolean {
  *  and matches the "duplicate names are fine, keyed by id" rule). A name that IS a
  *  relationship or pet word is dropped: those already resolve through their own path,
  *  so matching them again only doubles the chance of getting it wrong. */
-function matchableNames(names: CastName[], relWords: string, petWords: string): CastName[] {
+function matchableNames(names: CastName[], _relWords: string, _petWords: string): CastName[] {
   return names.filter((n) => {
-    // The id is the whole point of a match — without one there is nobody to cast, and
-    // a junk entry that matched FIRST would swallow the real person behind it and
-    // resolve to undefined. Checked here, not just at the call site, because this
-    // takes whatever the stored recipe happens to hold.
+    // See the Deno module: a name that IS a relationship word used to be dropped, which
+    // made "show me and wife" cast nobody. Names are required and unique now, so a member
+    // called "Wife" was named that deliberately and wins over the generic word.
     if (!n || typeof n.id !== 'string' || !n.id) return false;
     const name = typeof n.name === 'string' ? n.name.trim() : '';
-    if (name.length < MIN_CAST_NAME_LENGTH) return false;
-    return !matchesList(name, relWords) && !matchesList(name, petWords);
+    return name.length >= MIN_CAST_NAME_LENGTH;
   });
 }
 

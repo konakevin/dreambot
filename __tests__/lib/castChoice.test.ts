@@ -9,6 +9,7 @@
 
 import { castPreviewLabel } from '@/lib/castPreviewLabel';
 import { castChoiceRequest, castChoiceEquals, type CastChoice } from '@/lib/castChoiceRequest';
+import { useDreamStore } from '@/store/dream';
 
 describe('castPreviewLabel', () => {
   it('names the person when they have a name', () => {
@@ -96,5 +97,42 @@ describe('castChoiceEquals', () => {
       false
     );
     expect(castChoiceEquals({ kind: 'partner', id: 'a' }, { kind: 'auto' })).toBe(false);
+  });
+});
+
+/**
+ * STICKY CAST (Kevin, 2026-09-21: "i think sticky").
+ *
+ * Every other config value resets after a dream. This one does not, because the picker
+ * became a labelled field above the prompt showing the person's face — a lingering pick
+ * can no longer surprise anyone, and re-choosing your partner before every single dream
+ * is a chore. While it was a caption above the Dream button the opposite was true, and
+ * per-dream was the right call then.
+ *
+ * Guarded here because it is a one-line change in `reset()` that is easy to undo by
+ * accident while tidying, and the symptom — having to re-pick every time — reads as a
+ * papercut rather than a regression.
+ */
+describe('reset() keeps the cast pick', () => {
+  it('survives a reset, unlike the rest of the config', () => {
+    const st = useDreamStore.getState();
+    st.reset();
+    st.setCastChoice({ kind: 'partner', id: 'kevin' });
+    st.setPrompt('a lighthouse in a storm');
+
+    st.reset();
+
+    const after = useDreamStore.getState().config;
+    expect(after.castChoice).toEqual({ kind: 'partner', id: 'kevin' });
+    // and everything else did reset
+    expect(after.userPrompt).toBe('');
+  });
+
+  it('a deliberate switch back to auto also sticks', () => {
+    const st = useDreamStore.getState();
+    st.setCastChoice({ kind: 'partner', id: 'kevin' });
+    st.setCastChoice({ kind: 'auto' });
+    st.reset();
+    expect(useDreamStore.getState().config.castChoice).toEqual({ kind: 'auto' });
   });
 });

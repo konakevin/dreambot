@@ -25,9 +25,25 @@ interface Props {
    *  Settings — the user is already standing in the screen that changes it, so the reassurance there
    *  would be telling them they can do the thing they are currently doing (Kevin, 2026-09-20). */
   canEditLater?: boolean;
+  /** Everyone on screen already has a usable photo, so the advice has been ACTED ON and collapses
+   *  to one quiet line (Kevin, 2026-09-21: "i just don't love the way this screen looks").
+   *
+   *  At full size this was the biggest, brightest block on the Settings roster, sitting above the
+   *  actual cast — the least important thing on the screen shouting the loudest, and shouting
+   *  permanently about a problem you had already solved. It stays full size wherever it still has
+   *  work to do: onboarding, and any roster with a member missing a photo. */
+  satisfied?: boolean;
 }
 
-export function CastPhotoTip({ canEditLater = false }: Props) {
+export function CastPhotoTip({ canEditLater = false, satisfied = false }: Props) {
+  if (satisfied) {
+    return (
+      <View style={s.slim}>
+        <Ionicons name="checkmark-circle" size={15} color={MEDIUM_BADGE.face.color} />
+        <Text style={s.slimText}>Passport-style photos give the best dreams.</Text>
+      </View>
+    );
+  }
   return (
     <View style={s.row}>
       {/* The mascot posing for its own passport photo. */}
@@ -43,7 +59,7 @@ export function CastPhotoTip({ canEditLater = false }: Props) {
             end of a title that never reaches that edge. On the left there is no ragged
             edge to sit against, so there is no gap to fix. */}
         <View style={s.titleRow}>
-          <Ionicons name="warning" size={22} color={MEDIUM_BADGE.art.color} />
+          <Ionicons name="camera" size={22} color={MEDIUM_BADGE.face.color} />
           <Text style={s.title}>Use a passport-style photo</Text>
         </View>
         {/* Trimmed to the two lines that change behaviour (Kevin, 2026-09-20: "it's so wordy now …
@@ -66,22 +82,33 @@ const s = StyleSheet.create({
   // Full width and a stronger tint than a normal helper: this is the one piece of
   // advice on the screen that changes the output, so it is allowed to be loud.
   //
-  // The pink is Create's Dream Art badge colour (MEDIUM_BADGE.art), imported rather
-  // than pasted so it tracks that palette. It also happens to carry further than the
-  // brand purple did: pink is a much lighter colour, so at the same opacity it
-  // composites noticeably brighter over black, which is the point here.
+  // TEAL, not pink (Kevin, 2026-09-21): "make it greenish hue instead so that it signals
+  // DO THIS". Pink is this app's WARNING colour, and the message is not a warning — it is
+  // the single instruction that most improves the result. Styled as an alarm it read as
+  // "something is broken" on a screen where nothing was. Teal is the same colour the
+  // switches and the IN YOUR DREAMS heading use for "this is working", and it is imported
+  // from MEDIUM_BADGE.face rather than pasted so it tracks that palette.
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    backgroundColor: MEDIUM_BADGE.art.bg,
+    backgroundColor: MEDIUM_BADGE.face.bg,
     borderWidth: 1,
-    borderColor: 'rgba(249,168,212,0.45)',
+    borderColor: 'rgba(94,234,212,0.45)',
     borderRadius: 14,
     paddingVertical: verticalScale(12),
     paddingHorizontal: 12,
     marginBottom: verticalScale(18),
   },
+  // The collapsed form: one line, no card, no mascot. It is a reminder, not a notice.
+  slim: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+    paddingHorizontal: 4,
+    marginBottom: verticalScale(14),
+  },
+  slimText: { color: colors.subtleOnDark, fontSize: fontScale(12.5), flex: 1 },
   image: { width: 56, height: 56, borderRadius: 10 },
   copy: { flex: 1, gap: verticalScale(3) },
   // Left-aligned and hugging, NOT space-between: with one icon there is nothing to

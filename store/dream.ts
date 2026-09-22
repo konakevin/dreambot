@@ -227,12 +227,18 @@ export const useDreamStore = create<DreamStore>((set) => ({
   setActiveJobId: (id) => set({ activeJobId: id }),
   setActiveJobFailure: (failure) => set({ activeJobFailure: failure }),
   reset: () =>
-    set({
-      config: { ...INITIAL_CONFIG },
+    set((s) => ({
+      // STICKY CAST (Kevin, 2026-09-21). Everything else in the config returns to its
+      // default after a dream; who you are dreaming with does not. It was per-dream while
+      // the control was a caption above the CTA — a pick that outlived its prompt would
+      // have been a hidden mode quietly putting the same person in everything. Now the
+      // picker is a labelled field above the prompt showing their face, so it cannot
+      // surprise anyone: you can see who it is every time you look at the screen.
+      config: { ...INITIAL_CONFIG, castChoice: s.config.castChoice },
       result: null,
       activeJobId: null,
       activeJobFailure: null,
       pendingCreatePreset: null,
       photoClassification: null,
-    }),
+    })),
 }));

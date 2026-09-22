@@ -33,6 +33,7 @@ function Row({
   icon,
   title,
   subtitle,
+  isDefault,
 }: {
   selected: boolean;
   onPress: () => void;
@@ -40,6 +41,8 @@ function Row({
   icon?: keyof typeof Ionicons.glyphMap;
   title: string;
   subtitle?: string;
+  /** Marks the starred default so its subtitle reads as a badge, not a caption. */
+  isDefault?: boolean;
 }) {
   return (
     <TouchableOpacity
@@ -61,9 +64,16 @@ function Row({
           {title}
         </Text>
         {!!subtitle && (
-          <Text style={s.rowSubtitle} numberOfLines={1}>
-            {subtitle}
-          </Text>
+          // The DEFAULT marker earns a star and the accent colour; a plain grey caption
+          // made the one row that answers "which of these is my default?" look like any
+          // other subtitle. The star is deliberately the SAME symbol the Settings roster
+          // uses for the default, so it means one thing across both screens.
+          <View style={s.rowSubtitleRow}>
+            {isDefault && <Ionicons name="star" size={10} color={colors.accentLight} />}
+            <Text style={[s.rowSubtitle, isDefault && s.rowSubtitleDefault]} numberOfLines={1}>
+              {subtitle}
+            </Text>
+          </View>
         )}
       </View>
       {selected && <Ionicons name="checkmark-circle" size={20} color={colors.accent} />}
@@ -103,9 +113,16 @@ export function CastPickerSheet({
     >
       <TouchableOpacity style={s.overlay} activeOpacity={1} onPress={onClose}>
         <TouchableOpacity style={s.card} activeOpacity={1}>
-          <Text style={dialogText.title}>Who&apos;s in this dream?</Text>
+          <Text style={dialogText.title}>Pick your dream cast</Text>
+          {/* "On Auto, your prompt decides" was misleading (Kevin, 2026-09-21): "the
+              prompt doesn't decide, it just references whoever is the default partner
+              regardless if we say my wife, my friend, my partner ... but it does honor
+              names". Every relationship word collapses to the same plus-one slot, so only
+              a NAME changes who. Saying so is both the honest version and the only place
+              the name feature is taught. */}
           <Text style={dialogText.body}>
-            Pick someone and they star alongside you. On Auto, your prompt decides.
+            On Auto you can use names or phrases like &ldquo;my friend&rdquo; or &ldquo;my
+            partner&rdquo; to reference your default cast member.
           </Text>
 
           <ScrollView style={s.list} contentContainerStyle={s.listInner} bounces={false}>
@@ -114,7 +131,7 @@ export function CastPickerSheet({
               onPress={() => pick({ kind: 'auto' })}
               icon="text-outline"
               title="Auto"
-              subtitle="Follow my prompt"
+              subtitle="My default, or a name I type"
             />
             <Row
               selected={castChoiceEquals(choice, { kind: 'solo' })}
@@ -130,6 +147,7 @@ export function CastPickerSheet({
                 member={p}
                 title={`You and ${p.name ?? fallbackLabel(p).toLowerCase()}`}
                 subtitle={p.id === defaultPartnerId ? 'Your default' : undefined}
+                isDefault={p.id === defaultPartnerId}
               />
             ))}
             {partners.length === 0 && (
@@ -191,7 +209,9 @@ const s = StyleSheet.create({
   },
   rowText: { flex: 1 },
   rowTitle: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
+  rowSubtitleRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   rowSubtitle: { color: colors.textMuted, fontSize: fontScale(12), fontWeight: '600' },
+  rowSubtitleDefault: { color: colors.accentLight, fontWeight: '700' },
   empty: {
     color: colors.textMuted,
     fontSize: fontScale(13),

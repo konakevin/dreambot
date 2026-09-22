@@ -93,6 +93,32 @@ export function isPartnerEnabled(p: DreamPartner, activeId: string | null | unde
   return p.enabled ?? p.id === activeId;
 }
 
+/**
+ * Is `name` already taken by a DIFFERENT roster member?
+ *
+ * Names must be unique per account (Kevin, 2026-09-21). This reverses his 2026-09-15
+ * call that "i can have multiple friends named 'steph' or whatever", and the reversal is
+ * deliberate: names were display-only decoration then, and they are load-bearing now —
+ * "show me and Steph" has to resolve to exactly one person, or the feature is a coin
+ * flip the user cannot see. Two Stephs made first-match-wins the only possible rule, and
+ * first-match-wins is indistinguishable from a bug when it picks the wrong one.
+ *
+ * Case-insensitive, because "steph" and "Steph" are the same person to everyone except a
+ * string comparison.
+ */
+export function isNameTaken(profile: VibeProfile, name: string, exceptId: string): boolean {
+  const wanted = name.trim().toLowerCase();
+  if (!wanted) return false;
+  return (profile.partner_library ?? []).some(
+    (p) => p.id !== exceptId && (p.name ?? '').trim().toLowerCase() === wanted
+  );
+}
+
+/** Roster members still missing a name. Empty = every member can be summoned by name. */
+export function unnamedPartners(profile: VibeProfile): DreamPartner[] {
+  return (profile.partner_library ?? []).filter((p) => !p.name?.trim());
+}
+
 /** The roster members eligible to be rolled as the +1 (stable roster order). */
 export function enabledPartners(profile: VibeProfile): DreamPartner[] {
   const lib = profile.partner_library ?? [];

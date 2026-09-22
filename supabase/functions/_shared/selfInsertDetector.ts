@@ -111,11 +111,22 @@ function matchesList(word: string, list: string): boolean {
   }
 }
 
-/** The roster names worth testing, in roster order (so first-match-wins is stable
- *  and matches the "duplicate names are fine, keyed by id" rule). A name that IS a
- *  relationship or pet word is dropped: those already resolve through their own path,
- *  so matching them again only doubles the chance of getting it wrong. */
-function matchableNames(names: CastName[], relWords: string, petWords: string): CastName[] {
+/**
+ * The roster names worth testing, in roster order.
+ *
+ * A name that IS a relationship word ("Wife", "Mom", "Bestie") used to be DROPPED here,
+ * on the reasoning that those already resolve through the relationship path so matching
+ * them twice only doubles the chance of being wrong. That was right while names were
+ * optional decoration and duplicates were legal.
+ *
+ * It is backwards now (Kevin, 2026-09-21). Names are REQUIRED and UNIQUE per account, so
+ * a member called "Wife" was named that deliberately and is the most explicit signal
+ * there is. Worse, the drop did not merely fall back: "show me and wife" cast NOBODY,
+ * because the bare form has no relationship-path equivalent, so she vanished from her own
+ * dream. Deliberate naming now wins over the generic word — the same precedence a typed
+ * name already has over the starred default.
+ */
+function matchableNames(names: CastName[], _relWords: string, _petWords: string): CastName[] {
   return names.filter((n) => {
     // The id is the whole point of a match — without one there is nobody to cast, and
     // a junk entry that matched FIRST would swallow the real person behind it and
@@ -123,8 +134,7 @@ function matchableNames(names: CastName[], relWords: string, petWords: string): 
     // takes whatever the stored recipe happens to hold.
     if (!n || typeof n.id !== 'string' || !n.id) return false;
     const name = typeof n.name === 'string' ? n.name.trim() : '';
-    if (name.length < MIN_CAST_NAME_LENGTH) return false;
-    return !matchesList(name, relWords) && !matchesList(name, petWords);
+    return name.length >= MIN_CAST_NAME_LENGTH;
   });
 }
 
