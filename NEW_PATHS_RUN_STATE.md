@@ -100,7 +100,7 @@ Then the rest, grouped by bot to reuse each bot's audit.
 | 9 | BrickBot | balloon-festival | - | not started | |
 | 10 | BrickBot | archaeology-dig | - | not started | |
 | 11 | DinoBot | den-and-burrow | 1 | **PASS ~4.7, AWAITING GRADE** | designed from the motto: the hero is the unseen underground |
-| 12 | DinoBot | undergrowth-scale | - | not started | |
+| 12 | DinoBot | undergrowth-scale | 1 | **PASS ~4.8, AWAITING GRADE** | best of the run: the giant rendered as ONLY a tail with ripples spreading from its tip across the puddle |
 | 13 | DinoBot | tidal-flat-tracks | - | not started | |
 | 14 | DinoBot | amber-forest | - | not started | |
 | 15 | FaeBot | autumn-seed-gathering | - | not started | |
@@ -114,14 +114,14 @@ Then the rest, grouped by bot to reuse each bot's audit.
 | 23 | MangaBot | onsen-evening | - | not started | |
 | 24 | MangaBot | game-center-arcade | - | not started | |
 | 25 | PixelBot | castle-town-gate | - | not started | |
-| 26 | PixelBot | ice-cavern | - | not started | |
+| 26 | PixelBot | ice-cavern | 3+1 | validating charm fix | agent 4.06 CLOSE; carved-relief charm replaced with ice-native charms |
 | 27 | PixelBot | observatory-tower | - | not started | |
 | 28 | PixelBot | floating-market-canal | - | not started | |
 | 29 | SteamBot | rooftop-telegraph | - | not started | |
 | 30 | SteamBot | brass-glasshouse | - | not started | |
 | 31 | ToyBot | bath-toy-flotilla | - | not started | |
 | 32 | ToyBot | sand-toy-beachworks | - | not started | |
-| 33 | ToyBot | snow-globe-world | - | not started | |
+| 33 | ToyBot | snow-globe-world | 4 | **PASS ~4.47, AWAITING GRADE** | 9/9 framing on the shipped glass spec; best render an aurora over a single lit window |
 
 ### 3. DinoBot `den-and-burrow` — PASS at ROUND 1, ~4.7
 
@@ -176,6 +176,43 @@ Three separate paths needed the same move today, and it is now the default:
 **Sonnet writes only what the output order tells it to write.** A PICTORIAL/plain-surface rule sitting
 in a mid-template rules block gets paraphrased away — in both BrickBot failures the surface WAS named,
 just late. If a clause is load-bearing, it belongs in the ordered list, not in the rules.
+
+### ⭐ LESSON 11 — a LOOK-THROUGH-A-CONTAINER path: the container is a knob and BOTH ENDS FAIL
+
+From ToyBot `snow-globe-world`, measured at 6 renders per position. This generalises to any path
+seen through a window, porthole, doorway, aquarium, vitrine, dome or viewfinder.
+
+| the glass specified as | framing held |
+| --- | --- |
+| an OBJECT ("a glass dome … the turned base as a narrow sliver below") | **1/6** — the gift-shop product shot. CLIP renders the first-named noun and DISCARDS the scale qualifier; "only a thin rim" bought nothing. |
+| an ABSTRACTION ("whose only trace is a band of refraction") | **0/6** — no glass at all. Six lovely dioramas with the path's entire identity deleted. |
+| CONCRETE + POSITIONED + CROPPED ("through the glass WALL … ARCING ACROSS THE TOP CORNERS and RUNNING OFF ITS EDGES") | **9/9** |
+
+The middle position is the whole trick: name the container plainly, say WHERE IN THE FRAME it sits,
+and give the CROP as the counter-anchor. A scale adjective cannot do that job.
+
+Two companions from the same build:
+- **A content entry that could only be seen from OUTSIDE the intended frame drags the whole object
+  into shot.** 10 of 25 vessel entries described feet, an underside, two sides — none visible from a
+  camera two inches away, so rolling one forced Flux to pull back. Any fixed-camera path needs a
+  framing test on every entry: *could this camera actually see this?*
+- **A prose compatibility clause loses to a pool pick, every time.** A harbour rowboat launched in a
+  desert despite an explicit "keep the world, adapt or drop the moment" block. The fix is
+  STRUCTURAL: tag each moment with the setting it requires and filter the pick against the rolled
+  world's tags. A filter cannot be paraphrased away.
+
+### ⭐ LESSON 12 — a charm-detail wording proven safe on one MATERIAL can be unsafe on another
+
+`"a worn pictorial relief of a carved <shape>"` holds 15/15 on PixelBot `pixel-ruins` STONE. On
+`ice-cavern` ICE the same wording rendered a large centred heraldic emblem AND **built itself a
+masonry wall to be carved into**, dragging the room off ice entirely — it caused both sub-4 renders
+in that path's final round. Replaced with charms that can only exist IN ice (a column of bubbles
+frozen in place, a fossil fern deep in the clear ice, one pane gone lens-clear so the chamber beyond
+bends through it). Do not port a charm formula across materials without re-testing it.
+
+Also from that build, and Kevin's own instinct now measured: **requiring every palette entry to
+attach a WARM ACCENT to the light put one in 15 of 15 renders.** "A single warm accent against all
+that cold is the whole trick" is a reliable anti-monochrome lever, not just a taste note.
 
 ## The agent brief template (reuse verbatim; only §PATH changes)
 

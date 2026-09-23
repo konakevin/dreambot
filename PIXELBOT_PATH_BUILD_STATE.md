@@ -201,3 +201,49 @@ R3 4.48 / 3.8 (orchestrator, the agent's residual): the three-quarter angle appe
 ### pixel-cozy-farm R0 (2026-09-19 06:14 UTC) → SCRAPPED before grading (Kevin: farm domain stays with FarmBot). Five hidden shadow renders remain; files removed.
 
 ## SHIPPED (2026-09-19 08:20 UTC). Kevin approved all eleven after the final QA batches, so: pools scaled to PRODUCTION with the same recipes in append mode (25 -> 7,470 entries, every pool hit its exact target, zero stragglers, zero format drift), the post-scale sweeps run and 101 re-derived defects fixed at source (37 weathervanes, 29 halo rings, 8 light-as-object phrases, the cloud and headland similes, masonry in rock, camera posture verbs), then a faithful-xerox GO-LIVE: the eleven keys moved into paths[] while staying in SCENE_PATHS, so medium / model set / vibes / chaos-off / polish-off are byte-identical to the approved batches. epic-vista left the rotation (pixel-vista replaces it; its files stay dormant). PixelBot now posts 18 paths: 11 scene + 7 in-game. The shadow test renders are deliberately RETAINED at Kevin's request (2026-09-19) for later review; scripts/_pixelbot-cleanup-test-renders.js deletes them when he says so (dry-run by default). Final scores: rain-street 4.74, campfire-night 4.70, harbor 4.60, cabin-glow 4.74, fantasy-vista 4.72, cozy-room 4.70, ruins 4.66, cool-rides 4.65, vista 4.64, skyward 4.64, shoreline 4.62.
+
+---
+
+### ice-cavern (agent, 2026-09-23, three rounds) → CLOSE (4.06 / 3.3), Kevin's call
+New PixelBot path, PixelBot's second INTERIOR after volcano-forge. 10 bespoke pools at MVP-25 (`camera`
+hand-authored), flux-2 family pinned from R0 on volcano-forge's evidence. UNWIRED: three `index.js` lines
+are in the agent report for the orchestrator to merge. Shadow renders retained.
+
+```
+R0 2026-09-23 02:42 UTC | models: 2-flex x3, 2-pro, 2-max | avg 4.00 | min 3.2
+  #1 3.9  #2 4.3  #3 4.6 (ref)  #4 3.2  #5 4.0
+  misses: #1 "shaft" -> solid light cone + fish in an aquarium tank; #2 chamber rendered DARK STONE,
+          stag in a museum vitrine; #4 "heart of ice" -> floating cut heart-shaped GEM, seal in a glass
+          cube, camera placed ON the hero arch so the hero left the frame; #5 chamber rendered MASONRY
+  cause: (a) clear-ice-with-edges = a display case (3 of 5); (b) HEART is a shape prior; (c) naming the
+         enclosing surfaces is not enough when the room's MATERIAL is the identity — Flux's cavern prior
+         is dark rock; (d) one broken hand-authored camera entry
+  variable for R1: the room's own ICE MATERIAL named in the template + the continuous-ice rule (template
+         clause + the 4 pool wordings that create a discrete clear object). Camera[14] fixed as a broken
+         entry, not a lever. Models untouched.
+R1 2026-09-23 02:48 UTC | models: 2-pro x5 (roll luck) | avg 3.86 | min 3.2
+  #1 4.1  #2 4.3  #3 4.1  #4 3.6  #5 3.2
+  effect: ice-built chambers 1/5 -> 3/5; zero display cases, zero gems, no "shaft" in any prompt. The
+          variable WORKED; it exposed the real design flaw underneath.
+  misses: #4 sparse, no hero, dead upper half; #5 stone dungeon + a framed wall plaque. Cinematographer
+          stayed the worst lens (3.5): 4 of 5 had no hero mass.
+  cause: the hero pool names CHAMBERS (a dome, a tunnel, a broad chamber) = negative space, which cannot
+         own 40-60% of a frame. volcano-forge's hero is a MASS standing in a room.
+  variable for R2: template hero block re-pointed at "the biggest STANDING MASS OF ICE in the chamber",
+         plus the same clause extended so every arch/stair/bridge/ledge is a shape the ice itself made.
+R2 2026-09-23 02:53 UTC | models: 2-max x2, 2-pro, 2-flex x2 | avg 4.06 | min 3.3
+  #1 4.8 (REFERENCE: Amiga look, a pale whale asleep in the banded ice wall over an arch, two tiny
+          lantern-carrying adventurers, footprints on untouched frost)  #2 3.4  #3 4.5  #4 3.3  #5 4.3
+  effect: per-lens across the three rounds — medium 4.9/4.9/4.9, cinematographer 3.4/3.5/3.6, set
+          dresser 3.2/3.3/3.6, lighting 4.2/4.3/4.2, director 4.0/3.9/4.0. Modest lens movement, but the
+          "no hero at all" class went away in three of five and the best render went 4.6 -> 4.8.
+  residual: BOTH sub-4 renders trace to ONE cause — the "worn pictorial relief of a carved <shape>" charm
+          detail, which held 15 of 15 on pixel-ruins STONE but on ICE renders a large centred HERALDIC
+          EAGLE and BUILDS ITSELF A MASONRY WALL to be carved into (3rd occurrence counting R1 #5).
+          Secondary: light still renders as an object (a draped gold curtain, a flat salmon rectangle)
+          even with every banned word swept from the pools, because Sonnet re-derives it.
+verdict: 3 rounds, CLOSE at 4.06 (bar is 4.5 with no render under 4). NOT changed after the graded round,
+  so the files on disk are a faithful xerox of R2. Next lever (one variable, unverified): delete the
+  pictorial-relief charm detail from the cavern + vault pools and their recipes. Then: move the
+  light-is-light rule into the template.
+```

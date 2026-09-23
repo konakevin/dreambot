@@ -58,6 +58,7 @@ const pathBuilders = {
   'wooden-toy-land': require('./paths/wooden-toy-land'),
   'tin-toy-parade': require('./paths/tin-toy-parade'),
   'puppet-theatre': require('./paths/puppet-theatre'), // 2026-09-22 SHADOW — proscenium framing
+  'snow-globe-world': require('./paths/snow-globe-world'), // 2026-09-22 SHADOW — contained world behind cropped glass
   // Halloween seasonal candidates — promoted from AlphaBot (2026-09), see
   // seasonalPaths.halloween below. Self-contained function-form builders
   // (own material-look text inline; no per-medium style injection needed).
@@ -119,6 +120,13 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro': 100,
       'black-forest-labs/flux-1.1-pro-ultra': 100,
     },
+    // snow-globe-world mirrors the tin-toy / puppet-theatre lineup so the GLASS FRAMING was the
+    // only variable under test. 15 renders on the final spec: 8 pro / 7 ultra, and no per-model
+    // difference in whether the framing held.
+    'snow-globe-world': {
+      'black-forest-labs/flux-1.1-pro': 100,
+      'black-forest-labs/flux-1.1-pro-ultra': 100,
+    },
   },
 
   // mediumByPath — each path locks to its medium.
@@ -148,6 +156,7 @@ module.exports = {
     'wooden-toy-land': 'wooden_toy_diorama',
     'tin-toy-parade': 'tin_toy_diorama',
     'puppet-theatre': 'puppet_theatre_diorama',
+    'snow-globe-world': 'snow_globe_diorama',
     // Halloween seasonal candidates (promoted from AlphaBot 2026-09) — each
     // builder is fully self-contained (inlines its own material-look text),
     // so its medium key carries no injected style (see mediumStyles below).
@@ -280,6 +289,8 @@ module.exports = {
       'a real printed BOARD GAME come to life, glossy die-cut cardboard board with painted illustrated spaces and printed borders, a clear winding path, real wooden meeples and plastic pawns and pewter figures and tumbling dice as pieces, scattered cards and a spinner and a sand-timer, warm hobby-table lighting, tilt-shift macro tabletop photography, tactile printed-cardboard texture, shallow depth of field',
     wooden_toy_diorama:
       'heirloom HAND-CARVED WOODEN toys, solid painted wood with visible woodgrain and turned-lathe rounded forms, soft matte painted color, gently rounded edges, occasional natural unpainted beech and maple, Waldorf / Grimm’s / Ostheimer / Brio wooden-toy aesthetic, warm natural wood tones, cozy hobby-table lighting, tilt-shift macro toy photography, tactile wood texture, shallow depth of field',
+    snow_globe_diorama:
+      'extreme close-up shot through the thick curved glass wall of a snow globe, the bright wet glass arcing across the top corners of the picture and running off its edges, the whole tiny world inside filling the rest of the frame edge to edge, deep focus front to back with edge-to-edge sharpness so its own far distance and its own lit windows and its own road all stay readable, fine specks suspended in the water in front of it, hand-painted plaster and resin miniature with visible brush-marks, warm practical light raking in from one side through the water, tactile painted-miniature and wet-glass texture',
     puppet_theatre_diorama:
       'handmade puppets performing a scene on a little toy stage, caught mid-gesture on the boards with their strings and rods visible, photographed from the audience through a painted cardboard proscenium arch with chipped gilt framing the opening, painted card flats standing in grooves in overlapping receding layers, a painted backcloth behind, carved and cloth puppets on visible strings and rods, tiny warm footlights raking up from the front edge and throwing shadows onto the flats, scuffed stage boards, honest cut edges and visible brush-marks, warm practical bulb light, tilt-shift macro collectible photography, tactile painted-card and timber texture, shallow depth of field',
     tin_toy_diorama:
@@ -467,6 +478,23 @@ module.exports = {
   // so each path only rolls vibes that match its tone (no coquette boss
   // battles, no voltage dollhouses, no shimmer army-men).
   vibesByPath: {
+    // snow-globe-world — curated from the actual dream_vibes.directive TEXT, not guessed.
+    // Dropped: ethereal (its "soft diffused light, no single source visible" IS the pale-blurred
+    // failure and kills the directional light the money shot needs), peaceful ("absolute
+    // stillness" = the dullness class), coquette (pastel-pink-only fights every committed palette
+    // in the world pool), arcane ("luminous mist" fights the real weather), ancient (decays the
+    // little world), surreal (documented register-breaker), and voltage — whose 150-char directive
+    // slice ends on the word "signage", a text prior on the path whose #1 trap is lettering.
+    'snow-globe-world': [
+      'cinematic',
+      'cozy',
+      'epic',
+      'nostalgic',
+      'whimsical',
+      'enchanted',
+      'nightshade',
+      'shimmer',
+    ],
     claymation: [
       'cozy',
       'whimsical',
@@ -645,7 +673,7 @@ module.exports = {
   // dispatcher never auto-posts them; reachable only via explicit --mode.
   // 'puppet-theatre' stays here until Kevin grades it. shadowPaths[] is invisible to the hourly
   // dispatcher and renders only via `iter-bot --mode puppet-theatre --post`, posted hidden.
-  shadowPaths: ['puppet-theatre'], // Stage O paths promoted to live rotation 2026-08-16 (TOY_SHADOW_PATHS const retained for reference)
+  shadowPaths: ['puppet-theatre', 'snow-globe-world'], // Stage O paths promoted to live rotation 2026-08-16 (TOY_SHADOW_PATHS const retained for reference)
 
   // Seasonal-only paths (2026-09-07) — drawn ONLY when
   // engine_config.bots_seasonal_enabled is true AND the named holiday window
@@ -725,6 +753,8 @@ module.exports = {
       'tin-toy-parade',
       // puppet-theatre: chaos would scramble the proscenium framing, which IS the path.
       'puppet-theatre',
+      // snow-globe-world: same reason — chaos would scramble the cropped-glass framing.
+      'snow-globe-world',
       // Halloween seasonal candidates (promoted from AlphaBot 2026-09) —
       // protect the curated MVP composition validated during QA.
       'vintage-halloween-toybox',
@@ -781,6 +811,7 @@ module.exports = {
     // too so the curated MVP composition stays protected if polish is ever
     // re-enabled per-path.
     skipPaths: [
+      'snow-globe-world',
       'vintage-halloween-toybox',
       'spooky-dollhouse-diorama',
       'toy-graveyard-diorama',
@@ -797,6 +828,7 @@ module.exports = {
   sensoryAnchors: {
     enabled: true,
     skipPaths: [
+      'snow-globe-world',
       'model-train-world',
       'toybox-chaos',
       'plush-world',

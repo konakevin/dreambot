@@ -36,6 +36,7 @@ const SCENE_PATHS = {
   'pixel-skyward': require('./paths/pixel-skyward'), // batch 3 (agent), PASS R2 4.64
   'pixel-ruins': require('./paths/pixel-ruins'), // batch 4 (agent) + orchestrator R3, CLOSE 4.48 — Kevin's decision
   'volcano-forge': require('./paths/volcano-forge'), // batch 5 (agent), 3 rounds — R1 PASS 4.50; R2 four clean renders avg 4.75
+  'ice-cavern': require('./paths/ice-cavern'), // batch 5 (agent), 3 rounds — R2 4.06 CLOSE; ref render R2 #1 4.8
 };
 
 const pathBuilders = {
@@ -96,6 +97,15 @@ module.exports = {
     // flux-dev dropped the named machinery and rendered a "small, far off" figure at hero scale.
     // The firelit INTERIOR is this path's whole identity, so it runs on the flux-2 family.
     'volcano-forge': {
+      'black-forest-labs/flux-2-pro': 1,
+      'black-forest-labs/flux-2-max': 1,
+      'black-forest-labs/flux-2-flex': 1,
+    },
+    // ice-cavern: the SAME exclusion, applied from round 0 on volcano-forge's evidence rather than
+    // rediscovered. A blue-lit ice INTERIOR is a lighting condition, and flux-1.1-pro-ultra reverts
+    // any condition-identity path to a golden-hour EXTERIOR with a fake sign; flux-dev drops named
+    // features and renders a "small, far off" figure at hero scale.
+    'ice-cavern': {
       'black-forest-labs/flux-2-pro': 1,
       'black-forest-labs/flux-2-max': 1,
       'black-forest-labs/flux-2-flex': 1,
@@ -173,7 +183,7 @@ module.exports = {
   // cozy-farming-life-sim: pulled from rotation 2026-09-19 for a rework (cozy-cute pixel
   // farm, FarmBot-in-pixels). Kept renderable + hidden here until the rework is approved.
   // The scene paths went live 2026-09-19; only the pulled farm path stays parked here.
-  shadowPaths: ['cozy-farming-life-sim', 'volcano-forge'],
+  shadowPaths: ['cozy-farming-life-sim', 'volcano-forge', 'ice-cavern'],
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
