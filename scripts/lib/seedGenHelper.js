@@ -123,6 +123,31 @@ function keyForExact(s) {
   return s.toLowerCase().replace(/\s+/g, ' ').trim();
 }
 
+// IDEA KEY = sorted first-SIX non-stopword tokens >4 chars. Deliberately coarser
+// than signatureOf, and it is the check that was missing.
+//
+// Measured 2026-09-23 across the whole fleet: exact duplicates were ZERO and
+// 12-token signature dupes only 1.3%, yet 31,355 entries (6% of 497,895) were
+// restatements of an idea already in their own pool. Worst case
+// faebot_flower_fairy_scale_prover: 200 entries, 69 distinct ideas, including
+// nine that differed only by an adjective —
+//   "giant magnolia-bloom as her bedchamber, broad cream-and-pink petals..."
+//   "giant magnolia-bloom as her bedchamber, large cream-and-rose petals..."
+// Both pass keyForExact AND signatureOf, because 12 tokens is enough room for
+// synonym swaps to look distinct. Six is not. Kevin's symptom was the bots
+// feeling repetitive after a few weeks, which is exactly a pool of 200 entries
+// delivering 69 distinguishable renders.
+//
+// Generating against this key is what makes a deep pool actually diverse.
+function ideaKeyOf(s) {
+  const tokens = String(s)
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]+/g, ' ')
+    .split(/\s+/)
+    .filter((t) => t.length > 4 && !STOPWORDS.has(t));
+  return tokens.slice(0, 6).sort().join('|');
+}
+
 // Signature = sorted-unique first-12 non-stopword tokens >4 chars, joined.
 // Two entries with the same signature are near-duplicates per the playbook.
 function signatureOf(s) {
@@ -360,6 +385,7 @@ async function generatePool({
     // contribute one), then cross-batch against `all`.
     const droppedExact = [];
     const droppedSig = [];
+    const droppedIdea = [];
     const seenStrs = new Set(
       all
         .filter((e) => typeof e === 'string' || (e && typeof e.description === 'string'))
@@ -369,6 +395,11 @@ async function generatePool({
       all
         .filter((e) => typeof e === 'string' || (e && typeof e.description === 'string'))
         .map((e) => signatureOf(typeof e === 'string' ? e : e.description))
+    );
+    const seenIdeas = new Set(
+      all
+        .filter((e) => typeof e === 'string' || (e && typeof e.description === 'string'))
+        .map((e) => ideaKeyOf(typeof e === 'string' ? e : e.description))
     );
     const survivors = [];
     for (const entry of newEntries) {
@@ -384,8 +415,14 @@ async function generatePool({
         droppedSig.push(text.slice(0, 60));
         continue;
       }
+      const idea = ideaKeyOf(text);
+      if (seenIdeas.has(idea)) {
+        droppedIdea.push(text.slice(0, 60));
+        continue;
+      }
       seenStrs.add(exactKey);
       seenSigs.add(sig);
+      seenIdeas.add(idea);
       survivors.push(entry);
     }
     newEntries = survivors;
@@ -396,8 +433,8 @@ async function generatePool({
       newEntries = newEntries.slice(0, total - all.length);
     }
     const dropMsg =
-      droppedExact.length + droppedSig.length > 0
-        ? ` (dedup: -${droppedExact.length} exact, -${droppedSig.length} sig)`
+      droppedExact.length + droppedSig.length + droppedIdea.length > 0
+        ? ` (dedup: -${droppedExact.length} exact, -${droppedSig.length} sig, -${droppedIdea.length} same-idea)`
         : '';
     console.log(
       `  ✓ iter ${iteration}: +${newEntries.length}${dropMsg} (total: ${all.length + newEntries.length}/${total})`
@@ -436,4 +473,4 @@ async function generatePool({
   return all;
 }
 
-module.exports = { generatePool, loadEnv };
+module.exports = { generatePool, loadEnv, ideaKeyOf, signatureOf, keyForExact };
