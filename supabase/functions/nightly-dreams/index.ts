@@ -138,6 +138,7 @@ import { asGender, sidesToGenders, sideCheckModeOf } from '../_shared/wardrobeSi
 import { hydrateCastSources } from '../_shared/castPhotoUrl.ts';
 import { orderDualSides, shouldFlipDualSide } from '../_shared/dualSideOrder.ts';
 import { genderSafeDualSwap, identityThreshold } from '../_shared/dualSwapPipeline.ts';
+import { SwapCapacityRetryError } from '../_shared/swapCapacityGate.ts';
 import {
   aHashFromDecoded,
   hammingDistance,
@@ -4408,6 +4409,19 @@ Output ONLY the prompt.`;
               return r.aSide ? sidesToGenders(r.aSide, sideGenders.left, sideGenders.right) : null;
             }
           : undefined;
+      // CAPACITY RETRY (NIGHTLY_ROBUSTNESS_PLAN.md item 2): may a busy-service swap failure send this job back to
+      // the queue? Only a queued nightly (not first-dream, not a direct QA call) with attempts left under
+      // engine_config.nightly_swap_capacity_retries (0 = off = today's degrade).
+      const capacityRetryAllowed = await (async (): Promise<boolean> => {
+        const maxRetries = (await fetchEngineConfig(supabase)).nightlySwapCapacityRetries;
+        if (!queueJobId || isFirstDream || strict_face_swap || maxRetries <= 0) return false;
+        const { data: qa } = await supabase
+          .from('dream_queue')
+          .select('attempt_count')
+          .eq('id', queueJobId)
+          .single();
+        return (qa ? qa.attempt_count : 0) < maxRetries;
+      })();
       const result = await genderSafeDualSwap(
         tempUrl,
         {
@@ -4424,7 +4438,8 @@ Output ONLY the prompt.`;
               { left: s0.gender, right: s1.gender },
               queueJobId,
               genderOverride ?? null,
-              qa_big_face_max_hfrac ?? (await fetchEngineConfig(supabase)).dualBigFaceMaxHFrac
+              qa_big_face_max_hfrac ?? (await fetchEngineConfig(supabase)).dualBigFaceMaxHFrac,
+              'batch'
             ),
           confirmGenders: async (target) => {
             const r = await classifyDualGenders(target, REPLICATE_TOKEN);
@@ -4760,6 +4775,11 @@ Output ONLY the prompt.`;
           sideCheckMode: sideCheckModeOf((await fetchEngineConfig(supabase)).dualSideCheckMode),
           // Parity loop round 7: the looks path never ships a couple below 0.5 likeness without a re-render try.
           ...(looksPath ? { identityMinSim: LOOKS_DUAL_IDENTITY_MIN } : {}),
+          // CAPACITY RETRY (NIGHTLY_ROBUSTNESS_PLAN.md item 2): a nightly couple whose swap failed because the
+          // Fly service was busy goes back to the queue (backoff 1m / 5m) instead of shipping a solo — only on
+          // the cron path (never first-dream or a direct QA call) and only while retries remain; the last
+          // allowed attempts keep today's degrade so a dream always ships. 0 retries = today exactly.
+          capacityFailure: capacityRetryAllowed ? 'retry_later' : 'degrade',
         }
       );
       tempUrl = result.url;
@@ -5877,6 +5897,10 @@ Output ONLY the prompt.`;
   } catch (err) {
     const errMsg = (err as Error).message;
     console.error(`[nightly-dreams] Error for user ${userId}:`, errMsg);
+    // A capacity re-queue carries the swap stamps gathered before the throw (dual_swap_error, gate waits), so
+    // the failed attempt's log row says exactly why it went back to the queue.
+    const capacityRetry = err instanceof SwapCapacityRetryError;
+    if (capacityRetry) fallbackReasons.push(...err.reasons);
 
     // Record the failure so a silent cohort-wide outage is queryable. The
     // success path logs to ai_generation_log; without this, failures left no
@@ -5906,8 +5930,8 @@ Output ONLY the prompt.`;
       replicate_prediction_id: null,
     });
 
-    // Report to Sentry (no-op without SENTRY_EDGE_DSN; skip expected NSFW).
-    if (!/nsfw|safety/i.test(errMsg)) {
+    // Report to Sentry (no-op without SENTRY_EDGE_DSN; skip expected NSFW and planned capacity re-queues).
+    if (!/nsfw|safety/i.test(errMsg) && !capacityRetry) {
       await captureRenderError(err, {
         fn: 'nightly-dreams',
         jobId: queueJobId,

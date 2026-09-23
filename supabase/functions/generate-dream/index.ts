@@ -2286,7 +2286,9 @@ Output ONLY the prompt.`;
               { left: genderFromLock(s0.genderLock), right: genderFromLock(s1.genderLock) },
               jobId,
               genderOverride ?? null,
-              (await fetchEngineConfig(supabase)).dualBigFaceMaxHFrac
+              (await fetchEngineConfig(supabase)).dualBigFaceMaxHFrac,
+              // Swap capacity gate (mig 549): a user is watching, so Create may use the reserved slots.
+              'interactive'
             ),
           confirmGenders: async (target) => {
             const r = await classifyDualGenders(target, REPLICATE_TOKEN);

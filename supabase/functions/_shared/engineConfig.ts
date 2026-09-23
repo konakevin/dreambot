@@ -197,6 +197,13 @@ export interface EngineConfig {
   createOutfitPatternPct: number;
   /** Accounts that get both outfit switches while they are globally off (review before the flip). */
   createOutfitPreviewUserIds: string[];
+  /** SWAP CAPACITY GATE (mig 549, NIGHTLY_ROBUSTNESS_PLAN.md): dual swaps wait for a free Fly slot. */
+  swapGateEnabled: boolean;
+  /** Longest a dual swap waits for a slot before `swap_capacity_busy` (ms). */
+  swapGateMaxWaitMs: number;
+  /** Nightly couple: on queue attempts below this, a CAPACITY swap failure re-queues the job instead of
+   *  shipping a solo. 0 = off (today's degrade). */
+  nightlySwapCapacityRetries: number;
   /** Holiday DAY-OF date rule (mig 471, HOLIDAY_DAY_OF_PLAN.md §4): local hour at the 08:00 UTC run
    *  from which the day-of is evaluated against the NEXT local date (24 = never). Default 20. */
   dayOfEveningCutoffHour: number;
@@ -294,6 +301,9 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   createOutfitSeparateCutPct: 50,
   createOutfitPatternPct: 50,
   createOutfitPreviewUserIds: [],
+  swapGateEnabled: false,
+  swapGateMaxWaitMs: 45_000,
+  nightlySwapCapacityRetries: 0,
   dayOfEveningCutoffHour: 20,
   dayOfCostumePct: 100,
   holidayPostcardScope: 'day_of',
@@ -470,6 +480,13 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
           (x: unknown): x is string => typeof x === 'string'
         )
       : [],
+    swapGateEnabled: data.swap_gate_enabled === true,
+    swapGateMaxWaitMs: Number.isFinite(Number(data.swap_gate_max_wait_ms))
+      ? Math.max(0, Math.min(120_000, Number(data.swap_gate_max_wait_ms)))
+      : 45_000,
+    nightlySwapCapacityRetries: Number.isFinite(Number(data.nightly_swap_capacity_retries))
+      ? Math.max(0, Math.min(4, Math.round(Number(data.nightly_swap_capacity_retries))))
+      : 0,
     dayOfEveningCutoffHour: clampHour(data.day_of_evening_cutoff_hour, 20),
     dayOfCostumePct: clampPct(data.day_of_costume_pct, DEFAULT_ENGINE_CONFIG.dayOfCostumePct),
     holidayPostcardScope:

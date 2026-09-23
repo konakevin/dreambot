@@ -16,6 +16,11 @@
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { ensureHttpsImageUrl } from './faceSwap.ts';
+import { fetchEngineConfig } from './engineConfig.ts';
+import { acquireSwapSlot, releaseSwapSlot, type SwapPriority } from './swapCapacityGate.ts';
+
+/** A swap needs about this long once it starts; a slot that frees later than deadline minus this is useless. */
+const MIN_SWAP_MS = 25_000;
 
 export interface DualDispatchResult {
   /** The swapped image, or null when the render had no clean 2-face split
@@ -43,6 +48,10 @@ export interface DualDispatchResult {
   bigFace: boolean | null;
   /** Taller chosen face as a fraction of frame height, when the engine detected. */
   maxFaceHFrac: number | null;
+  /** SWAP CAPACITY GATE (mig 549): how long this swap waited for a Fly slot, and how the gate ran
+   *  ('acquired' | 'disabled' | 'gate_error'). */
+  gateWaitMs?: number | null;
+  gateMode?: string | null;
 }
 
 export async function dispatchDualFaceSwap(
@@ -68,7 +77,10 @@ export async function dispatchDualFaceSwap(
   genderOverride?: { left: 'male' | 'female'; right: 'male' | 'female' } | null,
   // Big-face tier ceiling from engine_config.dual_big_face_max_hfrac (BIG_FACE_RECLAIM_PLAN.md). Null / 0.40 =
   // today's behaviour on the engine; the engine clamps it to 0.40-0.80.
-  bigFaceMaxHFrac?: number | null
+  bigFaceMaxHFrac?: number | null,
+  // SWAP CAPACITY GATE (NIGHTLY_ROBUSTNESS_PLAN.md): 'interactive' (Create — a user is watching) may use the
+  // reserved slots; 'batch' (nightly, QA) waits behind them.
+  priority: SwapPriority = 'batch'
 ): Promise<DualDispatchResult> {
   // Convert data: URL targets (from native OpenAI + Gemini providers) to a temp HTTPS upload (on the
   // image-ops service, phase 3b) so the POST body stays small — no ~6-8 MB base64 ride-along — and the
@@ -79,7 +91,31 @@ export async function dispatchDualFaceSwap(
     userId
   );
 
+  let leaseId: string | null = null;
   try {
+    // SWAP CAPACITY GATE (mig 549): wait for a free Fly slot instead of piling onto the service. 1-2 swaps at
+    // once never failed in 21 nights of data; 3-4 at once failed 31% of the time. Fail-open by construction:
+    // disabled or a DB error = the swap runs un-gated, exactly as before. Throws SwapCapacityBusyError only
+    // when no slot frees up in time (nightly turns that into a later retry, never a solo).
+    const gateCfg = await fetchEngineConfig(supabase);
+    const gateNow = Date.now();
+    const swapDeadline = deadlineMs ?? gateNow + 120_000;
+    const lease = await acquireSwapSlot(supabase, {
+      priority,
+      holder: traceId ?? userId,
+      ttlMs: Math.min(150_000, Math.max(30_000, swapDeadline - gateNow + 20_000)),
+      waitUntilMs: swapDeadline - MIN_SWAP_MS,
+      settings: { enabled: gateCfg.swapGateEnabled, maxWaitMs: gateCfg.swapGateMaxWaitMs },
+    });
+    leaseId = lease.leaseId;
+    const gateWaitMs = lease.waitedMs;
+    const gateMode = lease.mode;
+    if (gateWaitMs > 0 && lease.mode === 'acquired') {
+      console.log(
+        `[dispatchDualFaceSwap]${traceId ? `[${traceId}]` : ''} waited ${gateWaitMs}ms for a swap slot (${priority})`
+      );
+    }
+
     // The dual swap runs ONLY on the Fly-hosted engine. No URL / token = a dual_swap_error for the
     // caller (→ the gender-safe solo rebuild), never an in-isolate engine (deleted 2026-09-17, phase 5).
     const flyUrl = Deno.env.get('DUAL_SWAP_FLY_URL');
@@ -179,8 +215,12 @@ export async function dispatchDualFaceSwap(
       identity: parsed.identity ?? null,
       bigFace: typeof parsed.bigFace === 'boolean' ? parsed.bigFace : null,
       maxFaceHFrac: typeof parsed.maxFaceHFrac === 'number' ? parsed.maxFaceHFrac : null,
+      gateWaitMs,
+      gateMode,
     };
   } finally {
+    // Give the swap slot back (an unreleased lease expires on its own).
+    await releaseSwapSlot(supabase, leaseId);
     // Clean up the temp data-URL conversion if we made one. Fire-and-forget.
     if (targetTempPath) {
       supabase.storage

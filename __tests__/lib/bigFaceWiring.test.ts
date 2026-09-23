@@ -37,7 +37,8 @@ describe('big-face tier — config', () => {
 describe('big-face tier — dispatcher + pipeline', () => {
   it('the dispatcher forwards the ceiling and parses the tier back', () => {
     const d = strip(read('supabase/functions/_shared/dualSwapDispatch.ts'));
-    expect(d).toContain('bigFaceMaxHFrac?: number | null ): Promise<DualDispatchResult>');
+    // (a trailing swap-gate priority param follows since migration 549 — see swapCapacityGate.test.ts)
+    expect(d).toContain('bigFaceMaxHFrac?: number | null,');
     expect(d).toContain('bigFaceMaxHFrac: bigFaceMaxHFrac ?? null,');
     expect(d).toContain("bigFace: typeof parsed.bigFace === 'boolean' ? parsed.bigFace : null,");
     expect(d).toContain(

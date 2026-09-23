@@ -279,7 +279,9 @@ export const DUAL_ACTIONS_DYNAMIC: string[] = [
   'one throwing an arm out in a broad sweeping gesture across the view while the other stands firm with arms crossed, both faces to the camera, a gap between their heads',
   'both windswept and leaning slightly into a strong gust, cloaks and hair streaming to one side, jaws set and eyes forward, a clear gap between their heads',
   'both mid-turn toward the camera as if just called, weight shifting onto the back foot, arms swinging naturally out to their own sides, heads apart',
-  'both with arms spread wide and open as if taking in a vast view, chests lifted, faces to the camera, heads kept well apart',
+  // REMOVED 2026-09-23 (action_poses 3508, migration 549): "both with arms spread wide and open as if taking in a
+  // vast view". Probe on Kevin's 09-23 dream: exact replay held the dual swap 3/7, the same replay with a neutral
+  // pose 8/8, with the vibe swapped instead 3/8 — the pose itself loses a face on flux couples.
   'one standing with weight cocked to one hip and a hand raised in a confident beckon, the other with arms crossed and chin up, heads apart',
   'both striding forward toward the camera side by side with a wide gap between them, confident purposeful gait, arms swinging, heads clearly apart',
   'one gesturing grandly outward with an open hand presenting the scene, the other standing proud with hands clasped behind the back, heads apart',

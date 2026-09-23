@@ -30,6 +30,8 @@
  * so this orchestrator can never be worse than the old behavior.
  */
 
+import { isSwapCapacityError, SwapCapacityRetryError } from './swapCapacityGate.ts';
+
 export interface DualSwapDeps {
   /**
    * Dual-swap the current target via the engine (which detects faces + their
@@ -198,6 +200,11 @@ export async function genderSafeDualSwap(
     /** Per-call likeness bar for a delivered dual (parity loop round 7, the looks path passes 0.5): a swap whose
      *  min per-face sim is below it takes the re-render ladder instead of shipping. Default = IDENTITY_MIN_SIM. */
     identityMinSim?: number;
+    /** NIGHTLY_ROBUSTNESS_PLAN.md item 2: what a CAPACITY swap failure (busy / slow Fly service, see
+     *  isSwapCapacityError) does. 'degrade' (default) = today's ladder (re-render if budget, else a solo);
+     *  'retry_later' = throw SwapCapacityRetryError so a non-interactive caller (the nightly queue) retries the
+     *  job later instead of shipping a solo. Content failures are unaffected either way. */
+    capacityFailure?: 'degrade' | 'retry_later';
     /** The couple ladder's solo rung fires only from this attempt on (default 0 = after the first failed couple).
      *  Nightly passes 1 (Kevin 2026-09-17, late): flux couple → flux couple AGAIN → flux single → next-model
      *  couple → its single → nobody. The 09-14..16 engine re-rendered a failed couple before degrading and
@@ -385,6 +392,8 @@ export async function genderSafeDualSwap(
       identity?: { left: number | null; right: number | null; ms: number } | null;
       bigFace?: boolean | null;
       maxFaceHFrac?: number | null;
+      gateWaitMs?: number | null;
+      gateMode?: string | null;
     };
     try {
       // Pass the override only when confident, so a no-confirmGenders caller (and
@@ -392,8 +401,15 @@ export async function genderSafeDualSwap(
       res = override ? await deps.dispatchDual(target, override) : await deps.dispatchDual(target);
     } catch (e) {
       // Engine / swap error → retry within budget (a fresh render usually clears it).
-      log(`dual swap error: ${(e as Error).message}`);
-      reasons.push(`dual_swap_error:${(e as Error).message.slice(0, 80)}`);
+      const msg = (e as Error).message;
+      log(`dual swap error: ${msg}`);
+      reasons.push(`dual_swap_error:${msg.slice(0, 80)}`);
+      // A BUSY service is not fixed by a fresh render and never deserved a solo: a caller that can wait
+      // (nightly) sends the whole job back to the queue instead (NIGHTLY_ROBUSTNESS_PLAN.md item 2).
+      if (opts.capacityFailure === 'retry_later' && isSwapCapacityError(msg)) {
+        reasons.push('swap_capacity_retry_later');
+        throw new SwapCapacityRetryError(msg, reasons);
+      }
       continue;
     }
     faceCount = res.faceCount;
@@ -403,6 +419,9 @@ export async function genderSafeDualSwap(
       // log nothing, which let an audit misread the live dynamic engine as
       // dormant. These reasons ride the caller's fallbackReasons into the log.
       reasons.push(`dual_engine:${res.engine ?? 'unknown'}`);
+      if (res.gateMode && res.gateMode !== 'disabled') {
+        reasons.push(`swap_gate:${res.gateMode}:${res.gateWaitMs ?? 0}`);
+      }
       // COMPOSITION GATE (Kevin 2026-09-17 late): a swapped couple is still rejected when its tallest face is
       // taller than the configured fraction of the frame — re-render down the chain like a split failure.
       if (
