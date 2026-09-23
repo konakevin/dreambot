@@ -12,6 +12,7 @@ const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   'amber-forest': require('./paths/amber-forest'), // 2026-09-22 SHADOW — the resin forest
+  'tidal-flat-tracks': require('./paths/tidal-flat-tracks'), // 2026-09-23 SHADOW — the giant has already gone
   'dino-portrait': require('./paths/dino-portrait'),
   'dino-action': require('./paths/dino-action'),
   'paleo-landscape': require('./paths/paleo-landscape'),
@@ -96,7 +97,10 @@ module.exports = {
     // render measured in the build was a nano-banana render on this medium.
     // The ChibiBot lesson-2 bypass, safe here because the path's own style tags
     // are concrete.
-    'google/gemini-2-image': { medium: 'dinobot_gpt_clean', skipPaths: ['amber-forest'] },
+    'google/gemini-2-image': {
+      medium: 'dinobot_gpt_clean',
+      skipPaths: ['amber-forest', 'tidal-flat-tracks'],
+    },
   },
   promptPrefixByMedium: {
     dinobot_gpt_clean: '',
@@ -111,6 +115,15 @@ module.exports = {
   // pool or template work on an optical-identity path.
   modelByPath: {
     'amber-forest': { 'black-forest-labs/flux-2-pro': 85, 'google/gemini-2-image': 15 },
+    // tidal-flat-tracks — same law, fourth confirmation on this bot. The R1 probe
+    // ran one render per model with EVERY structural law reaching 5/5 prompts, and
+    // three of five models still deleted the premise: flux-1.1-pro macro'd onto rock
+    // (2.1), ultra went abstract with no environment (2.0), flux-dev rendered a canyon
+    // and back-filled a whole theropod (2.0). Each reproduced its OWN documented
+    // amber-forest behaviour. Weights rather than a hard pin: flux-2-pro 3.75 (n=4) vs
+    // gemini 3.80 (n=6) is inside the noise at that size, and each owns a different
+    // half of the build's best work.
+    'tidal-flat-tracks': { 'black-forest-labs/flux-2-pro': 60, 'google/gemini-2-image': 40 },
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -203,6 +216,7 @@ module.exports = {
   // NOTHING else about how it renders (the go-live xerox rule).
   shadowPaths: [
     'amber-forest',
+    'tidal-flat-tracks',
     'courtship-display',
     'den-and-burrow',
     'desert-dunes',
@@ -219,6 +233,7 @@ module.exports = {
     // New axis-system paths skip chaos for the MVP so the hero composition is what gets judged.
     skipPaths: [
       'amber-forest',
+      'tidal-flat-tracks',
       'courtship-display',
       'den-and-burrow',
       'desert-dunes',
@@ -247,6 +262,7 @@ module.exports = {
     preservePhrasesByPath: {},
     skipPaths: [
       'amber-forest',
+      'tidal-flat-tracks',
       'courtship-display',
       'den-and-burrow',
       'desert-dunes',
@@ -270,6 +286,15 @@ module.exports = {
   },
   sensoryAnchors: {
     enabled: true,
+    // skipPaths — NEW on this bot, and load-bearing rather than tidy.
+    // `requiredChannels: ['lightcolor']` appends a rolled key light to EVERY render,
+    // so it is a second palette source firing 100% of the time — on the one path whose
+    // palette axis IS its anti-grey defence (see lessons 59/60 from its build). A third
+    // of the `scene` lightcolor pool also names a PLACE ("…illuminating the ancient
+    // limestone cave entrance"), which is a hostile injection on a wide-open tidal flat.
+    // Decisive reason: all 15 graded renders ran with this OFF, so shipping it ON would
+    // ship config that was never rendered. Supported since sensoryAnchors.js:152.
+    skipPaths: ['tidal-flat-tracks'],
     requiredChannels: ['lightcolor'],
     pathContext: {
       'dino-portrait': 'dinosaur',

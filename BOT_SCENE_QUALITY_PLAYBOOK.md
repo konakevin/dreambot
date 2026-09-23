@@ -1900,6 +1900,15 @@ failed render writes no `uploads` row, and `prompt_preview` caps at 2000 chars, 
 often?" could not be answered for apiary's 3-in-26 E005 rate at all: all 23 of its delivered prompts
 exceed the cap and reported the same number.
 
+**Third data point, measured independently on DinoBot `tidal-flat-tracks` and it also fails.** Within
+that build's final round, sorting by length gives the OPPOSITE sign: the **shortest** prompt (206w)
+graded **2.8** and the **longest** (289w) graded **4.7**. Across all 15 renders length correlates with
+nothing, while the MODEL and one pool class explain the variance completely — and DinoBot's two
+best-graded paths are its two longest. The honest summary across three bots: **the dial is real but it
+is not the dominant term once you are inside a bot's normal band**, and it is swamped by model choice
+and by a single bad pool class. Designing for brevity up front is still free, so keep doing it; just
+never diagnose with it.
+
 **The process lesson, which is the durable one:** an observational split of one path's renders is a
 HYPOTHESIS. Before writing it into the playbook as a law, test it against the paths already built — the
 data was already in the database and cost one query. I had written this up, committed it, and put it at
@@ -1982,6 +1991,60 @@ was the one that always ships. **When you fix a prompt-level defect, grep the pa
 can restate it — prose, pools, prefix, medium AND the output order — and check the order LAST because it
 is the one that wins.** (Fixed 2026-09-23; the 4.37 grade was measured before the fix, so the fix is
 expected to help and is UNVERIFIED — it needs one 6-render round to confirm.)
+
+**61. ⭐⭐⭐ A SIZE RULER MUST REACH EVERY RENDER, SO IT LIVES IN THE TEMPLATE — AND IF YOU LEAVE THE
+SLOT EMPTY SONNET INVENTS ONE, AT A 100% OFF-LIMITS HIT RATE.** DinoBot `tidal-flat-tracks` needed a
+scale ruler (how big is this footprint?). The ruler rule was written into the GENERATOR recipes, so it
+shaped the pool text and never reached the brief: pools audited **0 sweep hits across 125 entries**, and
+Sonnet then supplied its own rulers at brief-writing time in **3 of 5** round-1 prompts —
+*"PIGEON-sized"*, *"as wide as a ROWBOAT"*, *"THUMB-sized"*, *"small-FISTED"*, later *"wide enough to
+swallow a MAN standing"*. **Every single invented ruler was a banned modern object or a body part, on a
+no-humans bot**, and one tripped the engine's own banned-phrase retry. Worse, **on flux-2-pro the
+invented ruler rendered AS the ruler — a literal pigeon, a modern bird, on a bot that bans them.**
+Moving the ruler law into the template body plus output-order item 2 took off-limits rulers **3/5 → 1/5**
+and the intended in-world ruler (toe-notch, claw-slot) **0/5 → 5/5**.
+
+This is lesson 22 in a new costume and worth stating as its own law: **a rule in the generator reaches
+the POOL, not the PROMPT.** Any comparison the scene NEEDS but you have not supplied will be invented,
+and an invented comparison draws from the model's world rather than your bot's. Residual: Sonnet
+re-derives the IDIOM *"deep/wide enough to swallow X"*, so ban the idiom, not just the category.
+
+**62. ⭐⭐ A NEUTRAL CANNOT BE ONE OF YOUR "TWO COLOURS IN OPPOSITION" — IT ONLY DESATURATES.** A named
+failure mode for the two-committed-colours lever. An entry pairing one hue against **pewter / charcoal /
+iron / hail-white** satisfies every "two colours present" check and renders a grey frame with one
+accent. **6 of 25** sky entries had that shape, and they produced **both** of the round's grey frames —
+the exact failure the path existed to prevent. Requiring two real hues from *different parts of the
+wheel* took colour-vs-neutral **6/25 → 0/25**, two hues present **5/5** of prompts, grey frames
+**2/5 → 0/5**.
+
+⚠️ **And the counterweight, again (lesson 53):** the same sweep flagged the pool's **best** entry
+(*"bruised ochre-brown … a sharp electric cyan"*, the 4.6 render) because `cyan` and `ochre` were not in
+the regex's hue list. Reading the matched text saved it; a blind regeneration would have thrown away the
+build's best content.
+
+**63. ⭐⭐ STRENGTHENING "TWO COLOURS IN OPPOSITION" CREATES SPLIT PANELS, BECAUSE A SIDE-vs-SIDE COLOUR
+ASSIGNMENT *IS* A PANEL INSTRUCTION.** The lesson-62 fix worked and the round average still **fell 4.02
+→ 3.54**, because a sky entry that assigns hue A to the left and hue B to the right renders a
+dead-straight vertical seam. Measured: **sided-sky clause present → split panel 2 of 2; absent → 0 of
+3.** Assign the two hues to LAYERS (overhead vs underfoot) or to SURFACES, never to left vs right.
+
+General form, and this is the transferable half: **a fix that strengthens a rule can hand the model a
+new literal reading of that rule.** Before shipping a strengthened wording, ask what it could mean
+GEOMETRICALLY. Same family as lesson 30's split-pane trap.
+
+**64. ⭐⭐ A JARGON COLLISION CAN BE WITH YOUR BOT'S OWN WRAPPER, NOT WITH THE OUTSIDE WORLD.** Lesson
+28's layperson check points outward; this one points inward. Caught pre-render: the sky and air pools
+called the water layer *"the film"* — the natural English word for a thin sheet of liquid — while
+DinoBot's own medium fragment says **"cinematic 35mm FILM still" at word ~18 of every prompt**. Two
+senses of one token in one prompt, with the WRONG sense sitting in the attended region, across 25 of 25
+entries. Regenerated to "the standing water / the wet mirror / the sheen / the shallows".
+
+**So run the layperson check against your bot's own prefix, medium and suffix strings too.** Grep your
+candidate vocabulary against the wrapper before generating, not after rendering. Related pre-empt from
+the same build that worked: this path's premise noun is a footprint on wet sand, i.e. *the* famous
+photograph of bare human feet, and it was beaten by leading every entry with SHAPE AND SIZE before any
+name (*"a three-toed hollow as broad as a small pond"*) — lesson 48's colour-first/species-last in a new
+costume. `beach` reached **0 of 15** prompts and no render showed a human print.
 
 ---
 
