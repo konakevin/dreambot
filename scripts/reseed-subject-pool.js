@@ -31,7 +31,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const { clusterPool, similarity, entryText } = require('./lib/ideaSimilarity');
+const { clusterPool, similarity, entryText, formatTokens, tokens } = require('./lib/ideaSimilarity');
 const { SONNET } = require('./lib/models');
 
 function loadKey() {
@@ -127,6 +127,38 @@ async function main() {
   console.log();
 
   // validate
+  //
+  // Similarity here MUST strip the pool's own boilerplate, exactly as clusterPool
+  // does. An earlier version called similarity() raw, so the validator measured
+  // FORMAT while the audit measured IDEAS — and it rejected 72 of 100 entries
+  // whose real match against the closest existing entry was only 16-32%, far
+  // under the threshold. The audit said the pool had 63 ideas and the validator
+  // behaved as though it had 8. Same measure, both places, or the numbers lie.
+  const fmt = formatTokens(original, 0.4);
+  const strip = (t) => { const out = new Set(); for (const x of tokens(t)) if (!fmt.has(x)) out.add(x); return out.size ? out : tokens(t); };
+  const sim = (a, b) => similarity(strip(a), strip(b));
+
+  // DESIGN CONFORMANCE. Kevin: "making sure that the new seeds match the pool
+  // they're going into? we need to make sure to maintain each pool's
+  // over-arching design when we do this."
+  //
+  // The pool's high-frequency tokens ARE its design: the ones in >=80% of
+  // entries carry its framing and register. For flower_focal_cluster those
+  // include `co-hero`, `vignette`, `pastel`, `watercolor`, `layers` — drop them
+  // and the entry stops being a flower-friends entry even if the flowers are
+  // lovely. So a new entry must carry most of that skeleton, which is the
+  // generic form of a check first done by hand on the pilot (all six structural
+  // markers were at 100% on both old and new).
+  const designTokens = [...formatTokens(original, 0.8)];
+  const DESIGN_MIN = 0.7; // fraction of the pool's own skeleton a new entry must carry
+  const conformance = (t) => {
+    if (!designTokens.length) return 1;
+    const has = tokens(t);
+    let n = 0;
+    for (const d of designTokens) if (has.has(d)) n++;
+    return n / designTokens.length;
+  };
+
   const BANNED = /\b(sign|signs|signage|label|labels|banner|placard|lettering|written|words?)\b/i;
   const NEG = /\b(no|not|never|without|avoid)\b/i;
   const lens = keep.map((e) => entryText(e).length).sort((a, b) => a - b);
@@ -137,9 +169,11 @@ async function main() {
     if (BANNED.test(g.text)) why.push('text-prior noun');
     if (NEG.test(g.text)) why.push('negation');
     if (g.text.length < lo * 0.5 || g.text.length > hi * 1.8) why.push(`length ${g.text.length} vs pool ${lo}-${hi}`);
-    const vsOld = keep.reduce((m, t) => Math.max(m, similarity(g.text, entryText(t))), 0);
+    const conf = conformance(g.text);
+    if (conf < DESIGN_MIN) why.push(`off-design: carries only ${Math.round(conf * 100)}% of the pool's skeleton (needs ${DESIGN_MIN * 100}%)`);
+    const vsOld = keep.reduce((m, t) => Math.max(m, sim(g.text, entryText(t))), 0);
     if (vsOld >= 0.48) why.push(`${Math.round(vsOld * 100)}% same as an existing entry`);
-    const vsNew = accepted.reduce((m, a) => Math.max(m, similarity(g.text, a.text)), 0);
+    const vsNew = accepted.reduce((m, a) => Math.max(m, sim(g.text, a.text)), 0);
     if (vsNew >= 0.48) why.push(`${Math.round(vsNew * 100)}% same as another new entry`);
     (why.length ? rejected : accepted).push({ ...g, why });
   }
@@ -149,6 +183,11 @@ async function main() {
 
   console.log(`\nVALIDATION`);
   console.log(`  accepted ${accepted.length}   rejected ${rejected.length}`);
+  console.log(`  design skeleton: ${designTokens.length} token(s) in >=80% of existing entries; new entries must carry >=${DESIGN_MIN * 100}%`);
+  if (accepted.length) {
+    const confs = accepted.map((a) => conformance(a.text)).sort((x, y) => x - y);
+    console.log(`  accepted conformance: min ${Math.round(confs[0] * 100)}%  median ${Math.round(confs[Math.floor(confs.length / 2)] * 100)}%`);
+  }
   const byReason = {};
   for (const r of rejected) for (const w of r.why) { const k = w.replace(/\d+/g, 'N'); byReason[k] = (byReason[k] || 0) + 1; }
   for (const [k, v] of Object.entries(byReason).sort((a, b) => b[1] - a[1])) console.log(`     ${String(v).padStart(3)} x ${k}`);

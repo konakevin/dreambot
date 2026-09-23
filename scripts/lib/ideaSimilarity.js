@@ -28,11 +28,37 @@
  * in one entry is a real signal about that entry. This list removes only
  * function words.
  *
+ * ⚠️ READ THIS BEFORE QUOTING ANY NUMBER THIS MODULE PRODUCES
+ *
+ * This measure is WRONG IN BOTH DIRECTIONS on labelled real data, and the
+ * failures are pinned in __tests__/lib/ideaSimilarity.test.ts:
+ *
+ *   - WITHOUT boilerplate stripping, a rigidly-formatted pool makes unrelated
+ *     entries look like duplicates. faebot_flower_fairy_scale_prover reads 28
+ *     distinct ideas raw vs 90 stripped: same file, same threshold.
+ *   - WITH stripping, near-duplicates score as maximally DIFFERENT. A token is
+ *     called "format" when it appears in >= `share` of the compared entries, and
+ *     near-duplicates share nearly all their text — so nearly all of it is
+ *     stripped and only the words where they DIFFER survive. The nine labelled
+ *     magnolia duplicates below never merge into one idea at ANY threshold.
+ *
+ * No choice of {keepFormat, threshold} gets both labelled cases right. So:
+ *
+ *   USE THIS AS A PREFILTER AND A CI TRIPWIRE, NEVER AS AN ACCEPTANCE GATE.
+ *   A `distinct` count is an UPPER bound on real diversity, i.e. a LOWER bound
+ *   on redundancy — the true redundancy is always worse than reported. Acceptance
+ *   needs a judge that reads meaning (SEED_DIVERSITY_CHARTER.md §5b, decision 16).
+ *
  * THRESHOLD
- * `SAME_IDEA` is calibrated in __tests__/lib/ideaSimilarity.test.ts against
- * labelled real pool data: known duplicate clusters must collapse, known
- * distinct entries must not. Do not change it without re-running that test —
- * every number in SEED_DIVERSITY_CHARTER.md moves with it.
+ * `SAME_IDEA` = 0.6 is the value the program's published figures were computed
+ * with; it is NOT a calibrated optimum, because no optimum exists (above). If you
+ * change it, re-run the test and restate every affected number in
+ * SEED_DIVERSITY_CHARTER.md — they all move with it.
+ *
+ * COMPARING ONE POOL BEFORE AND AFTER
+ * Pass the BASELINE entries as `clusterPool(after, t, {formatFrom: before})`.
+ * The profile is otherwise derived from whatever is being measured, so the two
+ * sides get different yardsticks and the comparison is meaningless.
  */
 
 /** Function words only. No content words, no style words, no adjectives. */
@@ -105,6 +131,31 @@ function tokens(s) {
   return out;
 }
 
+/**
+ * Tokens that appear in at least `share` of a pool's entries are that pool's
+ * FORMAT, not its content, and comparing them makes every pair look similar.
+ *
+ * Measured on BLOOMBOT_FLOWER_FRIENDS_FLOWER_FOCAL_CLUSTER: twelve tokens appear
+ * in 100% of its 125 entries (`pale`, `soft`, `ivory`, `pastel`, `watercolor`,
+ * `blooming`, `together`, `hero`, `pulled`, `back`, `enchanted`, `register`,
+ * `layers`). With them included the median pairwise similarity is 0.46; with
+ * them removed it is 0.08. A fixed 0.48 threshold therefore sat just above the
+ * median and rejected legitimate pairs for sharing boilerplate — which is
+ * exactly what happened on the first pilot run, where 78 of 120 generated
+ * entries were thrown out as "too similar to another new entry".
+ *
+ * So idea comparison inside a pool must be done against the pool's own
+ * boilerplate profile, not in the abstract.
+ */
+function formatTokens(entries, share = 0.4) {
+  const df = new Map();
+  for (const e of entries) for (const t of tokens(entryText(e))) df.set(t, (df.get(t) || 0) + 1);
+  const out = new Set();
+  const min = Math.max(2, Math.ceil(entries.length * share));
+  for (const [t, c] of df) if (c >= min) out.add(t);
+  return out;
+}
+
 /** Jaccard similarity of two token sets: |A∩B| / |A∪B|. 0 = nothing shared, 1 = identical. */
 function similarity(a, b) {
   const A = a instanceof Set ? a : tokens(entryText(a));
@@ -132,9 +183,33 @@ function isSameIdea(a, b, threshold = SAME_IDEA) {
  * @returns {{clusters: Array<{rep: string, members: number[]}>, distinct: number,
  *            redundant: number, pct: number}}
  */
-function clusterPool(entries, threshold = SAME_IDEA) {
+function clusterPool(entries, threshold = SAME_IDEA, opts = {}) {
   const texts = entries.map(entryText);
-  const sets = texts.map(tokens);
+  // Strip this pool's own boilerplate before comparing, unless told not to.
+  // See formatTokens: without this a rigidly-formatted pool shows a median
+  // pairwise similarity of 0.46 and every threshold measures format, not idea.
+  //
+  // `formatFrom` EXISTS BECAUSE THIS MEASURE IS OTHERWISE NOT COMPARABLE ACROSS
+  // TWO VERSIONS OF A POOL. The profile is derived from the entries being
+  // measured, so adding diverse entries lowers each token's document frequency,
+  // fewer tokens clear `share`, less gets stripped — and the "after" number is
+  // computed with a different yardstick than the "before". Measured on the
+  // flower_focal_cluster pilot at share 0.4: original 125 entries read 90 ideas
+  // / 28% redundant, the repaired 137 read 137 / 0%. The 0% is an artifact; a
+  // manual read of the same file found a 7-entry alpine cluster that all name
+  // edelweiss + saxifrage + stonecrop.
+  //
+  // So ANY before/after comparison must pass the BASELINE pool as `formatFrom`
+  // and never quote a percentage without saying which basis produced it.
+  const fmtSource = opts.formatFrom || entries;
+  const fmt = opts.keepFormat ? new Set() : formatTokens(fmtSource, opts.formatShare ?? 0.4);
+  const sets = texts.map((t) => {
+    const s = tokens(t);
+    if (!fmt.size) return s;
+    const out = new Set();
+    for (const x of s) if (!fmt.has(x)) out.add(x);
+    return out.size ? out : s; // an entry that is ALL boilerplate keeps its tokens
+  });
   const clusters = [];
   for (let i = 0; i < texts.length; i++) {
     if (!texts[i]) continue;
@@ -158,4 +233,4 @@ function clusterPool(entries, threshold = SAME_IDEA) {
   };
 }
 
-module.exports = { STOP, MIN_LEN, SAME_IDEA, entryText, tokens, similarity, isSameIdea, clusterPool };
+module.exports = { STOP, MIN_LEN, SAME_IDEA, entryText, tokens, similarity, isSameIdea, clusterPool, formatTokens };
