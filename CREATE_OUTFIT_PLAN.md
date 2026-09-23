@@ -299,6 +299,20 @@ kept|retried|code_applied`). Stamps: `outfit_colour`, `outfit_cut`, `outfit_patt
   colour 44/44, partner's colour 0/44, dress next to a suit 0/6, code write-ins 0. The only fallback is
   the separate whale-watching scene bug.
 
+## Phase 5 (2026-09-23): wired into Create, switches OFF, preview = Kevin only
+
+- Migration 547 (applied): `create_outfit_rolls`, `create_outfit_user_lock` (both false),
+  `create_outfit_independent_pct` / `_separate_cut_pct` / `_pattern_pct` (50/50/50),
+  `create_outfit_preview_user_ids` = Kevin's account (gets both switches while they are globally off).
+- `engineConfig.ts` plumbing; `generate-dream`: the outfit read starts before the compiler (so a couple's
+  runs alongside the setting/action split), one plan per render, solo → `compilePrompt({ outfitPlan })` +
+  `enforceSoloOutfit` before post-processing, couples → `slotInput.outfitPlan`. Face-swap cast renders
+  with self / plus*one only (no pets, no Dream Art, no photo modes). Stamps: `outfit_spec:*`,
+  `outfit_preview`, `outfit_colour/cut/pattern`, `outfit_lock:*`, `outfit_occluder*\*`.
+- Wiring guard: `createEngineWiring.test.ts` (6 fields + both call sites).
+- Rollback: `UPDATE engine_config SET create_outfit_rolls = false, create_outfit_user_lock = false,
+create_outfit_preview_user_ids = '{}' WHERE id = 1;` (instant, no deploy).
+
 ## Porting to nightly later
 
 `planOutfits`, the pools and the brief wiring live in `_shared`; nightly would pass the same flag with

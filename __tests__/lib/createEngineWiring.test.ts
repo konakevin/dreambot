@@ -32,6 +32,12 @@ describe('generate-dream reads every create_* switch', () => {
     ['createPromptSceneSplit', 'splitting the prompt into setting + action'],
     ['createActivityWardrobe', 'dressing for the activity'],
     ['createSceneAxes', 'rolling a time of day and weather'],
+    ['createOutfitRolls', 'the per-person outfit plan (mig 547)'],
+    ['createOutfitUserLock', "reading and locking the user's own outfit words"],
+    ['createOutfitIndependentPct', 'the independent-colour roll'],
+    ['createOutfitSeparateCutPct', 'the separate-silhouette roll'],
+    ['createOutfitPatternPct', 'the pattern roll'],
+    ['createOutfitPreviewUserIds', 'the preview accounts'],
   ])('reads %s (%s)', (field) => {
     expect(SRC).toContain(field);
   });
@@ -93,5 +99,24 @@ describe('the composer is not routed through the graveyard', () => {
     // Matches an IMPORT, not any mention — the call site carries a comment naming the file
     // to explain why it is avoided, and that comment is documentation, not wiring.
     expect(SRC).not.toMatch(/from\s+'[^']*nightlyLooksPath/);
+  });
+});
+
+describe('generate-dream wires the outfit plan (mig 547) into both cast paths', () => {
+  it('reads the user outfit request alongside the split and rolls one plan', () => {
+    expect(SRC).toContain("from '../_shared/outfitPlan.ts'");
+    expect(SRC).toContain("from '../_shared/outfitSpec.ts'");
+    expect(SRC).toContain('extractOutfitSpec(userSubject, outfitLegend, ANTHROPIC_KEY)');
+    expect(SRC).toContain('planOutfits(');
+  });
+
+  it('couples: the plan reaches the slot pipeline input', () => {
+    expect(SRC).toContain('...(coupleOutfitPlan ? { outfitPlan: coupleOutfitPlan } : {})');
+  });
+
+  it("solo: the plan reaches the compiler, and Sonnet's text is enforced before post-processing", () => {
+    expect(SRC).toContain('...(soloOutfitPlan ? { outfitPlan: soloOutfitPlan } : {})');
+    expect(SRC).toContain('enforceSoloOutfit(soloText, soloPerson)');
+    expect(SRC).toContain('finalPrompt = postProcessPrompt(soloText, compiled.postProcess)');
   });
 });

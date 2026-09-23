@@ -186,6 +186,17 @@ export interface EngineConfig {
    *  from biome pools; Create had no biome and so sent '' for all three, lighting every dream of a
    *  prompt identically. */
   createSceneAxes: boolean;
+  /** CREATE OUTFITS (mig 547, CREATE_OUTFIT_PLAN.md): the per-person plan — each person's own colour,
+   *  never the partner's; a silhouette; a pattern or solid (outfitPlan.ts). */
+  createOutfitRolls: boolean;
+  /** Read and lock what the user asked each person to wear (outfitSpec.ts). Needs createOutfitRolls. */
+  createOutfitUserLock: boolean;
+  /** The three independent rolls, 0-100. */
+  createOutfitIndependentPct: number;
+  createOutfitSeparateCutPct: number;
+  createOutfitPatternPct: number;
+  /** Accounts that get both outfit switches while they are globally off (review before the flip). */
+  createOutfitPreviewUserIds: string[];
   /** Holiday DAY-OF date rule (mig 471, HOLIDAY_DAY_OF_PLAN.md §4): local hour at the 08:00 UTC run
    *  from which the day-of is evaluated against the NEXT local date (24 = never). Default 20. */
   dayOfEveningCutoffHour: number;
@@ -277,6 +288,12 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   createCoupleApprovals: false,
   createActivityWardrobe: false,
   createSceneAxes: false,
+  createOutfitRolls: false,
+  createOutfitUserLock: false,
+  createOutfitIndependentPct: 50,
+  createOutfitSeparateCutPct: 50,
+  createOutfitPatternPct: 50,
+  createOutfitPreviewUserIds: [],
   dayOfEveningCutoffHour: 20,
   dayOfCostumePct: 100,
   holidayPostcardScope: 'day_of',
@@ -443,6 +460,16 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     createCoupleApprovals: data.create_couple_approvals === true,
     createActivityWardrobe: data.create_activity_wardrobe === true,
     createSceneAxes: data.create_scene_axes === true,
+    createOutfitRolls: data.create_outfit_rolls === true,
+    createOutfitUserLock: data.create_outfit_user_lock === true,
+    createOutfitIndependentPct: clampPct(data.create_outfit_independent_pct, 50),
+    createOutfitSeparateCutPct: clampPct(data.create_outfit_separate_cut_pct, 50),
+    createOutfitPatternPct: clampPct(data.create_outfit_pattern_pct, 50),
+    createOutfitPreviewUserIds: Array.isArray(data.create_outfit_preview_user_ids)
+      ? data.create_outfit_preview_user_ids.filter(
+          (x: unknown): x is string => typeof x === 'string'
+        )
+      : [],
     dayOfEveningCutoffHour: clampHour(data.day_of_evening_cutoff_hour, 20),
     dayOfCostumePct: clampPct(data.day_of_costume_pct, DEFAULT_ENGINE_CONFIG.dayOfCostumePct),
     holidayPostcardScope:

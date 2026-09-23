@@ -46,6 +46,14 @@ import { detectSelfInsert } from '../_shared/selfInsertDetector.ts';
 import { mirrorPartnerIntoCast, type RosterPartner } from '../_shared/partnerRoll.ts';
 import { composeExperimentalCouple } from '../_shared/coupleComposerX.ts';
 import { splitPromptScene, type PromptSceneSplit } from '../_shared/promptSceneSplit.ts';
+import { planOutfits, type OutfitPlan } from '../_shared/outfitPlan.ts';
+import {
+  extractOutfitSpec,
+  outfitSpecStamps,
+  enforceSoloOutfit,
+  type OutfitPerson,
+  type OutfitSpecOutcome,
+} from '../_shared/outfitSpec.ts';
 import { nextCreateModel } from '../_shared/createModelChain.ts';
 import { rollCreateSceneAxes } from '../_shared/createSceneAxes.ts';
 import { resolveCastForPrompt } from '../_shared/castResolver.ts';
@@ -1509,6 +1517,58 @@ Output ONLY the prompt.`;
           }
         }
 
+        // ── CREATE OUTFITS (mig 547, CREATE_OUTFIT_PLAN.md) ───────────────────────────
+        // Per-person colour / silhouette / pattern (outfitPlan.ts) and whatever the user asked
+        // each person to wear (outfitSpec.ts). Face-swap cast renders only: solo through
+        // buildSingleBrief, couples through the slot pipeline. With both switches off and the
+        // account not on the preview list, nothing here runs and every prompt is unchanged.
+        const outfitPreview = castCfg.createOutfitPreviewUserIds.includes(userId);
+        const outfitRollsOn = castCfg.createOutfitRolls || outfitPreview;
+        const outfitLockOn = outfitRollsOn && (castCfg.createOutfitUserLock || outfitPreview);
+        const outfitRoles = resolvedCast.map((rc) => rc.role);
+        const outfitEligible =
+          outfitRollsOn &&
+          isFaceSwapEligible &&
+          (outfitRoles.length === 1 || isDualSwapRender) &&
+          outfitRoles.length <= 2 &&
+          outfitRoles.every((r) => r === 'self' || r === 'plus_one');
+        const partnerName =
+          typeof namedPartner?.name === 'string' && namedPartner.name.trim()
+            ? namedPartner.name.trim()
+            : null;
+        const outfitLegend: OutfitPerson[] = resolvedCast.map((rc) => ({
+          role: rc.role,
+          label:
+            rc.role === 'self'
+              ? 'the user'
+              : (partnerName ?? `the user's ${rc.relationship || 'companion'}`),
+          gender: rc.gender,
+        }));
+        // Started now, so a couple's read runs alongside the setting/action split below.
+        // extractOutfitSpec never throws (fail-open → no spec → the rolls alone).
+        const outfitSpecPromise: Promise<OutfitSpecOutcome> | null = outfitEligible
+          ? outfitLockOn
+            ? extractOutfitSpec(userSubject, outfitLegend, ANTHROPIC_KEY)
+            : Promise.resolve<OutfitSpecOutcome>({ source: 'skipped', result: null })
+          : null;
+        const rollOutfitPlan = (spec: OutfitSpecOutcome): OutfitPlan => {
+          fallbackReasons.push(...outfitSpecStamps(spec, outfitRoles.length));
+          if (outfitPreview && !castCfg.createOutfitRolls) fallbackReasons.push('outfit_preview');
+          return planOutfits(
+            outfitRoles,
+            {
+              independentPct: castCfg.createOutfitIndependentPct,
+              separateCutPct: castCfg.createOutfitSeparateCutPct,
+              patternPct: castCfg.createOutfitPatternPct,
+            },
+            spec.source === 'read' ? spec.result.byRole : {}
+          );
+        };
+        const soloOutfitPlan: OutfitPlan | null =
+          outfitSpecPromise && outfitRoles.length === 1
+            ? rollOutfitPlan(await outfitSpecPromise)
+            : null;
+
         const compiled = compilePrompt({
           inputType: 'self_insert',
           medium: {
@@ -1542,6 +1602,7 @@ Output ONLY the prompt.`;
             focalAnchor,
           },
           profile: { avoid: vibeProfile?.avoid },
+          ...(soloOutfitPlan ? { outfitPlan: soloOutfitPlan } : {}),
         });
 
         try {
@@ -1575,6 +1636,10 @@ Output ONLY the prompt.`;
                 );
                 fallbackReasons.push(`create_scene_split:${sceneSplit.source}`);
               }
+              const coupleOutfitPlan: OutfitPlan | null =
+                outfitSpecPromise && outfitRoles.length === 2
+                  ? rollOutfitPlan(await outfitSpecPromise)
+                  : null;
               // Named var (not inline) so a later dual-swap failure can rebuild a
               // SOLO prompt for self from the same input.
               const slotInput: CharacterSlotPipelineInput = {
@@ -1639,6 +1704,8 @@ Output ONLY the prompt.`;
                 // cast dream and a snowboarding prompt came back in a velvet jacket with
                 // gold piping. Off = the register sentence, exactly as before.
                 ...(castCfg.createActivityWardrobe ? { activityWardrobe: true } : {}),
+                // Per-person outfit plan (mig 547). Unset = the palette brief above, unchanged.
+                ...(coupleOutfitPlan ? { outfitPlan: coupleOutfitPlan } : {}),
                 // Create: NEUTRAL pose only — force the relationship-appropriate
                 // partner/companion pool (NOT the 18% playful roll). Create is the
                 // user's OWN prompt, so we tread lightly: no goofy thumbs-up poses
@@ -1729,7 +1796,29 @@ Output ONLY the prompt.`;
             sonnetBrief = sonnet.brief;
             sonnetRawResponse = sonnet.rawResponse;
             if (sonnet.text.length < 10) throw new Error('too short');
-            finalPrompt = postProcessPrompt(sonnet.text, compiled.postProcess);
+            let soloText = sonnet.text;
+            // Solo outfit guarantees (mig 547): strip face occluders, and write the user's own
+            // clothing words in if Sonnet dropped them. Unset plan = the text as Sonnet wrote it.
+            const soloPerson = soloOutfitPlan ? (soloOutfitPlan.people[0] ?? null) : null;
+            if (soloPerson) {
+              const enforced = enforceSoloOutfit(soloText, soloPerson);
+              soloText = enforced.prompt;
+              fallbackReasons.push(
+                'outfit_colour:solo',
+                'outfit_cut:solo',
+                `outfit_pattern:${
+                  !soloPerson.pattern
+                    ? 'solid'
+                    : soloPerson.patternSource === 'user'
+                      ? 'user'
+                      : soloPerson.patternAsTrim
+                        ? 'trim'
+                        : 'roll'
+                }`,
+                ...enforced.stamps
+              );
+            }
+            finalPrompt = postProcessPrompt(soloText, compiled.postProcess);
           }
           logAxes = {
             medium: medium.key,
