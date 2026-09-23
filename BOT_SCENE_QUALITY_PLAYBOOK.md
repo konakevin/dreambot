@@ -1626,6 +1626,46 @@ in a row, holes pricked in a leaf held to the moon, the sky doubled in a dish of
 ever a picture, a symbol or a mark. **Portable to any instrument, ledger, signage, score, map or
 diagram subject on any bot.**
 
+**37. ⭐⭐⭐ THE SHARED MEDIUM FRAGMENT SITS IN THE ATTENDED FIRST THIRD AND CAN OVERRIDE THE WHOLE
+PATH — confirmed on THREE bots, with a measured fix on two.** This is the highest-leverage layer in
+the fleet and the one nobody thinks to look at, because it is not in the path file.
+
+The final Flux prompt is assembled as `pathPrefix + prefix + mediumStyle + middle + suffix`, so the
+shared medium fragment lands BEFORE Sonnet's scene. Combine that with lesson 18 (a ~600-word prompt
+renders roughly its first third) and the arithmetic is unforgiving:
+
+| bot | shared fragment | starts at | scene starts at | verdict |
+| --- | --- | --- | --- | --- |
+| **FarmBot** | 273 words | **word 4** | word ~277 | the ENTIRE attended region is fixed preamble, identical on every render, on 35 live paths |
+| **BloomBot** | 39 words | word 40 | word ~100 of 230-300 | short, but it carries a MANDATE (below) |
+| SteamBot | ~60 words | word 5 | word ~60 | healthy; median 199 emitted words |
+
+**Length is not the only problem — CONTENT in that slot is worse.** BloomBot's fragment is only 39
+words and still capped a path, because it says *"lush abundant blooms FILLING THE FRAME as the
+unmistakable hero"*. That is a frame-packing instruction sitting in the attended region, and on
+`alpine-wildflower-meadow` it simply executed: the two worst round-1 renders were an unbroken flower
+carpet with a peak behind it, i.e. an existing path. Replacing the path PREFIX was not enough, because
+the mandate lives in the fragment. And the bot's own per-path escape hatch (`heroMandate`) operates on
+the Sonnet brief, so **it structurally cannot reach a Flux-side fragment** — the documented
+"bot-wide density mandate overrides a composed path" lesson, one layer deeper than it was first found.
+
+**The fix, measured twice:** give the path its own **code-only medium** in `mediumStyles` (which
+overrides the DB `flux_fragment`, so no row and no migration), plus a `modelByPath` entry so
+`pickModel` never reads the absent `dream_mediums` row. On BloomBot that took frame-filling carpet
+**2/6 → 0/6**, and buying back 13 words of preamble also took **look-landed 0/6 → 4/6** — the looks
+had been crowded out by the same 78 words. On SteamBot the same move took clock faces **3/6 → 1/6**
+and the batch **3.72 → 4.20**, by dropping three tokens (`exposed gears`, `glass gauges`,
+`impossible clockwork engineering`) that had reached 12 of 12 prompts while the path's own text
+carried none.
+
+**So the standing check, before designing any new path: print the bot's medium fragment, count its
+words, and find where the scene actually starts in a real `ai_prompt`.** If the fragment is long, or
+if it contains a MANDATE rather than just a style register, a path-own medium is not an optimisation —
+it is the difference between the path working and the path being the fragment.
+
+**→ FarmBot remains the open one and it is Kevin's call:** 273 words at word 4, across 35 live paths.
+One constant in one file, and the largest measured lever in the run.
+
 ---
 
 ## North Star — the actual goal

@@ -23,6 +23,7 @@ const { REGION_KEYS_GENERAL, regionRosterPrompt } = require('./species-roster');
 const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
+  'alpine-wildflower-meadow': require('./paths/alpine-wildflower-meadow'), // 2026-09-23 SHADOW — the snowline meadow
   // 2026-05-16: landscape migration attempted + REVERTED — legacy compose.js
   // outperformed the new declarative archetype. Declarative version preserved
   // at paths/landscape.js for reference, legacy stays canonical.
@@ -79,11 +80,27 @@ module.exports = {
   // flux-1.1-pro-ultra only (Kevin 2026-05-27). Paths NOT listed here use the
   // uniform allowedModels pick above.
   modelByPath: {
+    // alpine-wildflower-meadow: REQUIRED, not a preference — it bypasses pickModel
+    // so the code-only medium needs no dream_mediums row. Both models kept 50/50:
+    // ultra signed 0 of 13 renders on this path, so no pin to pro is needed.
+    'alpine-wildflower-meadow': [
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-1.1-pro',
+    ],
     'tropical-grove': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'flower-arrangement': [
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
+  },
+
+  // promptSuffixByPath — NEW KEY. Keeps the bot suffix's species-colour
+  // faithfulness and the text suppressor, drops "depth built from receding layers
+  // of more blooms" and "the sky clean and clear", which fight bare rock and a
+  // storm-lit sky respectively.
+  promptSuffixByPath: {
+    'alpine-wildflower-meadow':
+      'render every named species as that exact species in its named colour, bare broken rock and old snow visible between the flowers, the far ranges hard-edged and each one paler than the last, every layer crisply rendered, no text, no words, no watermarks, gallery quality',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -98,6 +115,10 @@ module.exports = {
   // sky. The SETTING, scale-prover + bans live in the pool + Sonnet template — NOT
   // here (no biome, no "deer", no negation in the prefix).
   promptPrefixReplaceByPath: {
+    // The bot-wide prefix is a second frame-packing mandate ("abundant blooms
+    // filling the entire frame edge-to-edge … any setting is only a backdrop").
+    'alpine-wildflower-meadow':
+      'a high-altitude wildflower meadow at the snowline, low tight flowers in dense clumps between bare grey broken rock and old snow lying in the meadow, a snowfield and bare peak standing above the flower line, thin hard clear mountain light',
     'great-blossom-tree':
       'a single colossal ancient flowering tree, towering high in full bloom against open sky',
     'jack-and-the-giant-flower':
@@ -121,7 +142,22 @@ module.exports = {
   // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
   // both now banned bot-wide (FLUX-only).
   cleanMediumByModel: {},
+  mediumByPath: {
+    'alpine-wildflower-meadow': 'bloom_alpine_meadow',
+  },
+
   mediumStyles: {
+    // alpine-wildflower-meadow: LOAD-BEARING, not cosmetic. The bot-wide
+    // BLOOM_NEUTRAL fragment sits at words 40-78 of every prompt — dead centre of
+    // the attended first third — and mandates "lush abundant blooms FILLING THE
+    // FRAME as the unmistakable hero". That is a frame-packing instruction and it
+    // erases the rock and snow this path exists to show; the bot's own heroMandate
+    // escape hatch lives in the Sonnet brief and cannot reach a Flux-side fragment.
+    // Measured: frame-filling carpet 2/6 → 0/6, and buying back 13 preamble words
+    // also took look-landed 0/6 → 4/6. Code-only: mediumStyles overrides the DB
+    // flux_fragment, so no dream_mediums row and no migration.
+    bloom_alpine_meadow:
+      'flowers the vivid saturated hero, sharing the ground with bare broken rock and lying snow; medium and finish set by the look tokens opening this prompt',
     bloombot_gpt_clean: blocks.GPT_CLEAN,
     // Override the DB bloom_hyperreal_cgi flux_fragment with the neutral
     // content-only fragment so the bot-wide look register (rolled in
@@ -172,7 +208,7 @@ module.exports = {
   // DARK-LAUNCH shadow paths (BOT_DARK_LAUNCH_PLAN.md + mig 376) — NOT in the
   // live paths[] rotation; render only via `iter-bot --mode <path> --post`
   // (shadow: hidden, admin-only). Promote = move the string into paths[].
-  shadowPaths: [], // Stage A paths promoted to live rotation 2026-08-16
+  shadowPaths: ['alpine-wildflower-meadow'], // Stage A paths promoted to live rotation 2026-08-16
 
   // Seasonal-window paths (scripts/lib/botSeasonal.js) — drawn ONLY when
   // engine_config.bots_seasonal_enabled is true AND the named holiday window
@@ -199,6 +235,7 @@ module.exports = {
     // hanging-flowers skips chaos for the MVP — protect the overhead-canopy
     // walkway composition while validating (2026-06-22; revisit after sign-off).
     skipPaths: [
+      'alpine-wildflower-meadow',
       'flower-arrangement',
       'hanging-flowers',
       'water-garden',
@@ -242,6 +279,7 @@ module.exports = {
     // declarative axis-system paths. Single-pass Sonnet preserves slot-pool
     // richness; Haiku compression drops bespoke vocabulary to hit word count.
     skipPaths: [
+      'alpine-wildflower-meadow',
       'landscape',
       'closeup',
       'tropical-paradise',
@@ -277,7 +315,59 @@ module.exports = {
   sensoryAnchors: {
     enabled: true,
     requiredChannels: ['lightcolor'],
+    // poolsByChannelByPath — NEW KEY. Two measured reasons:
+    // (a) requiredChannels ['lightcolor'] fires on EVERY render, and the shared
+    //     scene.lightcolor pool names GARDEN species (rose, wisteria, tulip,
+    //     magnolia, honeysuckle) — one would land above the tree line every time,
+    //     and it would fight this path's own light axis for the palette.
+    // (b) the 1-2 stochastic channels fall through to sensoryAnchors' built-in
+    //     DEFAULT_POOLS, which are written for a FIGURE ("the press of jewelry at
+    //     the throat", "boots sinking into soft ground") on a bot that bans people.
+    poolsByChannelByPath: {
+      'alpine-wildflower-meadow': {
+        lightcolor: [
+          'light coming straight through the low petals from behind so they read as lit glass',
+          'every shadow edge cut hard with no softness anywhere in it',
+          'the old snow throwing light back up underneath the flowers',
+          'one part of the slope lit and the rest of it held flat and dark',
+          'wet stone going almost black and mirror-bright where the water runs over it',
+          'the sky darkening steadily from the ridge line to the top of the frame',
+        ],
+        smell: [
+          'cold stone and crushed flower stems',
+          'snowmelt running over clean gravel',
+          'thin dry air carrying almost no scent at all',
+        ],
+        sound: [
+          'meltwater running somewhere under the snow',
+          'one marmot whistle carrying right across the slope',
+          'wind steady and unbroken over ground-low flowers',
+          'loose stones shifting and settling downslope',
+        ],
+        touch: [
+          'petals stiff and waxy in the cold',
+          'sun hot on the stone while the air stays freezing',
+          'grit and old granular snow underfoot',
+        ],
+        temperature: [
+          'full sun and near-freezing at the same moment',
+          'frost still holding in every shadow',
+          'the snow patch throwing cold up out of the ground',
+        ],
+        weight: [
+          'low flowers pressed flat by constant wind',
+          'wet snow sagging off a rock edge',
+          'stems bent under the weight of last season\u2019s seed heads',
+        ],
+        air: [
+          'air so thin the far distance stays hard-edged',
+          'a shred of cloud dragging through the flowers',
+          'grit lifting off the loose stone in a gust',
+        ],
+      },
+    },
     pathContext: {
+      'alpine-wildflower-meadow': 'scene',
       landscape: 'scene',
       closeup: 'scene',
       cozy: 'scene',

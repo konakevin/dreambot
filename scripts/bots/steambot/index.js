@@ -34,6 +34,7 @@ const pathBuilders = {
   'clocktower-heart': require('./paths/clocktower-heart'), // Stage M3 SHADOW
   'skydock-harbor': require('./paths/skydock-harbor'), // Stage M4 SHADOW
   'brass-glasshouse': require('./paths/brass-glasshouse'), // Stage N1 SHADOW
+  'rooftop-telegraph': require('./paths/rooftop-telegraph'), // Stage N2 SHADOW
 };
 
 // THE SteamBot look — crisp + vivid + cinematic. NO "hyperreal" / "photoreal"
@@ -91,6 +92,22 @@ const STEAMBOT_GROUNDED_PAINTED_STYLE =
 const STEAMBOT_NEUTRAL_STYLE =
   'richly detailed steampunk Victorian-industrial imagery — brass, copper, riveted iron, exposed gears, pipework, glass gauges, oiled wood and gaslight, an 1800s world of impossible clockwork engineering; render exactly the scene and composition the brief describes — the art-style, medium, palette and finish are set entirely by the LOOK at the top of the prompt';
 
+// Stage N2: rooftop-telegraph's own medium. IDENTICAL to STEAMBOT_NEUTRAL_STYLE
+// except that "exposed gears", "glass gauges" and "impossible clockwork
+// engineering" are replaced with this path's own nouns. Measured 2026-09-23:
+// those tokens reached 12 of 12 prompts across two rounds while the path's own
+// text carried ZERO clock/dial/gauge tokens, and 6 of those 12 renders grew a
+// dial or a clock face (two with full numerals, one inventing a whole clock
+// tower). Swapping this medium in took clock faces 3/6 → 1/6 and the batch
+// average 3.72 → 4.20. This is the bot-level lever brass-glasshouse identified
+// and did not need to spend.
+const STEAMBOT_ROOFTOP_STYLE =
+  'richly detailed steampunk Victorian-industrial imagery — brass, copper, riveted iron ' +
+  'lattice, taut cables, painted timber, pipework, gaslight, slate and lead and soot, an ' +
+  '1800s world of impossible aerial engineering; render exactly the scene and composition ' +
+  'the brief describes — the art-style, medium, palette and finish are set entirely by the ' +
+  'LOOK at the top of the prompt';
+
 // Paths that roll a look (all of them) — routed to steambot_neutral below and
 // receive the look-override in buildBrief.
 const STEAMBOT_LOOK_PATHS = new Set([
@@ -111,6 +128,7 @@ const STEAMBOT_LOOK_PATHS = new Set([
   'clocktower-heart', // Stage M3 SHADOW
   'skydock-harbor', // Stage M4 SHADOW
   'brass-glasshouse', // Stage N1 SHADOW
+  'rooftop-telegraph', // Stage N2 SHADOW
 ]);
 
 // Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
@@ -170,6 +188,11 @@ module.exports = {
     // dome read floor-to-apex; ultra frames tighter and crops the dome away
     // (the same tighter-framing behaviour measured on couples 2026-09-17).
     'brass-glasshouse': ['black-forest-labs/flux-1.1-pro'],
+    // Stage N2 SHADOW — pro ONLY. Ultra signs its work on text-magnet paths
+    // (measured on three bots this run including this bot's airship-female), and
+    // ultra reverts to a golden-hour exterior on any path whose identity is a
+    // LIGHTING condition — this path's is warm lamp against cold sky.
+    'rooftop-telegraph': ['black-forest-labs/flux-1.1-pro'],
   },
 
   // SteamBot's custom medium keys. Bot-internal — do NOT exist in
@@ -187,7 +210,12 @@ module.exports = {
   // composition-neutral medium; the per-render LOOK supplies the render style.
   // (Replaced the per-path painted-woman/man/interior + default-hyperreal
   // mediums so the bot rolls a dynamic range of treatments.)
-  mediumByPath: Object.fromEntries([...STEAMBOT_LOOK_PATHS].map((p) => [p, 'steambot_neutral'])),
+  mediumByPath: {
+    ...Object.fromEntries([...STEAMBOT_LOOK_PATHS].map((p) => [p, 'steambot_neutral'])),
+    // Stage N2 SHADOW — path-own medium, dropping the bot-wide clock vocabulary.
+    // MUST stay AFTER the spread above or the derived value overwrites it.
+    'rooftop-telegraph': 'steambot_rooftop',
+  },
 
   mediumStyles: {
     // gpt-image-2 clean (routed via mediumByModel above). Pulls GPT-Image-2
@@ -196,6 +224,7 @@ module.exports = {
     steambot_gpt_clean: blocks.GPT_CLEAN,
     'steambot-hyperreal': STEAMBOT_HYPERREAL_STYLE,
     steambot_neutral: STEAMBOT_NEUTRAL_STYLE,
+    steambot_rooftop: STEAMBOT_ROOFTOP_STYLE,
     'steambot-grounded-painted': STEAMBOT_GROUNDED_PAINTED_STYLE,
     'steambot-painted-woman': STEAMBOT_PAINTED_WOMAN_STYLE,
     'steambot-painted-man': STEAMBOT_PAINTED_MAN_STYLE,
@@ -211,6 +240,8 @@ module.exports = {
     // Neutral medium: tight CONTENT-only anchor (no style/palette tokens) so the
     // rolled LOOK leads the CLIP anchor.
     steambot_neutral: 'steampunk illustration, Victorian-industrial clockwork machinery',
+    // CONTENT-only anchor, no style tokens, so the rolled LOOK still leads.
+    steambot_rooftop: 'steampunk illustration, Victorian-industrial ironwork and aerial cables',
     'steambot-grounded-painted':
       'steampunk scene, brass and copper clockwork machinery, Victorian-industrial, working gaslit atmosphere',
     'steambot-painted-woman': blocks.PROMPT_PREFIX,
@@ -220,6 +251,7 @@ module.exports = {
   promptSuffixByMedium: {
     'steambot-hyperreal': blocks.PROMPT_SUFFIX,
     steambot_neutral: blocks.PROMPT_SUFFIX,
+    steambot_rooftop: blocks.PROMPT_SUFFIX,
     'steambot-grounded-painted': blocks.PROMPT_SUFFIX,
     'steambot-painted-woman': blocks.PROMPT_SUFFIX,
     'steambot-painted-man': blocks.PROMPT_SUFFIX,
@@ -308,7 +340,7 @@ module.exports = {
   // interior (all 16 live paths are metal/stone/sky/water/crowd, and its four
   // interiors are dark warm-amber brass boxes). Go-live = move this string into
   // `paths` above and change nothing else.
-  shadowPaths: ['brass-glasshouse'], // Stage M paths promoted to live 2026-08-16 (STEAM_SHADOW_PATHS const retained — still drives the polish-OFF skip list below)
+  shadowPaths: ['brass-glasshouse', 'rooftop-telegraph'], // Stage M paths promoted to live 2026-08-16 (STEAM_SHADOW_PATHS const retained — still drives the polish-OFF skip list below)
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -323,7 +355,7 @@ module.exports = {
     // brass-glasshouse: the glasshouse IS the subject and it is already dense
     // (dome + spiral stair + ring balcony + specimen); chaos-injected extra
     // subjects crowd the one thing the path exists to show.
-    skipPaths: ['steampunk-labs', 'steampunk-spectacle', 'brass-glasshouse'],
+    skipPaths: ['steampunk-labs', 'steampunk-spectacle', 'brass-glasshouse', 'rooftop-telegraph'],
     allowSubjectChaosPaths: [
       'steampunk-scene',
       'airship-skies',
@@ -352,6 +384,7 @@ module.exports = {
       'cozy-steampunk',
       'steampunk-labs',
       ...STEAM_SHADOW_PATHS, // nautilus-depths (SHADOW) — axis path, polish OFF
+      'rooftop-telegraph', // Stage N2 SHADOW — Haiku strips the crop/crosswise/blade-state clauses
       'brass-glasshouse', // Stage N1 SHADOW — Haiku compression strips the glass/
       // condensation/specimen detail stack down to "a greenhouse"
     ],
@@ -488,6 +521,13 @@ module.exports = {
   sensoryAnchors: {
     enabled: true,
     requiredChannels: ['lightcolor'],
+    // skipPaths — NEW KEY on this bot. requiredChannels puts a lightcolor anchor
+    // on EVERY render, appended AFTER the output order, and 47 of the 100 entries
+    // in sensory_scene_lightcolor name an INTERIOR surface ("polished mahogany wall
+    // panels", "the furnace observation porthole"). On a rooftop that is both a
+    // setting contradiction and a second light instruction fighting the axis that
+    // owns the palette. All three QA rounds ran with it skipped.
+    skipPaths: ['rooftop-telegraph'], // Stage N2 SHADOW
     pathContext: {
       // Switched 'female'→'scene' 2026-05-15 to escape body-coded sensory
       // anchors ("tight around her throat", "corset constricting her ribs",
@@ -514,6 +554,7 @@ module.exports = {
       'clocktower-heart': 'scene', // Stage M3 SHADOW
       'skydock-harbor': 'scene', // Stage M4 SHADOW
       'brass-glasshouse': 'scene', // Stage N1 SHADOW
+      'rooftop-telegraph': 'scene', // Stage N2 SHADOW
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
