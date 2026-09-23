@@ -27,6 +27,12 @@ type DedupRow = { bot_name: string; axis: string; value: string };
  * .from('bot_dedup').select().eq().eq()/insert()/delete().eq().eq() shape
  * the picker uses. Each call returns the chainable builder until it
  * resolves with { data, error } / { error }.
+ *
+ * `.order()` and `.range()` were added when the picker's read was fixed to
+ * PAGINATE (PostgREST silently caps a read at 1000 rows, and the unpaginated
+ * version had degraded the shuffle-bag to random on 17 of 19 bots). `.range()`
+ * slices for real rather than being a no-op, so these tests now exercise the
+ * pagination loop itself instead of just tolerating it.
  */
 function makeMockSb(initialRows: DedupRow[] = []) {
   const rows: DedupRow[] = [...initialRows];
@@ -42,6 +48,18 @@ function makeMockSb(initialRows: DedupRow[] = []) {
         eq(col: string, val: unknown) {
           filters.push({ col, val });
           return this;
+        },
+        order() {
+          // Ordering only matters for a stable page boundary; the mock's row
+          // order is already stable, so this is a pass-through.
+          return this;
+        },
+        range(from: number, to: number) {
+          const matched = rows.filter((r) =>
+            filters.every((f) => (r as unknown as Record<string, unknown>)[f.col] === f.val)
+          );
+          // Inclusive bounds, matching PostgREST.
+          return Promise.resolve({ data: matched.slice(from, to + 1), error: null });
         },
         insert(payload: DedupRow[]) {
           for (const r of payload) rows.push(r);

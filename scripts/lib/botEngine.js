@@ -610,8 +610,55 @@ function download(url, dest) {
  * JSON.stringify as last-resort. All bot pools with object values MUST
  * have a `text` property per the MIGRATE-BOT.md convention.
  */
+/**
+ * Read a bot's whole `bot_dedup` set, PAGINATED.
+ *
+ * THE BUG THIS FIXES. This was a single unpaginated select, which is a direct
+ * violation of the standing PostgREST rule: the API silently caps a read at
+ * 1000 rows. With no `.order()` the 1000 you get are in no defined order, so
+ * the recency set was both truncated AND arbitrary — and the engine's own
+ * contract ("every entry is picked exactly once before any repeats") had been
+ * inert across most of the fleet for a long time, degrading the shuffle-bag to
+ * plain random.
+ *
+ * Measured 2026-09-23 — 17 of 19 bots were over the cap, 90,019 rows total:
+ *
+ *   gothbot    9,154 rows →  11% visible
+ *   dragonbot  8,247      →  12%
+ *   mangabot   8,244      →  12%
+ *   starbot    8,183      →  12%
+ *   chibibot   7,940      →  13%
+ *   faebot     6,918      →  14%
+ *   steambot   5,476      →  18%
+ *   …
+ *
+ * Found on SteamBot `rooftop-telegraph`, where every axis drew a duplicate per
+ * 6-render batch and 4 of 6 renders rolled the same look from a 6-entry pool,
+ * because the path's seven brand-new axes were entirely invisible to the read.
+ *
+ * `.order('bot_name')` is only for a STABLE page boundary — any deterministic
+ * column works, and without one rows can repeat or vanish across pages. The
+ * cost is a handful of round-trips on a code path that already waits 20-150s
+ * on a render, so it is not worth optimising.
+ */
+async function loadDedupRows(sb, botName) {
+  const PAGE = 1000;
+  const rows = [];
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await sb
+      .from('bot_dedup')
+      .select('axis, value')
+      .eq('bot_name', botName)
+      .order('bot_name', { ascending: true }) // stable boundary; see above
+      .range(from, from + PAGE - 1);
+    if (error) return { rows, error };
+    rows.push(...data);
+    if (data.length < PAGE) return { rows, error: null };
+  }
+}
+
 async function createPicker({ botName, sb }) {
-  const { data, error } = await sb.from('bot_dedup').select('axis, value').eq('bot_name', botName);
+  const { rows: data, error } = await loadDedupRows(sb, botName);
   if (error) {
     console.warn(`  ⚠️ bot_dedup read failed (${error.message}); falling back to no recency`);
   }
