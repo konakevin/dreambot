@@ -353,6 +353,91 @@ ${SPECIES_ANCHOR}
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DINOBOT_COURTSHIP_DISPLAY: ({ slots, vibeDirective }) => {
+    const { lighting, atmosphere, biome, display_act, display_feature, audience, phenomenon } =
+      slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON (render it visibly) ━━━
+${phenomenon}
+
+`
+      : '';
+
+    return `You are a wildlife documentary cinematographer writing MESOZOIC COURTSHIP-DISPLAY scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm film still. Prehistoric-Planet / BBC-Planet-Earth mating-display cinematography: the shot a crew waits a week in a hide to get.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — THE DISPLAY IS THE SHOT ⚠️⚠️⚠️
+A dinosaur is caught MID-DISPLAY, in the act, never posed and never standing still. The displaying animal fills 35-55% of the frame and the structure it is displaying WITH is the single sharpest, most-lit thing in the image. If the animal is merely standing in a landscape, the render has failed.
+
+⚠️⚠️⚠️ SECOND RULE — DISPLAY AND RITUAL ONLY ⚠️⚠️⚠️
+This is courtship BEHAVIOUR: showing off, dancing, calling, presenting, building, posturing. Keep it entirely tasteful — no mating, no mounting, no contact between the animals. It is also not a fight: no combat, no blood, no wounds, no carcass. Two animals may display side by side, matched and sizing each other up, without ever touching.
+
+⚠️⚠️⚠️ THIRD RULE — AT LEAST TWO DINOSAURS ARE VISIBLE ⚠️⚠️⚠️
+A display needs someone to display AT. EVERY render shows the displaying animal PLUS at least one more dinosaur of the same kind in the frame — watching, assessing, ignoring, or copying. Often more: a loose gathering of three to six onlookers reads best of all. Front-load this so the frame is composed for two or more animals from the start.
+
+If only ONE dinosaur appears in the rendered frame, the render has FAILED — it becomes an animal portrait, which the bot already has six paths for.
+
+⚠️ NO HUMANS, NO PEOPLE, NO HUMAN FIGURES
+This is Earth 66+ million years BEFORE humans evolved. Zero humans, zero observers, zero anything humanoid. Empty primordial wilderness, filmed as wildlife.
+
+⚠️ MESOZOIC-LOCKED — never a modern zoo, never a safari park, never a sanctuary. No fences, no enclosures, no signage. Ancient primordial wilderness with mega-flora.
+
+━━━ THE DISPLAY ACT (the hero — lead your prompt with this) ━━━
+${display_act}
+
+━━━ THE DISPLAY STRUCTURE (the money shot — render this in the sharpest detail in the frame) ━━━
+${display_feature}
+
+Give this structure the best light in the image. Backlight it if the described light allows, so the membrane, vanes or stretched skin read translucent and you can see how the thing actually works.
+
+━━━ WHO IT IS FOR (render them — this is the second animal the third rule requires) ━━━
+${audience}
+
+Place them in the midground, clearly visible and clearly reacting, at roughly a third to a half the apparent size of the displaying animal. The displayer stays the hero and keeps the best light; the onlookers are what turn the frame from a portrait into a moment. Where the entry describes a gathering, render the whole gathering.
+
+━━━ THE MESOZOIC STAGE ━━━
+${biome}
+
+The biome is 40-55% of the frame: the arena the display happens in, with mega-flora at the banks, cliff-faces or canopy, receding into atmospheric haze.
+
+${phenomenonSection}━━━ LIGHT ━━━
+${lighting}
+
+━━━ AIR ━━━
+${atmosphere}
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ WRITE THE PROMPT IN THIS ORDER ━━━
+1. The displaying dinosaur and its act, named by body plan, mid-motion
+2. THE OTHER DINOSAURS — say plainly, this early, how many are in frame and what they are doing
+   ("a second hen watching from the ferns", "four onlookers spread across the midground")
+3. The display structure and how the light passes through it
+4. The physical consequence of the act (dust, gouged ground, shivering feathers, distended throat)
+5. The Mesozoic biome as the arena, receding into haze
+6. Light, air, colour
+
+Frame it WIDE enough to hold them all. A tight head-and-shoulders crop cannot show a display and its
+audience at the same time, so leave room: the displayer plus the onlookers plus the arena they stand in.
+
+━━━ COMPOSITION ━━━
+Photoreal 35mm wildlife documentary frame. Multi-tier depth: the displaying animal / the audience in midground / the biome / hazed distance. Strong directional light. Every surface materially specific — pebbled hide, keratin, wet-gloss skin, dust in the air.
+
+━━━ FAILURE CONDITIONS ━━━
+• Animal standing still, not displaying → FAILED
+• The display structure is small, dull or unlit → FAILED
+• Any human, observer or humanoid in frame → FAILED
+• Mating, mounting or physical contact → FAILED
+• Fighting, blood, wounds or a kill → FAILED
+• Reads as a zoo, park or sanctuary → FAILED
+
+Describe only what IS present in the scene — never write a negation into the prompt.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. No preamble, no titles, no headers, no markers, no bold labels, no "render as" suffixes.`;
+  },
+
   DINOBOT_NESTING_GROUND: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, biome, family_scene, surprise_element, phenomenon } = slots;
 

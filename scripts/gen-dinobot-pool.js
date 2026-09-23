@@ -1452,6 +1452,96 @@ ABSOLUTELY BANNED:
 - NO duplicate-style entries
 
 Output: ONE polar phenomenon per line. No numbering. No quotes.`,
+
+  // ── courtship-display (2026-09-22) — DinoBot's first DISPLAY-BEHAVIOUR path ──────────────────
+  // The bot has 16 paths and every one of them is a landscape, a herd, a fight, a family or a
+  // portrait. Nothing shows a dinosaur DISPLAYING. These three axes are the path: the ACT, the
+  // ANATOMY doing the displaying (the money-shot axis), and the AUDIENCE it is aimed at.
+
+  dinobot_courtship_act: `Generate COURTSHIP-DISPLAY ACT descriptions for DinoBot's courtship-display path. Each is ONE comma-separated line, 25-40 words, describing a dinosaur mid-DISPLAY — the behaviour a Prehistoric-Planet camera crew would wait a week to film.
+
+This is the HERO of the frame. The displaying animal is 35-55% of frame, caught MID-ACT, never posed and never static.
+
+Variety mandate (rotate widely — vary the BODY PLAN as much as the behaviour):
+- ~15% Crest / frill / sail flushed with blood and angled broadside to be seen at maximum width
+- ~15% Feather fans spread — arm-fans thrown wide, tail-fan raised and shivering
+- ~12% Inflated throat sac or dewlap, mid-boom, air visibly distending the skin
+- ~12% A dance — rhythmic stamping, a scrape-ceremony gouging the ground, circling with head held over the other's back
+- ~10% Head-bobbing / neck-swaying arc, the whole neck describing a curve
+- ~10% Presenting an object — a stone, a frond, a mouthful of vegetation held out
+- ~8% Two rivals displaying side by side, parallel and matched, sizing each other up without contact
+- ~8% Calling — head thrown back, jaws open, the resonating chamber of the crest in use
+- ~5% Wing-and-tail flagging on a small feathered dinosaur, bounding in place
+- ~5% Building — a mound, a cleared arena, a ring of scraped earth, mid-construction
+
+EVERY entry includes:
+- THE BODY PLAN said plainly enough that Flux renders a dinosaur (crested duckbill / horned ceratopsian / sail-backed / long-necked / small feathered theropod / tyrannosaur-built) — never just "a dinosaur"
+- THE ACT as an ACTIVE VERB, mid-motion
+- ONE PHYSICAL CONSEQUENCE of the act (dust kicked up, ground gouged, throat distended, feathers shivering, vegetation scattered, neck arched)
+
+HARD RULES:
+- NO humans, no people, no observers. This is Earth 66 million years before humans.
+- NO modern-zoo or safari-park framing. No fences, no enclosures, no signage.
+- NO mating / mounting / copulation — this is DISPLAY and courtship RITUAL only, always tasteful.
+- NO fighting, no blood, no wounds, no kill — display is the point, violence is a different path.
+- NO glowing / bioluminescent / magical anatomy. Real animal colour: flushed reds, ochres, blues, iridescence.
+- Describe only what IS present. Never write a negation.
+
+Output: ONE act per line. No numbering. No quotes.`,
+
+  dinobot_courtship_feature: `Generate DISPLAY-ANATOMY descriptions for DinoBot's courtship-display path — the SIGNATURE DETAIL the whole shot is about. Each is ONE comma-separated line, 20-35 words.
+
+This is the money-shot axis: the piece of anatomy actively doing the displaying, described so a viewer can see how it works.
+
+Variety mandate:
+- ~20% A crest, in colour and translucence — backlit so the blood vessels read through it
+- ~15% A frill or shield, patterned with eye-spots, rings or banding that only shows when angled
+- ~15% Feather structures — fan vanes catching light, iridescent sheen shifting across them, barbs separating
+- ~12% An inflated sac — skin stretched thin and glossy, colour deepening as it fills
+- ~10% A sail or spine-row, membrane between the spines lit from behind
+- ~8% Horn, boss or brow detail, worn and scarred from previous seasons
+- ~8% A dewlap or wattle in motion, swinging with the head
+- ~7% Skin flush — a colour change spreading across the face, snout or flank in real time
+- ~5% A tail structure — club, spike-fan, banded underside flashed upward
+
+EVERY entry includes:
+- THE STRUCTURE named concretely
+- HOW THE LIGHT INTERACTS with it (backlit / translucent / iridescent / wet-gloss / rim-lit)
+- ONE TEXTURE OR WEAR detail (pebbled skin, scars, moulting edges, dust caught in the barbs)
+
+HARD RULES:
+- Real animal anatomy and real pigment. NO glow, NO bioluminescence, NO metallic or jewelled surfaces.
+- NO humans, NO anthropomorphism, NO facial expressions that read human.
+- Describe only what IS present. Never write a negation.
+
+Output: ONE anatomy detail per line. No numbering. No quotes.`,
+
+  dinobot_courtship_audience: `Generate AUDIENCE / CONTEXT ACCENT descriptions for DinoBot's courtship-display path. Each is ONE comma-separated line, 15-30 words, describing the small secondary element that gives the display a REASON.
+
+A display aimed at nothing reads as a random pose. This axis supplies who it is FOR. The element is SMALL — 3-10% of frame, in the midground or at a foreground edge.
+
+Variety mandate:
+- ~25% The intended mate, watching — head turned, attention plainly on the displayer, unimpressed or interested
+- ~15% A rival at a distance, watching and not yet committing
+- ~12% Several onlookers of the same species loosely gathered, a lek forming
+- ~10% A conspicuously bored onlooker grazing, ignoring the whole performance
+- ~10% Ground evidence of the ritual — a scraped arena, flattened vegetation, a trampled ring, old scrape marks
+- ~8% A juvenile watching and clumsily copying the posture
+- ~8% Another species passing through, indifferent
+- ~7% A small animal displaced by the commotion — a lizard darting, insects lifting, a small pterosaur flushed
+- ~5% Evidence of a previous contest — a shed feather, a broken frond, a churned patch
+
+EVERY entry includes:
+- WHAT the element is
+- POSITION (midground / foreground edge / deep distance)
+- ITS ATTENTION or lack of it, stated as a posture
+
+HARD RULES:
+- NO humans, NO people, NO observers of any kind.
+- NO fighting, NO injuries, NO carcasses.
+- Describe only what IS present. Never write a negation.
+
+Output: ONE accent per line. No numbering. No quotes.`,
 };
 
 const RECIPE = RECIPES[POOL];

@@ -27,6 +27,7 @@ const pathBuilders = {
   'dino-nights': require('./paths/dino-nights'), // Stage D1 SHADOW
   'storm-season': require('./paths/storm-season'), // Stage D2 SHADOW
   'polar-dinos': require('./paths/polar-dinos'), // Stage D3 SHADOW
+  'courtship-display': require('./paths/courtship-display'), // 2026-09-22 SHADOW — display behaviour
 };
 
 // Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
@@ -174,7 +175,11 @@ module.exports = {
   ],
 
   // Dark-launched paths — renderable on demand, hidden from public + rotation.
-  shadowPaths: [], // Stage D paths promoted to live 2026-08-16 (DINO_SHADOW_PATHS const kept — drives polish-OFF skip)
+  // 'courtship-display' stays here until Kevin grades it. A shadowPaths[] path is invisible to the
+  // hourly dispatcher and renders only via `iter-bot --mode courtship-display --post`, which posts
+  // it hidden (shadow=true / is_public=false). Going live = move the string to paths[] and change
+  // NOTHING else about how it renders (the go-live xerox rule).
+  shadowPaths: ['courtship-display'], // Stage D paths promoted to live 2026-08-16 (DINO_SHADOW_PATHS const kept — drives polish-OFF skip)
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -182,7 +187,8 @@ module.exports = {
 
   chaos: {
     enabled: true,
-    skipPaths: [],
+    // New axis-system paths skip chaos for the MVP so the hero composition is what gets judged.
+    skipPaths: ['courtship-display'],
     allowSubjectChaosPaths: [
       'paleo-landscape',
       'herd-migration',
@@ -204,6 +210,7 @@ module.exports = {
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
     skipPaths: [
+      'courtship-display',
       'paleo-landscape',
       'swamp-river',
       'ocean-reptiles',

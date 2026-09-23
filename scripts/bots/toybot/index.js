@@ -57,6 +57,7 @@ const pathBuilders = {
   'board-game-world': require('./paths/board-game-world'),
   'wooden-toy-land': require('./paths/wooden-toy-land'),
   'tin-toy-parade': require('./paths/tin-toy-parade'),
+  'puppet-theatre': require('./paths/puppet-theatre'), // 2026-09-22 SHADOW — proscenium framing
   // Halloween seasonal candidates — promoted from AlphaBot (2026-09), see
   // seasonalPaths.halloween below. Self-contained function-form builders
   // (own material-look text inline; no per-medium style injection needed).
@@ -111,6 +112,13 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro': 100,
       'black-forest-labs/flux-1.1-pro-ultra': 100,
     },
+    // puppet-theatre mirrors the tin-toy lineup: the curated handmade-material register needs
+    // flux, and keeping the lineup identical to a proven bespoke-medium path means the medium is
+    // the only thing being tested.
+    'puppet-theatre': {
+      'black-forest-labs/flux-1.1-pro': 100,
+      'black-forest-labs/flux-1.1-pro-ultra': 100,
+    },
   },
 
   // mediumByPath — each path locks to its medium.
@@ -139,6 +147,7 @@ module.exports = {
     'board-game-world': 'board_game_diorama',
     'wooden-toy-land': 'wooden_toy_diorama',
     'tin-toy-parade': 'tin_toy_diorama',
+    'puppet-theatre': 'puppet_theatre_diorama',
     // Halloween seasonal candidates (promoted from AlphaBot 2026-09) — each
     // builder is fully self-contained (inlines its own material-look text),
     // so its medium key carries no injected style (see mediumStyles below).
@@ -271,6 +280,8 @@ module.exports = {
       'a real printed BOARD GAME come to life, glossy die-cut cardboard board with painted illustrated spaces and printed borders, a clear winding path, real wooden meeples and plastic pawns and pewter figures and tumbling dice as pieces, scattered cards and a spinner and a sand-timer, warm hobby-table lighting, tilt-shift macro tabletop photography, tactile printed-cardboard texture, shallow depth of field',
     wooden_toy_diorama:
       'heirloom HAND-CARVED WOODEN toys, solid painted wood with visible woodgrain and turned-lathe rounded forms, soft matte painted color, gently rounded edges, occasional natural unpainted beech and maple, Waldorf / Grimm’s / Ostheimer / Brio wooden-toy aesthetic, warm natural wood tones, cozy hobby-table lighting, tilt-shift macro toy photography, tactile wood texture, shallow depth of field',
+    puppet_theatre_diorama:
+      'a handmade TOY PUPPET THEATRE photographed from the audience, painted cardboard proscenium arch with chipped gilt framing the opening, painted card flats standing in grooves in overlapping receding layers, a painted backcloth behind, carved and cloth puppets on visible strings and rods, tiny warm footlights raking up from the front edge and throwing shadows onto the flats, scuffed stage boards, honest cut edges and visible brush-marks, warm practical bulb light, tilt-shift macro collectible photography, tactile painted-card and timber texture, shallow depth of field',
     tin_toy_diorama:
       'vintage 1950s LITHOGRAPHED PRESSED-TIN wind-up toys, colorful printed-on detail (rivets, faces, dials, clothes printed on the metal), pressed-tin panels with tab-and-slot seams, clockwork wind-up keys, slight patina and tiny scratches, warm enamel sheen, Masudaya / Yonezawa tin-toy register, nostalgic warm studio lighting, tilt-shift macro collectible photography, tactile reflective tin, shallow depth of field',
     // Halloween seasonal candidates — empty on purpose: each builder inlines
@@ -632,7 +643,9 @@ module.exports = {
 
   // Dark-launch scene paths (Stage O) — excluded from `paths`/cycle below so the
   // dispatcher never auto-posts them; reachable only via explicit --mode.
-  shadowPaths: [], // Stage O paths promoted to live rotation 2026-08-16 (TOY_SHADOW_PATHS const retained for reference)
+  // 'puppet-theatre' stays here until Kevin grades it. shadowPaths[] is invisible to the hourly
+  // dispatcher and renders only via `iter-bot --mode puppet-theatre --post`, posted hidden.
+  shadowPaths: ['puppet-theatre'], // Stage O paths promoted to live rotation 2026-08-16 (TOY_SHADOW_PATHS const retained for reference)
 
   // Seasonal-only paths (2026-09-07) — drawn ONLY when
   // engine_config.bots_seasonal_enabled is true AND the named holiday window
@@ -710,6 +723,8 @@ module.exports = {
       'board-game-world',
       'wooden-toy-land',
       'tin-toy-parade',
+      // puppet-theatre: chaos would scramble the proscenium framing, which IS the path.
+      'puppet-theatre',
       // Halloween seasonal candidates (promoted from AlphaBot 2026-09) —
       // protect the curated MVP composition validated during QA.
       'vintage-halloween-toybox',

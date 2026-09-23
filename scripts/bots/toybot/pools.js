@@ -234,4 +234,8 @@ module.exports = {
   TOYBOT_WOODEN_TOY_PIECES: load('toybot_wooden_toy_pieces'),
   TOYBOT_TIN_TOY_SCENES: load('toybot_tin_toy_scenes'),
   TOYBOT_TIN_TOY_PIECES: load('toybot_tin_toy_pieces'),
+  // puppet-theatre (2026-09-22) — the production on stage, the cast mid-gesture, the machinery.
+  TOYBOT_PUPPET_PRODUCTIONS: load('toybot_puppet_productions'),
+  TOYBOT_PUPPET_CAST: load('toybot_puppet_cast'),
+  TOYBOT_PUPPET_STAGECRAFT: load('toybot_puppet_stagecraft'),
 };

@@ -45,6 +45,10 @@ module.exports = {
   CAMERA_ANGLES: load('camera_angles'),
   // Paleo-landscape path-bespoke pools (added 2026-05-17 — axis-system migration)
   DINOBOT_PALEO_LANDSCAPE_BIOME: load('dinobot_paleo_landscape_biome'),
+  // courtship-display (2026-09-22) — display behaviour, the anatomy doing it, and who it is for.
+  DINOBOT_COURTSHIP_ACT: load('dinobot_courtship_act'),
+  DINOBOT_COURTSHIP_FEATURE: load('dinobot_courtship_feature'),
+  DINOBOT_COURTSHIP_AUDIENCE: load('dinobot_courtship_audience'),
   DINOBOT_PALEO_LANDSCAPE_MEGAFLORA: load('dinobot_paleo_landscape_megaflora'),
   DINOBOT_PALEO_LANDSCAPE_PHENOMENON: load('dinobot_paleo_landscape_phenomenon'),
   DINOBOT_PALEO_LANDSCAPE_SURPRISE_ELEMENT: load('dinobot_paleo_landscape_surprise_element'),

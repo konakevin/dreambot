@@ -111,6 +111,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  DINOBOT_COURTSHIP_DISPLAY: {
+    description:
+      'PATH-BESPOKE — DinoBot courtship-display path (2026-09-22). DISPLAY BEHAVIOUR as the hero: a dinosaur mid-display, crest flushed and angled broadside, feather fans thrown wide, throat sac inflated mid-boom, a scrape-dance gouging the arena. Built because DinoBot had 16 paths and every one was a landscape, a herd, a fight, a family or a portrait — nothing showed an animal DISPLAYING. 3 path-bespoke axes: display_act (the hero behaviour) / display_feature (the MONEY-SHOT axis: the anatomy actually doing the displaying, backlit and translucent) / audience (who the display is FOR, because a display aimed at nothing reads as a random pose). Reuses DINOBOT_PALEO_LANDSCAPE_BIOME for the stage + the 80%-gated phenomenon, plus universal lighting + atmosphere. Prehistoric-Planet mating-display cinematography. Display and ritual ONLY — never mating, never fighting.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['biome', 'display_act', 'display_feature', 'audience'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DINOBOT_HERD_MIGRATION: {
     description:
       'PATH-BESPOKE — DinoBot herd-migration path (2026-05-17 axis-system migration). COLOSSAL DINOSAUR HERDS crossing alien-Mesozoic landscapes. Hero foreground dinosaurs (35-55% frame) + massive 50-200 strong herd extending into vanishing-point haze. Silhouettes scream DINOSAUR (neck-S-curves, crests, frills, plate-rows, spike-tails) never wildebeest. Reuses HERD_SCENES (200 fat-seed herd scenes) + DINOBOT_PALEO_LANDSCAPE_BIOME (200 alien-Mesozoic biome). Adds one new path-bespoke pool for herd-specific small accents. BBC-Planet-Earth-meets-Prehistoric-Planet documentary cinematography. 3 path-bespoke axes (biome / herd_scene / surprise_element) + 80%-gated phenomenon + universal lighting + atmosphere.',
