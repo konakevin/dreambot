@@ -40,8 +40,6 @@ const pathBuilders = {
   'mushroom-apothecary': require('./paths/mushroom-apothecary'), // 2026-09-22 SHADOW — FaeBot's first interior
   'acorn-boat-regatta': require('./paths/acorn-boat-regatta'), // 2026-09-22 SHADOW — FaeBot's first ACTION path
   'star-charting': require('./paths/star-charting'), // 2026-09-23 SHADOW — FaeBot's first NIGHT-SKY / knowledge path
-  'honey-harvest': require('./paths/honey-harvest'), // 2026-09-23 SHADOW — FaeBot's first FOOD/FORAGING + first HEIST
-  'autumn-seed-gathering': require('./paths/autumn-seed-gathering'), // 2026-09-23 SHADOW — FaeBot's first MOTION/PHYSICS + first AUTUMN path
 };
 
 module.exports = {
@@ -62,7 +60,6 @@ module.exports = {
   // described. This path needs its own medium because the bot-wide register is what was
   // beating it: see promptPrefixByMedium below. Worth +1.06 on the round average.
   mediumByPath: {
-    'autumn-seed-gathering': 'faebot_seedfall',
   },
 
   // Override the DB flux_fragment for this medium key with the locked
@@ -122,14 +119,10 @@ module.exports = {
     // prompts; putting "hard at work, caught mid-movement" IN FRONT of the figure
     // clause — additively, nothing removed — took it to 6 of 6. Do not demote the
     // fae clause (lesson 34) and do not tidy out the action.
-    'honey-harvest':
-      'one slender grown fae hard at work, caught mid-movement with her whole body committed, painted large and close in the foreground, in a layered fae-craft coat and hood with open wings, on a great tree limb that fills one side of the picture and runs out of frame, pale honeycomb hanging under it in overlapping sheets with gold honey lit through them, forty small bees around her',
     // autumn-seed-gathering: inherits honey-harvest's measured opener verbatim (the action
     // clause IN FRONT of the figure clause). The stalk-fills-one-side clause is the
     // anti-vista law, and "two hundred white seed tufts" carries the count from the prefix
     // on 6 of 6 renders, which is why the output order's own air item is the named lever.
-    'autumn-seed-gathering':
-      'one slender grown fae hard at work, caught mid-movement with her whole body committed, painted large and close in the foreground, in a layered fae-craft coat with open wings, on a great dry autumn stalk that fills one side of the picture and runs out of frame, a split seed pod at her shoulder taller than she is, and two hundred white seed tufts sailing past her on the wind',
     'star-charting':
       'one slender grown fae close in the foreground, painted large, in a layered fae-craft coat and hood with open wings, on a high woodland perch whose broad surface fills the near frame, beneath a blazing saturated night sky of indigo, violet and green',
     // acorn-boat-regatta: a path staged on a LINEAR feature (a stream) renders as a receding
@@ -137,8 +130,37 @@ module.exports = {
     // ACROSS the water did not fix it (6 of 6 still corridors). What breaks it is naming the
     // SURFACE as filling the frame with its far edge as a BAND along one border — the ToyBot
     // concrete-but-cropped form applied to the setting rather than to an object. Playbook 17.
+    // acorn-boat-regatta REDESIGNED 2026-09-23 on Kevin's direction: the old prefix
+    // caused all three of his complaints at once. It opened on a SURFACE rather than a
+    // subject, said "a crowd of tiny fae" (the naked-putto token, which cost this path
+    // 5 of 6 renders), and named no clothing or wings — while both of this bot's
+    // successful paths lead with "one slender GROWN fae … coat and hood with OPEN WINGS".
+    // The cast is now MIXED SPECIES, which is the variety engine and kills the putto
+    // prior as a side effect: a dormouse in a walnut shell cannot render as a cherub, and
+    // Flux cannot stamp one centroid across five hulls when every hull is a different
+    // animal. One hero boat large in the foreground replaces "five abreast".
     'acorn-boat-regatta':
-      'close-up of a woodland stream surface filling the whole frame, a crowd of tiny fae racing boats made from acorn caps, walnut shells, curls of birch bark and flower petals spread abreast across the near water, a band of mossy bank along the top edge of the picture',
+      // R2: the species are NAMED here, in position 1. R1 proved the generic form fails:
+      // the brief itself named a hedgehog at the bow, a harnessed dragonfly, a mouse, a frog,
+      // a beetle and a wren, plus a cobalt hazelnut shell and an acorn cap — and Flux rendered
+      // five identical painted canoes crewed by identical winged humanoids, because every one
+      // of those nouns landed at 40-65% of the emitted prompt. Generic "small forest creatures"
+      // at position 1 is not an anchor; "a mouse, a frog, a hedgehog" is. Paid for by trimming
+      // the tail rather than growing the prefix (lesson 34).
+      // R3 (Kevin): the crews must be fae AND critters SHARING a boat. R2 rendered
+      // all-animal crews at 4.50 avg but no fae, because R2's prefix listed the animals
+      // first and put "winged grown fae" next to them — so Flux fused the attribute onto
+      // the animals (winged mice, a winged frog) instead of adding a second body. Position 1
+      // sets ATTRIBUTES, not RELATIONSHIPS. So the fae is now its own body with its own
+      // clothing and its own job, the creatures have theirs, and "wings" is bound to "her
+      // own … at her back" rather than sitting adjacent to an animal noun.
+      // R2 RESTORE POINT (4.50 avg, min 4.3, critters 6/6 but zero fae):
+      //   'a woodland boat race where a mouse, a frog, a hedgehog, a wren and a beetle each
+      //    crew their own little boat alongside fully-dressed winged grown fae, every hull a
+      //    found natural thing — an acorn cap, a walnut shell, a curl of birch bark — the
+      //    nearest boat large and close in the foreground caught mid-race with spray off its
+      //    bow, the others smaller behind it, on a beautiful open stretch of woodland water'
+      'a woodland boat race where one slender grown fae in a leaf-cloth tunic rows the nearest boat, a mouse and a frog riding in the hull beside her, her own wings folded at her back, more boats further behind each with its own fae and creatures aboard, every hull a found natural thing like an acorn cap or a walnut shell, on a beautiful open stretch of woodland water',
     'mushroom-apothecary':
       'inside a tiny crowded fae apothecary, warm lamplight against jewel-coloured glowing glass',
     'fairy-swarm':
@@ -206,8 +228,6 @@ module.exports = {
     'mushroom-apothecary',
     'acorn-boat-regatta',
     'star-charting',
-    'honey-harvest',
-    'autumn-seed-gathering',
   ], // Stage F paths promoted to live rotation 2026-08-16
 
   // Picker on with the BOT_MODEL_TALLY 6-model lineup (2026-05-30):
@@ -256,7 +276,6 @@ module.exports = {
     // retries for 4 deliveries. flux-2-FLEX hits the SAME E005 wall on the same
     // content, so this is a flux-2 FAMILY fact, not a flux-2-pro one: there is no
     // shippable flux-2 option for a FaeBot path with a close adult-fae body.
-    'honey-harvest': { 'black-forest-labs/flux-1.1-pro': 1 },
     // autumn-seed-gathering: flux-1.1-pro ONLY — 18 of 18 delivered, zero E005, zero
     // signatures. Load-bearing for TWO reasons. (1) FaeBot's picker rolled ultra on 15 of
     // 15 mushroom-apothecary renders and ultra signs its work, so an unpinned pick puts
@@ -266,7 +285,6 @@ module.exports = {
     // report: an absent row does NOT break the picker — `mediumModelsCache.get()` returns
     // undefined and it falls THROUGH to a default pool. The risk is an unpinned roll
     // (i.e. ultra), not an exception.
-    'autumn-seed-gathering': { 'black-forest-labs/flux-1.1-pro': 1 },
   },
   // modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
   // Original locks (restore individual lines if a path needs pinning again):
@@ -298,8 +316,6 @@ module.exports = {
       'mushroom-apothecary',
       'acorn-boat-regatta',
       'star-charting',
-      'honey-harvest',
-      'autumn-seed-gathering',
       'dryad-portrait',
       'forest-elder',
       'female-druid',
@@ -338,8 +354,6 @@ module.exports = {
       'mushroom-apothecary',
       'acorn-boat-regatta',
       'star-charting',
-      'honey-harvest',
-      'autumn-seed-gathering',
       'forest-elder',
       'female-druid',
       'female-druid-adventure',

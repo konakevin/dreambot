@@ -3,7 +3,7 @@
  * its first SPORT, and its first path staged ON water.
  *
  * THE SOUL OF THE PATH:
- *   A boat RACE down a woodland stream, run by palm-sized fae in tiny craft
+ *   A boat RACE on beautiful woodland water, crewed by forest creatures and grown fae in hand-made craft
  *   they made out of found things — an acorn-cap tub, a walnut shell under a
  *   petal sail, a curl of birch bark, a folded-leaf punt, a reed outrigger.
  *   Five or more hulls on the water at once, mid-race, strung across the
@@ -163,6 +163,7 @@ const STREAM_COURSE = load('faebot_regatta_stream_course');
 const COURSE_FURNITURE = load('faebot_regatta_course_furniture');
 const WATER_LIGHT = load('faebot_regatta_water_light');
 const BANKSIDE = load('faebot_regatta_bankside');
+const SHORE = load('faebot_regatta_shore');
 
 const BANKSIDE_GATE = 0.7;
 
@@ -189,6 +190,7 @@ module.exports = ({ vibeDirective, picker }) => {
   const furniture = picker.pickWithRecency(COURSE_FURNITURE, 'regatta_course_furniture');
   const light = picker.pickWithRecency(WATER_LIGHT, 'regatta_water_light');
   const vantage = picker.pickWithRecency(VANTAGES, 'regatta_vantage');
+  const shore = picker.pickWithRecency(SHORE, 'regatta_shore');
   const bankside =
     Math.random() < BANKSIDE_GATE ? picker.pickWithRecency(BANKSIDE, 'regatta_bankside') : null;
 
@@ -202,13 +204,13 @@ ${bankside}
 The banks belong to the water this stretch: leaning grasses, wet moss, a fallen leaf caught in the reeds, and the race running through with the channel to itself.
 `;
 
-  return `You are a fantasy concept-art painter writing ONE short Flux prompt for a BOAT RACE run by tiny palm-sized fae in little hand-made craft on a woodland stream, in FaeBot's soft painted-fantasy register (Manchess + Giancola + Bonner + Froud painted-fantasy lineage). A timeless fae world where every hull, sail and oar was made by hand from what the woodland gave.
+  return `You are a fantasy concept-art painter writing ONE short Flux prompt for a BOAT RACE run by small woodland creatures and grown fae together, each crewing a little hand-made craft on beautiful woodland water, in FaeBot's soft painted-fantasy register (Manchess + Giancola + Bonner + Froud painted-fantasy lineage). A timeless fae world where every hull, sail and oar was made by hand from what the woodland gave.
 
 ━━━ THE FIVE LAWS OF THIS PICTURE ━━━
 1. THE WATER FILLS THE FRAME. A CLOSE view onto the moving surface: water edge to edge through the whole lower and middle of the picture, the boats on it near and large, and only a BAND of far bank — wet moss, root, leaning grass — along the very TOP. The stream's length runs out of frame both sides.
 2. FIVE BOATS ABREAST. At least five little boats at once, spread WIDE side by side across the near water at different angles, filling the picture's width. No single hero boat centred.
-3. EACH HULL IS THE FOUND THING ITSELF — the acorn cap, the walnut shell, the curl of birch bark, the folded leaf, the petal — keeping its own shape, rim and grain, with palm-sized fae sitting down inside it. One natural thing in frame proves the scale.
-4. SOMETHING IS HAPPENING, AND THE FAE ARE DOING IT. Spray, effort, a capsize, a gust, a near-miss. Every figure is a slender palm-sized fae with a full beautiful face, real eyes, real hair, pointed ears and fine wings, in fae-craft cloth covering chest and shoulders — a petal-silk tunic, a leaf-cloth smock, a woven-grass jerkin.
+3. EACH HULL IS THE FOUND THING ITSELF — the acorn cap, the walnut shell, the curl of birch bark, the folded leaf, the petal — keeping its own shape, rim and grain, with its crew sitting down inside it. One natural thing in frame proves the scale.
+4. SOMETHING IS HAPPENING, AND THE CREWS ARE DOING IT. Spray, effort, a capsize, a gust, a near-miss. EVERY BOAT CARRIES A MIXED CREW — one grown fae and one or two forest creatures TOGETHER IN THE SAME HULL, never a boat of only animals and never a boat of only fae. Each animal is a REAL animal of its kind on all fours or perched naturally, with true fur, feathers or shell. Each fae is a GROWN adult with a full beautiful face, real eyes, real hair, pointed ears and fine wings, fully dressed in fae-craft cloth covering chest and shoulders — a petal-silk tunic, a leaf-cloth smock, a woven-grass jerkin.
 5. PICTURES AND VIVID COLOUR. Each sail is a whole veined leaf, a petal with its darker streak, or a moth wing with its eyespot; hull sides are smooth plain shell and bark. Saturated committed colour, painted with real brush authority, and one small clever thing the eye finds on second look.
 
 Everything below is NOTES, longer than your prompt. Take from each only what fits.
@@ -228,6 +230,9 @@ ${course}
 ━━━ THE HAND-MADE COURSE ━━━
 ${furniture}
 
+★━━━ THE SHORE (the banks are a REAL PLACE — trees, flowers, terrain, and something living on them) ━━━
+${shore}
+
 ★━━━ THE LIGHT ON THE WATER (owns the palette; light is a glow, patch, streak, fleck or dappling ON a real surface) ━━━
 ${light}
 ${banksideSection}
@@ -238,21 +243,22 @@ Painted ${vantage}.
 This world has its own words: a tethered berry on a grass line at the turn, the fae aboard, a fae moving pebbles along a twig to keep the count, a frog watching the turn, a clover garland strung between two reeds at the end. Use no word whose famous picture is a modern sporting event, a harbour or a machine.
 
 ━━━ MOOD ━━━
-${vibeDirective ? String(vibeDirective).slice(0, 90) : ''} — colour the light and the feeling only; the race stays fast and crowded.
+${vibeDirective ? String(vibeDirective).slice(0, 90) : ''} — colour the light and the feeling only; the race stays fast, with clear water between the boats.
 
 ━━━ LENGTH IS THE FIRST RULE — 95-120 WORDS, COUNT THEM ━━━
 Your whole prompt is SHORTER than any one section above. Name each thing in three or four words and move on. Write comma-separated phrases in THIS order and then STOP:
-[name it plainly with the rolled light — for example "sunlit woodland stream boat race of tiny fae craft"],
-[the frame: the stream surface filling the picture close up, a band of mossy bank along the top edge],
-[five small hulls abreast across the near water, what each is made of and its colour],
+[name it plainly with the rolled light — for example "sunlit river-bend boat race of woodland creatures"],
+[the frame: a beautiful open stretch of woodland water running away into the distance, and THE SHORE ABOVE — its trees, its flowers and its terrain named from the section above, filling both banks and the far end of the view],
+[the nearest boat large and close in the foreground, what it is made of and its colour],
+[three or four more boats further back at different distances, each a different found hull],
 [what is happening right now, across several boats],
-[the fae aboard: palm-sized, in petal-silk and leaf-cloth covering chest and shoulders, wings, faces detailed on the nearest],
+[the crew of the nearest boat: A GROWN DRESSED FAE WITH WINGS pulling the oars AND one or two forest creatures riding in the same hull with her, each doing its own job — her face and her clothing detailed, their fur and feathers detailed],
 [the sails, each a veined leaf or streaked petal, on smooth plain shell and bark hulls],
-[one natural thing that proves the fae scale, and one piece of the hand-made course],
+[one natural thing that proves the scale, and one piece of the hand-made course],
 [what the light is doing on the water and its colour],
 [soft painted-fantasy oil-brushwork].
 
-If it will not all fit, the frame, the five boats, the fae and the light are the ones that must survive. Describe only what IS present — every phrase names something in the picture, never something absent. No preamble, no headers, no markers, no bullets, no bold labels.`;
+If it will not all fit, the frame, the nearest boat, the fae AND the creatures sharing it, THE SHORE, and the light are the ones that must survive. Describe only what IS present — every phrase names something in the picture, never something absent. No preamble, no headers, no markers, no bullets, no bold labels.`;
 };
 
 /*

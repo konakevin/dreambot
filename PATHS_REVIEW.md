@@ -84,9 +84,42 @@ path, including on failed renders where it was previously impossible to ask.
 | 3.8 | PixelBot | `ice-cavern` | the charm fix worked (0 carved-relief gibberish) and the ice-native charms are lovely. Blocker is a stone-masonry drift I deliberately did not chase, because naming the enclosure was itself the earlier fix for voxel looks rendering a void |
 | 3.5 | ToyBot | `sand-toy-beachworks` | sand engineering as an epic, where the toys are the tools that built it. **The premise now lands 6 of 6 where it landed 1 of 6**, and zero lettering in 18 renders on a path made of branded plastic. Best frame: a cathedral-scale fortress crossing the frame with a big orange bucket low right, so the picture says *all of this came out of that*. Lever: the toys still render factory-fresh, and the fix is six words moved to the front of the prefix |
 | 3.45 | BrickBot | `archaeology-dig` | a LEGO excavation, the trench cut open. **Zero text in 18 renders** on the bot's most label-prone subject. Best 4.4: a colossal white brick hand rising out of the floor with four crew standing on the open palm. Lever: one pool entry of 25 is eating the hero — a giant ladder, while the trench already contains an ordinary one, so the model renders the ordinary one and drops the find |
-| 3.07 | FaeBot | `acorn-boat-regatta` | the bot's first action path. 5 of 6 rendered nude wingless cherub dolls — "tiny/palm-sized" on a humanoid IS a naked-putto prior. `honey-harvest` later beat that trap with a fix this path never got, and it is a transplant rather than research |
 | 3.0 | ToyBot | `bath-toy-flotilla` | genuinely funny when it lands (a submarine breaching in front of a duck squadron; a rubber crocodile with two penguins as crew) but fails VIVID in half the frames. Toys render factory-fresh against "scuffed sun-faded well-chewed" in all 24 prompts |
 | — | BrickBot | `airfield-biplanes` | best draws 4.5 (a biplane wheels-off over a brick garden); gibberish wing text at ~1-2 per 6, below the resolution of a 6-render round |
+
+## ⭐ FaeBot `acorn-boat-regatta` — REBUILT AND APPROVED 2026-09-23
+
+Kevin pulled this one back off the cut list ("can we iterate on faebot eggcorn boats path?") and it went
+**3.07 → ~4.5 over four rounds**, approved on round 4 ("this last batch is vERY GOOD"). It is now a
+mixed-species fae-and-critter regatta on a living river.
+
+| round | the ONE variable | result |
+| --- | --- | --- |
+| 1 | mixed-species cast pool + purge "tiny/palm-sized" + rewrite the output order | 3.2 — beautiful water, but **0 of 6** had any critter |
+| 2 | move the species nouns to words 7-16 of the prefix | **4.50** — critters 6/6, humanoid children 0/6, but no fae at all |
+| 3 | fae and critters SHARING each boat, wings bound to *her* | ~4.2 — mixed crews 4/4, hulls finally read as acorn caps |
+| **4** | **the shore: new 25-entry landscape pool, ungated, named in the output order** | **~4.5 — APPROVED** |
+
+**What each round actually taught, because every one of Kevin's four complaints turned out to be written
+into the code as an instruction:**
+- "same boat/character stamped a bunch of times" → the required output order said *"five small hulls
+  abreast across the near water"*.
+- "looks like little kids in boats" → the prefix said *"a crowd of **tiny** fae"* and never named
+  clothing, while both of this bot's successful paths lead with *"one slender **grown** fae … coat and
+  hood with **open wings**"*. 11 more "tiny/palm-sized" mentions sat in the template.
+- "just a shot of a river" → the frame line said *"the far bank **soft** behind it"*, the bank content was
+  **gated at 0.7** so it was absent from 30% of renders, and there was **no landscape pool at all** — the
+  existing "bankside" pool is 25 entries of fae *spectators* with no terrain in them.
+- Round 2's all-animal crews → naming "winged grown fae" adjacent to the animal nouns made Flux fuse the
+  attribute onto the animals (winged mice, a winged frog) instead of adding a second body. Position 1
+  sets ATTRIBUTES, not RELATIONSHIPS.
+
+**Not a concern (Kevin, 2026-09-23):** the fae often render bare-torsoed in a leaf skirt. Kevin's call
+is explicit — *"i don't care about the modesty"* — so this is NOT a defect and needs no fix. I built a
+round-5 garment-structure change for it before asking, which was unnecessary work on a non-problem; it
+is reverted and unshipped. Recorded here so nobody "fixes" it again.
+
+**Shipped state = round 4.** Do not re-tune this path without Kevin's word.
 
 ## Two DinoBot bonus paths, outside the original 33
 
