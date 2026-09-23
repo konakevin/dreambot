@@ -305,6 +305,39 @@ mega-mushroom forest on a snowy slope. Beautiful, on-brand, and not quite the st
 `desert_flora` / `alpine_flora` pool, not a template change. Left undone on purpose — the renders
 clear the bar, and Kevin grades whether the identity matters more than the extra pool costs.
 
+#### ⚠️ And the BIGGER problem the dilution note missed — snowline-forest's archetype forbade its own subject
+
+The megaflora dilution above was the symptom I predicted. Underneath it was something worse, found
+later by measuring the emitted prompts instead of reading the pools. `DINOBOT_PALEO_LANDSCAPE`'s
+template hands **every** render two hardcoded lines:
+
+- *"The PALETTE skews WARM EARTH-TONES — autumn-gold + bronze + rust-red + earthy ochre + **amber** +
+  emerald-undergrowth … **NOT cold-monochrome**. NOT washed-out. RICH WARM SATURATED earth-tones"*
+- *"• **NO Iceland-style snowy-grey-rocky alpine canyons**"*
+
+`snowline-forest` was built precisely as "a cold, high, sparse, blue-shadowed forest — the single
+biggest tonal contrast available to the bot". Its archetype ordered the opposite palette and
+**hard-banned its own subject**. Not theoretical: the warm vocabulary reached all 8 of its renders'
+prompts (amber 7/8, bronze 6/8, rust 5/8), fighting the snow words in every one.
+
+**Fix:** `DINOBOT_SNOWLINE_FOREST` — a thin WRAPPER over the warm archetype that swaps only those two
+strings, chosen over a 127-line copy so the two paths can never drift apart on composition and every
+future improvement to the paleo-landscape framing reaches this path automatically. The replacement
+cold palette is modelled on the bot's already-proven `DINOBOT_POLAR_DINOS` wording rather than
+invented. Additive: a new archetype key plus a one-word change in the path file, so the 10 live paths
+on the warm archetype are untouched.
+
+The wrapper has one silent failure mode — if anyone edits the palette or ban line, its `includes()`
+stops matching and the path quietly goes back to being told to render warm. Locked by
+`__tests__/lib/dinobotSnowlineArchetype.test.ts` (8 tests), which asserts both that the anchors still
+exist in the source template and that the wrapped output actually comes out cold.
+
+**The lesson, and it generalises past DinoBot:** "clone the path it's in" inherits the clone target's
+ARCHETYPE, including any hardcoded palette mandate and any hard ban in it. Before cloning a path for
+a tonally different subject, grep the archetype's template for palette mandates and ban lists. This
+is the same root cause as playbook lesson 20 (the object-led pool rewrite that changed nothing because
+the template owned the palette) — both were the shared template, not the pool.
+
 **The general rule:** a clone inherits every axis it does not override, and an axis written for the
 parent's register will quietly pull the clone back toward the parent. When cloning, ask of each
 inherited axis: *was this written for a world my new biome actually has?*

@@ -2043,3 +2043,65 @@ ${SPECIES_ANCHOR}
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 };
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DINOBOT_SNOWLINE_FOREST — the cold sibling of DINOBOT_PALEO_LANDSCAPE.
+//
+// WHY THIS EXISTS. `snowline-forest` was built (2026-09-22) as a clone of
+// `paleo-landscape` on Kevin's "literally just clone the path it's in" call, and
+// the clone inherited an archetype that CONTRADICTS the path's entire premise:
+//
+//   line 59: "The PALETTE skews WARM EARTH-TONES — autumn-gold + bronze +
+//             rust-red + earthy ochre + amber + … NOT cold-monochrome."
+//   line 62: "• NO Iceland-style snowy-grey-rocky alpine canyons"
+//
+// A cold, blue-shadowed forest at the snowline is exactly the thing the second
+// line hard-bans, and the first line orders the opposite palette. This was not
+// theoretical: all 8 snowline-forest renders carried the warm vocabulary into
+// their prompt alongside the snow words ("amber" in 7 of 8, "bronze" in 6,
+// "rust" in 5), so the path was fighting its own template on every render.
+//
+// The bot ALREADY proves the cold register works — `DINOBOT_POLAR_DINOS` runs a
+// committed cold palette, so the replacement wording below is modelled on that
+// proven text rather than invented. But POLAR_DINOS is dino-hero-shaped (its
+// whole frame is built around a cold-adapted animal mid-behaviour), while this
+// path is a LANDSCAPE vista, so it needs PALEO_LANDSCAPE's composition with
+// POLAR's palette.
+//
+// Built as a WRAPPER, not a 127-line copy, so the two archetypes can never
+// drift apart: every future improvement to the paleo-landscape composition
+// reaches this path automatically, and only the two conflicting lines are
+// swapped. `__tests__/lib/dinobotSnowlineArchetype.test.ts` fails in CI if
+// either anchor string stops matching, so a template edit cannot silently
+// restore the warm mandate here.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const SNOWLINE_WARM_ANCHOR =
+  'The PALETTE skews WARM EARTH-TONES — autumn-gold + bronze + rust-red + earthy ochre + amber + emerald-undergrowth + atmospheric blue-haze at distance. NOT cold-monochrome. NOT washed-out. RICH WARM SATURATED earth-tones with golden god-rays.';
+
+const SNOWLINE_COLD_PALETTE =
+  'The PALETTE is COLD HIGH-ALTITUDE — snow-white, glacial cyan, cobalt and slate-blue shadow, dark wet conifer green, with pale low-angle winter sun on the lit faces. COMMITTED and SATURATED, never washed-out and never grey-monochrome: the shadow blues go deep and the lit snow reads bright. This is emphatically NOT the bot’s warm golden-bronze jungle.';
+
+const SNOWLINE_SNOW_BAN_ANCHOR = '• NO Iceland-style snowy-grey-rocky alpine canyons\n';
+
+module.exports.DINOBOT_SNOWLINE_FOREST = (args) => {
+  let out = module.exports.DINOBOT_PALEO_LANDSCAPE(args);
+  // Swap the warm mandate for the cold one, and drop the snowy-alpine ban that
+  // forbids this path's own subject. Both anchors are locked by a CI test.
+  if (out.includes(SNOWLINE_WARM_ANCHOR)) {
+    out = out.replace(SNOWLINE_WARM_ANCHOR, SNOWLINE_COLD_PALETTE);
+  }
+  if (out.includes(SNOWLINE_SNOW_BAN_ANCHOR)) {
+    out = out.replace(SNOWLINE_SNOW_BAN_ANCHOR, '');
+  }
+  return out;
+};
+
+// Hung off the FUNCTION rather than exported as its own key: archetypeRegistry
+// merges every exported key into the shared TEMPLATES map, and a non-function
+// value in there would be a foot-gun for anything that iterates it.
+module.exports.DINOBOT_SNOWLINE_FOREST.__anchors = {
+  warm: SNOWLINE_WARM_ANCHOR,
+  cold: SNOWLINE_COLD_PALETTE,
+  snowBan: SNOWLINE_SNOW_BAN_ANCHOR,
+};

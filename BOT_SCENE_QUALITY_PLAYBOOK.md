@@ -1238,6 +1238,39 @@ The reusable part is the method: a residual in the low single digits per six is 
 resolution of a 6-render round**, which is exactly the trap of grinding rounds against it. Before
 spending another round on a 1-2/6 residual, work out whether the round can even see the effect.
 
+**20. ⭐ A POOL-LEVEL WORD METRIC IS WORTHLESS UNLESS THE POOL TEXT ACTUALLY REACHES FLUX — measured
+end to end 2026-09-22, and the answer was a clean NULL.** DinoBot's
+`DINOBOT_PALEO_LANDSCAPE_BIOME` was the single most saturated pool in the fleet: 5.64 atmosphere
+adjectives to 2.35 countable objects per entry, with the word **"amber" in 84% of its 200 entries**.
+The thesis was that adjectives are a shared CONSTANT across a pool while objects are the VARIABLE, so
+an adjective-heavy pool makes every render look alike. An LLM rewrite took the pool to **ratio 0.42 →
+3.20**, adjectives 5.64 → 1.31, objects 2.35 → 4.21, "amber" 84% → 32%, with 174 of 200 entries
+changed, 0 duplicates. A 7.6× improvement on the metric.
+
+Then a 6-vs-6 shadow A/B on the emitted prompts:
+
+| | pool ratio | objects/prompt | atmosphere-adj/prompt | emitted ratio | "amber"/prompt |
+| --- | --- | --- | --- | --- | --- |
+| live pool | 0.42 | 6.50 | 6.83 | 0.95 | 1.83 |
+| rewritten pool | **3.20** | 6.83 | 8.50 | **0.80** | 2.00 |
+
+**Nothing moved.** Not the ratio, not the object count, not even "amber". The rewritten pool's
+distinctive vocabulary ("packed grit", "water-cuts", "talus fan", "ripple-marks") reached **0 of 6**
+prompts. Root cause, found by grepping the shared files instead of the pool:
+`archetype-templates.js` line 59 hands **every** `DINOBOT_PALEO_LANDSCAPE` render a hardcoded palette
+mandate — *"The PALETTE skews WARM EARTH-TONES — autumn-gold + bronze + rust-red + earthy ochre +
+**amber** + emerald-undergrowth… NOT cold-monochrome"* — and the shared `megaflora` pool carries 169
+more "amber" mentions. The biome pool was one of THREE sources and not the dominant one.
+
+**The generalisable law: on any path where pool text goes into a Sonnet BRIEF rather than straight into
+the Flux prompt, Sonnet paraphrases it and the pool's word statistics are washed out.** A pool-level
+metric is then measuring something Flux never sees. It only means anything where the pool text is
+concatenated directly into the prompt (a medium fragment, a prompt prefix, a preserved anchor phrase).
+Before optimising ANY pool-level metric, confirm the pool's own words survive into `ai_prompt` — one
+grep of six stored prompts for the pool's distinctive vocabulary answers it, and would have saved this
+entire rewrite. This is the "template adjective lock" failure mode one level up: **check the shared
+template and the shared sibling pools BEFORE rewriting the hero pool.**
+
 ---
 
 ## North Star — the actual goal

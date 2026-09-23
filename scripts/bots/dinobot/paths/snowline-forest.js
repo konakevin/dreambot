@@ -11,8 +11,20 @@
  * slot in the rotation. The entries were MOVED rather than copied: the parent pool is back to its
  * pre-wave-1 200, so this content is exclusive here and never double-serves.
  *
- * A true CLONE of `paleo-landscape`: same archetype, same megaflora / phenomenon /
- * surprise_element / sky_layer pools, same universal lighting + atmosphere. Only the biome differs.
+ * A near-clone of `paleo-landscape`: same megaflora / phenomenon / surprise_element / sky_layer
+ * pools, same universal lighting + atmosphere, and the SAME COMPOSITION — but NOT the same archetype
+ * any more. It runs `DINOBOT_SNOWLINE_FOREST`, a thin wrapper over `DINOBOT_PALEO_LANDSCAPE`.
+ *
+ * WHY THE ARCHETYPE HAD TO CHANGE (found 2026-09-22 by reading the emitted prompts, not the pools).
+ * The paleo-landscape template hands every render two hardcoded lines that are both fatal here:
+ *   "The PALETTE skews WARM EARTH-TONES — autumn-gold + bronze + rust-red + earthy ochre + amber
+ *    … NOT cold-monochrome. RICH WARM SATURATED earth-tones"
+ *   "• NO Iceland-style snowy-grey-rocky alpine canyons"
+ * So the archetype ordered the OPPOSITE palette to this path's whole reason for existing, and
+ * hard-banned its own subject. It showed: warm vocabulary reached all 8 early renders' prompts
+ * (amber 7/8, bronze 6/8, rust 5/8), fighting the snow words every time. The wrapper swaps exactly
+ * those two strings and nothing else, so composition stays shared and cannot drift; its anchors are
+ * locked by `__tests__/lib/dinobotSnowlineArchetype.test.ts`.
  * That is the ChibiBot shared-family pattern (one archetype, N paths each wiring their own hero
  * pool), so this path inherits a composition already proven on the bot.
  *
@@ -31,7 +43,7 @@
  */
 
 module.exports = {
-  archetype: 'DINOBOT_PALEO_LANDSCAPE',
+  archetype: 'DINOBOT_SNOWLINE_FOREST',
   pools: {
     biome: 'DINOBOT_SNOWLINE_FOREST_BIOME',
     megaflora: 'DINOBOT_PALEO_LANDSCAPE_MEGAFLORA',

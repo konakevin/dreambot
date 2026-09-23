@@ -69,6 +69,25 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  // DINOBOT_SNOWLINE_FOREST — identical slot wiring to DINOBOT_PALEO_LANDSCAPE
+  // (it is that archetype's COLD sibling and its template is a thin wrapper over
+  // it). Only the palette mandate and the snowy-alpine ban differ; see the block
+  // at the bottom of archetype-templates.js for why it exists, and
+  // __tests__/lib/dinobotSnowlineArchetype.test.ts for the anchors that lock it.
+  DINOBOT_SNOWLINE_FOREST: {
+    description:
+      'PATH-BESPOKE — DinoBot snowline-forest path (2026-09-22). The COLD sibling of DINOBOT_PALEO_LANDSCAPE: a high conifer forest at the snowline, the landscape itself the hero, no dinosaur as primary subject. Same composition and slot wiring as paleo-landscape; the template swaps that archetype\'s hardcoded WARM-EARTH-TONES palette mandate for a committed cold one (snow-white / glacial cyan / cobalt shadow) and drops its "NO Iceland-style snowy-grey-rocky alpine canyons" ban, which forbade this path\'s own subject. Built because DinoBot\'s whole landscape register is warm (the shared biome pool used "amber" in 84% of entries) and a cold high sparse forest is the single biggest tonal contrast available to the bot.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['biome', 'megaflora', 'surprise_element', 'sky_layer'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DINOBOT_SWAMP_RIVER: {
     description:
       'PATH-BESPOKE — DinoBot swamp-river path (2026-05-17 axis-system migration from legacy function-form). MESOZOIC SWAMP / RIVER / WATERWAY with a SEMI-AQUATIC DINOSAUR interacting with the water. Spinosaur fishing / sauropod wading / hadrosaur drinking / mosasaur breaching / crocodilian floating / pterosaur skimming. Water is the setting; dino is the candid focal subject (25-40% frame). NO humans. National-Geographic-cinematic candid moment. 3 path-bespoke axes (water_scene / dino / surprise) + 80%-gated phenomenon + universal lighting + atmosphere.',
