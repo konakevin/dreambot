@@ -2216,6 +2216,70 @@ same regex you sweep the pools with.** A banned word enumerated inside an instru
 in the prompt. And the 200-roll dry-run that proved it cost no API call and no render — pair this with
 lesson 69 (verify the dry run itself) and it is the cheapest gate in the pipeline.
 
+**77. ⭐⭐⭐ THE OUTPUT ORDER IS THE ONLY LAYER THAT SHIPS — PROVEN IN BOTH DIRECTIONS NOW.** Lesson 60
+found an inflator SURVIVING in the order after being removed everywhere else. FarmBot
+`hay-baling-summer` produced the exact inverse: while trimming a template for length, its author
+DELETED the hard-LINE half of the crosswise law *from the order* and left it in the framing prose and in
+**24 of 25** field-pool entries. Result: **0 of 6 emitted prompts carried it**, and the path's own
+differentiator was weak or absent in 4 of 6 renders.
+
+The control is inside the same law. Its OTHER half ("runs off both side edges") survived in the order,
+reached **6/6** prompts, and held corridors to **0/6**. Restoring the line clause to the order *alone*
+took it **0/6 → 5/6 → 6/6** — and the single prompt that still lacked it was the single render that
+still lacked the line.
+
+So the two lessons close a loop: **prose and pool text reach roughly 0% of renders; the output order
+reaches 100%.** Practical rule: **when you trim a template for length, diff the OUTPUT ORDER separately
+and last.** It is the cheapest thing to break by accident and the most expensive thing to have broken.
+
+**78. ⭐⭐ A POSITIVE GEOMETRIC LAW NEEDS THREE LAYERS, NOT SIX — AND HANDING IT TO EVERY AXIS BLOWS
+EVERY WORD COUNT.** A necessary correction to how lesson 44 gets applied. Reading 44 as "put the law on
+every axis that can name the thing" is right for BANS and wrong for positive laws. Given to three
+recipes, the 35-word crosswise clause landed in 17/25 bales, 23/25 field and 13/25 moment entries, so a
+composed brief carried it three or four times over, plus the framing block, plus the order. It also blew
+every length ask, because the examples carried the law (lesson 55) — **with a clean within-build
+control:**
+
+| pool | ask | returned median | |
+|---|---|---|---|
+| bales | 22-34 | **73** | 2.5× |
+| field | 26-38 | **79** | 2.3× |
+| moment | 28-40 | **62** | 1.8× |
+| light | 24-34 | 45 | 1.5× |
+| **crew** | 14-24 | **26** | **1.1×** ← the one pool whose examples were short |
+
+Same generator, same model, same run. Giving the ground to ONE owning axis and rewriting the examples
+short took bales 73 → 39 and moment 62 → 36, duplication 17/25 and 13/25 → **0/25**, and bought back
+~60 words of brief. **The three layers a positive law needs: the early framing block, the ONE axis that
+owns the thing, and the output order. Nothing else.**
+
+**79. ⭐⭐ "STUBBLE" IS THE SHORN SHEEP AGAIN — AND IT IS ALSO A BEARD.** The best single illustration of
+two laws colliding in one word. The natural premise noun for a cut field is disqualified twice over:
+it is **subtractive** (grass with its height removed, lesson 58's exact shape) AND to everyone outside
+farming it means **facial hair** (lesson 47), on a path that puts human faces in frame.
+
+The fix transposes the shorn-sheep recipe exactly: a positive object (*"a pale bristled floor of cut
+stalks with bare dry soil showing between them"*), the cut proven by things **added** to it (wheel ruts,
+combed ridges, broken stalks, a few stalks the blade missed, the bales), and the uncut grass named as a
+**wall** at the boundary — hat-and-socks plus woolly-majority in a different costume. The positive
+surface rendered **18/18**. Two more from the same layperson check on this one path: **"baling" is a
+homophone of "bailing"** (out a boat), and, least obvious, **"haymaker" is a big swinging punch** — on a
+path full of people swinging things.
+
+**80. ⭐⭐ THE CHECKING TOOLS NOW FAIL ROUTINELY, NOT RARELY — FIVE FALSE NEGATIVES IN ONE BUILD.**
+Lesson 69 recorded this as a hazard; this build makes it a standing expectation. In one path:
+`grep -c "evenly"` matched inside **un**evenly; two dry-run patterns went stale against a newline
+introduced by a wrapped template literal; two more missed because the reworded text was ALL-CAPS against
+a case-sensitive regex; and the character-branch detector keyed on a section header that had been
+renamed, reporting 0 of 12 character briefs. **Every one was caught by hand-reading a single composed
+brief or pool entry before acting.** Budget for it: after any reword, your own greps are stale until
+proven otherwise, and one hand-read example is the whole cost of proving it.
+
+Same build, lesson 53 quantified a fourth time — **51 raw sweep hits → 13 real.** All 14 "size
+comparison" hits were the word *deep* (layer counts, rut depth, and the light pool's required
+`deep blue-violet`). And the single-owner ruler rule (67) held: **0 real ruler hits across 139 entries**,
+against **7** independent re-derivations of "a hand's width" on the sibling path that lacked it.
+
 ---
 
 ## North Star — the actual goal

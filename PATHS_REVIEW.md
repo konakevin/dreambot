@@ -7,7 +7,7 @@ Going live is moving one string from `shadowPaths[]` into `paths[]` and changing
 To look at any path's renders: they are shadow posts on that bot's own profile, reviewable in the app.
 To render more of one: `node scripts/iter-bot.js --bot <bot> --mode <path> --count 6 --post --shadow`.
 
-⏳ **STATUS: 34 of 35 built, 1 outstanding** (rendering now). This sheet is updated as each wave merges; the final
+✅ **STATUS: all 35 built, merged and shadow-only.** Nothing is in live rotation; every one is one string away. This sheet is updated as each wave merges; the final
 version will cover all 35. Full per-path detail, every measured round and every residual lives in
 `NEW_PATHS_RUN_STATE.md`; the cross-bot laws all this produced are in `BOT_SCENE_QUALITY_PLAYBOOK.md`.
 
@@ -74,6 +74,7 @@ two named axes getting pushed off the end, not a word-count problem.
 
 | score | bot | path | honest assessment |
 | --- | --- | --- | --- |
+| 3.97 | FarmBot | `hay-baling-summer` | high-summer haymaking: the field half-cut, bales standing in the cut floor. Text 0/18, one corridor in 18. Best frame 4.8: an enormous cropped bale with a hot rim against a deep indigo flank, its shadow a hard bar across the frame, the air packed with individually lit motes, one pheasant feather laid on a twine-bound ridge. Lever: one light family out of six averages 2.5 against 3.0-4.3 for the rest, because its own wording says "lies flat" and "bleached" — five entries to reword |
 | 3.92 | FarmBot | `lambing-season` | best frame 4.6 (a hail shower with a gold sunbreak, eight lambs running a wall line). ~4 `light` entries described as "even" produce every sober frame; rewriting those is one edit |
 | 3.8 | PixelBot | `ice-cavern` | the charm fix worked (0 carved-relief gibberish) and the ice-native charms are lovely. Blocker is a stone-masonry drift I deliberately did not chase, because naming the enclosure was itself the earlier fix for voxel looks rendering a void |
 | 3.07 | FaeBot | `acorn-boat-regatta` | the bot's first action path. 5 of 6 rendered nude wingless cherub dolls — "tiny/palm-sized" on a humanoid IS a naked-putto prior. `star-charting` later beat that trap 0 of 26 with a fix this path never got |
