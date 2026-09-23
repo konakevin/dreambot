@@ -1705,6 +1705,70 @@ sweep on the output is the control.** And the usual counterweight applied — 90
 were false positives (portcullis *bars*, *cone* roofs, *beam*-ends, raindrop *rings*, the wall
 "standing", and the playbook's own protected simile "a roof pulled low like a hat").
 
+**42. ⭐⭐⭐ A THREE-PER-ARM COMPARISON WILL HAND YOU A CONFIDENT WRONG VERDICT. RUN ONE CONFIRMATION
+BATCH BEFORE YOU ENCODE ANY FINDING.** This is lesson 19's resolution warning caught in the act, and
+the agent caught itself, which is why it is worth reading. On BloomBot `coastal-cliff-bloom` the
+3-per-arm model split looked decisive:
+
+| | apparent (3 per arm) | after a 6-render confirmation | pooled over 24 |
+| --- | --- | --- | --- |
+| postcard-vista rate | **1 of 9 ultra vs 7 of 9 pro** | — | ~33% ultra vs ~67% pro |
+| round average | ultra **4.50** vs pro 3.75 | ultra **3.92** | ultra 4.03 (n=15), pro 3.75 (n=9) |
+
+A hard ultra pin was one step from shipping on that. **The edge is real but about half the apparent
+size, and pinning bought nothing over a weighted split.** The path was merged with weights, not a pin,
+and the reason is recorded in `index.js` so nobody "tidies" it into a pin later.
+
+Generalises to every comparison in this playbook: model arms, prompt variants, pool rewrites. Three
+renders per arm is enough to FORM a hypothesis and never enough to encode one. Cheapest possible
+guard: one confirmation batch at 6+ on the winning arm alone.
+
+**43. ⭐⭐ THE ATTENTION CURVE, MEASURED BY POSITION RATHER THAN BY WORD COUNT.** Same build, and it is
+the sharpest quantification of lesson 18 in the run: **content at 5-10% of the prompt rendered 6 of 6;
+content past ~30% rendered 0 of 6 until it was moved.** SteamBot's `rooftop-telegraph` independently
+measured the same shape — its roofline noun at word ~104 (25% of the prompt) rendered 6/6 while its
+blade word at ~177 (45-51%) rendered 0/6.
+
+So the useful unit is **fraction of the prompt, not absolute words**, and the cliff is steep and early.
+Two consequences:
+- Auditing "did my element render" means asking **where in the prompt it sits as a percentage**, which
+  is a one-line calculation on the stored `ai_prompt`.
+- A path with five rule blocks and nine output-order items has already spent its attended region on
+  rules, which is why the lever is deleting template prose and order items rather than reordering them
+  (lesson 34: reordering just moves the failure onto whatever you demoted).
+
+**44. A LAW OMITTED FROM ONE AXIS IS THE AXIS THAT BREAKS IT — and satellite axes inherit vocabulary
+from your own EXAMPLES.** Three measurements from the same build, all caught by a local dry-run before
+any render:
+- The off-camera-ruler ban rode only on the creature axis, so the ground, cast and charm pools
+  independently reached for *"the width of a hand"*, *"the size of a thumb"*, *"a finger-width gap"* —
+  a useless ruler AND a stray human noun on a bot that bans people.
+- The near-surface framing law rode on four axes but not on `charm` or `light`, and **those two were
+  the only pools that produced "cliff face" / "rock face"** — the exact noun the path bans.
+- The ruler EXAMPLES named ground shapes ("the slab it stands on, the bank of grass"), so Sonnet put
+  specific ground formations into the animal pool (**13 of 25**), the sea pool (5/25) and charm
+  (2/25) — each one able to contradict the rolled ground.
+
+**So: a law belongs on every axis that can name the banned thing, not just the axis that owns it. And
+write examples in GENERIC anchors ("bare rock", "the stone", "a flower clump"), because whatever noun
+your example uses becomes that axis's vocabulary.**
+
+**45. TWO MORE TEXT-PRIOR FAMILIES, both from process words.** (a) **"PUT THERE BY A HAND"** — lesson
+1 lists `mark|glyph|engraved`, but a recipe sanctioning *"as if ruled"*, *"so straight it looks
+drawn"*, *"like a tide mark in the air"* had all three echoed back. Add
+`ruled|drawn|traced|written|inked|pencilled|scored|tide mark`. (b) **the verb `cross`**, because on a
+clifftop or hilltop its noun sense is a memorial cross, one of Flux's strongest priors for that
+setting. And for the coastal jargon list (lesson 28): `thrift` (a savings bank), `stack` (paper),
+`shelf` (bookshelf), `lip`, `spit`, `head`, `kidney vetch` (an organ), `bird's-foot trefoil`,
+`sea holly` (Christmas holly), `scurvygrass` (a disease), `razorbill` (a razor) — plus **`salt burn`
+carries FIRE** and **`wind-pruned` carries garden shears**.
+
+**46. A STATED LENGTH RANGE IN PROSE IS NOT A CAP, AND A LENGTH SPEC THAT CONTRADICTS ITS OWN CONTENT
+REQUIREMENTS LOSES EVERY TIME.** Same build: a recipe asking for "22-38 words" returned a 71-word
+average. Restating it as a counted hard rule with an explicit rejection clause brought most pools to
+spec but left the hero pool at 66 — **because that recipe asked for four things one sentence cannot
+hold.** If a pool will not come to length, the fix is removing a requirement, not restating the number.
+
 ---
 
 ## North Star — the actual goal

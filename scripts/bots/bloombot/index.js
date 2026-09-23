@@ -24,6 +24,7 @@ const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   'alpine-wildflower-meadow': require('./paths/alpine-wildflower-meadow'), // 2026-09-23 SHADOW — the snowline meadow
+  'coastal-cliff-bloom': require('./paths/coastal-cliff-bloom'), // 2026-09-23 SHADOW — the sea cliff
   // 2026-05-16: landscape migration attempted + REVERTED — legacy compose.js
   // outperformed the new declarative archetype. Declarative version preserved
   // at paths/landscape.js for reference, legacy stays canonical.
@@ -87,6 +88,15 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro-ultra',
       'black-forest-labs/flux-1.1-pro',
     ],
+    // coastal-cliff-bloom: WEIGHTED, deliberately not pinned. A 3-per-arm split
+    // looked decisive (postcard vista 1 of 9 on ultra vs 7 of 9 on pro) and a hard
+    // ultra pin was nearly shipped on it; the 6-render confirmation came back 3.92,
+    // not 4.50. Pooled over 24 renders: ultra 4.03, pro 3.75 — the edge is real but
+    // about half the apparent size, and pinning bought nothing over the split.
+    'coastal-cliff-bloom': {
+      'black-forest-labs/flux-1.1-pro-ultra': 70,
+      'black-forest-labs/flux-1.1-pro': 30,
+    },
     'tropical-grove': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'flower-arrangement': [
       'black-forest-labs/flux-1.1-pro',
@@ -99,6 +109,8 @@ module.exports = {
   // of more blooms" and "the sky clean and clear", which fight bare rock and a
   // storm-lit sky respectively.
   promptSuffixByPath: {
+    'coastal-cliff-bloom':
+      'render every named species as that exact species in its named colour, the seaward side of every plant dried brown and the sheltered side green, the flowers at the edge silhouetted directly against the open water far below them, the far horizon a flat hard line, every layer crisply rendered, no text, no words, no watermarks, gallery quality',
     'alpine-wildflower-meadow':
       'render every named species as that exact species in its named colour, bare broken rock and old snow visible between the flowers, the far ranges hard-edged and each one paler than the last, every layer crisply rendered, no text, no words, no watermarks, gallery quality',
   },
@@ -117,6 +129,10 @@ module.exports = {
   promptPrefixReplaceByPath: {
     // The bot-wide prefix is a second frame-packing mandate ("abundant blooms
     // filling the entire frame edge-to-edge … any setting is only a backdrop").
+    // Carries the three wind-and-salt facts, because the prefix is the only slot
+    // that reliably renders on this path (measured 0/6 → 4/6).
+    'coastal-cliff-bloom':
+      'a close low bank of flowers filling the near frame, every plant cut flat and level across its top, every flower leaning the same way inland, the seaward half of each plant dried brown and the sheltered half green, the ground stopping in one hard straight line right across the picture, the flowers along that line silhouetted directly against open water lying far below them',
     'alpine-wildflower-meadow':
       'a high-altitude wildflower meadow at the snowline, low tight flowers in dense clumps between bare grey broken rock and old snow lying in the meadow, a snowfield and bare peak standing above the flower line, thin hard clear mountain light',
     'great-blossom-tree':
@@ -144,6 +160,7 @@ module.exports = {
   cleanMediumByModel: {},
   mediumByPath: {
     'alpine-wildflower-meadow': 'bloom_alpine_meadow',
+    'coastal-cliff-bloom': 'bloom_coastal_cliff',
   },
 
   mediumStyles: {
@@ -156,6 +173,11 @@ module.exports = {
     // Measured: frame-filling carpet 2/6 → 0/6, and buying back 13 preamble words
     // also took look-landed 0/6 → 4/6. Code-only: mediumStyles overrides the DB
     // flux_fragment, so no dream_mediums row and no migration.
+    // coastal-cliff-bloom: same load-bearing reason as the sibling — BLOOM_NEUTRAL sits at
+    // words 40-78 and mandates frame-filling blooms, which erases the bare rock and
+    // the water this path exists to show. Code-only: no DB row, no migration.
+    bloom_coastal_cliff:
+      'flowers the vivid saturated hero, low and wind-cut on bare rock above open water; medium and finish set by the look tokens opening this prompt',
     bloom_alpine_meadow:
       'flowers the vivid saturated hero, sharing the ground with bare broken rock and lying snow; medium and finish set by the look tokens opening this prompt',
     bloombot_gpt_clean: blocks.GPT_CLEAN,
@@ -208,7 +230,7 @@ module.exports = {
   // DARK-LAUNCH shadow paths (BOT_DARK_LAUNCH_PLAN.md + mig 376) — NOT in the
   // live paths[] rotation; render only via `iter-bot --mode <path> --post`
   // (shadow: hidden, admin-only). Promote = move the string into paths[].
-  shadowPaths: ['alpine-wildflower-meadow'], // Stage A paths promoted to live rotation 2026-08-16
+  shadowPaths: ['alpine-wildflower-meadow', 'coastal-cliff-bloom'], // Stage A paths promoted to live rotation 2026-08-16
 
   // Seasonal-window paths (scripts/lib/botSeasonal.js) — drawn ONLY when
   // engine_config.bots_seasonal_enabled is true AND the named holiday window
@@ -236,6 +258,7 @@ module.exports = {
     // walkway composition while validating (2026-06-22; revisit after sign-off).
     skipPaths: [
       'alpine-wildflower-meadow',
+      'coastal-cliff-bloom',
       'flower-arrangement',
       'hanging-flowers',
       'water-garden',
@@ -280,6 +303,7 @@ module.exports = {
     // richness; Haiku compression drops bespoke vocabulary to hit word count.
     skipPaths: [
       'alpine-wildflower-meadow',
+      'coastal-cliff-bloom',
       'landscape',
       'closeup',
       'tropical-paradise',
@@ -324,6 +348,48 @@ module.exports = {
     //     DEFAULT_POOLS, which are written for a FIGURE ("the press of jewelry at
     //     the throat", "boots sinking into soft ground") on a bot that bans people.
     poolsByChannelByPath: {
+      'coastal-cliff-bloom': {
+        lightcolor: [
+          'light coming straight through the low petals from behind so they read as lit glass',
+          'every shadow edge cut hard with no softness anywhere in it',
+          'the white water below throwing light back up under the flowers',
+          'one band of the flowers lit and the rest of the ground held flat and dark',
+          'wet rock going almost black and mirror-bright where the water has come over it',
+          'the orange lichen burning brighter than anything else in the frame',
+          'the sky darkening steadily from the sea horizon to the top of the frame',
+        ],
+        smell: [
+          'salt and crushed flower stems',
+          'wet rock and cold seaweed lifting off the water',
+          'clean hard air carrying nothing but salt',
+        ],
+        sound: [
+          'the sea working somewhere below the edge and never stopping',
+          'wind steady and unbroken over ground-low flowers',
+          'one gull call carried sideways past the edge',
+          'loose stones shifting where the ground has broken away',
+        ],
+        touch: [
+          'petals stiff and waxy and gritty with dried salt',
+          'sun hot on the rock while the wind stays cold',
+          'short wiry grass springing back flat the moment it is let go',
+        ],
+        temperature: [
+          'full sun and a cold wind at the same moment',
+          'the shaded side of every stone holding damp cold',
+          'spray landing cold on warm stone',
+        ],
+        weight: [
+          'low flowers pressed flat and held there by constant wind',
+          'stems bent permanently one way and staying bent',
+          'wet foam sagging off a blade of grass',
+        ],
+        air: [
+          'air so clean the far horizon stays a hard line',
+          'a shred of blown foam dragging through the flowers',
+          'salt haze lifting off the water below the edge',
+        ],
+      },
       'alpine-wildflower-meadow': {
         lightcolor: [
           'light coming straight through the low petals from behind so they read as lit glass',
@@ -368,6 +434,7 @@ module.exports = {
     },
     pathContext: {
       'alpine-wildflower-meadow': 'scene',
+      'coastal-cliff-bloom': 'scene',
       landscape: 'scene',
       closeup: 'scene',
       cozy: 'scene',
