@@ -61,11 +61,12 @@ export class SwapCapacityRetryError extends Error {
  * errors are worth retrying later; content failures (no clean two-face split, identity) are not.
  *   - our own gate timing out: `swap_capacity_busy`
  *   - Fly proxy refusing / bad gateway: `returned 502|503|504`
- *   - the engine giving up on Replicate: `Face swap timed out` (inside a 500)
+ *   - the engine giving up on Replicate: `Face swap timed out` / `Face swap deadline exceeded` (inside a 500)
  *   - the edge aborting the call: `Signal timed out`, `TimeoutError`, `aborted`
+ * The dream-queue monitor classifies the same way (scripts/lib/nightlySwapHealth.js, parity-tested).
  */
 export function isSwapCapacityError(message: string): boolean {
-  return /swap_capacity_busy|returned 50[234]\b|face swap timed out|signal timed out|timeouterror|\baborted\b|operation was aborted/i.test(
+  return /swap_capacity_busy|returned 50[234]\b|face swap timed out|face swap deadline exceeded|signal timed out|timeouterror|\baborted\b|operation was aborted/i.test(
     message
   );
 }

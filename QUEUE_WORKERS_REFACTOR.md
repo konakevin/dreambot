@@ -256,8 +256,9 @@ The HEAVY cap is the **Fly.io `face-swap-dual` service capacity**, not Supabase.
 
 1. `fly scale count 2` (or 3) — pins N machines. Verify: `fly machines list`.
 2. Re-run `node scripts/loadtest-dual-swap.js` (or `loadtest-mixed.js --heavy N`) at the new intended concurrency to confirm no `face-swap-dual@fly` exhaustion / no 546.
-3. Only then raise `dream_queue_max_concurrent_heavy` in `engine_config` (live, no deploy) to ~`10 × machine_count` and watch `dream-queue-monitor` for dead_letters.
-   Rule of thumb from the load test: ~10 concurrent dual swaps per 1-vCPU/2GB machine. Never raise the cap past tested Fly capacity — excess just exhausts the swap service.
+3. Raise `fly_dual_swap_slots` in `engine_config` to the number of machines (live, no deploy): the swap capacity gate admits that many swaps at once, one per machine (`soft_limit 1`).
+4. Only then raise `dream_queue_max_concurrent_heavy`, at most to `slots × (1 + swap_gate_max_wait_ms / 25 s)` (2 slots → 5; `heavyCapCeiling` in `scripts/lib/nightlySwapHealth.js`), and watch `dream-queue-monitor`: it warns when the cap exceeds that ceiling and when capacity retries pile up.
+   SUPERSEDED rule (2026-09-23): the July "~10 concurrent dual swaps per machine" was wrong. Measured over 21 nights and the 09-21 load test, 3+ couples swapping at once on 2 machines failed 31% of the time; the safe number is ONE swap per machine. Heavy cap recorded at 3 in migration 552.
 
 **Hardening pass 2026-06-17 (this section is the status of record):** (a) the per-weight cap is now enforced ATOMICALLY inside `claim_dream_queue_jobs_by_weight` (migration 275, per-weight advisory lock) so overlapping invokers can't overshoot; (b) the worker has an `x-worker-sync` mode + a GitHub Actions backstop (`.github/workflows/dream-queue-sync.yml`, every 5 min) that drains via a HELD connection — the queue keeps draining even if `EdgeRuntime.waitUntil` is dropped by the platform (which happened 2026-06-17 and stalled the queue); (c) `RENDER_TIMEOUT_MS` lowered to 120s (under the 150s request-idle ceiling); (d) `generateImage` 429 retry is now bounded (3); (e) nightly user fetches are paginated (PostgREST's silent 1000-row cap was dropping users 1001+). See `[[project_waituntil_regression_synchronous_queue_render]]`.
 

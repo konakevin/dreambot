@@ -114,10 +114,11 @@ is untouched. Rollback = `active = false`, no deploy. Use a PIN for routing — 
 - **PER-WEIGHT concurrency caps are the anti-546 lever**, enforced ATOMICALLY inside
   `claim_dream_queue_jobs_by_weight` (migration 275, per-weight advisory lock — no overshoot under
   concurrent invokers). `weight` set at enqueue (face-swap-likely = heavy, plain text + restyle = light);
-  light cap `engine_config.dream_queue_max_concurrent` (40), heavy `…_heavy` (10), both live-tunable.
-  Beyond the cap, jobs queue + drain (never fail). **The heavy ceiling is the Fly.io `face-swap-dual`
-  service** — scale Fly FIRST (`fly scale count N`, runbook in `QUEUE_WORKERS_REFACTOR.md`), then raise
-  the heavy cap.
+  light cap `engine_config.dream_queue_max_concurrent` (40), heavy `…_heavy` (3, migration 552), both
+  live-tunable. Beyond the cap, jobs queue + drain (never fail). **The heavy ceiling is the Fly.io
+  `face-swap-dual` service** — ONE swap per machine; the swap capacity gate (`fly_dual_swap_slots`, mig 549)
+  meters it. Scale Fly FIRST (`fly scale count N`, runbook in `QUEUE_WORKERS_REFACTOR.md`), then raise
+  `fly_dual_swap_slots`, then the heavy cap (≤ slots × (1 + max wait / 25 s); the dream-queue monitor warns).
 - **Dual face swap** runs ONLY on the Fly.io `face-swap-dual` service (2GB; face detection + identity/gender
   checks), routed via `_shared/dualSwapDispatch.ts`. There is NO in-isolate engine any more (deleted
   2026-09-17, `NO_PIXELS_IN_ISOLATE_PLAN.md` phase 5): with no `DUAL_SWAP_FLY_URL` the dispatch throws and the

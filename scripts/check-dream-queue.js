@@ -7,7 +7,9 @@
  * via pg_cron). Exits 1 — failing the workflow loudly — when the queue looks
  * unhealthy:
  *   - jobs stuck 'queued' past STUCK_MIN (worker / pg_cron not draining), or
- *   - too many recent dead_letter jobs (renders failing systemically).
+ *   - too many recent dead_letter jobs (renders failing systemically), or
+ *   - nightly couples shipping as solos: any lost to swap capacity while the gate + capacity retry are on, or a
+ *     high all-cause couple→solo rate (scripts/lib/nightlySwapHealth.js).
  *
  * Run on a schedule by .github/workflows/dream-queue-monitor.yml.
  *
@@ -194,6 +196,68 @@ const sb = createClient(SUPABASE_URL.trim(), SUPABASE_KEY.trim());
       .eq('weight', w)
       .lte('created_at', nowIso);
     console.log(`  queued ${w} (due): ${qd || 0}`);
+  }
+
+  // NIGHTLY COUPLE SWAPS (NIGHTLY_ROBUSTNESS_PLAN.md items 4 + 5). A couple that ships as a solo used to count as a
+  // "completed" job, so nothing ever alarmed on it. Now: any couple lost to swap CAPACITY while the gate + capacity
+  // retry are on fails the run (armed by that config), a high all-cause couple→solo rate fails it, and a busy Fly /
+  // an over-sized heavy cap warns. Real cron jobs only (QA batches carry payload.qa_silent), owner INCLUDED: his
+  // own nightly is a real one. Thresholds + the on-spec-never-alarms guarantee: scripts/lib/nightlySwapHealth.js.
+  const {
+    isRealNightlyJob,
+    summarizeNightlyJobs,
+    nightlySwapAlarms,
+  } = require('./lib/nightlySwapHealth');
+  const { data: swapCfg, error: swapCfgErr } = await sb
+    .from('engine_config')
+    .select(
+      'swap_gate_enabled, nightly_swap_capacity_retries, fly_dual_swap_slots, swap_gate_max_wait_ms, dream_queue_max_concurrent_heavy'
+    )
+    .eq('id', 1)
+    .single();
+  if (swapCfgErr) throw new Error(`engine_config read failed: ${swapCfgErr.message}`);
+  const nightlyJobs = [];
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await sb
+      .from('dream_queue')
+      .select('id, source, dedup_key, payload')
+      .eq('source', 'nightly')
+      .gte('created_at', dayAgo)
+      .order('id')
+      .range(from, from + 999);
+    if (error) throw new Error(`nightly job read failed: ${error.message}`);
+    nightlyJobs.push(...data);
+    if (data.length < 1000) break;
+  }
+  const realIds = nightlyJobs.filter(isRealNightlyJob).map((j) => j.id);
+  const nightlyLogs = [];
+  for (let i = 0; i < realIds.length; i += 100) {
+    const { data, error } = await sb
+      .from('ai_generation_log')
+      .select('job_id, status, fallback_reasons')
+      .in('job_id', realIds.slice(i, i + 100));
+    if (error) throw new Error(`ai_generation_log read failed: ${error.message}`);
+    nightlyLogs.push(...data);
+  }
+  const swapReport = nightlySwapAlarms(
+    summarizeNightlyJobs(nightlyLogs),
+    {
+      swapGateEnabled: swapCfg.swap_gate_enabled,
+      nightlySwapCapacityRetries: swapCfg.nightly_swap_capacity_retries,
+      flyDualSwapSlots: swapCfg.fly_dual_swap_slots,
+      swapGateMaxWaitMs: swapCfg.swap_gate_max_wait_ms,
+      heavyCap: swapCfg.dream_queue_max_concurrent_heavy,
+    },
+    {
+      soloMinCount: parseInt(getKey('NIGHTLY_SOLO_ALARM_MIN') || '3', 10),
+      soloMaxRate: parseFloat(getKey('NIGHTLY_SOLO_ALARM_RATE') || '0.25'),
+    }
+  );
+  for (const n of swapReport.notes) console.log(n);
+  for (const w of swapReport.warnings) console.log(`::warning::${w}`);
+  for (const e of swapReport.errors) {
+    console.error(`::error::${e}`);
+    alarm = true;
   }
 
   if (alarm) {

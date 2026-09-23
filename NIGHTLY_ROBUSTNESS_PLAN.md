@@ -1,6 +1,6 @@
 # Nightly robustness: couples fail when the swap service is busy
 
-Status: items 1, 2, 3, 6 + 7 LIVE (2026-09-23, migrations 549, 550, 551 + Fly machines warm); items 4, 5 and 6b open. Kevin: "we anticipate eventually getting hundreds of users all
+Status: items 1-7 LIVE except 6b (2026-09-23, migrations 549-552 + Fly machines warm); 6b (edge/Fly deadline) in progress. Kevin: "we anticipate eventually getting hundreds of users all
 generating their nightly dream at once … can we look into the way the nightly dreams are generated for all
 users during the nightly run and see if we can make it more robust and not so damn flakey?"
 
@@ -155,3 +155,25 @@ reserved interactive slot during a nightly swap, paid that cold start inside its
   swap-model fallbacks cannot fit). That is a Fly service code change plus an image deploy.
 - Rollback: `fly machine update 0807dd5f9e1198 --autostop=stop -a dreambot-face-swap-dual` (and set
   `auto_stop_machines` back to `'stop'` in fly.toml).
+
+## Live (2026-09-23 ~22:00 UTC, migration 552): items 4 + 5, alarms and config hygiene
+
+- **Item 4 (alarms):** `scripts/check-dream-queue.js` (hourly) now reads the last 24 h of REAL nightly jobs
+  (cron key `nightly:*` without `payload.qa_silent`; Kevin's own nightly included) and fails loudly when
+  (a) any couple shipped as a solo because of swap CAPACITY while the gate + capacity retry are on: armed by that
+  config, logged only when either is off (the rollback state); or (b) couples shipped solo at
+  `>= max(3, 25%)` for any cause. It warns (never fails) on many capacity retries (scale Fly) and on a heavy cap
+  above the swap-slot ceiling. Logic in `scripts/lib/nightlySwapHealth.js`, locked by
+  `__tests__/lib/nightlySwapHealth.test.ts`, which includes the edge/monitor parity on every `dual_swap_error`
+  shape seen in 30 days.
+  Replay on the last 11 real nights, as if the protection had been on: alarms on exactly the three nights a couple
+  lost its partner to capacity (09-16, 09-21, 09-22); silent on the other eight (09-15's one solo was a content
+  miss, under the rate limit). Baseline all-cause couple → solo: ~5-9%.
+- **Found on the way:** the biggest swap-error class in 30 days (42 of 93) was Fly returning 500 with
+  "Face swap timed out" inside; `isSwapCapacityError` already treats it as capacity (retry, not solo). Added
+  "Face swap deadline exceeded" (same class, 1 in 30 days) to both classifiers.
+- **Item 5 (config hygiene):** migration 552 records the heavy cap at 3 (live since the 09-21 load test, never in a
+  migration; the column default said 15, the code fallback 10) and sets the column default to 3; the code fallback
+  is 3. The ceiling is `fly_dual_swap_slots × (1 + swap_gate_max_wait_ms / 25 s)` = 5 today (`heavyCapCeiling`).
+  Runbook (QUEUE_WORKERS_REFACTOR.md) and CLAUDE.md now say: one swap per machine; scale Fly, then
+  `fly_dual_swap_slots`, then the heavy cap. The July "~10 swaps per machine" rule is marked superseded.

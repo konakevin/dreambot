@@ -239,7 +239,11 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   // was 15 — a latent landmine that would over-admit into the single machine if
   // the row were ever reset/missing. Aligned to 10 (2026-07-11). To raise real
   // heavy throughput, `fly scale count N` FIRST, then set the row to ~10×N.
-  dreamQueueMaxConcurrentHeavy: 10,
+  // SUPERSEDED 2026-09-23 (migration 552): the "~10 per machine" rule was wrong for the swap service: 3+ couples
+  // swapping at once failed 31% of the time on 2 machines. The live row has been 3 since the 09-21 load test, and
+  // the swap capacity gate now meters Fly. Fallback aligned to 3; the ceiling is
+  // fly_dual_swap_slots * (1 + swap_gate_max_wait_ms / ~25 s) (heavyCapCeiling, scripts/lib/nightlySwapHealth.js).
+  dreamQueueMaxConcurrentHeavy: 3,
   dreamQueueMaxJobsPerTick: 10,
   maxInflightDreamsPerUser: 5,
   newSceneMaxPeople: 3,
