@@ -1840,6 +1840,253 @@ HARD RULES:
 - Describe only what IS present. Never write a negation.
 
 Output: ONE accent per line. No numbering. No quotes.`,
+
+  // ── amber-forest (2026-09-23) ───────────────────────────────────────────────────────────────
+  // THE DELIGHT ANGLE: DinoBot's whole landscape register is VISTAS (canyon, coast, plain,
+  // volcanic, snowline, desert). It has no path whose hero is a MATERIAL and its OPTICS. A
+  // Mesozoic resin forest is a real, science-true, famous place that almost nobody has ever been
+  // shown as a PLACE rather than as a museum specimen in a jeweller's case.
+  //
+  // THE DULL FAILURE THIS PATH DRIFTS TOWARD: "a brown forest with orange goo on some trunks."
+  // Two guards run through every recipe below.
+  //   (a) AMBER IS ALREADY DINOBOT'S SATURATION WORD — measured 167 of 200 entries (84%) of
+  //       DINOBOT_PALEO_LANDSCAPE_BIOME contain "amber". So a path whose SUBJECT is amber has to
+  //       earn it through OBJECTS AND OPTICS, never through the adjective. "amber light",
+  //       "golden haze" and "warm golden glow" as standalone atmosphere are banned in every
+  //       recipe here; resin is written as a PHYSICAL SUBSTANCE with volume, surface and
+  //       contents.
+  //   (b) RESIN'S DELIGHT IS THAT IT IS A LENS AND A TRAP. Not sap on bark — what the resin does
+  //       to light passing through it, and what is stuck inside it forever.
+  //
+  // ⚠️ NEVER WRITE "STAINED GLASS" IN ANY OF THESE POOLS OR IN THE TEMPLATE. A hanging resin
+  // sheet is the obvious thing to call a window of dirty stained glass, and "stained glass" is a
+  // documented EMBLEM/TEXT prior on this fleet (PixelBot ice-cavern rendered a carved-relief
+  // charm as a centred heraldic emblem and BUILT A MASONRY WALL to carve it into; SteamBot's
+  // "blank enamel dial" shipped roman numerals). Describe the sheet by WHAT IT HOLDS — the
+  // smeared doubled forest behind it and the thing trapped inside it — never by a glazing
+  // tradition.
+
+  dinobot_amber_grove: `Generate RESIN-FOREST GROVE descriptions for DinoBot's amber-forest path — the Mesozoic conifer forest that BLEEDS, written as a LANDFORM and a stage. Each is ONE comma-separated line, 30-45 words.
+
+THE BAR (Kevin's motto): playful, adventurous, VIVID, beautiful, clever. Saturated committed colour and dramatic light, never muted, never a monochrome brown wood. Every entry carries ONE CHARM DETAIL that makes it THAT grove and no other. Ask of every entry: is this the obvious version of a resin forest, or the surprising one? Write the surprising one.
+
+LEAD WITH THE GROVE'S DEFINING MASS. The first words name the shape of the forest itself, because the first-named noun is what gets rendered. A grove with no stated massing renders as the same generic wood every time.
+
+NAME THE MASSING EXPLICITLY, and rotate it hard (no two entries share a massing):
+- ~16% A colonnade of enormous straight resin-glazed trunks receding in uneven ranks, wildly different girths, none of them in a row
+- ~12% ONE colossal buttressed conifer filling most of the frame, its flanks running with flows, the rest of the forest small behind it
+- ~12% A leaning crooked grove on a slope, trunks all tilted the same way, resin running down the low side of every one
+- ~10% A blowdown tangle where a giant has come over, its snapped stump weeping in sheets, the crater of its root-plate open
+- ~10% A narrow gap between two close trunks, the space between them hung with resin, the forest beyond showing through
+- ~10% A terrace of stepped ground with the trunks standing at three different heights, flows joining downhill
+- ~8% A clearing floor littered with hardened resin nodules like scattered marbles, the ring of trunks around it
+- ~8% A shallow creek cut through the roots, hardened resin lumps rolled smooth in its bed like pebbles
+- ~7% A hollow burnt-out giant still standing, resin boiling out of the scorched side in fresh bright runs
+- ~7% A dense understorey of tree ferns and cycads under the resin trunks, the canopy far above nearly closed
+
+EVERY ENTRY INCLUDES:
+- THE MASSING, first, in plain shape words (a colonnade, a single giant, a leaning slope, a blowdown, a gap, a terrace)
+- THE TREES named as real Mesozoic conifers: Araucaria monkey-puzzle with whorled branches, tall Cheirolepid conifers, Agathis-like kauri giants, scaly-barked podocarps, with ginkgo, cycads, tree ferns and horsetails below
+- THE FLOOR underfoot, specifically: deep rust needle-litter, emerald moss cushions, bare grey mud, fallen cones, a creek of clear water, a carpet of resin nodules
+- THE FOREST'S OWN COLOUR beyond the resin: black-green needle shade, rust-red bark, emerald moss, silver lichen, blue-grey depth between trunks
+- ONE VIVID CHARM DETAIL: a trunk whose whole flank is one smooth glaze you could see your face in, a cone stuck fast halfway down a flow, a row of old flows hardened into ribs like organ pipes, a beetle-bored hole with a bead swelling out of it, claw-scores across a resin scar, a sapling growing straight out of a resin-cemented crack
+- THE VANTAGE, at the very end, stated as where the CAMERA stands: "seen from the litter looking up the flank", "seen along the colonnade from between two trunks", "seen low across the nodule floor", "seen from inside the hollow looking out"
+
+HARD RULES:
+- NO humans, no people, no structures, no tools, no modern anything. Earth 66 million years before humans evolved.
+- NO glowing, bioluminescent or magical anything. Real resin, real trees, real daylight.
+- NEVER the words "stained glass", "window pane", "cathedral window", "sign", "marking", "glyph" or "carving".
+- NEVER "amber light", "golden haze" or "warm golden glow" as the atmosphere — the resin is an OBJECT here, not a colour wash.
+- NO fossil, no museum, no specimen jar, no excavation, no polished gemstone framing. This is a LIVING forest.
+- ⚠️ SUBSTRING BAN COLLISION — DinoBot's engine runs a RAW SUBSTRING check over your text (bot.bannedPhrases) and HARD-FAILS the render with nothing stored if it matches. There are no word boundaries, so a longer word that merely CONTAINS one of these kills the render: "man ", "woman", "human", "person", "people", "child", "hunter", "explorer", "scientist", "ranger", "tourist". Measured at 3 of 16 renders before this rule: "harvestman" (contains "man ") and "personally" (contains "person"). So write "harvest-spider", never "harvestman"; "plainly", never "personally".
+- Describe only what IS present. Never write a negation.
+
+Output: ONE grove per line. No numbering. No quotes.`,
+
+  dinobot_amber_resin_event: `Generate RESIN-FORMATION descriptions for DinoBot's amber-forest path — the SIGNATURE MONEY-SHOT axis. Each entry is ONE specific mass of conifer resin: its VOLUME, its SURFACE STATE, WHERE IT SITS IN THE FRAME, and how it is CROPPED. ONE comma-separated line, 30-45 words.
+
+THIS AXIS IS THE WHOLE PATH. A frame where the resin is only a colour, or only a coating on bark, has no identity. The resin must read as a THING WITH THICKNESS standing in the near foreground — something with real weight and volume you could lean a trunk-sized shadow against.
+
+THE BAR: playful, adventurous, VIVID, beautiful, clever. Show people something they have never been shown. Resin is a substance almost nobody has seen as scenery: it stretches, it sags, it skins over, it traps, it cracks, it goes cloudy, it catches grit, it holds its own weather.
+
+STATE WHERE IN THE FRAME IT SITS AND GIVE IT A CROP. A big near foreground object that is named without a position and a crop renders as a small prop in the middle distance. So: name it plainly, say where in the frame it sits, and let it RUN OFF AN EDGE. For example "hanging across the whole left half and running off the top and bottom edges", "filling the lower third and out past both sides", "arcing across the upper corners".
+
+Variety mandate (rotate widely — one formation per entry, never a collage):
+- ~14% A FRESH FLOW still moving, thick and slow as poured honey, a visible bulging leading edge, a skin already wrinkling on top where it has begun to set
+- ~12% A HANGING SHEET stretched between two trunks like a sagging curtain, thick enough to distort everything behind it, its bottom edge heavy and rolled
+- ~12% A HARDENED BOULDER at the base of a trunk, cloudy and crazed with internal cracks, its outside dulled with dust and stuck grit
+- ~10% A STRETCHED THREAD frozen mid-fall, a long taut strand from a branch with a heavy drop still hanging at its end
+- ~10% A BEAD ROW along the underside of a branch, drops at wildly uneven spacing — some crowded almost touching, some far apart, sizes all over — each one a tiny round lens
+- ~10% A TORN SCAR on a trunk, the old crust dull and dark and chewed open, the fresh stuff welling out through it bright and wet
+- ~8% A LOPSIDED ACCUMULATION of old flows piled onto each other at no regular interval, no two lobes the same size and none of them level, each a different clarity and colour
+- ~8% A POOL on the ground where a flow has run off the trunk and spread flat, its surface skinned over and dusted with needles
+- ~8% A SPLIT NODULE on the litter, the outside a dull cracked lump, the freshly broken face inside water-clear
+- ~8% A GLAZED FLANK where a whole face of the trunk is one smooth continuous coat, wet-looking and mirror-bright
+
+EVERY ENTRY INCLUDES:
+- ITS VOLUME said physically: how thick, how heavy, how much of it — "as deep as a cone is long", "as thick as a tree-fern's trunk", "a boulder the size of a crouching animal", "a sheet a metre across". SCALE IS ALWAYS MEASURED AGAINST THINGS IN THIS WORLD (a cone, a needle, a frond, a trunk, an animal), NEVER against a body part — this is a no-humans bot and a body-part scale unit puts that body part in the frame.
+- ITS SURFACE STATE, specifically: wet and mirror-bright, skinned over and matte, wrinkled where it set, crazed with cracks, dusted with needles and grit, pitted by rain, sticky and pulling threads
+- ITS COLOUR RANGE said as a substance, not a light: pale honey, dark treacle, greenish-clear at the thin edge and near-black where it is thickest, milky where it has clouded, rust where bark is suspended in it
+- WHERE IN THE FRAME IT SITS AND ITS CROP, at the end of the entry
+- ONE CHARM DETAIL of the material itself: a bubble the size of a grape stopped halfway up, a crack that has healed with a paler seam, a single needle standing straight up out of the skin, a run that split around a knot and rejoined below, one corner gone opaque white like frost
+
+⚠️ NO REGULAR REPEATING GEOMETRY. Resin piles up unevenly and it never comes out level. An entry that instructs a regular series — "layer on layer", "eight distinct layers", "each layer's edge a clean overhang", "drops at even spacing", "progressively larger from left to right" — renders as a manufactured object: a tapering tower of identical rings, a stack of doughnuts, a row of matched baubles (measured twice, both "tiered stack" draws). So every mass is LOPSIDED: name the lobes as different sizes, off-centre, none of them level, the fresh run spilling down ONE side only.
+
+HARD RULES:
+- NO humans, no people, no tools, no touching. Earth 66 million years before humans evolved.
+- NEVER the words "stained glass", "window pane", "cathedral window", "jewel", "gemstone", "polished stone", "sign", "marking", "glyph", "carving" or "engraved". A simile like "as a jewel" gets rendered LITERALLY as a gem.
+- ⚠️ NAME THE ATTACHMENT FIRST, ALWAYS. A detached mass with air all round it renders as a MANUFACTURED CURIO — a polished slab standing on the litter, a paperweight dome on a stump, a mineral geode (measured at 3 of 6 renders before this rule). So every mass opens by saying what holds it: welded to the bark where it grew, swelling out of the trunk base, half-buried in the needle-litter, lying against a root, sunk into the floor with moss creeping up one flank. Forest debris is STUCK to it — needles pressed into the crust, a twig on its damp underside, litter banked against one side, a fern stem growing past it.
+- NO pedestal, NO plinth, NO stand, NO display, NO polished or cut face: the resin is attached to a tree or lying in the forest floor, never presented on something.
+- NO glowing, no bioluminescence, no magic, no internal light source. Resin is lit from OUTSIDE, by daylight.
+- NO fossil, no specimen, no museum display, no jewellery, no cut-and-polished amber.
+- NEVER "amber light", "golden haze" or "warm golden glow" — this axis describes a SUBSTANCE, never an atmosphere.
+- ⚠️ SUBSTRING BAN COLLISION — DinoBot's engine runs a RAW SUBSTRING check over your text (bot.bannedPhrases) and HARD-FAILS the render with nothing stored if it matches. There are no word boundaries, so a longer word that merely CONTAINS one of these kills the render: "man ", "woman", "human", "person", "people", "child", "hunter", "explorer", "scientist", "ranger", "tourist". Measured at 3 of 16 renders before this rule: "harvestman" (contains "man ") and "personally" (contains "person"). So write "harvest-spider", never "harvestman"; "plainly", never "personally".
+- Describe only what IS present. Never write a negation.
+
+Output: ONE resin formation per line. No numbering. No quotes.`,
+
+  dinobot_amber_trapped: `Generate TRAPPED-INSIDE descriptions for DinoBot's amber-forest path — what is caught in the resin forever, how DEEP it sits, and how clearly it reads. This is the CLEVER axis: it is the detail that makes the picture a story rather than a texture. Each is ONE comma-separated line, 20-35 words.
+
+THE BAR: playful, adventurous, vivid, clever. Every entry is a tiny piece of comedy or wonder frozen mid-event. The obvious version is "an insect in amber". The surprising version is an insect caught IN THE MIDDLE OF DOING SOMETHING, or a thing nobody would think of as trappable.
+
+EVERY ENTRY NAMES THREE THINGS: WHAT is trapped, HOW DEEP it sits (just under the surface / a needle's length in / far in and gone soft-edged / pressed right against the surface), and WHAT IT WAS DOING when it stopped. SCALE AND DEPTH ARE MEASURED AGAINST THINGS IN THIS WORLD (a needle, a cone, a frond), NEVER against a body part — this is a no-humans bot and a body-part scale unit puts that body part in the frame.
+
+Variety mandate (rotate widely):
+- ~16% A giant dragonfly with a wingspan as wide as a cycad frond, stopped mid-wingbeat, both wings still open, every vein visible
+- ~12% A whole small feathered dinosaur deep inside a hardened mass, only a dark shape and one clawed foot pressed flat against the surface
+- ~10% A fern frond swallowed by a fresh flow, still green inside it while the fronds outside have all browned
+- ~10% A tiny insect climbing UP a hanging thread to escape, still going, halfway out
+- ~8% A line of ants caught in single file, the leaders already deep and the stragglers only half in
+- ~8% A whole spider with a fly already in its jaws, both of them stopped together
+- ~8% A single down feather standing upright inside a clear lump, its barbs perfectly separate
+- ~7% A lizard's shed tail, still curled, suspended with nothing else around it
+- ~7% Two beetles nose to nose mid-argument, legs braced against each other
+- ~7% A cluster of conifer pollen and one whole seed-cone, suspended at different depths like things in water
+- ~7% A tree frog with a foot splayed against the inside of the surface, its pale belly flat to the glass-smooth face
+
+EVERY ENTRY INCLUDES:
+- WHAT is trapped, named as a real Mesozoic creature or plant part: giant odonate dragonfly, long-horn beetle, lacewing, ant, harvestman, spider, cockroach, mayfly swarm, small feathered theropod, gecko-like lizard, tree frog, fern frond, conifer needles, seed-cone, a single feather, flower, pollen cloud
+- HOW DEEP, stated plainly
+- WHAT IT WAS DOING, as an active verb, mid-event: mid-wingbeat, mid-stride, climbing, spreading its wings, biting, reaching, falling, still gripping
+- ONE CHARM DETAIL that makes it that inclusion and no other: one wing crumpled and the other perfect, a thin bubble-trail behind it showing the path it struggled along, its own shadow cast through the resin onto the bark behind, the resin gone slightly cloudy in a halo just around it, one leg left outside the surface
+
+HARD RULES:
+- NO humans, no people, no hands, no tools. Earth 66 million years before humans evolved.
+- NO gore, NO blood, NO suffering, NO distress language. These are things quietly and beautifully stopped, the way real inclusions look.
+- NEVER the words "stained glass", "jewel", "gemstone", "specimen", "museum", "fossil", "display case", "sign", "marking" or "engraved".
+- NO glowing, no bioluminescence, no magic.
+- ⚠️ SUBSTRING BAN COLLISION — DinoBot's engine runs a RAW SUBSTRING check over your text (bot.bannedPhrases) and HARD-FAILS the render with nothing stored if it matches. There are no word boundaries, so a longer word that merely CONTAINS one of these kills the render: "man ", "woman", "human", "person", "people", "child", "hunter", "explorer", "scientist", "ranger", "tourist". Measured at 3 of 16 renders before this rule: "harvestman" (contains "man ") and "personally" (contains "person"). So write "harvest-spider", never "harvestman"; "plainly", never "personally".
+- Describe only what IS present. Never write a negation.
+
+Output: ONE inclusion per line. No numbering. No quotes.`,
+
+  dinobot_amber_optics: `Generate RESIN-OPTICS descriptions for DinoBot's amber-forest path — what the resin DOES to light passing through it, and what the forest looks like SEEN THROUGH it. This axis replaces the bot's normal lighting slot and it owns the whole palette of the frame. Each is ONE comma-separated line, 22-36 words.
+
+WHY THIS AXIS EXISTS: resin is a LENS. That is the never-seen picture, and it is what stops this path being a brown forest with orange goo on some trunks. Every entry is one real optical behaviour of a thick translucent substance in daylight.
+
+THE BAR: VIVID is literal. Every entry names TWO COLOURS, and at least HALF of them must pit a COOL colour against the honey — black-green needle shade, blue-grey forest depth, cold silver rain-light, violet shadow — because a single warm hue across the whole frame is the exact miss this path is built to avoid. A frame that is one flat orange is a failure even when it is competent.
+
+AXIS-CLEAN: this axis is OPTICS AND COLOUR ONLY. No grove massing, no trees, no creatures, no air-particulate, no weather event. Just what the light does.
+
+Variety mandate (rotate widely):
+- ~14% CAUSTICS — light through the resin throwing moving honey-coloured shapes across the bark and the litter, the way light through water moves on a pool floor
+- ~12% BACKLIT LIGHTBOX — low sun straight through a thick sheet, the whole sheet lit up from behind and everything inside it reading as a clean dark silhouette
+- ~12% DOUBLING AND SMEARING — the forest seen through the resin, pulled sideways and repeated, one trunk arriving as two, edges dragged into streaks
+- ~10% INVERSION — a swelling bead acting as a fish-eye lens, holding a whole tiny upside-down image of the canopy above it
+- ~10% DEPTH GRADIENT — the thin edge nearly colourless and the thick middle almost black, the whole range in one piece
+- ~10% SPECULAR — a hard white highlight skating along a wet flow as bright as a struck match, the rest of the trunk in deep shade
+- ~8% CLOUDED SCATTER — an old crazed mass glowing softly all the way through instead of transmitting, like light inside milk
+- ~8% SHADOW PROJECTION — a trapped insect's shadow thrown right through the resin and printed large on the bark behind it
+- ~8% SPLIT COLOUR — a thin wedge bending daylight into a soft smeared wash of colour along a leaf's own curve, green grading through yellow into red, every transition soft-edged
+- ~8% COLD AGAINST WARM — the honey transmission on one side of the trunk against cold blue-grey forest shade on the other, the two meeting on a hard line
+
+EVERY ENTRY INCLUDES:
+- THE OPTICAL BEHAVIOUR named plainly: transmitted, backlit, doubled, inverted, scattered, projected, split, reflected
+- THE SURFACE IT LANDS ON: bark, needle-litter, moss, a broad frond, the creek, another flow, the animal's flank
+- TWO NAMED COLOURS, the honey range plus a second one — and in at least half the entries the second is COOL
+- ONE CHARM DETAIL of the optic itself: the caustic shapes drifting as a branch moves in the wind, the silhouette inside the lit sheet having one wing sharp and one blurred by depth, the doubled trunk not quite lining up, the projected shadow bigger than the insect that casts it
+
+HARD RULES:
+- NEVER "amber light", "golden haze", "warm golden glow", "golden hour glow" or any standalone warm-atmosphere phrase. Every entry must name the PHYSICAL PATH of the light: through what, onto what.
+- ⚠️ NEVER "a ruled band", "its own strip", "each stripe sharp at its border" or any straight-edged geometry for a split colour. Measured: that wording rendered a flat rectangular RAINBOW COLOUR-SWATCH CARD lying on the forest floor — a modern graphic-design object 66 million years early, the same literalization class as "coins of light" rendering real gold coins. Colour lands as a SOFT SMEARED WASH that follows the curve of a real leaf, with no hard edge anywhere.
+- NEVER a light source inside the resin. The resin is lit from OUTSIDE by daylight. No glowing, no bioluminescence, no magic, no lamps.
+- NEVER the words "stained glass", "window pane", "prism", "jewel", "gemstone", "lens flare", "sign" or "marking". Say "acting as a lens", never "like a jewel" — a simile gets rendered as the literal object.
+- NO humans, no people. Earth 66 million years before humans evolved.
+- ⚠️ SUBSTRING BAN COLLISION — DinoBot's engine runs a RAW SUBSTRING check over your text (bot.bannedPhrases) and HARD-FAILS the render with nothing stored if it matches. There are no word boundaries, so a longer word that merely CONTAINS one of these kills the render: "man ", "woman", "human", "person", "people", "child", "hunter", "explorer", "scientist", "ranger", "tourist". Measured at 3 of 16 renders before this rule: "harvestman" (contains "man ") and "personally" (contains "person"). So write "harvest-spider", never "harvestman"; "plainly", never "personally".
+- Describe only what IS present. Never write a negation.
+
+Output: ONE optical behaviour per line. No numbering. No quotes.`,
+
+  dinobot_amber_air: `Generate GROVE-AIR descriptions for DinoBot's amber-forest path — what the air inside a sheltered, sticky, resin-scented conifer forest is doing. Each is ONE comma-separated line, 15-28 words.
+
+WHY THIS AXIS IS BESPOKE: DinoBot's shared atmosphere pool is written for open water and open country (measured: mirror-flat lakes, mud-flats, sandbars, tidepools, wading animals) and it names whole dinosaurs, which would hijack the frame on the renders where this path deliberately has no animal. A closed grove needs its own air.
+
+AXIS-CLEAN: this axis is THE AIR ONLY. No light colour, no optics, no trees, no resin formations, no creatures as subjects, no big weather event.
+
+THE BAR: vivid and specific. The air in this forest is thick, still, and full of small floating things. Sticky forests smell and hum.
+
+Variety mandate:
+- ~15% Conifer pollen drifting in visible clouds, settling on everything sticky
+- ~12% Midges and small flies hanging in a loose column, some of them drifting too close to a fresh flow
+- ~12% Fine spore-dust and needle-fragments turning slowly in still air
+- ~10% Warm damp air after rain, water still dripping from the canopy one drop at a time
+- ~10% Cool blue forest shade air, completely still, nothing moving at all
+- ~10% Thin resin-smoke shimmer rising off a sun-warmed trunk face in the heat
+- ~8% A slow drift of seed-fluff and winged conifer seeds spinning down
+- ~8% Faint mist caught low between the trunks, thinning as it rises
+- ~8% Dry heat with the air visibly wobbling above the hottest flank
+- ~7% A single gust passing through, everything small in the air suddenly moving one way
+
+EVERY ENTRY INCLUDES:
+- WHAT IS IN THE AIR, named specifically: pollen, spores, midges, needle-fragments, seed-fluff, winged seeds, water droplets, mist, heat-shimmer
+- HOW IT MOVES: hanging, turning slowly, drifting sideways, spiralling down, rising, completely still, all rushing one way
+- ONE SMALL CHARM DETAIL: a midge already stuck to a wet surface and still moving one leg, pollen collected in the dip of a set flow, a water drop hanging off the tip of a resin thread and not letting go, seed-fluff glued fast in a bright new run
+
+HARD RULES:
+- NO humans, no people. Earth 66 million years before humans evolved.
+- NO big weather events (no storms, no lightning, no volcanoes) — the canopy is nearly closed here.
+- NO glowing, bioluminescent or magical anything.
+- NEVER "amber light", "golden haze" or "warm golden glow" — that is the light axis's job, and it is banned as a phrase anywhere on this path.
+- NO named dinosaurs, no whole animals as the subject of the entry. Insects only, and only as things in the air.
+- ⚠️ SUBSTRING BAN COLLISION — DinoBot's engine runs a RAW SUBSTRING check over your text (bot.bannedPhrases) and HARD-FAILS the render with nothing stored if it matches. There are no word boundaries, so a longer word that merely CONTAINS one of these kills the render: "man ", "woman", "human", "person", "people", "child", "hunter", "explorer", "scientist", "ranger", "tourist". Measured at 3 of 16 renders before this rule: "harvestman" (contains "man ") and "personally" (contains "person"). So write "harvest-spider", never "harvestman"; "plainly", never "personally".
+- Describe only what IS present. Never write a negation.
+
+Output: ONE air state per line. No numbering. No quotes.`,
+
+  dinobot_amber_resident: `Generate RESIDENT-DINOSAUR descriptions for DinoBot's amber-forest path — the animal living in the resin forest, caught mid-action. Each is ONE comma-separated line, 25-40 words.
+
+THE BAR: playful, adventurous, vivid, clever. ADVENTUROUS BEATS STATIC — mid-action over parked, a story beat over a tableau, and comedy is very welcome here. A sticky forest is genuinely funny to live in: things get stuck to you, and you have to deal with it.
+
+THE PATH'S BEST JOKE, and it should appear often: a dinosaur that has brushed against a fresh flow and walks away with a glittering stripe down its flank, bark and needles and one dead beetle stuck to it, mildly annoyed.
+
+Variety mandate (rotate widely):
+- ~16% Walking away from a trunk with a bright sticky stripe down its flank and litter glued to it, shaking one leg
+- ~12% Mid-scratch against a resin-scarred trunk, the old crust crumbling off and fresh stuff welling out where it rubbed
+- ~10% Nosing right up to a hanging sheet, its own face distorted and doubled in the thick resin an inch from it
+- ~10% A small feathered theropod picking trapped insects off the surface of a set flow, one foot braced on the trunk
+- ~10% Licking or chewing at a resin scar, jaw working, plainly finding it a mistake
+- ~8% Stepping high and carefully over a resin pool on the floor, one foot lifted, entirely aware of what it is avoiding
+- ~8% A juvenile with a resin bead stuck to the top of its snout, trying to rub it off on a fern
+- ~8% Standing in a shaft of light coming through a resin sheet, honey-coloured shapes drifting across its hide
+- ~8% Sleeping curled against a warm resin-glazed trunk flank, one eye half open
+- ~10% Two of the same species together, one busy at the resin and one watching it with visible opinion
+
+EVERY ENTRY INCLUDES:
+- THE BODY PLAN said before any Latin name, so the right silhouette renders: "a feathered raptor like Velociraptor", "a duck-billed hadrosaur with a broad flat toothless beak", "a horned ceratopsian with a bony neck-frill", "a long-necked sauropod", "a large theropod like a T-rex", "a low-slung armoured ankylosaur"
+- ITS SIZE against the grove, plainly: turkey-sized, as tall as the tree ferns, its shoulder level with the lowest branches
+- ITS HIDE OR PLUMAGE in real animal colour and pattern: barred rust and cream, iridescent green-black, sandy with dark spots, slate grey with a pale throat, a crest of stiff quills, a banded tail
+- WHAT IT IS DOING, an active verb, mid-motion
+- ONE CHARACTERFUL DETAIL that makes it a personality instead of a specimen: a wrinkled eye-ridge, a cocked head, a curled lip, one foot still lifted, needles caught in its feathers
+
+HARD RULES:
+- NO humans, no people. Earth 66 million years before humans evolved.
+- NO hunting, NO predation, NO blood, NO fighting, NO distress, NO animal trapped or dying in the resin. The resin is an inconvenience and a curiosity, never a threat.
+- Real animal colour: no glowing, no metallic, no jewelled, no neon.
+- NEVER the words "jewel", "gemstone", "fossil", "specimen" or "museum".
+- ⚠️ SUBSTRING BAN COLLISION — DinoBot's engine runs a RAW SUBSTRING check over your text (bot.bannedPhrases) and HARD-FAILS the render with nothing stored if it matches. There are no word boundaries, so a longer word that merely CONTAINS one of these kills the render: "man ", "woman", "human", "person", "people", "child", "hunter", "explorer", "scientist", "ranger", "tourist". Measured at 3 of 16 renders before this rule: "harvestman" (contains "man ") and "personally" (contains "person"). So write "harvest-spider", never "harvestman"; "plainly", never "personally".
+- Describe only what IS present. Never write a negation.
+
+Output: ONE resident per line. No numbering. No quotes.`,
 };
 
 const RECIPE = RECIPES[POOL];

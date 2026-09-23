@@ -1271,6 +1271,40 @@ grep of six stored prompts for the pool's distinctive vocabulary answers it, and
 entire rewrite. This is the "template adjective lock" failure mode one level up: **check the shared
 template and the shared sibling pools BEFORE rewriting the hero pool.**
 
+**21. A CONTAINER WITH A STANDARD VIEWING HEIGHT NEEDS A FOURTH KNOB POSITION, AND CAMERA WORDS ARE
+NOT IT — NAME A SURFACE THAT CANNOT EXIST FROM THE WRONG HEIGHT.** ToyBot bath-toy-flotilla, 24
+renders. Lesson 11's CONCRETE-BUT-CROPPED form is necessary here and **not sufficient**, because a
+snow globe and a bathtub differ decisively: the snow-globe camera was PRESSED TO THE GLASS, so its
+crop and its camera were one instruction, while a bathtub carries an overwhelming shot-from-ABOVE
+prior that a crop does nothing about. Measured, 6 renders per position: **R1, lesson 17's wording**
+("the water surface filling the whole frame and running off all four edges") — on a low-horizon path
+that clause IS a top-down instruction, since a frame that is all water surface with no horizon is an
+overhead shot; **5 of 6 looked down into a tub**. **R2, the rim made the sea HORIZON and the whole
+spec hoisted to output-order position 1** — the clause reached **6 of 6 prompts, up from 1 of 6, and
+flux still shot from above in 6 of 6.** **R3, name the two surfaces that cannot exist in a shot from
+above** — every hull **CUT BY THE WATERLINE** with the water climbing it in a meniscus, and the
+bath's own enamel side **CURVING UP** behind the fleet and cropped out of frame — and the camera came
+down. This is lesson 3's law ("camera words do not fix it; NAMING THE ENCLOSING SURFACES does") in a
+new costume, and it generalises: **for any container whose prior includes a standard viewing height —
+a tub, a sink, a fish tank, a cot, a birdbath, a pool, a pram — the crop buys the framing but only a
+height-exclusive SURFACE buys the camera.** Two companions from the same build:
+- **"ENAMEL WALL" IS A TILED-BATHROOM GENERATOR AND "ENAMEL SIDE CURVING UP" IS NOT.** A large
+  vertical white surface behind a bath IS a tiled wall to flux, and a template's own "no tiles"
+  cannot negate it. Deleting the noun (lesson 12's move) fixed it: 1 of 6 → **0 of 6**.
+- **THE FIRST-THIRD BUDGET IS ZERO-SUM, MEASURED TWICE IN ONE BUILD.** Position of the first vessel
+  noun: R1 word 97 (35% in), R2 word **183** (60% in), R3 word 10. R2 bought its framing with the
+  hero's attention window and its content collapsed to generic duck piles; R4 bought a matte finish
+  the same way and its non-duck vessels rendered in only 3 of 6. With six axes and ~90 words of
+  first-third budget, framing, material and hero **cannot all be paid for in the prefix** — so put
+  the material in the SEEDS (lesson 13: a surface named in a seed sticks 9/9) and keep the prefix for
+  the hero. This is the constructive half of lesson 18: it tells you not just to shorten the prompt
+  but WHICH layer each law belongs in.
+- **A BATH TOY IS A BRANDED OBJECT AND THE BATH-TOY AISLE IS FULL OF TEXT-SHAPED OBJECTS.** Foam
+  alphabet letters, foam numbers, bath books, thermometers, graduated measuring cups, numbered
+  stacking cups, bottles, tubes, jars, tins — every one deleted from every recipe rather than
+  described (lesson 12), plus the per-vessel plain-surface clause in both the output order and the
+  seeds. **0 lettering in 24 renders** on a path made entirely of branded objects and boat hulls.
+
 ---
 
 ## North Star — the actual goal
@@ -4101,6 +4135,20 @@ ToyBot's 24th path and its first CONTAINED WORLD: every other path photographs t
 
 **Residuals (accepted):** the recency picker clustered duplicate worlds inside single 6-render rounds (2 pairs in R0, 1 pair in R2/R3 each) — the pool is 25 and the round is 6, so it reads as picker recency-window behaviour rather than a pool gap; a cross-axis compatibility clause ("if the moment names a place the world does not have, adapt or drop it") did NOT hold, so a harbour rowboat still turned up in a desert and a cherry orchard; and one probe render came back glossy-Disney-CG rather than hand-painted miniature. Files: `paths/snow-globe-world.js`, `gen-seeds/toybot/gen-snow-globe-world.js`, 4 × `seeds/toybot_snow_globe_*.json` (25 each).
 
+### ToyBot `bath-toy-flotilla` — the WATER register, the SCALE-MISMATCH premise, and the container knob's FOURTH position (2026-09-22, SHADOW, 3+1 rounds, R1 2.5 → R2 2.1 → R3 3.0 → R4 2.75, best render 4.0; CLOSE, NOT a pass)
+
+ToyBot's 28th path. The gap, audited across all 27 existing builders: every one photographs toys on a DRY surface — a shelf, a table, a board, a diorama floor, a stage, or sealed inside a globe — so there was no WATER path, and nothing in the roster was built on a comic mismatch of SCALE. This is both: the bath is an OCEAN, the toys are a FLEET, and it is shot like a maritime epic from down at the waterline, with the toys played completely straight as vessels and crew so the comedy is the viewer's and never in the words. Function-form, self-contained (6 own seed JSONs + a hand-authored vantage array, zero shared-file edits). Axes: `flotilla` (hero, leads) + `landmark` (the cropped bath edge — the container knob) + `sea_light` (owns the palette) + `sea_state` (money shot) + `voyage_moment` (0.75 gate) + `sea_life` (0.5 gate). Charm is a LAW inside three of the recipes rather than a seventh axis, on word budget.
+
+The headline finding is now **cross-bot lesson 19** above — a container with a standard viewing HEIGHT needs a fourth knob position, camera words do nothing, and what works is naming a surface that cannot exist from the wrong height. Also from this build:
+
+1. **A LOCAL BRIEF DRY-RUN PAID FOR ITSELF TWICE BEFORE THE FIRST RENDER** (lesson 16 confirmed). A ~30-line stub picker over the path builder, printing the composed brief with no API call, caught a corridor-generating fleet formation ("a long column of six ducks, five ducks ahead in fine order") and a cross-axis contradiction the keyword filter had let through (a submarine surfacing and lifting a duck, on a glass-still mirror calm). The ban-list became an allow-list and a 40-combination dry sweep then showed 0 conflicts. Neither would have been visible in the code.
+2. **THE CORRIDOR CAN COME FROM FORMATION WORDING ALONE, WITH NO LINEAR STAGE AND NO AXIAL CAMERA.** 3 of 6 R1 renders tiled the fleet back to a vanishing point. The cause was inside the hero pool — "single file", "in a column", "each holding station a hull-length behind the one ahead", "each progressively smaller" — which is lesson 17's corridor generated by the SUBJECT's arrangement rather than by the stage. Purged to lateral formations (line abreast, loose V, staggered echelon, bunched); audit any fleet/herd/queue pool for this as a SET.
+3. **ULTRA FAILED 4 FOR 4 ON A FRAMING-IDENTITY PATH** — shot the tub from outside every time, duplicated the tap in one render, and produced both of the build's lowest-scoring frames while pro produced every frame with a correct bath edge. Pinned out. This extends lesson 6's standing exclusion from a LIGHTING condition to a CAMERA-HEIGHT condition: ultra breaks any path whose identity is a condition rather than a subject.
+4. **"READ THE MATCHED TEXT" CUT BOTH WAYS AGAIN.** A text-prior sweep flagged `tile` in 6 of 6 R4 prompts; the match was **"tactile"**. And in the pools the same sweep correctly flagged `marks` inside "tooth-marks" (reworded to "bite-dents" per lesson 1), while `foot` was a duck's foot and `legs` were a crab's. The sweep is only useful if every hit is read.
+5. **MY OWN PATCH INTRODUCED A HAND.** Rewriting a negation out of a sea-state entry ("drifting slowly and not touching the next") produced "a hand's width of dark water between each" — on a path whose hardest rule is that no person is in this bath. Re-run the full guard sweep over your own edits, not just over the generated output (the regeneration corollary of lesson 16).
+
+**Residual (accepted, with the lever named):** the toys render FACTORY-FRESH AND GLOSSY in most frames against "scuffed sun-faded well-chewed" present in all 24 prompts — adjectives lose to the rubber-duck PRODUCT prior. R4 showed the counter-prior that works is a FINISH stated as a surface ("gone matte and chalky, no shine left on it") plus a named material tradition, ToyBot's own Stage-O form that took tin-toy-parade to 4.9 — but R4 bought it with prefix words and lost the fleet's variety. **The next lever is to spend the words where they are free: put the matte/chalky finish into the FLEET SEEDS' own opening noun phrase, per entry, not into the prefix or the template.** Second residual: the palette still reads pale cyan in about half the frames, because bathwater plus white enamel is a strong cool prior that `sea_light` reaches the prompt and loses to; one fleet entry ("a dozen cobalt plastic fish") is monochrome by construction and produced the build's one blue-on-blue frame. Files: `paths/bath-toy-flotilla.js`, `gen-seeds/toybot/gen-bath-toy-flotilla.js`, 6 × `seeds/toybot_bath_*.json` (25 each).
+
 ### YumBot Stage P — function-form on a look-register bot + the no-humans transfer (2026-08-16, SHADOW)
 
 Built 3 SHADOW YumBot paths — `kawaii-drinks` (4.83), `holiday-sweets` (5.0, a flawless batch), `food-village` (4.92). YumBot is a declarative look-register bot, but I built these FUNCTION-FORM and they were among the strongest batches of the whole run. Keys:
@@ -4585,6 +4633,71 @@ Added storm-season (Jurassic-Park-in-the-rain) and polar-dinos (paleo-accurate h
 - **Aurora is safe ONLY where it's real:** banned as sci-fi on night/storm, but positively allowed on polar-dinos ("a green aurora rippling in real curtains — genuine polar science") and rendered gorgeously. Sun-dogs / light-pillars / diamond-dust are likewise real polar phenomena worth seeding.
 
 **Shared residual across all three DinoBot atmospheric paths:** palms/pines (modern-tree drift), flux-2-pro "magical" glow (eyes / light-beams), and big-theropod-scaly — all model-lottery Flux priors, not recipe defects. Future lever when promoting live: a per-path modelByPath pin excluding flux-2-pro (DinoBot lacks modelByPath today) + bias biome pools toward tree-sparse settings.
+
+### `amber-forest` (2026-09-23, SHADOW) — DinoBot's first MATERIAL-as-hero path, and three measured defects
+
+DinoBot's 21st path and the first whose hero is not a place or an animal but a SUBSTANCE and its optics: a
+Mesozoic resin forest, with the resin as a foreground VOLUME that things are trapped inside and light comes
+through. Every other DinoBot path is a vista seen from a distance; this is the bot's only translucent/backlit
+register. Function-form and self-contained (its own six seed JSONs, zero `pools.js` / `archetypes.js` /
+`archetype-templates.js` edits — the FaeBot mushroom-apothecary pattern). 3 rounds + 3 probes, 30 attempts:
+R1 ~3.2 → R2 ~4.4 (best of run 5.0) → R3 ~3.9 → final probe ~4.2 with 0 aborts. Five reusable findings:
+
+1. **⭐ `bot.bannedPhrases` IS A RAW SUBSTRING CHECK WITH NO WORD BOUNDARIES AND NO RECOVERY — AN ON-BRIEF
+   WORD THAT MERELY *CONTAINS* A BANNED TOKEN HARD-KILLS THE RENDER.** 3 of 16 renders (19%) died at stage
+   `banned-phrase-check` with nothing stored. Found by forcing all 24 entries of one pool through Sonnet
+   individually: **`"harvestman "` contains `"man "`** and **`"personally"` contains `"person"`**. A harvestman
+   is a real arachnid and "personally offended" was the path's best joke — both were correct content. Two
+   traps inside the trap: the `bot_run_log` row stamps the **DEFAULT model (flux-dev)** because the abort
+   happens before model selection, so the model column is a red herring; and the failure is invisible to a
+   brief-only probe, because it depends on which pool entry rolled. **Audit any new pool against the bot's
+   own `bannedPhrases` as SUBSTRINGS before rendering** — `require` the bot and run
+   `bannedPhrases.some(p => entry.toLowerCase().includes(p))` over every entry. DinoBot's list makes these
+   words unusable anywhere in a pool: anything containing `man ` / `woman` / `human` / `person` / `people` /
+   `child` / `hunter` / `explorer` / `scientist` / `ranger` / `tourist` — which quietly bans *harvestman,
+   personality, personally, children, stranger* and any "**hunter**" describing a theropod.
+2. **⭐ A STRAIGHT-EDGED COLOUR DESCRIPTION RENDERS A RAINBOW COLOUR-SWATCH CARD.** *"a ruled band of colour
+   running from cool green at one edge through to red-orange at the other, each stripe sharp at its border"*
+   put a flat rectangular gradient strip on the forest floor — a modern graphic-design object 66 million
+   years early. Same literalization class as "coins of light" → real gold coins, but the trigger is the
+   GEOMETRY word, not the object noun: `ruled`, `band`, `strip`, `stripe`, `sharp at its border`. Colour
+   through a prism-like material must be a **soft smeared wash that follows a real surface's own curve, with
+   no hard edge anywhere**. 0 recurrences in 12 renders after the rewrite.
+3. **⭐ A DETACHED MASS RENDERS AS A MANUFACTURED CURIO — THE SNOW-GLOBE LAW, ONE LAYER DOWN IN THE CONTENT
+   POOL.** 3 of 6 renders in one probe turned the resin into a polished slab standing upright on the litter,
+   a paperweight dome on a stump, and a mineral geode. The entries named the object and its position in the
+   frame (which the snow-globe lesson demands) but never **what HELD it** — so Flux framed it as a specimen
+   with air all round it, and the grove's own stump became a plinth. Fix: every detached mass OPENS by naming
+   its attachment (*welded to the bark where it grew, half-buried in the needle-litter, lying against a root,
+   sunk into the floor with moss creeping up one flank*) and carries forest debris STUCK to it. 0 curio
+   failures in the 6 renders after. **Generalises: position + crop keeps an object BIG; attachment keeps it
+   REAL. A fixed-camera path needs both, and the second one is the one everybody forgets.**
+4. **⭐ REGULAR REPEATING GEOMETRY IN A SEED IS THE VERTICAL FORM OF THE DEAD-SYMMETRY LAW.** *"layer on
+   layer like a candle's drips, eight distinct layers, each layer's edge a clean overhang"* rendered, twice
+   out of two draws and on two different models, as **a tapering tower of identical rings — a stack of
+   doughnuts / a child's stacking-ring toy**. Rewritten as *"no two lobes the same size or shape and none of
+   them level, a fresh run spilling down ONE side only"* and the artifact vanished. Sweep any accumulation /
+   tier / row / series seed for `layer on layer`, `N distinct layers`, `even spacing`, `progressively larger`.
+5. **⚠️ THE MODEL DECIDES WHETHER AN OPTICAL-IDENTITY PATH EXISTS AT ALL — this is now measured on a
+   third path and it is a standing exclusion, not a preference.** One render per model on an identical
+   template and pools: **flux-2-pro 4.8 | nano-banana 4.2 | flux-1.1-pro 2.5 | flux-1.1-pro-ultra 2.8 |
+   flux-dev 1.8.** flux-1.1-pro macro'd onto the nearest texture and lost the grove to bokeh; ultra went
+   abstract-stylised with no environment (its documented condition-identity failure, third path running);
+   and **flux-dev rendered NO RESIN WHATSOEVER on a brief that led with a resin sheet filling two thirds of
+   the frame** — the hero simply deleted. Over 25 graded renders: flux-2-pro **4.35** (n=13, floor 3.0) vs
+   nano-banana **3.90** (n=12, floor 2.8). Banana's floor is mechanically explained — it routes through
+   `cleanMediumByModel` to `dinobot_gpt_clean`, which drops the bot's photoreal/PBR anchor, so its resin
+   comes back OPAQUE (dough, wax, stone) and it invents an internal glow. Its peaks are still among the
+   run's best (4.8, 4.7), so it stays a small variety lane. **First lever for any bot whose path identity is
+   an optical or lighting condition: pin `modelByPath` before touching a pool or a template.**
+
+Also worth carrying forward: this path deliberately **replaced** DinoBot's shared `LIGHTING` and
+`PREHISTORIC_ATMOSPHERES` slots with bespoke `optics` / `grove_air` axes, because both shared pools carry
+SCENE CONTENT and NAMED DINOSAURS ("Mirror-flat lake reflecting dinosaur silhouette", "Baryonyx hunting",
+"Sandbar emerging from receding tide") — two hijacks at once on a closed-forest path with a GATED resident.
+And the reused 0.4-gated `phenomenon` pool is **filtered in the path file** to the 8 of 100 entries that a
+closed canopy can host, because a prose compatibility clause loses to a pool pick every time.
+
 
 ## OceanBot
 

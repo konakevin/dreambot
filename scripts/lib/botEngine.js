@@ -223,6 +223,71 @@ async function callModelWithRetry({ model, brief, maxTokens, anthropicKey }) {
  * fellBackToSecondary }. Throws if BOTH models exhausted.
  */
 /**
+ * Find the first banned phrase in a brief, matching on WORD BOUNDARIES rather
+ * than raw substrings.
+ *
+ * THE BUG THIS FIXES. The old check was `text.toLowerCase().includes(phrase)`,
+ * which has no notion of word edges, so ordinary on-brief words containing a
+ * banned string killed the render outright:
+ *
+ *   "harvestman"  contains  "man "     (a real arachnid, entirely on-brief)
+ *   "personally"  contains  "person"
+ *   "personality" contains  "person"
+ *
+ * Measured on DinoBot `amber-forest`: 3 of 16 renders (19%) died at
+ * `banned-phrase-check` on correct content, and the failure was near-impossible
+ * to diagnose — there is no retry that helps (the pool entry re-rolls, so it
+ * depends which entry came up), nothing was logged about WHAT matched, and
+ * `bot_run_log` stamped the DEFAULT model because the abort happens before model
+ * selection. A brief-only probe could not reproduce it (22/22 clean).
+ *
+ * WHY NOT A PLAIN `\b…\b`. A strict whole-word match would stop catching real
+ * plurals and inflections that a no-humans bot must still block — "children"
+ * would sail past a `\bchild\b`. So the start of the phrase anchors on a word
+ * boundary (which is what kills "harvestman" and "personally", since neither has
+ * a boundary before the banned part) while the end allows the common English
+ * inflections and nothing else.
+ *
+ * THE TRADE-OFF, stated plainly: this is slightly more permissive than a raw
+ * substring test, so a compound word that genuinely embeds a human noun
+ * mid-word (e.g. "shaman") no longer trips. That is the right side to err on
+ * here — the old behaviour was throwing away one render in five of correct
+ * content — but a bot whose ban list needs to catch a specific compound should
+ * add that compound to its own list rather than rely on substring bleed.
+ *
+ * Returns `{ phrase, matched, context }` for the first hit, or null. `context`
+ * is what makes a failure diagnosable at all.
+ */
+const BANNED_INFLECTIONS = "(?:s|es|ren|'s|s')?";
+
+function findBannedPhrase(text, phrases) {
+  if (!text || !phrases || phrases.length === 0) return null;
+  for (const raw of phrases) {
+    // A trailing space in a list entry (e.g. 'man ') was the old hand-rolled way
+    // of faking a word boundary. Real boundaries make it unnecessary.
+    const phrase = String(raw).trim();
+    if (!phrase) continue;
+    const escaped = phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // `\b` only means anything next to a word character. A phrase starting or
+    // ending in punctuation (or a space, already trimmed above) would otherwise
+    // get a boundary that can never match, silently disabling that ban entry.
+    const head = /^\w/.test(phrase) ? '\\b' : '';
+    const tailBoundary = /\w$/.test(phrase) ? `${BANNED_INFLECTIONS}\\b` : '';
+    const re = new RegExp(`${head}${escaped}${tailBoundary}`, 'i');
+    const m = re.exec(text);
+    if (m) {
+      const at = m.index;
+      return {
+        phrase,
+        matched: m[0],
+        context: text.slice(Math.max(0, at - 40), at + m[0].length + 40).replace(/\s+/g, ' '),
+      };
+    }
+  }
+  return null;
+}
+
+/**
  * Output-token budget for a brief-writing call.
  *
  * WHY THIS IS GENEROUS, AND WHY IT MATTERS. Every brief already states its own
@@ -1504,16 +1569,25 @@ async function runBot(opts) {
         // 7. Banned-phrase retry (up to 2 retries = 3 total attempts)
         if (bot.bannedPhrases && bot.bannedPhrases.length > 0) {
           errorStage = 'banned-phrase-check';
-          const lower = (s) => s.toLowerCase();
           let retries = 0;
-          while (retries < 2 && bot.bannedPhrases.some((p) => lower(middle).includes(lower(p)))) {
+          let hit = findBannedPhrase(middle, bot.bannedPhrases);
+          while (retries < 2 && hit) {
             retries += 1;
-            console.warn(`  ⚠️ banned phrase detected, retrying (${retries}/2)`);
+            // Name the MATCH and its context. Previously this logged nothing and
+            // the throw below stored nothing, so a render killed here left no
+            // trace of what tripped it — see findBannedPhrase for the 19% of
+            // amber-forest renders lost to "harvestman" matching "man ".
+            console.warn(
+              `  ⚠️ banned phrase "${hit.phrase}" matched "${hit.matched}" in "…${hit.context}…", retrying (${retries}/2)`
+            );
             const retry = await generateMiddle();
             middle = retry.text;
+            hit = findBannedPhrase(middle, bot.bannedPhrases);
           }
-          if (bot.bannedPhrases.some((p) => lower(middle).includes(lower(p)))) {
-            throw new Error(`banned phrase still present after retries`);
+          if (hit) {
+            throw new Error(
+              `banned phrase "${hit.phrase}" still present after retries (matched "${hit.matched}" in "…${hit.context}…")`
+            );
           }
         }
       }
@@ -1971,6 +2045,10 @@ module.exports = {
   runBot,
   createPicker,
   callClaude,
+  // exported for __tests__/lib/bannedPhraseMatching.test.ts — both directions of
+  // this matcher are load-bearing (over-blocking killed 19% of one path's renders;
+  // under-blocking would put a human in a no-humans bot's render)
+  findBannedPhrase,
   flux,
   download,
   weightedPick,

@@ -11,6 +11,7 @@ const blocks = require('./shared-blocks');
 const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
+  'amber-forest': require('./paths/amber-forest'), // 2026-09-22 SHADOW — the resin forest
   'dino-portrait': require('./paths/dino-portrait'),
   'dino-action': require('./paths/dino-action'),
   'paleo-landscape': require('./paths/paleo-landscape'),
@@ -89,10 +90,27 @@ module.exports = {
   // Retired with the 2026-06-21 fleet ban; RESTORED 2026-07-01 (Kevin) —
   // DinoBot re-enables Nano Banana via modelBanExemptions below.
   cleanMediumByModel: {
-    'google/gemini-2-image': { medium: 'dinobot_gpt_clean' },
+    // amber-forest opts OUT of the clean medium: its identity is OPTICAL
+    // (resin as a lens you see things through), and `dinobot_gpt_clean` strips
+    // the photoreal/PBR anchor that carries translucency. Every opaque-resin
+    // render measured in the build was a nano-banana render on this medium.
+    // The ChibiBot lesson-2 bypass, safe here because the path's own style tags
+    // are concrete.
+    'google/gemini-2-image': { medium: 'dinobot_gpt_clean', skipPaths: ['amber-forest'] },
   },
   promptPrefixByMedium: {
     dinobot_gpt_clean: '',
+  },
+
+  // modelByPath — NEW KEY. Load-bearing for amber-forest, not a preference: the
+  // path's identity is OPTICAL, and the model decides whether it exists at all.
+  // Measured over 25 renders: flux-2-pro 4.35 avg, nano-banana 3.90, and
+  // flux-1.1-pro 2.5 / ultra 2.8 / flux-dev 1.8 — flux-dev produced NO RESIN
+  // WHATSOEVER on a brief that led with a resin sheet filling two thirds of the
+  // frame. Third path in the fleet to confirm the law: pin the model BEFORE any
+  // pool or template work on an optical-identity path.
+  modelByPath: {
+    'amber-forest': { 'black-forest-labs/flux-2-pro': 85, 'google/gemini-2-image': 15 },
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -184,6 +202,7 @@ module.exports = {
   // it hidden (shadow=true / is_public=false). Going live = move the string to paths[] and change
   // NOTHING else about how it renders (the go-live xerox rule).
   shadowPaths: [
+    'amber-forest',
     'courtship-display',
     'den-and-burrow',
     'desert-dunes',
@@ -199,6 +218,7 @@ module.exports = {
     enabled: true,
     // New axis-system paths skip chaos for the MVP so the hero composition is what gets judged.
     skipPaths: [
+      'amber-forest',
       'courtship-display',
       'den-and-burrow',
       'desert-dunes',
@@ -226,6 +246,7 @@ module.exports = {
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
     skipPaths: [
+      'amber-forest',
       'courtship-display',
       'den-and-burrow',
       'desert-dunes',
@@ -315,7 +336,12 @@ module.exports = {
     'man ',
     'woman',
     'child',
-    'hunter',
+    // 'hunter' REMOVED 2026-09-22. It was banned to keep human hunters out, but
+    // DinoBot's whole subject is predators, so it matched dinosaurs described as
+    // hunters and killed the render: 23 of 28 flagged entries across 10,956 live
+    // pool entries were this one word ("ambush hunter revealed", "marine hunter
+    // suddenly airborne", "hunter's belly scraping sand"). Human hunters are
+    // already blocked by human/person/people/man.
     'explorer',
     'scientist',
     'ranger',
