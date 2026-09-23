@@ -37,9 +37,21 @@
  * including pools behind random gates, which is why each path is sampled
  * repeatedly rather than once.
  *
- * Writes POOL_BACKFILL_AUDIT.md — a ranked, explained work list, because the
- * previous tracker recorded a bare count with no reasoning and it could not be
- * acted on later.
+ * ⚠️ RETRACTED AS A WORK LIST, 2026-09-23. What this measures is shuffle-bag
+ * CYCLE LENGTH, which is not the same as "needs more entries", and the original
+ * version of this header claimed otherwise. A shuffle-bag draws every entry once
+ * before repeating, so cycling is EVEN COVERAGE: "179 atmospheres cycle in 90
+ * days" means one shows up per quarter, which nobody perceives. The 365-day
+ * target below is arbitrary and it did all the work in producing absurd numbers
+ * (+551 steampunk atmospheres). Kevin caught it.
+ *
+ * Checked afterwards: not ONE of the 14 pools this flagged has a semantic-variety
+ * problem, while all 300 pools that ARE near-ceiling (>=20% same-idea) are DEEP,
+ * 113-260 entries. Depth is not the lever; variety is a REWRITE problem. See the
+ * retraction section in POOL_BACKFILL_AUDIT.md before using this output.
+ *
+ * Still useful for the narrow question it actually answers: how fast does a given
+ * pool cycle, and which paths draw it.
  *
  * Usage: node scripts/audit-pool-repeat-risk.js [--samples 24] [--out FILE]
  */
