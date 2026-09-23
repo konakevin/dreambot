@@ -1144,6 +1144,24 @@ of frame, so three of a thing means three big things. Three corollaries, each ve
   a comb cell, a wax cap, an entrance slot, a top bar.
 - **DETAIL AND SIZE ARE THE SAME DIAL.** An animal-parity clause ("the bees rendered as carefully as
   the person") ENLARGED them. Parity must be spent on FRAME SHARE, not per-subject detail: cap the
+
+> **⚠️ CORRECTION, MEASURED 2026-09-23 — "cap the detail at the nearest one or two" IS ITSELF THE
+> INFLATOR, and it undoes a correct ruler.** The original fix for bee scale was a count floor plus an
+> in-frame ruler, with detail capped at the nearest one or two. That made a MASS of bees reliably
+> correct but left a residual where a lone near bee still came out hand-sized. Root cause: the
+> detail exemption. `farmbot_apiary_bee_presence` entries stated a dozen-plus AND welded a ruler
+> ("each one no longer than three honeycomb cells across") and then added *"the nearest showing a
+> furry amber-and-umber thorax and banded abdomen, clear veined wings folded flat"* — and the
+> anatomical detail beat the ruler every time. 20 of 30 entries carried such a clause, i.e. about 3
+> per 6-render batch, which is exactly the rate of giant bees observed.
+>
+> Stripping the exemption from all 20 entries and from the template took **giant bees 3 of 5 → 0 of
+> 6** and the batch from 3.86 to **4.37**.
+>
+> **So the rule is stronger than "spend parity on frame share": grant NO subject a detail exemption
+> at all.** Every one of them is a small clean shape at the ruler's size, including the nearest. State
+> the reason in the template so it survives editing — *the one you describe most is the one that comes
+> out biggest.*
   detail at the nearest one or two and let the rest be small clean shapes.
 - A mass of the creature is reliable while a LONE near one still inflates: a single subject has
   nothing to compete with and expands to fill its attention share.
