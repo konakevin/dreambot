@@ -88,6 +88,10 @@ Holds: `base_sparkle_cost`, `welcome_sparkle_bonus`, `pro_trial_days` (the 3-run
 `nightly_require_*`, `pro_monthly_sparkle_bundle`, `dream_queue_max_concurrent` (light cap 40),
 `dream_queue_max_concurrent_heavy` (heavy cap 10), cast-detection regexes, and the nightly distribution
 knobs (chaos tiers, embodied/face-swap rates).
+For You feed mix (migration 544, read by `get_feed`): `feed_unseen_fresh_bonus` (0.40, unseen posts under
+`feed_unseen_fresh_hours` 24 lead), `feed_older_post_hours` (168: older posts ignore engagement per
+`feed_older_ignore_engagement` + take turns per author via `feed_older_turn_step` 0.04). 0/false = off, no
+deploy; all three off reproduces the 492 scores exactly. Locked by `__tests__/db/feedSeenPenalty.dbspec.ts`.
 
 Other DB-driven config tables: `dream_mediums` / `dream_vibes` (directives/flux fragments/flags +
 `client_meta` jsonb for new client-driving attrs, migration 251); `bot_config` (per-bot dials overlaid
