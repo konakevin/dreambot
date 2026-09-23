@@ -59,6 +59,7 @@ const pathBuilders = {
   'tin-toy-parade': require('./paths/tin-toy-parade'),
   'puppet-theatre': require('./paths/puppet-theatre'), // 2026-09-22 SHADOW — proscenium framing
   'snow-globe-world': require('./paths/snow-globe-world'), // 2026-09-22 SHADOW — contained world behind cropped glass
+  'bath-toy-flotilla': require('./paths/bath-toy-flotilla'), // 2026-09-22 SHADOW — bath as ocean, toys as fleet
   // Halloween seasonal candidates — promoted from AlphaBot (2026-09), see
   // seasonalPaths.halloween below. Self-contained function-form builders
   // (own material-look text inline; no per-medium style injection needed).
@@ -127,6 +128,14 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro': 100,
       'black-forest-labs/flux-1.1-pro-ultra': 100,
     },
+    // bath-toy-flotilla: ULTRA PINNED OUT on measured evidence — 4 renders across R1/R2, 4
+    // framing failures (shot the tub from OUTSIDE every time, duplicated the tap once, and
+    // produced both lowest-scoring frames), while pro produced every frame with a correct bath
+    // edge. Extends the standing ultra exclusion from a LIGHTING condition to a CAMERA-HEIGHT
+    // condition.
+    'bath-toy-flotilla': {
+      'black-forest-labs/flux-1.1-pro': 100,
+    },
   },
 
   // mediumByPath — each path locks to its medium.
@@ -157,6 +166,7 @@ module.exports = {
     'tin-toy-parade': 'tin_toy_diorama',
     'puppet-theatre': 'puppet_theatre_diorama',
     'snow-globe-world': 'snow_globe_diorama',
+    'bath-toy-flotilla': 'bath_flotilla_diorama',
     // Halloween seasonal candidates (promoted from AlphaBot 2026-09) — each
     // builder is fully self-contained (inlines its own material-look text),
     // so its medium key carries no injected style (see mediumStyles below).
@@ -289,6 +299,14 @@ module.exports = {
       'a real printed BOARD GAME come to life, glossy die-cut cardboard board with painted illustrated spaces and printed borders, a clear winding path, real wooden meeples and plastic pawns and pewter figures and tumbling dice as pieces, scattered cards and a spinner and a sand-timer, warm hobby-table lighting, tilt-shift macro tabletop photography, tactile printed-cardboard texture, shallow depth of field',
     wooden_toy_diorama:
       'heirloom HAND-CARVED WOODEN toys, solid painted wood with visible woodgrain and turned-lathe rounded forms, soft matte painted color, gently rounded edges, occasional natural unpainted beech and maple, Waldorf / Grimm’s / Ostheimer / Brio wooden-toy aesthetic, warm natural wood tones, cozy hobby-table lighting, tilt-shift macro toy photography, tactile wood texture, shallow depth of field',
+    // bath_flotilla_diorama — the R3 measured spec. The two SURFACES are load-bearing and
+    // camera words are NOT: naming the camera reached 6/6 prompts in R2 and flux still shot
+    // from above in 6/6. A hull CUT BY THE WATERLINE and the bath's side CURVING UP are what
+    // bring the camera down, because neither can exist in a shot from above. Deliberately
+    // SHORT (~60 words): R2 and R4 both bought framing/material with prefix words and both
+    // lost the fleet's variety (first-vessel noun at 60% of the prompt vs 4%).
+    bath_flotilla_diorama:
+      'photographed from on the water down among the toys, every hull cut by the waterline with the water climbing it, a fleet of scuffed sun-faded well-chewed rubber and plastic bath toys under way as real vessels, the bath\u2019s own enamel side curving up behind them and cropped out of frame, cinematic photoreal macro, per-drop water and foam, tactile worn rubber and wet chrome',
     snow_globe_diorama:
       'extreme close-up shot through the thick curved glass wall of a snow globe, the bright wet glass arcing across the top corners of the picture and running off its edges, the whole tiny world inside filling the rest of the frame edge to edge, deep focus front to back with edge-to-edge sharpness so its own far distance and its own lit windows and its own road all stay readable, fine specks suspended in the water in front of it, hand-painted plaster and resin miniature with visible brush-marks, warm practical light raking in from one side through the water, tactile painted-miniature and wet-glass texture',
     puppet_theatre_diorama:
@@ -485,6 +503,16 @@ module.exports = {
     // in the world pool), arcane ("luminous mist" fights the real weather), ancient (decays the
     // little world), surreal (documented register-breaker), and voltage — whose 150-char directive
     // slice ends on the word "signage", a text prior on the path whose #1 trap is lettering.
+    // bath-toy-flotilla — curated from the actual dream_vibes.directive TEXT, not guessed.
+    // Dropped: cozy (its directive is "small rooms, reading nooks, window seats, porch
+    // corners" — ROOM NOUNS, on the one path whose hardest rule is that no room exists),
+    // ethereal ("soft diffused light, no single source visible" IS the pale washed-out
+    // failure a white bathroom defaults to), peaceful ("absolute stillness" contradicts every
+    // rough sea state), nightshade (puts a candlelit crypt in the bath), arcane + enchanted
+    // (magic glow is banned in every pool and fights "played completely straight"), coquette
+    // (pastel blush fights every committed palette), ancient (ages the bath into a ruin),
+    // surreal (register-breaker), and voltage (its slice ends on "signage", a text prior).
+    'bath-toy-flotilla': ['cinematic', 'epic', 'nostalgic', 'whimsical', 'shimmer'],
     'snow-globe-world': [
       'cinematic',
       'cozy',
@@ -673,7 +701,7 @@ module.exports = {
   // dispatcher never auto-posts them; reachable only via explicit --mode.
   // 'puppet-theatre' stays here until Kevin grades it. shadowPaths[] is invisible to the hourly
   // dispatcher and renders only via `iter-bot --mode puppet-theatre --post`, posted hidden.
-  shadowPaths: ['puppet-theatre', 'snow-globe-world'], // Stage O paths promoted to live rotation 2026-08-16 (TOY_SHADOW_PATHS const retained for reference)
+  shadowPaths: ['puppet-theatre', 'snow-globe-world', 'bath-toy-flotilla'], // Stage O paths promoted to live rotation 2026-08-16 (TOY_SHADOW_PATHS const retained for reference)
 
   // Seasonal-only paths (2026-09-07) — drawn ONLY when
   // engine_config.bots_seasonal_enabled is true AND the named holiday window
@@ -755,6 +783,7 @@ module.exports = {
       'puppet-theatre',
       // snow-globe-world: same reason — chaos would scramble the cropped-glass framing.
       'snow-globe-world',
+      'bath-toy-flotilla',
       // Halloween seasonal candidates (promoted from AlphaBot 2026-09) —
       // protect the curated MVP composition validated during QA.
       'vintage-halloween-toybox',
@@ -812,6 +841,7 @@ module.exports = {
     // re-enabled per-path.
     skipPaths: [
       'snow-globe-world',
+      'bath-toy-flotilla',
       'vintage-halloween-toybox',
       'spooky-dollhouse-diorama',
       'toy-graveyard-diorama',
@@ -829,6 +859,7 @@ module.exports = {
     enabled: true,
     skipPaths: [
       'snow-globe-world',
+      'bath-toy-flotilla',
       'model-train-world',
       'toybox-chaos',
       'plush-world',

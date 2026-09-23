@@ -37,6 +37,7 @@ const SCENE_PATHS = {
   'pixel-ruins': require('./paths/pixel-ruins'), // batch 4 (agent) + orchestrator R3, CLOSE 4.48 — Kevin's decision
   'volcano-forge': require('./paths/volcano-forge'), // batch 5 (agent), 3 rounds — R1 PASS 4.50; R2 four clean renders avg 4.75
   'ice-cavern': require('./paths/ice-cavern'), // batch 5 (agent), 3 rounds — R2 4.06 CLOSE; ref render R2 #1 4.8
+  'floating-market-canal': require('./paths/floating-market-canal'), // batch 5 (agent), 4 rounds — R3 PASS 4.52 (min 4.2); corridor 0/5, text 0/5
 };
 
 const pathBuilders = {
@@ -106,6 +107,17 @@ module.exports = {
     // any condition-identity path to a golden-hour EXTERIOR with a fake sign; flux-dev drops named
     // features and renders a "small, far off" figure at hero scale.
     'ice-cavern': {
+      'black-forest-labs/flux-2-pro': 1,
+      'black-forest-labs/flux-2-max': 1,
+      'black-forest-labs/flux-2-flex': 1,
+    },
+    // floating-market-canal: the flux-2 family only, pinned from R0 on volcano-forge +
+    // ice-cavern + campfire-night's measured evidence rather than rediscovered.
+    // flux-1.1-pro-ultra SIGNS its work, and a fake signature is a hard TEXT fail on what is
+    // the highest text-risk path in the roster (a market means awnings and shopfronts);
+    // flux-dev drops named features, and every named boat-stall rendering IS this path's money
+    // shot. All 20 QA renders ran on pro/max/flex and held the pixel medium 20/20.
+    'floating-market-canal': {
       'black-forest-labs/flux-2-pro': 1,
       'black-forest-labs/flux-2-max': 1,
       'black-forest-labs/flux-2-flex': 1,
@@ -183,7 +195,7 @@ module.exports = {
   // cozy-farming-life-sim: pulled from rotation 2026-09-19 for a rework (cozy-cute pixel
   // farm, FarmBot-in-pixels). Kept renderable + hidden here until the rework is approved.
   // The scene paths went live 2026-09-19; only the pulled farm path stays parked here.
-  shadowPaths: ['cozy-farming-life-sim', 'volcano-forge', 'ice-cavern'],
+  shadowPaths: ['cozy-farming-life-sim', 'volcano-forge', 'ice-cavern', 'floating-market-canal'],
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.

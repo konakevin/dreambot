@@ -1305,6 +1305,58 @@ height-exclusive SURFACE buys the camera.** Two companions from the same build:
   described (lesson 12), plus the per-vessel plain-surface clause in both the output order and the
   seeds. **0 lettering in 24 renders** on a path made entirely of branded objects and boat hulls.
 
+**22. ⭐⭐ A LAW APPENDED TO THE TAIL OF A SEED ENTRY IS NOT SHIPPED — IT REACHES ABOUT 20% OF
+PROMPTS. THE OUTPUT ORDER TAKES IT TO 100%.** The sharpest measurement of the whole run, from PixelBot
+`floating-market-canal`, and it puts a NUMBER on MangaBot's "the order gets it in, the seed makes it
+stick". The path's WALL LAW was appended to **25 of 25** seed entries and reached **1 of 5** emitted
+prompts — and that single render was the only one in its round with no signage. Adding the same clause
+to the required OUTPUT ORDER took it to **5 of 5**, and text hard-fails went 1/5 → 0/5 in one round.
+Sonnet drops tails. Corollary measured on the same path: moving two clauses into the order took the
+wall law 1/5 → 5/5 and a sky-band law 0/5 → 5/5 simultaneously. **If a rule must appear on every
+render, it goes in the output order — appending it to every pool entry is not a substitute and feels
+far more thorough than it is.**
+
+**23. ⭐ THE PICTORIAL-SYMBOL FORMULA IS ITSELF A SIGNBOARD GENERATOR WHEN THE SUBSTRATE ISN'T
+GUARANTEED VISIBLE.** The fleet's standard anti-text move — "one small painted picture on the hull" —
+produced a market path's first text failure: where the hull was hidden behind cargo, Flux **invented a
+hanging board with two pseudo-numerals** to paint the symbol on. Same shape as the ice-cavern law (a
+charm detail implying a substrate makes the room supply that substrate), one level up. The replacement
+that held **19 of 20**: **THE GOODS LAW** — identify a stall by its CARGO, piled so it shapes the
+boat's whole silhouette, and delete the symbol from the template, the output order and every seed that
+carried it. **A pictorial marking is only safe where the thing it sits on is certain to be in frame.**
+
+**24. THE CROSSWISE LAW BEATS A CANAL/ROAD CORRIDOR — and a BRIDGE is its own corridor generator.**
+Completes lesson 17. The fix that took corridors 2/5 → 0/5 and held **0 of 20** after: *"the canal
+crosses the picture from the left edge to the right edge, its open water fills the near half, the far
+bank is a BAND across the top, both ends run out of frame"* — stated in three places that reach Flux
+(template rule 1, every hero seed, output-order item 2). The missing half: **a bridge must span the
+waterway, so naming one tells Flux the waterway runs INTO the picture.** Both corridor failures came
+from bridge rolls. Same form fixes it: *"any bridge enters from ONE SIDE EDGE and runs back out of it,
+cropped."* Held 2/2 on bridge rolls after.
+
+**25. THREE MORE SCALE-AND-ACTOR TRAPS, each cost a render.** All three are lesson 13's family.
+- **A SHAPE WORD IN THE CARGO'S NAME BECOMES THE SHAPE ON SCREEN, and a low count inflates it.**
+  "Lacquer bowls stacked eight-tall" in an entry titled `LACQUER TOWER` drew nine bathtub-sized bowls
+  taller than a four-storey building. 14 of 25 entries carried `tower`/`column`/`pyramid`. Fix: many
+  small pieces (two dozen+) plus a ruler welded to the vessel ("about as high as the standing figure
+  beside it, or the boat's own mast"). Gone in one round.
+- **A NAMED ACTION WITH NO NAMED ACTOR RENDERS THE BODY PART ALONE.** *"A cup held out from the next
+  deck"* drew a giant disembodied hand and forearm, duplicated at two scales. Name the whole figure.
+- **A SMALL CREATURE NAMED *ON* A MADE OBJECT ARRIVES WITH THAT OBJECT AT HERO SCALE.** "A green
+  parrot small on the bars of a hanging cage" put a house-sized cage in the near corner. The size
+  cue has to be a POSITION IN THE FRAME ("tiny at the far side of the picture"), not an adjective —
+  **the object Flux must invent to satisfy the entry is the one that inflates.**
+
+**26. A SURFACE DESCRIBED AS "PLAIN" STILL GROWS PSEUDO-LETTERING, AND LESSON 14'S MERGE FIXES A
+SECOND DEFECT FOR FREE.** All three of one round's text failures were **unprompted backfill**
+(verified: zero text nouns in any of those prompts) onto the quay-side wall faces between stalls — the
+one surface class nothing described. "Blank" and "plain" are negations CLIP cannot use. Naming what
+those walls actually CARRY (stacked crates and a rope coil, a vine gone to the eaves, jars on iron
+hooks, a brazier burning low, a cat-sized hole cut low in one) killed the signage **and** fixed the
+flat-frieze far bank that had made two earlier renders dull — and produced the build's single best
+charm detail, a cat peeking out of the drain hole. **The anti-text form must carry the interest; done
+right it is a set-dressing win, not a tax.**
+
 ---
 
 ## North Star — the actual goal
