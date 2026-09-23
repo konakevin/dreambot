@@ -123,7 +123,15 @@ can change" (their own comments say so):
 truncation stamped to `sonnet_truncated` for DB forensics. Locked by
 `__tests__/lib/briefTokenBudgetGuard.test.ts` (6 tests, verified to go red if the cap regresses).
 Raising the ceiling does NOT lengthen prompts — every brief states its own word count — and you pay
-only for tokens generated, so unused headroom is free.
+only for tokens generated, so unused headroom is free. (The cap was later raised 1200 → **2000** after
+the `✂️ TRUNCATED` warning fired on a FarmBot apiary brief; `thinking` measured 0 on that call, so it
+was genuinely long output rather than thinking tokens eating the budget.)
+
+**✅ VERIFIED CLOSED 2026-09-23.** Now that the stamp exists, the fix is measured rather than assumed:
+**423 stamped runs across 12 bots over a ~5 h window, 0 truncated (0.0%)** — against 6.7% fleet-wide
+and **21.4% on FarmBot** before the fix. FarmBot specifically: 50 stamped runs, 0 truncated. This is the
+one of the run's four engine bugs that can now be shown closed from the database instead of argued from
+the code.
 
 **→ OPEN FOR KEVIN (live-path content change, not doing it unasked):** both FarmBot workarounds are now
 unnecessary. Un-capping the costume parade to 3 humans and un-reordering the barn path would restore
