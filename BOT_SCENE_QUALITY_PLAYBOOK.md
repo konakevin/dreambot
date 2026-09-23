@@ -1666,6 +1666,45 @@ it is the difference between the path working and the path being the fragment.
 **→ FarmBot remains the open one and it is Kevin's call:** 273 words at word 4, across 35 live paths.
 One constant in one file, and the largest measured lever in the run.
 
+**38. ⭐ A CARVED ANIMAL IS SAFE AS A HEAD GROWING OUT OF A WALL AND UNSAFE AS A WHOLE ANIMAL ON A
+BRACKET — and a single one named "BESIDE" a gate gets MIRRORED.** PixelBot `castle-town-gate`,
+measured over 10 renders. The whole-animal form failed 3 of 10: a live bear sitting in an upper
+window, a giant live owl bigger than a house, and two identical stone bears mirrored on two gateposts.
+The HEAD form held 3 of 3 and a fish-head spout 2 of 2, because **a head embedded in a wall cannot
+read as alive and cannot become flanking statuary.** Do not port `pixel-ruins`' "worn pictorial relief"
+formula to a subject where the sculpture stands free.
+
+And the placement word decides the mirroring, because a gate has two sides and Flux's symmetry prior
+fills both. Measured over the 5 rolls carrying a head: **"above the arch" 0 of 3 mirrored, "beside the
+arch" 1 of 2, on a gatepost 1 of 1.** The fix is to purge the offending class, not to add an
+anti-mirror clause — "above" has only one place to be.
+
+**39. ⭐ "IN FLAT BLOCKS OF COLOUR" IS CORRECT PIXEL-ART TECHNIQUE LANGUAGE AND A DEVICE-SUBSTRATE
+GENERATOR WHEN IT DESCRIBES HANGING CLOTH.** Same build, and it is the subtlest text trap found in the
+run. The only text failure in 14 renders came from *"washing strung between two upper windows in flat
+blocks of colour"* — which drew four flat rectangles squared to camera, each carrying an identical
+angular chevron device. Lesson 27's dividing line is whether the object's SHAPE is already a sign, and
+**"a flat block of colour" instructs exactly that shape.** Keep the phrase for roofs, walls and water;
+describe hanging cloth as sagging, folded, rippling, twisting or **edge-on**. Proof it works: three
+streamers "twisting edge-on in the wind" came back with zero device.
+
+**40. A BEAT / `moment` AXIS MUST NOT BE HANDED THE PATH'S IDENTITY LAW OR ITS SIZE LAW.** Same build.
+The first-generation moment recipe carried the full position-colour-count menu and the full ruler
+paragraph, and Sonnet read them as CONTENT requirements — so every beat also described the towers, the
+cloth colours, the lamp count and the carved lion. It duplicated two other axes, ran 35-45 words
+against a 16-34 ask, and could contradict whatever hero rolled. **A law that must appear on every
+render belongs in the output order (lesson 22), not stuffed into every axis recipe.** Caught by a local
+dry-run plus a per-pool word count, before any render.
+
+**41. RUN THE SWEEP EVEN WHERE THE RECIPE ALREADY BANS THE WORD.** Same build: the recipe explicitly
+banned `curtain`, `crown` and `corbel` with plain replacements written out, and Sonnet still produced
+"a ragged overlapping **curtain** of herbs", "warm pink at the **crown**" and "every ledge and
+**corbel**" — 4 hits across 3 pools at MVP-25. This confirms at 25 entries what the PixelBot go-live
+audit found at 7,470: **Sonnet re-derives banned nouns, so the ban in the recipe is a nudge and the
+sweep on the output is the control.** And the usual counterweight applied — 90 of 102 raw sweep hits
+were false positives (portcullis *bars*, *cone* roofs, *beam*-ends, raindrop *rings*, the wall
+"standing", and the playbook's own protected simile "a roof pulled low like a hat").
+
 ---
 
 ## North Star — the actual goal

@@ -10,6 +10,7 @@
  *   node scripts/_pixelbot-scene-render.js --path pixel-vista --count 5 --label pixel-vista-r0
  *   node scripts/_pixelbot-scene-render.js --path pixel-vista --count 1 --label look-3 --look 3
  *   [--vibe <key>]   force a vibe    [--look <i>]  force look-register index i
+ *   [--models flux2] pin the flux-2 family (flux-dev + ultra are excluded on this bot)
  */
 const { runBot } = require('./lib/botEngine');
 const bot = require('./bots/pixelbot');
@@ -21,10 +22,24 @@ const argv = process.argv.slice(2);
 const arg = (n, fb) => { const i = argv.indexOf('--' + n); return i >= 0 && argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : fb; };
 const key = arg('path'); const count = parseInt(arg('count', '5'), 10); const label = arg('label', `${key}-r0`);
 const vibe = arg('vibe', 'random'); const look = arg('look', null);
-if (!key) { console.error('usage: --path <key> [--count N] [--label L] [--vibe v] [--look i]'); process.exit(2); }
+// --models flux2 pins the flux-2 family. Without this the in-memory patch used
+// to hand every path all five SCENE_MODELS, including the two that are excluded
+// on this bot (flux-dev and flux-1.1-pro-ultra render smooth paintings with no
+// pixel structure, and ultra signs its work) — which cost one path 3 of its 5
+// round-0 renders. A path can also self-declare via `module.exports.models`.
+const modelsArg = arg('models', null);
+const MODEL_SETS = {
+  flux2: {
+    'black-forest-labs/flux-2-pro': 1,
+    'black-forest-labs/flux-2-max': 1,
+    'black-forest-labs/flux-2-flex': 1,
+  },
+};
+if (!key) { console.error('usage: --path <key> [--count N] [--label L] [--vibe v] [--look i] [--models flux2]'); process.exit(2); }
+if (modelsArg && !MODEL_SETS[modelsArg]) { console.error('unknown --models set:', modelsArg, '(known:', Object.keys(MODEL_SETS).join(', '), ')'); process.exit(2); }
 
 const builder = require(`./bots/pixelbot/paths/${key}`);
-scene.patchInMemory(bot, key, builder);
+scene.patchInMemory(bot, key, builder, modelsArg ? { models: MODEL_SETS[modelsArg] } : {});
 if (look !== null) {
   const entry = pools.PIXELBOT_LOOK_REGISTER[parseInt(look, 10)];
   if (!entry) { console.error('no look at index', look); process.exit(2); }

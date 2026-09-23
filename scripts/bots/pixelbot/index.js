@@ -38,6 +38,7 @@ const SCENE_PATHS = {
   'volcano-forge': require('./paths/volcano-forge'), // batch 5 (agent), 3 rounds — R1 PASS 4.50; R2 four clean renders avg 4.75
   'ice-cavern': require('./paths/ice-cavern'), // batch 5 (agent), 3 rounds — R2 4.06 CLOSE; ref render R2 #1 4.8
   'floating-market-canal': require('./paths/floating-market-canal'), // batch 5 (agent), 4 rounds — R3 PASS 4.52 (min 4.2); corridor 0/5, text 0/5
+  'castle-town-gate': require('./paths/castle-town-gate'), // wave 5 (agent), 3 rounds — R0 3.02 → R1 4.46 → R2 PASS 4.64 (min 4.3); text 0/10 on the pin
 };
 
 const pathBuilders = {
@@ -122,6 +123,20 @@ module.exports = {
       'black-forest-labs/flux-2-max': 1,
       'black-forest-labs/flux-2-flex': 1,
     },
+    // castle-town-gate: flux-2 family only, MEASURED ON THIS PATH rather than
+    // inherited. Round 0 ran unpinned across all five SCENE_MODELS and all three
+    // renders handed to flux-dev or flux-1.1-pro-ultra failed: two as FULLY SMOOTH
+    // paintings with no pixel structure (ultra also rendered a LIVE bear where a
+    // carved stone bear was asked for) and one as crisp pixel art with a GIBBERISH
+    // SIGNATURE stamped in the corner. A fake signature is a hard TEXT fail on the
+    // roster's highest text-risk subject, and flux-dev dropped most of the late
+    // content at 371 emitted words — the named travellers ARE this path's scale
+    // ruler. Rounds 1-2: 10 renders on pro/max/flex, medium 10/10, text 0/10.
+    'castle-town-gate': {
+      'black-forest-labs/flux-2-pro': 1,
+      'black-forest-labs/flux-2-max': 1,
+      'black-forest-labs/flux-2-flex': 1,
+    },
     // pixel-campfire-night only: flux-1.1-pro-ultra rendered a golden-hour SUNSET on an
     // aurora-and-stars night prompt and stamped a fake copyright mark on it (2026-09-19).
     // Night is this path's whole identity, so it runs on the four models that held it.
@@ -195,7 +210,13 @@ module.exports = {
   // cozy-farming-life-sim: pulled from rotation 2026-09-19 for a rework (cozy-cute pixel
   // farm, FarmBot-in-pixels). Kept renderable + hidden here until the rework is approved.
   // The scene paths went live 2026-09-19; only the pulled farm path stays parked here.
-  shadowPaths: ['cozy-farming-life-sim', 'volcano-forge', 'ice-cavern', 'floating-market-canal'],
+  shadowPaths: [
+    'cozy-farming-life-sim',
+    'volcano-forge',
+    'ice-cavern',
+    'floating-market-canal',
+    'castle-town-gate',
+  ],
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.

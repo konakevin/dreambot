@@ -66,11 +66,32 @@ const vibesByPath = (m) =>
  * exactly as it will once wired (used by scripts/_pixelbot-scene-render.js for
  * agent fan-out; never touches disk).
  */
-function patchInMemory(bot, key, builder) {
+/**
+ * @param opts.models  Optional model set for this path. Defaults to the builder's
+ *   own declared `builder.models`, then to the full SCENE_MODELS.
+ *
+ * WHY THE OVERRIDE EXISTS. This used to hard-assign `SCENE_MODELS` (all five),
+ * which silently CLOBBERED any pin a path declared for itself — so an agent
+ * testing in memory always rendered round 0 across flux-dev and
+ * flux-1.1-pro-ultra even when its own header declared a flux-2 pin. Both of
+ * those carry a standing exclusion on this bot, measured independently on
+ * volcano-forge, ice-cavern, floating-market-canal and campfire-night: they
+ * return fully SMOOTH paintings with no pixel structure, and ultra stamps a
+ * gibberish signature. It cost `castle-town-gate` 3 of its 5 round-0 renders
+ * before anyone noticed the wrapper was overriding the path.
+ *
+ * A path self-declares by exporting `models` on its builder function:
+ *   module.exports.models = { 'black-forest-labs/flux-2-pro': 1, … };
+ */
+function patchInMemory(bot, key, builder, opts = {}) {
   bot.shadowPaths = bot.shadowPaths || [];
   if (!bot.shadowPaths.includes(key) && !bot.paths.includes(key)) bot.shadowPaths.push(key);
   bot.mediumByPath = { ...(bot.mediumByPath || {}), [key]: SCENE_MEDIUM };
-  bot.modelByPath = { ...(bot.modelByPath || {}), [key]: SCENE_MODELS };
+  const models = opts.models || builder.models || SCENE_MODELS;
+  bot.modelByPath = { ...(bot.modelByPath || {}), [key]: models };
+  if (models !== SCENE_MODELS) {
+    console.log(`⚡ model pin honoured for ${key}: ${Object.keys(models).join(', ')}`);
+  }
   bot.vibesByPath = { ...(bot.vibesByPath || {}), [key]: builder.vibes || ['nostalgic', 'enchanted'] };
   bot.vibes = Array.from(new Set([...(bot.vibes || []), ...(builder.vibes || [])]));
   if (bot.chaos && Array.isArray(bot.chaos.skipPaths) && !bot.chaos.skipPaths.includes(key)) {
