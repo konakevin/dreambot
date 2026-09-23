@@ -342,6 +342,33 @@ the template owned the palette) — both were the shared template, not the pool.
 parent's register will quietly pull the clone back toward the parent. When cloning, ask of each
 inherited axis: *was this written for a world my new biome actually has?*
 
+## BloomBot prep — the overlap audit, done before dispatch (2026-09-23)
+
+BloomBot is the only bot in the plan with NOTHING built yet, and it is also the one where the three
+queued paths are most at risk of duplicating what exists. Audited so the briefs can be specific
+instead of discovering it in round 1.
+
+**24 live paths:** landscape · closeup · cozy · garden-walk · dreamscape · conservatory ·
+tropical-paradise · city-flowers · jack-and-the-giant-flower · hanging-flowers · sunset-flowers ·
+flower-friends · flower-humming-birds · flower-fantasy · flower-grove · tropical-grove ·
+flower-arrangement · desert-bloom · reclaim · water-garden · flower-fields · moon-garden ·
+rain-garden · great-blossom-tree.
+
+**Config that matters for a new path:** single medium `bloom_hyperreal_cgi`; `allowedModels` is only
+flux-1.1-pro-ultra + flux-1.1-pro (so the flux-2 family that carried volcano-forge, ice-cavern and
+floating-market-canal is NOT available unless widened, and **ultra signs its work on several bots**,
+which is a hard text fail); chaos ON bot-wide; twoPassPolish ON bot-wide. Per this run's repeated
+finding, a new axis path wants BOTH skipped — so each BloomBot brief must call for `chaos.skipPaths`
+and `twoPassPolish.skipPaths` entries, unlike the bots where those are already off.
+
+**The overlap each queued path must beat, stated up front:**
+
+| queued path | what it collides with | the differentiator it MUST carry |
+| --- | --- | --- |
+| `alpine-wildflower-meadow` | `flower-fields`, `landscape` — both are open flower expanses | ALTITUDE as a physical fact: scree and bare rock, snowmelt runnels, cushion plants growing flat to the ground, a snowfield above the flowers, thin hard light. Not "a meadow with mountains behind it" |
+| `coastal-cliff-bloom` | `landscape`, `desert-bloom` | THE SEA and WIND: plants wind-pruned flat and leaning inland, salt-burn on the seaward edge, spray, the cliff EDGE in frame with water below, seabirds |
+| `orchid-cloud-forest` | `tropical-paradise`, `tropical-grove`, `conservatory` — highest overlap of the three | VERTICALITY and EPIPHYTES: orchids growing ON trunks and branches rather than in ground beds, moss-furred bark, the cloud layer moving through the trees at eye level, everything dripping. A conservatory is glass and a grove is ground-level; this is a wet vertical wall of other plants |
+
 ## The agent brief template (reuse verbatim; only §PATH changes)
 
 Every dispatched agent gets this. Written down so dispatch is consistent across 33 paths and so a
