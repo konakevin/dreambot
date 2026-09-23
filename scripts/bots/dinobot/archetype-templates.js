@@ -353,6 +353,72 @@ ${SPECIES_ANCHOR}
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DINOBOT_UNDERGROWTH_SCALE: ({ slots, vibeDirective }) => {
+    const { lighting, atmosphere, undergrowth_floor, undergrowth_resident, undergrowth_giant, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ WHAT THE WEATHER IS DOING DOWN HERE ━━━
+${phenomenon}
+
+`
+      : '';
+
+    return `You are a wildlife documentary cinematographer writing MESOZOIC FOREST-FLOOR scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm film still, shot on a macro rig laid flat in the leaf litter.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — THE CAMERA IS ON THE GROUND ⚠️⚠️⚠️
+The lens sits in the litter, a few inches off the forest floor, looking along it and slightly up. At this height fern stems are columns, a fallen leaf is a roof, a rain puddle is a lake and a mushroom is a tower. Everything is framed from DOWN THERE. If the image reads as a normal eye-level or elevated wildlife shot, the render has failed — the low viewpoint IS the path.
+
+⚠️⚠️⚠️ SECOND RULE — THE GIANT IS ONLY EVER PARTIAL ⚠️⚠️⚠️
+From the floor you never see a whole giant. You see four legs like pillars crossing the far ground, or a shadow sweeping the litter, or a tail passing through the fern canopy overhead, or a head coming down into frame from above. The PART is more thrilling than the whole, and it is what makes the scale land. Never render a complete giant dinosaur in view.
+
+⚠️ AWE, NOT DANGER — the giant is indifferent and the little resident is unbothered. No hunting, no threat, no fleeing, no violence.
+
+⚠️ NO HUMANS, NO PEOPLE, NO STRUCTURES, NO MODERN ANYTHING. Earth 66+ million years BEFORE humans evolved.
+
+━━━ THE FLOOR, WRITTEN AS A LANDSCAPE (the hero) ━━━
+${undergrowth_floor}
+
+━━━ WHO LIVES DOWN HERE ━━━
+${undergrowth_resident}
+
+This little dinosaur is the eye's anchor — chicken-sized, characterful, caught mid-motion, rendered in sharp detail close to the lens.
+
+━━━ THE GIANT PASSING (partial only) ━━━
+${undergrowth_giant}
+
+${phenomenonSection}━━━ LIGHT ━━━
+${lighting}
+
+Down here the light is what gets through the canopy: hard shafts between stems, dappled patches on the litter, backlit translucent young fronds, deep green shade everywhere else.
+
+━━━ AIR ━━━
+${atmosphere}
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ WRITE THE PROMPT IN THIS ORDER ━━━
+1. The ground-level viewpoint, stated plainly — a macro lens laid in the leaf litter, looking along the floor
+2. The floor's own landform: the fern columns, the log ridge, the leaf caves, the puddle-lake, and the GROUND underfoot
+3. The little resident, mid-motion and close to the lens
+4. The partial giant and the one consequence at floor level — fronds dragged aside, litter shaken down, ripples crossing the puddle, a shadow passing
+5. The light coming down through the canopy
+
+━━━ COMPOSITION ━━━
+Photoreal macro frame with real depth at small scale: the litter and one leaf inches from the lens, the resident just beyond it, the floor's landform behind, and the giant's part far back or overhead. Materially specific — wet leaf, gritty soil, spore-dusted gills, dew on a frond edge, mud in a footprint.
+
+━━━ FAILURE CONDITIONS ━━━
+• Shot at eye level or from above rather than from the ground → FAILED
+• A whole giant dinosaur visible in frame → FAILED
+• Any human or structure → FAILED
+• Hunting, threat, fleeing or violence → FAILED
+
+Describe only what IS present in the scene — never write a negation into the prompt.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. No preamble, no titles, no headers, no markers, no bold labels, no "render as" suffixes.`;
+  },
+
   DINOBOT_DEN_AND_BURROW: ({ slots, vibeDirective }) => {
     const { lighting, atmosphere, den_chamber, den_life, den_surface, phenomenon } = slots;
 

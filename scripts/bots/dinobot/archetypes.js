@@ -125,6 +125,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  DINOBOT_UNDERGROWTH_SCALE: {
+    description:
+      'PATH-BESPOKE — DinoBot undergrowth-scale path (2026-09-22). THE DELIGHT ANGLE: every other DinoBot path looks AT dinosaurs from human height or above. This one puts the camera at ANKLE HEIGHT in the leaf litter, where fern stems are columns, a fallen leaf is a roof and a rain puddle is a lake. 3 path-bespoke axes: undergrowth_floor (the floor written as a LANDSCAPE, the hero) / undergrowth_resident (the chicken-sized dinosaur who lives down here, characterful and gorgeous) / undergrowth_giant (the enormous dinosaur passing, deliberately only ever PARTIAL — four legs like pillars, a shadow sweeping the litter, a tail dragging fronds aside overhead, ripples crossing the puddle-lake; the part is more thrilling than the whole). Plus a 40%-gated phenomenon and universal lighting + atmosphere. Awe, never danger: no predation, no threat to the resident.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['undergrowth_floor', 'undergrowth_resident', 'undergrowth_giant'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DINOBOT_DEN_AND_BURROW: {
     description:
       'PATH-BESPOKE — DinoBot den-and-burrow path (2026-09-22). THE DELIGHT ANGLE: nobody has ever been shown the inside of a dinosaur burrow, so the hero is the UNDERGROUND itself — a dished nest hollow under a woven root ceiling, a cutaway of two or three chambers at different depths, the entrance tunnel seen from inside as a blazing disc of daylight, a chamber open to a river with light bouncing off the water onto the ceiling. 3 path-bespoke axes: den_chamber (the space, its materials, its ONE light source) / den_life (who is home and what they are doing — the warmth, tender or funny over solemn) / den_surface (the world through the opening, written as ONE continuous shot so it never renders as a pasted-in second panel, per the split-panel trap). Plus the 80%-gated phenomenon and universal lighting + atmosphere. A lived-in home: no bones, no death, no distress.',

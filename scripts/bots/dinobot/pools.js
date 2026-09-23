@@ -55,6 +55,17 @@ module.exports = {
   DINOBOT_DEN_CHAMBER: load('dinobot_den_chamber'),
   DINOBOT_DEN_LIFE: load('dinobot_den_life'),
   DINOBOT_DEN_SURFACE: load('dinobot_den_surface'),
+  // desert-dunes + snowline-forest (2026-09-22) — promoted from BUCKETS to their own paths on
+  // Kevin's call. The 25 entries each were MOVED out of DINOBOT_PALEO_LANDSCAPE_BIOME (back to its
+  // pre-wave-1 200), so each path owns its content exclusively instead of holding ~10% of a pool
+  // shared by 10 live paths.
+  DINOBOT_DESERT_DUNES_BIOME: load('dinobot_desert_dunes_biome'),
+  DINOBOT_SNOWLINE_FOREST_BIOME: load('dinobot_snowline_forest_biome'),
+  // undergrowth-scale (2026-09-22) — the floor as a landscape, its small resident, and the giant
+  // passing PARTIALLY overhead (never whole; the part is what makes the scale read).
+  DINOBOT_UNDERGROWTH_FLOOR: load('dinobot_undergrowth_floor'),
+  DINOBOT_UNDERGROWTH_RESIDENT: load('dinobot_undergrowth_resident'),
+  DINOBOT_UNDERGROWTH_GIANT: load('dinobot_undergrowth_giant'),
   DINOBOT_PALEO_LANDSCAPE_MEGAFLORA: load('dinobot_paleo_landscape_megaflora'),
   DINOBOT_PALEO_LANDSCAPE_PHENOMENON: load('dinobot_paleo_landscape_phenomenon'),
   DINOBOT_PALEO_LANDSCAPE_SURPRISE_ELEMENT: load('dinobot_paleo_landscape_surprise_element'),

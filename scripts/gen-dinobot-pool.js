@@ -1489,6 +1489,148 @@ HARD RULES:
 
 Output: ONE act per line. No numbering. No quotes.`,
 
+  // ── desert-dunes + snowline-forest (2026-09-22) ─────────────────────────────────────────────
+  // Promoted from buckets to their own paths on Kevin's call. These recipes exist so each path is
+  // READY TO SCALE: `--pool <name> --target 200` after he grades the MVP-25.
+  //
+  // Both are written OBJECT-LED on purpose, per the finding that produced them: the shared
+  // paleo-landscape biome pool averaged 5.6 atmosphere adjectives to 2.4 physical objects and used
+  // "amber" in 84% of entries, so 200 entries delivered one look. An atmosphere adjective is a
+  // shared CONSTANT across a pool; a physical object is a VARIABLE. Name THINGS, mention light once.
+
+  dinobot_desert_dunes_biome: `Generate PALEO DESERT-DUNE landscape entries for DinoBot's desert-dunes path. Each is ONE comma-separated line, 35-50 words, describing a vast arid dune landscape in deep prehistory.
+
+WRITE OBJECT-LED, NOT ADJECTIVE-LED. This is the single rule that matters. Name at least FOUR countable physical things and mention light or atmosphere exactly ONCE, in a short specific clause. A pool full of atmosphere adjectives renders as one look no matter how the landform varies; a pool full of objects renders as different places.
+
+BANNED WORDS, because DinoBot's landscape register has worn them out: amber, haze, hazy, misted, misty, golden, atmospheric, primordial, ancient, epic, sweeping, majestic, breathtaking, pristine, lush, verdant. Say what you mean more specifically instead.
+
+EVERY ENTRY INCLUDES:
+- THE DUNE FORM, named: a long transverse ridge, a star dune, a barchan arm, a wind-scoured corridor, a slip-face mid-avalanche, a dune field spilling against bare rock
+- THE GROUND underfoot: razor-sharp ripple marks, coarse grit, a lag of dark pebbles, cracked clay plates in a dry pan, loose slip-face sand
+- AT LEAST TWO MORE PHYSICAL THINGS: a petrified trunk lying across a pan, bleached bone in the gravel, wind-stunted cycad scrub in a hollow, fossil-bearing strata exposed at the margin, a lone araucaria half-buried to its crown, a dry wash cut through the crust, hoodoos standing off the field
+- ONE LIGHT CLAUSE, specific: late light raking sideways across every ripple, a hard noon shadow off one ridge, a dust-dimmed sun
+- ONE VIVID DETAIL that makes it that place: a whole tree fossilised upright, an odd-coloured band through the strata, a spring darkening the sand at a dune's foot, a slip-face caught mid-collapse
+
+Variety mandate: 5 transverse ridge fields, 3 star dunes, 3 wind-scoured corridors, 4 dry pans between dunes, 3 dunes against bare rock, 3 slip-faces avalanching, 4 dune margins with exposed strata or petrified wood.
+
+HARD RULES: no humans, no structures, no modern anything, no glowing terrain. Mega-flora named by species. Describe only what IS present, never a negation.
+
+Output: ONE landscape per line. No numbering. No quotes.`,
+
+  dinobot_snowline_forest_biome: `Generate PALEO SNOWLINE-FOREST landscape entries for DinoBot's snowline-forest path. Each is ONE comma-separated line, 35-50 words, describing high conifer forest in deep prehistory right where the trees give out and the snow begins.
+
+WRITE OBJECT-LED, NOT ADJECTIVE-LED. This is the single rule that matters. Name at least FOUR countable physical things and mention light or atmosphere exactly ONCE, in a short specific clause. This path also exists to be DinoBot's coldest register — the rest of the bot's landscape content is warm, so commit to cold blues, wet black rock and white, with at most one warm accent.
+
+BANNED WORDS, because DinoBot's landscape register has worn them out: amber, haze, hazy, misted, misty, golden, atmospheric, primordial, ancient, epic, sweeping, majestic, breathtaking, pristine, lush, verdant. Say what you mean more specifically instead.
+
+EVERY ENTRY INCLUDES:
+- THE FOREST FORM, named: a stand of araucaria thinning to bare rock, a wind-flagged treeline on a ridge, a boulder field above the last trees, a hanging valley with a frozen tarn, a pass with cloud pouring through, a slope of deadfall
+- THE GROUND underfoot: snow lying only in the lee of trunks, wet black rock, deep needle litter, frost-shattered scree, a melt stream cutting a snowpack channel
+- AT LEAST TWO MORE PHYSICAL THINGS: rime feathered along every needle, a fallen trunk bridging a gully, lichen mapping a boulder face, club-mosses in a sheltered hollow, icicles fringing an overhang, a tarn skinned with ice
+- ONE LIGHT CLAUSE, specific: flat overcast with no shadow at all, a low sun throwing long blue shadows downslope, cloud breaking over the pass
+- ONE VIVID DETAIL that makes it that place: one araucaria grown horizontal out of the wind, a single warm-lit break in the cloud, a frozen waterfall stopped mid-fall, tracks crossing an untouched snowfield
+
+Variety mandate: 4 thinning araucaria stands, 3 wind-flagged treelines, 3 boulder fields above the trees, 3 hanging valleys with tarns, 3 passes with cloud, 3 deadfall slopes, 3 melt-stream channels, 3 rime-coated stands.
+
+HARD RULES: no humans, no structures, no modern anything, no glowing terrain. Name conifer species (araucaria, podocarp) rather than "conifer". Describe only what IS present, never a negation.
+
+Output: ONE landscape per line. No numbering. No quotes.`,
+
+  // ── undergrowth-scale (2026-09-22) ──────────────────────────────────────────────────────────
+  // THE DELIGHT ANGLE: a dino's-eye view from the FOREST FLOOR, looking UP. Every DinoBot path
+  // looks AT dinosaurs from human height or above. This one puts the camera at ankle height among
+  // the leaf litter, where a chicken-sized dinosaur lives and a giant is just four legs and a
+  // shadow passing overhead. Same animals, a perspective nobody gets shown.
+
+  dinobot_undergrowth_floor: `Generate FOREST-FLOOR descriptions for DinoBot's undergrowth-scale path — the world at ankle height, seen by something the size of a chicken. Each is ONE comma-separated line, 30-45 words.
+
+THE BAR (Kevin's motto): playful, adventurous, VIVID, beautiful, clever. Saturated colour and dramatic light, never muted. Every entry carries ONE CHARM DETAIL that makes it that patch of floor and no other. This axis exists to show a perspective nobody is ever shown.
+
+THE CAMERA IS DOWN IN IT. Fern stems are tree trunks. A fallen leaf is a roof. A puddle is a lake. Write the floor as a LANDSCAPE.
+
+Variety mandate (rotate widely):
+- ~15% A cathedral of fern stems rising like columns, light coming down between them in hard shafts
+- ~12% A fallen log gone soft and mossy, its bark peeled into overhanging shelves, fungi stepping up it in tiers
+- ~12% A leaf-litter floor in full autumn colour, curled leaves forming caves and tunnels
+- ~10% A rain puddle the size of a lake, the canopy perfectly reflected in it, a drowned leaf on the bottom
+- ~10% A cycad's crown seen from directly beneath, fronds radiating out like a vaulted ceiling
+- ~10% Horsetails standing in a dense reed-forest at the water's edge, jointed stems banded green
+- ~8% A root buttress rising into a wall, a natural archway worn under it
+- ~8% A mushroom ring standing like a town, caps at different heights, gills catching the light
+- ~8% Moss in full soft depth, a whole plush landscape of hummocks and valleys, dew held in it
+- ~7% A shaft of light hitting one small patch of floor and leaving the rest in deep green shade
+
+EVERY ENTRY INCLUDES:
+- THE FLOOR-LEVEL SUBJECT treated as a landform (a fern cathedral, a log ridge, a leaf cave, a puddle lake)
+- ITS SCALE said from below — stems as columns, a leaf as a roof, a mushroom as a tower
+- THE LIGHT and what it does down there: a hard shaft, dappled coins, deep green shade, backlit translucent leaves
+- ONE VIVID CHARM DETAIL: dew beaded along a fern's edge, a snail track glinting, a beetle-bored hole through a leaf, a spiral of seed-fluff caught in moss, light through a translucent young frond, rain still dripping from one stem
+
+HARD RULES:
+- NO humans, no people, no structures, no modern anything. Earth 66 million years before humans.
+- NO glowing/bioluminescent plants. Real light on real plants.
+- Mega-flora is the point: tree ferns, cycads, horsetails, ginkgo, araucaria, club-mosses.
+- Describe only what IS present. Never write a negation.
+
+Output: ONE floor landscape per line. No numbering. No quotes.`,
+
+  dinobot_undergrowth_resident: `Generate SMALL-DINOSAUR descriptions for DinoBot's undergrowth-scale path — the little dinosaur who LIVES down here, at the scale of a chicken or a turkey. Each is ONE comma-separated line, 25-40 words.
+
+THE BAR: playful, adventurous, vivid, clever. This is the hero and it should be characterful and gorgeous, never a drab lizard.
+
+Variety mandate:
+- ~25% A small feathered theropod, plumage patterned like a living bird — barred, spotted, iridescent, crested
+- ~15% A tiny armoured herbivore, low and wide, plates and spines in bold pattern
+- ~12% A long-legged runner built like a roadrunner, poised mid-stride
+- ~12% A climber gripping a fern stem or a log, tail counterbalancing
+- ~10% A burrower half out of a hole in the litter, soil on its snout
+- ~10% A pair of them together, one alert and one busy
+- ~8% A juvenile of a giant species, unmistakably the same body plan at knee height
+- ~8% Something perched on the log ridge, surveying its floor-kingdom
+
+EVERY ENTRY INCLUDES:
+- SIZE said plainly against the floor world (chicken-sized, turkey-sized, cat-sized)
+- ITS PLUMAGE OR HIDE in real animal colour and pattern, specifically: barred rust and cream, iridescent green-black, a crest of stiff quills, sandy with dark spots, a banded tail
+- WHAT IT IS DOING, an active verb, mid-motion: peering, darting, scratching the litter, drinking at the puddle-lake, gripping a stem, tilting its head, shaking rain off
+- ONE CHARACTERFUL DETAIL that makes it a personality rather than a specimen
+
+HARD RULES:
+- NO humans. NO predation, NO blood, NO distress — it is going about its day.
+- Real animal colour: no glowing, no metallic, no jewelled.
+- It is a DINOSAUR: say the body plan so Flux does not render a bird or a lizard.
+- Describe only what IS present. Never write a negation.
+
+Output: ONE resident per line. No numbering. No quotes.`,
+
+  dinobot_undergrowth_giant: `Generate GIANT-OVERHEAD descriptions for DinoBot's undergrowth-scale path — the enormous dinosaur passing by, seen from ankle height where you only get PART of it. Each is ONE comma-separated line, 20-35 words.
+
+WHY THIS AXIS: this is what makes the perspective land. From the floor you never see a whole giant — you see four legs like pillars, a shadow sweeping the litter, a tail passing through frame, a head coming down. The PART is more thrilling than the whole.
+
+THE BAR: adventurous, vivid, clever. This is the awe beat. It is 10-25% of frame and mostly implied.
+
+Variety mandate:
+- ~20% Legs only — columns of hide crossing the far floor, feet bigger than the whole foreground
+- ~15% A shadow sweeping across the leaf litter, the animal itself out of frame
+- ~12% A tail passing overhead through the fern canopy, dragging fronds aside
+- ~12% A head lowering into frame from above to browse, seen from directly below
+- ~10% A footprint already there, filled with water, a whole puddle in one toe-print
+- ~10% Dust or litter shaken loose from the canopy by something heavy passing
+- ~8% A giant's flank filling the far background like a wall of hide, no head visible
+- ~8% The floor world trembling — ripples crossing the puddle-lake, fronds shivering
+- ~5% A neck rising away into the canopy, the body lost in green above
+
+EVERY ENTRY INCLUDES:
+- THE PART of the giant that is visible, and where in frame
+- ONE CONSEQUENCE at floor level: fronds dragged aside, litter shaken down, ripples crossing the puddle, a shadow crossing, dust drifting
+- Its SCALE against the little world, stated
+
+HARD RULES:
+- NO humans. NO threat to the small resident, NO predation, NO violence — this is awe, not danger.
+- NO whole-giant portraits: this axis is deliberately partial.
+- Describe only what IS present. Never write a negation.
+
+Output: ONE giant beat per line. No numbering. No quotes.`,
+
   // ── den-and-burrow (2026-09-22) ─────────────────────────────────────────────────────────────
   // THE DELIGHT ANGLE: nobody has seen inside a dinosaur burrow. The hero is the UNDERGROUND
   // itself — a cutaway of packed-earth chambers, root ceilings, a shaft of daylight down the
