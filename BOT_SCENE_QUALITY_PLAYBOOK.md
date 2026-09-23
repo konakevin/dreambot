@@ -1201,6 +1201,29 @@ lifted the round 2.65 → 3.07. The word-cap only RE-ORDERS (apothecary); what s
 deleting template prose and output-order items. **Always check the emitted WORD COUNT before concluding
 an element was dropped.**
 
+> **REFINEMENT (2026-09-23) — "a word cap only RE-ORDERS" is true only where a cap ALREADY EXISTS.
+> Adding the FIRST cap to a path that has none roughly HALVES the output.** The original measurement
+> came from a path already carrying a "120-150 WORDS" instruction, so tightening it moved nothing.
+> FarmBot `apiary-beekeeping` had **no word count anywhere** (FarmBot path briefs state none), and its
+> emitted prompts ran to a median of **965 words, max 1080** — the longest in the fleet. Adding a
+> 110-140 cap plus a modest prose trim:
+>
+> | | min | median | max |
+> | --- | --- | --- | --- |
+> | no cap at all | 596 | **965** | 1080 |
+> | first cap added | 480 | **512** | 1047 |
+>
+> So the order of operations is: **if there is no cap, add one — it is the cheapest large win. If
+> there is already a cap, stop tightening it and delete template prose and output-order items
+> instead.**
+>
+> ⚠️ AND THE HONEST OTHER HALF: halving the prompt **did not raise the grade** (3.83 → 3.86). What it
+> bought was STRUCTURAL COMPLIANCE — the painted-hive rule started firing (3 of 5 renders) and the
+> hero-comb composition landed — while the batch stayed capped by a completely different defect. So
+> prompt length is worth fixing because it makes your other rules actually reach the picture, not
+> because it is itself a quality lever. Fix the length, then go find what is actually capping the
+> grade.
+
 > **MEASURED FLEET-WIDE and it is ONE BOT, not the fleet** — full table in the `acorn-boat-regatta`
 > section above. Short version: fleet median is 250 emitted words and most bots sit at 210-300, but
 > **FarmBot medians 562 with all 399 renders over 350 and a 1,080-word max**, which is also why it was

@@ -377,9 +377,10 @@ ${moment}
 
 ━━━ THE BEES (required — they must actually appear, never just background mood) ━━━
 ${bees}
-Tiny against everything around them, in true honeybee shape and colour; detail on the nearest one
-or two only, every other bee a small clean shape. The charm comes from the warm linework, light and
-colour, never from any added face or expression drawn onto a creature or an object.
+Tiny, true honeybee shape and colour. EVERY bee is a small clean shape at the size named above,
+including the nearest one — none is singled out for close anatomical detail, because detail and size
+are the same dial and the bee you describe most is the bee that comes out biggest. No face or
+expression drawn onto any creature or object.
 
 ━━━ ${indoors ? 'THE HONEY ROOM' : 'THE APIARY'} (the near setting, close behind the hero) ━━━
 ${place}${forage ? `\n${forage}` : ''}
@@ -400,13 +401,13 @@ WRITE THE PROMPT IN THIS ORDER: (1) the hero above, close at hand and filling th
     character ? '(5) the beekeeper, large and close, whole face visible; (6) light and air; (7) camera' : '(5) light and air; (6) camera'
   }. Describe only what IS present.
 
+LENGTH IS THE FIRST RULE — 110-140 WORDS, COUNT THEM, then STOP. Comma-separated phrases. A tight
+130-word frame beats a 900-word inventory: past about 300 words the tail of the prompt is not
+rendered at all, so anything you add beyond the count is thrown away.
+
 ${
   character
-    ? `render a warm, absorbed moment at the hive — comb, hives and beekeeper all given
-equal loving richness, the bees tiny and true throughout. Every face in frame, human and
-animal, stays clearly separate and fully legible.`
-    : `no human figure anywhere in the frame — a warm, absorbed hive-side still-life, the work
-sitting exactly where it was set down, carried by the comb, the painted hives and the bees at
-work on them, richly detailed, never bare or empty.`
+    ? `Comb, hives and beekeeper all equally rich; every face separate and legible.`
+    : `No human figure anywhere; the work sits where it was set down, never bare or empty.`
 }`;
 };
