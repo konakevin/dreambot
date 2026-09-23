@@ -17,6 +17,7 @@
     "typecheck:deno": "sh scripts/check-deno.sh",
     "scan:dual-proximity": "node scripts/scan-dual-faceswap-proximity.js",
     "scan:bot-seed-dupes": "node scripts/scan-bot-seed-dupes.js",
+    "audit:prompt-health": "node scripts/audit-bot-prompt-health.js",
     "scan:buckets": "node scripts/scan-bucket-eligibility.js --baseline",
     "eval:cast": "node scripts/eval-cast-scanner.mjs",
     "check": "npm run format:check && npm run scan:dual-proximity && npm run scan:bot-seed-dupes && npm run lint && npm run typecheck && npm run typecheck:deno && npm run test -- --silent",

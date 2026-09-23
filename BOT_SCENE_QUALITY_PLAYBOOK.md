@@ -1209,6 +1209,35 @@ an element was dropped.**
 > from `uploads.ai_prompt`. Trimming FarmBot's templates touches 64 live paths, so it is Kevin's call.
 
 
+**19. THE FLEET-WIDE "no text, no watermarks" SUFFIX — MEASURED 2026-09-22, RESULT INCONCLUSIVE, AND
+HERE IS THE SAMPLE SIZE YOU ACTUALLY NEED.** Every bot's bot-wide `PROMPT_SUFFIX` ends with some form
+of *"no text, no words, no watermarks"*. That looks like a flat violation of the negation-leak law
+(CLIP cannot process negation, so naming a banned noun renders it), and it is a tempting single
+explanation for the gibberish-lettering residual that dogged this whole 33-path run. **But BrickBot's
+`shared-blocks.js` carries an explicit counter-claim from an earlier session** — *"`no text, no
+watermark` stays — overlay-text suppressor that Flux treats differently from scene content"* — and
+nobody had ever tested either belief.
+
+Tested properly on `airfield-biplanes` (a path with a KNOWN 1-2/6 wing-lettering residual), 8 renders
+per arm, identical in every other respect, suffix swapped in memory via `promptSuffixByPath`:
+
+| arm | clear gibberish lettering | faint ambiguous markings |
+| --- | --- | --- |
+| A — suffix as shipped | 0 / 8 | 3 |
+| B — negation clause deleted | 1 / 8 | 1 |
+
+**Neither belief is supported, and the honest answer is that 16 renders cannot answer this question.**
+Against a ~1-2/6 base rate, telling 1/8 apart from 0/8 is noise; separating a real effect of that size
+needs roughly **40+ renders per arm**. So: do NOT cite this as "the negation is harmless" and do NOT
+cite it as "the negation causes the text." What it does establish is that **the negation is not
+visibly earning its keep**, so if a future session wants to remove it fleet-wide on principle (the
+law says positive-only), the evidence neither blocks nor justifies that — it is a judgment call for
+Kevin, touching every bot's live prompts.
+
+The reusable part is the method: a residual in the low single digits per six is **below the
+resolution of a 6-render round**, which is exactly the trap of grinding rounds against it. Before
+spending another round on a 1-2/6 residual, work out whether the round can even see the effect.
+
 ---
 
 ## North Star — the actual goal
