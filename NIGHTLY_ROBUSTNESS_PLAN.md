@@ -1,6 +1,6 @@
 # Nightly robustness: couples fail when the swap service is busy
 
-Status: items 1 + 2 BUILT (2026-09-23, migration 549), gate + retry shipped INERT; items 3-7 open. Kevin: "we anticipate eventually getting hundreds of users all
+Status: items 1, 2 + 7 LIVE (2026-09-23, migrations 549 + 550); items 3-6 open. Kevin: "we anticipate eventually getting hundreds of users all
 generating their nightly dream at once … can we look into the way the nightly dreams are generated for all
 users during the nightly run and see if we can make it more robust and not so damn flakey?"
 
@@ -92,3 +92,19 @@ minute.
   Sentry, and the worker re-queues with backoff (1m / 5m). Content failures keep today's ladder.
 - Both ship INERT: `swap_gate_enabled = false`, `nightly_swap_capacity_retries = 0`. Tests: 25 unit
   (`swapCapacityGate.test.ts`), 6 live-DB (`swapSlotLeases.dbspec.ts`), wiring guards.
+
+## Live (2026-09-23 ~21:00 UTC, migration 550): gate on, nightly capacity retry = 2
+
+Verified live before and after the flip:
+
+- **Create burst** (6 couples through the real queue, 3 at a time): 6/6 held first try, 0 swap errors; in each
+  wave two swaps took a slot at once and the third waited (35.4 s and 14.4 s) instead of piling onto Fly.
+- **Nightly contention** (3 nightly couples fired at the same instant, batch = 1 slot): all 3 held first try,
+  0 swap errors; waits 0.1 s / 3.3 s / 28.7 s; every lease released (`swap_slot_leases` empty after).
+- The retry-later path did not trigger (no wait overran its deadline); it is covered by unit tests, and the
+  worker's re-queue with backoff is the existing, tested failure path.
+- CI db-tests green (`swapSlotLeases.dbspec.ts` on real Postgres).
+
+Watch the next nightly bursts (10:18 UTC Denver) via stamps: `swap_gate:acquired:<ms>`, `swap_capacity_retry_later`,
+`nightly_error:nightly_swap_capacity_retry`, and whether `dual_swap_error` / `dual_degrade_single` disappear.
+Rollback: `UPDATE engine_config SET swap_gate_enabled = false, nightly_swap_capacity_retries = 0 WHERE id = 1;`
