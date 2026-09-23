@@ -57,12 +57,34 @@ const MIN_LEN = 3;
  */
 const SAME_IDEA = 0.6;
 
-/** The text of a seed entry, which may be a bare string or {description}. */
+/**
+ * The text of a seed entry.
+ *
+ * Entries are NOT a uniform shape across the fleet. Most are bare strings, some
+ * are {description}, and some are richer records — BrickBot's location pool uses
+ * {location, scene, tier}. An earlier version of this function only read
+ * `description`/`text` and therefore returned '' for all 1,601 entries of that
+ * pool, which the audit then reported as "1601 entries, 0 distinct ideas". That
+ * was a bug in this function presented as a finding about the data.
+ *
+ * So: strings pass through, and objects contribute every string field EXCEPT the
+ * ones that are classification metadata rather than content (`tier`, `tags`,
+ * `id`, `weight`) — including those would make two entries look similar merely
+ * for sharing a tier.
+ */
+const META_FIELDS = new Set(['tier', 'tags', 'tag', 'id', 'key', 'weight', 'rarity', 'category']);
+
 function entryText(e) {
   if (typeof e === 'string') return e;
-  if (e && typeof e.description === 'string') return e.description;
-  if (e && typeof e.text === 'string') return e.text;
-  return '';
+  if (!e || typeof e !== 'object') return '';
+  if (typeof e.description === 'string' && e.description) return e.description;
+  if (typeof e.text === 'string' && e.text) return e.text;
+  const parts = [];
+  for (const [k, v] of Object.entries(e)) {
+    if (META_FIELDS.has(k)) continue;
+    if (typeof v === 'string' && v) parts.push(v);
+  }
+  return parts.join(' ');
 }
 
 /**

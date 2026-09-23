@@ -1,0 +1,1730 @@
+{
+ "bloombot/landscape": {
+  "subject": "landform",
+  "why": "The landform is explicitly identified as \"the canvas\" and the dominant terrain that forms the setting for the bloom-carpet hero; all other pools are either atmospheric/compositional axes (sky, phenomenon) or scale/detail elements (scale_prover, surprise_element)."
+ },
+ "bloombot/closeup": {
+  "subject": "bloom_wall_type, growing_context",
+  "why": "These pools define the what-the-render-is-of: the bloom mass itself and the natural environment backdrop; macro_phenomenon is a secondary magical detail, not the subject."
+ },
+ "bloombot/cozy": {
+  "subject": "interior_setting, furniture_anchor",
+  "why": "interior_setting defines the cozy room canvas (the place/scene), and furniture_anchor provides the structural piece that serves as the composition's tactile anchor."
+ },
+ "bloombot/garden-walk": {
+  "subject": "archway_type, path_material, destination_glimpse",
+  "why": "These three pools define the core scene elements—the architectural framing, the walkable surface, and what lies beyond—while atmospheric_phenomenon is a modifier that alters the look rather than what the render depicts."
+ },
+ "bloombot/dreamscape": {
+  "subject": "world_element",
+  "why": "The world_element pool defines the physical object that anchors the surreal composition (sphere, staircase, lake, window, etc.), making it the core subject of the render."
+ },
+ "bloombot/conservatory": {
+  "subject": "conservatory_type, structural_anchor",
+  "why": "conservatory_type defines the Victorian glass-and-iron architectural shell (the setting/scene), and structural_anchor specifies the central focal piece within it (the primary subject element); atmospheric_phenomenon is a lighting/magic effect modifier, not what the render IS of."
+ },
+ "bloombot/tropical-paradise": {
+  "subject": "tropical_setting, vegetation_anchor",
+  "why": "These pools define the dense tropical jungle scene itself (biome and jungle scaffolding), which is the primary subject of the render; surprise_creature is secondary peripheral dressing."
+ },
+ "bloombot/city-flowers": {
+  "subject": "city_setting, architectural_detail",
+  "why": "The city environment and its signature architectural element are the structural heroes that form the scene's point, with flowers distributed across them as secondary dressing."
+ },
+ "bloombot/jack-and-the-giant-flower": {
+  "subject": "giant_form, base_surround",
+  "why": "The giant colossal flower is the hero subject rendered at monumental scale, and the base_surround provides the lush normal-scale world that establishes scale contrast; sky_ascent is a compositional/atmospheric axis, not part of what the render depicts."
+ },
+ "bloombot/hanging-flowers": {
+  "subject": "setting, hanging_pieces",
+  "why": "The setting defines the walkway environment (the scene location), and hanging_pieces is the hero canopy that forms the core subject of the render."
+ },
+ "bloombot/sunset-flowers": {
+  "subject": "hero_flower, landscape_backdrop, sunset_sky",
+  "why": "These three pools define what the render IS OF — the backlit flower in foreground, the landscape behind it, and the dramatic sunset sky filling the upper frame as the scene's two heroes."
+ },
+ "bloombot/flower-friends": {
+  "subject": "flower_focal_cluster, hero_pollinator",
+  "why": "The flower cluster and the pollinator insect are co-heroes of the scene; magical_particles is atmospheric dressing, not subject matter."
+ },
+ "bloombot/flower-humming-birds": {
+  "subject": "flower_focal_cluster, hummingbird_cast",
+  "why": "The flower clusters and hummingbird cast are the dual heroes defining what the render depicts — the scene's subject matter — while magical_particles is decorative atmospheric dressing."
+ },
+ "bloombot/flower-fantasy": {
+  "subject": "scale_form, floor_carpet",
+  "why": "The scale_form is the hero surreal flower-construction that anchors the scene, and floor_carpet is the supporting meadow environment that completes the naturalistic landscape reimagined through flowers."
+ },
+ "bloombot/flower-grove": {
+  "subject": "grove, ground",
+  "why": "The grove is the hero setting (the Truffula flower-tree forest), and ground is the soft terrain that completes the scene; whimsy is a conditional scenario modifier, not a subject."
+ },
+ "bloombot/tropical-grove": {
+  "subject": "canopy, setting",
+  "why": "The canopy pool defines the giant tropical flower-trees (the visual hero), and the setting pool defines the locale (volcanic/jungle/lagoon/waterfall/beach) where the scene takes place."
+ },
+ "bloombot/flower-arrangement": {
+  "subject": "vessel, style, setting",
+  "why": "The vessel is the ornate hero container, style defines the arrangement's form, and setting provides the lush flower-garden backdrop; whimsy is conditional surreal enhancement, not subject matter."
+ },
+ "bloombot/desert-bloom": {
+  "subject": "desert_anchor, bloom_explosion",
+  "why": "The desert_anchor pool defines the landform being rendered (saguaro/mesa/red-rock etc.) and bloom_explosion defines the wildflower carpet that is the visual hero of the composition."
+ },
+ "bloombot/reclaim": {
+  "subject": "ruin_type, decay_anchor",
+  "why": "The ruin_type defines the abandoned structure (the scene/place) and decay_anchor specifies the focal-point detail within it that grounds the composition."
+ },
+ "bloombot/water-garden": {
+  "subject": "water_body, water_flora, bank_planting",
+  "why": "These pools define the actual scene — the pond itself, the floating blooms, and the surrounding planted banks — while reflection is compositional, and water_life is secondary ambient detail."
+ },
+ "bloombot/flower-fields": {
+  "subject": "field_geometry, crop_bloom",
+  "why": "These pools define WHAT the render depicts—the cultivated field's layout pattern and the flower type/bloom that fills it."
+ },
+ "bloombot/moon-garden": {
+  "subject": "garden_setting, night_bloom",
+  "why": "garden_setting defines the place/scene, and night_bloom defines the creatures/objects that are the visual heroes of the moonlit garden."
+ },
+ "bloombot/rain-garden": {
+  "subject": "garden_scene",
+  "why": "The garden_scene pool defines the actual place/setting that is being rendered, while the other pools modify its appearance (rain state, lighting, weather event) or add detail (wet effects)."
+ },
+ "bloombot/great-blossom-tree": {
+  "subject": "tree_form, bloom_canopy, root_world",
+  "why": "tree_form defines the colossal tree structure itself, bloom_canopy describes the flowering crown, and root_world establishes the dwarfed landscape at its base—together they comprise the complete subject (the great blossom tree and its environment); season_light and canopy_event are modifiers (lighting/atmosphere and secondary event) rather than core subject pools."
+ },
+ "brickbot/macro-display": {
+  "subject": "diorama_theme, signature_centerpiece",
+  "why": "diorama_theme defines the entire brick world/scene being rendered, and signature_centerpiece is the focal hero structure within it."
+ },
+ "brickbot/crazy-islands": {
+  "subject": "island_scene",
+  "why": "The island_scene pool is the only one that defines WHAT THE RENDER IS OF — the tropical-island happenings and locations that form the hero idea; all other pools are axes that modify lighting, framing, time, density, edge treatment, and color."
+ },
+ "brickbot/girly": {
+  "subject": "scene_type, subject_focus",
+  "why": "scene_type defines the LEGO setting/build (castle/boutique/unicorn/mermaid) and subject_focus specifies what the render centers on, together they establish WHAT THE PICTURE IS OF."
+ },
+ "brickbot/western": {
+  "subject": "scene_type, subject_focus, minifig_action",
+  "why": "The path declares a character + setting composition where scene_type (frontier stage), subject_focus (saloon/fort/stagecoach/locomotive/mesa), and minifig_action (verb-led beat) together define WHAT THE RENDER IS OF — the wild-west scene and the character's action within it."
+ },
+ "brickbot/fantasy": {
+  "subject": "scene_type, subject_focus",
+  "why": "scene_type defines the narrative stage/setting and subject_focus anchors the visual composition around the key LEGO structure or landscape that is the point of the photograph."
+ },
+ "brickbot/space": {
+  "subject": "BRICKBOT_SPACE_SCENE_TYPE, BRICKBOT_SPACE_VEHICLE_CLASS",
+  "why": "scene_type defines the narrative stage/diorama setting, and vehicle_class defines the spatial hero object that anchors the composition."
+ },
+ "brickbot/aquatic": {
+  "subject": "BRICKBOT_AQUATIC_SUBJECT_FOCUS, BRICKBOT_AQUATIC_MARINE_LIFE",
+  "why": "subject_focus defines the diorama's primary target (STRUCTURE or CREATURE-MOUNT), and marine_life populates the scene with the brick-built creatures that inhabit it."
+ },
+ "brickbot/winter": {
+  "subject": "scene_type, subject_focus",
+  "why": "scene_type defines the winter narrative stage (alpine village, ski resort, frozen lake, etc.) and subject_focus specifies what structural or creature element anchors the render."
+ },
+ "brickbot/pirates": {
+  "subject": "scene_type, ship_class",
+  "why": "scene_type defines the narrative stage/setting and ship_class defines the vessel silhouette that together form the core \"what the render is of,\" while all other axes modify appearance, action, framing, or atmosphere."
+ },
+ "brickbot/mech": {
+  "subject": "mech_class, setting",
+  "why": "The mech itself is the hero subject, and the setting provides the scene context in which the posed mech appears."
+ },
+ "brickbot/theme-park": {
+  "subject": "attraction, crowd_action, scene_life",
+  "why": "The attraction is the hero structure, crowd_action describes the animated scene's central activity, and scene_life provides the secondary setting dressing (stalls/vendors)."
+ },
+ "brickbot/forest": {
+  "subject": "scene_type, subject_focus",
+  "why": "scene_type defines the woodland narrative stage setting, and subject_focus specifies what structural or creature element anchors the composition."
+ },
+ "brickbot/landscape": {
+  "subject": "biome_vista",
+  "why": "The biome_vista pool names the monumental brick landform that is the hero subject of the render—the mountain range, glacier valley, redwood grove, desert canyon, or other epic natural vista."
+ },
+ "brickbot/lego-landscapes": {
+  "subject": "BRICKBOT_LEGO_LANDSCAPES_LOCATIONS",
+  "why": "The pool entry's `location` and `scene` fields define the specific landscape vista being rendered as a LEGO diorama — the terrain, geological features, and place identity that IS the subject of the build."
+ },
+ "brickbot/lego-city": {
+  "subject": "scene_type, city_event",
+  "why": "These pools define WHAT the render depicts—the LEGO City location/scenario and the urban event occurring there—while all other pools modify appearance, framing, or character action."
+ },
+ "brickbot/lego-trains": {
+  "subject": "train_consist, trackwork, route_biome",
+  "why": "These three pools define what the render depicts — the train itself, the rail infrastructure, and the landscape/environment it travels through."
+ },
+ "brickbot/haunted-brick": {
+  "subject": "scene_type, minifig_action",
+  "why": "The scene_type pool describes WHAT the render depicts (haunted house setting variations), and minifig_action describes WHAT the figures are doing within it, together defining the core subject matter."
+ },
+ "chibibot/rainy-interior": {
+  "subject": "setting, creature_group",
+  "why": "The setting (interior room) is the hero with mandatory rainy window, and the solo resident creature adds story-driven life as a secondary subject."
+ },
+ "chibibot/heartwarming-scene": {
+  "subject": "creature_1, creature_2, setting",
+  "why": "The creature(s) and their chosen storybook setting are the point of the picture; activity, time_of_day, weather, and phenomenon are all modifiers of how that core moment is rendered."
+ },
+ "chibibot/cozy-landscape": {
+  "subject": "world, creature",
+  "why": "The setting (mushroom village, cottage, meadow, etc.) is the hero, and one tiny resident creature adds story-driven life to it."
+ },
+ "chibibot/creature-portrait": {
+  "subject": "creature",
+  "why": "The creature is the hero and sole subject of the tight portrait; all other pools (pose, expression, outfit, accessory, set decoration, background mood, time of day) are modifiers of its appearance or context."
+ },
+ "chibibot/creature-world": {
+  "subject": "CUTE_CREATURES, CREATURE_WORLD_ENVIRONMENT",
+  "why": "The path has two hero pools — a specific creature and a lush magical world environment that together form the complete subject of the render."
+ },
+ "chibibot/sleepy-naptime": {
+  "subject": "creature, nap_spot",
+  "why": "The creature is the hero being rendered asleep, and the nap-spot is the specific cozy location that defines the scene's setting."
+ },
+ "chibibot/rainy-day-cozy": {
+  "subject": "creature_group, shelter",
+  "why": "The scene depicts chibi friends (creatures) sheltered in a specific refuge structure, making both the group and their shelter the core subjects of the render."
+ },
+ "chibibot/bath-time": {
+  "subject": "creature_1, setting",
+  "why": "The path always renders a cute creature (the hero) in a bath-time setting (the vessel and location), with lighting and decorations as modifiers rather than subjects."
+ },
+ "chibibot/cuddly-aquatic": {
+  "subject": "creature_1, creature_2, setting",
+  "why": "The path's identity is the cuddling pair of aquatic creatures in their habitat, making both creatures and their underwater/surface-water setting the core subjects being rendered."
+ },
+ "chibibot/night-meadow": {
+  "subject": "creature_1, creature_2, setting",
+  "why": "The render's hero is a pair of cute critters in a night meadow/glade scene, making the two creatures and their setting the core WHAT of the picture."
+ },
+ "chibibot/outdoor-adventure": {
+  "subject": "creature, wilderness_setting",
+  "why": "The creature is the hero in a solo adventure pose, and the wilderness setting defines the place/scene that is the point of the picture."
+ },
+ "chibibot/creature-adventures": {
+  "subject": "scene",
+  "why": "The scene pool contains the complete real-world locations (amusement park, beach, arcade, etc.) where the chibi creatures and their friends are doing activities together."
+ },
+ "chibibot/creature-amusement-park": {
+  "subject": "creature_group, setting_detail",
+  "why": "The creature band is the hero, and the amusement park setting details define the scene location; activity, prop, and surprise are modifiers of what happens within it."
+ },
+ "chibibot/creature-beach-day": {
+  "subject": "creature_group, activity",
+  "why": "The creature_group defines WHO is in the scene (the chibi creature friends), and activity defines WHAT THEY ARE DOING (the beach day outing action), making both core to the render subject."
+ },
+ "chibibot/creature-camping": {
+  "subject": "creature_group, setting_detail",
+  "why": "The creature_group pool defines WHAT the render is of (the chibi creature friends), and setting_detail defines WHERE they are (the camping woods scene)."
+ },
+ "chibibot/creature-snow-day": {
+  "subject": "creature_group, activity",
+  "why": "The creature_group pool defines the heroes (band of chibi friends) and activity pool defines what they're doing (playing in snow), which together form the render's core subject matter."
+ },
+ "chibibot/creature-county-fair": {
+  "subject": "creature_group, activity",
+  "why": "The render depicts chibi creature friends (the hero subjects) engaged in county fair activities (what they're doing in the scene)."
+ },
+ "chibibot/creature-birthday-party": {
+  "subject": "creature_group, activity",
+  "why": "The creature_group pool defines which chibi creatures are present (the hero subjects), and the activity pool defines what they are doing at the party (the scene's primary action)."
+ },
+ "chibibot/cozy-interior": {
+  "subject": "room, creature",
+  "why": "The path treats the cozy interior space as the primary hero while the creature performs a peripheral story-driven activity within it."
+ },
+ "chibibot/cottagecore-village": {
+  "subject": "village, creature",
+  "why": "The path frames a cottagecore village as the setting-hero with a cute creature as the solo inhabitant performing activities within it."
+ },
+ "chibibot/aquatic-village": {
+  "subject": "village, creature",
+  "why": "The village setting and the marine creature are both heroes of the scene—the path renders an aquatic village inhabited by a cute creature doing an activity within it."
+ },
+ "chibibot/arctic-village": {
+  "subject": "village, creature",
+  "why": "The path has a SETTING-AS-HERO arctic village pool and a filtered SOLO creature pool that performs foreground activities within that setting."
+ },
+ "chibibot/jungle-village": {
+  "subject": "village, creature",
+  "why": "The setting (jungle village with treehouses/platforms) is the hero, and the jungle-tagged creature performing a story-driven activity in the foreground is the co-subject."
+ },
+ "chibibot/twilight-village": {
+  "subject": "creature, village",
+  "why": "The creature is the solo hero in this setting-as-hero path, and the village is the place/scene being depicted."
+ },
+ "chibibot/sunny-village": {
+  "subject": "village, creature",
+  "why": "The setting is hardcoded as the Mediterranean village hero, and the creature pool provides the solo land/bird character positioned within it."
+ },
+ "chibibot/creature-autumn-day": {
+  "subject": "creature_group, setting_detail",
+  "why": "The creature_group (CUTE_CREATURES_UNIFIED cast) and setting_detail (autumn-day environment) are the core WHAT of the render, while activity, prop, and surprise_element are modifiers or dressing."
+ },
+ "chibibot/creature-lantern-festival": {
+  "subject": "creature_group, setting_detail",
+  "why": "The creature_group (CUTE_CREATURES_UNIFIED) is the hero cast, and setting_detail defines the lantern-festival location/scene that frames the outing."
+ },
+ "chibibot/creature-school": {
+  "subject": "creature_group, activity",
+  "why": "The creature pupils and teacher are the heroes, and the classroom activity is what they're doing together in the scene."
+ },
+ "chibibot/sky-village": {
+  "subject": "village, creature",
+  "why": "The scene is a whimsical sky village (setting-as-hero), and a solo chibi creature serves as the scale-prover focal point within it."
+ },
+ "dinobot/dino-portrait": {
+  "subject": "species, biome",
+  "why": "The dinosaur species is the hero subject, and the Mesozoic biome is the secondary subject that forms the bokeh background setting."
+ },
+ "dinobot/dino-action": {
+  "subject": "species, action, biome",
+  "why": "The render depicts a single dinosaur (species) performing a peak action moment (action) within a Mesozoic landscape setting (biome)."
+ },
+ "dinobot/paleo-landscape": {
+  "subject": "biome, megaflora",
+  "why": "The biome and megaflora pools define the primordial landscape and prehistoric flora that are the primary subject, while phenomenon, surprise_element, and sky_layer are atmospheric/compositional modifiers."
+ },
+ "dinobot/herd-migration": {
+  "subject": "herd_scene, biome",
+  "why": "The herd_scene pool defines the dinosaur herd composition and arrangement, while the biome pool defines the Mesozoic landscape setting that is the point of the picture."
+ },
+ "dinobot/territory-clash": {
+  "subject": "clash_scene, biome",
+  "why": "The clash_scene pool defines the two dinosaurs in dominance confrontation (the hero content), and the biome pool defines the Mesozoic landscape setting they inhabit."
+ },
+ "dinobot/nesting-ground": {
+  "subject": "NESTING_SCENES, DINOBOT_PALEO_LANDSCAPE_BIOME",
+  "why": "The family-life scenes and Mesozoic biome setting are what the render depicts; the surprise element and phenomenon are secondary dressing/atmosphere."
+ },
+ "dinobot/swamp-river": {
+  "subject": "DINOBOT_SWAMP_RIVER_WATER_SCENE, DINOBOT_SWAMP_RIVER_DINO",
+  "why": "The water scene defines the setting/place and the dino pool defines the hero creature in its water-behavior interaction."
+ },
+ "dinobot/ocean-reptiles": {
+  "subject": "DINOBOT_OCEAN_REPTILES_OCEAN_SCENE, DINOBOT_OCEAN_REPTILES_CREATURE",
+  "why": "The ocean scene is the setting/backdrop and the marine reptile is the hero creature that is the point of the picture."
+ },
+ "dinobot/cinematic-silhouette": {
+  "subject": "silhouette_scene, biome",
+  "why": "The dinosaur silhouette shape and the prehistoric landscape/biome setting are the dual heroes of the composition; phenomenon and surprise_element are atmospheric modifiers and secondary detail, not the subject."
+ },
+ "dinobot/extinction-event": {
+  "subject": "species, extinction_scene, biome",
+  "why": "The render depicts a dinosaur species positioned within an apocalyptic landscape scene during the K-PG extinction event."
+ },
+ "dinobot/dino-cozy": {
+  "subject": "biome, species",
+  "why": "The render depicts a dinosaur (species) in a prehistoric landscape (biome) engaged in a cozy moment; both the creature and its setting are the point of the picture."
+ },
+ "dinobot/dino-pack": {
+  "subject": "species, pack_action, biome",
+  "why": "The render depicts multiple dinosaurs of a chosen species engaged in a group behavior within a Mesozoic landscape setting."
+ },
+ "dinobot/aerial-perspectives": {
+  "subject": "AERIAL_SUBJECTS",
+  "why": "AERIAL_SUBJECTS contains the pterosaurs or ground dinosaurs that are the hero of the render, while action, setting, and phenomenon are modifiers of how/where/in what conditions they appear."
+ },
+ "dinobot/dino-nights": {
+  "subject": "night_scene, night_biome",
+  "why": "night_scene defines the nocturnal setting/place and night_biome specifies the Mesozoic environment, while night_light and night_phenomenon are lighting/atmosphere axes, and surprise_element is secondary dressing."
+ },
+ "dinobot/storm-season": {
+  "subject": "storm_scene, storm_biome",
+  "why": "storm_scene describes the dramatic weather scenario and storm_biome describes the landscape setting; weather_drama, storm_light, and peak_event are atmospheric/lighting modifiers, not subject pools."
+ },
+ "dinobot/polar-dinos": {
+  "subject": "polar_scene",
+  "why": "polar_scene is the pool that defines the WHERE and WHAT of the render (polar landscape, ice coasts, high-latitude terrain); the other pools (polar_light, ice_feature, polar_phenomenon) are modifiers of look/atmosphere, and surprise_element is ambient dressing."
+ },
+ "dragonbot/landscape": {
+  "subject": "LANDSCAPE_BIOME, LANDSCAPE_ARCHITECTURE",
+  "why": "Biome is explicitly \"the hero — primary biome\" and architecture anchors the composition; all other pools modify appearance, atmosphere, or add secondary detail."
+ },
+ "dragonbot/fantasy-scene": {
+  "subject": "landscape, character",
+  "why": "The path renders a fantasy character integrated into an epic magical landscape, making both the setting and the character the dual subjects of what the render depicts."
+ },
+ "dragonbot/epic-moment": {
+  "subject": "castle, event",
+  "why": "The castle and event pools define the actual scene and the peak moment occurring within it, while all other pools are atmospheric, decorative, or compositional modifiers."
+ },
+ "dragonbot/castle": {
+  "subject": "CASTLE_HERO, CASTLE_BIOME",
+  "why": "The castle is the architectural hero and focal subject, while the biome provides the fantasy landscape setting that frames it."
+ },
+ "dragonbot/dragon-scene": {
+  "subject": "DRAGON_SCENE_DRAGON, DRAGON_SCENE_LANDSCAPE",
+  "why": "The western dragon is the primary hero subject, and the epic fantasy biome is the scene/setting subject; action, drama, and surprise_element are modifiers and secondary dressing, not subjects."
+ },
+ "dragonbot/dragon-rider": {
+  "subject": "dragon, rider, setting",
+  "why": "The dragon and rider are co-heroes of the composition, while setting provides the scene context for their action."
+ },
+ "dragonbot/dragon-battle": {
+  "subject": "battle_setting, dragon, target",
+  "why": "The battle_setting defines the scene/location, the dragon is the creature hero of the action, and the target is what the dragon engages with (castle/army/rival)."
+ },
+ "dragonbot/dragon-flight": {
+  "subject": "dragon, vista_below",
+  "why": "The dragon is the hero figure and the vista_below is the scene being soared over, together forming the dual subject matter of an aerial flight composition."
+ },
+ "dragonbot/dragon-brood": {
+  "subject": "brood_subject, setting, dominant_dragon",
+  "why": "brood_subject is the core WHAT (the dragons themselves as a collective), setting is the WHERE, and dominant_dragon is the hero figure within that brood spectacle."
+ },
+ "dragonbot/dragon-breeds": {
+  "subject": "breed, habitat, breed_pose",
+  "why": "The breed's anatomical features are the star, posed in a habitat setting; element_effect and drama are atmospheric modifiers, not what the render depicts."
+ },
+ "dragonbot/clash-of-armies": {
+  "subject": "CLASH_BATTLEFIELD, CLASH_ARMIES",
+  "why": "The battlefield setting and the armies themselves are what the render depicts; the action, spectacle, and drama are modifiers of how that core scene appears."
+ },
+ "dragonbot/magic-unleashed": {
+  "subject": "spell_event, caster, magic_effect, setting",
+  "why": "The spell event, the caster performing it, the magical effects produced, and the physical location are all core \"what the render depicts\" elements; drama is a narrative modifier, not a subject."
+ },
+ "dragonbot/mythic-bestiary": {
+  "subject": "creature, habitat",
+  "why": "The creature pool defines the mythic being (the hero of the portrait), and the habitat pool defines where that creature is situated."
+ },
+ "dragonbot/dungeon-delve": {
+  "subject": "dungeon, party, lurking_threat",
+  "why": "These pools define the core scene (the dungeon chamber), the heroes exploring it (the party), and the antagonistic element (the lurking threat) that form the primary visual subject matter."
+ },
+ "dragonbot/necromancer": {
+  "subject": "NECRO_SUBJECT, NECRO_SETTING",
+  "why": "The undead creature/lich is the hero, and the dark setting is the scene where necromancy unfolds."
+ },
+ "dragonbot/wizard-tower": {
+  "subject": "tower, tower_setting, occupant",
+  "why": "The tower structure itself, its surrounding setting, and the wizard inhabiting it are the core \"what the render is of\" — the scene and its primary character."
+ },
+ "dragonbot/dwarven-hold": {
+  "subject": "hold, forge_activity",
+  "why": "The hold pool describes the vast underground kingdom halls (the setting/scene), and forge_activity describes what is happening in those spaces (the action/activity that is the point of the render)."
+ },
+ "dragonbot/elven-city": {
+  "subject": "elven_city, city_setting, occupant",
+  "why": "These pools define the core scene (the elven city itself and its setting) and the creature/figure that inhabits it, which together form the primary subject of the render."
+ },
+ "dragonbot/drow-underdark": {
+  "subject": "drow_city, drow_cavern, drow_occupant",
+  "why": "The setting (Underdark city/cavern) and the dark-elf inhabitant are the primary scene subjects; underdark_light is atmosphere/lighting, underdark_detail is dressing, and drama is a conditional modifier."
+ },
+ "dragonbot/dragonborn-citadel": {
+  "subject": "draconic_city, citadel_setting, dragonborn_occupant",
+  "why": "These three pools define the core scene (the volcanic temple-citadel city), its architectural/environmental character, and the hero figure inhabiting it, while draconic_detail and drama are modifiers/secondary elements."
+ },
+ "dragonbot/orc-warhold": {
+  "subject": "orc_warhold, orc_occupant",
+  "why": "The warhold structure is the setting subject, and the orc occupant is the creature subject that inhabits it."
+ },
+ "dragonbot/giant-steadinghold": {
+  "subject": "giant_hold, giant_occupant",
+  "why": "giant_hold describes the cyclopean hall structure itself, and giant_occupant is the hero creature inhabiting that setting."
+ },
+ "dragonbot/sky-castle": {
+  "subject": "sky_structure, sky_setting",
+  "why": "These pools define the place itself—the floating castle structure and its sky-kingdom setting are what the render depicts, while the other pools modify details, scale, and dramatic atmosphere."
+ },
+ "dragonbot/arcane-library": {
+  "subject": "library, library_feature, occupant",
+  "why": "The library setting and its architectural features form the scene, while the occupant is the hero figure within it."
+ },
+ "dragonbot/dragon-nest": {
+  "subject": "nest_setting, clutch, broodlings, mother",
+  "why": "The scene is a dragon nursery with eggs and young dragons, optionally tended by the mother — she is the hero figure when present, making both setting and creature primary subjects."
+ },
+ "dragonbot/dragon-lair": {
+  "subject": "lair, nests, broodlings",
+  "why": "The lair-interior setting, egg clutch, and baby dragons are the primary \"what the render is of,\" while mother and drama are optional modifiers and detail is ambient dressing."
+ },
+ "dragonbot/female-adventurer": {
+  "subject": "FEMALE_ADVENTURER_LANDSCAPE",
+  "why": "The landscape pool defines the wild fantasy biome setting that is the render's primary subject, while all other pools (class, outfit, action, drama, etc.) are modifiers of the adventurer figure herself or atmospheric events."
+ },
+ "dragonbot/female-explorer": {
+  "subject": "FEMALE_EXPLORER_ACTION, FEMALE_EXPLORER_LANDSCAPE",
+  "why": "The action pool defines what the explorer is doing (the scene's primary event) and the landscape pool defines the setting/terrain where that action occurs (the place being rendered)."
+ },
+ "dragonbot/female-action-scenes": {
+  "subject": "action, landscape",
+  "why": "The action pool contains the dynamic combat/spell moments (mages mid-spell, rangers mid-loose, rogues sneaking, paladins mid-strike), and the landscape pool contains the settings where these scenes occur."
+ },
+ "dragonbot/artsy-girl": {
+  "subject": "ARTSY_GIRL_LANDSCAPE, FEMALE_WARRIORS",
+  "why": "The landscape pool defines the setting/scene, and the warrior archetype pool defines the hero character that is the point of the render."
+ },
+ "dragonbot/male-adventurer": {
+  "subject": "landscape, action",
+  "why": "The landscape pool defines the setting/scene where the adventurer exists, and the action pool defines what the adventurer is doing in that scene — together these constitute the core \"what the render is of.\""
+ },
+ "dragonbot/male-explorer": {
+  "subject": "MALE_EXPLORER_LANDSCAPE, MALE_EXPLORER_ACTION",
+  "why": "The landscape pool defines the adventurous scenes (climbing/bridges/paths/creek-rest/campfire), and the action pool defines what the explorer is doing within those scenes, together forming the \"what the render is of.\""
+ },
+ "dragonbot/male-action-scenes": {
+  "subject": "action, landscape",
+  "why": "The action pool defines what the male protagonist is doing (the primary dynamic moment), and the landscape pool defines the setting where that action occurs."
+ },
+ "dragonbot/cozy-arcane": {
+  "subject": "setting, inhabitant_archetype, clutter_focus",
+  "why": "The path renders a fantasy character (inhabitant) at home in their magical sanctum (setting) surrounded by spotlighted magical clutter, making these three pools the core subjects of what the scene depicts."
+ },
+ "dragonbot/arcane-halls": {
+  "subject": "hall, caster",
+  "why": "The path depicts a spellcaster (the hero figure) inside a grand magical interior (the setting), with both being co-equal subjects of the render."
+ },
+ "dragonbot/dark-realm": {
+  "subject": "DARK_REALM_SCENE, DARK_REALM_ARCHITECTURE",
+  "why": "These pools define the place and structures that form the core scene being rendered; phenomenon, surprise_element, and sky_layer are atmospheric/compositional modifiers."
+ },
+ "dragonbot/dragon-lore": {
+  "subject": "DRAGON_LORE_RELIC, DRAGON_LORE_SETTING",
+  "why": "The relic is the colossal hero of every render, and the setting is the biome where it rests—together they form the unmistakable \"what the render is of.\""
+ },
+ "dragonbot/iconic-landscape": {
+  "subject": "biome, legendary_landmark",
+  "why": "The biome pool defines the archetypal fantasy landscape itself, and the legendary_landmark pool adds iconic geographical features that are the visual subject of the render."
+ },
+ "dreambot/bubble-bot-dreams": {
+  "subject": "dream_world, world_detail, bot_body, bot_dome, bot_eyes, bot_pose",
+  "why": "The bubble-bot is the focal hero character with its own appearance axes, and the dream_world pool describes the imaginative environment that is the setting, making both core to WHAT THE RENDER IS OF."
+ },
+ "dreambot/bubble-bot-dreams-warm": {
+  "subject": "dream_world, world_detail",
+  "why": "dream_world defines the setting/scene and world_detail adds environmental dressing; bot_body, bot_dome, bot_eyes, bot_pose describe the figure's appearance and pose, while light_mood and atmosphere are rendering axes."
+ },
+ "dreambot/bubble-bot-dreams-earthbot": {
+  "subject": "dream_world, world_detail",
+  "why": "The dream_world pool defines the epic Earth nature setting (peaks, atolls, glaciers, canyons), and world_detail adds secondary environmental dressing to that scene."
+ },
+ "dreambot/bubble-bot-dreams-brickbot": {
+  "subject": "dream_world, bot_body",
+  "why": "The render depicts a BrickBot figure (the hero) positioned within an all-LEGO brick-built dream world (the setting)."
+ },
+ "dreambot/bubble-bot-dreams-dragonbot": {
+  "subject": "bot_body, bot_pose, dream_world",
+  "why": "The render depicts a bubble-bot (figure with body and pose) positioned within a dragon-themed fantasy world setting."
+ },
+ "dreambot/bubble-bot-dreams-bloombot": {
+  "subject": "dream_world, bot_body",
+  "why": "The dream_world pool defines the setting/scene, and bot_body defines the hero creature being rendered within it."
+ },
+ "dreambot/bubble-bot-dreams-chibibot": {
+  "subject": "dream_world",
+  "why": "The dream_world pool (BUBBLE_WORLD_CHIBIBOT) defines the scene/setting that is the point of the render, while bot_body, bot_dome, bot_eyes, bot_pose are figure appearance and bot_pose is figure placement; light_mood and atmosphere are modifiers."
+ },
+ "dreambot/bubble-bot-dreams-dinobot": {
+  "subject": "dream_world",
+  "why": "The dream_world pool (BUBBLE_WORLD_DINOBOT) is the setting that defines WHAT THE RENDER IS OF — the dinobot-themed world where the bubble-bot exists; all other pools are either the bot's appearance (body, dome, eyes, pose) or atmospheric modifiers (lighting, detail, mood, atmosphere)."
+ },
+ "dreambot/bubble-bot-dreams-faebot": {
+  "subject": "dream_world",
+  "why": "The dream_world pool (BUBBLE_WORLD_FAEBOT) defines the setting/scene that is the point of the render, while bot_body, bot_dome, bot_eyes are figure appearance, bot_pose is framing, and light_mood and atmosphere are rendering axes."
+ },
+ "dreambot/bubble-bot-dreams-gothbot": {
+  "subject": "dream_world, bot_body",
+  "why": "The dream_world pool defines the gothic setting/scene, and bot_body defines the bubble-bot creature that is the hero of the render."
+ },
+ "dreambot/bubble-bot-dreams-mangabot": {
+  "subject": "dream_world, bot_body",
+  "why": "The dream_world pool defines the setting/scene (manga-style world), and bot_body pool defines the hero creature being rendered in that world."
+ },
+ "dreambot/bubble-bot-dreams-mechbot": {
+  "subject": "dream_world, bot_body, bot_pose",
+  "why": "The dream_world pool defines the setting (mechbot's world), while bot_body and bot_pose define the bubble-bot protagonist and its stance within that scene."
+ },
+ "dreambot/bubble-bot-dreams-oceanbot": {
+  "subject": "dream_world",
+  "why": "The dream_world pool (BUBBLE_WORLD_OCEANBOT) defines the setting/scene that is the point of the render—the bubble-bot placed in oceanbot's world."
+ },
+ "dreambot/bubble-bot-dreams-pixelbot": {
+  "subject": "dream_world",
+  "why": "The dream_world pool (BUBBLE_WORLD_PIXELBOT) is the only slot that describes WHAT THE RENDER IS OF — the setting/scene where the bubble-bot exists; all other pools modify the bot's appearance or the atmospheric/lighting treatment."
+ },
+ "dreambot/bubble-bot-dreams-retrobot": {
+  "subject": "dream_world, bot_body",
+  "why": "The render depicts a bubble-bot (the creature/hero) situated in a retrobot-styled dream world (the setting), with other pools modifying appearance and mood rather than defining what is rendered."
+ },
+ "dreambot/bubble-bot-dreams-starbot": {
+  "subject": "dream_world, bot_body",
+  "why": "The dream_world pool defines the setting (starbot's world), and bot_body defines the hero creature (the bubble-bot) being rendered in that scene."
+ },
+ "dreambot/bubble-bot-dreams-steambot": {
+  "subject": "dream_world, bot_body",
+  "why": "The dream_world pool defines the steambot setting (the scene), and bot_body pool defines the bubble-bot creature (the hero), making this a crossover with both setting and character as subjects."
+ },
+ "dreambot/bubble-bot-dreams-tinybot": {
+  "subject": "dream_world",
+  "why": "The dream_world pool (BUBBLE_WORLD_TINYBOT) defines the setting/scene that is the point of the render, while bot_body, bot_dome, bot_eyes, and bot_pose are the figure's appearance, and light_mood, atmosphere, world_detail are modifying axes."
+ },
+ "dreambot/bubble-bot-dreams-toybot": {
+  "subject": "dream_world, bot_body, bot_pose",
+  "why": "The dream_world pool defines the setting (toybot's world), while bot_body and bot_pose define the hero subject (the bubble-bot character and how it's positioned within that world)."
+ },
+ "dreambot/bubble-bot-dreams-yumbot": {
+  "subject": "dream_world",
+  "why": "The dream_world pool (BUBBLE_WORLD_YUMBOT) describes the setting/scene that is the point of the render, while bot_body, bot_dome, bot_eyes, bot_pose describe the figure's appearance, and light_mood, atmosphere, world_detail are modifying axes."
+ },
+ "earthbot/epic-vista": {
+  "subject": "EPIC_VISTA_SUBJECT",
+  "why": "The subject pool is explicitly declared as the hero landscape element that dominates the frame, with all other axes (lighting, atmosphere, hero_feature, sky_layer, phenomenon) designed to support it rather than define it."
+ },
+ "earthbot/hidden-corner": {
+  "subject": "HIDDEN_CORNER_SUBJECT",
+  "why": "It defines the intimate nature pocket setting that is the core point of every render in this path."
+ },
+ "earthbot/sacred-light": {
+  "subject": "SACRED_LIGHT_SUBJECT",
+  "why": "The subject pool defines the scene settings where transcendent natural-light moments occur, which is the core \"what the render is of\" for this path."
+ },
+ "earthbot/national-parks": {
+  "subject": "NATIONAL_PARKS_SUBJECT",
+  "why": "The subject pool describes iconic US National Park vantages and their biomes—the scenes themselves that are the hero of each render."
+ },
+ "earthbot/seasonal-shift": {
+  "subject": "subject",
+  "why": "The path's core purpose is to render dramatic seasonal landscape scenes where the seasonal transformation of the landscape itself is the hero — the subject pool is explicitly stated as \"THE SEASON IS THE SUBJECT\" and rolls first to set the season tag that controls all downstream coherent pools."
+ },
+ "earthbot/geological-wonder": {
+  "subject": "GEOLOGICAL_WONDER_SUBJECT",
+  "why": "This pool defines the geological formations themselves (caves, vistas, hoodoos, salt flats, lava flows) that are the point of the render, while all other pools modify lighting, atmosphere, color, and composition."
+ },
+ "earthbot/desert-southwest": {
+  "subject": "DESERT_SOUTHWEST_SUBJECT",
+  "why": "The pool explicitly named \"subject\" contains the geological formations and landscape scenes (Monument Valley towers, Antelope Canyon, Bryce hoodoos, etc.) that are the primary focus of what the render depicts."
+ },
+ "earthbot/deep-forest": {
+  "subject": "DEEP_FOREST_SUBJECT",
+  "why": "It is the bespoke pool explicitly identifying old-growth temperate forest cathedrals as the core WHAT THE RENDER IS OF."
+ },
+ "earthbot/lush-jungle": {
+  "subject": "LUSH_JUNGLE_SUBJECT",
+  "why": "This pool alone describes the tropical rainforest interior scenes themselves (buttress-root cathedrals, vine curtains, waterfalls, canopy layers), while all other pools modify the visual presentation through lighting, atmosphere, and ambient detail."
+ },
+ "earthbot/iceland-raw": {
+  "subject": "ICELAND_RAW_SUBJECT",
+  "why": "This pool holds the geological formations and landscapes (geysers, glacier tongues, black-sand beaches, basalt columns, ice caves, waterfalls, icebergs) that are the core what-is-being-rendered of each image."
+ },
+ "earthbot/andes-patagonia": {
+  "subject": "ANDES_PATAGONIA_SUBJECT",
+  "why": "This pool names the geographic/landscape features that are the focal point of each render (Torres del Paine, glaciers, salt flats, peaks, volcano, falls, etc.)."
+ },
+ "earthbot/african-landscape": {
+  "subject": "AFRICAN_LANDSCAPE_SUBJECT",
+  "why": "The subject pool defines the hero composition anchored to African toponyms (Serengeti, Okavango, Sahara, etc.) that establish WHAT THE RENDER IS OF — the specific place or biome being depicted."
+ },
+ "earthbot/asia-landscape": {
+  "subject": "ASIA_LANDSCAPE_SUBJECT",
+  "why": "The path explicitly defines a subject pool containing the geographic/geological features (mountains, karst formations, gorges, etc.) that are the what-the-render-is-of."
+ },
+ "earthbot/australian-outback": {
+  "subject": "AUSTRALIAN_OUTBACK_SUBJECT",
+  "why": "This pool contains the geological landmarks and landscape features (Uluru, Kata Tjuta, gorges, deserts, ranges) that are the core point of each render."
+ },
+ "earthbot/european-wilderness": {
+  "subject": "EUROPEAN_WILDERNESS_SUBJECT",
+  "why": "This pool names the geographic locations and terrain features (glens, peaks, fjords, lakes) that form the core scene being rendered."
+ },
+ "earthbot/great-waterfalls": {
+  "subject": "GREAT_WATERFALLS_SUBJECT",
+  "why": "The bespoke subject pool defines the iconic waterfalls themselves as the hero of the render, with their scale and falling-water motion as the focal point."
+ },
+ "earthbot/wetlands-wild": {
+  "subject": "WETLANDS_WILD_SUBJECT",
+  "why": "The bespoke subject pool describes the inland freshwater wetland scenes (deltas, swamps, lily lagoons, mangrove channels, flooded forests) that are the hero of the render."
+ },
+ "earthbot/night-landscapes": {
+  "subject": "landscape, night_sky",
+  "why": "The landscape is the hero subject (dramatic visible real geology), and the night sky is the co-subject backdrop that physically lights and reveals the land."
+ },
+ "earthbot/winter-wonder": {
+  "subject": "WINTER_WONDER_SUBJECT",
+  "why": "This pool defines the specific ice-feature or frozen landscape scene that forms the hero subject of each render (e.g. hoarfrost forests, frozen waterfalls, ice caves), while the other pools modify appearance and atmosphere."
+ },
+ "earthbot/north-wild": {
+  "subject": "NORTH_WILD_SUBJECT",
+  "why": "This is the sole pool that defines the geographic/landscape features that form the render's point — the Alaskan wilderness locations, geological formations, and natural landmarks."
+ },
+ "earthbot/storm-earth": {
+  "subject": "STORM_EARTH_SUBJECT",
+  "why": "The file explicitly names the storm structure (supercell mesocyclones, shelf clouds, mammatus fields, etc.) as \"the hero\" of the scene, with a dedicated bespoke subject pool for severe-weather spectacle content."
+ },
+ "earthbot/coastal-vista": {
+  "subject": "COASTAL_VISTA_SUBJECT",
+  "why": "It is the bespoke pool that defines the dramatic craggy coastal scenes themselves (the what-the-render-is-of), while all other pools are modifying axes like lighting, atmosphere, sky, and phenomena."
+ },
+ "earthbot/waves": {
+  "subject": "wave_subject, coastal_context",
+  "why": "wave_subject is the hero (intimate barrel or monumental wall), and coastal_context defines what the wave breaks on, together forming the scene's core subject matter."
+ },
+ "earthbot/tropical-paradise": {
+  "subject": "TROPICAL_PARADISE_SUBJECT",
+  "why": "This is the only bespoke pool in the path; it contains the paradise coast scenes (palms, turquoise water, white sand, lagoon, atoll, reef edge) that define WHAT THE RENDER IS OF, while all other pools (lighting, atmosphere, sky, phenomenon, hero_feature) are modifying axes."
+ },
+ "earthbot/cozy-beach": {
+  "subject": "subject_setting",
+  "why": "Only subject_setting defines the actual intimate beach pocket cove scene itself; all other axes (foreground_element, water_state, sky_layer, light_condition, phenomenon) are atmospheric modifiers or secondary dressing."
+ },
+ "earthbot/hawaii-flowers": {
+  "subject": "subject",
+  "why": "The subject pool (HAWAII_FLOWERS_SUBJECT) defines the beach scene itself in ground-level framing; flowers are a separate foreground axis, not the subject of the render."
+ },
+ "earthbot/reef-paradise": {
+  "subject": "bay_setting, shoreline_drama",
+  "why": "These two pools define WHAT THE SCENE IS OF — the bay geometry and the dramatic coastal landscape that form the core subject matter of the paradise island-bay view."
+ },
+ "earthbot/beach-night": {
+  "subject": "BEACH_NIGHT_SUBJECT",
+  "why": "This pool defines the tropical beach geographic setting and night context, which is the core scene being rendered."
+ },
+ "earthbot/epic-sunset": {
+  "subject": "EPIC_SUNSET_SUBJECT",
+  "why": "The bespoke subject pool contains sunset compositions with biome tags that define what the render depicts, while other pools (lighting, atmosphere, sky_layer, phenomenon) are axes that modify the visual presentation."
+ },
+ "faebot/forest-fairy-scene": {
+  "subject": "creature, forest_biome",
+  "why": "The focal mythic forest fairy creature and the specific forest biome type are what the render depicts; all other axes are atmospheric, compositional, or appearance modifiers."
+ },
+ "faebot/dryad-portrait": {
+  "subject": "creature, forest_backdrop",
+  "why": "The dryad herself (species, appearance) and the soft-focus forest setting are what the portrait renders of; all other axes are modifying attributes (expression, gesture, lighting, weather, adornment, magical effects, framing)."
+ },
+ "faebot/forest-elder": {
+  "subject": "creature, story_beat",
+  "why": "The creature pool defines the forest-elder hero himself (bark skin, moss-beard, antlers, mantle), and the story_beat pool defines the narrative moment and woodland action that is the subject of the render."
+ },
+ "faebot/female-druid": {
+  "subject": "backdrop, companion",
+  "why": "The backdrop pool defines the moonlit forest setting that is the scene being rendered, and the companion pool optionally adds a spirit-animal character to the composition; all other pools modify the druid's appearance or pose."
+ },
+ "faebot/female-druid-adventure": {
+  "subject": "adventure_setting, adventure_action, companion",
+  "why": "The setting describes the forest/environment location, the action describes what the druid is doing in that world, and the companion is a secondary subject creature alongside her."
+ },
+ "faebot/male-druid": {
+  "subject": "backdrop, companion",
+  "why": "The backdrop pool defines the forest setting scene, and the companion pool introduces a secondary character/creature that shares the frame with the druid subject."
+ },
+ "faebot/male-druid-adventure": {
+  "subject": "adventure_setting, druid_magic, companion",
+  "why": "The adventure_setting defines the wild scene (forest/creek/ledge), druid_magic and companion are the active content elements; character, action, composition, and lighting are axes that modify the render."
+ },
+ "faebot/tiny-fae": {
+  "subject": "creature, scale_anchor_companion, macro_perch, forest_micro_biome",
+  "why": "These pools define WHAT the render depicts — the tiny fae hero, the dwarfing forest creature that proves her scale, what she sits/stands on, and the macro forest setting itself."
+ },
+ "faebot/fairy-swarm": {
+  "subject": "gathering_spot, fae_troupe, critter_guests",
+  "why": "The scene is defined by its tiny forest venue (gathering_spot), the palm-sized fairies themselves as the hero subjects (fae_troupe), and the attending creatures (critter_guests); lighting and magical_flavor are atmospheric modifiers, not subjects."
+ },
+ "faebot/queen-of-the-forest": {
+  "subject": "posed_setting, forest_critters",
+  "why": "The path pivots on a specific natural forest location where the queen is posed (gnarled-root throne, tree-branch, meadow, etc.) and the animals that flock to her as core scene elements."
+ },
+ "faebot/enchanted-vista": {
+  "subject": "biome, hero_feature, floor_carpet, water_element, foreground_anchor, wildlife_distant",
+  "why": "These pools define the actual scene components—the enchanted forest landscape itself—while the others (composition, lighting, atmospheric_depth, weather, magical_ambient) are rendering axes that modify how the scene looks."
+ },
+ "faebot/fae-village": {
+  "subject": "FAE_VILLAGES, VILLAGE_WILDLIFE",
+  "why": "The dwelling architecture is the primary subject (40-55% of frame, described first), and the wildlife pool provides secondary subject matter (visible critters as animated scene elements), while lighting/weather/forest are atmospheric modifiers."
+ },
+ "faebot/fae-village-axis": {
+  "subject": "dwelling_type, village_layout",
+  "why": "These two pools define what the render is fundamentally of — the fae dwellings themselves and how they are arranged in space as the primary subject (40-55% of frame)."
+ },
+ "faebot/flower-fairy": {
+  "subject": "creature, flower_biome",
+  "why": "The flower-merged fae creature is the focal hero (40-55% of frame), and the flower biome is the WHERE that defines the scene's setting and botanical context."
+ },
+ "faebot/fae-court": {
+  "subject": "fae_subject, enchanted_setting",
+  "why": "fae_subject describes the fae figure/hero while enchanted_setting describes the ethereal court location they inhabit; the other pools (detail, surprise, lighting, drama) modify appearance, mood, or atmosphere."
+ },
+ "faebot/elven-city": {
+  "subject": "elven_city, city_setting",
+  "why": "These pools define the physical place and scene being rendered—the graceful white elven spired city and its environmental setting."
+ },
+ "faebot/fae-castle-village": {
+  "subject": "village_layout, setting",
+  "why": "village_layout describes the architectural structure and spatial arrangement (cottages, archways, bridges), while setting provides the environmental context (forest, lush surroundings) that together define WHAT THE RENDER IS OF."
+ },
+ "faebot/fae-wilds-village": {
+  "subject": "landscape_feature, village_built",
+  "why": "These two pools define the core scene—the natural landmark and the elven settlement built around it—while the others modify atmosphere, add inhabitants, or provide secondary detail."
+ },
+ "faebot/fae-natural-village": {
+  "subject": "landscape_feature, village_built",
+  "why": "These two pools define the core scene—the natural landmark and the organic dwellings that comprise the village itself."
+ },
+ "faebot/goblin-market": {
+  "subject": "market_setting, market_wares",
+  "why": "The scene (lantern-lit bazaar under great roots) and the impossible goods for sale are what the render depicts; merchant_troupe and critter_guests are secondary figures, while lighting and magical_flavor are atmospheric modifiers."
+ },
+ "faebot/goblin-market-stall": {
+  "subject": "stall_setting, market_wares, merchant_troupe, critter_guests",
+  "why": "The setting (the stall itself), the goods for sale, and the fae characters inhabiting the scene together form the WHAT of the render—the intimate vignette composition."
+ },
+ "faebot/goblin-market-lane": {
+  "subject": "lane_setting, lane_troupe, critter_guests",
+  "why": "The scene is a fae night market lane with foreground winged fae at a stall and the grand market behind them; lighting and magical_flavor are atmospheric modifiers, not the subject itself."
+ },
+ "faebot/frost-court": {
+  "subject": "frost_fae, winter_wood",
+  "why": "The fae character and the silver-birch forest setting are the dual heroes of this render, with frost-artistry as the visual showcase between them."
+ },
+ "faebot/spirit-beasts": {
+  "subject": "spirit_beast, beast_domain",
+  "why": "The spirit beast is the hero protagonist, and beast_domain is the setting where it exists; together they form the core \"what the render is of.\""
+ },
+ "farmbot/animal-feeding-time": {
+  "subject": "ANIMAL_COMPANIONS, CHARACTER_ARCHETYPE",
+  "why": "The path's primary subjects are the animals being fed (ANIMAL_COMPANIONS pool, always present) and optionally the character doing the feeding (CHARACTER_ARCHETYPE pool, ~60% of renders), with all other pools serving as modifiers of lighting, props, weather, and composition."
+ },
+ "farmbot/cozy-bakery-afternoon": {
+  "subject": "FOOD_AND_BAKING, ANIMAL_COMPANIONS",
+  "why": "The path has two subject pools—food/baking items that anchor the scene, and animal companions that are mandatory visible presences in the render (not atmospheric dressing)."
+ },
+ "farmbot/autumn-village-market": {
+  "subject": "FOOD_AND_BAKING, WORLD_DETAIL_PROPS, SEASON, WEATHER_ATMOSPHERE",
+  "why": "The path renders an autumn village market scene where the food/goods and setting details form the core subject matter, with optional characters as secondary elements—the scene itself is the hero in the 60% pure-scene variant."
+ },
+ "farmbot/quiet-sunset-on-the-porch": {
+  "subject": "NONE",
+  "why": "The path hard-codes \"a porch at sunset\" in its template prose and draws character, animal, props, and atmosphere from pools to decorate that fixed scene, rather than selecting from a subject pool."
+ },
+ "farmbot/summer-evening-by-the-pond": {
+  "subject": "POND_PLACE",
+  "why": "The pond is explicitly the hero of the shot (place-led design), with the character and animal as optional warm layers on top, not the primary subject."
+ },
+ "farmbot/harvest-festival": {
+  "subject": "HARVEST_FESTIVAL_PLACE",
+  "why": "The path is explicitly place-led with the decorated harvest-festival grounds as the hero, sourced from the bespoke HARVEST_FESTIVAL_PLACE pool that describes the setting itself."
+ },
+ "farmbot/spring-planting-day": {
+  "subject": "CHARACTER_ARCHETYPE (gardener), SEASON (spring seedlings/soil)",
+  "why": "The path's core subject is a spring gardener character tending freshly planted seedlings and soil, with PLANTING_ANCHOR and ACTIVITY pools ensuring the planting action remains the visual center regardless of other rolls."
+ },
+ "farmbot/rainy-farmhouse-morning": {
+  "subject": "NONE",
+  "why": "The scene is hard-coded in the template prose (a rainy farmhouse interior with optional character and props), and pools are filtered/curated to support that fixed setting rather than providing alternative SUBJECT options."
+ },
+ "farmbot/flower-field-wandering": {
+  "subject": "FLOWER_FIELD_PLACE",
+  "why": "The path is explicitly place-led with the wildflower field as \"the hero, always named first\" using a required bespoke place pool."
+ },
+ "farmbot/orchard-afternoon": {
+  "subject": "ORCHARD_AFTERNOON_PLACE",
+  "why": "The orchard is explicitly marked as \"the hero of the shot\" and the place-led anchor; the character (if present) and activity are optional secondary elements, not the subject pool."
+ },
+ "farmbot/picnic-in-the-meadow": {
+  "subject": "NONE",
+  "why": "The path hard-codes the picnic scene itself (checkered blanket, woven basket, wildflowers, open sky) as a fixed anchor block with no subject pool, only layering modifiers (food, activity, props, season, weather, animal) on top from shared pools."
+ },
+ "farmbot/woodland-walk": {
+  "subject": "WOODLAND_WALK_PLACE",
+  "why": "The path-bespoke WOODLAND_WALK_PLACE pool is the required setting anchor and identified hero of the shot, providing the specific woodland scene details that define what the render depicts."
+ },
+ "farmbot/lakeside-riverside-moment": {
+  "subject": "LAKESIDE_RIVERSIDE_PLACE",
+  "why": "The path-bespoke pool is the primary hero of the shot (explicitly named first in the template and commented as \"place-led\"), defining the water body that anchors the entire scene."
+ },
+ "farmbot/village-street-wandering": {
+  "subject": "THE VILLAGE_STREET_PLACE pool",
+  "why": "The street itself is explicitly named the hero and always appears first; it is what the render is of, with villagers and animals as incidental secondary elements passing through it."
+ },
+ "farmbot/flower-shop": {
+  "subject": "FLOWER_SHOP_PLACE",
+  "why": "The flower-shop interior (buckets, counter, dried herbs, blooms) is explicitly the hero and always the dominant subject of the scene."
+ },
+ "farmbot/artisan-workshop": {
+  "subject": "ARTISAN_WORKSHOP_PLACE",
+  "why": "The workshop interior itself is explicitly the hero and place-led anchor of this render, with its tools, furnishings, and finished goods forming the core subject pool."
+ },
+ "farmbot/cozy-inn-interior": {
+  "subject": "COZY_INN_INTERIOR_PLACE",
+  "why": "The place pool describes the inn's common room itself as the hero—its hearth, tables, chairs, tankards, rug, and furnishings are what the render depicts."
+ },
+ "farmbot/fishing-dock": {
+  "subject": "FISHING_DOCK_PLACE",
+  "why": "The dock structure itself (weathered planks, rope, fishing rod, bucket, moored rowboat) is explicitly stated as the hero and always named first, with water as secondary background."
+ },
+ "farmbot/garden-vegetable-patch-tending": {
+  "subject": "VEGETABLE_GARDEN_PLACE",
+  "why": "The established, working vegetable garden with ripe produce, rows, trellises, and weeds is explicitly the hero and sole subject pool of this place-led path."
+ },
+ "farmbot/barn-animal-shelter-interior": {
+  "subject": "BARN_INTERIOR_PLACE, BARN_ANIMALS",
+  "why": "The path has two named hero subjects — the warm barn interior (a bespoke place pool) is the named-first setting, and a barn full of resting animals is \"the whole point\" per the brief, making both the location and the animal companions co-equal subject pools."
+ },
+ "farmbot/seasonal-festival": {
+  "subject": "farmbot_seasonal_festival_place",
+  "why": "The bespoke pool supplies the hero-of-the-shot setting for one of eight rotating festival concepts (filtered by season and concept-key)."
+ },
+ "farmbot/pineapple-field-afternoon": {
+  "subject": "PINEAPPLE_FIELD_PLACE",
+  "why": "The path uses a bespoke place pool as the hero setting anchor, explicitly named first in the template to ensure it survives token budget constraints."
+ },
+ "farmbot/mango-orchard-harvest": {
+  "subject": "MANGO_ORCHARD_PLACE",
+  "why": "The mango orchard is the hero of the scene and the primary subject pool that defines what the render depicts, with the place-led architecture explicitly prioritizing it first in the brief."
+ },
+ "farmbot/banana-grove-path": {
+  "subject": "BANANA_GROVE_PLACE",
+  "why": "The path is place-led with the cultivated banana grove as the hero, pulled from a bespoke place pool that defines the setting anchor."
+ },
+ "farmbot/coconut-palm-grove": {
+  "subject": "COCONUT_PALM_GROVE_PLACE",
+  "why": "The coconut palm grove is the setting hero and place-led subject anchor, loaded as a bespoke pool that defines what the render depicts."
+ },
+ "farmbot/tropical-flower-garden": {
+  "subject": "TROPICAL_FLOWER_GARDEN_PLACE",
+  "why": "The bespoke place pool is the hero setting anchor (named first in template per maxTokens strategy), carrying the cultivated tropical garden as the primary subject of the render."
+ },
+ "farmbot/tropical-stream-crossing": {
+  "subject": "TROPICAL_STREAM_CROSSING_PLACE",
+  "why": "The stream crossing itself (the physical setting with water, bridge or stepping stones, and tropical farm plantings) is the hero of this place-led path, named first in the brief to survive token-budget truncation."
+ },
+ "farmbot/papaya-guava-orchard": {
+  "subject": "PAPAYA_GUAVA_ORCHARD_PLACE",
+  "why": "The orchard itself (with its two tree types and harvest infrastructure) is the place-led hero of the render, named first and anchored by the bespoke place pool."
+ },
+ "farmbot/deliveries": {
+  "subject": "farmbot_deliveries_scene",
+  "why": "The scenes pool defines the settings and delivery situations that are the core subject of what is being rendered."
+ },
+ "farmbot/evening-chores": {
+  "subject": "farmbot_evening_chores_scenes",
+  "why": "The SCENES pool defines the specific evening farm moments that are the visual hero of each render (tools, gates, lanterns, plants, creatures as still-life subjects)."
+ },
+ "farmbot/laundry-day": {
+  "subject": "SCENES",
+  "why": "The SCENES pool holds 121 entries each describing a distinct laundry-day still-life composition (clothesline, hanging fabric, garden detail, and one small creature), which is the core subject matter being rendered."
+ },
+ "farmbot/waterfall-glade": {
+  "subject": "WATERFALL_GLADE_PLACE, WATERFALL_GLADE_WILDLIFE",
+  "why": "The path centers on the cascading waterfall and pool as the hero setting, plus animals drinking or playing at the water feature as a secondary subject pool."
+ },
+ "farmbot/market-town-square": {
+  "subject": "farmbot_market_town_square_scenes",
+  "why": "The scene pool contains the specific market square settings that define what the render depicts, while townsfolk and signage rules are constraints on how to render it, not what it is of."
+ },
+ "farmbot/duck-pond": {
+  "subject": "POND_LIFE, POND_FEEDING",
+  "why": "These two pools contain the animal-hero pond-life scenes (ducks, ducklings, frogs, birds, grazing farm animals) that are the primary subject of what the render depicts, with the pond as setting backdrop."
+ },
+ "gothbot/dark-landscape": {
+  "subject": "biome, architecture",
+  "why": "These pools define the place and scene itself—the gothic landscape setting that is the hero of the composition, while sky, phenomenon, and surprise_element are atmospheric or decorative layers."
+ },
+ "gothbot/gothic-architecture": {
+  "subject": "structure",
+  "why": "The gothic building is explicitly the hero dominating 80%+ of the frame; architectural_detail, inner_light, accent_creature, spice_decoration, and sky_layer are all modifiers or secondary elements, not what the render is fundamentally of."
+ },
+ "gothbot/the-sanctum": {
+  "subject": "interior, focal_feature",
+  "why": "The grand gothic chamber itself is the hero (80%+ of frame), with the focal_feature as the centrepiece the eye lands on within that immense interior space."
+ },
+ "gothbot/the-frost-garden": {
+  "subject": "GOTHBOT_FROSTGARDEN_GARDEN, GOTHBOT_FROSTGARDEN_STATUARY",
+  "why": "The frozen garden is the hero scene, and the stone statuary is the compositional centrepiece within it; frost_feature, flora, light_sky, and accent are all modifiers/dressing rather than subject matter."
+ },
+ "gothbot/twilight-gothic": {
+  "subject": "GOTHBOT_TWILIGHT_SCENE",
+  "why": "The scene pool is the hero subject (castle ridges, cemeteries, abbey ruins, etc.), while the other pools are atmospheric modifiers and depth elements, not what the render IS OF."
+ },
+ "gothbot/goth-closeup": {
+  "subject": "GOTHBOT_GOTH_CLOSEUP_CANDID_MOMENT",
+  "why": "The candid_moment pool defines the scene/action context (what the character is doing in the frame), making it the only subject pool; all others describe the figure's appearance or camera technique."
+ },
+ "gothbot/goth-full-body": {
+  "subject": "GOTH_FEMALE_ARCHETYPES, CHARACTER_BACKDROPS",
+  "why": "The archetype defines who the woman IS (the hero/subject), and the backdrop is the partial environment that frames her as the focal point of the scene."
+ },
+ "gothbot/castlevania-scene": {
+  "subject": "GOTHBOT_CASTLEVANIA_SCENE_STRUCTURE, GOTHBOT_CASTLEVANIA_SCENE_ACCENT_CREATURE",
+  "why": "Structure is the primary hero (80%+ visual weight) and accent_creature is a secondary subject element, while all other pools are modifiers (detail, lighting, decoration, sky)."
+ },
+ "gothbot/castle-moonscape": {
+  "subject": "structure, moonscape",
+  "why": "The path explicitly declares two co-equal heroes—the gothic castle/haunted house and the bright full moon dominating the night sky—with all other pools serving as modifiers or secondary elements."
+ },
+ "gothbot/cozy-goth": {
+  "subject": "GOTHBOT_COZY_GOTH_INTERIOR_SPACE",
+  "why": "The interior_space pool defines the WHAT of the render — the specific gothic interior setting (library, apothecary, scrying chamber, etc.) that is the hero of the composition; all other pools are either atmospheric modifiers or secondary dressing."
+ },
+ "gothbot/vampire-girls-2": {
+  "subject": "scene",
+  "why": "The `scene` pool (VAMPIRE_SETTINGS) is the only slot that describes the place/environment where the render occurs; all other pools define the vampire character's appearance, pose, or lighting conditions."
+ },
+ "gothbot/the-dark-prince": {
+  "subject": "DARKPRINCE_SCENE",
+  "why": "The scene pool defines the setting/background environment where the dark prince bust portrait is composed, while all other pools describe the character's appearance (archetype, ethnicity, hair, wardrobe, menace features) or rendering axes (composition, lighting, regalia)."
+ },
+ "gothbot/the-coven": {
+  "subject": "GOTHBOT_COVEN_WITCH, GOTHBOT_COVEN_LAIR",
+  "why": "The witch is the hero figure and the lair is the setting/scene; spell, action, composition, and familiar are all modifiers of how that core subject is rendered."
+ },
+ "gothbot/moonlit-maiden": {
+  "subject": "GOTHBOT_MOONLIT_MAIDEN, GOTHBOT_MOONLIT_SCENE",
+  "why": "The path has two co-equal heroes—the ethereal woman (the maiden pool defines her as hero) and the grand gothic atmospheric environment (the scene pool defines the setting), with composition framing them together."
+ },
+ "gothbot/gothic-vista": {
+  "subject": "GOTHBOT_GOTHIC_VISTA_BIOME, GOTHBOT_GOTHIC_VISTA_ARCHITECTURE",
+  "why": "Biome and architecture define the setting itself; phenomenon, surprise_element, and sky_layer are atmospheric/dressing modifiers rather than the core subject."
+ },
+ "gothbot/vampire-assassin-female": {
+  "subject": "ASSASSIN_STAGE, ASSASSIN_EPIC_BACKDROP",
+  "why": "The stage and epic backdrop are the only pools that describe WHERE the scene takes place (castle/courtyard/forest/graveyard setting); all other pools describe the character's appearance, pose, lighting, or mood."
+ },
+ "gothbot/vampire-from-a-distance": {
+  "subject": "ASSASSIN_STAGE, ASSASSIN_EPIC_BACKDROP",
+  "why": "The stage and epic backdrop pools define the gothic environment setting where the vampire-assassin operates, though the character herself is the primary visual focus rather than a subject pool."
+ },
+ "gothbot/vampire-hunter-in-action": {
+  "subject": "GOTHBOT_VHIA_SETTING_LOCATION, GOTHBOT_VHIA_PROWL_ACTION",
+  "why": "The setting_location pool defines the specific gothic scene (alley, cathedral, crypt, etc.) that is the render's backdrop, and prowl_action pool defines the hunter's active motion through that scene—together these constitute what the image IS OF."
+ },
+ "gothbot/goth-male-full-body-axis": {
+  "subject": "scene_context",
+  "why": "The scene_context pool defines the gothic urban/crypt/cathedral stage that is the \"what the render is of\" — the place where the hunter poster moment occurs."
+ },
+ "gothbot/vampire-assassin-combat": {
+  "subject": "ASSASSIN_STAGE, ASSASSIN_EPIC_BACKDROP, VAMPIRE_DUEL_MOMENT",
+  "why": "The path's subject is the duel scene itself—the stage/location where the vampire-assassin and vampire-foe physically engage in combat, with the backdrop setting the gothic atmosphere."
+ },
+ "gothbot/monster-prowl": {
+  "subject": "creature, action, stage",
+  "why": "The monster archetype is the hero, its wild action pose defines the moment, and the gothic stage is the dramatic backdrop setting."
+ },
+ "gothbot/gargoyles": {
+  "subject": "GARGOYLE_CREATURE, MONSTER_PROWL_STAGE",
+  "why": "The gargoyle itself is the solo epic hero-shot subject, and the cathedral architecture setting is the secondary subject pool that frames it."
+ },
+ "mangabot/mythological-creature": {
+  "subject": "creature_type, shrine_or_setting",
+  "why": "The yokai creature is the hero subject, and the shrine or setting is the environmental subject where the scene takes place."
+ },
+ "mangabot/kawaii": {
+  "subject": "setting, action",
+  "why": "The setting pool defines the place/scene and the action pool defines what the character is doing in that moment, together forming the scene's subject matter."
+ },
+ "mangabot/slice-of-life": {
+  "subject": "setting, action",
+  "why": "The setting pool defines the location/scene and the action pool defines what the character is doing in that mundane moment—together these form the core \"what the render is of.\""
+ },
+ "mangabot/neo-tokyo": {
+  "subject": "scene_type, district, landmark_anchor, character_role",
+  "why": "These pools define the WHAT—the cyberpunk Tokyo setting, location, iconic anchor, and the hero character—while the rest are axes that modify look, mood, lighting, framing, and atmospheric detail."
+ },
+ "mangabot/shonen-action": {
+  "subject": "battlefield, action",
+  "why": "The battlefield is the scene/place being rendered, and the action is the event/pose that constitutes what the render depicts; all other axes are either figure appearance (ethnicity through weapon) or technical modifiers (camera_framing, power_signature, drama, surprise_element)."
+ },
+ "mangabot/samurai-era": {
+  "subject": "scene_type, landscape_setting, architectural_anchor, character_role",
+  "why": "These four pools define WHAT the render depicts—the scene type, the physical setting, the built anchor, and the figure present—while the remaining pools are modifiers (action, atmosphere, light, time, emotion, framing, props, details)."
+ },
+ "mangabot/isekai-fantasy": {
+  "subject": "scene_type, fantasy_world_setting, architectural_anchor, character_role, fantasy_creature",
+  "why": "These pools define the WHERE (scene/setting/architecture), WHO (character/creature), and WHAT ACTION/MOMENT is happening—the core render subject; the rest are atmospheric or stylistic axes."
+ },
+ "mangabot/anime-village": {
+  "subject": "village_anchor, architecture, streetscape_detail",
+  "why": "These pools define the village/streetscape scene itself, which the header explicitly identifies as the HERO of the render."
+ },
+ "mangabot/anime-character-female": {
+  "subject": "setting, action",
+  "why": "The anime woman character is the hero engaged with a setting, and her forward-facing action is what the frame captures."
+ },
+ "mangabot/anime-character-male": {
+  "subject": "setting, surprise_element",
+  "why": "Setting defines the place/scene context, and surprise_element introduces secondary subjects; all other pools modify the character's appearance, framing, action, or atmosphere."
+ },
+ "mangabot/mecha-hangars": {
+  "subject": "mech_class, hangar_setting",
+  "why": "The mech and its hangar environment form the dual hero subjects of the composition, with the mech as primary focus and the hangar as the scene context."
+ },
+ "mangabot/festival-nights": {
+  "subject": "setting, action",
+  "why": "The setting pool defines the matsuri festival scene itself, and the action pool defines what the figure is doing within that environment—together they constitute what the render depicts."
+ },
+ "mangabot/magical-girl": {
+  "subject": "MAGICAL_GIRL_SETTING, MAGICAL_GIRL_ARCHETYPE",
+  "why": "The setting pool defines the scene/location, and the archetype pool defines the magical girl character who is the hero of the render."
+ },
+ "mangabot/ghibli-countryside": {
+  "subject": "scene_type, landscape_setting, architectural_anchor, character_role, wildflower_garden, spirit_element",
+  "why": "These pools define the *what* of the scene—the pastoral setting, structures, characters present, flora, and magical elements—while the rest are visual modifiers (weather, lighting, framing, mood, props, background detail)."
+ },
+ "mangabot/occult-tokyo": {
+  "subject": "setting, action",
+  "why": "The setting pool defines the Tokyo occult locations/scenes, and the action pool defines what the character is doing within that scene—together these form the core subject matter of the render."
+ },
+ "mangabot/post-apocalyptic": {
+  "subject": "setting, action",
+  "why": "The setting pool defines the post-apocalyptic location/scene, and the action pool defines what the wanderer is doing within it—together they form the core subject of the render."
+ },
+ "mangabot/beach-episode": {
+  "subject": "setting, action",
+  "why": "The setting pool defines the beach location/scene, and the action pool defines what the character(s) are doing there, together forming the core subject of the render."
+ },
+ "mangabot/rooftop-sunsets": {
+  "subject": "setting, action",
+  "why": "The setting pool defines the rooftop environment and the action pool defines what the character does within it; everything else modifies appearance or framing."
+ },
+ "mangabot/cherry-blossom-romance": {
+  "subject": "setting, action",
+  "why": "The setting pool defines the scene/location and the action pool defines what the character is doing within it, together forming the \"what the render is of.\""
+ },
+ "mangabot/space-opera": {
+  "subject": "ship_class, cosmic_setting, stellar_phenomenon",
+  "why": "The starship/orbital station is the hero subject, positioned within a cosmic setting and stellar environment that forms the scene being rendered."
+ },
+ "mangabot/ghibli-painterly": {
+  "subject": "monumental_anchor, setting_type",
+  "why": "These pools define what the render depicts—the monumental architecture (hero) and its setting type (sky-island/cathedral/cavern/tower), which together constitute the scene being portrayed."
+ },
+ "mangabot/anime-rain": {
+  "subject": "rain_scene, rain_play",
+  "why": "rain_scene describes the physical setting (shrine steps, puddles, hydrangeas) and rain_play is the hero visual element (lush greens + grey light), while other pools modify look, framing, mood, or add figures."
+ },
+ "mangabot/anime-trains": {
+  "subject": "train_scene, landscape_beyond",
+  "why": "train_scene defines the train and track setting itself, while landscape_beyond specifies the surrounding environment—together they establish what the render depicts; all other pools modify mood, framing, lighting, or add detail."
+ },
+ "mangabot/winter-anime": {
+  "subject": "winter_scene, figure_moment",
+  "why": "winter_scene defines the location/setting (shrine, street, festival) and figure_moment defines the character action that is the hero of the composition, while other pools modify atmosphere, camera, or emotional tone."
+ },
+ "mangabot/night-touge": {
+  "subject": "touge_scene, hero_car",
+  "why": "touge_scene defines the mountain pass setting/location, and hero_car defines the vehicle that is the hero of the composition."
+ },
+ "oceanbot/shipwreck-kingdom": {
+  "subject": "wreck_class, coral_growth, marine_life",
+  "why": "These three pools describe what the render depicts—the shipwreck itself, its biological colonization, and the creatures inhabiting it—while caustic_light and camera_framing are visual axes that modify how the scene looks."
+ },
+ "oceanbot/lost-cities": {
+  "subject": "ruin_class, coral_growth, marine_life",
+  "why": "These three pools define what the render depicts—the drowned architectural hero, its biological overgrowth, and the creatures inhabiting the scene—while the other axes (caustic_light, camera_framing) are visual modifiers."
+ },
+ "oceanbot/pirates": {
+  "subject": "pirate_scene",
+  "why": "The pirate_scene pool encodes the setting, characters, and action that form the visual subject of the render, while camera_framing is a compositional axis that modifies how it is viewed."
+ },
+ "oceanbot/ghost-ship": {
+  "subject": "GHOST_SHIPS",
+  "why": "The ghost_ship pool encodes the derelict vessel itself—its state, spectral presence, and condition—which is the hero subject of the render."
+ },
+ "oceanbot/kraken-leviathan": {
+  "subject": "kraken_scene",
+  "why": "The kraken_scene pool encodes the creature, ship, and attack moment that forms the visual subject of the render, while camera_framing is a compositional axis modifying how that subject is viewed."
+ },
+ "oceanbot/deep-wonder": {
+  "subject": "deep_wonder",
+  "why": "The deep_wonder pool encodes the specific bioluminescent creature and abyssal context that is the hero of each render, while camera_framing is a compositional axis that modifies how it is viewed."
+ },
+ "oceanbot/whale-encounter": {
+  "subject": "whale_encounter",
+  "why": "The whale_encounter pool contains the cetacean species and behaviors that are the hero subjects of the render; camera_framing is a visual axis that modifies how the whale is presented, not what it is."
+ },
+ "oceanbot/reef-paradise": {
+  "subject": "reef_scene",
+  "why": "The reef_scene pool describes the actual coral reef ecosystem and its inhabitants (the WHAT of the render), while camera_framing is a compositional axis that modifies how it's viewed."
+ },
+ "oceanbot/polar-seas": {
+  "subject": "polar_scene",
+  "why": "POLAR_SCENES pool contains the what-it-is-of (icebergs, pack ice, polar wildlife, aurora on water) while camera_framing is a visual axis that modifies how we see it."
+ },
+ "oceanbot/bioluminescent-night": {
+  "subject": "biolum_scene",
+  "why": "The bioluminescent_scene pool describes the actual ocean surface/shore setting and phenomena (plankton bloom, glowing surf, jellyfish swarm) that is the point of the picture, while camera_framing is a compositional axis that modifies how it's viewed."
+ },
+ "oceanbot/seaturtle-scape": {
+  "subject": "SEATURTLE_SCENES",
+  "why": "The turtle_scene pool defines the habitat and life-stage contexts where sea turtles are encountered, making it the subject pool; camera_framing is an axis that modifies how the scene is viewed."
+ },
+ "oceanbot/wild-sealife-camera": {
+  "subject": "wild_sealife_scene",
+  "why": "This pool contains the marine creatures and their behaviors that are the primary focus of the documentary-style wildlife photography."
+ },
+ "oceanbot/tropical-fish-closeup": {
+  "subject": "fish_scene",
+  "why": "The fish_scene pool describes the reef habitat and positioning that frames the tropical fish hero, which is the what-the-render-is-of; camera_framing is a compositional axis that modifies how the scene looks, not what it depicts."
+ },
+ "oceanbot/coastal-power": {
+  "subject": "coastal_power_scene",
+  "why": "This pool describes the actual coastal settings and geological features (cliffs, reefs, lighthouses, beaches) that form the subject of what is being rendered."
+ },
+ "oceanbot/kelp-forest": {
+  "subject": "kelp_scene",
+  "why": "kelp_scene is the hero pool that defines the WHAT—the kelp forest cathedral ecosystem itself—while canopy_light and camera_framing are modifying axes (lighting and framing)."
+ },
+ "oceanbot/lighthouse-storms": {
+  "subject": "lighthouse_scene, wave_impact",
+  "why": "lighthouse_scene defines the tower structure itself (the hero); wave_impact defines the monster wave striking it (the money-shot event); storm_sky and camera_framing are atmospheric/compositional axes, not subject."
+ },
+ "oceanbot/sea-caves": {
+  "subject": "cave_scene, light_window",
+  "why": "cave_scene describes the monumental formation or creature that anchors the scene, and light_window captures the physical sea-cave setting itself (the glowing water and light shafts that define the environment)."
+ },
+ "pixelbot/pixel-vista": {
+  "subject": "landform",
+  "why": "The landform is explicitly the hero filling 60–70% of the frame; light, sky, air, camera, and palette are modifying axes; life and moment are secondary dressing."
+ },
+ "pixelbot/pixel-cabin-glow": {
+  "subject": "dwelling_place",
+  "why": "The dwelling is explicitly stated as the hero at mid-distance whose lit windows are the brightest element, making it the primary subject pool."
+ },
+ "pixelbot/pixel-harbor": {
+  "subject": "place, life",
+  "why": "The \"place\" pool names the hero boat or waterside structure, and the \"life\" pool adds small creatures as accent elements to the scene."
+ },
+ "pixelbot/pixel-cozy-room": {
+  "subject": "room, window_view",
+  "why": "The scene has two subject pools — the room itself (the hero and primary setting) and the window_view (the money shot glimpsed through the window), while other slots are atmospheric, compositional, or modifier axes."
+ },
+ "pixelbot/pixel-fantasy-vista": {
+  "subject": "landmark, sky",
+  "why": "The landmark (built or magical wonder at 40-60% of frame) is the hero subject, and the sky is a distinct environmental subject pool that contributes to the vista composition."
+ },
+ "pixelbot/pixel-cool-rides": {
+  "subject": "ride, route_line",
+  "why": "The ride (the hero machine) and the route/lead line (the receding path) are the two subject pools that define what the scene depicts."
+ },
+ "pixelbot/pixel-rain-street": {
+  "subject": "street, pavement_reflection",
+  "why": "The street itself and its wet pavement reflections are the hardcoded primary subjects; the \"ONE focal element\" (tram, window, bridge, lamp post) is a hero within that street scene, not an alternative subject pool."
+ },
+ "pixelbot/pixel-campfire-night": {
+  "subject": "place, fire_light, sky_field",
+  "why": "The place holds the campfire location, fire_light is the warm source hero, and sky_field is the money-shot that fills the top half; air, life, moment, camera, and palette are all atmospheric or compositional modifiers, not what the render depicts."
+ },
+ "pixelbot/pixel-shoreline": {
+  "subject": "place",
+  "why": "The coastal landform or structure is explicitly identified as the hero at mid-distance, making the 'place' pool the sole subject pool defining what the render depicts."
+ },
+ "pixelbot/pixel-skyward": {
+  "subject": "vessel, land_below",
+  "why": "The vessel (a hand-built floating craft) and the land below are the two compositional heroes—the vessel as the primary subject in the upper middle, and the land as the base layer forming the scene's foundation."
+ },
+ "pixelbot/pixel-ruins": {
+  "subject": "ruin, reclamation",
+  "why": "The ruin is the hero filling 40–60% of the frame, and nature's reclamation of it is the second read, together forming the subject pool of what the scene depicts."
+ },
+ "pixelbot/cozy-rpg-town": {
+  "subject": "town_locale, town_biome, npc_life",
+  "why": "These pools define WHAT the render depicts — the specific town space, its regional character, and the inhabitants occupying it; atmospheric_phenomenon modifies the look rather than defining the scene itself."
+ },
+ "pixelbot/side-scroller-world": {
+  "subject": "biome_setting, platform_geography, hero_action",
+  "why": "These three pools define the scene's place (biome), foreground terrain (platform), and the active subject (hero with enemies), while atmospheric_phenomenon is a visual modifier layer."
+ },
+ "pixelbot/boss-arena": {
+  "subject": "arena_setting, boss_creature",
+  "why": "The arena_setting pool defines the place/scene and boss_creature pool defines the hero antagonist; player_engagement and arena_phenomenon are secondary dressing/effects."
+ },
+ "pixelbot/pixel-horror": {
+  "subject": "gothic_setting, classic_enemy, hero_action",
+  "why": "The path defines a scene (gothic_setting) populated by a monster antagonist (classic_enemy) and a playable hero (hero_action) in mid-action gameplay; gothic_props are secondary dressing."
+ },
+ "pixelbot/pixel-sci-fi-action": {
+  "subject": "sci_fi_setting, sci_fi_enemy, hero_action",
+  "why": "The setting describes the scene/location, the enemy is the antagonist creature/object, and the hero_action describes what the protagonist is doing as the focal point of the gameplay screenshot."
+ },
+ "pixelbot/classic-jrpg": {
+  "subject": "jrpg_locale, party_action, npc_or_enemy_life",
+  "why": "The locale defines the scene/place, the party_action defines the hero(es) as the render subject, and npc_or_enemy_life defines secondary characters/creatures that populate that scene."
+ },
+ "pixelbot/retro-racing": {
+  "subject": "route_scene, horizon_bands",
+  "why": "route_scene defines the coastal highway setting with its terrain types, and horizon_bands is explicitly called the \"money-shot\" that forms the core visual."
+ },
+ "starbot/cosmic-vista": {
+  "subject": "phenomenon, signature_phenomenon",
+  "why": "These are the only pools that describe WHAT THE RENDER IS OF — the astronomical phenomena and cosmic drama that form the point of the picture; all other pools modify look, framing, atmosphere, palette, or scale."
+ },
+ "starbot/alien-landscape": {
+  "subject": "biome",
+  "why": "The ALIEN_PLANET_BIOME pool is the primary hero pool that defines what alien landscape the render depicts, while anchor_entity, moment, and deep_distance are modifying axes."
+ },
+ "starbot/space-opera": {
+  "subject": "ship, setting, traffic, battle",
+  "why": "The spaceship is the primary hero anchor, the setting is the cosmic environment, and traffic/battle are conditional scene pools that define what happens in the frame."
+ },
+ "starbot/cozy-sci-fi-interior": {
+  "subject": "COZY_SCI_FI_INTERIORS",
+  "why": "The path's primary fat seed pool defines the specific interior setting—the scene itself—which is the point of the render, with all other axes (story, lighting, moment) modifying or contextualizing that core space."
+ },
+ "starbot/alien-city": {
+  "subject": "ALIEN_CITIES",
+  "why": "The setting pool defines the vast multi-tier alien city as the hero subject of the render, with anchor entities and deep-distance features as secondary compositional elements within that scene."
+ },
+ "starbot/real-space": {
+  "subject": "REAL_SPACE_SUBJECTS",
+  "why": "It is the fat-seed pool containing complete 100-160 word scene paragraphs describing the actual astronomical subject being rendered—the nebula, galaxy, stellar phenomenon, or cosmic structure that is the point of the image."
+ },
+ "starbot/cosmic-oracle": {
+  "subject": "COSMIC_ORACLE_CHARACTERS, COSMIC_ORACLE_LOCATIONS",
+  "why": "The character is the primary anchor entity and the cosmic location is the environment setting; the action pool modifies the character's pose rather than defining what the render depicts."
+ },
+ "starbot/female-explorer": {
+  "subject": "biome, action",
+  "why": "The biome (ALIEN_PLANET_BIOME) is the setting/scene that forms the stage, and action (CHARACTER_ACTION) describes what the explorer is doing in that scene; all other pools modify the character's appearance or are secondary dressing."
+ },
+ "starbot/male-explorer": {
+  "subject": "biome, explorer_archetype",
+  "why": "The biome pool defines the alien setting/scene, and the explorer_archetype pool defines the hero character whose appearance and presence is the point of the render."
+ },
+ "starbot/megastructure": {
+  "subject": "MEGASTRUCTURE_SETTING, MEGASTRUCTURE_ANCHOR_ENTITY",
+  "why": "The setting pool defines the colossal engineered construct itself (the hero), and the anchor_entity pool provides scale-proof witnesses that contextualise what we're looking at."
+ },
+ "starbot/space-femme": {
+  "subject": "biome, background_drama",
+  "why": "The render's core WHAT is the exotic perilous environment (biome) and the deep-distance secondary focal point (background_drama); the female figure is the hero positioned within that scene, not the subject pool itself."
+ },
+ "starbot/spacewalk": {
+  "subject": "void_backdrop, nearby_structure",
+  "why": "The void_backdrop (planet curve/nebula/stellar feature) and nearby_structure (colossal hull/station) are the environmental co-heroes that define the scene's \"what and where,\" while suit, visor_reflection, eva_action, and suit_detail describe the figure's appearance and gear."
+ },
+ "starbot/ring-habitat": {
+  "subject": "habitat_zone, curve_overhead, endcap",
+  "why": "These pools describe the physical structure and geography of the ring-habitat itself—the what and where of the scene's core subject."
+ },
+ "starbot/impossible-sky": {
+  "subject": "ringed_giant, sky_companions, foreground, horizon_detail",
+  "why": "These pools describe the *what* of the scene—the gas giant, moons, aurora, and alien landscape that comprise the render; atmosphere, sky_event, and witness_figure are modifiers or secondary elements."
+ },
+ "starbot/derelict": {
+  "subject": "derelict_setting, explorer_light",
+  "why": "The dead spacecraft/station structure and the explorer's flashlight beam are jointly the hero of the scene, with decay detail and atmospheric elements supporting them."
+ },
+ "starbot/leviathan": {
+  "subject": "creature_form, cosmic_setting",
+  "why": "The creature is the hero of a first-contact shot, and the cosmic setting provides the scene context; creature_detail/behavior/scale_anchor/contact_event modify or anchor the render rather than define what it depicts."
+ },
+ "starbot/orbital-descent": {
+  "subject": "ORBITAL_DESCENT_PLANET, ORBITAL_DESCENT_SURFACE, ORBITAL_DESCENT_CRAFT",
+  "why": "The planet and its surface are the scene itself, and the approaching craft is the hero element within that orbital descent scenario."
+ },
+ "starbot/cockpit-view": {
+  "subject": "cockpit_type, view_beyond",
+  "why": "cockpit_type defines the interior space/vessel and view_beyond defines what the pilot sees out the canopy—together they form the complete scene being rendered."
+ },
+ "starbot/ship-graveyard": {
+  "subject": "graveyard_setting, explorer_craft",
+  "why": "The graveyard_setting defines the vast fleet boneyard scene itself, and explorer_craft is the lone hero navigating through it."
+ },
+ "starbot/terraforming": {
+  "subject": "terraform_stage, climate_drama, world_backdrop",
+  "why": "These pools define the scene itself—the stage of planetary transformation, the atmospheric/climate conflict, and the alien world's visual state—while the others (tech, settlement, milestone) are modifications or secondary elements."
+ },
+ "starbot/robot-moment": {
+  "subject": "ROBOT_TYPES, ROBOT_CHARACTER_INTERIOR, ROBOT_PLANET_SETTING",
+  "why": "The path has two subject pools—the ornate robot character itself and the living environment setting (either interior or planet wilderness) in which it's caught mid-action."
+ },
+ "starbot/scifi-cyborg-female": {
+  "subject": "xeno_being, biome",
+  "why": "The hero is an exotic alien-cyborg species (xeno_being), rendered within an alien environment (biome); signature_wow, eyes, look, composition, and drama are all modifying axes that shape how the scene appears, not what it depicts."
+ },
+ "starbot/og-cyborg-female": {
+  "subject": "OG_CYBORG_SUBJECT",
+  "why": "This pool defines the hero — the beautiful human-proportioned female cyborg woman who is the point of the render."
+ },
+ "starbot/mech-insect-hybrids": {
+  "subject": "being, biome",
+  "why": "The HERO (mech-insect hybrid creature) and its bio-mechanical environment are what the render depicts; all other pools modify appearance, atmosphere, or framing."
+ },
+ "starbot/void-lancers": {
+  "subject": "lancer, void",
+  "why": "The lancer is the hero mech-knight archetype, and void is the orbital setting that establishes WHAT the render depicts—zero-G combat in hard vacuum around a planet."
+ },
+ "starbot/post-apoc-rust-tech": {
+  "subject": "RUST_APOC_SUBJECTS, RUST_APOC_SETTINGS",
+  "why": "The path renders post-apocalyptic scavenger rigs and walkers as the hero subject, positioned within wasteland landscapes (hardpan, ruins, salvage yards) that form the scene."
+ },
+ "starbot/alien-biomechs": {
+  "subject": "ALIEN_BIOMECH_SUBJECTS, ALIEN_BIOMECH_SETTINGS",
+  "why": "The path has two core subject pools — the alien creature organism itself and its habitat setting — with everything else (action, camera, lighting, atmosphere) being modifiers or framing choices."
+ },
+ "starbot/killer-cyborgs-male": {
+  "subject": "xeno_being, biome",
+  "why": "The xeno_being pool defines the male cyborg assassin hero, and the biome pool defines the setting/location where the render takes place."
+ },
+ "starbot/event-horizon": {
+  "subject": "hole_presentation",
+  "why": "The black hole and its accretion disk are the primary scene being rendered; all other pools modify lighting, lensing, scale perspective, backdrop, or add events."
+ },
+ "starbot/gas-giant-skies": {
+  "subject": "cloudscape, float_presence, storm_titan",
+  "why": "These three pools describe the scene itself (cloud formations, floating platforms/cities, and the massive storm), while the others modify atmosphere, lighting, and sky layer."
+ },
+ "starbot/first-contact": {
+  "subject": "arrival_form, earth_setting",
+  "why": "The arrival form is the alien ship (the hero/focus), and earth_setting is the landscape below where the encounter occurs; event_light and witness_scale are atmospheric/compositional modifiers, not what the render depicts."
+ },
+ "steambot/steampunk-scene": {
+  "subject": "character, landscape",
+  "why": "The file explicitly states the landscape and character are co-heroes of the scene, making both the WHAT of the render."
+ },
+ "steambot/airship-skies": {
+  "subject": "scene",
+  "why": "The scene pool contains the airship and sky-galleon subjects that are the focal point of these dramatic movie-poster renders."
+ },
+ "steambot/airship-female": {
+  "subject": "backdrop, drama",
+  "why": "The backdrop pool defines the distant sky/city/terrain setting, and the drama pool defines environmental events that constitute the scene; the character's appearance and action are staging elements, not the subject of the render."
+ },
+ "steambot/airship-male": {
+  "subject": "backdrop, action",
+  "why": "The backdrop pool defines the airship deck stage/setting, and the action pool defines the mid-action scene (combat, climbing rigging, etc.) that is the primary visual focus; the male character's appearance and outfit are secondary dressing."
+ },
+ "steambot/steampunk-curio": {
+  "subject": "curio, habitat",
+  "why": "The curio pool defines the mechanical automaton hero, and the habitat pool defines the Victorian-industrial setting room where it rests."
+ },
+ "steambot/sexy-steampunk-woman": {
+  "subject": "landscape, action",
+  "why": "The landscape pool defines the Victorian-industrial setting, and the action pool defines the candid moment/pose, together composing what the scene depicts; all other pools modify the character's appearance or are excluded as per instructions."
+ },
+ "steambot/steampunk-man": {
+  "subject": "landscape, action",
+  "why": "The setting (Victorian-industrial environment) and the moment/activity (outdoor candid action) define what the render depicts; character appearance pools (skin, eyes, facial_hair, hair_color, hairstyle, outfit, accessory) and persona are modifiers of the figure itself."
+ },
+ "steambot/steampunk-spectacle": {
+  "subject": "SPECTACLE_EVENTS",
+  "why": "The event pool defines the grand Victorian-industrial ceremonies, festivals, and performances that are the central subject of these crowd-driven scenes."
+ },
+ "steambot/steam-transport": {
+  "subject": "transport, terrain_drama",
+  "why": "The transport pool defines the vehicle (the hero machine) and terrain_drama defines the dramatic landscape setting that creates the scene together."
+ },
+ "steambot/cozy-steampunk": {
+  "subject": "room, window_view",
+  "why": "The file header explicitly states both the steampunk interior room and the window view are \"both heroes\" — the primary subjects being rendered."
+ },
+ "steambot/steampunk-labs": {
+  "subject": "lab_space, centerpiece, apparatus, scientist",
+  "why": "The path composes Victorian-industrial laboratory interiors (setting) with a glowing experiment centerpiece (focal subject) and optional scientist figure (secondary subject), while electrical phenomena and apparatus are decorative/atmospheric modifiers."
+ },
+ "steambot/steampunk-hybrid": {
+  "subject": "hybrid_world",
+  "why": "The hybrid_world pool describes the collision of steampunk with another genre (gothic-horror, western, etc.), defining the actual scene/environment that is the render's primary subject."
+ },
+ "steambot/nautilus-depths": {
+  "subject": "submersible, deep_encounter, leviathan_shadow",
+  "why": "The submersible is the vessel-hero, deep_encounter describes the underwater setting/scene, and leviathan_shadow is the creature co-presence that defines what is encountered in the depths."
+ },
+ "steambot/celestial-observatory": {
+  "subject": "observatory_space, great_instrument, sky_through_dome",
+  "why": "These three pools define the core scene—the observatory setting, its primary telescope instrument, and the night sky viewed through the dome—which together form what the render depicts."
+ },
+ "steambot/clocktower-heart": {
+  "subject": "mechanism_hall, gear_choreography",
+  "why": "These pools define the physical setting (the cathedral-scale clock interior with gears and catwalks) and the primary focal choreography (gear movement), while the others are lighting, scale reference, and timed events."
+ },
+ "steambot/skydock-harbor": {
+  "subject": "harbor_vista, dock_activity",
+  "why": "harbor_vista describes the place itself (docked fleets, gantry-towers, platforms), and dock_activity describes the verb-led events and multi-actor bustle that define what is happening in that place; mooring_light, crowd_texture, and departure_event are atmospheric/compositional modifiers or secondary dressing, not the core subject."
+ },
+ "tinybot/diorama": {
+  "subject": "DOLLHOUSE_DIORAMAS",
+  "why": "The diorama pool is the primary subject—it defines the miniature scene being photographed, while atmosphere, palette, and lighting are all modifying axes applied to that scene."
+ },
+ "tinybot/miniature-landscape": {
+  "subject": "MINIATURE_LANDSCAPES",
+  "why": "The landscape pool variable holds the diorama scene itself, which is the primary subject of what the render depicts."
+ },
+ "tinybot/macro-nature": {
+  "subject": "MACRO_NATURE_SUBJECTS, TINY_CREATURES",
+  "why": "The path picks a macro nature subject as the primary scene hero and optionally includes a tiny creature as a secondary subject within that miniaturized landscape."
+ },
+ "tinybot/miniature-urban": {
+  "subject": "MINIATURE_URBAN_SCENES",
+  "why": "The pool contains the actual urban settings/places that are photographed in miniature via tilt-shift, which is what the render depicts."
+ },
+ "tinybot/tiny-cozy": {
+  "subject": "TINY_COZY_SCENES, TINY_COZY_DWELLERS",
+  "why": "The scene pool defines the setting/space that is the hero, and the dweller pool defines the creature inhabiting it whose presence is mandatory to the composition."
+ },
+ "tinybot/contained-worlds": {
+  "subject": "CONTAINED_WORLDS, TINY_TERRARIUM_DWELLERS",
+  "why": "The path renders a specific contained world (setting pool) with a tiny creature performing an action within it (creature pool), where both are equally compositional heroes."
+ },
+ "tinybot/micro-fantasy": {
+  "subject": "MICRO_FANTASY, TINY_CREATURES",
+  "why": "The path picks a micro-fantasy scene (the setting/diorama) and a tiny creature (the magical inhabitant), both of which define what the render depicts."
+ },
+ "tinybot/miniature-industry": {
+  "subject": "MINIATURE_INDUSTRY, TINY_INDUSTRY_CREW",
+  "why": "The path renders a dollhouse-scale workshop scene as the primary subject, with miniature workers as mandatory secondary subjects actively engaged in their labor within that setting."
+ },
+ "tinybot/cottage-village": {
+  "subject": "COTTAGE_VILLAGE",
+  "why": "The pool provides the specific miniature village scene that is the primary subject being rendered, while atmospheres and palettes are modifying axes."
+ },
+ "tinybot/mushroom-village": {
+  "subject": "MUSHROOM_VILLAGE, TINY_CREATURES",
+  "why": "The path renders a fungal settlement as the primary subject, with an optional tiny creature inhabitant as a secondary subject pool."
+ },
+ "tinybot/pastel-village": {
+  "subject": "PASTEL_VILLAGE, TINY_VILLAGE_FOLK",
+  "why": "The scene renders a pastel fairy-tale village setting as the primary subject, with mandatory villagers caught mid-action as secondary hero subjects."
+ },
+ "tinybot/enchanted-village": {
+  "subject": "ENCHANTED_VILLAGE, TINY_CREATURES",
+  "why": "The path picks a village scene as the primary subject and conditionally adds a tiny creature as a secondary hero element, with atmosphere as a modifier layer only."
+ },
+ "tinybot/tiny-beach": {
+  "subject": "TINY_BEACH, TINY_CREATURES",
+  "why": "The pools define the coastal setting (beach, pier, lighthouse, etc.) as the primary subject, with an optional tiny creature as secondary subject when included."
+ },
+ "tinybot/tiny-food-world": {
+  "subject": "TINY_FOOD_WORLD",
+  "why": "The path picks from a dedicated food-world scene pool that describes edible landscapes and architectural food structures, which is the core subject being rendered."
+ },
+ "tinybot/tiny-vehicles": {
+  "subject": "TINY_VEHICLES, TINY_JOURNEY_BEATS, TINY_WORLDS",
+  "why": "The vehicle is the hero subject, the journey beat describes what's happening (the scene's action), and the tiny world is the setting/stage where it all occurs."
+ },
+ "tinybot/tiny-winter-village": {
+  "subject": "TINY_WINTER_VILLAGE, TINY_WINTER_VILLAGE_CAST",
+  "why": "The scene pool defines the miniature village diorama itself (the constructed world and its layers), and the cast pool provides the cute critters giving it life, with the village explicitly named as \"the hero.\""
+ },
+ "tinybot/tiny-night-market": {
+  "subject": "TINY_NIGHT_MARKET, TINY_NIGHT_MARKET_CAST",
+  "why": "The path has two subject pools—the miniature night market scene (the setting/hero) and the tiny animal cast (the vendors and shoppers who inhabit it)."
+ },
+ "tinybot/tiny-carnival": {
+  "subject": "TINY_CARNIVAL, TINY_CARNIVAL_CAST",
+  "why": "The scene pool defines the miniature fairground setting itself (Ferris wheel, carousel, tents, lights), and the cast pool defines the tiny animals who inhabit and operate it."
+ },
+ "toybot/claymation": {
+  "subject": "CLAYMATION_LANDSCAPES, CLAYMATION_SCENES, CLAYMATION_STORY_BEATS",
+  "why": "These three pools define the physical setting and the narrative event occurring within it, which together constitute what the render depicts."
+ },
+ "toybot/vinyl": {
+  "subject": "VINYL_FUNKO_CAST, TOY_SCENARIOS",
+  "why": "The cast pool provides the character subjects (which Funko Pops appear) and the scenario pool provides the setting/situation subjects (what real-world context the figures are performing in)."
+ },
+ "toybot/sackboy": {
+  "subject": "SACKBOY_LANDSCAPES, SACKBOY_SCENES",
+  "why": "The path picks either a landscape or scene pool as the core setting, which defines WHAT THE RENDER IS OF in the fabric-world environment."
+ },
+ "toybot/shortcake-scene": {
+  "subject": "SHORTCAKE_LANDSCAPES, SHORTCAKE_SCENES, TOY_SCENARIOS",
+  "why": "The path pulls from scene/landscape pools and optional scenario pool to define the physical setting and circumstance that is the point of the render."
+ },
+ "toybot/barbie-scene": {
+  "subject": "scene",
+  "why": "The scene pool encodes the complete story setup—the playset surface, the protagonist dolls, the absurd action, supporting dolls, and prop decoration—which collectively define what the render depicts."
+ },
+ "toybot/gi-joe-missions": {
+  "subject": "GI_JOE_MISSIONS_SCENES",
+  "why": "The scene pool defines the diorama setting/playset location where the action figures are positioned; story beat and all other axes (lighting, atmosphere, palette, camera) modify how that scene is rendered."
+ },
+ "toybot/green-army-warzone": {
+  "subject": "GREEN_ARMY_WARZONE_SCENES",
+  "why": "The scene pool defines the setting and diorama environment that is the point of the photograph, while lighting, camera, atmosphere, and story beat are modifiers or context layers."
+ },
+ "toybot/miniature-dungeon": {
+  "subject": "MINIATURE_DUNGEON_SCENES, MINIATURE_DUNGEON_LANDSCAPES",
+  "why": "These pools define the tabletop terrain diorama setting that is the visual subject; the story beat, lighting, and atmosphere modify how that setting appears rather than defining what it is."
+ },
+ "toybot/collector-shelf-epic": {
+  "subject": "COLLECTOR_SHELF_LANDSCAPES, COLLECTOR_SHELF_SCENES",
+  "why": "The battle setting is chosen from either a landscapes pool or a scenes pool, establishing the diorama environment where the action figures clash."
+ },
+ "toybot/epic-hero-bucket": {
+  "subject": "EPIC_HERO_BUCKET_LANDSCAPES, EPIC_HERO_BUCKET_SCENES, TOYBOT_TOYBOX_STORYTELLING_SCENES",
+  "why": "The path picks a landscape OR scene as the physical setting, then layers a specific narrative story beat event into that setting, making both the scene and story beat the WHAT of the render."
+ },
+ "toybot/dollhouse-life": {
+  "subject": "DOLLHOUSE_LIFE_SCENES, DOLLHOUSE_LIFE_LANDSCAPES",
+  "why": "These pools define the physical miniature interior or exterior setting that is the core subject of each dollhouse diorama render."
+ },
+ "toybot/model-train-world": {
+  "subject": "scene, train_consist",
+  "why": "The scene pool describes the diorama landscape/setting, and the train_consist pool describes the train itself—together these form the core \"what the render is of.\""
+ },
+ "toybot/plush-world": {
+  "subject": "scene",
+  "why": "The scene pool encodes the complete storybook moment — setting, protagonist plush, action, supporting cast, and props — which is the \"what the render is of.\""
+ },
+ "toybot/mech-toy-rampage": {
+  "subject": "MECH_TOY_LANDSCAPES, MECH_TOY_SCENES, MECH_ARCHETYPES",
+  "why": "The scene is defined by either a landscape OR scene setting pool, plus a cast of specific mech archetypes that are the heroes performing the combat action."
+ },
+ "toybot/toybox-chaos": {
+  "subject": "toy_cast, surface, scenario, story_beat",
+  "why": "These pools define WHAT the render depicts — the toys themselves (pickN:4), the playing surface they're on, the situation unfolding, and the narrative event driving the composition."
+ },
+ "toybot/space-saga-figures": {
+  "subject": "SPACE_SAGA_FIGURES, SPACE_SAGA_LANDSCAPES, SPACE_SAGA_SCENES",
+  "why": "The path defines figures (the cast) and either landscapes or scenes as the dual subject pools that form the render's point; lighting, camera, and story-beats are atmospheric/compositional modifiers, not subjects."
+ },
+ "toybot/monster-boss-battle": {
+  "subject": "FINAL_BOSSES, TOY_SCENARIOS",
+  "why": "The path renders a climactic toy-scale battle where both the boss monster and the scenario setting are the core subjects being depicted; the story beat, lighting, and atmosphere are narrative and visual modifiers, not subjects."
+ },
+ "toybot/dino-diorama": {
+  "subject": "biome, anchor, cast",
+  "why": "The biome is the clay-sculpted prehistoric world setting, the anchor is the monumental hero element within it, and the cast are the real toy dinosaurs that are the staged subjects of the diorama."
+ },
+ "toybot/toy-blockbuster": {
+  "subject": "scenario, centerpiece, setting",
+  "why": "These three pools define what the render depicts—the epic action scene, its dominant focal point, and the physical stage where it unfolds."
+ },
+ "toybot/giant-toys": {
+  "subject": "giant_toy, cast_toys, setting",
+  "why": "The giant boss toy and the smaller cast toys are the heroes of the scene, and the real-world arena setting is where the toy battle takes place."
+ },
+ "toybot/toy-landscapes": {
+  "subject": "TOYBOT_TOY_LANDSCAPES_LOCATIONS",
+  "why": "The path renders famous real-world landscape vistas as handcrafted dioramas, with location and scene as the primary subject pool defining what the craft-world depicts."
+ },
+ "toybot/board-game-world": {
+  "subject": "TOYBOT_BOARD_GAME_SCENES, TOYBOT_BOARD_GAME_PIECES",
+  "why": "The scene pool defines the board-world setting (the painted illustrated spaces as a tiny world), and the pieces pool defines the game tokens/meeples that are the story protagonists crossing that board."
+ },
+ "toybot/tin-toy-parade": {
+  "subject": "TOYBOT_TIN_TOY_SCENES, TOYBOT_TIN_TOY_PIECES",
+  "why": "The path has two subject pools—one for the parade-world setting and one for the vintage tin toys that are the hero subjects of the photograph."
+ },
+ "yumbot/floral-garden-cup": {
+  "subject": "vessel, overflowing_flora",
+  "why": "The vessel (teacup/mug/bowl) and the magical bouquet overflowing from it are the core subjects being rendered; all other pools modify appearance, atmosphere, or provide secondary dressing."
+ },
+ "yumbot/floral-garden-scene": {
+  "subject": "scene_type, vessel, overflowing_flora, tabletop_scatter, frame_branches",
+  "why": "These pools define the garden scene's compositional elements—the arrangement type, the planters themselves, the flowers overflowing from them, scattered treats, and framing botanicals—which together form WHAT THE RENDER IS OF."
+ },
+ "yumbot/rainbow-dreamscape": {
+  "subject": "food_inhabitants, environment, dreamscape_setting",
+  "why": "The render depicts kawaii-faced food containers as heroes in a pastel dreamscape landscape with environmental features and rainbow elements—the food and setting are what the picture is of."
+ },
+ "yumbot/checkered-tabletop": {
+  "subject": "TABLETOP_VESSEL_HERO, TABLETOP_MINI_CREATURE_PILE",
+  "why": "The vessel_hero and mini_creature_pile define WHAT the render depicts—a kawaii-faced food/drink character and the cluster of smiling mini-food friends that compose the scene's hero subjects."
+ },
+ "yumbot/candy-fantasy": {
+  "subject": "candy_landscape, candy_terrain, food_inhabitants, companions",
+  "why": "These pools define the Sugar Rush world setting, terrain, creatures, and scene composition that constitute WHAT IS RENDERED, while the others (camera, lighting, time_of_day, weather, sky) are visual axes that modify the look."
+ },
+ "yumbot/japanese-festival": {
+  "subject": "scene_type, market_backdrop, food_inhabitants",
+  "why": "These pools define the WHAT of the render: the festival scene type, the market setting backdrop, and the kawaii food subjects that are the heroes of the composed lineup."
+ },
+ "yumbot/mini-chef": {
+  "subject": "kitchen_backdrop, dish_being_prepared, food_inhabitants",
+  "why": "These pools define what the render depicts—the kawaii kitchen setting, the dish being prepared as the centerpiece, and the five food-character chefs that populate the scene."
+ },
+ "yumbot/cottagecore-nature": {
+  "subject": "scene_type, backdrop, terrain, nature_element",
+  "why": "These pools define the *place* and *what is depicted* — the cottage setting, landscape, and featured natural detail — while the others modify atmosphere, lighting, camera, or populate it with characters."
+ },
+ "yumbot/coquette-food": {
+  "subject": "scene_type, backdrop, terrain, food_inhabitants",
+  "why": "These pools define the WHERE and WHAT of the scene — the coquette party setting, its backdrop, ground, and the food items that populate it as the central visual subject matter."
+ },
+ "yumbot/meal-types": {
+  "subject": "scene",
+  "why": "The scene pool contains the meal-occasion settings (breakfast/high-tea/picnic/coffee-shop/food-truck/midnight-snack) that define WHAT IS BEING RENDERED, while all other pools are modifying axes."
+ },
+ "yumbot/whimsical": {
+  "subject": "scene, companion",
+  "why": "The scene pool defines whimsical food-based settings (food-with-pets, food-fashion-show, etc.) and the companion pool provides the characters/creatures that inhabit those scenes, together forming the \"what the render is of.\""
+ },
+ "yumbot/cuisine": {
+  "subject": "scene",
+  "why": "The scene pool contains the actual culinary settings and food-focused environments that form the core subject matter of each render."
+ },
+ "yumbot/scale": {
+  "subject": "YUMBOT_SCALE_SCENES, YUMBOT_SCALE_COMPANIONS",
+  "why": "The scene pool defines the place/environment across scale themes, and the companion pool introduces a figure as the hero within that scene."
+ },
+ "yumbot/places": {
+  "subject": "scene",
+  "why": "The `scene` pool is the only one that describes WHAT THE RENDER IS OF — the actual place/setting (greenhouse, library, train, amusement park, aquarium, rooftop garden); all other pools modify look, framing, lighting, mood, or add secondary dressing."
+ },
+ "yumbot/narrative": {
+  "subject": "scene, companion",
+  "why": "The scene pool defines the narrative setting (baking, harvest, shop, parade, tea party, delivery) and the companion pool defines the figure(s) present in that setting."
+ },
+ "yumbot/fruits-veggies": {
+  "subject": "scene",
+  "why": "The scene pool defines the environmental settings (vegetable-garden, fruit-tree, harvest-basket, etc.) that are the foundational \"what the render is of,\" while other pools modify lighting, framing, palette, and add companion characters."
+ },
+ "yumbot/fast-food": {
+  "subject": "scene",
+  "why": "The `scene` pool defines the fast-food setting/environment that is the primary subject of the render, while all other pools (camera_framing, lighting, palette, time_of_day, companion, decor_accents, atmospheric_accent) are modifiers of appearance, framing, or mood."
+ },
+ "yumbot/carnival-food": {
+  "subject": "scene",
+  "why": "The scene pool defines the carnival food vendor stations and settings that are the primary subject of the render."
+ },
+ "yumbot/food-adventures": {
+  "subject": "scene",
+  "why": "The scene pool defines the real-world locations where the food characters perform their activities (amusement park, water park, mall, camping, etc.), which is the primary WHAT THE RENDER IS OF."
+ },
+ "yumbot/food-amusement-park": {
+  "subject": "scene",
+  "why": "The scene pool defines the amusement park locations and ride types that form the core \"what the render is of,\" while all other pools (camera, lighting, palette, time, companion, decor, atmosphere) are axes that modify how that scene appears."
+ },
+ "yumbot/food-water-park": {
+  "subject": "scene",
+  "why": "The `scene` pool references `YUMBOT_WATER_PARK_SCENES`, which defines the water-park setting and location that is the core subject of what is being rendered."
+ },
+ "yumbot/food-beach-day": {
+  "subject": "scene",
+  "why": "The `scene` pool (YUMBOT_BEACH_DAY_SCENES) defines the place and setting that is the point of the picture, while all other pools modify appearance, lighting, framing, atmosphere, time, companions, and decorative details."
+ },
+ "yumbot/food-camping": {
+  "subject": "scene",
+  "why": "The scene pool contains the camping setting and location that forms the core \"what the render is of,\" while all other pools are modifiers (camera, lighting, palette, time, atmospheric qualities, and decorative elements)."
+ },
+ "yumbot/food-concert": {
+  "subject": "scene",
+  "why": "The scene pool (YUMBOT_CONCERT_SCENES) defines the concert setting itself—the stage, crowd, and food-band performance—which is the what-the-render-is-of; all other pools are modifiers (lighting, camera, palette, time, companions, decor, atmosphere)."
+ },
+ "yumbot/food-arcade": {
+  "subject": "scene",
+  "why": "The `scene` pool (YUMBOT_ARCADE_SCENES) defines the arcade setting and location that is the point of the render, while all other pools modify lighting, framing, atmosphere, time, companions, and decor."
+ },
+ "yumbot/food-county-fair": {
+  "subject": "scene",
+  "why": "The scene pool contains the county-fair setting with cast, action, and location baked in as the core subject; all other pools are modifiers (camera, lighting, palette, time, companion, decor, atmosphere)."
+ },
+ "yumbot/food-birthday-party": {
+  "subject": "scene",
+  "why": "The `scene` pool (YUMBOT_BIRTHDAY_PARTY_SCENES) defines the birthday-party setting, cast, action and location that form the core subject of what is being rendered."
+ },
+ "yumbot/food-outings": {
+  "subject": "scene",
+  "why": "The scene pool defines the 12 distinct food-outing settings (mall, zoo, skatepark, etc.) that are the core subject matter of what is being rendered."
+ },
+ "yumbot/kawaii-drinks": {
+  "subject": "YUMBOT_KAWAII_DRINKS_SCENES, YUMBOT_KAWAII_DRINKS_TREATS",
+  "why": "The scene pool defines the lively setting backdrop, and the drinks pool provides the adorable drink-characters who are the visual heroes of the render."
+ },
+ "yumbot/holiday-sweets": {
+  "subject": "YUMBOT_HOLIDAY_SWEETS_SCENES, YUMBOT_HOLIDAY_SWEETS_TREATS",
+  "why": "The path has two subject pools—the festive scene setting and the kawaii holiday treats themselves, which are positioned as the visual stars of the render."
+ },
+ "yumbot/food-village": {
+  "subject": "YUMBOT_FOOD_VILLAGE_SCENES, YUMBOT_FOOD_VILLAGE_RESIDENTS",
+  "why": "The path has two subject pools — one defining the edible architecture/world setting and one defining the cute food-character inhabitants who are the focal point."
+ }
+}

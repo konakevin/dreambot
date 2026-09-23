@@ -310,12 +310,54 @@ have enough paths?) and is not this task.
 | --- | --- | --- |
 | Baseline audit, all pools, likeness-based | **done** | `scripts/audit-seed-redundancy.js`, 31,355 redundant fleet-wide (includes axis pools, superseded as a work list) |
 | Settle the "same idea" definition | **done** | `scripts/lib/ideaSimilarity.js`, calibrated against labelled clusters |
-| Identify every path's SUBJECT pool | **running** | `scripts/identify-subject-pools.js` → `SUBJECT_POOL_MAP.json` |
-| Audit idea-count for subject pools only | **blocked on the above** | partial name-based result was 52 pools / 8 bots and is NOT trustworthy |
-| Agree the broadened concept range, per pool, with Kevin | not started | he approves the category list before any generation |
-| Re-seed ONE pool, render 6, Kevin reviews | not started | `earthbot/epic_sunset_subject` is the candidate |
+| Identify every path's SUBJECT pool | **done** | `SUBJECT_POOL_MAP.json`, all 18 live bots, 715 subject pools resolved, 66 names unresolved (mostly ChibiBot `creature*` slots) |
+| Audit idea-count for subject pools only | **done** | **154 subject pools under 100 distinct ideas, ~4,930 entries to author.** YumBot 24, EarthBot 21, MangaBot 18, BloomBot 14, FaeBot 12, StarBot 11, ChibiBot 11, OceanBot 9, TinyBot 7, PixelBot 7, rest 20 |
+| Agree the broadened concept range, per pool, with Kevin | **pilot range set** | 15 categories, inside the path's documented bounds |
+| Re-seed ONE pool, render 6, Kevin reviews | **IN PROGRESS** | pilot is `bloombot/flower-friends` → `flower_focal_cluster` (125 entries, 8 ideas) |
 | Roll out to remaining pools | not started | |
 | CI gate | not started | lands LAST, per §6b |
+
+### PILOT — `bloombot/flower-friends`, in progress
+
+Kevin: *"take one of the paths and work on getting it properly cleaned up and backfilled, then run some
+test renders ... this is the case study. once we figure out and prove out a repeatable strategy on the
+pilot path, we can then move to a system wide iterative task."*
+
+**Why this path.** Its subject pool is the most extreme case in the fleet, the path is live so renders
+are meaningful, and — decisively — the path's own header already says the pool should be broader:
+*"pink-purple-cream-coral palette in the refs, but ALL flower colors welcome here."* So broadening
+restores the documented intent instead of changing the brand.
+
+| pool | entries | distinct ideas | redundant | verdict |
+| --- | --- | --- | --- | --- |
+| `flower_focal_cluster` | 125 | **8** | 94% | the work |
+| `hero_pollinator` | 196 | 129 | 34% | healthy, leave alone |
+| `magical_particles` | — | — | — | axis, out of scope |
+
+The 8 ideas are one idea in six colourways: 40 powder-blue wildflower clusters, 26 pale-blue periwinkle,
+25 pale-violet phlox, 13 lilac, 7 buttercup, 6 blush pink. Every entry is
+"SOFT/PALE ‹colour› + three flower names + delicate". That is why every flower-friends render is a
+pastel bouquet.
+
+**Method being proved** (`scripts/reseed-subject-pool.js`, dry-run by default):
+1. Cluster the pool, KEEP one representative of every existing idea. Nothing is thrown away; the 117
+   restatements simply do not survive, and the backup holds the original.
+2. The operator supplies CATEGORIES — kinds of idea the pool should cover but does not. This is the
+   step that matters, and it is what dedup-only would have missed.
+3. Generate per category, then validate every entry: lexical distinctness against existing AND against
+   other new entries, register/length band, no negation, no text-prior nouns. Rejections are reported
+   with reasons, never silently dropped.
+4. Re-measure, then **6 shadow renders** on the path and review in the app. The render is the proof; the
+   audit only proves the text changed.
+
+15 categories authored for the pilot, all inside the path's bounds: bold saturated colourways, one
+single dramatic bloom, tropical/exotic, dark and moody, spiky/architectural, seed heads and spent
+blooms, flowering herbs, climbers and pendant forms, water-adjacent, wild meadow, night bloomers,
+post-rain/dew-laden, autumn, early spring, grasses in flower.
+
+**What the pilot has to establish before anything else is touched:** that expanding categories measurably
+raises distinct ideas, that the generated entries survive validation at an acceptable rate, that the
+renders actually look more varied, and what it really costs per pool.
 
 ### What is NOT yet known, and must not be guessed
 
@@ -324,6 +366,12 @@ have enough paths?) and is not this task.
 - **Whether each pool's motif should be broadened or preserved.** For `epic_sunset_subject`, is
   EarthBot's intent specifically tropical-beach-sunset (pool is correct, bot needs more paths) or
   "epic sunsets" broadly (pool is too narrow)? That is a brand call per pool, and Kevin's.
+- **Two of my own audit bugs, fixed, recorded so the numbers are not re-quoted wrong.** (1)
+  `entryText` only read `description`/`text`, so BrickBot's `{location, scene, tier}` pool returned
+  empty for all 1,601 entries and was reported as "0 distinct ideas, worst in the fleet". It is
+  actually 1,601 entries → 1,531 ideas, 4% redundant, perfectly healthy. (2) The LLM listed appearance
+  pools (`bot_body`, `bot_eyes`, `bot_pose`) as subject because the bot IS the subject; those are now
+  filtered, since by Kevin's definition appearance is not the scene.
 - **Real cost.** The earlier ~$140 estimate assumed purify-and-backfill. Expanding concept space on ~50
   pools is closer to authoring new pools and will cost more. Re-estimate after the one-pool trial.
 
