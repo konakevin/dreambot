@@ -96,7 +96,7 @@ Then the rest, grouped by bot to reuse each bot's audit.
 | 5 | BloomBot | alpine-wildflower-meadow | - | not started | |
 | 6 | BloomBot | coastal-cliff-bloom | - | not started | |
 | 7 | BloomBot | orchid-cloud-forest | - | not started | |
-| 8 | BrickBot | airfield-biplanes | 4+1 | validating plain-surface move | camera purge was the fix; residual gibberish ~1/5 |
+| 8 | BrickBot | airfield-biplanes | 5 | **PASS w/ residual, AWAITING GRADE** | best draws 4.5 (biplane wheels-off over a brick garden); gibberish wing text ~1-2/6, a known fleet band |
 | 9 | BrickBot | balloon-festival | - | not started | |
 | 10 | BrickBot | archaeology-dig | - | not started | |
 | 11 | DinoBot | den-and-burrow | 1 | **PASS ~4.7, AWAITING GRADE** | designed from the motto: the hero is the unseen underground |
