@@ -11,7 +11,7 @@
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { dualFaceSwap } from './faceSwap.ts';
+import { dualFaceSwap, effectiveSwapDeadline } from './faceSwap.ts';
 import { detectFacesWithGender } from './faceDetect.ts';
 import { decodeImage } from './imageCodec.ts';
 import { cosine, embedFace, embedReference } from './faceEmbed.ts';
@@ -384,17 +384,11 @@ Deno.serve({ port: PORT }, async (req) => {
   const t0 = Date.now();
   console.log(`[face-swap-dual] Start userId=${userId.slice(0, 8)} target=${targetUrl.slice(-30)}`);
 
-  // Re-base the swap deadline at request RECEIPT. The caller (generate-dream)
-  // passes an ABSOLUTE wall-clock deadline computed BEFORE it dispatched to us.
-  // If this machine cold-started (~9s boot at low traffic / on auto-scale-up),
-  // that boot elapsed before this handler ran and already ate into the absolute
-  // window — squeezing the swap budget until Replicate times out (the
-  // 2026-06-15 dual-swap failures). Flooring at now + MIN_SWAP_BUDGET_MS
-  // guarantees a cold-booted machine still gets a full swap budget, so a cold
-  // start costs LATENCY, not a failed dream — at ANY scale-up depth, not just
-  // machine #1. Warm requests keep the caller's larger (later) deadline.
-  const MIN_SWAP_BUDGET_MS = 60_000;
-  const effectiveDeadlineMs = Math.max(deadlineMs ?? 0, t0 + MIN_SWAP_BUDGET_MS);
+  // Work to the CALLER's deadline (+4 s grace), not a 60 s floor from receipt (NIGHTLY_ROBUSTNESS_PLAN.md item 6b,
+  // 2026-09-23). The floor (2026-06-15) protected a cold-booted machine's budget, but the caller gives up at its
+  // deadline + 5 s regardless, so the extra seconds were a swap nobody received, holding this machine after the
+  // swap capacity gate had already given its slot away. Both machines are always warm now. See effectiveSwapDeadline.
+  const effectiveDeadlineMs = effectiveSwapDeadline(deadlineMs, t0);
 
   try {
     const { swappedUrl, faceCount, reason, identity, bigFace, maxFaceHFrac } = await dualFaceSwap(

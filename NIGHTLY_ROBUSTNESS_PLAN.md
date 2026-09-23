@@ -1,6 +1,6 @@
 # Nightly robustness: couples fail when the swap service is busy
 
-Status: items 1-7 LIVE except 6b (2026-09-23, migrations 549-552 + Fly machines warm); 6b (edge/Fly deadline) in progress. Kevin: "we anticipate eventually getting hundreds of users all
+Status: ALL items LIVE (2026-09-23): migrations 549-553, both Fly machines warm, Fly engine deadline fix (6b), capacity retries keep the couple. Kevin: "we anticipate eventually getting hundreds of users all
 generating their nightly dream at once … can we look into the way the nightly dreams are generated for all
 users during the nightly run and see if we can make it more robust and not so damn flakey?"
 
@@ -195,3 +195,28 @@ prefix), so the dream stays a real one. Stamps: `capacity_retry_pin:any|partner`
 - Tests: `__tests__/lib/capacityRetryPin.test.ts` (parse, hold rules, partner, never-throws, not-QA, every wiring
   hop, pin applied after the day-of pre-roll), `__tests__/db/capacityRetryPin.dbspec.ts` (merge keeps other keys,
   null payload, leaves a finished job alone).
+
+## Live (2026-09-23 ~22:00 UTC, Fly deploy): item 6b, the edge/Fly deadline drift
+
+Three fixes in `services/face-swap-dual` (deployed with `fly deploy --strategy rolling`, one machine at a time):
+
+1. **The engine works to the CALLER's deadline** (`effectiveSwapDeadline`): caller deadline + 4 s, never under 10 s or
+   over 115 s from receipt, 60 s when none is sent. It used to be `max(caller deadline, receipt + 60 s)`: the caller
+   gives up at deadline + 5 s regardless, so every second past that was a swap nobody received, holding the machine
+   after the swap gate had already handed its slot to the next swap.
+2. **The Replicate poll stops on the clock**, not after `maxWaitMs / 1 s` polls: each poll's round trip added to every
+   second, so a 45 s primary cap really ran ~50-55 s. An abandoned prediction is now **cancelled** on Replicate
+   (best effort, 5 s bound) instead of running on, billed.
+3. **The post-swap reserve is 5 s, not 15 s** (`replicateBudgetMs`). Measured: stitch + identity read ~2 s. Caught
+   live: with (1) alone, a tight re-swap (caller 32 s left) got only 20 s of Replicate and timed out at 24 s, where
+   the old engine effectively had ~31 s before the caller cut it off. Now 28 s. A normal first swap (~70 s left) gets
+   66 s instead of 52 s, so a 45 s primary timeout leaves ~21 s for a fallback model (the 15 s minimum), which it
+   never did before.
+
+- Verified live after the final deploy: a real flux-1.1-pro couple through the worker, Fly "budget 75s", "Swap budget:
+  67s", done in 34 s, first-try swap, completed. (The earlier 24 s timeout was retried by the capacity retry and the
+  pin kept the couple: attempt 2 completed on the same couple.)
+- Tests: `services/face-swap-dual/src/deadline.test.ts` (deadline rule, tight/normal/floor budgets, the poll stops on
+  the clock and cancels, a success is not cancelled). Service suite 41/41. Run:
+  `cd services/face-swap-dual/src && deno test --allow-net --allow-env --allow-read --allow-ffi`.
+- Rollback: `fly deploy -a dreambot-face-swap-dual --image registry.fly.io/dreambot-face-swap-dual:deployment-01M2RNCT487ACKQGAD0PFKMTXA` (v25, the pre-6b engine; v27 = this one).

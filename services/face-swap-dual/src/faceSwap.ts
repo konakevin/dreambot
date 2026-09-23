@@ -304,7 +304,42 @@ async function validateSourceUrl(url: string, ctx: string): Promise<void> {
   }
 }
 
-async function faceSwapOnce(
+/**
+ * The deadline this engine works to (NIGHTLY_ROBUSTNESS_PLAN.md item 6b, 2026-09-23). It used to be
+ * max(caller deadline, receipt + 60 s): a floor that protected a cold-booted machine's budget. But the caller's fetch
+ * gives up at its deadline + 5 s whatever this engine does, so every second past that was work nobody received,
+ * holding the machine while the swap capacity gate had already handed the slot to the next swap (two swaps on one
+ * machine = the 2026-09-12 hang). Both machines are now always warm (item 6). So: the caller's deadline + 4 s grace
+ * (still answering before its +5 s cut-off), never under 10 s from receipt (a caller always waits >= 15 s), never
+ * over 115 s (a caller never waits more than 120 s: _shared/dualSwapDispatch.ts fetchBudgetMs), and 60 s when no
+ * deadline was sent (unchanged).
+ */
+export const CALLER_GRACE_MS = 4_000;
+export const MIN_ENGINE_BUDGET_MS = 10_000;
+export const MAX_ENGINE_BUDGET_MS = 115_000;
+export const NO_DEADLINE_BUDGET_MS = 60_000;
+/**
+ * What the Replicate swaps may spend: the deadline minus the work that follows them. That work (stitch the halves +
+ * the ArcFace identity read) measured ~2 s on 2026-09-23 (e.g. "Both swaps complete" 21:56:31 → "Done" 21:56:33);
+ * the old 15 s reserve (7x) was hidden by the 60 s floor. With the caller's own deadline that reserve cut a tight
+ * re-swap to 20 s of Replicate (it timed out at 24 s, live), so it is 5 s now. 20 s floor unchanged.
+ */
+export const POST_SWAP_RESERVE_MS = 5_000;
+export function replicateBudgetMs(deadline: number, now: number): number {
+  return Math.max(deadline - now - POST_SWAP_RESERVE_MS, 20_000);
+}
+export function effectiveSwapDeadline(callerDeadlineMs: unknown, receivedAt: number): number {
+  if (typeof callerDeadlineMs !== 'number' || !Number.isFinite(callerDeadlineMs)) {
+    return receivedAt + NO_DEADLINE_BUDGET_MS;
+  }
+  return Math.min(
+    Math.max(callerDeadlineMs + CALLER_GRACE_MS, receivedAt + MIN_ENGINE_BUDGET_MS),
+    receivedAt + MAX_ENGINE_BUDGET_MS
+  );
+}
+
+// Exported for faceSwap.test.ts (the clock-based poll + cancel); not part of the service's API.
+export async function faceSwapOnce(
   sourceImageUrl: string,
   targetImageUrl: string,
   replicateToken: string,
@@ -345,9 +380,13 @@ async function faceSwapOnce(
       throw new Error(`No prediction ID from face swap (${model.name})`);
     }
 
-    const maxPolls = Math.ceil(maxWaitMs / POLL_INTERVAL_MS);
-    for (let i = 0; i < maxPolls; i++) {
-      await new Promise((r) => setTimeout(r, POLL_INTERVAL_MS));
+    // CLOCK-BASED (item 6b): this counted polls (maxWaitMs / 1 s), but each poll's own round trip added to every
+    // second, so a 45 s cap really ran ~50-55 s and drifted past the caller's deadline. Now it stops on the clock.
+    const stopAt = Date.now() + maxWaitMs;
+    while (Date.now() < stopAt) {
+      await new Promise((r) =>
+        setTimeout(r, Math.min(POLL_INTERVAL_MS, Math.max(0, stopAt - Date.now())))
+      );
       const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${data.id}`, {
         headers: { Authorization: `Bearer ${replicateToken}` },
       });
@@ -365,6 +404,15 @@ async function faceSwapOnce(
         );
       }
     }
+    // Cancel the prediction we are abandoning (item 6b): it would otherwise keep running on Replicate, billed, and
+    // holding the model while the next swap queues behind it. Best effort, bounded, never blocks the error.
+    fetch(`https://api.replicate.com/v1/predictions/${data.id}/cancel`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${replicateToken}` },
+      signal: AbortSignal.timeout(5_000),
+    }).catch((e) =>
+      console.warn(`[faceSwap] cancel ${data.id} failed: ${(e as Error).message?.slice(0, 80)}`)
+    );
     throw new Error(`Face swap timed out (${model.name})`);
   } finally {
     // Cleanup of perturbed source upload — no-op now that we use query-string
@@ -1092,7 +1140,7 @@ export async function dualFaceSwap(
           lSrc = gL === 'male' ? maleSrc : femaleSrc;
           rSrc = gL === 'male' ? femaleSrc : maleSrc;
         }
-        const perFaceBudgetMs = Math.max(deadline - Date.now() - 15_000, 20_000);
+        const perFaceBudgetMs = replicateBudgetMs(deadline, Date.now());
         const composedUrl = await perFaceCompositeSwap(
           targetImg.data,
           W,
@@ -1221,7 +1269,7 @@ export async function dualFaceSwap(
   const rightCropUrl = supabase.storage.from('uploads').getPublicUrl(rightPath).data.publicUrl;
   console.log(`[dualFaceSwap] Crops uploaded: ${leftPath}, ${rightPath}`);
 
-  const swapBudgetMs = Math.max(deadline - Date.now() - 15_000, 20_000);
+  const swapBudgetMs = replicateBudgetMs(deadline, Date.now());
   console.log(`[dualFaceSwap] Swap budget: ${Math.round(swapBudgetMs / 1000)}s`);
   const [leftSwapUrl, rightSwapUrl] = await Promise.all([
     faceSwap(leftSrc, leftCropUrl, replicateToken, supabase, userId, {
