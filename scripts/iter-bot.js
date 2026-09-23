@@ -99,9 +99,26 @@ function arg(name, fallback) {
     const pools = require(path.resolve(`scripts/bots/${botName}/pools.js`));
     for (const spec of poolOverride.split(',')) {
       const [symbol, file] = spec.split('=').map((x) => (x || '').trim());
-      const target = pools[symbol];
+      // A pool is reachable two ways, and both resolve to the SAME array so both are overridable:
+      //   1. a pools.js symbol      — pools.SCENES
+      //   2. a direct seed require  — require('../seeds/farmbot_red_barn_scenes.json'), which is
+      //      how every FarmBot place path and several others load their bespoke pool. require() is
+      //      cached, so the array the path holds is the array we get back here.
+      // Accept either spelling: SYMBOL or the seed file's basename.
+      let target = pools[symbol];
       if (!Array.isArray(target)) {
-        console.error(`--pool-override: ${botName} has no array pool named "${symbol}"`);
+        try {
+          const viaSeed = require(path.resolve(`scripts/bots/${botName}/seeds/${symbol}.json`));
+          if (Array.isArray(viaSeed)) target = viaSeed;
+        } catch {
+          /* fall through to the error below */
+        }
+      }
+      if (!Array.isArray(target)) {
+        console.error(
+          `--pool-override: ${botName} has no array pool named "${symbol}" ` +
+            `(tried the pools.js symbol and seeds/${symbol}.json)`
+        );
         process.exit(2);
       }
       let next;

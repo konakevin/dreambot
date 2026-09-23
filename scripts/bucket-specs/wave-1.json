@@ -1,0 +1,237 @@
+[
+  {
+    "bot": "bloombot",
+    "pool": "bloombot_water_garden_water_body",
+    "bucket": "floating flower barges on a canal",
+    "brief": "Flat-bottomed barges and punts moored or drifting on a still canal, loaded so heavily with cut blooms and potted plants that the boat itself nearly disappears under them. The water is the subject this pool always describes, so keep the canal itself central: its surface, its colour, what the flower-laden hulls do to the reflection. Vary the flowers (peonies, dahlias, lilies, tulips, chrysanthemums, hydrangeas), the barge (a long painted narrowboat, a low sampan, a wide raft of lashed planks, a rowboat brimming over), and the arrangement (a single barge mid-channel, a line of them nose to tail, two rafted together, one just cast off with a wake). Canals already exist in this pool; the BARGES are the new thing, so the boat and its cargo must be unmistakable in every entry. No people.",
+    "path": "water-garden"
+  },
+  {
+    "bot": "chibibot",
+    "pool": "chibibot_creature_adventures_scenes",
+    "symbol": "CHIBIBOT_CREATURE_ADVENTURES_SCENES",
+    "bucket": "train ride",
+    "brief": "A cosy little railway journey. Vary the vantage: a plush compartment with the countryside streaming past the window, a corridor between carriages, a dining car with tiny cups sliding on the table, the open platform at the rear, a luggage rack turned into a nest, a window seat with a forehead against the glass. Vary the train itself (a brass-and-green steam locomotive, a wooden narrow-gauge carriage, a sleek pastel streamliner) and the land it crosses (meadow, viaduct over a gorge, tunnel mouth, snowy pass, coastline). Small cosy specifics do the work: ticket stubs, a folded map, a thermos, curtains swaying, a lamp bobbing. Keep the storybook warmth this pool always has.",
+    "path": "creature-adventures"
+  },
+  {
+    "bot": "chibibot",
+    "pool": "aquatic_village_settings",
+    "symbol": "AQUATIC_VILLAGE_SETTINGS",
+    "bucket": "ferry crossing",
+    "brief": "A small passenger ferry working between two points of the aquatic village. Vary the moment: nosing into a floating jetty, mid-channel with both shores distant, ropes being cast off, loading at a ramp, arriving at dusk with lanterns lit, waiting at an empty landing in fog. Vary the vessel (a stubby wooden steam ferry, a broad flat punt on a hand-drawn cable, a many-oared longboat, a shell-hulled skiff) and the infrastructure (pilings, a gangplank, a bell on a post, a ticket hut on stilts, mooring rings). This pool describes SETTINGS, so build the whole crossing as a place: the water, the landings, the village behind. Submarine-ports and vessel-cottages already exist here; a working FERRY ROUTE is the new idea.",
+    "path": "aquatic-village"
+  },
+  {
+    "bot": "chibibot",
+    "pool": "rainy_interior_rooms",
+    "symbol": "RAINY_INTERIOR_ROOMS",
+    "bucket": "rainy afternoon in a bookshop",
+    "brief": "The inside of a small second-hand bookshop while it rains outside. Vary the corner: a window seat with a streaming pane, a reading nook wedged between shelves, a spiral stair between floors, a counter stacked with unsorted stock, a back room of crates, a landing where shelves meet a skylight drumming with rain. Specifics sell it: leaning towers of books, a ladder on a rail, a tipped-over stack, paper curling in the damp, a brass lamp, a dripping umbrella, a rug gone dark at the door, tea going cold on a shelf edge. Keep the rain present and audible-feeling in every entry, the way this pool always does.",
+    "path": "rainy-interior"
+  },
+  {
+    "bot": "chibibot",
+    "pool": "cottagecore_village_settings",
+    "symbol": "COTTAGECORE_VILLAGE_SETTINGS",
+    "bucket": "farmers market",
+    "brief": "Market day in the village. Vary the vantage: a lane of striped awnings, a single trestle heaped with produce, the space between two stalls, a corner flower stand, a cheese-and-preserves table, the tail of a cart being unloaded, the square at the end of the day with crates stacking. Specifics: chalk price boards left blank, wicker baskets, scales, hand-lettered-looking tags with no readable text, bunched carrots, trays of eggs, jars of honey, a canvas canopy sagging with rain. Build it as a PLACE the way this pool always does, not as a single object, and keep the soft cottagecore warmth.",
+    "path": "cottagecore-village"
+  },
+  {
+    "bot": "chibibot",
+    "pool": "cozy_landscape_worlds",
+    "symbol": "COZY_LANDSCAPE_WORLDS",
+    "bucket": "kite festival",
+    "brief": "A hillside or shoreline given over to kite flying, with the sky as busy as the ground. Vary the sky (a dozen tiny diamonds, one enormous fish-shaped banner, a chain of paper discs climbing, long ribbon tails crossing, a single kite far up in clear blue) and the ground (a grassy ridge, a wide beach at low tide, terraced fields, a river meadow, a clifftop). Specifics: line spools, tangled string, a kite down in the grass, bunting on poles, a picnic blanket weighted with stones, a windsock. Keep this pool's habit of describing a whole WORLD with distance and layers, not a close-up.",
+    "path": "cozy-landscape"
+  },
+  {
+    "bot": "chibibot",
+    "pool": "sunny_village_settings",
+    "symbol": "SUNNY_VILLAGE_SETTINGS",
+    "bucket": "bake sale",
+    "brief": "A village bake sale set up outdoors in bright sun. Vary the setting: a trestle table outside a garden gate, a stand under a tree, a church-hall step, a stall in the square, a cart parked in a lane, a windowsill counter opening onto the street. Specifics: tiered plates of buns, tarts under glass domes, a tin of coins, chequered cloth, a blank chalk board, a cake with a slice already out, paper cases, a jug of lemonade sweating in the heat, wasps circling. Keep the bright, open, sunlit register this pool always uses, and build it as a place in the village rather than a food close-up.",
+    "path": "sunny-village"
+  },
+  {
+    "bot": "chibibot",
+    "pool": "night_meadow_settings",
+    "symbol": "NIGHT_MEADOW_SETTINGS",
+    "bucket": "stargazing at an observatory",
+    "brief": "A small hilltop observatory at night, and the meadow around it. Vary the vantage: the dome with its shutter open and a telescope barrel angled out, the terrace beside it with a smaller scope on a tripod, an equipment table, the track up through long grass, the dome seen small against a huge sky, the inside of the dome with the sky through the slot. Specifics: a folding stool, a red-filtered lamp, star charts weighted against the breeze, a thermos, a blanket, dew on the instrument, moths at the lamp. Keep the night-meadow softness this pool has: the sky is enormous, the building is small and human-scaled.",
+    "path": "night-meadow"
+  },
+  {
+    "bot": "dinobot",
+    "pool": "dinobot_paleo_landscape_biome",
+    "symbol": "DINOBOT_PALEO_LANDSCAPE_BIOME",
+    "bucket": "high desert dunes",
+    "brief": "A vast arid dune field in deep prehistory. Vary the form: long transverse ridges marching to the horizon, a single towering star dune, a wind-scoured corridor between dunes, a dune field spilling against bare rock, a dry pan between them cracked into plates, a slope avalanching in the wind. Specifics that make it PALEO rather than modern desert: wind-stunted cycads and low scrub in the hollows, a dry wash with petrified trunks, a scatter of bleached bone, fossil-bearing strata exposed at the margin, ripples printed sharp across every flank. Match this pool's habit of naming scale in feet, the light, and the ground texture, and keep it people-free.",
+    "path": "paleo-landscape"
+  },
+  {
+    "bot": "dinobot",
+    "pool": "dinobot_paleo_landscape_biome",
+    "symbol": "DINOBOT_PALEO_LANDSCAPE_BIOME",
+    "bucket": "mountain forest at the snowline",
+    "brief": "High conifer forest in deep prehistory, right where the trees give out and the snow begins. Vary the form: a stand of tall araucaria thinning into bare rock, a ridge with snow in the lee of every trunk, a boulder field above the last trees, a hanging valley with a frozen tarn, a slope of wind-flagged timber, a pass with cloud pouring through it. Specifics: rime on needles, snow lying in the shadow side only, black wet rock, lichen, a melt stream cutting the snowpack, deadfall bridging a gully, breath-cold air. Keep this pool's scale cues and light description, and keep it people-free.",
+    "path": "paleo-landscape"
+  },
+  {
+    "bot": "faebot",
+    "pool": "faebot_enchanted_vista_biome",
+    "bucket": "mossy bridge crossing",
+    "brief": "An old stone or timber bridge deep in the enchanted wood, so overgrown it is half landscape. Vary the structure: a single-arch stone span furred green, a flat slab clapper bridge over a brook, a rope-and-plank crossing swaying above a gorge, a fallen giant trunk worn into a path, a many-arched viaduct with trees rooted in its parapet, stepping stones with a broken arch beyond. Specifics: moss thick enough to hide the joints, ferns from the mortar, a worn hollow where feet have passed, water below, mist in the span, a handrail gone soft with rot. This is a VISTA pool, so give the whole view depth: the bridge, what it crosses, and the wood receding beyond it.",
+    "path": "enchanted-vista"
+  },
+  {
+    "bot": "farmbot",
+    "pool": "farmbot_artisan_workshop_place",
+    "bucket": "dairy and cheesemaking",
+    "brief": "A small farm dairy mid-work. Vary the station: a scrubbed table with a vat and a curd knife laid across it, a press with rounds under weighted boards, a shelf of ageing wheels with rinds in every stage, a churn beside a stool, a stone cooling trough with cans standing in water, a corner with cloths hung to drip. Specifics: whey in a channel on the floor, a wide shallow pan, cheesecloth in folds, a wooden paddle worn pale, chalk marks on a beam with no readable writing, brine crust on a barrel rim. Match this pool's voice exactly: it opens on one object doing its job at the centre of the room, then names the tools and surfaces around it, all of them showing use.",
+    "path": "artisan-workshop"
+  },
+  {
+    "bot": "farmbot",
+    "pool": "farmbot_artisan_workshop_place",
+    "bucket": "herb-drying loft",
+    "brief": "A roof loft used for drying and bundling herbs. Vary the station: bunches hung in rows from a rafter, a long table mid-sorting with stems everywhere, a rack of stacked drying screens, a corner of labelled jars with blank labels, a scale with a heap of dried leaf beside it, a window propped for airflow with the crop swaying. Specifics: twine on a spool, a bundle half-tied, crumbled leaf dust on the boards, brown paper bags, a basket of fresh-cut still bright green next to stock gone grey-green, low beams, dust in the light. Match this pool's voice: one object at the centre doing its job, then the worn tools and surfaces around it.",
+    "path": "artisan-workshop"
+  },
+  {
+    "bot": "farmbot",
+    "pool": "farmbot_barn_interior_place",
+    "bucket": "stable morning with horses",
+    "brief": "The stable end of the barn early in the day, with horses as the SUBJECT rather than as props. Vary the moment: a head over a stall door, two in adjoining stalls, one being led down the aisle, a mare and foal in a deep-bedded box, a row of quarters seen down the aisle, one at a manger. Specifics: fresh straw banked at the walls, a haynet, a filled water bucket, tack on a hook, a barrow and fork left mid-job, breath visible, dust in the light from a high window, hoofprints in the bedding. This pool already mentions horse brushes on tool walls; here the ANIMALS are the point. Match this pool's grounded voice and keep it people-free.",
+    "path": "barn-animal-shelter-interior"
+  },
+  {
+    "bot": "gothbot",
+    "pool": "gothbot_sanctum_interior",
+    "symbol": "GOTHBOT_SANCTUM_INTERIOR",
+    "bucket": "catacomb library",
+    "brief": "A library built down into a catacomb, where the shelving and the ossuary are the same architecture. Vary the space: shelves fitted into burial niches, a barrel-vaulted corridor lined floor to ceiling with tomes, a rotunda with a reading table under a shaft of light, a spiral stair between stacked levels, a collapsed section where books have spilled, a cell-sized study cut into the rock. Specifics: chained volumes, ledgers swollen with damp, candle stubs welded to stone by their own wax, a lectern, iron grilles, skulls shelved among the bindings, dust, cold stone sweating. Match this pool's register exactly: long architectural sentences, deep recession, light arriving from far off and losing the fight.",
+    "path": "the-sanctum"
+  },
+  {
+    "bot": "gothbot",
+    "pool": "gothbot_twilight_scene",
+    "symbol": "GOTHBOT_TWILIGHT_SCENE",
+    "bucket": "moonlit lake boat",
+    "brief": "A small boat on a still lake under the moon. Vary the arrangement: a rowboat adrift mid-water with its oars shipped, a punt among reeds, a boat pulled half out on a shingle bank, one tied at the end of a long jetty, a boat far out as a silhouette, a hull seen close with black water lapping. Specifics: the moon's track broken on the ripples, mist standing on the surface, a lantern at the bow, a rope trailing, water beaded on the gunwale, drowned trees, the far shore as a low black line. This pool has harbours and old boats already; a LAKE at NIGHT with the moon doing the lighting is the new idea. Keep the cold, still, unhurried gothic register.",
+    "path": "twilight-gothic"
+  },
+  {
+    "bot": "gothbot",
+    "pool": "gothbot_frostgarden_garden",
+    "symbol": "GOTHBOT_FROSTGARDEN_GARDEN",
+    "bucket": "glasshouse of black roses",
+    "brief": "A glasshouse given over entirely to near-black roses. Vary the space: a long nave of staging with blooms down both sides, a domed end with a single enormous climber, an aisle where canes have reached the glass and turned back, a propagation bench of cuttings, a corner where panes are gone and frost has got in, the exterior seen through fogged glass with the dark mass inside. Specifics: petals so deep red they read black, thorned canes thick as rope, a pruned heap on the floor, iron ribs, whitewash flaking, condensation running, frost on the outside of the panes and bloom on the inside. This pool already has derelict conservatories; the ROSES are the new subject, so they must dominate every entry.",
+    "path": "the-frost-garden"
+  },
+  {
+    "bot": "mangabot",
+    "pool": "slice_of_life_setting",
+    "symbol": "SLICE_OF_LIFE_SETTING",
+    "bucket": "cicada summer on shrine steps",
+    "brief": "A long flight of shrine steps in the dead heat of summer, loud with cicadas. Vary the vantage: looking up the flight with the torii framing the top, looking down from the landing over the rooftops, a turn in the steps under heavy trees, the stone lanterns along the edge, the washbasin at the top, a shaded rest halfway with the light hammering outside it. Specifics: heat shimmer, moss in the step joints, a discarded cicada shell on a rail, dropped leaves, a bright sky through the canopy, sweat-bright stone, an ema rack with blank tags, a bell rope. Match this pool's exact voice: it names foreground, midground and background in one breath and places the figure mid-action.",
+    "path": "slice-of-life"
+  },
+  {
+    "bot": "steambot",
+    "pool": "cozy_steampunk_room",
+    "symbol": "COZY_STEAMPUNK_ROOM",
+    "bucket": "apothecary and chemist",
+    "brief": "A cosy apothecary's consulting room and dispensary. Vary the space: a wall of small labelled drawers with blank labels, a counter of scales and mortars, a bench of glassware over a low burner, a corner of demijohns in wicker, a niche of specimen jars, a back room where a still drips into a receiver. Specifics: brass balance pans, a pill-rolling board, cork stoppers in a bowl, a ledger open on the counter, tubing in coils, a spirit lamp, stains in the benchtop, bunched dried plants overhead, warm lamplight on glass. Match this pool's voice exactly: it opens by naming the room type, then furnishes it in one long sentence of specific brass-and-timber objects.",
+    "path": "cozy-steampunk"
+  },
+  {
+    "bot": "steambot",
+    "pool": "transport_scenes",
+    "symbol": "TRANSPORT_SCENES",
+    "bucket": "steam tram street",
+    "brief": "A steam tram working a city street. Vary the moment: a tram halted at an island platform, coming round a curve with its flanges squealing, at a junction where rails cross, climbing a steep street on a cable slot, at a terminus loop, passing under an overhead gantry. Specifics: a squat boiler at one end, a stovepipe, brass handrails, an open upper deck, rails sunk in cobbles with worn shining crowns, points and a lever, sand boxes, a trolley pole, steam fogging a shopfront, wet setts reflecting. Keep this pool's habit of putting the vehicle in a real working environment with terrain and infrastructure around it.",
+    "path": "steam-transport"
+  },
+  {
+    "bot": "steambot",
+    "pool": "skydock_harbor_vista",
+    "symbol": "SKYDOCK_HARBOR_VISTA",
+    "bucket": "dirigible repair scaffold",
+    "brief": "An airship in for repair, wrapped in scaffold at the skydock. Vary the arrangement: a hull cradled in a timber-and-iron cage with plating off and ribs showing, a gondola lowered onto trestles, a envelope partly deflated over its frame, a tail section in a separate cradle, a gantry crane swinging a new fin into place, a night shift with work lamps strung along the staging. Specifics: planks and ladders at every level, tarpaulins lashed down, a hose feeding gas, riveting stages slung under the curve, spare panels stacked, cables and pulleys, chalk marks on the skin. This is a VISTA pool, so keep the whole dock in view with depth and distance, the scaffolded ship as the anchor.",
+    "path": "skydock-harbor"
+  },
+  {
+    "bot": "yumbot",
+    "pool": "yumbot_meal_types_scenes",
+    "symbol": "YUMBOT_MEAL_TYPES_SCENES",
+    "bucket": "bakery at dawn",
+    "tag": "bakery-dawn",
+    "brief": "Kawaii baked goods in a bakery just as it opens, first light coming in. The meal occasion is the very start of the day: trays coming out, racks being filled, the first loaves on the counter. Vary the subject (a kawaii croissant, a boule with a smiling scored top, a tray of buns, a brioche, a baguette, a cinnamon roll) and the setting detail (a cooling rack, a wooden peel, a flour-dusted bench, an open oven mouth, a window with dawn light, a counter with the shutter half up). Keep the exact YumBot voice: one kawaii subject with named face features, anchored in the setting, plus a light composition hint.",
+    "path": "meal-types"
+  },
+  {
+    "bot": "yumbot",
+    "pool": "yumbot_meal_types_scenes",
+    "symbol": "YUMBOT_MEAL_TYPES_SCENES",
+    "bucket": "diner booth",
+    "tag": "diner-booth",
+    "brief": "Kawaii diner food in a vinyl booth. The meal occasion is a classic diner sit-down. Vary the subject (a kawaii stack of pancakes, a burger, a milkshake in a fluted glass, a slice of pie under a dome, a plate of fries, a banana split) and the setting detail (a chrome-edged table, a quilted vinyl bench, a napkin dispenser, a jukebox selector at the wall, a chequered floor, a window with a parking lot beyond). Keep the exact YumBot voice: one kawaii subject with named face features, anchored in the booth, plus a light composition hint.",
+    "path": "meal-types"
+  },
+  {
+    "bot": "yumbot",
+    "pool": "yumbot_meal_types_scenes",
+    "symbol": "YUMBOT_MEAL_TYPES_SCENES",
+    "bucket": "ice cream parlor",
+    "tag": "ice-cream-parlor",
+    "brief": "Kawaii frozen treats in an old-fashioned ice cream parlour. Vary the subject (a kawaii cone with a tilted scoop, a sundae in a tall glass, a float, a scoop tub in the case, a banana boat, a sandwich wafer) and the setting detail (a curved glass case with tubs in a row, a marble counter, a bentwood chair, a scoop well of cloudy water, a wall of flavour tiles with no readable text, a striped awning through the window). Keep the exact YumBot voice: one kawaii subject with named face features, anchored in the parlour, plus a light composition hint.",
+    "path": "meal-types"
+  },
+  {
+    "bot": "yumbot",
+    "pool": "yumbot_meal_types_scenes",
+    "symbol": "YUMBOT_MEAL_TYPES_SCENES",
+    "bucket": "brunch patio",
+    "tag": "brunch-patio",
+    "brief": "Kawaii brunch food outdoors on a sunny patio. The meal occasion is late-morning, unhurried. Vary the subject (kawaii avocado toast, a waffle stack, eggs benedict, a fruit bowl, a mimosa flute, a shakshuka pan) and the setting detail (a bistro table with a woven top, a trellis with vines overhead, a dappled tablecloth, a jug of iced water beading, a potted olive at the table edge, a low wall with a view beyond). Keep the exact YumBot voice: one kawaii subject with named face features, anchored on the patio, plus a light composition hint.",
+    "path": "meal-types"
+  },
+  {
+    "bot": "yumbot",
+    "pool": "yumbot_meal_types_scenes",
+    "symbol": "YUMBOT_MEAL_TYPES_SCENES",
+    "bucket": "bento lunchbox",
+    "tag": "bento-lunchbox",
+    "brief": "A kawaii bento box packed and open. The meal occasion is a packed lunch. Vary the subject (a kawaii onigiri with a nori face, a rolled omelette, a sausage cut into a flower, a rice ball nest of noodles, a compartment of fruit, a whole assembled box seen from above) and the setting detail (a lacquered box with fitted dividers, silicone cups, a furoshiki cloth mid-wrap, chopsticks in a sleeve, a school desk, a park bench, a lid propped beside it). Keep the exact YumBot voice: one kawaii subject with named face features, anchored in the bento context, plus a light composition hint.",
+    "path": "meal-types"
+  },
+  {
+    "bot": "yumbot",
+    "pool": "yumbot_cuisine_scenes",
+    "symbol": "YUMBOT_CUISINE_SCENES",
+    "bucket": "ramen counter at night",
+    "tag": "ramen-counter",
+    "brief": "A kawaii bowl of ramen at a tiny counter shop at night. This pool is about WORLD CUISINES, so the cuisine identity must be unmistakable. Vary the subject (a kawaii ramen bowl with a smiling egg half, a gyoza plate, a bowl seen from above with every topping arranged, a broth pot, a bowl being set down on the counter) and the setting detail (a worn timber counter with a stool, a noren curtain at the entrance, a steam-fogged window with night outside, a row of bottles, a ticket machine with a blank face, a lantern glowing). Keep the exact YumBot voice: one kawaii subject with named face features, anchored in the setting, plus a light composition hint.",
+    "path": "cuisine"
+  },
+  {
+    "bot": "yumbot",
+    "pool": "yumbot_cuisine_scenes",
+    "symbol": "YUMBOT_CUISINE_SCENES",
+    "bucket": "hot pot table",
+    "tag": "hot-pot",
+    "brief": "A kawaii hot pot bubbling at a shared table. This pool is about WORLD CUISINES, so the cuisine identity must be unmistakable. Vary the subject (a kawaii divided pot with two broths, a platter of thin-sliced meat rolled into rosettes, a tower of vegetable plates, a basket of noodles, a dipping bowl, a single dumpling lifted clear) and the setting detail (a recessed burner in the table, a lazy susan, steam rolling up past a lamp, plates crowding every inch, a tiled wall, a window fogged from the inside). Keep the exact YumBot voice: one kawaii subject with named face features, anchored at the table, plus a light composition hint.",
+    "path": "cuisine"
+  },
+  {
+    "bot": "yumbot",
+    "pool": "yumbot_cuisine_scenes",
+    "symbol": "YUMBOT_CUISINE_SCENES",
+    "bucket": "sushi counter",
+    "tag": "sushi-counter",
+    "brief": "Kawaii sushi at a polished counter. This pool is about WORLD CUISINES, so the cuisine identity must be unmistakable. Vary the subject (a kawaii nigiri pair on a wooden geta board, a maki roll cut into a row, a chirashi bowl, a hand roll standing in a holder, a single piece being placed, an assortment on a leaf) and the setting detail (a pale hinoki counter worn smooth, a glass case of fish, a sprig of bamboo, a small dish of soy, a cloth folded on the counter, warm downlight on the wood). Keep the exact YumBot voice: one kawaii subject with named face features, anchored at the counter, plus a light composition hint.",
+    "path": "cuisine"
+  }
+]

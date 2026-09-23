@@ -419,6 +419,81 @@ shadow round. New entries use "painted" once or twice, naturally.
 
 ---
 
+## 2e. Step 2b IMPLEMENTATION: how a bucket actually lands (2026-09-22)
+
+**A bucket needs NO path code change.** This was the open question and it is settled. YumBot's
+`places` path declares `scene: 'YUMBOT_PLACES_SCENES'` and picks one entry; it never reads the
+tags. So a 7th bucket is 34 more entries appended to that one file. The tags are bookkeeping that
+keeps the buckets even in size.
+
+**The exception, and the whole reason for the guard.** Some pools ARE tag-filtered per path:
+
+```js
+pool.filter((e) => e.tags.includes('ANY') || e.tags.some((t) => allowed.has(t)))
+```
+
+There, a bucket whose tag is missing from the path's allowed list is SILENTLY DROPPED — no error,
+zero renders, healthy-looking seed file. Check before writing, never after:
+
+```sh
+node scripts/scan-bucket-eligibility.js --will-roll <bot>:<POOL_SYMBOL>:<tag>
+```
+
+### The tooling
+
+| Tool | Job |
+| --- | --- |
+| `scripts/lib/bucketEligibility.js` | the five checks, locked by `__tests__/lib/bucketEligibility.test.ts` (29 tests) |
+| `scripts/scan-bucket-eligibility.js` | fleet scan + `--will-roll` pre-flight; `npm run scan:buckets` |
+| `scripts/add-bucket.js` | appends a bucket in the destination pool's own shape and voice |
+| `scripts/bucket-specs/wave-1.json` | the 29 shipped specs, one creative brief each |
+
+`add-bucket.js` exists as ONE tool rather than 25 hand-written generators because every bot's pools
+have a distinct house voice, and a bucket in the wrong voice is worse than no bucket:
+
+```
+bloombot  "DARK LOTUS POND — a broad still pond of near-black water, glass-calm and ..."
+mangabot  "Konbini late-night with magazine-rack close foreground, fluorescent shelves ..."
+farmbot   "A potter's wheel crouches low at the center of the workshop, a thick lump of ..."
+```
+
+So it READS the destination pool, samples four entries spread across it as voice exemplars, detects
+whether the pool holds plain strings or `{tags, description}` objects, and asks for the same. It
+always passes `append: true` (generatePool defaults to OVERWRITE) and refuses any bucket the
+eligibility pre-flight says could never roll.
+
+### Where the 75 actually went
+
+| | count | cost | note |
+| --- | --- | --- | --- |
+| Appended to an existing pool | **29** | ~$9 | no code change; shipped in wave 1 |
+| **Already covered — SKIPPED** | **2** | $0 | see below |
+| Homeless: need a whole new path | **33** | not priced yet | the real decision still owed to Kevin |
+| TinyBot, sequenced after the cast rework | 5 | — | the rework is done and approved, so these are unblocked |
+| Flagged / undecided | 6 | — | flags 1-4 in section 6 |
+
+**The two skipped, found by probing the destination pool before spending:**
+- `mangabot` "convenience store at night" — `slice_of_life_setting` already holds **12** konbini
+  entries, e.g. *"Konbini late-night with magazine-rack close foreground, fluorescent shelves
+  receding, cold-case glow midground"*. Fully covered.
+- `chibibot` "hot-spring soak" — `bath_time_scenes` already holds **9**, including a proper onsen
+  with a shoji screen onto a snowy maple. Fully covered.
+
+**Probe the destination pool for the bucket's distinctive element before writing it.** Four more
+looked covered on a loose keyword probe and were NOT, so use the specific idea, not the setting:
+`gothbot_sanctum_interior` has 43 entries matching catacomb-or-library but **zero** with books IN a
+catacomb; `farmbot_barn_interior_place` has 24 matching "horse" but they are all horse BRUSHES on a
+tool wall, never the animal as subject; `gothbot_frostgarden_garden` has 24 glasshouses and zero
+glasshouse roses; `bloombot_water_garden_water_body` has 15 canals and zero barges.
+
+### Still to do on wave 1
+1. `node scripts/scan-bot-seed-dupes.js && npm run scan:buckets` (both must pass).
+2. Shadow-render a batch per affected bot and have Kevin grade it. **25 entries is the trial size —
+   do not scale to 200 before sign-off** (`feedback_always_seed_25_to_test_then_scale`).
+3. On sign-off, re-run `add-bucket.js` with `--count 200`; it is grow-to-N and idempotent.
+
+---
+
 ## 3. Step 0: safety net (do this first, always)
 
 - [x] `scripts/scan-bot-seed-dupes.js` — BUILT + RUN 2026-09-22. Reports exact dupes, signature
