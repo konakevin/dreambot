@@ -391,7 +391,7 @@ ${air}
 ━━━ CAMERA ━━━
 ${camera}
 
-WRITE THE PROMPT IN THIS ORDER: (1) the hero above, close at hand and filling the frame, the hives an arm's length behind; (2) the bees at exactly the count named and at the tiny in-frame size named, in true honeybee shape, detail on the nearest one or two only and every other bee a small clean shape; (3) ${
+WRITE THE PROMPT IN THIS ORDER: (1) the hero above, close at hand and filling the frame, the hives an arm's length behind; (2) the bees at exactly the count named and at the tiny in-frame size named, in true honeybee shape, every bee including the nearest one a small clean shape at the size named; (3) ${
     paintedHives ? 'the hive boxes each painted a different flat saturated colour, and ' : ''
   }every jar, crate end and ${
     indoors ? 'shed door' : 'gate post'

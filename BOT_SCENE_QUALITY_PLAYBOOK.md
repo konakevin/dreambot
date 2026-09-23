@@ -1845,6 +1845,13 @@ gutted a working pool. The rule:
   lesson 17's case, and the fix is structural (a crop law, a different framing form), not deletion.
 Count which entries produced the failures before deciding. It is one query on the stored prompts.
 
+**Reconfirmed hard on `sheep-shearing-day`, which nearly lost its best content to a blind purge:** of
+36 raw sweep hits, all but a handful were load-bearing content working exactly as designed — 11
+"light as a solid object" hits were structural roof BEAMS, 5 "formation" hits were the path's required
+enclosure law, 5 "negation" hits were comparative rulers ("no higher than the lowest bar"), and 13
+"missing count" hits were counts the regex did not know ("Fourteen", "Sixteen"). A blind purge would
+have deleted the enclosure law and the roof. **Read every sweep hit; reword only the real ones.**
+
 **54. ⭐ PROMPT LENGTH vs GRADE — A WITHIN-PATH OBSERVATION THAT DOES **NOT** GENERALISE, AND THE
 DISTINCTION THAT MATTERS.** Recorded with its own refutation attached, because I wrote this as a
 three-star fleet law and then failed to replicate it within the hour.
@@ -1922,6 +1929,59 @@ every pinned object into the tower's own **curving plaster** kept the whole idea
 constellation charts, beads on wires) and rendered clean in every roll that drew it, with **0 text
 across 15 renders** on the fleet's highest text-risk subject. When a premise needs things attached to a
 surface, attach them to a curved or irregular one and the text prior never engages.
+
+**58. ⭐⭐⭐ THE MODEL ADDS BUT DOES NOT SUBTRACT — and the proof is an in-sentence control, which makes
+this the best-measured law in this file.** FarmBot `sheep-shearing-day` needed a just-shorn sheep: an
+animal with its wool removed. One authored clause carried an additive half and a subtractive half, in
+the SAME sentence, at the SAME position, in the SAME prompts:
+
+| half of the clause | kind | rendered |
+|---|---|---|
+| "woolly cuffs still at the ankles" | ADDITIVE | **6 of 6, every round** |
+| "no fluff on the body anywhere" | SUBTRACTIVE | **1 of 6** |
+
+Position, length, model and pool are all controlled away. The only difference is direction. This is the
+negation-leak law (lesson 6) in a much sharper form: it is not merely that naming a banned noun renders
+it, it is that **removing an expected feature from a strong prior cannot be achieved by description at
+all**, however well worded. Three rounds of better adjectives moved it 0 → 1 of 6.
+
+**What worked, and it is a recipe rather than a wording:** name a POSITIVE object that happens to lack
+the feature. Round 3 reframed the shorn sheep as *"an ENTIRELY DIFFERENT ANIMAL — a body shaped like a
+GREYHOUND, WEARING a woolly HAT and four woolly SOCKS"*, one or two of them against a named woolly
+majority. **5 of 6**, with only that one output-order clause changed between rounds (the six pools were
+byte-identical). The three moving parts are worth separating because each does a job: a **borrowed shape
+prior** from an animal that has no wool at all; **hat and socks** as things the model can put ON
+something, which absorbs the wool it insists on rendering; and **odd-one-out framing** against the
+majority, which gives the bare body a reason to be legible.
+
+Portable to every bare / empty / shaved / stripped / cleared / leafless / drained subject. **Cheap
+diagnostic:** when a two-part clause half-lands, check whether the half that landed is the additive one
+BEFORE you touch position, length or model — that is a one-minute read of the stored prompt and it
+skips a whole round.
+
+**59. ⭐⭐ A DISTRIBUTION ASKED FOR INSIDE ONE META-PROMPT IS NOT A DISTRIBUTION YOU GET — AND IT CAN BE
+A CRASH, NOT JUST A VARIETY PROBLEM.** Same build. Two recipes asked for roughly a 15/10 and a 16/9
+split between two settings and returned **25/0 and 24/1**. On a path that rolls the second setting 30%
+of the time, `forSetting` would have handed the picker an **EMPTY ARRAY** on every one of those renders.
+This is lesson 55's family (the generator obeys examples and shape, not stated numbers) but the failure
+mode is worse than sameness: a tag-filtered pick from an empty slice is a hard break, not a dull
+render. **If a tag split is load-bearing, seed each side as its OWN recipe and count the tags before
+spending a render.** Caught here by a local dry-run roll before any render, which is the cheapest gate
+in the whole pipeline and should precede every first batch.
+
+**60. ⭐⭐ A FIX MUST LAND IN THE REQUIRED OUTPUT ORDER, NOT ONLY IN THE PROSE AND THE POOLS — the order
+is the one layer that reaches 100% of prompts.** Found by a sibling build auditing an already-shipped
+path. FarmBot `apiary-beekeeping` had its giant-bee inflator removed from the template prose and from
+the pools, and the prose was left saying *"EVERY bee is a small clean shape … including the nearest one
+— none is singled out for close anatomical detail, because detail and size are the same dial."*
+Meanwhile its `WRITE THE PROMPT IN THIS ORDER:` line still said **"detail on the nearest one or two
+only"** — the exact inflator, in the layer that is emitted every single time, directly contradicting the
+prose twelve lines above it. Removing that phrase elsewhere had already been measured as worth
+**3.86 → 4.37** with giant bees **3/5 → 0/6**, so the fix was two-thirds applied and the remaining third
+was the one that always ships. **When you fix a prompt-level defect, grep the path for every layer that
+can restate it — prose, pools, prefix, medium AND the output order — and check the order LAST because it
+is the one that wins.** (Fixed 2026-09-23; the 4.37 grade was measured before the fix, so the fix is
+expected to help and is UNVERIFIED — it needs one 6-render round to confirm.)
 
 ---
 

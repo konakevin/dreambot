@@ -7,7 +7,7 @@ Going live is moving one string from `shadowPaths[]` into `paths[]` and changing
 To look at any path's renders: they are shadow posts on that bot's own profile, reviewable in the app.
 To render more of one: `node scripts/iter-bot.js --bot <bot> --mode <path> --count 6 --post --shadow`.
 
-⏳ **STATUS: 29 of 35 built, 6 outstanding** (3 rendering now, 3 queued). This sheet is updated as each wave merges; the final
+⏳ **STATUS: 30 of 35 built, 5 outstanding** (3 rendering now, 2 queued). This sheet is updated as each wave merges; the final
 version will cover all 35. Full per-path detail, every measured round and every residual lives in
 `NEW_PATHS_RUN_STATE.md`; the cross-bot laws all this produced are in `BOT_SCENE_QUALITY_PLAYBOOK.md`.
 
@@ -60,7 +60,8 @@ two named axes getting pushed off the end, not a word-count problem.
 | 4.47 | ToyBot | `snow-globe-world` | 9/9 on the shipped glass spec; best is an aurora over a single lit window |
 | 4.42 | BloomBot | `orchid-cloud-forest` | orchids scatter like stickers instead of clumping, and a pale sky patch survives — both sit LATE in a 377-word prompt. Lever: delete template prose |
 | 4.4 | DinoBot | `amber-forest` | ~1 in 4 renders the resin OPAQUE, losing the lens half of the premise. Lever: the clean-medium opt-out, already applied at merge |
-| 4.37 | FarmBot | `apiary-beekeeping` | was 3.83; removing the per-bee detail exemption took giant bees 3/5 → 0/6. Residual: Replicate's filter trips on this path |
+| ~4.4 | FarmBot | `sheep-shearing-day` | shearing day in the shed. **18/18 rendered with zero content-filter failures**, where the two sibling close-range FarmBot paths trip it at 12-17%. Best frame 4.7: one just-shorn animal, greyhound-shaped in a woolly hat, dead centre of the woolly mob with a hen on the rail judging it. Residual: the bare body lands 5 of 6; lever is putting that clause in the framing block too |
+| 4.37 | FarmBot | `apiary-beekeeping` | was 3.83; removing the per-bee detail exemption took giant bees 3/5 → 0/6. Residual: Replicate's filter trips on this path (measured 3 of 26, ~12%). **⚠️ I closed a half-applied fix here after this grade was measured** — the inflator had been stripped from the prose and pools but not from the required output order, the one layer that ships every time. The 4.37 is the honest record of the renders you are grading; the fix is unverified and wants one 6-render round |
 | 4.27 | BrickBot | `balloon-festival` | ~1 in 6 goes wide-and-distant and loses the scale ruler, saturation and text control at once. Lever: purge the camera pool by frame-size |
 | 4.26 | PixelBot | `observatory-tower` | an astronomer's tower, the dome slot open to the night. **Text 0/15** on the fleet's highest text-risk subject, won by moving every pinned thing onto curved plaster instead of a flat board. Best frame 5.0: a figure on the ladder handing a steaming mug down to a small one reaching up. Lever: its long rolls push `reading_tool` and `room_dressing` off the end, and those two axes are exactly what the bare-walled 3.0 renders were missing |
 | ~4.2 | FaeBot | `honey-harvest` | beat the naked-cherub trap that sank `acorn-boat-regatta`, 6/6 first try, by opening with a fae *at work mid-movement* rather than a static description. Two 4.5s. Also settled a fleet question: the Replicate content-filter wall is the whole flux-2 family, not one model |
