@@ -266,6 +266,67 @@ prove one pool  ->  Kevin reviews  ->  one bot end to end  ->  render batch  -> 
 The CI gate lands **last**, not first: turning it on while 46 pools are still over the ceiling would
 block every unrelated commit that happens to touch a seed file.
 
+## 6c. DECISION LOG — read this before proposing anything
+
+Every row is something already tried and settled. The point of this table is that nobody re-proposes
+a rejected approach, including me. Five of these are my own wrong turns in a single session.
+
+| # | proposed | verdict | why |
+| --- | --- | --- | --- |
+| 1 | Flat +100 entries to every pool fleet-wide | **REJECTED** (2026-09-22) | ~303,000 entries nobody would see. Fleet near-dup was 2-11% and each entry resurfaces about once every five years |
+| 2 | "Top up the 178 wired pools under 120 entries" (stage 1b) | **REJECTED** | Never had support in the data. Depth is not the lever — see #4 |
+| 3 | Rank pools by shuffle-bag cycle length ("effective_days") | **REJECTED** | Measures how fast a pool cycles, not whether it repeats ideas. Its top 10 came back full of pools with ZERO redundancy that simply get drawn often. A shuffle-bag cycling is EVEN COVERAGE, not repetition |
+| 4 | Deepen pools to 100+ entries | **SUPERSEDED** | The pools with a real problem are already at 200. Adding entries to a pool that is 80% one idea produces more of that idea. The bar is 100 DISTINCT IDEAS, not 100 entries |
+| 5 | Judge sameness with a token hash (first 6 or 12 tokens, sorted) | **REJECTED as the judge, KEPT as a prefilter** | Misses adjective-swap duplicates entirely: the magnolia nine never collapse below 2 clusters at ANY threshold including 0.40, because the difference is broad/large/blush. Kept because a CI gate must be free and deterministic |
+| 6 | Classify subject vs axis pools by **filename** | **REJECTED** | Picks up template boilerplate, not motifs. `faebot_*` pools all score "painted 100%, register 100%" because the generator skeleton is in every entry |
+| 7 | Classify subject vs axis pools by **slot name** in the `pools:` map | **REJECTED** | There is no naming convention. OceanBot names its subject slot per path (`wreck_class`, `ghost_ship`, `kraken_scene`); FarmBot's 34 paths and TinyBot's 18 are function-form with no slot map at all. The regex covered 8 of 18 live bots and silently omitted the rest |
+| 8 | Have an LLM read each path file and name its subject pool | **ACCEPTED, IN PROGRESS** | The only approach that works across naming schemes and function-form paths. `scripts/identify-subject-pools.js` → `SUBJECT_POOL_MAP.json` |
+| 9 | Purify duplicates inside a pool, then backfill | **PARTLY SUPERSEDED** | Correct mechanically, but see #10 — most bad pools are not duplicated, they are single-motif |
+| 10 | Expand each pool's CONCEPT SPACE, not just deduplicate | **ACCEPTED** | 34 of 35 bad pools are one motif at ≥70%. `earthbot/epic_sunset_subject` is 96% "tropical beach sunset with silhouetted palms" — 200 entries, 33 real ideas, and no storm, sunrise or underwater sunset anywhere. Purifying within the motif would move the audit numbers and change nothing a viewer sees |
+
+### Scope, corrected
+
+**SUBJECT pools only.** Kevin, after I drifted onto axis pools repeatedly: *"I said I wanted to focus on
+the subject pools, why is that so hard to understand."* The subject pool is the one whose entries state
+what the render is OF. Proven by reading a real emitted brief:
+
+```
+━━━ THE VISTA SUBJECT (the location + its core geology — the hero of the frame, fills it) ━━━
+Wide flat white-sand crescent beach with tall coconut palms silhouetted on the inland fringe...
+```
+
+Within a path, the subject pool is the ONLY thing that changes what you are looking at. Everything else
+modifies it. Axis pools (lighting, palette, camera, weather, atmosphere, composition) and appearance
+pools (eyes, skin, hair, outfit, regalia, adornment) are **out of scope** and must not be touched.
+
+Also note: the PATH bounds what its subject pool may say. `epic-sunset` can never produce a spaceship —
+its brief mandates a real-Earth sunset vista. So a pool's legitimate range is set by its path, and the
+defect is a pool using one corner of that range. Cross-path variety is a separate question (does a bot
+have enough paths?) and is not this task.
+
+## 6d. PROGRESS TRACKER — update as we go
+
+| step | state | evidence |
+| --- | --- | --- |
+| Baseline audit, all pools, likeness-based | **done** | `scripts/audit-seed-redundancy.js`, 31,355 redundant fleet-wide (includes axis pools, superseded as a work list) |
+| Settle the "same idea" definition | **done** | `scripts/lib/ideaSimilarity.js`, calibrated against labelled clusters |
+| Identify every path's SUBJECT pool | **running** | `scripts/identify-subject-pools.js` → `SUBJECT_POOL_MAP.json` |
+| Audit idea-count for subject pools only | **blocked on the above** | partial name-based result was 52 pools / 8 bots and is NOT trustworthy |
+| Agree the broadened concept range, per pool, with Kevin | not started | he approves the category list before any generation |
+| Re-seed ONE pool, render 6, Kevin reviews | not started | `earthbot/epic_sunset_subject` is the candidate |
+| Roll out to remaining pools | not started | |
+| CI gate | not started | lands LAST, per §6b |
+
+### What is NOT yet known, and must not be guessed
+
+- **The true count of subject pools needing work.** The 52-pool figure came from the rejected slot-name
+  method and covers 8 of 18 bots. Do not quote it.
+- **Whether each pool's motif should be broadened or preserved.** For `epic_sunset_subject`, is
+  EarthBot's intent specifically tropical-beach-sunset (pool is correct, bot needs more paths) or
+  "epic sunsets" broadly (pool is too narrow)? That is a brand call per pool, and Kevin's.
+- **Real cost.** The earlier ~$140 estimate assumed purify-and-backfill. Expanding concept space on ~50
+  pools is closer to authoring new pools and will cost more. Re-estimate after the one-pool trial.
+
 ## 7. Open questions for Kevin
 
 1. **Is 100 distinct ideas the bar for every scene pool, or should hot pools go deeper?** A pool drawn
