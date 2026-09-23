@@ -9,6 +9,7 @@
  * under compression pressure: SCENE (sacred) → OBJECT → CHARACTER → CAMERA → STYLE → MOOD.
  */
 
+import type { OutfitPlan } from './outfitPlan.ts';
 import type { ResolvedCastMember } from './castResolver.ts';
 import type { MoodAxes } from './vibeProfile.ts';
 import { buildDualBrief } from './dualBriefBuilder.ts';
@@ -73,6 +74,11 @@ export interface CompilerInput {
   profile?: {
     avoid?: string[];
   };
+
+  /** CREATE OUTFIT PLAN (CREATE_OUTFIT_PLAN.md, phase 4): the solo face-swap brief (singleBriefBuilder) adds
+   *  an OUTFIT block from it — the user's own garment / colour / pattern, or our rolled colour, silhouette and
+   *  pattern. Unset → every brief is byte-identical. */
+  outfitPlan?: OutfitPlan | null;
 }
 
 export interface CompilerOutput {

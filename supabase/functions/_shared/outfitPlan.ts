@@ -405,7 +405,9 @@ export function renderOutfitPlanLines(plan: OutfitPlan, sides: readonly OutfitSi
       if (!p) return '';
       const partner = sides.length === 2 ? sides[1 - i].label : null;
       const parts: string[] = [];
-      if (p.garment) parts.push(`wears the user's own request, "${p.garment}". Keep those words.`);
+      if (p.garment && !isGenericGarment(p.garment)) {
+        parts.push(`wears the user's own request, "${p.garment}". Keep those words.`);
+      }
       parts.push(colourLine(p, partner));
       parts.push(
         `Silhouette: ${p.silhouette}${p.garment ? ', as far as the garment allows' : ''}.`
@@ -487,10 +489,17 @@ function garmentHeads(garment: string): string[][] {
       const words = contentWords(seg);
       if (!words.length) return [];
       const head = words[words.length - 1];
-      // "Detroit lions cheerleading outfit": the head is generic, so any real word of it counts.
-      return GENERIC_HEAD.test(head) && words.length > 1 ? words.slice(0, -1) : [head];
+      // "Detroit lions cheerleading outfit": the head is generic, so any real word of it counts. A segment of
+      // ONLY generic words ("clothes") names nothing checkable.
+      if (!GENERIC_HEAD.test(head)) return [head];
+      return words.slice(0, -1).filter((w) => !GENERIC_HEAD.test(w));
     })
     .filter((alts) => alts.length > 0);
+}
+
+/** A garment made only of generic words ("clothes", "an outfit") names nothing to keep or write in. */
+export function isGenericGarment(garment: string | null): boolean {
+  return !!garment && contentWords(garment).every((w) => GENERIC_HEAD.test(w));
 }
 
 /** What the user asked this person to wear that `wardrobe` dropped. Empty = kept. */
@@ -521,9 +530,10 @@ export function missingUserOutfit(wardrobe: string, p: PersonOutfitPlan): string
 /** The user's request as a wardrobe string, for when Sonnet drops it twice: plain but exactly what they
  *  asked for (plus the planned trim). */
 export function userOutfitPhrase(p: PersonOutfitPlan): string | null {
-  if (!p.garment && p.colourSource !== 'user' && p.patternSource !== 'user') return null;
+  const garmentWords = p.garment && !isGenericGarment(p.garment) ? p.garment : null;
+  if (!garmentWords && p.colourSource !== 'user' && p.patternSource !== 'user') return null;
   const colour = p.colourSource === 'user' && p.colour ? `${p.colour.lead} ` : '';
-  const garment = p.garment ?? 'outfit';
+  const garment = garmentWords ?? 'outfit';
   const pattern =
     p.patternSource === 'user' && p.pattern
       ? /^with\b/i.test(p.pattern)

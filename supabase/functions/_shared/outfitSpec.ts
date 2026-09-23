@@ -24,7 +24,12 @@
 
 import { callSonnet } from './llm.ts';
 import { sanitizeUserText } from './sanitizeUserText.ts';
-import type { UserOutfitSpec } from './outfitPlan.ts';
+import {
+  missingUserOutfit,
+  userOutfitPhrase,
+  type PersonOutfitPlan,
+  type UserOutfitSpec,
+} from './outfitPlan.ts';
 
 // ── prefilter ────────────────────────────────────────────────────────────
 
@@ -328,4 +333,46 @@ export function outfitSpecStamps(outcome: OutfitSpecOutcome, castCount: number):
   if (r.rejectedInventions.length)
     stamps.push(`outfit_spec_rejected:${r.rejectedInventions.length}`);
   return stamps;
+}
+
+// ── Solo: enforce on Sonnet's freeform prompt (phase 4) ──────────────────
+
+/** A face occluder in a finished prompt. Stricter than OCCLUDER: "in shades of blue" is a colour, not
+ *  sunglasses, so "shades" only counts when someone is wearing them. */
+const OCCLUDER_IN_PROMPT =
+  /\b(sun ?glasses|goggles|helmets?|masks?|visors?|veils?|balaclavas?|hoods? (?:up|pulled up|drawn up|over))\b|\b(?:wearing|in|with|pair of) (?:dark |mirrored |oversized |retro |chic )?shades\b(?!\s+of\b)/i;
+
+/**
+ * The solo prompt is written freeform by Sonnet (no slots, no retry loop), so the guarantees run on the text:
+ *   1. any comma/semicolon clause that puts a face occluder on the person is removed;
+ *   2. if what the user asked for is missing, their own words are appended ("…, wearing red bikini").
+ * Pure; the caller runs it on Sonnet's text before postProcessPrompt.
+ */
+export function enforceSoloOutfit(
+  prompt: string,
+  person: PersonOutfitPlan | null
+): { prompt: string; stamps: string[] } {
+  const stamps: string[] = [];
+  const clauses = prompt.split(/(?<=[,;])/);
+  const kept = clauses.filter((c) => !OCCLUDER_IN_PROMPT.test(c));
+  let out = prompt;
+  if (kept.length !== clauses.length) {
+    out = kept
+      .join('')
+      .replace(/[\s,;]+$/, '')
+      .replace(/,\s*,/g, ',');
+    stamps.push(`outfit_occluder_stripped:${clauses.length - kept.length}`);
+  }
+  if (person) {
+    const phrase = userOutfitPhrase(person);
+    if (phrase) {
+      if (missingUserOutfit(out, person).length) {
+        out = `${out.replace(/[\s,.;]+$/, '')}, wearing ${phrase}`;
+        stamps.push('outfit_lock:THE PERSON:code_applied');
+      } else {
+        stamps.push('outfit_lock:THE PERSON:kept');
+      }
+    }
+  }
+  return { prompt: out, stamps };
 }

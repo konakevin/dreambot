@@ -305,6 +305,17 @@ describe('missingUserOutfit — did Sonnet keep what the user asked for?', () =>
     expect(missingUserOutfit(wardrobe, p)).toEqual(missing);
   });
 
+  it('a garment of only generic words ("clothes") has nothing to check or write in', () => {
+    const p = person({ garment: 'clothes' });
+    expect(missingUserOutfit('a moss green sweatshirt and acid-wash jeans', p)).toEqual([]);
+    expect(userOutfitPhrase(p)).toBeNull();
+    expect(
+      userOutfitPhrase(
+        person({ garment: 'outfit', colour: { lead: 'red', accent: null }, colourSource: 'user' })
+      )
+    ).toBe('red outfit');
+  });
+
   it('a person the user did not dress has nothing to miss', () => {
     expect(missingUserOutfit('anything at all', person({}))).toEqual([]);
   });

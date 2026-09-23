@@ -28,6 +28,7 @@
 import type { CompilerInput, CompilerOutput } from './promptCompiler.ts';
 import { applyVibeGenderModifier } from './promptCompiler.ts';
 import { applyFaceSwapOverride } from './faceSwapFluxOverrides.ts';
+import { renderOutfitPlanLines } from './outfitPlan.ts';
 
 // ── Single-cast composition presets ────────────────────────────────────
 // Mirrors `pools/dual_composition.ts` for the single case. Every preset
@@ -132,6 +133,22 @@ This is what the user asked for. Their LOCATION wins. Their ACTION wins. Their A
     : '';
   const sceneExpansion = scene.sceneExpansion ? `\nSCENE DETAILS:\n${scene.sceneExpansion}\n` : '';
 
+  // OUTFIT PLAN (CREATE_OUTFIT_PLAN.md, phase 4). Solo had no colour of its own ("me in a bikini" came back
+  // "a vibrant bikini" 3/3) and kept face occluders the user mentioned (sunglasses 6/6). Unset → '' → the
+  // brief is byte-identical.
+  const outfitLine = input.outfitPlan
+    ? renderOutfitPlanLines(input.outfitPlan, [
+        { role: c.role, label: 'THE PERSON', gender: castGender },
+      ])
+    : '';
+  const outfitBlock = outfitLine
+    ? `
+OUTFIT — write it into the CHARACTER part of the prompt, following it exactly:
+${outfitLine}
+Name the real garments the scene calls for and make them beautiful; the user's own clothing words always win. The face stays fully visible: no sunglasses, helmet, mask, goggles, visor or veil on the face, even if the request mentions them.
+`
+    : '';
+
   const styleReference = scene.styleReference
     ? `\nREFERENCE STYLE (apply ONLY these style descriptors — do NOT introduce any subjects, characters, places, or named entities from the reference):
 "${scene.styleReference.slice(0, 400)}"
@@ -153,7 +170,7 @@ STRUCTURE:
 4. CHARACTER (30% of words) — physical traits and clothing
 5. CAMERA + MOOD (20% of words)
 6. End with: no text, no words, no letters, no watermarks, ultra detailed
-${userPrompt}${sceneExpansion}${styleReference}
+${userPrompt}${outfitBlock}${sceneExpansion}${styleReference}
 MANDATORY — include this EXACT phrase unchanged somewhere in the prompt:
 "${faceLockPhrase}"
 

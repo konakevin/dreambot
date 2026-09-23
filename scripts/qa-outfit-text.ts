@@ -43,6 +43,7 @@ import {
 import {
   extractOutfitSpec,
   outfitSpecStamps,
+  enforceSoloOutfit,
   type OutfitPerson,
 } from '../supabase/functions/_shared/outfitSpec.ts';
 
@@ -642,6 +643,29 @@ async function renderOne(c: Case, run: number): Promise<Result> {
     characterRenderMode: 'natural',
     key: 'photography',
   });
+  const soloRole = c.shape === 'solo_self' ? 'self' : 'plus_one';
+  let soloPlan: OutfitPlan | null = null;
+  const soloStamps: string[] = [];
+  if (VARIANT === 'plan') {
+    const legend: OutfitPerson[] = [
+      soloRole === 'self'
+        ? { role: 'self', label: 'the user', gender: c.self }
+        : {
+            role: 'plus_one',
+            label: /^[A-Z]/.test(c.partner!.name)
+              ? c.partner!.name
+              : `the user's ${c.partner!.name}`,
+            gender: c.partner!.gender,
+          },
+    ];
+    const specOut = await extractOutfitSpec(raw, legend, KEY);
+    soloStamps.push(...outfitSpecStamps(specOut, 1));
+    soloPlan = planOutfits(
+      [soloRole],
+      DEFAULT_OUTFIT_ROLLS,
+      specOut.source === 'read' ? specOut.result.byRole : {}
+    );
+  }
   const compiled = compilePrompt({
     inputType: 'self_insert',
     medium: {
@@ -660,19 +684,33 @@ async function renderOne(c: Case, run: number): Promise<Result> {
       shotDirection: 'medium shot',
       focalAnchor: 'the person',
     },
+    ...(soloPlan ? { outfitPlan: soloPlan } : {}),
   });
   const sonnet = await callSonnet(compiled.sonnetBrief, KEY, compiled.maxTokens);
-  const finalPrompt = postProcessPrompt(sonnet.text, compiled.postProcess);
+  let soloText = sonnet.text;
+  if (soloPlan) {
+    const enforced = enforceSoloOutfit(soloText, soloPlan.people[0]);
+    soloText = enforced.prompt;
+    soloStamps.push(...enforced.stamps);
+  }
+  const finalPrompt = postProcessPrompt(soloText, compiled.postProcess);
+  const occluder =
+    /\b(sun ?glasses|goggles|helmets?|masks?|visors?|veils?)\b|\bshades\b(?!\s+of\b)/i;
   const expect = c.shape === 'solo_self' ? c.expectSelf : c.expectPartner;
   return {
     ...base,
     finalPrompt,
-    fallbackReasons: [],
+    fallbackReasons: [
+      ...soloStamps,
+      ...(c.tags?.includes('occluder') && occluder.test(finalPrompt) ? ['OCCLUDER_IN_FINAL'] : []),
+    ],
+    plan: soloPlan,
     checks: {
       self: c.shape === 'solo_self' ? check(finalPrompt, expect) : null,
       partner: c.shape === 'solo_partner' ? check(finalPrompt, expect) : null,
       mirrored: null,
       formalTypeMismatch: null,
+      ...(soloPlan ? planColourChecks(soloPlan, { [soloRole]: finalPrompt }) : {}),
     },
   };
 }
@@ -889,6 +927,7 @@ for (const r of results) {
       marks.push('wears-partner-colour');
     }
   }
+  if (r.fallbackReasons.includes('OCCLUDER_IN_FINAL')) marks.push('OCCLUDER_IN_FINAL');
   if (r.fallbackReasons.some((f) => /outfit_lock:.*code_applied/.test(f))) {
     codeApplied++;
     marks.push('lock-code-applied');

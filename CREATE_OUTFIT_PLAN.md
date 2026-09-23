@@ -278,6 +278,27 @@ kept|retried|code_applied`). Stamps: `outfit_colour`, `outfit_cut`, `outfit_patt
   (a tropical-leaf lining on a ski jacket). Open question for Kevin: a tux gets recoloured under "their
   garment, our colour" (one run: a turquoise tuxedo with floral lapels).
 
+## Phase 4 done (2026-09-23): solo (inert until Create passes a plan)
+
+- Kevin on the tux: "let the tux go wild with colors and patterns, this is AI, let's have some fun". No
+  exceptions list: every garment the user names without a colour takes our colour and pattern.
+- `CompilerInput.outfitPlan` (optional). `buildSingleBrief` adds an OUTFIT block right after the user's
+  sacred prompt: the person's line plus "the face stays fully visible: no sunglasses, helmet, mask,
+  goggles, visor or veil, even if the request mentions them". Unset → byte-identical.
+- `enforceSoloOutfit` (outfitSpec.ts) runs on Sonnet's freeform text before postProcessPrompt: strips any
+  clause putting a face occluder on the person ("in shades of blue" survives), and appends the user's own
+  words if Sonnet dropped them. Stamps `outfit_occluder_stripped:<n>`, `outfit_lock:THE PERSON:...`.
+- Bug found and fixed on the way: a garment of only generic words ("80's clothes" read as "clothes") was
+  locked and written in as ", wearing clothes". Generic-only garments are now never locked, repeated or
+  written in.
+- `__tests__/lib/outfitSolo.test.ts`: 14 tests. Full gate: 216 suites / 4,258 tests, tsc, deno.
+- Live solo (12 prompts x 3): user garment 33/33, colour 18/18, pattern 6/6, own rolled colour 18/18,
+  face occluders in the final prompt 0 (baseline: sunglasses 6/6), "me in a bikini" now gets a colour and
+  often a print (a saffron-and-violet gingham bikini, a lilac and moss colour-blocked bikini).
+- Final full-corpus check (34 prompts x 2, couples + solo): garment 72/72, colour 40/40, pattern 8/8, own
+  colour 44/44, partner's colour 0/44, dress next to a suit 0/6, code write-ins 0. The only fallback is
+  the separate whale-watching scene bug.
+
 ## Porting to nightly later
 
 `planOutfits`, the pools and the brief wiring live in `_shared`; nightly would pass the same flag with
