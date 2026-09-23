@@ -361,16 +361,27 @@ context compaction — if you are resuming, check each bot's `shadowPaths` in co
   path's specific traps (text-shaped surfaces, the jargon trap, corridor generators, no detail
   exemptions, output-order placement).
 
-**Wave 4 (in flight):** BloomBot `alpine-wildflower-meadow` · SteamBot `rooftop-telegraph` ·
-FaeBot `star-charting`
+**PROGRESS — 26 of 35 built, all shadow-only.** Waves 4-6 are done and merged. Remaining:
 
-**Wave 5:** BloomBot `coastal-cliff-bloom` · BloomBot `orchid-cloud-forest` · PixelBot `castle-town-gate`
-**Wave 6:** FaeBot `autumn-seed-gathering` · FaeBot `honey-harvest` · PixelBot `observatory-tower`
-**Wave 7:** FarmBot `sheep-shearing-day` · FarmBot `hay-baling-summer` · MangaBot `game-center-arcade`
-**Wave 8:** BrickBot `archaeology-dig` · DinoBot `tidal-flat-tracks` · ToyBot `sand-toy-beachworks`
+**In flight:** PixelBot `observatory-tower` · MangaBot `game-center-arcade` · FaeBot `honey-harvest`
+**Wave 7 (next):** FarmBot `sheep-shearing-day` · FarmBot `hay-baling-summer` · ToyBot `sand-toy-beachworks`
+**Wave 8 (last):** BrickBot `archaeology-dig` · DinoBot `tidal-flat-tracks` · FaeBot `autumn-seed-gathering`
 
-Waves are grouped so same-bot paths run together (shared audit, and I can fence them against each
-other — `lambing-season` was already fenced against `sheep-shearing-day` for exactly this reason).
+**Two operational notes for whoever resumes this:**
+
+1. **A concurrent session owns `scripts/qa-outfit-text.ts`** (its "Outfits phase 2/3/4" commits). While
+   that file was UNTRACKED and unformatted it failed `prettier --check` and therefore blocked every
+   commit of mine, so I was moving it out of the tree and restoring it byte-identical each time. **That
+   pattern was fragile and I have stopped using it:** on one run the restore step did not fire, and
+   because the file had since become TRACKED, the miss showed up as a `D` deletion of another
+   session's work in `git status`. It was recoverable (byte-identical in both my hold and HEAD) and
+   nothing was lost, but the lesson is real — **never move another session's file out of the tree to
+   get a commit through.** It is moot now: that session has committed and formatted the file, so it no
+   longer blocks anything.
+2. **Do not use a directory-level `git add scripts/bots/<bot>/`** in this tree. It swept an agent's
+   path file into a commit while the agent was still revising it, and swept another agent's seeds into
+   a commit whose message did not mention them. Both were harmless (an unregistered path file is
+   inert), but stage explicit paths.
 
 **Open items that stay Kevin's call and must NOT be actioned autonomously:**
 1. FarmBot's shared `FARMBOT_COZY_NEUTRAL` fragment — 273 words, starting at word 4 of every prompt,
