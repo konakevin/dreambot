@@ -76,6 +76,19 @@ for (const p of PATHS) {
 // lean secret-sauce axes. No tag-filtering — single theme.
 
 const AXIS_POOLS = {
+  // airfield-biplanes (2026-09-23, SHADOW) — BrickBot's aviation path. 8 bespoke axes + a
+  // 50%-gated field_event. No `register` axis on purpose: LEGO's aviation heritage is a thin
+  // conceptual space that would cap a register pool near 15 and repeat, so the era/role signature
+  // rides on the aircraft hero entry instead.
+  BRICKBOT_AIRFIELD_AIRCRAFT: load('brickbot_airfield_aircraft'),
+  BRICKBOT_AIRFIELD_FLIGHT_MOMENT: load('brickbot_airfield_flight_moment'),
+  BRICKBOT_AIRFIELD_SETTING: load('brickbot_airfield_setting'),
+  BRICKBOT_AIRFIELD_GROUND_CREW_BEAT: load('brickbot_airfield_ground_crew_beat'),
+  BRICKBOT_AIRFIELD_CAMERA_FRAMING: load('brickbot_airfield_camera_framing'),
+  BRICKBOT_AIRFIELD_BUILD_TECHNIQUE: load('brickbot_airfield_build_technique'),
+  BRICKBOT_AIRFIELD_LIGHTING: load('brickbot_airfield_lighting'),
+  BRICKBOT_AIRFIELD_PALETTE: load('brickbot_airfield_palette'),
+  BRICKBOT_AIRFIELD_FIELD_EVENT: load('brickbot_airfield_field_event'),
   // crazy-islands path — fun/crazy tropical-island SCENE path (2026-05-27).
   // One varied island_scene hero pool + lean secret-sauce axes (no tag-filter).
   BRICKBOT_CRAZY_ISLANDS_SCENE: load('brickbot_islands_scene'),

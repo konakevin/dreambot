@@ -602,4 +602,45 @@ Bending advantage over legacy: scene + weather are decoupled, so unique permutat
     framingModes: null,
     anchorScaleRange: null,
   },
+  BRICKBOT_AIRFIELD_BIPLANES: {
+    description: `PATH-BESPOKE — BrickBot airfield-biplanes (2026-09-23). THE AVIATION path — the roster's only one (space / pirates / city / trains / castle / mech / western / theme-park / aquatic / winter / forest / islands / macro-display / girly / haunted / landscapes / lego-masters covered everything BUT flight). A grass-strip aerodrome built entirely in brick: a vintage BIPLANE as the hero, a windsock on a bar mast, chocks, a corrugated arch hangar with hinged doors, a mechanic minifig up a step-ladder with his head in the cowling. Canon: LEGO Adventurers pulp expedition bi-wings (Johnny Thunder, 1930s leather-and-tan), classic LEGO Town/City aerodrome, LEGO Creator vintage propeller planes, LEGO City stunt planes, golden-age barnstorming and pylon air-racing, and the Bricklink AFOL aviation-diorama community. Licensed pop-culture flavour is fine (Kevin reversed the BrickBot IP ban 2026-09-22); hard-SF and modern-military photoreal registers stay OUT because they photoreal-drift.
+
+THREE NAMED FAILURE MODES THIS PATH IS ENGINEERED AGAINST (all three are baked into the POOLS, not just the template — a template rule never reaches Flux, since Sonnet only writes what is present):
+  1. REAL-AIRCRAFT BRAND NAMES (Sopwith / Fokker / Spitfire / Cessna / Piper) pull photoreal stock aviation photography. Every aircraft entry describes the machine by SILHOUETTE + stance + engine shape + cockpit count. No name, ever.
+  2. READABLE TEXT — airfields mean registrations, serials, roundels, stencils and signage, and Flux renders all of it as gibberish lettering, a hard fail. Every marking in every pool is a painted geometric shape, a small round PICTORIAL emblem, a printed stripe, or an explicitly PLAIN BLANK PANEL, named in the seed itself. No boards, no charts, no paper, no clock faces, no weathervanes.
+  3. PHOTOREAL DRIFT — aviation photography is one of Flux's strongest priors. The dedicated build_technique axis is the load-bearing anti-photoreal lever (the same role water_build_technique / snow_ice_build_technique / terrain_build_technique play on BrickBot's other drift-prone paths), and every pool carries the brick signal.
+
+8 path-bespoke slots + 1 conditional:
+  • aircraft            — THE HERO. One brick-built vintage machine: silhouette (mostly biplanes, plus a triplane / high-wing monoplane / twin-float seaplane / single-wing racer), stance, engine shape, cockpit count, livery-as-plain-colour-plus-ONE-painted-shape, and its brick construction cue. Carries the era/faction signature too (barnstormer / flying-circus / pylon racer / airmail / pulp expedition / crop-duster / floatplane / trainer / ski rescue / photo-survey / banner-tow / glider-tug / freight / bush / aerobatic / coastal patrol / amphibian / LEGO-Town aerodrome) — this path deliberately has NO separate register axis, because LEGO's aviation heritage is a thin conceptual space and a dedicated register pool would cap around 15 entries and repeat (Lesson 10).
+  • flight_moment       — THE SIGNATURE MONEY-SHOT AXIS. The frozen instant, in three roughly-equal families: GROUND-RUNNING (taxiing with the tail-skid scoring the plate-mosaic, the take-off run, the landing flare, roll-out, a tied-tail run-up, the hand-prop swing at the top of its arc, being towed), AIRBORNE LOW OVER THE FIELD (wheels a single stud clear at lift-off, a steep climb off the strip end, a low banked pass over the hangar ridge, a hedgerow hop, the apex of a slow loop), and HANGAR SURGERY (nose-down on brick trestles with the cowling hinged open and the round-brick engine ring half-exposed, one wheel off and the axle bare, a lower-wing fabric panel peeled back off the plate-and-bar frame, being winched out of the hangar mouth on a trolley). Livery-agnostic by construction so it never contradicts the rolled hero.
+  • airfield_setting    — the brick-built stage (mown green plate-mosaic strip with a paler tile centreline / corrugated arch hangar over a light-bley apron / cliff-top coastal field / alpine meadow strip / jungle clearing / tan dry-lake field / snow-plate strip / atoll floatplane ramp / county-fair field / pylon race course / village aerodrome behind a hedgerow / wooden hangar of vertically-SNOTed tiles / canvas flight-line / lakeside dock / ridge-top glider field). Signage-free by recipe.
+  • ground_crew_beat    — verb-led minifig STORY BEAT, every entry opening "Mid-" (mid-swing hand-propping / mid-pull on a chock rope / mid-climb up a step-ladder with a spanner / mid-pour from a fuel churn / mid-wave with plain paddle bats / mid-haul on the tail / mid-scramble clear of the propeller / mid-clamber of two kids up the fence rails). No paper, no charts, no clipboards — text priors.
+  • camera_framing      — MANDATORY DRIVING AXIS. HAND-AUTHORED, not generated: hero-agnostic (works on the ground, in the air, or inside the hangar), carries an ANGLE word, and contains zero posture verbs, zero time-of-day, zero weather, zero terrain (Sonnet-generated camera pools leak all of those by default).
+  • build_technique     — THE ANTI-PHOTOREAL LEVER. AFOL aviation parts-usage: wing cellules as stacked plates with tile-clad leading edges and a row of exposed studs, interplane struts as Technic pins and bars in a braced N-cage, rigging as taut bar-and-clip runs, a rotary engine as a ring of round 2x2 bricks with cylinder stubs and a moulded three-blade propeller, fabric-effect fuselage as smooth tiles with plate seams left showing, a SNOT-clad cowling with headlight-brick exhaust stubs, hinge-plate control surfaces sitting visibly deflected.
+  • lighting            — axis-clean: time of day + direction + colour + shadow only. No weather, no fog, no optical events.
+  • palette             — axis-clean LEGO-coded colour stories, colour and light words only (a palette slot carrying object nouns is a second-scene injection).
+  • field_event (50%-gated) — the environmental beat in brick parts: prop-wash flattening a fan of tuft elements and lifting tan studs, the wind cone snapped stiff on its mast, a curling trail of white cloud-slope smoke off a wingtip pod, trans-clear rain rods beading along the top wing, a brick bird-flock scattering off the hangar ridge, a hay-bale brick rolling across the threshold, trans-orange spark plates at the exhaust stubs, a spray of trans-blue plates off the floats. Rigid-object words (column / pillar / ribbon / disc / beam / "shaped like") banned for anything made of air, smoke, light, dust or water.
+
+Bending advantage: aircraft × flight_moment × airfield_setting × ground_crew_beat × field_event are all independently rolled, so "pulp-expedition bi-wing on balloon tyres + nose-down on trestles with the engine ring bare + jungle clearing strip + mid-brush of dope onto a peeled panel" and "pylon air-racer + wheels a stud clear at lift-off + county-fair field + wind cone snapped stiff" are both rollable off one 25-entry MVP set.
+
+TILT-SHIFT IS RETAINED ON PURPOSE — NO deep-focus promptPrefixByPath. Playbook Lesson 1: tilt-shift is Flux's structural signal that "everything in frame is the LEGO model", and the deep-focus prefix trades it for wide cinematic readability at the cost of photoreal-background drift. Because PHOTOREAL DRIFT is this path's single named critical trap (aviation photography prior), the anti-photoreal signal wins the first round. Adding the prefix is the reserved R2 lever if frames come back too tight/intimate — and it must then be the EXACT existing string used by lego-city / lego-trains.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'aircraft',
+        'flight_moment',
+        'airfield_setting',
+        'ground_crew_beat',
+        'camera_framing',
+        'build_technique',
+        'lighting',
+        'palette',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'field_event', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };

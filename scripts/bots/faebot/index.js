@@ -161,6 +161,18 @@ module.exports = {
   // History: flux-2-pro removed 2026-06-01; gpt-image-2 + flux-2-max removed today.
   // Nano Banana banned fleet-wide 2026-06-21 (Kevin) — bots are FLUX-ONLY.
   allowedModels: ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+  // modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection — with ONE
+  // exception below, added 2026-09-22.
+  modelByPath: {
+    // mushroom-apothecary: the picker rolled flux-1.1-pro-ultra on 15 of 15 renders and ultra
+    // signed 3 of them with a painted signature artifact in the corner. A signature is readable
+    // text, which is a hard fail on the QA rubric. flux-1.1-pro does not sign, so this splits the
+    // roll rather than excluding ultra (its painted register is otherwise the best of the two here).
+    'mushroom-apothecary': {
+      'black-forest-labs/flux-1.1-pro': 1,
+      'black-forest-labs/flux-1.1-pro-ultra': 1,
+    },
+  },
   // modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
   // Original locks (restore individual lines if a path needs pinning again):
   // modelByPath: {

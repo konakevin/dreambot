@@ -92,11 +92,11 @@ Then the rest, grouped by bot to reuse each bot's audit.
 | 1 | DinoBot | courtship-display | 4 | **PASS ~4.6, AWAITING GRADE** | bespoke arena pool fixed the lone-animal miss structurally |
 | 2 | ToyBot | puppet-theatre | 3 | **PASS ~4.7, AWAITING GRADE** | prefix reorder fixed the empty stage; positive crowd-out killed the text prior |
 | 3 | PixelBot | volcano-forge | 3+1 | **PASS ~4.7, AWAITING GRADE** | agent built; ultra pinned OUT (renders exteriors on interior prompts); text repair validated |
-| 4 | FaeBot | mushroom-apothecary | 3+2 | validating wall-text fix | best render 5.0; amber cast fixed path-scoped |
+| 4 | FaeBot | mushroom-apothecary | 6 | **PASS ~4.7, AWAITING GRADE** | 3 agent + 3 mine, each on a distinct verified defect: amber cast, wall text, ultra signature |
 | 5 | BloomBot | alpine-wildflower-meadow | - | not started | |
 | 6 | BloomBot | coastal-cliff-bloom | - | not started | |
 | 7 | BloomBot | orchid-cloud-forest | - | not started | |
-| 8 | BrickBot | airfield-biplanes | - | not started | |
+| 8 | BrickBot | airfield-biplanes | 4+1 | validating plain-surface move | camera purge was the fix; residual gibberish ~1/5 |
 | 9 | BrickBot | balloon-festival | - | not started | |
 | 10 | BrickBot | archaeology-dig | - | not started | |
 | 11 | DinoBot | den-and-burrow | 1 | **PASS ~4.7, AWAITING GRADE** | designed from the motto: the hero is the unseen underground |
@@ -148,6 +148,34 @@ roots across the ceiling, a clutch of fluffy feathered hatchlings all facing the
 **Minor register nit for Kevin's eye:** the feathered hatchlings read slightly duckling-ish. Left
 alone deliberately — real feathered hatchlings do look like that and the playbook warns against
 over-correcting a non-defect.
+
+### THE SHARPEST LESSON OF THE RUN SO FAR (BrickBot, and it generalises)
+
+**On a photography-register bot, an AXIAL or PLAN-VIEW camera entry is a hard-fail GENERATOR, and it
+out-votes every anti-front-on mandate in the template.** Every hard fail across four BrickBot batches
+traced to just 3 of 25 camera entries — "straight down the long axis", "looking back down its length",
+"steep down-shot, plan-form flat". They produced a mirrored glass corridor, a symmetric hangar
+portrait, a snow strip dead up the middle, and one render that dropped the AEROPLANE ENTIRELY and
+substituted a racing car. The template already carried the bot's proven camera-is-mandatory block AND
+an explicit asymmetry rule, and they still lost.
+
+**The fix was PURGING the entries, not strengthening the mandate.** Post-purge probe: 3/3 clean, zero
+corridors, zero mirrors, zero subject-loss. Treat the camera pool as hand-authored and audit it as a
+SET, reading every entry — this is the OceanBot camera-framing-as-LAW lesson in a new costume.
+
+### THE PATTERN THAT KEEPS RECURRING — a rules block never reaches Flux
+
+Three separate paths needed the same move today, and it is now the default:
+
+| Path | The rule that was being ignored | Where it had to go |
+| --- | --- | --- |
+| ToyBot puppet-theatre | painted flats carry pictorial scenery | its own section, and the arch de-front-loaded |
+| FaeBot mushroom-apothecary | wall surfaces carry a picture or a plant | INSIDE the required output order |
+| BrickBot airfield-biplanes | fuselage/rudder/floats are smooth unmarked brick | INSIDE the output order, right after the hero |
+
+**Sonnet writes only what the output order tells it to write.** A PICTORIAL/plain-surface rule sitting
+in a mid-template rules block gets paraphrased away — in both BrickBot failures the surface WAS named,
+just late. If a clause is load-bearing, it belongs in the ordered list, not in the rules.
 
 ## The agent brief template (reuse verbatim; only §PATH changes)
 

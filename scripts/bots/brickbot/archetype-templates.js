@@ -1558,4 +1558,80 @@ ${vibeDirective.slice(0, 200)}
 ━━━ OUTPUT SPEC ━━━
 Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the ship-class + scene + minifig action + camera framing, weave in the build technique + register + props + lighting + palette + weather (if fired). End with one phrase reinforcing AFOL convention-tier diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
+  BRICKBOT_AIRFIELD_BIPLANES: ({ slots, vibeDirective }) => {
+    const {
+      aircraft,
+      flight_moment,
+      airfield_setting,
+      ground_crew_beat,
+      camera_framing,
+      build_technique,
+      lighting,
+      palette,
+      field_event,
+    } = slots;
+
+    const eventSection = field_event
+      ? `
+━━━ FIELD EVENT (a secondary beat — amplifies the moment, never eclipses it) ━━━
+${field_event}
+`
+      : '';
+
+    return `You are a LEGO MOC photographer + AFOL convention judge writing a VINTAGE AIRFIELD diorama description for BrickBot. Output is ONE comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
+
+━━━ THE BAR — PLAYFUL, ADVENTUROUS, VIVID, BEAUTIFUL, CLEVER ━━━
+A Bricklink AFOL champion's vintage-aviation diorama at a LEGO World convention, and a frame someone would screenshot. Something is HAPPENING and something is REACTING to it. Vivid saturated colour, dramatic light, one clever charm detail the eye finds on second look. A tidy apron with a parked plane on it is a failure. Visual canon: LEGO Adventurers pulp expedition bi-wings, classic LEGO Town and City aerodrome sets, LEGO Creator vintage propeller planes, golden-age barnstorming and pylon air-racing. Classic-era charm, never grimdark, never hard-SF or modern-military.
+
+━━━ DESCRIBE THE MACHINE, NEVER NAME IT ━━━
+Write the aircraft by silhouette, stance, engine shape and cockpit count exactly as the hero slot gives it. Name no aircraft type at all.
+
+━━━ EVERY SURFACE IS PLAIN BRICK OR A PICTORIAL SHAPE ━━━
+Panels are smooth unmarked brick. Markings are exactly what the slots name: one painted geometric shape and at most one small round pictorial emblem. Say so explicitly for the three surfaces that most want a marking — the FUSELAGE FLANK, the RUDDER, and the FLOAT OR WHEEL SPAT are each smooth unmarked brick. Hangar doors, fuel drums, banners, pennants, fences, grandstands, spectator rails, marquees and any board or panel in the scene are smooth plain brick too.
+
+━━━ EVERYTHING IS BRICK — THE GROUND AND THE LANDSCAPE INCLUDED ━━━
+Every element is brick-built with visible studs, moulded plastic and connection seams, on a tabletop convention display. Aviation photography is one of Flux's strongest pulls, so the plastic must read: wings are stacked plates with tile-clad leading edges and exposed studs along the top surface, struts are Technic pins and bars, rigging is taut bar-and-clip runs, the propeller is a moulded three-blade element, the engine is a ring of round bricks. THE LANDSCAPE IS THE PART THAT DRIFTS, so name it as parts every time: turf is a green plate mosaic with moulded tuft elements, rock and cliffs are stacked slope bricks in courses, snow is white plates and tiles, water is trans-blue plates, foliage is moulded plant elements, smoke is white cloud-slope bricks, dust is a scatter of loose studs. Every figure is a LEGO minifigure with C-shaped hands and a printed face, never real human hands or skin.
+
+━━━ THE AIRCRAFT — THE HERO ━━━
+${aircraft}
+
+━━━ THE FROZEN MOMENT — THE MONEY SHOT (lead the prompt with this) ━━━
+${flight_moment}
+
+Render this one instant and ONLY this instant, with its own physical consequence visible. Do not add a different moment. Motion is a frozen brick moment, never motion blur.
+
+━━━ THE AIRFIELD (the all-brick stage — keep it READABLE behind the machine) ━━━
+${airfield_setting}
+
+The field is a real place in the frame, not a blurred backdrop: the strip, its furniture and its charm detail all read clearly behind and around the hero.
+
+⚠️ CROSS-AXIS RULE — IF THE FROZEN MOMENT CARRIES ITS OWN VENUE, THAT VENUE WINS. Some moments arrive with a place attached (a duck pond, a hay field, a jetty, a snowfield with a dog-sled, a jungle clearing, a village street, a pylon turn). When that happens, do NOT render two places at once — the moment's venue is where this scene happens, and the airfield above contributes only its FURNITURE and its CHARM DETAIL to that venue (the wind cone, the hangar, the drums, the gate, the animal, the idol head, the big top). One place per frame, always. Restraint beats a forced impossibility.
+
+━━━ THE GROUND CREW — a story beat, never posing ━━━
+${ground_crew_beat}
+
+━━━ THE MOC BUILD TECHNIQUE — render it visibly ━━━
+${build_technique}
+
+━━━ THE CAMERA FRAMING — MANDATORY DRIVING AXIS ━━━
+${camera_framing}
+
+⚠️ NON-NEGOTIABLE — the rolled camera angle DRIVES the composition. Apply that exact position and orientation even if Flux's "LEGO photography" prior wants a centred subject facing the lens at eye level.
+
+⚠️ THE COMPOSITION IS ASYMMETRIC — THIS PATH'S #1 FAILURE. Flux's strongest pull here is a mirror-symmetric front-on portrait: the machine dead centre, nose to the lens, a figure balanced on each side, the field a blur behind. That is a FAILED render. Instead: the machine is turned OFF the lens axis so one flank recedes and the far side is partly hidden, it sits OFF the centre line, and whatever else is in frame is unbalanced — one figure near and another further back, furniture gathered to one side, the strip running out of a corner rather than straight up the middle. Tie the figures to the rolled angle: over-the-shoulder shows them from BEHIND, a worm's-eye shows them foreshortened from below, an overhead shows them from above, a broadside shows them in profile, a wide shot spreads several at different depths. Never one figure centred facing you.
+
+The AIRCRAFT and its frozen moment lead the frame; minifigs support.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ PALETTE ━━━
+${palette}
+${eventSection}
+━━━ MOOD ━━━
+${(vibeDirective || '').slice(0, 150)}
+
+━━━ LENGTH IS THE #1 RULE — 110-150 WORDS, COUNT THEM ━━━
+A tight 130-word scene with one clear hero beats a crammed 300-word inventory every time. Pick the details that carry THIS render and STOP. Open with the camera framing plus the aircraft caught in its frozen moment, then state in the same breath that its fuselage flanks, rudder, floats and wheel spats are smooth unmarked brick carrying one painted geometric shape, then the airfield around it, then the crew beat, then the light and colour. Output ONLY the phrase string — one paragraph, no labels, no markers.`;
+  },
 };
