@@ -1512,6 +1512,71 @@ negation or personification sweep is looking for. Banned at the recipe
 (`rust|rusted|rust-orange|rusty|crimson|scarlet|maroon|oxblood`); worn iron is *"worn silver-bright"*.
 **Add it to the standing sweep for any bot with mud, wet weather and animals.**
 
+**32. ⭐⭐ THERE ARE TWO CLASSES OF NEGATION AND ONLY ONE OF THEM IS DANGEROUS. CHECK WHICH BEFORE
+YOU FIX ANYTHING.** The negation-leak law says a banned noun renders anyway, because CLIP cannot
+process "no". True — but it applies to **what reaches FLUX**, and a brief is not a prompt.
+
+- **DANGEROUS: a negation in a string concatenated STRAIGHT INTO the Flux prompt.** Medium fragments,
+  `promptPrefix`, `promptSuffix`, look overrides. Nothing filters these; the tokens land verbatim.
+  The fleet's `PROMPT_SUFFIX` "no text, no watermarks" is this class (and measured inconclusive at 8
+  renders per arm — lesson 19).
+- **HARMLESS: a negation in the BRIEF, i.e. in Sonnet's instructions.** Sonnet does not echo its own
+  formatting rules into its output, so the token never reaches Flux.
+
+Measured 2026-09-23, because an agent flagged the fleet's standard closing line — *"No preamble, no
+headers, no markers, no bullets"* — as a lesson-1 text-prior violation sitting on every prompt, and
+recommended a fleet-wide edit across 25 files including live paths. Before touching any of them I
+checked the emitted prompts:
+
+> **"marker" reached 0 of 253 emitted prompts** across the ten paths whose brief contains "no markers".
+
+So it is not a text prior at all, and the 25-file change was unnecessary. **The test is one grep of
+`uploads.ai_prompt`, and it is the difference between a real fix and churning live content on a
+plausible-sounding theory.** Before acting on ANY negation-leak finding, ask: is this string handed to
+Sonnet, or concatenated to Flux? Then verify against delivered prompts.
+
+**33. ⭐⭐⭐ WHEN A PREMISE OBJECT RENDERS ZERO TIMES, STOP ITERATING THE PROMPT AND PROBE A MODEL.**
+FaeBot `star-charting`, the sharpest version of this yet. Its reading instrument — the entire reason
+the path exists — rendered **0 of 22** on flux-1.1-pro across three rounds, while every law sat in
+**6 of 6 emitted prompts** every round. Three rounds of prompt work moved it 0/6, 0/6, 0/6. One model
+swap to flux-2-pro, *same prompts, same pools*: **instrument 3 of 3, warm light 3 of 3, real wardrobe
+3 of 3**, and ~2.8 → ~4.5.
+
+This is the third confirmation in one run (DinoBot `amber-forest`: flux-dev produced NO RESIN at all
+on a brief that led with a resin sheet filling two thirds of the frame; PixelBot `volcano-forge`:
+ultra rendered exteriors on interior prompts). **The rule: a stated, correctly-ordered,
+seed-reinforced element that renders 0 times is a MODEL fact, not a prompt fact.** Probe the model
+before round 2, not after round 3 — it is the cheapest experiment available and it has now decided
+three paths.
+
+**34. NEVER BUY AN UNSOLVED TRAP WITH A SOLVED ONE — the first-third budget is zero-sum and the trade
+can go backwards.** Same build, measured: to make room for the instrument at output-order item 2, the
+costume was demoted from item 2 to item 3. The instrument still did not render (it was a model
+problem), and the demotion lost **wings in 4 of 6, pointed ears in 5 of 6, and the costume itself in 3
+of 6**, plus one literal body-fused-into-the-perch graft. Round average went 2.85 → 2.2 and was
+reverted. When the budget is full, the answer is to shorten the template, not to reorder a rule that
+is currently working.
+
+**35. A HIGH PLACE UNDER A BIG SKY IS THE PUREST VISTA PRIOR IN FANTASY ILLUSTRATION, AND THE CROP
+CLAUSE DOES NOT BEAT IT — what decides the render is WHAT KIND OF THING the perch is.** Same build:
+the crop law reached 6 of 6 prompts every round and rendered in roughly 6 of 22. The split was clean:
+a **self-contained detachable object** (a nest, a seed case, a mushroom with its stalk, a boulder)
+rendered as that whole object seen from OUTSIDE with the figure shrunk to a passenger; a **feature of
+something too big to fit in frame** (a limb fork, a root buttress, a burl, a fallen giant's flank)
+rendered as a near surface. **And the parent must be WOODY** — every rock-parented perch rendered a
+landscape, because naming a cliff licenses the whole cliff system. Purging the bad class beat
+strengthening the mandate, which is the BrickBot camera-pool precedent again: **on a framing failure,
+audit the pool as a SET and delete the offending class rather than adding words.**
+
+**36. THE POSITION-COLOUR-COUNT LAW — information shown without a single character, 0 text in 26
+renders on the fleet's highest text-risk subject.** A star chart is a diagram covered in writing, and
+lesson 23 says even the standard "one small painted picture" move invents a signboard when its
+substrate is not guaranteed visible. This path shows information only as the **position, colour or
+count of real physical objects**: a pin in moss per star, a bead slid up a cord, pebbles counted out
+in a row, holes pricked in a leaf held to the moon, the sky doubled in a dish of water. Nothing is
+ever a picture, a symbol or a mark. **Portable to any instrument, ledger, signage, score, map or
+diagram subject on any bot.**
+
 ---
 
 ## North Star — the actual goal

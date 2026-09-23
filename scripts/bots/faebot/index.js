@@ -39,6 +39,7 @@ const pathBuilders = {
   'spirit-beasts': require('./paths/spirit-beasts'),
   'mushroom-apothecary': require('./paths/mushroom-apothecary'), // 2026-09-22 SHADOW — FaeBot's first interior
   'acorn-boat-regatta': require('./paths/acorn-boat-regatta'), // 2026-09-22 SHADOW — FaeBot's first ACTION path
+  'star-charting': require('./paths/star-charting'), // 2026-09-23 SHADOW — FaeBot's first NIGHT-SKY / knowledge path
 };
 
 module.exports = {
@@ -89,6 +90,13 @@ module.exports = {
   // multi-figure lesson: a singular opener collapses the crowd to one hero.
   // Structural anchor only, no style/content language.
   promptPrefixByPath: {
+    // star-charting: front-loads the ADULT clothed winged fae. This is what beat the
+    // putto trap that cost acorn-boat-regatta 5 of 6 renders ("tiny/palm-sized" on a
+    // humanoid is a naked-cherub prior). Do not demote it to buy room for anything
+    // else — a measured round that did exactly that lost wings in 4 of 6 and the
+    // costume in 3 of 6.
+    'star-charting':
+      'one slender grown fae close in the foreground, painted large, in a layered fae-craft coat and hood with open wings, on a high woodland perch whose broad surface fills the near frame, beneath a blazing saturated night sky of indigo, violet and green',
     // acorn-boat-regatta: a path staged on a LINEAR feature (a stream) renders as a receding
     // corridor with the boats tiled to the vanishing point, and rewriting all 8 vantages to look
     // ACROSS the water did not fix it (6 of 6 still corridors). What breaks it is naming the
@@ -159,7 +167,7 @@ module.exports = {
   // string into `paths[]`.
   // 'mushroom-apothecary' stays here until Kevin grades it. shadowPaths[] is invisible to the
   // hourly dispatcher; going live = move the string into paths[] and change nothing else.
-  shadowPaths: ['mushroom-apothecary', 'acorn-boat-regatta'], // Stage F paths promoted to live rotation 2026-08-16
+  shadowPaths: ['mushroom-apothecary', 'acorn-boat-regatta', 'star-charting'], // Stage F paths promoted to live rotation 2026-08-16
 
   // Picker on with the BOT_MODEL_TALLY 6-model lineup (2026-05-30):
   // Banana + GPT-2 + Flux 2 Pro + Flux 1.1 Pro + Flux 1.1 Pro Ultra + Flux 2 Max.
@@ -171,6 +179,13 @@ module.exports = {
   allowedModels: ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
   // modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection — with ONE
   // exception below, added 2026-09-22.
+  // promptSuffixByPath — NEW KEY on this bot. Replaces the bot-wide suffix for one
+  // path only, to carry a committed night palette instead of the default register.
+  promptSuffixByPath: {
+    'star-charting':
+      'painted fantasy concept art, soft brushwork, atmospheric night illustration, luminous saturated night colour, deep indigo and violet sky with one warm lamplight against it, Brian Froud + Mononoke painted-fantasy lineage',
+  },
+
   modelByPath: {
     // mushroom-apothecary: the picker rolled flux-1.1-pro-ultra on 15 of 15 renders and ultra
     // signed 3 of them with a painted signature artifact in the corner. A signature is readable
@@ -185,6 +200,15 @@ module.exports = {
     'acorn-boat-regatta': {
       'black-forest-labs/flux-1.1-pro': 1,
     },
+    // star-charting: flux-2-pro ONLY, and this is the strongest model finding of the
+    // run. On flux-1.1-pro the reading instrument — the entire reason the path exists
+    // — rendered 0 of 22 while every law sat in 6 of 6 emitted prompts; three rounds
+    // of prompt work moved it 0/6, 0/6, 0/6. One model swap, same prompts and pools:
+    // instrument 3 of 3, warm light 3 of 3, real wardrobe 3 of 3, ~2.8 -> ~4.5.
+    // ⚠️ GO-LIVE IS BLOCKED: flux-2-pro's safety classifier delivered only 3 of 11
+    // attempts on this path's content (flux-1.1-pro is 23 of 23), which is fine for a
+    // shadow path and not shippable on a 2x/day cron. See the tracker for the lever.
+    'star-charting': ['black-forest-labs/flux-2-pro'],
   },
   // modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
   // Original locks (restore individual lines if a path needs pinning again):
@@ -215,6 +239,7 @@ module.exports = {
     paths: [
       'mushroom-apothecary',
       'acorn-boat-regatta',
+      'star-charting',
       'dryad-portrait',
       'forest-elder',
       'female-druid',
@@ -252,6 +277,7 @@ module.exports = {
     skipPaths: [
       'mushroom-apothecary',
       'acorn-boat-regatta',
+      'star-charting',
       'forest-elder',
       'female-druid',
       'female-druid-adventure',
