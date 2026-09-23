@@ -220,3 +220,29 @@ Three fixes in `services/face-swap-dual` (deployed with `fly deploy --strategy r
   the clock and cancels, a success is not cancelled). Service suite 41/41. Run:
   `cd services/face-swap-dual/src && deno test --allow-net --allow-env --allow-read --allow-ffi`.
 - Rollback: `fly deploy -a dreambot-face-swap-dual --image registry.fly.io/dreambot-face-swap-dual:deployment-01M2RNCT487ACKQGAD0PFKMTXA` (v25, the pre-6b engine; v27 = this one).
+
+## Item 7 follow-up (2026-09-23 evening): the other two arms-wide couple poses are FINE, kept
+
+Same controlled replay as the morning probe (Kevin's 09-23 couple, forced flux-1.1-pro, production composer), 8 each:
+
+| pose                                                                  | held |
+| --------------------------------------------------------------------- | ---- |
+| 3508 "both with arms spread wide … vast view" (morning, now disabled) | 3/7  |
+| 3418 "both leaning against a car hood, one with arms spread wide"     | 8/8  |
+| 3390 "both leaning on a railing, one with arms stretched wide"        | 8/8  |
+| neutral control (evening)                                             | 8/8  |
+
+3508 failed with `no_dual_split(faces=1)` (both people's arms wide and heads together); 3418 and 3390 spread only
+ONE person's arms, with the other "a step apart", and hold like the neutral pose. Production had flagged 3418 (1 of
+5 real couples held, 3 of the 4 misses a one-sided likeness near zero), but all four misses were NIGHT vibes on
+painted looks (synthwave, noir, blue hour, ominous): the known flux night-vibe couple failure, not the pose. No
+change; both stay enabled.
+
+## Validator fix (2026-09-23 evening): "whale watching" no longer throws out the scene
+
+The couple slot validator (`characterSlotPrompt.ts` FORBIDDEN_PATTERNS) and the action-beat filter
+(`actionSafety.ts` DIRECTION_WORDS) banned "watching" / "gazing" anywhere, so a user's "whale watching" failed
+both Sonnet attempts and the scene fell back to the generic one (3 of 3 in the outfit harness). Both now exempt
+activity names (whale / dolphin / bird / wildlife / people / storm / star + watching / gazing); "watching the
+sunset" and "gazing at the stars" still fail. Verified with Sonnet (3 of 3 keep the whale-watching scene, no
+violations); `__tests__/lib/directionWordsActivity.test.ts`. Applies to Create and nightly (same validator).
