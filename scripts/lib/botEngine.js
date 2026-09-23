@@ -1881,6 +1881,7 @@ async function runBot(opts) {
         image_url: imageUrl,
         duration_ms: durationMs,
         cost_cents: costCents,
+        // 300 is fine on SUCCESS: the full prompt is on the uploads row.
         prompt_preview: finalPrompt.slice(0, 300),
         sonnet_retries: claudeMeta.retries,
         sonnet_fell_back_to_secondary: claudeMeta.fellBackToSecondary,
@@ -1924,7 +1925,15 @@ async function runBot(opts) {
           error: errStr.slice(0, 2000),
           error_stage: errorStage,
           duration_ms: durationMs,
-          prompt_preview: finalPrompt ? finalPrompt.slice(0, 300) : null,
+          // 2000, not 300. A FAILED render writes no `uploads` row, so this is the
+          // ONLY surviving copy of the prompt that caused the failure — and 300 chars
+          // captures just the bot-wide prefix, which is identical on every render and
+          // therefore says nothing. Measured 2026-09-22 trying to diagnose why FarmBot
+          // `apiary-beekeeping` trips Replicate's content filter on ~14% of renders:
+          // both failures had byte-identical previews and the distinguishing content
+          // sat past the cut, so the cause was simply not recoverable from history.
+          // `prompt_preview` is a text column, so a longer slice needs no migration.
+          prompt_preview: finalPrompt ? finalPrompt.slice(0, 2000) : null,
           sonnet_retries: claudeMeta.retries,
           sonnet_fell_back_to_secondary: claudeMeta.fellBackToSecondary,
           sonnet_truncated: claudeMeta.truncated,
