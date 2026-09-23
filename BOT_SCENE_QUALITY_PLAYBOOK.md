@@ -985,6 +985,14 @@ fails them. See [[feedback_dreambot_motto_whimsy_delight_bar]].
 > generated, so unused headroom is free), `stop_reason` now warns loudly, and truncation is stamped to
 > `sonnet_truncated` for DB forensics. Locked by `__tests__/lib/briefTokenBudgetGuard.test.ts`.
 >
+> **CHECKED AND CLEAN — the user-facing pipeline was NOT affected, so do not go changing it.** The edge
+> runtime has its own `callSonnet` in `supabase/functions/_shared/llm.ts` with caps of 200/300/350, and
+> it discards `stop_reason` the same way. Measured anyway: **0 of 416 nightly prompts truncated (0.0%)**.
+> Nightly briefs are shorter and more templated than a bot path's, and `dualBriefBuilder` /
+> `singleBriefBuilder` had already been bumped to 350/300 by earlier sessions for exactly this reason
+> (their comments say "prevents cast-block truncation"). The nightly engine is Kevin's locked
+> best-state-ever, so it stays untouched — this note exists so nobody re-runs the investigation.
+
 > **The standing lesson: never design a path around a token ceiling.** If content late in a brief goes
 > missing, check `sonnet_truncated` and the console for `✂️ TRUNCATED` before you touch a pool, reorder
 > a template, or cut a cast member. And the general form — *a silent cap is worse than a loud failure*:
@@ -1077,6 +1085,56 @@ summons. Corollary on tracing: brass-glasshouse's residual traced by elimination
 to two SHARED constants — `promptPrefixByMedium.steambot_neutral` ("clockwork machinery") and
 `STEAMBOT_NEUTRAL_STYLE` ("glass gauges"), present in 18 of 18 prompts. **When a text residual
 survives a clean path, grep the bot-wide prefix and medium strings before touching the path's pools.**
+
+**13. THE SIZE OF A SMALL CREATURE TRACKS ITS COUNT, NOT ANY SIZE WORD YOU WRITE.** FarmBot
+apiary-beekeeping, measured over 18 renders. Entries reading *"three bees… each no bigger than a
+fingernail"* produced BIRD-SIZED bees; *"about a dozen"* and *"eighty or more"* produced correct ones.
+Sixteen of thirty entries specified under ten. Raising the count floor to twelve took correct scale
+from 2/6 to 6/6. **A low count IS the giant-insect generator** — Flux gives each named subject a share
+of frame, so three of a thing means three big things. Three corollaries, each verified:
+- **A size comparison must name something IN THE FRAME, and that ruler's own size must be fixed by its
+  parent object.** "Thumbnail"/"fingernail" are off-camera and buy nothing. But a *free-floating*
+  in-frame ruler fails differently: *"no bigger than a single clover floret"* produced a fist-sized
+  clover AND bird-sized bees — the ruler inflated too. Only rulers welded to a larger structure work:
+  a comb cell, a wax cap, an entrance slot, a top bar.
+- **DETAIL AND SIZE ARE THE SAME DIAL.** An animal-parity clause ("the bees rendered as carefully as
+  the person") ENLARGED them. Parity must be spent on FRAME SHARE, not per-subject detail: cap the
+  detail at the nearest one or two and let the rest be small clean shapes.
+- A mass of the creature is reliable while a LONE near one still inflates: a single subject has
+  nothing to compete with and expands to fill its attention share.
+
+**14. AN ANTI-TEXT CLAUSE CAN MANUFACTURE THE DULL RENDER — the two rules fight, so merge them into one
+clause.** To stop lettering, an apiary pool said hive fronts were *"plain smooth unpainted timber"*.
+That produced exactly the row of plain white boxes the path existed to avoid, because Flux takes the
+first option it is handed and the mismatched-paint instruction lived in a later block. The anti-text
+form must ITSELF carry the interest: say the body is *painted* and only the small flat panels are
+plain. Same shape as lesson 2, one level up — an anti-text rule and a make-it-vivid rule aimed at the
+same surface must be written as a single sentence, never as two clauses in different blocks.
+
+**15. THREE MORE NOUN TRAPS, each cost a render.**
+- **A SMALL DARK APERTURE PLUS A GLOW WORD RELOCATES THE GLOW.** *"The smoker's fuel door propped
+  open"* → Sonnet added *"the faintest ember glow within"* → Flux painted a FURNACE MOUTH BURNING
+  INSIDE THE HIVE. The glow migrates to the nearest dark opening, not the one you named.
+- **"A DENSE ROUNDED MASS HANGING FROM A BRANCH" IS A WASP NEST.** A swarm must be stated as *made
+  entirely of living bees layered over one another, its whole surface small clinging bodies*, or the
+  papery-nest shape prior wins.
+- **AN OBJECT WITH A "FACE" PERSONIFIES; A FLAT SURFACE WITH ONE DOES NOT.** "The FACE of a hive" is
+  real beekeeping jargon for the front board, and under a cute tone lock it rendered anime eyes, a
+  blush and a mouth ON the hive. "The face of a comb" was clean in 18 of 18. A noun with a FRONT
+  invites a face; a flat plane does not. (The agent's own sweep flagged this exact string and it was
+  dismissed alongside five genuine false positives — **"read the matched text" cuts both ways**.)
+
+**16. AXIS-CLEAN APPLIES TO THE CAMERA POOL, AND A LOCAL BRIEF DRY-RUN IS CHEAPER THAN A RENDER
+ROUND.** A camera axis whose entries named heroes (*"tight on the comb's surface"*, *"close on the
+swarm cluster"*) carried CONTENT, and a dry run paired a comb camera with a bee-beard hero — the
+camera contradicting the rolled subject. Distance, height and orientation only. And the way that was
+caught generalises: a ~30-line stub picker over the path builder, printing the composed brief with no
+API call and no render, exposed FOUR cross-axis incompatibilities (hero↔place, camera↔hero,
+animal↔setting, magic↔setting) that were invisible in the code and would have cost two render rounds.
+**Compose and read the brief locally before spending renders on any path with 5+ axes.** Related:
+after REGENERATING a pool, re-run the FULL guard sweep, not just the check for the thing you were
+fixing — one regeneration silently dropped its own axis-clean paragraph and leaked five time-of-day
+words back in.
 
 ---
 

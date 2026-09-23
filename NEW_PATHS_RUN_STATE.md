@@ -152,7 +152,7 @@ content those paths were designed to have. Both are LIVE public paths, so that i
 | 16 | FaeBot | acorn-boat-regatta | - | not started | |
 | 17 | FaeBot | star-charting | - | not started | |
 | 18 | FaeBot | honey-harvest | - | not started | |
-| 19 | FarmBot | apiary-beekeeping | - | not started | |
+| 19 | FarmBot | apiary-beekeeping | 3+1 | **re-measuring post-truncation-fix** | agent R1 3.25 → R2 3.92 → R3 3.83, best 4.5 (honey-extractor tap + 20 clean pictorial labels; a bee-beard render would have been 4.5 but Flux drew a FACE on the hive). Text 0/18, split-panel 0/18. ⚠️ Built WHILE the truncation bug was live on the worst-hit bot (21.4%) — its own lesson says the paint instruction "lived in a later block that truncation ate", so R3 is partly a bug artifact. Merged as SHADOW; round 4 = the fix alone, no pool edits |
 | 20 | FarmBot | lambing-season | - | not started | |
 | 21 | FarmBot | sheep-shearing-day | - | not started | |
 | 22 | FarmBot | hay-baling-summer | - | not started | |

@@ -47,6 +47,7 @@ const blocks = require('./shared-blocks');
 const pools = require('./pools');
 
 const pathBuilders = {
+  'apiary-beekeeping': require('./paths/apiary-beekeeping'), // SHADOW — awaiting Kevin's grade
   'animal-feeding-time': require('./paths/animal-feeding-time'),
   'cozy-bakery-afternoon': require('./paths/cozy-bakery-afternoon'),
   'autumn-village-market': require('./paths/autumn-village-market'),
@@ -209,7 +210,10 @@ module.exports = {
   // the moment its QA is signed off — don't leave entries here longer than
   // the QA session that added them (they silently suppress that path's
   // normal live public posting the whole time they're listed).
-  shadowPaths: [],
+  // apiary-beekeeping: NEW path, dark until Kevin grades it. FarmBot had no
+  // apiary content anywhere — honey only as food on a cheeseboard, hives only
+  // as a distant prop. Go-live = move this string into `paths` above.
+  shadowPaths: ['apiary-beekeeping'],
 
   cycleAllPaths: true,
 
