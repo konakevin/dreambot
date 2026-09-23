@@ -240,11 +240,19 @@ async function callModelWithRetry({ model, brief, maxTokens, anthropicKey }) {
  * reorder its sections to get the animals in at all. Paths should be shaped by
  * what makes a good picture, never by an invisible token ceiling.
  *
+ * WHY 2000 AND NOT 1200: measured 2026-09-22 on FarmBot `apiary-beekeeping`, whose
+ * brief produced a 667-word / 888-token answer and still tripped the warning at
+ * 1200. FarmBot's path briefs state NO word count at all (unlike most bots, which
+ * say "110-140 WORDS, COUNT THEM"), so its model writes long by default — that is
+ * the real reason FarmBot was the worst-hit bot at 21.4%. Confirmed NOT thinking
+ * tokens: this call reports `thinking = 0`. 2000 clears roughly 1,500 words, which
+ * covers the most verbose brief in the fleet with real headroom.
+ *
  * You only pay for tokens actually generated, so unused headroom is free.
  * `stop_reason: 'max_tokens'` now warns loudly, so if a brief ever does run
  * past this, it says so instead of silently shipping a half-written prompt.
  */
-const BRIEF_MAX_TOKENS = 1200;
+const BRIEF_MAX_TOKENS = 2000;
 
 async function callClaude({
   brief,

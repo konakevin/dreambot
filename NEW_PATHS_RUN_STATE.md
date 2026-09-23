@@ -149,10 +149,10 @@ content those paths were designed to have. Both are LIVE public paths, so that i
 | - | DinoBot | tidal-flat-tracks | - | queued | |
 | - | DinoBot | amber-forest | - | queued | |
 | 15 | FaeBot | autumn-seed-gathering | - | not started | |
-| 16 | FaeBot | acorn-boat-regatta | - | not started | |
+| 16 | FaeBot | acorn-boat-regatta | 4 | **3.07, CLOSE not a pass** | FaeBot's first ACTION path (all 25 others are static subjects; no sport, no water stage). MERGED as shadow. Won: found-object hulls 17/18, fae scale, vivid colour, corridor broken 4/6, modern-prior 0/24. Residual = the CAST: 5/6 rendered nude wingless cherub dolls against a prompt naming petal-silk tunics and wings — the KODAMA trap in a new costume, since "tiny/palm-sized" on a humanoid IS a naked-putto prior and 1-2% of frame has no resolution for cloth. Next lever = one big near boat, its two fae painted large, adult proportions ("slender grown fae, the size of a mouse") |
 | 17 | FaeBot | star-charting | - | not started | |
 | 18 | FaeBot | honey-harvest | - | not started | |
-| 19 | FarmBot | apiary-beekeeping | 3+1 | **re-measuring post-truncation-fix** | agent R1 3.25 → R2 3.92 → R3 3.83, best 4.5 (honey-extractor tap + 20 clean pictorial labels; a bee-beard render would have been 4.5 but Flux drew a FACE on the hive). Text 0/18, split-panel 0/18. ⚠️ Built WHILE the truncation bug was live on the worst-hit bot (21.4%) — its own lesson says the paint instruction "lived in a later block that truncation ate", so R3 is partly a bug artifact. Merged as SHADOW; round 4 = the fix alone, no pool edits |
+| 19 | FarmBot | apiary-beekeeping | 3+1 | **3.83, CLOSE — one lever left** | agent R1 3.25 → R2 3.92 → R3 3.83, best 4.5 (honey-extractor tap + 20 clean pictorial labels). Text 0/18, split-panel 0/18. Re-measured post-truncation-fix; the re-run then tripped Replicate's safety filter repeatedly and was stopped. NOT my token change: farmbot's other 586 runs on the same model are 0/586 on safety, apiary is 2/14 → PATH-SPECIFIC content. Next lever = the agent's own: raise the bee count floor 12→25 and delete every "the nearest one or two" clause (a LONE near bee inflates; a mass is correct) |
 | 20 | FarmBot | lambing-season | - | not started | |
 | 21 | FarmBot | sheep-shearing-day | - | not started | |
 | 22 | FarmBot | hay-baling-summer | - | not started | |

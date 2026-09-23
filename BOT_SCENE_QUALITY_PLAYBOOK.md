@@ -555,6 +555,51 @@ FaeBot was 100% outdoor vistas (vistas / forests / villages / courts / markets /
 7. **RESIDUAL — a bot-wide warm-glow cast out-votes a per-render light axis.** 4 of 6 R3 renders are a single amber hue even though `light_event` now names two colours per entry. The cause is upstream of the path: `promptPrefixByMedium.painted_fantasy_novel` ends "dreamy atmospheric painted glow" and the bot-wide `PROMPT_SUFFIX` adds "dreamy dappled light" — a fixed colour cast on EVERY FaeBot prompt (the ChibiBot "warm volumetric glow overrides the time-of-day axis" law, at the bot-wide wrapper layer). The path-level lever is a short `promptPrefixByPath` entry (it PREPENDS before the medium prefix); the real fix is auditing those two bot-wide strings.
 8. **flux-1.1-pro-ultra signed 3 of 15 renders** (a faint corner scrawl) and FaeBot's picker rolled ultra 15/15 despite two allowed models — consistent with the documented "ultra signs its work" model trait. Treat as a model-selection lever (`modelByPath`), never as a prompt defect; more suffix negation would only leak the word.
 
+## acorn-boat-regatta — FaeBot's FIRST ACTION path, and the RECEDING-CHANNEL corridor (2026-09-22, FaeBot — 4 rounds × 6 shadow renders, R0 2.6 → R1 2.7 → R2 2.65 → R3 3.07, best render 3.9; CLOSE, NOT a pass)
+
+FaeBot's 26th path and its first with any MOTION in it: a boat race down a woodland stream run by palm-sized fae in craft made of found things (acorn caps, walnut shells, bark curls, petal coracles). The gap it fills, audited across all 25 existing paths: ~9 character/portrait, ~8 settlement/architecture, 4 crowd (3 goblin-market + fairy-swarm), 1 vista, 1 court, 1 frost-court, 1 spirit-beasts, 1 interior — every one a STATIC subject, no sport, no contest, and no path where water is the stage rather than scenery. Built function-form and self-contained (7 own seed JSONs + a hand-authored vantage array, zero shared-file edits) with its own gen script. Five lessons, four of them cross-bot.
+
+1. **⭐ THE HEADLINE — A PATH STAGED ON A STREAM, ROAD, CORRIDOR OR TRACK RENDERS AS A RECEDING CORRIDOR WITH AN INFINITELY TILED SUBJECT, AND NEITHER THE VANTAGE POOL NOR THE PREFIX'S "ACROSS" WORDING FIXES IT. WHAT FIXES IT IS CROPPING THE STAGE OUT OF FRAME.** Measured across 24 renders. R0's prefix ended "racing together **down a woodland stream**" and 5 of 6 came back as a channel vanishing dead up the middle with a queue of identical boats tiled to the horizon (two of them literally hundreds of copies). This is the BrickBot SYMMETRY LAW on a natural feature instead of an airstrip, and the BrickBot fix — purge the axial camera entries — was **not enough**: all eight hand-authored vantages were rewritten to look ACROSS the channel with the far bank behind the boats, and the corridor survived all 6 of R1. What broke it was the ToyBot snow-globe **CONCRETE BUT CROPPED** form applied to the setting: *"close-up of a woodland stream surface filling the whole frame … a band of mossy bank along the top edge of the picture"*, with the channel's LENGTH stated as running out of frame on both sides. A receding corridor cannot exist in a frame that is all water plus one band of bank. Corridor broken in 2 of 6 at R2 and 4 of 6 at R3. **The generalisable rule: when the stage is a linear feature, do not describe the feature — describe the SURFACE it is made of, filling the frame, with its far edge as a BAND along one border. Camera words and "across" wording lose to the feature's own prior every time.**
+2. **A 600-WORD PROMPT RENDERS ITS FIRST THIRD AND DISCARDS THE REST — AND THE DROPPED CONTENT IS *IN* THE PROMPT, SO A CONTENT SWEEP SAYS EVERYTHING IS FINE.** The single most useful diagnosis of the build. R2's renders had the right hulls and no cast, no incident and no course furniture, which reads exactly like a mid-prompt content drop. Pulling the stored `ai_prompt`s proved the opposite: **every element was present in all 6, and the prompts ran 456-669 words against a "120-150 WORDS" cap.** flux-1.1-pro was rendering the frame and the fleet (early) and ignoring the racers, the incident and the furniture (late). Compressing the brief 8049 → 4023 chars, the output order 12 → 8 items and the cap to 95-120 took emitted prompts to ~180 words and lifted the round from 2.65 to 3.07. **Corollary for the apothecary "loud last word-cap" lesson: the cap only re-orders; what actually shortens the output is deleting template PROSE and output-order ITEMS. And always check emitted word count before concluding an element was dropped.**
+
+> **⚠️ MEASURED FLEET-WIDE 2026-09-22, AND THE ANSWER IS ONE BOT, NOT THE FLEET.** Lesson 18 was
+> found on a path that DID state a "120-150 WORDS" cap and blew through it, which raised the obvious
+> worry that the whole fleet is over-long. It is not. Emitted word count over 2,645 live bot renders:
+>
+> | bot | n | median | p90 | max | renders >350w |
+> | --- | --- | --- | --- | --- | --- |
+> | **farmbot** | 399 | **562** | 589 | **1080** | **399 of 399** |
+> | brickbot | 81 | 296 | 345 | 365 | 7 |
+> | faebot | 107 | 294 | 451 | 669 | 16 |
+> | mangabot | 80 | 279 | 351 | 366 | 9 |
+> | AlphaBot | 819 | 241 | 377 | 588 | 111 |
+> | dinobot | 115 | 221 | 277 | 329 | 0 |
+> | pixelbot | 331 | 210 | 251 | 338 | 0 |
+> | oceanbot | 48 | 123 | 139 | 157 | 0 |
+> | **FLEET** | **2,645** | **250** | — | — | 553 (21%) |
+>
+> Most bots sit at 210-300 median, near the ~180 the regatta fix landed on. **FarmBot is the outlier
+> and it is not close:** median 562, every single render over 350, up to 1,080 words. So the back two
+> thirds of every FarmBot prompt has been decorative, and that is also exactly why FarmBot was hit
+> hardest by the `maxTokens` truncation bug (21.4% vs 6.7% fleet) — a brief that runs long hits any
+> ceiling first. The 21% fleet figure is almost entirely FarmBot (399) plus AlphaBot (111, the private
+> proving ground), not a spread problem.
+>
+> **Do NOT use "does this bot state a word cap" as the screen** — it does not predict length. 16 of 22
+> bots state no cap anywhere and most of them emit perfectly reasonable 210-300 word prompts, while
+> the regatta path had a cap and emitted 669. Measure the EMITTED count from `uploads.ai_prompt`
+> instead. And the lever that works is deleting template prose and output-order items, not adding a
+> cap (adding one only RE-ORDERS, measured on apothecary).
+>
+> **→ OPEN FOR KEVIN:** trimming FarmBot's templates touches 64 live paths, so it is his call, not a
+> unilateral change. It is the single largest measured quality lever found in this run.
+
+3. **"TINY" + "PALM-SIZED" ON A HUMANOID IS A NAKED-PUTTO PRIOR.** The build's blocking residual, present in every round: 5 of 6 R3 renders gave UNCLOTHED, WINGLESS, FACELESS CHERUB DOLLS, against a prompt that says *"palm-sized fae in petal-silk tunics and woven-grass jerkins, pointed ears, real hair, iridescent wings, faces detailed on the nearest"* in every single render. This is the KODAMA trap in a new costume — the nearest famous image for "tiny winged person" is a naked baby cherub, and the scale words are what summon it. `nudityCheck` caught and re-rolled only 1 of the batch (the figures sit at 1-2% of frame, below the classifier's and Flux's own resolution for cloth). Recorded next lever: name ADULT proportions on the figure ("slender grown fae, long-limbed, the size of a mouse") and give the picture ONE big near boat so the nearest two fae are painted large. **Cross-bot: any path whose subject is a small humanoid must state adult proportions explicitly, and must put at least one of them big in frame.**
+4. **THE FOUND-OBJECT HULL LAW IS A PREFIX JOB, NOT A SEED JOB.** R0 rendered full-size wooden dinghies in 5 of 6 despite every fleet seed naming acorn caps, walnut shells and petal coracles, because the prefix's first nouns were "boats … racing down a stream". Moving the materials into the leading tokens ("boats made from acorn caps, walnut shells, curls of birch bark and flower petals") fixed it in one round and it never regressed: 17 of the next 18 renders had genuine nutshell/petal/bark hulls at legible fae scale. Confirms the framing-is-the-leading-layer law for MATERIAL as well as composition.
+5. **FaeBot's bot-wide `PROMPT_SUFFIX` ends "no text, no watermarks" — and it renders watermarks.** Two of 24 renders came back with a stock-photo URL across the bottom (`www.AKEOUNDS.com`) or a corner signature, on flux-1.1-pro, which does not normally sign. This is the anti-baggage law at the bot-wide wrapper layer: a negation CLIP cannot process, carried by all 26 FaeBot paths. Flagged for Kevin as a shared-file fix (it is not a path-level defect and no path-level lever reaches it). Ultra was separately measured out of this path in R0 for signing 1 of its 3 renders, matching mushroom-apothecary's 3-of-15.
+
+**Also confirmed:** the fairy-swarm MODERN-PRIOR NOUN discipline works — zero modern-prior renders in 24, with "regatta" never written into a prompt, every office named by its action (a frog watching the turn, a fae moving pebbles along a twig) and no buoy/flag/trophy/finish-line in any pool. Sonnet DID re-derive "buoy" from a tethered-berry seed on the first dry run, caught by reading the composed prompt before spending a render — so the template carries a short positive FAE-CRAFT WORDS block listing this world's own words for each office. **Residual to fix next:** the course furniture and the bankside crowd have rendered 0 times in 24 renders (both last in the output order). Files: `paths/acorn-boat-regatta.js`, `gen-faebot-regatta-pools.js`, 7 × `seeds/faebot_regatta_*.json` (25 each).
+
 ## Gender-locked character paths — ship a SEPARATE male path, never one neutral template (2026-06-11)
 
 Reinforces the gender-lock rule. FaeBot's feminine dryad-portrait pool had ~14 male "Leshy" seeds; the template was hard-feminine ("render **her** … **She** is …"). A male Leshy seed in a "she" template rendered "a girl with a beard" — androgynous mush. **Fix that worked:** (1) extract the male seeds out, (2) make the feminine recipes feminine-ONLY with explicit male bans, (3) build a NEW male-locked path (`forest-elder`) with its own he/his template. Don't try to make one path serve both genders. NOTE: the male gender-lock is **load-bearing**, so that path **skips two-pass polish** — Haiku compression strips "he/his/bearded" and androgyny returns.
@@ -1135,6 +1180,34 @@ animal↔setting, magic↔setting) that were invisible in the code and would hav
 after REGENERATING a pool, re-run the FULL guard sweep, not just the check for the thing you were
 fixing — one regeneration silently dropped its own axis-clean paragraph and leaked five time-of-day
 words back in.
+
+**17. A PATH STAGED ON A LINEAR FEATURE (STREAM, ROAD, TRACK, CORRIDOR) RENDERS AS A RECEDING
+CORRIDOR WITH THE SUBJECT TILED TO THE VANISHING POINT — AND PURGING THE AXIAL CAMERA ENTRIES IS NOT
+ENOUGH.** FaeBot acorn-boat-regatta, 24 renders. R0 5 of 6 were a channel vanishing dead up the middle
+with a queue of identical boats (two of them hundreds of copies); rewriting all eight hand-authored
+vantages to look ACROSS the water with the far bank behind the boats still left the corridor in 6 of 6.
+What broke it was the ToyBot CONCRETE-BUT-CROPPED form applied to the SETTING: name the SURFACE the
+feature is made of, filling the frame, with its far edge as a BAND along one border, and state that the
+feature's LENGTH runs out of frame both sides — "close-up of a woodland stream surface filling the whole
+frame … a band of mossy bank along the top edge". A receding corridor cannot exist in that frame.
+Corridor broken in 4 of 6 after. Camera words and "across" wording lose to the feature's own prior.
+
+**18. A 600-WORD PROMPT RENDERS ITS FIRST THIRD — AND THE MISSING CONTENT IS *IN* THE PROMPT, SO A
+CONTENT SWEEP SAYS EVERYTHING IS FINE.** Same build: renders had the right hulls and no cast, no
+incident and no course furniture, which reads exactly like a mid-prompt drop. The stored `ai_prompt`s
+proved every element present in all 6 — at **456-669 words against a "120-150 WORDS" cap**. Compressing
+the template 8049 → 4023 chars and the output order 12 → 8 items took emitted prompts to ~180 words and
+lifted the round 2.65 → 3.07. The word-cap only RE-ORDERS (apothecary); what shortens the output is
+deleting template prose and output-order items. **Always check the emitted WORD COUNT before concluding
+an element was dropped.**
+
+> **MEASURED FLEET-WIDE and it is ONE BOT, not the fleet** — full table in the `acorn-boat-regatta`
+> section above. Short version: fleet median is 250 emitted words and most bots sit at 210-300, but
+> **FarmBot medians 562 with all 399 renders over 350 and a 1,080-word max**, which is also why it was
+> the bot hit hardest by the `maxTokens` truncation bug. Do NOT screen on "does this bot state a word
+> cap" — it does not predict length (16 of 22 bots state none and are fine). Measure emitted words
+> from `uploads.ai_prompt`. Trimming FarmBot's templates touches 64 live paths, so it is Kevin's call.
+
 
 ---
 

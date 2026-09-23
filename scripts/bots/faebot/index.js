@@ -38,6 +38,7 @@ const pathBuilders = {
   'frost-court': require('./paths/frost-court'),
   'spirit-beasts': require('./paths/spirit-beasts'),
   'mushroom-apothecary': require('./paths/mushroom-apothecary'), // 2026-09-22 SHADOW — FaeBot's first interior
+  'acorn-boat-regatta': require('./paths/acorn-boat-regatta'), // 2026-09-22 SHADOW — FaeBot's first ACTION path
 };
 
 module.exports = {
@@ -88,6 +89,13 @@ module.exports = {
   // multi-figure lesson: a singular opener collapses the crowd to one hero.
   // Structural anchor only, no style/content language.
   promptPrefixByPath: {
+    // acorn-boat-regatta: a path staged on a LINEAR feature (a stream) renders as a receding
+    // corridor with the boats tiled to the vanishing point, and rewriting all 8 vantages to look
+    // ACROSS the water did not fix it (6 of 6 still corridors). What breaks it is naming the
+    // SURFACE as filling the frame with its far edge as a BAND along one border — the ToyBot
+    // concrete-but-cropped form applied to the setting rather than to an object. Playbook 17.
+    'acorn-boat-regatta':
+      'close-up of a woodland stream surface filling the whole frame, a crowd of tiny fae racing boats made from acorn caps, walnut shells, curls of birch bark and flower petals spread abreast across the near water, a band of mossy bank along the top edge of the picture',
     'mushroom-apothecary':
       'inside a tiny crowded fae apothecary, warm lamplight against jewel-coloured glowing glass',
     'fairy-swarm':
@@ -151,7 +159,7 @@ module.exports = {
   // string into `paths[]`.
   // 'mushroom-apothecary' stays here until Kevin grades it. shadowPaths[] is invisible to the
   // hourly dispatcher; going live = move the string into paths[] and change nothing else.
-  shadowPaths: ['mushroom-apothecary'], // Stage F paths promoted to live rotation 2026-08-16
+  shadowPaths: ['mushroom-apothecary', 'acorn-boat-regatta'], // Stage F paths promoted to live rotation 2026-08-16
 
   // Picker on with the BOT_MODEL_TALLY 6-model lineup (2026-05-30):
   // Banana + GPT-2 + Flux 2 Pro + Flux 1.1 Pro + Flux 1.1 Pro Ultra + Flux 2 Max.
@@ -171,6 +179,11 @@ module.exports = {
     'mushroom-apothecary': {
       'black-forest-labs/flux-1.1-pro': 1,
       'black-forest-labs/flux-1.1-pro-ultra': 1,
+    },
+    // acorn-boat-regatta: pro ONLY. Ultra was measured out in round 0 for signing 1 of its 3
+    // renders — a signature is readable text, a hard fail on the rubric.
+    'acorn-boat-regatta': {
+      'black-forest-labs/flux-1.1-pro': 1,
     },
   },
   // modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
@@ -201,6 +214,7 @@ module.exports = {
     maxRetries: 2,
     paths: [
       'mushroom-apothecary',
+      'acorn-boat-regatta',
       'dryad-portrait',
       'forest-elder',
       'female-druid',
@@ -237,6 +251,7 @@ module.exports = {
     // load-bearing element; Haiku compression strips it and androgyny returns.
     skipPaths: [
       'mushroom-apothecary',
+      'acorn-boat-regatta',
       'forest-elder',
       'female-druid',
       'female-druid-adventure',

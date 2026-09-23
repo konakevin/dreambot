@@ -362,6 +362,7 @@ export type Database = {
           prompt_preview: string | null;
           sonnet_fell_back_to_secondary: boolean | null;
           sonnet_retries: number | null;
+          sonnet_truncated: boolean | null;
           source: string;
           status: string;
           vibe: string | null;
@@ -381,6 +382,7 @@ export type Database = {
           prompt_preview?: string | null;
           sonnet_fell_back_to_secondary?: boolean | null;
           sonnet_retries?: number | null;
+          sonnet_truncated?: boolean | null;
           source?: string;
           status: string;
           vibe?: string | null;
@@ -400,6 +402,7 @@ export type Database = {
           prompt_preview?: string | null;
           sonnet_fell_back_to_secondary?: boolean | null;
           sonnet_retries?: number | null;
+          sonnet_truncated?: boolean | null;
           source?: string;
           status?: string;
           vibe?: string | null;
@@ -569,6 +572,44 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'users';
             referencedColumns: ['id'];
+          },
+        ];
+      };
+      create_look_approvals: {
+        Row: {
+          approved: boolean;
+          created_at: string;
+          medium_key: string;
+          model: string;
+          note: string | null;
+          source: string;
+          surface: string;
+        };
+        Insert: {
+          approved: boolean;
+          created_at?: string;
+          medium_key: string;
+          model: string;
+          note?: string | null;
+          source?: string;
+          surface: string;
+        };
+        Update: {
+          approved?: boolean;
+          created_at?: string;
+          medium_key?: string;
+          model?: string;
+          note?: string | null;
+          source?: string;
+          surface?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'create_look_approvals_medium_key_fkey';
+            columns: ['medium_key'];
+            isOneToOne: false;
+            referencedRelation: 'dream_mediums';
+            referencedColumns: ['key'];
           },
         ];
       };
@@ -1628,6 +1669,12 @@ export type Database = {
           chaos_high_threshold: number;
           chaos_low_threshold: number;
           couple_prompt_style: string;
+          create_activity_wardrobe: boolean;
+          create_couple_approvals: boolean;
+          create_couple_engine: string;
+          create_prompt_scene_split: boolean;
+          create_retry_changes_model: boolean;
+          create_scene_axes: boolean;
           day_of_costume_pct: number;
           day_of_evening_cutoff_hour: number;
           dream_art_mediums: string[];
@@ -1661,6 +1708,11 @@ export type Database = {
           face_swap_self_rate: number;
           face_swap_share: number;
           face_swap_share_with_plus_one: number;
+          feed_older_ignore_engagement: boolean;
+          feed_older_post_hours: number;
+          feed_older_turn_step: number;
+          feed_unseen_fresh_bonus: number;
+          feed_unseen_fresh_hours: number;
           female_hair_variation_pct: number;
           first_dream_ip_max: number;
           first_dream_ip_window_hours: number;
@@ -1680,6 +1732,7 @@ export type Database = {
           max_pinned_posts: number;
           min_app_version: string | null;
           model_policy_mode: string;
+          name_stop_words: string | null;
           new_scene_max_people: number;
           new_scene_price_best: number;
           new_scene_price_standard: number;
@@ -1734,6 +1787,12 @@ export type Database = {
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
           couple_prompt_style?: string;
+          create_activity_wardrobe?: boolean;
+          create_couple_approvals?: boolean;
+          create_couple_engine?: string;
+          create_prompt_scene_split?: boolean;
+          create_retry_changes_model?: boolean;
+          create_scene_axes?: boolean;
           day_of_costume_pct?: number;
           day_of_evening_cutoff_hour?: number;
           dream_art_mediums?: string[];
@@ -1767,6 +1826,11 @@ export type Database = {
           face_swap_self_rate?: number;
           face_swap_share?: number;
           face_swap_share_with_plus_one?: number;
+          feed_older_ignore_engagement?: boolean;
+          feed_older_post_hours?: number;
+          feed_older_turn_step?: number;
+          feed_unseen_fresh_bonus?: number;
+          feed_unseen_fresh_hours?: number;
           female_hair_variation_pct?: number;
           first_dream_ip_max?: number;
           first_dream_ip_window_hours?: number;
@@ -1786,6 +1850,7 @@ export type Database = {
           max_pinned_posts?: number;
           min_app_version?: string | null;
           model_policy_mode?: string;
+          name_stop_words?: string | null;
           new_scene_max_people?: number;
           new_scene_price_best?: number;
           new_scene_price_standard?: number;
@@ -1840,6 +1905,12 @@ export type Database = {
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
           couple_prompt_style?: string;
+          create_activity_wardrobe?: boolean;
+          create_couple_approvals?: boolean;
+          create_couple_engine?: string;
+          create_prompt_scene_split?: boolean;
+          create_retry_changes_model?: boolean;
+          create_scene_axes?: boolean;
           day_of_costume_pct?: number;
           day_of_evening_cutoff_hour?: number;
           dream_art_mediums?: string[];
@@ -1873,6 +1944,11 @@ export type Database = {
           face_swap_self_rate?: number;
           face_swap_share?: number;
           face_swap_share_with_plus_one?: number;
+          feed_older_ignore_engagement?: boolean;
+          feed_older_post_hours?: number;
+          feed_older_turn_step?: number;
+          feed_unseen_fresh_bonus?: number;
+          feed_unseen_fresh_hours?: number;
           female_hair_variation_pct?: number;
           first_dream_ip_max?: number;
           first_dream_ip_window_hours?: number;
@@ -1892,6 +1968,7 @@ export type Database = {
           max_pinned_posts?: number;
           min_app_version?: string | null;
           model_policy_mode?: string;
+          name_stop_words?: string | null;
           new_scene_max_people?: number;
           new_scene_price_best?: number;
           new_scene_price_standard?: number;
