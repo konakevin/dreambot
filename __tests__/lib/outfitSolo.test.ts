@@ -77,7 +77,8 @@ describe('buildSingleBrief with an outfit plan', () => {
     expect(b).toContain(`- THE PERSON (the woman): wears the user's own request, "bikini".`);
     expect(b).toContain(`Colour: lead with ${p.colour!.lead}, accent with ${p.colour!.accent}.`);
     expect(b).toContain(`Pattern: ${p.pattern}`);
-    expect(b).toContain('as far as the garment allows');
+    // their garment keeps its own shape: no rolled silhouette on a named garment
+    expect(b).not.toMatch(/THE PERSON[^\n]*Silhouette:/);
     expect(b).toMatch(/no sunglasses, helmet, mask, goggles, visor or veil on the face/);
     // the block sits right after the user's sacred prompt
     expect(b.indexOf('USER PROMPT')).toBeLessThan(b.indexOf('OUTFIT —'));

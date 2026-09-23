@@ -160,7 +160,7 @@ describe('renderOutfitPlanLines', () => {
     );
   });
 
-  it('the user’s own request: their words, their colour, our pattern only as TRIM, silhouette as far as it allows', () => {
+  it('the user’s own request: their words, their colour, our pattern only as TRIM, and THEIR shape (no rolled silhouette)', () => {
     const plan: OutfitPlan = {
       colourMode: 'coordinated',
       cutMode: 'shared',
@@ -188,7 +188,8 @@ describe('renderOutfitPlanLines', () => {
     );
     expect(text).toContain('Colour: red, exactly as asked.');
     expect(text).toContain('Trim: playful polka dots, as a trim or accent only.');
-    expect(text).toContain('as far as the garment allows');
+    // a garment the user named keeps its own cut: a rolled silhouette turned a bikini into bikini + shorts
+    expect(text.split('\n')[0]).not.toContain('Silhouette:');
     expect(text).toContain("Colour: the garment's own known colours. Do not recolour it.");
   });
 });
@@ -202,7 +203,10 @@ describe('buildSlotBrief with an outfit plan', () => {
     expect(b).toContain('The plan for each person. Follow it exactly:');
     expect(b).toContain('- LEFT (the woman): wears the user\'s own request, "bikini"');
     expect(b).toMatch(/- RIGHT \(the man\): Colour: .* is their colour/);
-    expect(b).toContain('The scene sets the garment TYPE and the dress level for BOTH of them');
+    expect(b).toContain(
+      'The scene sets ONE garment type and dress level for the pair, dressed per person'
+    );
+    expect(b).toContain('Two women at a gala both wear gowns');
     expect(b).toContain('Follow the RIGHT line of the wardrobe plan above.');
     expect(b).toContain('DRESS THEM FOR WHAT THEY ARE DOING: "standing side by side at the rail"');
   });
@@ -275,7 +279,11 @@ describe('the user’s words are exempt from PLAIN_CLOTHES — in their own fiel
 describe('missingUserOutfit — did Sonnet keep what the user asked for?', () => {
   it.each([
     [{ garment: 'bikini', colour: 'red' }, 'a red triangle bikini with gold rings', []],
-    [{ garment: 'bikini', colour: 'red' }, 'a scarlet triangle bikini', ['"red"']],
+    [{ garment: 'bikini', colour: 'red' }, 'a scarlet triangle bikini', []],
+    [{ garment: 'bikini', colour: 'red' }, 'a coral triangle bikini', ['"red"']],
+    [{ garment: 'suit', colour: 'navy' }, 'a cobalt three-piece suit', ['"navy"']],
+    [{ garment: 'dress', colour: 'green' }, 'an emerald silk charmeuse gown', []],
+    [{ garment: 'shorts', colour: 'green' }, 'emerald swim trunks', []],
     [{ garment: 'bikini', colour: 'red' }, 'a red one-piece swimsuit', ['"bikini"']],
     [{ garment: 'jeans and t-shirts' }, 'dark selvedge denim and a crisp white tee', []],
     [
@@ -370,9 +378,7 @@ describe('runCharacterSlotPipeline with an outfit plan', () => {
 
   it('Sonnet drops "red": a named violation, a retry that names it, then kept → stamped retried', async () => {
     mockSonnet
-      .mockResolvedValueOnce(
-        sonnetReply(coupleSlots('a scarlet bikini', 'a sky blue resort shirt'))
-      )
+      .mockResolvedValueOnce(sonnetReply(coupleSlots('a coral bikini', 'a sky blue resort shirt')))
       .mockResolvedValueOnce(sonnetReply(coupleSlots('a red bikini', 'a sky blue resort shirt')));
     const r = await runCharacterSlotPipeline(input({ outfitPlan: redBikiniPlan() }), 'k');
     expect(r.fallbackReasons).toContain('slot_violations_attempt_1:outfit_lock(LEFT:"red")');

@@ -409,9 +409,9 @@ export function renderOutfitPlanLines(plan: OutfitPlan, sides: readonly OutfitSi
         parts.push(`wears the user's own request, "${p.garment}". Keep those words.`);
       }
       parts.push(colourLine(p, partner));
-      parts.push(
-        `Silhouette: ${p.silhouette}${p.garment ? ', as far as the garment allows' : ''}.`
-      );
+      // A garment the user named keeps its own shape: our silhouette turned "a pink bikini" into bikini-top-
+      // and-shorts on a real render (2026-09-23). Colour and pattern are ours to add; the cut is theirs.
+      if (!p.garment || isGenericGarment(p.garment)) parts.push(`Silhouette: ${p.silhouette}.`);
       parts.push(patternLine(p));
       return `- ${side.label} (${noun(side.gender)}): ${parts.filter(Boolean).join(' ')}`;
     })
@@ -437,6 +437,8 @@ const GARMENT_EQUIV: readonly string[][] = [
   ['sneaker', 'trainer'],
   ['swimsuit', 'swimwear', 'one-piece', 'bathing suit'],
   ['spacesuit', 'space suit', 'pressure suit'],
+  ['dress', 'gown', 'frock'],
+  ['shorts', 'trunks', 'boardshorts', 'board shorts'],
 ];
 const PATTERN_EQUIV: readonly string[][] = [
   ['flower', 'floral', 'botanical', 'hibiscus', 'blossom'],
@@ -446,6 +448,7 @@ const PATTERN_EQUIV: readonly string[][] = [
   ['hawaiian', 'tropical', 'aloha'],
   ['leopard', 'animal print', 'cheetah'],
 ];
+const BASIC_COLOUR = /^(red|pink|orange|yellow|green|blue|purple|brown|black|white|grey|gray)$/i;
 const GENERIC_HEAD = /^(outfits?|clothes|clothing|costumes?|attire|looks?|gear|wear)$/i;
 const FILLER = new Set([
   'the',
@@ -513,9 +516,13 @@ export function missingUserOutfit(wardrobe: string, p: PersonOutfitPlan): string
   }
   if (p.colourSource === 'user' && p.colour) {
     const words = contentWords(p.colour.lead).filter((w) => colourFamiliesOf(w).length > 0);
+    const worn = colourFamiliesOf(wardrobe);
     for (const w of words.length ? words : contentWords(p.colour.lead)) {
-      if (!new RegExp(`\\b${w.replace(/[^a-z0-9-]/gi, '')}`, 'i').test(wardrobe))
-        missing.push(`"${w}"`);
+      const named = new RegExp(`\\b${w.replace(/[^a-z0-9-]/gi, '')}`, 'i').test(wardrobe);
+      // A BASIC colour word is a family ("green" is honoured by emerald); a shade the user chose ("navy",
+      // "emerald") must be named.
+      const family = BASIC_COLOUR.test(w) ? colourFamiliesOf(w)[0] : null;
+      if (!named && !(family && worn.includes(family))) missing.push(`"${w}"`);
     }
   }
   if (p.patternSource === 'user' && p.pattern) {

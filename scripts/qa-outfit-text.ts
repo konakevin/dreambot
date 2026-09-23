@@ -436,7 +436,8 @@ function check(text: string, e?: Expect) {
     pattern: has(text, e.pattern),
   };
 }
-const DRESS_TYPE = /\b(gown|dress|sheath|skirt|frock)\b/i;
+// No leading \\b: "ballgown" is a gown.
+const DRESS_TYPE = /(gown|dress|sheath|skirt|frock)\b/i;
 const SUIT_TYPE = /\b(suit|tux|tuxedo|blazer|jacket|trousers|pants|jumpsuit)\b/i;
 /** Two palette colours → both present in BOTH outfits = the mirror. */
 function mirrored(palette: string | null, left: string, right: string): boolean | null {

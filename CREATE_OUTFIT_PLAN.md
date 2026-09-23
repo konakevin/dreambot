@@ -308,10 +308,31 @@ kept|retried|code_applied`). Stamps: `outfit_colour`, `outfit_cut`, `outfit_patt
   runs alongside the setting/action split), one plan per render, solo → `compilePrompt({ outfitPlan })` +
   `enforceSoloOutfit` before post-processing, couples → `slotInput.outfitPlan`. Face-swap cast renders
   with self / plus*one only (no pets, no Dream Art, no photo modes). Stamps: `outfit_spec:*`,
-  `outfit_preview`, `outfit_colour/cut/pattern`, `outfit_lock:*`, `outfit_occluder*\*`.
+`outfit_preview`, `outfit_colour/cut/pattern`, `outfit_lock:_`, `outfit_occluder_\*`.
 - Wiring guard: `createEngineWiring.test.ts` (6 fields + both call sites).
 - Rollback: `UPDATE engine_config SET create_outfit_rolls = false, create_outfit_user_lock = false,
 create_outfit_preview_user_ids = '{}' WHERE id = 1;` (instant, no deploy).
+
+## Phase 6 (2026-09-23): real renders on Kevin's account (preview), then fixes
+
+20 renders through the real queue as Kevin (preview list; not billed): 12 couples, 8 solos. All 20
+completed; all 12 couples held the dual swap first try. Seen in the images: wild tuxes (tangerine at a
+gala, green-and-gold jacquard, plum with an orange floral print), Lakers jerseys in team colours, jeans and
+t-shirts honored, red bikini red, no sunglasses on the yacht, each person in their own colour.
+
+Found and fixed:
+
+- A rolled silhouette on a garment the user NAMED reshaped it: "pink bikini" came back as a gingham
+  bikini top + shorts ("oversized and relaxed" silhouette). Named garments now keep their own cut: colour
+  and pattern are ours to add, the shape is theirs.
+- The lock was too literal: "emerald green gown" failed "green dress" twice and the code wrote in the
+  plainer "green dress". Now a BASIC colour word is a family (green ← emerald, red ← scarlet) while a
+  specific shade ("navy") must be named; dress ↔ gown ↔ frock and shorts ↔ trunks are equivalent.
+- One jumpsuit next to a gown (two women, formal). The brief now names ONE garment type for the pair,
+  dressed per person ("two women at a gala both wear gowns"). Re-run 15 formal same-gender couples: 1
+  mismatch left (a blazer suit next to a ball gown at a "Fashion Show", where a suit is plausible);
+  baseline was 22%.
+- Harness: "ballgown" now counts as a gown.
 
 ## Porting to nightly later
 

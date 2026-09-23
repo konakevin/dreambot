@@ -911,7 +911,7 @@ function buildOutfitPlanGuidance(
     ? `DRESS THEM FOR WHAT THEY ARE DOING${input.action ? `: "${input.action}"` : ''}. Name the real garment the activity demands, then make it beautiful: cut, materials, one signature detail. Reach for the elevated name, never the basic one (a brushed midlayer not a fleece, a quilted down gilet not a puffer vest, a cable-knit roll-neck not a sweater).`
     : 'Tailor it to this exact place, its climate and its register, and make it STAND OUT: a signature piece, named colours and materials.';
   const level = dual
-    ? ' The scene sets the garment TYPE and the dress level for BOTH of them (a gala: gowns or a tux; a beach: swimwear or resort wear; the slopes: snow gear), so never put one in a gown and the other in a jacket unless the plan below asks for it. Vary colour, silhouette and pattern between them, never the dress level.'
+    ? ' The scene sets ONE garment type and dress level for the pair, dressed per person (a gala: gowns for women, tuxedos for men; a beach: swimwear; the slopes: snow gear). Two women at a gala both wear gowns: never a gown next to a jumpsuit, a suit or a jacket unless the plan below asks for it. Vary colour, silhouette and pattern between them, never the garment type or the dress level.'
     : '';
   const userDressed = planHasUserGarment(plan);
   const basics = plan.people.some((p) => !p.garment)

@@ -29,6 +29,7 @@
  *
  * Flags: --n (default 10) --medium (canvas) --vibe (arcane) --model (flux-1.1-pro)
  *        --hint (the snowboarding prompt) --concurrency (3, the CLAUDE.md ceiling)
+ *        --role (dual) force_cast_role; `none` lets the prompt's own words decide (solo prompts)
  */
 
 require('dotenv').config({ path: require('path').join(__dirname, '..', '.env.local') });
@@ -56,6 +57,7 @@ const MODEL = arg('model', 'black-forest-labs/flux-1.1-pro');
 // Kevin's own failing prompt, so a round is directly comparable to the complaint.
 const HINT = arg('hint', 'Show me and Steph snowboarding');
 const CONCURRENCY = Number(arg('concurrency', '3'));
+const ROLE = arg('role', 'dual');
 
 async function seedJob(recipe, i) {
   const jobId = randomUUID();
@@ -67,7 +69,7 @@ async function seedJob(recipe, i) {
     force_model: MODEL,
     // 'dual' forces self + plus_one regardless of what the prompt parses to, so a round
     // measures the COMPOSER rather than the cast detector.
-    force_cast_role: 'dual',
+    ...(ROLE === 'none' ? {} : { force_cast_role: ROLE }),
     vibe_profile: recipe,
     hint: HINT,
   };
