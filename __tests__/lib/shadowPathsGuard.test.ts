@@ -65,15 +65,27 @@ describe('shadow paths — dark means dark, and registered means renderable', ()
     if (shadow.length > 0) {
       it.each(shadow)('shadow path %s resolves to a working builder', (pathKey: string) => {
         // buildBrief is the only external probe of pathBuilders wiring.
-        const brief = bot.buildBrief({
+        const result = bot.buildBrief({
           path: pathKey,
           sharedDNA: {},
           vibeDirective: 'test mood',
           vibeKey: 'test',
           picker: stubPicker(),
         });
-        expect(typeof brief).toBe('string');
-        expect(brief.length).toBeGreaterThan(300);
+
+        // botEngine accepts THREE documented return shapes (see the comment at
+        // `isDirectPrompt` in scripts/lib/botEngine.js), so this guard must accept
+        // all three or it fails a perfectly valid path:
+        //   string                                  — the brief (legacy)
+        //   { brief, briefMeta }                    — brief + recipe enrichment
+        //   { direct: true, prompt, briefMeta? }    — Sonnet bypassed
+        // BrickBot `balloon-festival` uses the second form to supply its camera
+        // for DLT replay, and asserting a bare string rejected it.
+        const text =
+          typeof result === 'string' ? result : result && (result.brief || result.prompt);
+
+        expect(typeof text).toBe('string');
+        expect((text as string).length).toBeGreaterThan(300);
       });
     }
   });

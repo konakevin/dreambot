@@ -52,6 +52,12 @@ const SKIP_LEGACY_PER_PATH = new Set([
   'lego-city',
   'lego-trains',
   'haunted-brick',
+  // Function paths that load their own seeds. Listed here BEFORE go-live on
+  // purpose: this set is only consulted for paths already in PATHS, so an entry
+  // for a shadow path does nothing today and prevents a require-time crash the
+  // day its string moves into paths[].
+  'airfield-biplanes',
+  'balloon-festival',
 ]);
 for (const p of PATHS) {
   if (SKIP_LEGACY_PER_PATH.has(p)) continue;

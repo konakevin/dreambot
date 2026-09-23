@@ -1457,6 +1457,61 @@ throughout. **The dividing line is not "is it flat" and not "did I say no markin
 the object's SHAPE is already a sign.** Cloth, a plank in a wall, a lantern's paper face and an eave
 board are safe substrates. A rectangular panel over a doorway is not, and never will be.
 
+**28. ⭐⭐⭐ A DOMAIN'S OWN CORRECT JARGON CAN BE A CONFIDENT WRONG PRIOR — and this one is measured
+perfectly.** BrickBot `balloon-festival`, round 0. **"Envelope"** is exactly what a balloonist calls the
+fabric bag, so the pools used it: 152 "envelope" tokens against 13 "balloon". Flux's prior for the word
+is a **paper mail envelope**. The six stored prompts split cleanly against their six renders:
+
+| | renders delivering a balloon fleet |
+| --- | --- |
+| "balloon" present in the prompt | **1 of 1** |
+| "balloon" absent (only "envelope") | **0 of 5** |
+
+Two of those five came back as a **carpet of literal paper envelopes** with a brick owl and a castle
+turret standing in it. One occurrence of the layperson's word was the entire difference, and R0 1.6 →
+R1 4.15 came mostly from fixing it.
+
+This is the KODAMA trap's sibling and it is worse. A no-prior word collapses to a nearest centroid,
+which is vague and obvious in the render. **Jargon that collides with a common object renders that
+object CONFIDENTLY**, so it looks like a deliberate choice rather than a failure.
+
+**New pre-round-0 check, cheap and mandatory on any specialist path: for every domain term in the
+pools, ask what a LAYPERSON pictures when they read this word. If the answer is a different object,
+the jargon is banned even though it is correct.** Known live minefields: balloons (envelope, crown,
+skirt, mouth), telegraphy (key, sounder, relay, drop, arm, block, line), gardening (spur, bract,
+runner, crown, eye, sport, cap), sailing (sheet, head, foot, tack), printing (plate, bed, furniture).
+
+**29. ⭐⭐ A VANISHING POINT CAN BE AUTHORED INTO THE SKY AXIS, WHERE THE GROUND RULE CANNOT REACH IT.**
+Same build. Its one remaining sub-bar corridor happened **with the crosswise-field law present verbatim
+in 6 of 6 prompts** — because the corridor was not being built on the ground. It came from the hero
+pool's own wording: *"converging from all round the field toward a single point high up… closing on
+that bright shared sky point"*. **A "single shared point" that everything converges on IS a
+vanishing-point instruction**, and no amount of correct crosswise GROUND wording beats it. Add
+`converg|toward a single point|shared .* point|apex|meeting point` to the corridor sweep, and run that
+sweep on the HERO pool, not just on the camera and setting pools.
+
+**30. ⭐ ON AN INTERIOR PATH, THE LIGHT AXIS NEEDS ITS SOURCE INSIDE THE ROOM — an "outdoor sky" light
+entry is a flat-daylight generator.** FarmBot `lambing-season`: its three flattest, palest renders were
+all the shed-interior ones, and each had rolled a light entry naming an outdoor sun or sky (*"hard
+midday sun"*, *"a butter-yellow low sun in a clear pale-blue sky"*, *"a cold clear dawn"*) — which a
+shed physically cannot show. With nothing to anchor the light to, Flux rendered flat ambient daylight
+and took the whole palette pale. Every entry that worked named a lamp, a doorway, an open end or a gap
+between boards **and said what its light landed on**. Retagging the 6 sky entries to outdoor-only plus
+adding 4 non-lamp in-frame sources moved the shed renders **3.60 → 3.98 in one round**.
+
+Generalises: **on any interior path the light axis needs a per-entry requirement that its source
+EXISTS INSIDE THE ROOM.** Tagging an entry `indoor` is not the same as it being renderable indoors.
+This is also a sharper second form of lesson 15: the aperture law says do not put a glow *inside* a
+small dark opening; this says a *bright* opening still has to be named as the source.
+
+**31. ⭐ A RUST WORD ON A WET FARM PATH IS A BLOOD GENERATOR — and no existing sweep looks for it.**
+Same build. *"a faded blue gate on a rope hinge, rust-orange hinges showing at the post"* rendered two
+bright wet orange-red runs streaking down the gate post AND down the crook leaning beside it. On a
+**lambing** path that reads unmistakably as blood. It is a content failure that no text, scale,
+negation or personification sweep is looking for. Banned at the recipe
+(`rust|rusted|rust-orange|rusty|crimson|scarlet|maroon|oxblood`); worn iron is *"worn silver-bright"*.
+**Add it to the standing sweep for any bot with mud, wet weather and animals.**
+
 ---
 
 ## North Star — the actual goal

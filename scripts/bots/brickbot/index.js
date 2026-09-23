@@ -41,6 +41,7 @@ const pathBuilders = {
   'lego-trains': require('./paths/lego-trains'), // Stage B2 SHADOW
   'haunted-brick': require('./paths/haunted-brick'), // Stage B3 SHADOW
   'airfield-biplanes': require('./paths/airfield-biplanes'), // aviation path (2026-09-23) SHADOW
+  'balloon-festival': require('./paths/balloon-festival'), // mass-ascension path (2026-09-23) SHADOW
 };
 
 module.exports = {
@@ -89,6 +90,11 @@ module.exports = {
     // REQUIRED, not cosmetic: BrickBot's `photography` medium fragment carries "natural bokeh",
     // and without this override 4 of 6 first-batch renders collapsed to a hero-on-bokeh product
     // shot with the airfield behind it an unreadable smear.
+    // REQUIRED, not cosmetic: the subject is a SKY FULL of balloons, and the bot's
+    // photography medium fragment carries "natural bokeh" — without this the fleet
+    // bokehs away into orbs and the path's whole identity goes with it.
+    'balloon-festival':
+      'cinematic widescreen film frame, deep focus front-to-back, edge-to-edge sharpness, expansive establishing shot',
     'airfield-biplanes':
       'cinematic widescreen film frame, deep focus front-to-back, edge-to-edge sharpness, expansive establishing shot',
     pirates:
@@ -129,7 +135,7 @@ module.exports = {
   // never looks for a legacy pool triplet. On go-live it must be added to PATHS *and* to
   // SKIP_LEGACY_PER_PATH in the SAME edit — PATHS alone makes pools.js call
   // load('airfield_biplanes_scenes') and throw at require time, taking the whole bot down.
-  shadowPaths: ['airfield-biplanes'], // Stage B paths promoted to live rotation 2026-08-16
+  shadowPaths: ['airfield-biplanes', 'balloon-festival'], // Stage B paths promoted to live rotation 2026-08-16
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -140,7 +146,7 @@ module.exports = {
     // Stage B shadow paths ran with chaos OFF (they weren't in allowSubjectChaosPaths
     // = pools.PATHS while shadow). Now they're in PATHS, so skip them explicitly to
     // preserve the exact approved-shadow behavior (XEROX — do not newly-apply chaos).
-    skipPaths: ['lego-city', 'lego-trains', 'haunted-brick', 'airfield-biplanes'],
+    skipPaths: ['lego-city', 'lego-trains', 'haunted-brick', 'airfield-biplanes', 'balloon-festival'],
     allowSubjectChaosPaths: pools.PATHS,
   },
 
@@ -153,6 +159,7 @@ module.exports = {
     // curated axis language (build_technique vocab, register-locks,
     // scene-prop detail) when compressing 150 → 70-100 words.
     skipPaths: [
+      'balloon-festival',
       'airfield-biplanes',
       'pirates',
       'space',
