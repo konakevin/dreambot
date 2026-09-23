@@ -153,9 +153,11 @@
  *   one model can render 3 of 3 on another. So the pin ships as flux-2-pro and
  *   flux-1.1-pro is the rollback (see the registration block).
  *   TWO RESIDUALS on flux-2-pro, both measured and both named in the
- *   registration block: it SIGNS its work (2 of 3), and its safety classifier
- *   rejected 8 of 11 attempts with E005 while flux-1.1-pro went 23 of 23 clean
- *   on the same prompts in the same minutes. Shadow-safe, not cron-safe.
+ *   registration block: it SIGNS its work (2 of 3), and its flux-2-pro delivery
+ *   rate collapsed to 3 of 13 attempts on Replicate E005 while flux-1.1-pro
+ *   went 23 of 23 clean, including a control render submitted mid-streak.
+ *   Shadow-safe, not cron-safe. The E005 attribution is NOT settled — see the
+ *   registration block, the next step is a retry and not a pool edit.
  *
  * Config: FaeBot's default medium (painted_fantasy_novel).
  *   chaos + sensoryAnchors are off bot-wide. twoPassPolish MUST skip
@@ -322,24 +324,31 @@ If it will not all fit, the large near fae, the vivid sky and the perch's crop a
  *     24). Playbook lesson 19 could not resolve that clause's effect against a
  *     1-2/6 base rate; a ~2/3 signature rate CAN be resolved by a 2-arm test
  *     at 8 renders per arm. Run that first.
- *
- *     (2) flux-2-pro's OWN SAFETY CLASSIFIER REJECTS THIS PATH — measured, and
- *     the attribution is nailed down. Delivery on flux-2-pro was 3 of 11
- *     logged attempts (~27%); the other 8 all returned Replicate E005 "flagged
- *     as sensitive". It is NOT the prompt wording: rewording the prefix's
- *     clothing clause still failed on its first attempt. It is NOT upstream or
- *     account state: a flux-1.1-pro control render submitted in the middle of
- *     the flux-2-pro failure streak succeeded immediately, and flux-1.1-pro is
- *     23 of 23 with zero E005 across this whole build. So the classifier is
- *     model-specific and it is reacting to this path's own content — an adult
- *     female figure described in physical detail across a pose pool. Same
- *     shape as FarmBot apiary-beekeeping's safety wall in this run.
- *     A 25% delivery rate is fine for a shadow path (it renders only on an
- *     explicit iter-bot call) and NOT shippable on a 2x/day cron. Likeliest
- *     lever, untested: the `astronomer` pool's body-plan vocabulary — the
- *     adult-proportions law is what beat the naked-putto trap, so soften the
- *     anatomy words WITHOUT losing the adult read, and re-measure delivery
- *     rate over 8 attempts before touching anything else.
+ *     (2) flux-2-pro DELIVERY COLLAPSED TO 3 OF 13 ATTEMPTS (~23%), all nine
+ *     failures returning Replicate E005 "flagged as sensitive". READ THE SHAPE
+ *     OF THIS BEFORE ACTING ON IT, because it is NOT the obvious conclusion:
+ *       • attempts 1-4 delivered 3 (06:02-06:07 UTC 2026-09-23),
+ *       • every attempt after ~06:10 failed: 0 of 9, across THREE separate
+ *         batches and TWO different prompt variants,
+ *       • all nine carried the IDENTICAL Replicate error id (uIJ6l3ruRD),
+ *       • a flux-1.1-pro control submitted in the middle of the streak
+ *         succeeded immediately, and flux-1.1-pro is 23 of 23 with zero E005.
+ *     So flux-1.1-pro is definitely unaffected, and the fault is definitely
+ *     specific to flux-2-pro. But CONTENT ATTRIBUTION IS NOT ESTABLISHED. I
+ *     tested the obvious content hypothesis — that the prefix's clothing-status
+ *     clause reads as a nudity-context token to the classifier — by rewording
+ *     it, and that arm went 0 of 4. A clean before/after break in TIME, holding
+ *     across two prompt variants with one repeated error id, fits a throttled
+ *     or canned upstream response for flux-2 on this account at least as well
+ *     as it fits this path's content.
+ *     SO THE NEXT STEP IS A RETRY, NOT A POOL EDIT. Re-run 8 flux-2-pro
+ *     attempts in a later session first. Only if delivery is still near zero
+ *     is it content, and only then consider softening the `astronomer` pool's
+ *     body-plan vocabulary — carefully, because the adult-proportions law is
+ *     precisely what beat the naked-putto trap that killed acorn-boat-regatta.
+ *     Do not spend that lever on an unproven attribution.
+ *     Either way: ~23% delivery is fine for a shadow path, which renders only
+ *     on an explicit iter-bot call, and is not shippable on a 2x/day cron.
  *
  * Nothing else is required: pools.js is untouched (this file loads its own
  * seeds), chaos + sensoryAnchors are disabled bot-wide, and the medium falls
