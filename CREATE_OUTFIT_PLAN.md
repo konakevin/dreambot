@@ -230,6 +230,24 @@ Where it fails, verified by reading the outfits:
 - Note for phase 3: a rolled silhouette on a USER garment can read oddly ("full and flared" on a bikini),
   so the brief phrases it "as far as the garment allows".
 
+## Phase 2 done (2026-09-23): the outfit reader
+
+- `supabase/functions/_shared/outfitSpec.ts` (imported by nothing yet, so inert): `mentionsClothing`
+  prefilter, `stripOccluders`, `buildOutfitSpecBrief` (sanitized raw prompt + a code-built who-is-who
+  legend), `parseOutfitSpecReply` (labelled lines; every value must share a word with the prompt or it is
+  refused), `extractOutfitSpec` (fail-open), `outfitSpecStamps`.
+- IMPLIED is narrow on purpose: only garments with specific known colours (a real team's jersey, a brand's
+  signature look, an official uniform, a named character). A regency gown, a kimono, 80s clothes or a tux
+  take our colours. The first run marked regency gown and kimono IMPLIED; the brief was tightened and the
+  harness now fails if they come back IMPLIED. Team, brand and character names stay in the garment
+  ("Lakers jerseys", not "jerseys").
+- `__tests__/lib/outfitSpec.test.ts`: 39 tests (prefilter, occluder stripping, brief, parser incl.
+  refused inventions, possessives, markdown, unassigned; fail-open; stamps).
+- Live read over the corpus (`--mode=extract`, 34 prompts x 3): garment 108/108, colour 60/60 (IMPLIED
+  where right, never where wrong), pattern 12/12, 0 prefilter misses, 0 false locks (nothing ever pinned
+  on a person the user said nothing about), both sunglasses prompts stripped by code, 0 errors.
+- Full gate green: 214 suites / 4,206 tests, tsc, deno check.
+
 ## Porting to nightly later
 
 `planOutfits`, the pools and the brief wiring live in `_shared`; nightly would pass the same flag with

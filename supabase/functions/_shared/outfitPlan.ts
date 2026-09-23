@@ -142,7 +142,7 @@ export interface UserOutfitSpec {
   pattern: string | null;
 }
 
-const COLOUR_WORDS: ReadonlyArray<[ColourFamily, RegExp]> = [
+const COLOUR_WORDS: readonly [ColourFamily, RegExp][] = [
   ['red', /\b(red|scarlet|crimson|cherry|ruby|burgundy|maroon|oxblood|wine)\b/i],
   ['pink', /\b(pink|blush|rose|fuchsia|magenta|coral|raspberry|salmon)\b/i],
   ['orange', /\b(orange|tangerine|rust|terracotta|copper|peach|apricot)\b/i],
@@ -256,7 +256,7 @@ export function planOutfits(
     : rng() < pct(cfg.independentPct)
       ? 'independent'
       : 'coordinated';
-  const rolled: Array<OutfitColour | null> = roles.map(() => null);
+  const rolled: (OutfitColour | null)[] = roles.map(() => null);
   if (colourMode === 'coordinated') {
     const open = roles.map((r) => !userColourLocked(r));
     // One person locked by the user: the pair must have at least one half outside the user's family, so the

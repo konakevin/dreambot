@@ -35,6 +35,11 @@ import { composeExperimentalCouple } from '../supabase/functions/_shared/coupleC
 import { rollCreateSceneAxes } from '../supabase/functions/_shared/createSceneAxes.ts';
 import { resolveCastForPrompt } from '../supabase/functions/_shared/castResolver.ts';
 import { callSonnet } from '../supabase/functions/_shared/llm.ts';
+import {
+  extractOutfitSpec,
+  outfitSpecStamps,
+  type OutfitPerson,
+} from '../supabase/functions/_shared/outfitSpec.ts';
 
 // ── env ────────────────────────────────────────────────────────────────
 const env = Object.fromEntries(
@@ -58,6 +63,8 @@ const ONLY = arg('only', '')
   .map((s) => s.trim())
   .filter(Boolean);
 const CONCURRENCY = Number(arg('concurrency', '4'));
+/** pipeline = today's Create text pipeline end to end; extract = the phase-2 outfit reader only. */
+const MODE = arg('mode', 'pipeline');
 if (!OUT) throw new Error('--out=<dir> is required');
 
 // ── corpus ─────────────────────────────────────────────────────────────
@@ -67,6 +74,8 @@ interface Expect {
   garment?: string;
   colour?: string;
   pattern?: string;
+  /** The garment carries its own colours (team jersey, period costume): the extractor must say IMPLIED. */
+  implied?: boolean;
 }
 interface Case {
   id: string;
@@ -95,16 +104,16 @@ const CASES: Case[] = [
     partner: { name: 'Summer', gender: 'female', relationship: REL.family },
     prompt:
       'I am in a regency gown at a ball dancing with a handsome dandy and so is my granddaughter summer',
-    expectSelf: { garment: 'gown|dress' },
-    expectPartner: { garment: 'gown|dress' },
+    expectSelf: { garment: 'gown|dress', implied: false },
+    expectPartner: { garment: 'gown|dress', implied: false },
   },
   {
     id: 'R2',
     shape: 'solo_self',
     self: 'female',
-    tags: ['style_only'],
     prompt:
       "Imagine me wearing the 80's hairstyle, makeup and clothes surrounded by popular 80's nostalgia background",
+    expectSelf: { garment: '80|clothes', implied: false },
   },
   {
     id: 'R3',
@@ -129,7 +138,7 @@ const CASES: Case[] = [
     self: 'female',
     prompt:
       'Show a very glamorous version of me wearing a Detroit lions jersey, cheering at a lions football game',
-    expectSelf: { garment: 'jersey', colour: 'blue|honolulu|silver' },
+    expectSelf: { garment: 'jersey', colour: 'blue|honolulu|silver', implied: true },
   },
   {
     id: 'R6',
@@ -168,7 +177,7 @@ const CASES: Case[] = [
     self: 'female',
     prompt:
       'Show me with long dark hair as a very glamorous version of me wearing a Detroit lions cheerleading outfit, cheering at a home game',
-    expectSelf: { garment: 'cheer', colour: 'blue|honolulu|silver' },
+    expectSelf: { garment: 'cheer', colour: 'blue|honolulu|silver', implied: true },
   },
   {
     id: 'R10',
@@ -239,7 +248,7 @@ const CASES: Case[] = [
     self: 'male',
     partner: { name: 'Steph', gender: 'female', relationship: REL.wife },
     prompt: "Show me and Steph at a gala. I'm in a tux and Steph is in a green dress.",
-    expectSelf: { garment: 'tux|tuxedo|dinner jacket' },
+    expectSelf: { garment: 'tux|tuxedo|dinner jacket', implied: false },
     expectPartner: { garment: 'dress|gown', colour: GREEN },
   },
   {
@@ -295,7 +304,7 @@ const CASES: Case[] = [
     shape: 'solo_self',
     self: 'female',
     prompt: 'Show me in a kimono in Kyoto',
-    expectSelf: { garment: 'kimono' },
+    expectSelf: { garment: 'kimono', implied: false },
   },
   {
     id: 'S11',
@@ -333,8 +342,8 @@ const CASES: Case[] = [
     self: 'male',
     partner: { name: 'Steph', gender: 'female', relationship: REL.wife },
     prompt: 'Me and Steph at a Lakers game in Lakers jerseys',
-    expectSelf: { garment: 'jersey', colour: 'purple|gold|yellow' },
-    expectPartner: { garment: 'jersey', colour: 'purple|gold|yellow' },
+    expectSelf: { garment: 'lakers.*jersey', colour: 'purple|gold|yellow', implied: true },
+    expectPartner: { garment: 'lakers.*jersey', colour: 'purple|gold|yellow', implied: true },
   },
   {
     id: 'S15',
@@ -584,6 +593,126 @@ async function renderOne(c: Case, run: number): Promise<Result> {
       formalTypeMismatch: null,
     },
   };
+}
+
+// ── extract mode (phase 2): does the outfit reader get who-wears-what right? ──
+async function runExtract(): Promise<void> {
+  const personOf = (c: Case, role: 'self' | 'plus_one'): OutfitPerson =>
+    role === 'self'
+      ? { role: 'self', label: 'the user', gender: c.self }
+      : {
+          role: 'plus_one',
+          label: /^[A-Z]/.test(c.partner!.name) ? c.partner!.name : `the user's ${c.partner!.name}`,
+          gender: c.partner!.gender,
+        };
+  const todo: Array<{ c: Case; run: number }> = [];
+  for (const c of CASES) {
+    if (ONLY.length && !ONLY.includes(c.id)) continue;
+    for (let r = 0; r < RUNS; r++) todo.push({ c, run: r });
+  }
+  const out: Array<Record<string, unknown>> = [];
+  const tally = {
+    garment: [0, 0],
+    colour: [0, 0],
+    pattern: [0, 0],
+    falseLock: 0,
+    missed: 0,
+    errors: 0,
+  };
+  const marks = new Map<string, string[]>();
+  let i = 0;
+  const work = async () => {
+    while (i < todo.length) {
+      const { c, run } = todo[i++];
+      const raw = sanitizeUserText(c.prompt, 'hint');
+      const roles: Array<'self' | 'plus_one'> =
+        c.shape === 'couple'
+          ? ['self', 'plus_one']
+          : c.shape === 'solo_self'
+            ? ['self']
+            : ['plus_one'];
+      const people = roles.map((r) => personOf(c, r));
+      const outcome = await extractOutfitSpec(raw, people, KEY);
+      const m: string[] = [];
+      if (outcome.source === 'error') tally.errors++;
+      const byRole = outcome.source === 'read' ? outcome.result.byRole : {};
+      for (const role of roles) {
+        const e = role === 'self' ? c.expectSelf : c.expectPartner;
+        const got = byRole[role];
+        const who = role === 'self' ? 'self' : 'partner';
+        if (!e) {
+          if (got && (got.garment || got.colour)) {
+            tally.falseLock++;
+            m.push(`${who}:FALSE_LOCK(${got.garment ?? ''}/${got.colour ?? ''})`);
+          }
+          continue;
+        }
+        if (!got && outcome.source === 'skipped') {
+          tally.missed++;
+          m.push(`${who}:prefilter_missed`);
+        }
+        const g = got ?? { garment: null, colour: null, colourImplied: false, pattern: null };
+        if (e.garment) {
+          tally.garment[1]++;
+          if (g.garment && new RegExp(e.garment, 'i').test(g.garment)) tally.garment[0]++;
+          else m.push(`${who}.garment✗(${g.garment})`);
+        }
+        if (e.implied === false && g.colourImplied) {
+          tally.colour[1]++;
+          m.push(`${who}.WRONGLY_IMPLIED`);
+        }
+        if (e.implied || e.colour) {
+          tally.colour[1]++;
+          const ok = e.implied
+            ? g.colourImplied
+            : !!g.colour && new RegExp(e.colour!, 'i').test(g.colour);
+          if (ok) tally.colour[0]++;
+          else m.push(`${who}.colour✗(${g.colourImplied ? 'IMPLIED' : g.colour})`);
+        }
+        if (e.pattern) {
+          tally.pattern[1]++;
+          const hay = `${g.pattern ?? ''} ${g.garment ?? ''}`;
+          if (new RegExp(e.pattern, 'i').test(hay)) tally.pattern[0]++;
+          else m.push(`${who}.pattern✗(${g.pattern})`);
+        }
+      }
+      marks.set(c.id, [...(marks.get(c.id) ?? []), m.length ? m.join(' ') : 'ok']);
+      out.push({
+        id: c.id,
+        run,
+        prompt: c.prompt,
+        source: outcome.source,
+        byRole,
+        stamps: outfitSpecStamps(outcome, roles.length),
+        unassigned: outcome.source === 'read' ? outcome.result.unassigned : null,
+      });
+      Deno.stdout.writeSync(new TextEncoder().encode('.'));
+    }
+  };
+  await Promise.all(Array.from({ length: CONCURRENCY }, work));
+  console.log('');
+  Deno.mkdirSync(OUT, { recursive: true });
+  out.sort(
+    (a, b) =>
+      String(a.id).localeCompare(String(b.id), undefined, { numeric: true }) ||
+      Number(a.run) - Number(b.run)
+  );
+  Deno.writeTextFileSync(`${OUT}/extract.json`, JSON.stringify(out, null, 2));
+  const f = ([p, t]: number[]) => (t ? `${p}/${t} (${Math.round((100 * p) / t)}%)` : 'n/a');
+  console.log(`reads: ${out.length}  errors: ${tally.errors}  prefilter misses: ${tally.missed}`);
+  console.log(`garment right : ${f(tally.garment)}`);
+  console.log(
+    `colour right  : ${f(tally.colour)}  (IMPLIED counted where the garment carries its own colours)`
+  );
+  console.log(`pattern right : ${f(tally.pattern)}`);
+  console.log(
+    `false locks (something locked on a person the user said nothing about): ${tally.falseLock}`
+  );
+  for (const [id, ms] of marks) console.log(`  ${id.padEnd(4)} ${ms.join(' | ')}`);
+}
+if (MODE === 'extract') {
+  await runExtract();
+  Deno.exit(0);
 }
 
 // ── run ────────────────────────────────────────────────────────────────

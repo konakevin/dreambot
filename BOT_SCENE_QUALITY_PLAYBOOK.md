@@ -1397,6 +1397,19 @@ paper lanterns strung across it, a hanging bough of pine, a bundle of bamboo, or
 eave with icicles — and states that nothing up there is ever flat or rectangular. Same shape as
 lesson 26's quay walls, applied to the one surface a deletion had emptied.
 
+> **THIRD ROUND, AND THE COMPOSED FIX IS CONFIRMED:**
+>
+> | round | the one variable | board present | renders with lettering | batch avg |
+> | --- | --- | --- | --- | --- |
+> | 1 | a described board "bearing one painted sprig and no other marking" | yes | 2 / 6 | ~4.5 |
+> | 2 | board DELETED from all 3 layers → "only deep eave shadow" | **came back** | 2 / 6 | ~4.5 |
+> | 3 | DELETED **and** the lintel filled positively | **0 / 6** | **1 / 6** (faint, on water, not the lintel) | **~4.6** |
+>
+> And the part worth internalising: **the batch average went UP.** The lintel dressing is not a tax
+> paid to avoid text, it is some of the best set dressing in the path — dozens of round lanterns each
+> carrying a painted swallow strung over a floating-lantern pool, a hanging pine bough weighed down
+> with snow and icicles. Second independent confirmation of lesson 26's closing line.
+
 Corollary worth keeping: on those same 12 renders the NOREN carried its painted crane / pine sprig /
 wave motif correctly **11 of 12**, and lantern faces, doorway planks and eave boards were clean
 throughout. **The dividing line is not "is it flat" and not "did I say no markings" — it is whether
