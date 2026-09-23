@@ -1,6 +1,6 @@
 # Nightly robustness: couples fail when the swap service is busy
 
-Status: items 1, 2 + 7 LIVE (2026-09-23, migrations 549 + 550); items 3-6 open. Kevin: "we anticipate eventually getting hundreds of users all
+Status: items 1, 2, 3 + 7 LIVE (2026-09-23, migrations 549, 550, 551); items 4-6 open. Kevin: "we anticipate eventually getting hundreds of users all
 generating their nightly dream at once … can we look into the way the nightly dreams are generated for all
 users during the nightly run and see if we can make it more robust and not so damn flakey?"
 
@@ -101,10 +101,36 @@ Verified live before and after the flip:
   wave two swaps took a slot at once and the third waited (35.4 s and 14.4 s) instead of piling onto Fly.
 - **Nightly contention** (3 nightly couples fired at the same instant, batch = 1 slot): all 3 held first try,
   0 swap errors; waits 0.1 s / 3.3 s / 28.7 s; every lease released (`swap_slot_leases` empty after).
-- The retry-later path did not trigger (no wait overran its deadline); it is covered by unit tests, and the
-  worker's re-queue with backoff is the existing, tested failure path.
+- **Retry, direct** (placeholder lease holding the batch slot, nightly couple fired at the edge fn): 500
+  `nightly_swap_capacity_retry` after a 41.7 s wait, stamps `dual_swap_error:swap_capacity_busy`,
+  `swap_capacity_retry_later`, `nightly_error:nightly_swap_capacity_retry`. No solo shipped.
+- **Retry, through the worker** (same setup, job enqueued into `dream_queue`): attempt 0 rolled a flux-1.1-pro
+  couple, waited 44.6 s for a slot, failed retryably → re-queued `attempt_count = 1` → claimed again ~1.5 min
+  later → `completed` on flux-1.1-pro. Unit-locked in `swapDispatchGate.test.ts` (acquire before Fly, release
+  on success / 5xx / throw, busy = Fly never called, disabled + gate error = fail-open).
+- **Known side effect:** a retry is a fresh nightly roll, so attempt 1 may roll a solo (it did in the worker
+  test). The dream is still a full first-choice render, not a degraded one; pinning the rolled cast across a
+  capacity retry is a possible follow-up (production-engine change, needs Kevin's word).
 - CI db-tests green (`swapSlotLeases.dbspec.ts` on real Postgres).
 
 Watch the next nightly bursts (10:18 UTC Denver) via stamps: `swap_gate:acquired:<ms>`, `swap_capacity_retry_later`,
 `nightly_error:nightly_swap_capacity_retry`, and whether `dual_swap_error` / `dual_degrade_single` disappear.
 Rollback: `UPDATE engine_config SET swap_gate_enabled = false, nightly_swap_capacity_retries = 0 WHERE id = 1;`
+
+## Live (2026-09-23 ~21:30 UTC, migration 551): item 3, the burst spread
+
+A time zone's users all come due on the same tick and used to land in one insert with one `created_at`; the
+worker claims every job whose `created_at` has passed, so they all started at once. Now job i of n gets
+`created_at = now + i * step`, `step = min(nightly_enqueue_spacing_s, nightly_enqueue_max_spread_min * 60 / (n - 1))`
+(defaults 30 s, 60 min): a 5-user cohort starts over 2 minutes; 200 users never spread wider than an hour. No
+new column and no claim change: the claim already skips future `created_at` (the retry backoff uses the same
+mechanism, and `check-dream-queue.js` already excludes future-dated rows from "stuck").
+
+- Both enqueue paths apply the same rule: the pg_cron backstop `enqueue_nightly_dreams` (migration 551, the path
+  that actually enqueues most nights) and `scripts/nightly-dreams.js` via `scripts/lib/nightlySpread.js`.
+- Tests: `__tests__/lib/nightlySpread.test.ts` (the rule + JS/SQL parity guards),
+  `__tests__/db/nightlyEnqueueSpread.dbspec.ts` (the real function on Postgres: 30 s steps, the max-spread
+  squeeze, spacing 0 = old behaviour, dedup + dry run).
+- Verified live after applying: dry run and a real run both clean (11 due users, all already enqueued today →
+  `skipped_dedup`, nothing inserted); the script reads 30 / 60 from `engine_config`.
+- Rollback (instant, no deploy): `UPDATE engine_config SET nightly_enqueue_spacing_s = 0 WHERE id = 1;`

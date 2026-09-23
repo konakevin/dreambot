@@ -32,6 +32,7 @@ const {
 } = require('./lib/nightlyEligibility');
 const { nightlyDelivery } = require('./lib/nightlyTimezone');
 const { fetchEngineConfig } = require('./lib/engineConfig');
+const { spreadRows } = require('./lib/nightlySpread');
 
 // Reminders stay DAILY (once at this UTC hour) even though the dream enqueue now
 // runs hourly for timezone-aware delivery — see the enqueue + reminder blocks below.
@@ -274,10 +275,19 @@ const PAID_REMINDER_TIERS = [
       // from migration 192 existed), FALL BACK to a plain insert: the pre-filter
       // above already gives per-user-per-day idempotency, so the batch is correct
       // either way and the cron can never crash on this regardless of migration state.
+      // SPREAD THE BURST (NIGHTLY_ROBUSTNESS_PLAN.md item 3, migration 551): a time zone's users all come due
+      // on the same tick, and the worker claims jobs whose created_at has passed — so one insert used to start
+      // them all at once. Staggered created_at = staggered starts (the SQL backstop mirrors this rule).
+      const spreadNewRows = spreadRows(
+        newRows,
+        Date.now(),
+        cfg.nightlyEnqueueSpacingS,
+        cfg.nightlyEnqueueMaxSpreadMin
+      );
       let inserted, insErr;
       ({ data: inserted, error: insErr } = await sb
         .from('dream_queue')
-        .upsert(newRows, { onConflict: 'dedup_key', ignoreDuplicates: true })
+        .upsert(spreadNewRows, { onConflict: 'dedup_key', ignoreDuplicates: true })
         .select('id'));
       if (insErr && /on conflict|no unique or exclusion|42P10/i.test(insErr.message)) {
         console.warn(
@@ -285,7 +295,7 @@ const PAID_REMINDER_TIERS = [
         );
         ({ data: inserted, error: insErr } = await sb
           .from('dream_queue')
-          .insert(newRows)
+          .insert(spreadNewRows)
           .select('id'));
       }
       if (insErr) {

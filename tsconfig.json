@@ -18,6 +18,7 @@
     "__tests__/lib/outfitPlanBrief.test.ts",
     "__tests__/lib/outfitSolo.test.ts",
     "__tests__/lib/swapCapacityGate.test.ts",
+    "__tests__/lib/swapDispatchGate.test.ts",
     "__tests__/lib/styleContractEmptyPool.test.ts",
     "__tests__/lib/coupleDegradeSoloRung.test.ts",
     "__tests__/lib/lookBanRefitKeepsModel.test.ts",

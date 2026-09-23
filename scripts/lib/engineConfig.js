@@ -25,6 +25,10 @@ const DEFAULT_ENGINE_CONFIG = {
   relationshipRegex: null,
   botsSeasonalEnabled: false,
   botsSeasonalPct: 30,
+  // Nightly burst spread (migration 551, scripts/lib/nightlySpread.js): seconds between a cohort's job starts,
+  // and the widest the cohort may spread (minutes). 0 spacing = off.
+  nightlyEnqueueSpacingS: 30,
+  nightlyEnqueueMaxSpreadMin: 60,
 };
 
 let cached = null;
@@ -35,7 +39,7 @@ async function fetchEngineConfig(sb) {
   const { data, error } = await sb
     .from('engine_config')
     .select(
-      'base_sparkle_cost, welcome_sparkle_bonus, pro_trial_days, prompt_max_length, photo_preprocess_width, photo_preprocess_quality, nightly_max_jobs, nightly_enabled, nightly_require_onboarding, nightly_require_ai_enabled, self_ref_regex, relationship_regex, bots_seasonal_enabled, bots_seasonal_pct'
+      'base_sparkle_cost, welcome_sparkle_bonus, pro_trial_days, prompt_max_length, photo_preprocess_width, photo_preprocess_quality, nightly_max_jobs, nightly_enabled, nightly_require_onboarding, nightly_require_ai_enabled, self_ref_regex, relationship_regex, bots_seasonal_enabled, bots_seasonal_pct, nightly_enqueue_spacing_s, nightly_enqueue_max_spread_min'
     )
     .eq('id', 1)
     .single();
@@ -68,6 +72,14 @@ async function fetchEngineConfig(sb) {
     relationshipRegex: data.relationship_regex ?? DEFAULT_ENGINE_CONFIG.relationshipRegex,
     botsSeasonalEnabled: data.bots_seasonal_enabled ?? DEFAULT_ENGINE_CONFIG.botsSeasonalEnabled,
     botsSeasonalPct: num(data.bots_seasonal_pct, DEFAULT_ENGINE_CONFIG.botsSeasonalPct),
+    nightlyEnqueueSpacingS: num(
+      data.nightly_enqueue_spacing_s,
+      DEFAULT_ENGINE_CONFIG.nightlyEnqueueSpacingS
+    ),
+    nightlyEnqueueMaxSpreadMin: num(
+      data.nightly_enqueue_max_spread_min,
+      DEFAULT_ENGINE_CONFIG.nightlyEnqueueMaxSpreadMin
+    ),
   };
   return cached;
 }
