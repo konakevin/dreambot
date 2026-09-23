@@ -7,7 +7,7 @@ Going live is moving one string from `shadowPaths[]` into `paths[]` and changing
 To look at any path's renders: they are shadow posts on that bot's own profile, reviewable in the app.
 To render more of one: `node scripts/iter-bot.js --bot <bot> --mode <path> --count 6 --post --shadow`.
 
-⏳ **STATUS: 33 of 35 built, 2 outstanding** (both rendering now). This sheet is updated as each wave merges; the final
+⏳ **STATUS: 34 of 35 built, 1 outstanding** (rendering now). This sheet is updated as each wave merges; the final
 version will cover all 35. Full per-path detail, every measured round and every residual lives in
 `NEW_PATHS_RUN_STATE.md`; the cross-bot laws all this produced are in `BOT_SCENE_QUALITY_PLAYBOOK.md`.
 
@@ -79,6 +79,7 @@ two named axes getting pushed off the end, not a word-count problem.
 | 3.07 | FaeBot | `acorn-boat-regatta` | the bot's first action path. 5 of 6 rendered nude wingless cherub dolls — "tiny/palm-sized" on a humanoid IS a naked-putto prior. `star-charting` later beat that trap 0 of 26 with a fix this path never got |
 | 3.5 | ToyBot | `sand-toy-beachworks` | sand engineering as an epic, where the toys are the tools that built it. Went 2.5 → 3.5 and the premise now lands 6 of 6 where it landed 1 of 6, plus zero lettering in 18 renders on a path made of branded plastic. Best frame: a cathedral-scale fortress crossing the frame with a big orange bucket low right, so the picture says *all of this came out of that*. Lever: the toys still render factory-fresh, and the fix is six words moved to the front of the prefix |
 | 3.0 | ToyBot | `bath-toy-flotilla` | genuinely funny when it lands (a submarine breaching in front of a duck squadron; a rubber crocodile with two penguins as crew) but fails VIVID in half the frames. Toys render factory-fresh against "scuffed sun-faded well-chewed" in all 24 prompts |
+| 3.45 | BrickBot | `archaeology-dig` | a LEGO excavation: the trench cut open, something huge still mostly buried. **Zero text in 18 renders** on the bot's most label-prone subject. Best frame 4.4: a colossal white brick hand rising out of the floor with four crew standing on the open palm. Lever: one pool entry out of 25 is eating the hero — a giant ladder, while the trench already contains an ordinary one, so the model renders the ordinary one and drops the find |
 | — | BrickBot | `airfield-biplanes` | best draws 4.5 (a biplane wheels-off over a brick garden); gibberish wing text at ~1-2 per 6, which is below the resolution of a 6-render round |
 
 ## Two DinoBot bonus paths, outside the original 33

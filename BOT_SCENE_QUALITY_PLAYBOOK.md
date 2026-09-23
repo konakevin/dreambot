@@ -2159,6 +2159,63 @@ beetle put those objects into 4 of 25 entries of the `light` axis, which owns th
 composed brief duplicated the same charm across two axes. **Satellite axes inherit vocabulary from your
 examples even when the example lives in a shared block rather than in that axis's own recipe.**
 
+**73. ⭐⭐⭐ THE OTHER HALF OF LESSON 70: WHEN EVERY LAW IS IN EVERY PROMPT AND NOTHING RENDERS, MEASURE
+WHAT PERCENTAGE OF THE PROMPT IS FIXED PREAMBLE.** Lesson 70 found a wrapper CONTRADICTING a path;
+BrickBot `archaeology-dig` found a wrapper CROWDING one out, on the same day. Take them as one
+diagnostic with two answers.
+
+BrickBot's stock wrapper is **83 words in three stacked layers** — `promptPrefixByPath` (15) +
+`bot.promptPrefix` (55) + the `photography` DB `flux_fragment` (27) — identical on every render. Model
+mix held constant at 3 pro + 3 ultra per round, one variable changed:
+
+| | scene starts at | colour bands rendered | corridors | round avg |
+|---|---|---|---|---|
+| stock 83-word wrapper | 19-34% | 1 / 6 | 4 / 6 | 2.32 |
+| 28-word path-own medium | **8-16%** | **6 / 6** | **1 / 6** | **3.10** |
+
+**Every law was already in 6 of 6 prompts in BOTH arms.** So the diagnostic question is not "is my clause
+in the prompt", it is **"what fraction of the prompt is spent before my content starts"**. The fix needs
+no migration: a code-only medium key with a `mediumByPath` entry, because
+`fetchMediumFluxFragment` returns `''` for an unknown key and `mediumStyles` overrides it.
+
+That wrapper's CONTENT was also hostile, which is lesson 70's failure in the same string: *"natural
+bokeh, accurate skin tones, photographic realism"* — bokeh on a path whose differentiator is a
+background SURFACE, and skin tones on a bot that renders plastic.
+
+**74. ⭐⭐ A RULER IN ITS OWN OUTPUT-ORDER ITEM ARRIVES AT 50% AND RENDERS 0 TIMES; FOLDED INTO ITEM 1 IT
+ARRIVES AT 5% AND RENDERS EVERY TIME — AND YOU PAY FOR IT BY DELETING THE ITEM.** Completes lessons
+61/67 with the position number attached. As its own order item the crew clause landed at **47-60%** of
+the emitted prompt and figures rendered in **2 of 6**; named inside item 1 as the find's ruler, with the
+standalone item DELETED, it landed at **5% of 6 of 6 prompts** and figures rendered **6 of 6** — while
+median emitted words FELL 409 → 355. That is lesson 34 satisfied rather than violated: the trade was
+funded by a deletion, so nothing already working got demoted. **When you promote a clause, name what you
+are deleting to pay for it.**
+
+**75. ⭐⭐⭐ A GIANT VERSION OF AN OBJECT THAT ALSO EXISTS AS ORDINARY EQUIPMENT IS DELETED, NOT
+DUPLICATED — a shared noun is SUBSTITUTION, not a clash.** The known animal lesson says two axes that
+can both supply an animal will render both. A MADE object fails worse and in the opposite direction.
+The find entry *"a giant ladder built for something far larger than any crew figure"* rolled twice, and
+because every `cut` entry also puts a ladder in the trench as the way down, both renders came back with
+**one ordinary-proportioned ladder and no giant find at all** — the mundane instance out-voted the
+colossal one and the hero's identity vanished. The failures CONCENTRATED in that single entry of 25,
+which is lesson 53's purge condition.
+
+**Before shipping a hero pool, diff its nouns against every other axis's kit list.** A noun shared
+between your hero and your set dressing does not produce two objects, it produces the boring one. Same
+family as lesson 71 (one token, two referents) but about objects rather than words.
+
+**76. ⭐⭐ YOUR PREMISE'S OWN ANTI-LAW CAN BE A TEXT PRIOR — AND A LOCAL DRY-RUN CATCHES IT FOR FREE.**
+The template said *"never write that anything is buried, hidden, partly exposed or not yet uncovered"* —
+an instruction addressed to the WRITER, which lessons 32/49 establish is normally safe. It nonetheless
+put the literal phrase `partly exposed` into **200 of 200** composed briefs, one grep from shipping.
+Deleting the enumeration and keeping only the positive *"describe only what IS present"* took it to
+**0/200**.
+
+So the negation-leak law (6) reaches further than pool text: **sweep your own TEMPLATE prose with the
+same regex you sweep the pools with.** A banned word enumerated inside an instruction is still a token
+in the prompt. And the 200-roll dry-run that proved it cost no API call and no render — pair this with
+lesson 69 (verify the dry run itself) and it is the cheapest gate in the pipeline.
+
 ---
 
 ## North Star — the actual goal
