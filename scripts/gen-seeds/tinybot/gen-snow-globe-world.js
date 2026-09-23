@@ -13,10 +13,10 @@
 // front-load collapses the interior to a blurred prop — the bubble-bot environment-collapse law).
 //
 // 4 pools x 25 (MVP):
-//   toybot_snow_globe_worlds   — the sealed world inside (the HERO, leads the prompt)
-//   toybot_snow_globe_weather  — what the water and the flakes are doing (the MONEY SHOT)
-//   toybot_snow_globe_vessel   — the dome, base, wear, trapped bubbles, refraction
-//   toybot_snow_globe_moments  — a story beat playing out inside (gated ~70% in the path file)
+//   tinybot_snow_globe_worlds   — the sealed world inside (the HERO, leads the prompt)
+//   tinybot_snow_globe_weather  — what the water and the flakes are doing (the MONEY SHOT)
+//   tinybot_snow_globe_vessel   — the dome, base, wear, trapped bubbles, refraction
+//   tinybot_snow_globe_moments  — a story beat playing out inside (gated ~70% in the path file)
 //
 // TEXT-PRIOR NOTE: a snow globe base is a plaque magnet, and the surface you forget to describe
 // is the one that gets lettering. Every recipe below therefore handles its own signable surfaces
@@ -43,7 +43,7 @@ This is a REAL PHYSICAL OBJECT photographed close up. The little world is a hand
 (async () => {
   // ── 1. THE WORLD INSIDE — the hero. Leads the prompt, so it leads with its own mass. ──
   await generatePool({
-    outPath: 'scripts/bots/toybot/seeds/toybot_snow_globe_worlds.json',
+    outPath: 'scripts/bots/tinybot/seeds/tinybot_snow_globe_worlds.json',
     total: 25,
     append: true,
     batch: 25,
@@ -79,7 +79,7 @@ JSON array of ${n} strings. No preamble, no numbering, no keys.`,
 
   // ── 2. THE WEATHER IN THE WATER — the money-shot axis. ──
   await generatePool({
-    outPath: 'scripts/bots/toybot/seeds/toybot_snow_globe_weather.json',
+    outPath: 'scripts/bots/tinybot/seeds/tinybot_snow_globe_weather.json',
     total: 25,
     append: true,
     batch: 25,
@@ -112,7 +112,7 @@ JSON array of ${n} strings. No preamble, no numbering, no keys.`,
 
   // ── 3. THE VESSEL — the dome, the base, the wear, the refraction. Sits LAST in the prompt. ──
   await generatePool({
-    outPath: 'scripts/bots/toybot/seeds/toybot_snow_globe_vessel.json',
+    outPath: 'scripts/bots/tinybot/seeds/tinybot_snow_globe_vessel.json',
     total: 25,
     append: true,
     batch: 25,
@@ -152,7 +152,7 @@ JSON array of ${n} strings. No preamble, no numbering, no keys.`,
 
   // ── 4. THE MOMENT INSIDE — the story beat. Gated ~70% in the path file. ──
   await generatePool({
-    outPath: 'scripts/bots/toybot/seeds/toybot_snow_globe_moments.json',
+    outPath: 'scripts/bots/tinybot/seeds/tinybot_snow_globe_moments.json',
     total: 25,
     append: true,
     batch: 25,

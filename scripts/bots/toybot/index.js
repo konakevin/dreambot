@@ -57,7 +57,6 @@ const pathBuilders = {
   'board-game-world': require('./paths/board-game-world'),
   'wooden-toy-land': require('./paths/wooden-toy-land'),
   'tin-toy-parade': require('./paths/tin-toy-parade'),
-  'snow-globe-world': require('./paths/snow-globe-world'), // 2026-09-22 SHADOW — contained world behind cropped glass
   // Halloween seasonal candidates — promoted from AlphaBot (2026-09), see
   // seasonalPaths.halloween below. Self-contained function-form builders
   // (own material-look text inline; no per-medium style injection needed).
@@ -118,10 +117,6 @@ module.exports = {
     // snow-globe-world mirrors the tin-toy / puppet-theatre lineup so the GLASS FRAMING was the
     // only variable under test. 15 renders on the final spec: 8 pro / 7 ultra, and no per-model
     // difference in whether the framing held.
-    'snow-globe-world': {
-      'black-forest-labs/flux-1.1-pro': 100,
-      'black-forest-labs/flux-1.1-pro-ultra': 100,
-    },
     // bath-toy-flotilla: ULTRA PINNED OUT on measured evidence — 4 renders across R1/R2, 4
     // framing failures (shot the tub from OUTSIDE every time, duplicated the tap once, and
     // produced both lowest-scoring frames), while pro produced every frame with a correct bath
@@ -161,7 +156,6 @@ module.exports = {
     'board-game-world': 'board_game_diorama',
     'wooden-toy-land': 'wooden_toy_diorama',
     'tin-toy-parade': 'tin_toy_diorama',
-    'snow-globe-world': 'snow_globe_diorama',
     // Halloween seasonal candidates (promoted from AlphaBot 2026-09) — each
     // builder is fully self-contained (inlines its own material-look text),
     // so its medium key carries no injected style (see mediumStyles below).
@@ -314,8 +308,6 @@ module.exports = {
     // proved that buying a finish with prefix words costs the hero its variety.
     sand_beachworks_diorama:
       'shot from sand level among the walls and canals of a half-built sandcastle, a plastic bucket cropped close in the near corner of the frame, the near wall crossing the picture from the left edge to the right edge, both ends cropped, its wet cut face rising out of the bottom of frame, its tallest towers standing against a bright band of water along the top edge, sand giving way or water filling right now, low raking sun and every ridge\u2019s shadow long across the sand, wet sand near-black against pale dry sand, cinematic photoreal, tactile packed wet sand',
-    snow_globe_diorama:
-      'extreme close-up shot through the thick curved glass wall of a snow globe, the bright wet glass arcing across the top corners of the picture and running off its edges, the whole tiny world inside filling the rest of the frame edge to edge, deep focus front to back with edge-to-edge sharpness so its own far distance and its own lit windows and its own road all stay readable, fine specks suspended in the water in front of it, hand-painted plaster and resin miniature with visible brush-marks, warm practical light raking in from one side through the water, tactile painted-miniature and wet-glass texture',
     puppet_theatre_diorama:
       'handmade puppets performing a scene on a little toy stage, caught mid-gesture on the boards with their strings and rods visible, photographed from the audience through a painted cardboard proscenium arch with chipped gilt framing the opening, painted card flats standing in grooves in overlapping receding layers, a painted backcloth behind, carved and cloth puppets on visible strings and rods, tiny warm footlights raking up from the front edge and throwing shadows onto the flats, scuffed stage boards, honest cut edges and visible brush-marks, warm practical bulb light, tilt-shift macro collectible photography, tactile painted-card and timber texture, shallow depth of field',
     tin_toy_diorama:
@@ -530,16 +522,6 @@ module.exports = {
     // a path made of branded plastic). nostalgic is KEPT but is the one to watch: it ends
     // "everything softer than it really was", the only kept vibe that argues with the hard
     // raking light.
-    'snow-globe-world': [
-      'cinematic',
-      'cozy',
-      'epic',
-      'nostalgic',
-      'whimsical',
-      'enchanted',
-      'nightshade',
-      'shimmer',
-    ],
     claymation: [
       'cozy',
       'whimsical',
@@ -718,7 +700,7 @@ module.exports = {
   // dispatcher never auto-posts them; reachable only via explicit --mode.
   // 'puppet-theatre' stays here until Kevin grades it. shadowPaths[] is invisible to the hourly
   // dispatcher and renders only via `iter-bot --mode puppet-theatre --post`, posted hidden.
-  shadowPaths: ['snow-globe-world'], // Stage O paths promoted to live rotation 2026-08-16 (TOY_SHADOW_PATHS const retained for reference)
+  shadowPaths: [], // Stage O paths promoted to live rotation 2026-08-16 (TOY_SHADOW_PATHS const retained for reference)
 
   // Seasonal-only paths (2026-09-07) — drawn ONLY when
   // engine_config.bots_seasonal_enabled is true AND the named holiday window
@@ -798,8 +780,7 @@ module.exports = {
       'tin-toy-parade',
       // puppet-theatre: chaos would scramble the proscenium framing, which IS the path.
       // snow-globe-world: same reason — chaos would scramble the cropped-glass framing.
-      'snow-globe-world',
-      // Halloween seasonal candidates (promoted from AlphaBot 2026-09) —
+            // Halloween seasonal candidates (promoted from AlphaBot 2026-09) —
       // protect the curated MVP composition validated during QA.
       'vintage-halloween-toybox',
       'spooky-dollhouse-diorama',
@@ -855,8 +836,7 @@ module.exports = {
     // too so the curated MVP composition stays protected if polish is ever
     // re-enabled per-path.
     skipPaths: [
-      'snow-globe-world',
-      'vintage-halloween-toybox',
+            'vintage-halloween-toybox',
       'spooky-dollhouse-diorama',
       'toy-graveyard-diorama',
       'jack-o-lantern-toy-parade',
@@ -872,8 +852,7 @@ module.exports = {
   sensoryAnchors: {
     enabled: true,
     skipPaths: [
-      'snow-globe-world',
-      'model-train-world',
+            'model-train-world',
       'toybox-chaos',
       'plush-world',
       'barbie-scene',

@@ -9,6 +9,12 @@ const pools = require('./pools');
 const blocks = require('./shared-blocks');
 
 const pathBuilders = {
+  // MOVED from ToyBot 2026-09-23 on Kevin's call. Approved there at ~4.47, but it is a
+  // contained miniature world seen through cropped glass, which is TinyBot's subject
+  // rather than ToyBot's. Its look rides promptPrefixByMedium below, carried over
+  // verbatim from the approved ToyBot config so the graded renders still describe
+  // what ships.
+  'snow-globe-world': require('./paths/snow-globe-world'),
   diorama: require('./paths/diorama'),
   'miniature-landscape': require('./paths/miniature-landscape'),
   'macro-nature': require('./paths/macro-nature'),
@@ -122,15 +128,38 @@ module.exports = {
 
   // Stage N paths promoted to live rotation 2026-08-16 (shadowPaths emptied;
   // TINY_SHADOW_PATHS const retained — still drives allowSubjectChaosPaths below).
-  shadowPaths: [],
+  // snow-globe-world stays SHADOW: it was graded on ToyBot, and moving it changes the
+  // bot wrapper around it, so the look wants re-validating here before going live.
+  shadowPaths: ['snow-globe-world'],
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
   cycleAllPaths: true,
 
+  // ── snow-globe-world config, moved from ToyBot ──────────────────────────────
+  // TinyBot had none of these four keys; they exist solely for this path, and every
+  // value is carried over verbatim rather than re-derived.
+  modelByPath: {
+    // ultra was measured OUT on ToyBot: it frames tighter and loses the cropped-glass
+    // arc that IS this path.
+    'snow-globe-world': { 'black-forest-labs/flux-1.1-pro': 100 },
+  },
+  mediumByPath: { 'snow-globe-world': 'snow_globe_diorama' },
+  promptPrefixByMedium: {
+    // The whole look rides this string: there is no dream_mediums row and no
+    // mediumStyles entry, matching how it worked on ToyBot. The 9/9 glass spec is the
+    // cropped arc across the top corners — do not trim it.
+    snow_globe_diorama:
+      'extreme close-up shot through the thick curved glass wall of a snow globe, the bright wet glass arcing across the top corners of the picture and running off its edges, the whole tiny world inside filling the rest of the frame edge to edge, deep focus front to back with edge-to-edge sharpness so its own far distance and its own lit windows and its own road all stay readable, fine specks suspended in the water in front of it, hand-painted plaster and resin miniature with visible brush-marks, warm practical light raking in from one side through the water, tactile painted-miniature and wet-glass texture',
+  },
+  vibesByPath: {
+    'snow-globe-world': ['cinematic', 'epic', 'nostalgic', 'whimsical', 'shimmer'],
+  },
+
   chaos: {
     enabled: true,
     skipPaths: [
+      'snow-globe-world',
       // Halloween seasonal candidates (promoted from AlphaBot 2026-09-07) —
       // protect the curated MVP composition; matches AlphaBot QA config.
       'tiny-halloween-village',
@@ -164,6 +193,7 @@ module.exports = {
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
     skipPaths: [
+      'snow-globe-world',
       // Halloween seasonal candidates (promoted from AlphaBot 2026-09-07) —
       // protect the curated MVP composition; matches AlphaBot QA config.
       'tiny-halloween-village',
@@ -174,6 +204,9 @@ module.exports = {
   },
   sensoryAnchors: {
     enabled: true,
+    // this path's palette and light are its own; a rolled key light fights the single
+    // raking source the glass spec depends on
+    skipPaths: ['snow-globe-world'],
     requiredChannels: ['lightcolor'],
     pathContext: {
       diorama: 'scene',

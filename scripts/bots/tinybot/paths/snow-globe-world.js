@@ -34,10 +34,10 @@
  *    front of the glass allowed to go soft.
  */
 
-const globeWorlds = require('../seeds/toybot_snow_globe_worlds.json');
-const globeWeather = require('../seeds/toybot_snow_globe_weather.json');
-const globeVessel = require('../seeds/toybot_snow_globe_vessel.json');
-const globeMoments = require('../seeds/toybot_snow_globe_moments.json');
+const globeWorlds = require('../seeds/tinybot_snow_globe_worlds.json');
+const globeWeather = require('../seeds/tinybot_snow_globe_weather.json');
+const globeVessel = require('../seeds/tinybot_snow_globe_vessel.json');
+const globeMoments = require('../seeds/tinybot_snow_globe_moments.json');
 
 // HAND-AUTHORED, never generated (see decision 1 above). All six are the same shot — the camera
 // against the glass, the world filling the frame — varied only in where it stands and what the
