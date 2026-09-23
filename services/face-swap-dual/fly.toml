@@ -17,7 +17,15 @@ primary_region = 'iad'
   # cold-start that blew the swap deadline budget → "Face swap timed out" on
   # every dual-cast render until daytime traffic warmed it again (2026-06-15).
   # auto_start still spins up EXTRA machines under load; this just floors it at 1.
-  auto_stop_machines = 'stop'
+  #
+  # BOTH MACHINES ALWAYS WARM (2026-09-23, NIGHTLY_ROBUSTNESS_PLAN.md item 6). Nightly runs every hour (each time
+  # zone at its local 4am), and the second machine stopped a few minutes after going idle, so a Create couple
+  # during a nightly swap (the swap capacity gate's reserved interactive slot) or the second swap of a burst paid
+  # the cold start inside its deadline. auto_stop 'off' keeps every machine running; applied live to both
+  # machines with `fly machine update <id> --autostop=off` (no deploy), recorded here so a deploy keeps it.
+  # Rollback: `fly machine update 0807dd5f9e1198 --autostop=stop -a dreambot-face-swap-dual` (and set this
+  # line back to 'stop').
+  auto_stop_machines = 'off'
   auto_start_machines = true
   min_machines_running = 1
   processes = ['app']

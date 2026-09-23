@@ -1,6 +1,6 @@
 # Nightly robustness: couples fail when the swap service is busy
 
-Status: items 1, 2, 3 + 7 LIVE (2026-09-23, migrations 549, 550, 551); items 4-6 open. Kevin: "we anticipate eventually getting hundreds of users all
+Status: items 1, 2, 3, 6 + 7 LIVE (2026-09-23, migrations 549, 550, 551 + Fly machines warm); items 4, 5 and 6b open. Kevin: "we anticipate eventually getting hundreds of users all
 generating their nightly dream at once … can we look into the way the nightly dreams are generated for all
 users during the nightly run and see if we can make it more robust and not so damn flakey?"
 
@@ -134,3 +134,24 @@ mechanism, and `check-dream-queue.js` already excludes future-dated rows from "s
 - Verified live after applying: dry run and a real run both clean (11 due users, all already enqueued today →
   `skipped_dedup`, nothing inserted); the script reads 30 / 60 from `engine_config`.
 - Rollback (instant, no deploy): `UPDATE engine_config SET nightly_enqueue_spacing_s = 0 WHERE id = 1;`
+
+## Live (2026-09-23 ~21:14 UTC, no deploy): item 6, both Fly swap machines always warm
+
+Before: machine `48e7551f069358` stayed warm (`min_machines_running = 1`) and `0807dd5f9e1198` was stopped by the
+Fly proxy a few minutes after going idle, then cold-started on the next request that needed it. Nightly runs every
+hour (each time zone at its local 4am), so the second swap of any overlap, or a Create couple taking the gate's
+reserved interactive slot during a nightly swap, paid that cold start inside its deadline.
+
+- Both machines: `fly machine update <id> --autostop=off` (config only, same image, no rebuild).
+  `services/face-swap-dual/fly.toml` now says `auto_stop_machines = 'off'` so a future `fly deploy` keeps it.
+- Gotchas hit doing it: (a) turning auto-stop off on only the standby is not enough, because the proxy may then
+  stop the OTHER machine down to `min_machines_running = 1`; (b) the proxy stopped the standby 2 s after the
+  update restarted it (it had not picked up the new setting yet), so it needed a `fly machine start`.
+- Verified: both machines still `started` 8+ minutes after the change with no stop event (before, the idle one
+  was stopped within minutes).
+- Cost: performance-1x 2 GB is $32.19/month at Fly's list price when running 24/7; the standby already ran part
+  of each day, so the added cost is below that.
+- Not done in this pass (item 6b): the edge/Fly budget drift (Fly restarts its own clock on receipt, so the
+  swap-model fallbacks cannot fit). That is a Fly service code change plus an image deploy.
+- Rollback: `fly machine update 0807dd5f9e1198 --autostop=stop -a dreambot-face-swap-dual` (and set
+  `auto_stop_machines` back to `'stop'` in fly.toml).

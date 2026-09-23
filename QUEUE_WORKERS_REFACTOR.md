@@ -252,7 +252,7 @@ One UUID is `dream_queue.id == dream_jobs.id == job_id == sparkle ledger referen
 The HEAVY cap is the **Fly.io `face-swap-dual` service capacity**, not Supabase. Tested: heavy=10 → all dual swaps succeed; heavy=15 → `dual cast face swap exhausted (face-swap-dual@fly)` under combined load. To support more concurrent interactive dual dreams: **scale the Fly.io service FIRST, then raise `dream_queue_max_concurrent_heavy`.** Beyond the cap, jobs queue + drain (never fail) — concurrency is bounded, throughput/total-users is not. Nightly is `weight='heavy'` (the column default) but non-interactive, so a multi-hour overnight drain is invisible.
 
 **RUNBOOK — scaling the Fly heavy ceiling (do this BEFORE raising the cap):**
-`services/face-swap-dual/fly.toml` is currently effectively **one machine** (`min_machines_running=1`, no explicit count, no `[http_service.concurrency]`). The app is stateless (each swap is independent), so it scales horizontally cleanly. Steps, from `services/face-swap-dual/`:
+`services/face-swap-dual/fly.toml` runs **two performance-1x 2GB machines, both always warm** (`auto_stop_machines = 'off'` since 2026-09-23, NIGHTLY_ROBUSTNESS_PLAN.md item 6) with `[http_service.concurrency]` soft 1 / hard 2, and swaps are admitted by the DB swap capacity gate (`engine_config.fly_dual_swap_slots`, migration 549): raise that slot count together with the machine count. The app is stateless (each swap is independent), so it scales horizontally cleanly. Steps, from `services/face-swap-dual/`:
 
 1. `fly scale count 2` (or 3) — pins N machines. Verify: `fly machines list`.
 2. Re-run `node scripts/loadtest-dual-swap.js` (or `loadtest-mixed.js --heavy N`) at the new intended concurrency to confirm no `face-swap-dual@fly` exhaustion / no 546.
