@@ -210,11 +210,18 @@ function accepts(t) {
       arr.forEach((nt, k) => {
         if (slice[k] && typeof nt === 'string' && accepts(nt)) { out[slice[k].i] = nt; ok++; }
       });
+      // NOTE: do NOT accumulate `ok` here. A batch can run twice, and a partial
+      // second attempt re-writes entries the first already counted, so summing
+      // attempt totals over-counts — it reported "rewritten 304, left as-is -104"
+      // on a 200-entry pool. The true figure is counted once at the end by
+      // diffing `out` against the originals.
       rewritten += ok;
       console.log(`  batch ${b / BATCH + 1}: ${ok}/${slice.length} accepted`);
       if (ok === slice.length) break;
     }
   }
+  // Count DISTINCT entries that actually changed, not attempt totals.
+  rewritten = out.reduce((n, t, i) => n + (String(t) !== String(entries[i]) ? 1 : 0), 0);
   kept = entries.length - rewritten;
 
   const after = poolStats(out);
