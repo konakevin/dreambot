@@ -180,13 +180,42 @@ Vary the concrete objects and the vantage across your ${'${n}'} entries. Two ent
 JSON array of ${'${n}'} ${p.shape === 'tagged' ? 'objects' : 'strings'}. No preamble, no numbering, no commentary.`;
 }
 
+/**
+ * Group buckets by destination FILE, because two buckets writing the same file concurrently lose
+ * each other's work. generatePool does read-modify-write with no locking, so when three buckets
+ * targeted yumbot_meal_types_scenes at once they each read 204, each appended 25, and each wrote
+ * 229 — the last writer won and 75 entries vanished. Worse, every one of them REPORTED success,
+ * because each measured before/after around its own write.
+ *
+ * So: groups run in parallel, buckets inside a group run strictly in sequence.
+ */
+function groupByFile(items) {
+  const g = new Map();
+  for (const p of items) {
+    const k = `${p.bot}/${p.pool}`;
+    if (!g.has(k)) g.set(k, []);
+    g.get(k).push(p);
+  }
+  return [...g.values()];
+}
+
 (async () => {
   const results = [];
-  let i = 0;
+  const groups = groupByFile(plan);
+  const shared = groups.filter((g) => g.length > 1);
+  if (shared.length) {
+    console.log(
+      `\n${shared.length} pool(s) receive more than one bucket; those run SEQUENTIALLY to avoid ` +
+        `clobbering:\n` +
+        shared.map((g) => `  ${g[0].bot}/${g[0].pool}: ${g.map((x) => `"${x.bucket}"`).join(', ')}`).join('\n')
+    );
+  }
+  console.log('');
+
+  let gi = 0;
   const CONCURRENCY = 3; // throttle rule
-  const workers = Array.from({ length: Math.min(CONCURRENCY, plan.length) }, async () => {
-    while (i < plan.length) {
-      const p = plan[i++];
+  const runGroup = async (group) => {
+    for (const p of group) {
       const before = (readPool(p.bot, p.pool) || []).length;
       const tmpl = metaPromptFor(p);
       try {
@@ -202,19 +231,34 @@ JSON array of ${'${n}'} ${p.shape === 'tagged' ? 'objects' : 'strings'}. No prea
         console.log(`  XX ${p.bot}/${p.pool} "${p.bucket}": ${String(e.message).slice(0, 120)}`);
         continue;
       }
-      const after = (readPool(p.bot, p.pool) || []).length;
-      results.push({ ...p, before, after });
-      console.log(`  ${after > before ? 'ok' : '!!'} ${p.bot}/${p.pool} "${p.bucket}": ${before} -> ${after}`);
+      // VERIFY by re-reading, and for a tagged pool by counting the tag itself. A growth check
+      // alone reported success on all three clobbered yumbot buckets.
+      const now = readPool(p.bot, p.pool) || [];
+      const after = now.length;
+      const tagCount =
+        p.shape === 'tagged'
+          ? now.filter((e) => e && typeof e === 'object' && (e.tags || []).includes(p.tag)).length
+          : null;
+      const landed = p.shape === 'tagged' ? tagCount > 0 : after > before;
+      results.push({ ...p, before, after, tagCount });
+      console.log(
+        `  ${landed ? 'ok' : '!!'} ${p.bot}/${p.pool} "${p.bucket}": ${before} -> ${after}` +
+          (tagCount === null ? '' : `  (${tagCount} tagged '${p.tag}')`)
+      );
     }
+  };
+
+  const workers = Array.from({ length: Math.min(CONCURRENCY, groups.length) }, async () => {
+    while (gi < groups.length) await runGroup(groups[gi++]);
   });
   await Promise.all(workers);
 
-  const grew = results.filter((r) => r.after > r.before);
+  const grew = results.filter((r) => (r.shape === 'tagged' ? r.tagCount > 0 : r.after > r.before));
   const gained = grew.reduce((s, r) => s + (r.after - r.before), 0);
   console.log(
     `\nDONE: ${grew.length}/${plan.length} buckets added, ${gained} entries (about $${(gained * CENTS_PER_ENTRY).toFixed(2)})`
   );
-  const stalled = results.filter((r) => r.after <= r.before);
+  const stalled = results.filter((r) => !(r.shape === 'tagged' ? r.tagCount > 0 : r.after > r.before));
   for (const r of stalled) {
     console.log(`  NO GROWTH  ${r.bot}/${r.pool} "${r.bucket}"${r.error ? `: ${r.error}` : ' — semantic ceiling or all-duplicate batch'}`);
   }
