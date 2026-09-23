@@ -1769,6 +1769,49 @@ average. Restating it as a counted hard rule with an explicit rejection clause b
 spec but left the hero pool at 66 — **because that recipe asked for four things one sentence cannot
 hold.** If a pool will not come to length, the fix is removing a requirement, not restating the number.
 
+**47. ⭐⭐⭐ THE PREMISE WORD ITSELF CAN BE THE JARGON TRAP — lesson 28's sharpest form, because the
+offender is the path's own TITLE.** BloomBot `orchid-cloud-forest`. "Cloud" is the correct, standard
+name for that ecosystem, and a layperson (and CLIP) picture **a cumulus in the sky**. So *"cloud
+standing between the trunks"* rendered a bright cumulus over a valley lookout in **4 of 6** renders —
+the path's own name importing the exact vista prior it was built to avoid.
+
+The fix: swap the **Flux-facing noun to MIST**, keeping "cloud forest" exactly once, in the prefix, as
+the ecosystem's name. Measured: hard vista **3/6 → 0/6**, mist-as-an-eye-level-volume **2/6 → 6/6**.
+
+**So run the layperson check on the path's TITLE and premise nouns first, before any pool.** The
+jargon audit is usually aimed at specialist words buried in seeds; the most expensive offender can be
+the word in the path's name, which then rides every single prompt.
+
+**48. ⭐⭐ A SPECIES NAME DOES NOT CARRY ITS COLOUR, AND AN ADJACENT COLOUR WORD DOES NOT SAVE IT.
+WRITE COLOUR FIRST, SHAPE SECOND, SPECIES LAST OR NOT AT ALL.** Same build, measured over 12 renders:
+cream stanhopea → **pink**, green cymbidium → **pink**, egg-yellow maxillaria → **pink**, white
+coelogyne → **coral**. The genus token out-voted the colour word sitting right next to it, every time,
+and pulled everything toward the category's dominant prior.
+
+Rewriting the pool **colour-first / shape-second / genus-last-or-omitted** took species-colour
+fidelity **1.5/6 → 6/6** and pink-dominant frames 5/6 → 2/6 — and the genus names then simply vanished
+from 5 of 6 emitted prompts, which is the tell that they were never doing the work. Generalises
+BloomBot's flower×colour matrix lesson to any bot naming species, breeds, minerals or materials:
+**don't tag a species with a colour; stop leading with the species.**
+
+**49. LESSON 32 CONFIRMED LIVE, WITH THE DIVIDING LINE MADE PRECISE.** Same build: the brief literally
+instructs *"Write MIST, never cloud"*, and the banned word reached **0 of 6** emitted prompts — a
+negation in the BRIEF is harmless, exactly as measured. But the same word inside a **scene-describing
+rule block** did need removing. So the test is not "is this a negation" but: **is this sentence
+describing the picture, or instructing the writer?** Instructions to the writer are safe; anything that
+describes the scene is prompt material and its nouns will ship.
+
+**50. FLAGGED, NOT ACTIONED — BloomBot's rolled LOOK register reaches ~2 of 21 renders, and the path's
+own vocabulary is why.** Pop-art silkscreen, ukiyo-e woodblock and gongbi ink-wash all came back as
+photoreal nature photography. The path's own required words — *wet, beaded, razor-sharp, mirror-bright*
+— are a PHOTOGRAPHIC register, and they out-vote a graphic look sitting at the top of the prompt. This
+is `NIGHTLY_LOOK_FIDELITY_INVESTIGATION`'s finding in a bot-path costume (there: the framing
+boilerplate said "photograph" three times after naming the look). **Worth knowing before anyone
+debugs "why don't BloomBot's looks show on this path".** Also flagged and not actioned: BloomBot's
+bot-wide look-override in `buildBrief` uses "NON-NEGOTIABLE / AUTHORITY / OVERRIDES", the exact family
+measured at ~28% Sonnet refusal on FarmBot in 2026-09. It showed 0 refusals in 21 renders here, so it
+is not firing — but it rides all 24 live paths, so it is Kevin's call rather than a path-level fix.
+
 ---
 
 ## North Star — the actual goal

@@ -220,14 +220,20 @@ Describe only what IS present — every phrase names something in the picture, n
  * ── REGISTRATION (merge into scripts/bots/bloombot/index.js) ─────────────────
  * Nothing in pools.js, shared-blocks.js, archetypes.js or archetype-templates.js
  * changes — this file loads its own six seed JSONs and inlines its own brief.
- * Every entry below is keyed by path name, so going live later is ONE move:
- * the string moves from shadowPaths[] into paths[] and nothing else changes.
+ * EVERY block below ALREADY EXISTS in index.js (the alpine + coastal siblings
+ * created them), so this merge is pure additions — no new blocks to create.
+ * Verified: all 11 edits applied to a throwaway copy of the CURRENT index.js,
+ * every anchor asserted unique, then 23 assertions run against the loaded bot
+ * (path resolves · shadow not live · chaos+polish skipped · prefix replaced not
+ * prepended · buildBrief composes · look register injected · bot-wide
+ * LUSH_HERO absent · both siblings intact · all 29 other paths still build).
+ * Measured over 21 shadow renders: R1 3.92 → R2 4.13 → R3 4.42, +3 confirmation.
  *
  *  1. pathBuilders — add:
- *       'orchid-cloud-forest': require('./paths/orchid-cloud-forest'),
+ *       'orchid-cloud-forest': require('./paths/orchid-cloud-forest'), // 2026-09-23 SHADOW
  *
- *  2. shadowPaths — add (alpine-wildflower-meadow is already staged there):
- *       shadowPaths: ['alpine-wildflower-meadow', 'orchid-cloud-forest'],
+ *  2. shadowPaths — append to the existing array:
+ *       shadowPaths: ['alpine-wildflower-meadow', 'coastal-cliff-bloom', 'orchid-cloud-forest'],
  *
  *  3. chaos.skipPaths — add:
  *       'orchid-cloud-forest',
@@ -241,18 +247,18 @@ Describe only what IS present — every phrase names something in the picture, n
  *     is THE load-bearing entry: the bot-wide BLOOM_NEUTRAL fragment sits at
  *     words 40-78 of every prompt, dead centre of the attended first third, and
  *     mandates "lush abundant blooms FILLING THE FRAME as the unmistakable
- *     hero" — a carpet-of-flowers instruction that erases the bark, the cloud
- *     and the wet green wall. The bot's own heroMandate escape hatch lives in
- *     the Sonnet brief and cannot reach a Flux-side fragment.
+ *     hero" — a carpet-of-flowers instruction that would erase the bark, the
+ *     mist and the wet green wall. The bot's own heroMandate escape hatch lives
+ *     in the Sonnet brief and cannot reach a Flux-side fragment.
  *       bloom_cloud_forest:
  *         'orchids the vivid saturated hero, growing on wet mossy bark and branches against dark wet green and standing white mist; medium and finish set by the look tokens opening this prompt',
  *
- *  6. mediumByPath — add to the existing block:
+ *  6. mediumByPath — add:
  *       'orchid-cloud-forest': 'bloom_cloud_forest',
  *
  *  7. modelByPath — add (REQUIRED, not a preference: it bypasses pickModel so
- *     the code-only medium needs no dream_mediums row). Both models kept 50/50
- *     for round 1 — see the probe note at the end of this block:
+ *     the code-only medium needs no dream_mediums row). Both models 50/50 —
+ *     see the MODEL NOTE at the end of this block:
  *       'orchid-cloud-forest': [
  *         'black-forest-labs/flux-1.1-pro-ultra',
  *         'black-forest-labs/flux-1.1-pro',
@@ -261,31 +267,31 @@ Describe only what IS present — every phrase names something in the picture, n
  *  8. promptPrefixReplaceByPath — add. The bot-wide PROMPT_PREFIX ("abundant
  *     blooms filling the entire frame edge-to-edge … any setting is only a
  *     backdrop") is the second frame-packing mandate this path must not carry.
- *     Positive-only (this string is concatenated STRAIGHT into the Flux prompt,
- *     so a negation here is the dangerous class — lesson 32):
+ *     Positive-only: this string is concatenated STRAIGHT into the Flux prompt,
+ *     so a negation here is the dangerous class (playbook lesson 32):
  *       'orchid-cloud-forest':
  *         'a wet tropical cloud-forest slope, orchids and bromeliads rooted in moss on the branches and bark of the trees, thick white mist standing in the air between the trunks at eye level, more wet mossy trunks and hanging moss filling every gap behind them',
  *
- *  9. promptSuffixByPath — add to the existing block. Keeps the bot suffix's
- *     load-bearing species-colour faithfulness and the fleet text suppressor;
- *     drops "depth built from receding layers of more blooms" (this path's depth
- *     is CLOUD, and receding layers is also a corridor generator) and "the sky
- *     clean and clear" (fatal — no sky is visible in this path at all):
+ *  9. promptSuffixByPath — add. Keeps the bot suffix's load-bearing
+ *     species-colour faithfulness and the fleet text suppressor; DROPS "depth
+ *     built from receding layers of more blooms" (this path's depth is MIST, and
+ *     receding layers is also a corridor generator) and "the sky clean and
+ *     clear" (fatal — no sky is visible in this path at all):
  *       'orchid-cloud-forest':
  *         'render every named species as that exact species in its named colour, every flower in frame growing on wet mossy bark and branches, water beaded on every leaf and petal, depth built from the mist thickening between the trunks until it swallows the far trees, the near plants crisply rendered, no text, no words, no watermarks, gallery quality',
  *
  * 10. sensoryAnchors.pathContext — add:
  *       'orchid-cloud-forest': 'scene',
  *
- * 11. sensoryAnchors.poolsByChannelByPath — add to the existing block. TWO
- *     reasons, both measured on the sibling path: (a) `requiredChannels:
- *     ['lightcolor']` fires on EVERY render and the shared scene.lightcolor pool
- *     names GARDEN species (rose, wisteria, tulip, magnolia, honeysuckle) — one
- *     would land on a cloud-forest branch every time, and it would also fight
- *     this path's own light axis for the palette; (b) the 1-2 stochastic
- *     channels fall through to sensoryAnchors' built-in DEFAULT_POOLS, which are
- *     written for a FIGURE ("the press of jewelry at the throat", "boots sinking
- *     into soft ground", "cheeks flushed warm") on a bot that bans people.
+ * 11. sensoryAnchors.poolsByChannelByPath — add. TWO reasons, both measured on
+ *     the sibling path: (a) `requiredChannels: ['lightcolor']` fires on EVERY
+ *     render and the shared scene.lightcolor pool names GARDEN species (rose,
+ *     wisteria, tulip, magnolia, honeysuckle) — one would land on a cloud-forest
+ *     branch every time, and it would also fight this path's own light axis for
+ *     the palette; (b) the 1-2 stochastic channels fall through to
+ *     sensoryAnchors' built-in DEFAULT_POOLS, which are written for a FIGURE
+ *     ("the press of jewelry at the throat", "boots sinking into soft ground")
+ *     on a bot that bans people.
  *       'orchid-cloud-forest': {
  *         lightcolor: [
  *           'light coming through one thin fern leaf so the leaf reads as lit right through',
@@ -330,13 +336,17 @@ Describe only what IS present — every phrase names something in the picture, n
  *
  * Do NOT add this path to chaos.allowSubjectChaosPaths, and do NOT add it to
  * promptPrefixByPath (that PREPENDS; item 8 REPLACES, which is what is wanted).
+ * Going live later = move the string from shadowPaths[] into paths[], changing
+ * nothing else — every entry above is keyed by path name, so the look is a
+ * faithful xerox of the approved shadow batch.
  *
- * ⚠️ MODEL NOTE FOR WHOEVER TUNES THIS NEXT (playbook lessons 6 + 33). This is a
- * CONDITION-IDENTITY path — the cloud is its identity the way night is
- * campfire-night's and firelight is volcano-forge's — and flux-1.1-pro-ultra is
- * a documented standing risk on exactly that class (it reverted both of those to
- * a golden-hour exterior). Measured over this path's 18 shadow renders the two
- * models split the other way than feared: see the per-round table in
- * BOT_SCENE_QUALITY_PLAYBOOK.md's orchid-cloud-forest section. Judge the model
- * from `uploads.model`, never the iter-bot log.
+ * ⚠️ MODEL NOTE (playbook lessons 6 + 33). This is a CONDITION-IDENTITY path —
+ * the mist is its identity the way night is campfire-night's and firelight is
+ * volcano-forge's — and flux-1.1-pro-ultra is a documented standing risk on
+ * exactly that class (it reverted both of those to a golden-hour exterior).
+ * Probed here over 21 renders and the worry did NOT materialise: ultra rendered
+ * the standing mist correctly every time, produced the two best frames of the
+ * build, and SIGNED 0 OF 21 (no lettering anywhere in the batch). So no pin is
+ * needed and both models stay 50/50. Judge the model from `uploads.model`,
+ * never from the iter-bot log.
  */
