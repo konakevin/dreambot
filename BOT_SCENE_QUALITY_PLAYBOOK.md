@@ -1374,6 +1374,35 @@ flat-frieze far bank that had made two earlier renders dull — and produced the
 charm detail, a cat peeking out of the drain hole. **The anti-text form must carry the interest; done
 right it is a set-dressing win, not a tax.**
 
+**27. ⭐⭐ DELETING A TEXT-SHAPED NOUN IS NOT ENOUGH WHEN THE *SETTING* CARRIES THE PRIOR — LESSONS 12
+AND 26 HAVE TO COMPOSE, AND HERE IS THE MEASUREMENT THAT PROVES IT.** MangaBot `onsen-evening`,
+2026-09-23, two rounds of 6 on one variable:
+
+| round | what changed | renders with gibberish lettering |
+| --- | --- | --- |
+| before | a described "board bearing one painted pine sprig and no other marking" | **2 of 6** |
+| after | that board DELETED from all three layers (20 pool clauses, the flat-panel rule, the output order), replaced with *"above the entrance there is only deep eave shadow"* | **2 of 6** |
+
+**The rate did not move.** The board simply came back uninvited, once over the entrance and once as a
+freestanding A-board at the frame edge — because a Japanese inn entrance is itself an overwhelming
+signboard prior, and removing OUR mention of it removes nothing from the model's.
+
+The error is visible in the replacement text: *"only deep eave shadow"* is an ABSENCE, and lesson 26
+already says an undescribed or "plain" surface is exactly what gets backfilled. So deleting the noun
+(lesson 12) left a **blank lintel**, which is a more inviting target than the board had been.
+
+**The composed rule: delete the sign-shaped noun AND fill the space it left with a positive object
+that is not sign-shaped.** The replacement here names the lintel as always FULL — a row of round
+paper lanterns strung across it, a hanging bough of pine, a bundle of bamboo, or snow heaped along the
+eave with icicles — and states that nothing up there is ever flat or rectangular. Same shape as
+lesson 26's quay walls, applied to the one surface a deletion had emptied.
+
+Corollary worth keeping: on those same 12 renders the NOREN carried its painted crane / pine sprig /
+wave motif correctly **11 of 12**, and lantern faces, doorway planks and eave boards were clean
+throughout. **The dividing line is not "is it flat" and not "did I say no markings" — it is whether
+the object's SHAPE is already a sign.** Cloth, a plank in a wall, a lantern's paper face and an eave
+board are safe substrates. A rectangular panel over a doorway is not, and never will be.
+
 ---
 
 ## North Star — the actual goal
