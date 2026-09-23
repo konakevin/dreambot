@@ -5,6 +5,14 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.MINIATURE_INDUSTRY, 'miniature_industry');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
+  // MANDATORY verb-led crew, 2026-09-22. The DNA below claims "the workspace feels ACTIVE --
+  // mid-project, not museum-clean" while putting NOBODY in the shop, so it rendered the exact
+  // museum shot it was trying to avoid. Same lever as tiny-vehicles/TINY_CREW.
+  const crew = [picker.pickWithRecency(pools.TINY_INDUSTRY_CREW, 'tiny_industry_crew')];
+  if (Math.random() < 0.45) {
+    crew.push(picker.pickWithRecency(pools.TINY_INDUSTRY_CREW, 'tiny_industry_crew'));
+  }
+
   return `You are a master model-maker writing MINIATURE INDUSTRY scenes for TinyBot. Dollhouse-scale workshops, factories, train yards, clockwork repair benches, construction sites. The "wow, someone BUILT that" diorama energy. Output wraps with style prefix + suffix.
 
 ${blocks.TILT_SHIFT_MINIATURE_BLOCK}
@@ -19,6 +27,11 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
 ━━━ THE MINIATURE INDUSTRY SCENE ━━━
 ${scene}
+
+━━━ THE CREW -- MANDATORY, AND THEY ARE MID-JOB ━━━
+${crew.map((c) => `• ${c}`).join('\n')}
+
+Somebody is WORKING this shop right now. Write ${crew.length === 1 ? 'this worker' : 'these workers'} into the frame doing exactly the job named, hands on the actual tool or machine. ${crew.length > 1 ? 'The two of them are on the same job (one holds while the other cuts, one pays out rope while the other hauls) rather than working in separate corners. ' : ''}They stay small and readable against the bench -- the workshop and its craftsmanship are still the hero, but the shop is OCCUPIED, never an empty museum set.
 
 ${blocks.varietyAxesSection(sharedDNA)}
 

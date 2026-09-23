@@ -3,7 +3,11 @@ const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const world = picker.pickWithRecency(pools.CONTAINED_WORLDS, 'contained_world');
-  const creature = picker.pickWithRecency(pools.TINY_CREATURES, 'tiny_creature');
+  // Bespoke verb-led dweller, 2026-09-22. This path always rolled a creature, so unlike its three
+  // siblings it was never EMPTY -- but TINY_CREATURES holds static poses ("perched on a rose
+  // petal"), so the frame had an inhabitant and still had nothing happening. The header below also
+  // said OPTIONAL, which was never true of the roll.
+  const creature = picker.pickWithRecency(pools.TINY_TERRARIUM_DWELLERS, 'tiny_terrarium_dweller');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are a surreal-miniature artist writing CONTAINED WORLD scenes for TinyBot. Terrariums + object-containers + surreal-tiny juxtapositions. Cute + clever. Never sci-fi / dark / horror. Output wraps with style prefix + suffix.
@@ -21,8 +25,10 @@ ${blocks.CONTAINED_WORLD_SURREAL_BLOCK}
 ━━━ THE CONTAINED WORLD ━━━
 ${world}
 
-━━━ OPTIONAL TINY CREATURE INHABITANT ━━━
+━━━ WHO LIVES IN THIS LITTLE WORLD -- MANDATORY, AND THEY ARE MID-ACTION ━━━
 ${creature}
+
+This container is somebody's whole world and they are using it right now. Write the dweller into the frame doing exactly what they're doing, touching the actual part of the container named -- the glass, the cork, the moss slope, the pebble shore. They stay small and readable: the CONTAINED WORLD is still the hero, and their scale against it is what sells how big that little world feels.
 
 ${blocks.varietyAxesSection(sharedDNA)}
 

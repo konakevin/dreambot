@@ -49,12 +49,22 @@ than more of the same. The full reasoning is in section 1.
 | ---------- | ------------------------------------------------------------------------------------------------------------ |
 | `7b834ac4` | Phase 0 audit tooling (3 scripts), this tracker, ToyBot `wooden-toy-land` deactivation, BrickBot IP reversal |
 | `990d1d86` | The duplicate purge: 5,164 entries removed from 225 pools                                                    |
+| `effef784` | Stage A: `lib/seedDupeLint.js` + the CI gate in `npm run check` + 13 jest tests                              |
+| `ed4597dc` | Stage B: narrowed six over-broad defect families (they were flagging correct entries)                        |
+| `bd1b71aa` | Stage B: rewrote 911 known-bad seed entries                                                                  |
+| `78ab6900` | Stage B2 PILOT (Kevin approved): TinyBot `pastel-village` mandatory verb-led cast + wiring-audit bugfix      |
 
-- **Step 0 is 3 of 5 done.** The three audit scripts exist and have been run. Still open: wire the dupe
-  scanner into `package.json` `check`, and write its jest test. See section 3.
-- **Step 1a (duplicate purge) is DONE.** See section 2b.
-- **Steps 1b, 2a, 2b, 2c and 3 are NOT started.** Zero seed entries have been generated or rewritten.
-- Spend so far: **$0**. Everything completed to date was measurement and deletion.
+- **Step 0 is DONE.** All four audit scripts exist, the dupe scanner is wired into `npm run check`, and
+  `__tests__/lib/seedDupeLint.test.ts` locks the load-bearing rule (same description + different tags is
+  NOT a duplicate).
+- **Step 1a (duplicate purge) is DONE.** 7,909 entries total. Recurrence is now impossible: the gate
+  fails the commit.
+- **Stage B (defect sweep) is DONE** except the `text_prior` family, which is mid-run.
+- **Stage B2 (TinyBot story-beat rework) — the lever is PROVEN and approved.** Kevin graded the
+  `pastel-village` batch: *"these are much better and more interesting, so keep going"* (2026-09-22).
+  Rolled to the three remaining paths the same day. See section 2c.
+- **Stage B3 (low-variety pools) is DONE, and 2 of the 4 shortlisted pools needed NOTHING.** See 2d.
+- **Steps 1b, 2a, 2b and 2c are NOT started.**
 
 ### 0.4 Decisions Kevin has already made (treat as settled)
 
@@ -326,6 +336,86 @@ blood-moon, a line of dewdrops) and need narrowing before use. Validated, action
   render on 4 bots, because they are hand-authored rather than generated.
 - **~$246, add step 1b.** Tops the 177 clean wired pools up toward 200.
 - **~$385, add steps 2b and 2c.** The actual creative expansion, gated on Kevin's review rounds.
+
+---
+
+## 2c. Stage B2 RESULT: the empty-room defect, and the lever that fixes it (2026-09-22)
+
+**Kevin's grade on the pilot:** *"these are much better and more interesting, so keep going."*
+
+Four TinyBot paths rendered beautiful, well-dressed, EMPTY frames. The cause was not the scene pools --
+it was written into the paths themselves:
+
+| Path                 | What the path said                                                                           | Cast before        |
+| -------------------- | -------------------------------------------------------------------------------------------- | ------------------ |
+| `pastel-village`     | "the architecture is the hero; the world dissolves into pink-pastel bokeh around it", plus a FAILURE CONDITION enforcing the blur | optional, 55%      |
+| `tiny-cozy`          | "Lived-in quality. Viewer wants to shrink down and live there"                                | NONE               |
+| `miniature-industry` | "The workspace feels ACTIVE -- mid-project, not museum-clean"                                 | NONE               |
+| `contained-worlds`   | header read "OPTIONAL TINY CREATURE INHABITANT"                                              | always, but STATIC |
+
+Two of them stated the goal ("lived-in", "ACTIVE, not museum-clean") and then put nobody in the frame,
+so they rendered the exact museum shot they were trying to avoid. `contained-worlds` was the subtler
+case: it always had an inhabitant, but `TINY_CREATURES` holds static poses ("perched on a rose petal",
+"dozing on a sunflower"), so the frame had a creature and still had nothing happening in it.
+
+**THE LEVER (this is the reusable part).** One mandatory, verb-led, path-bespoke cast:
+
+1. A new pool per path -- never shared (`TINY_VILLAGE_FOLK`, `TINY_COZY_DWELLERS`,
+   `TINY_INDUSTRY_CREW`, `TINY_TERRARIUM_DWELLERS`). Village folk hang laundry, crew run machines,
+   dwellers live in a jar. The proven original is `TINY_CREW` on `tiny-vehicles`.
+2. Every entry OPENS WITH THE CRITTER then an ACTIVE VERB. Static poses are banned in the recipe.
+3. Every entry names the piece of the SET it is touching -- the bakery window, the chalk line, the cork,
+   the armchair. This is what anchors the cast INTO the scene instead of floating in front of it.
+4. Mandatory, never a probability. A second one rolls at 40-45%, and when two roll the prompt tells them
+   to share the moment rather than stand in separate corners.
+5. The cast stays SMALL and explicitly not the hero. The building / room / workshop / container is still
+   the hero. Say so, or Flux promotes the critter to a foreground mascot.
+
+**One variable per round.** The pastel/bokeh identity was left completely alone even though it reads as
+the cause -- the only concession was exempting the villagers from the blur, which the lever needs to work
+at all. Do not bundle a palette change with a cast change.
+
+**Known residue, not caused by the lever:** `miniature-industry` scene rolls do not always read as
+industrial (one came back as a snowbank, vibe=ancient + medium=claymation). That is the SCENE pool and the
+variety axes, a separate axis from the cast. `pastel-village` is the only one of the four with an explicit
+"the palette OVERRIDES the variety axes" guard; the other three have none.
+
+**Open taste question for Kevin:** gnomes and pixies are in these cast pools (inherited from the proven
+`TINY_CREW`, which lists "Fairy / gnome / pixie"), and flux renders them human-faced, which brushes the
+path's own `NO_HUMANS_BLOCK`. Left as-is because it is house-consistent and pre-existing, but it is worth
+a yes/no.
+
+---
+
+## 2d. Stage B3 RESULT: 2 of the 4 "low-variety" pools needed nothing (2026-09-22)
+
+The saturation scanner flags 301 pools at >=20% same-idea. `audit-seed-variety.js` shortlisted 4 as
+REVIEW. **Two of those four were fine, and finding that out cost nothing while fixing them would have
+cost money and damaged good content.** This is the third time in this project that an automated
+"sameness" signal over-called; the scanner's own header already warns about it.
+
+| Pool                                          | Verdict      | Why                                                                                                                    |
+| --------------------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `bloombot_..._hummingbird_cast` (153)         | **FINE**     | 100% name a midground bird, 64% have 3+ birds at named depths, 97% mid-flight, 79% wing motion-blur. Delivers its declared contract. |
+| `yumbot/kawaii_night_augment` (200)           | **FINE**     | 112 distinct sky openings and 20 distinct worlds. Real variety under a repeated sentence frame.                          |
+| `faebot_flower_fairy_weather` (200)           | BACKFILLED   | A weather axis with **0% sun-shafts, 0% storm, 0% rainbow**, and 64% drifting petals (which are not weather).           |
+| `faebot_forest_fairy_scene_foreground_anchor` (200) | BACKFILLED | Good botanical spread (19-28% each) but **0% fae-made, 1% water, 1% creature**. All plants and rocks, nothing built, wet or alive. |
+
+**The measurement trap that produced the wrong answer first.** My initial histogram used exclusive
+buckets with a `break` on first match, so anything hitting an early bucket was never tested against the
+rest -- "front-and-center" matched 100% of the hummingbird entries and the loop never checked whether
+those same entries also said "hovering" (99%) or "mid-flight" (97%). **Count registers INDEPENDENTLY.**
+An entry can and should hit several.
+
+**The fix shape: ADD, do not delete.** Both FaeBot pools grew 200 -> 260 with the missing registers
+named explicitly in the recipe. Nothing was deleted, so no working entry was put at risk, petals fall
+from 64% to ~49% by dilution alone, and revert is dropping the tail.
+
+**Deliberately NOT done, flagged for its own round:** every entry in both pools says "painted" -- an
+average of **4.2 times per 23-word entry** in the weather pool (max 8), 2.3 in the anchor pool. The path
+prefix already establishes painted-fantasy, so this is textbook stacked-intensifier cruft. But
+de-stuffing changes how every live FaeBot render looks, which is a SECOND variable and needs its own
+shadow round. New entries use "painted" once or twice, naturally.
 
 ---
 

@@ -58,6 +58,12 @@ module.exports = {
   // pastel-village's MANDATORY verb-led villagers (2026-09-22) — see gen-village-folk.js for why
   // TINY_CREATURES could not be reused here: its entries are static poses, not actions.
   TINY_VILLAGE_FOLK: load('tiny_village_folk'),
+  // Bespoke verb-led casts for the three other paths that rendered empty rooms (2026-09-22).
+  // One per path, never shared: village folk hang laundry, crew run machines, dwellers live in a
+  // jar. See each gen-seeds/tinybot/gen-*.js header for that path's specific diagnosis.
+  TINY_INDUSTRY_CREW: load('tiny_industry_crew'),
+  TINY_COZY_DWELLERS: load('tiny_cozy_dwellers'),
+  TINY_TERRARIUM_DWELLERS: load('tiny_terrarium_dwellers'),
   // Stage N (SHADOW) — festival/village scene paths, each SCENE + cute critter
   // CAST (verb-led, cute-only allow-list). Scene = the layered constructed
   // world; cast = warm life dropped in ~75%/~35%.
