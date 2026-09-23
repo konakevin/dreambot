@@ -342,6 +342,42 @@ the template owned the palette) — both were the shared template, not the pool.
 parent's register will quietly pull the clone back toward the parent. When cloning, ask of each
 inherited axis: *was this written for a world my new biome actually has?*
 
+## ⚙️ AUTONOMOUS RUN-TO-COMPLETION PLAN (Kevin away 2026-09-23, "continue through to the end")
+
+Kevin is away for a long while and asked for all remaining paths finished, merged and graded, for
+review together on his return. 20 of 35 are built. This is the dispatch order so the run survives a
+context compaction — if you are resuming, check each bot's `shadowPaths` in code for ground truth
+(the tracker rows are updated per merge), then continue from the first wave whose paths are absent.
+
+**Discipline held for every wave, unchanged:**
+- 3 concurrent agents, never more. The cap is the DB-connection-headroom rule, and 3 agents rendering
+  simultaneously is exactly at it.
+- Each agent: shadow posts only, MVP-25 pools, ≤3 rounds, one variable per round, never touches
+  `index.js` / `pools.js` / `shared-blocks.js` / either `.md`, and reports merge lines for me.
+- I merge centrally, verify with a load check, update this tracker, and commit per wave.
+- Every brief carries the MOTTO, the bot's own measured model pins, and the lessons that apply to that
+  path's specific traps (text-shaped surfaces, the jargon trap, corridor generators, no detail
+  exemptions, output-order placement).
+
+**Wave 4 (in flight):** BloomBot `alpine-wildflower-meadow` · SteamBot `rooftop-telegraph` ·
+FaeBot `star-charting`
+
+**Wave 5:** BloomBot `coastal-cliff-bloom` · BloomBot `orchid-cloud-forest` · PixelBot `castle-town-gate`
+**Wave 6:** FaeBot `autumn-seed-gathering` · FaeBot `honey-harvest` · PixelBot `observatory-tower`
+**Wave 7:** FarmBot `sheep-shearing-day` · FarmBot `hay-baling-summer` · MangaBot `game-center-arcade`
+**Wave 8:** BrickBot `archaeology-dig` · DinoBot `tidal-flat-tracks` · ToyBot `sand-toy-beachworks`
+
+Waves are grouped so same-bot paths run together (shared audit, and I can fence them against each
+other — `lambing-season` was already fenced against `sheep-shearing-day` for exactly this reason).
+
+**Open items that stay Kevin's call and must NOT be actioned autonomously:**
+1. FarmBot's shared `FARMBOT_COZY_NEUTRAL` fragment — 273 words, starting at word 4 of every prompt,
+   pushing all scene content past the attended region on 35 live paths. One constant, one file, and
+   the largest measured quality lever in the run.
+2. The fleet-wide `no text, no watermarks` suffix — measured inconclusive at 8 renders per arm.
+3. Un-capping `farmbot-halloween-costume-parade` to 3 humans and un-reordering
+   `barn-animal-shelter-interior`, both now unnecessary workarounds for the fixed truncation bug.
+
 ## BloomBot prep — the overlap audit, done before dispatch (2026-09-23)
 
 BloomBot is the only bot in the plan with NOTHING built yet, and it is also the one where the three
