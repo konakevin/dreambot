@@ -1568,6 +1568,23 @@ landscape, because naming a cliff licenses the whole cliff system. Purging the b
 strengthening the mandate, which is the BrickBot camera-pool precedent again: **on a framing failure,
 audit the pool as a SET and delete the offending class rather than adding words.**
 
+
+> **⚠️ AND A CORRECTED DIAGNOSIS ON THAT BLOCKER, worth keeping as a method note.** The obvious read of
+> a safety-classifier failure on a path with an adult female figure is "the body description is too
+> physical, soften it". I read all 25 entries before touching them and **every one is fully clothed
+> with zero revealing content.** The words that a sweep flags are false positives of a kind that will
+> recur on any wardrobe-heavy pool: `breasted` is "double-**breasted** jerkin", `chestnut` is hair
+> colour, `waisted` is "short-**waisted**" proportion, `hip` is where an object hangs ("a flat stone
+> hanging at his hip"), and `bodice` is a covering garment worn under a coat. "skin" appears in 25 of
+> 25 only because every entry states a skin TONE, which is standard fleet practice on an appearance
+> axis.
+>
+> Softening the pool would have been cargo-culting, and it also contradicts the build's own evidence
+> (rewording the clothing clause did not change the failure rate). **When a classifier rejects a
+> prompt, do not assume the most socially obvious cause — read the text, and prefer the experiment
+> that can distinguish a MODEL fact from a CONTENT fact.** Here that experiment is one variable: run
+> the same model on an unrelated path on the same bot.
+
 **36. THE POSITION-COLOUR-COUNT LAW — information shown without a single character, 0 text in 26
 renders on the fleet's highest text-risk subject.** A star chart is a diagram covered in writing, and
 lesson 23 says even the standard "one small painted picture" move invents a signboard when its
