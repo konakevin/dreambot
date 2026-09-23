@@ -191,7 +191,7 @@ Should you place any figure here at all, that figure is covered — sunk to the 
 2. THICK STEAM IS THE HERO MATERIAL — banks of white steam standing over the whole surface of the water, rolling over the rim and climbing to veil the far side. Never a thin wisp. The pool owns 40-60% of the frame, in deep focus front to back.
 3. SOMEWHERE WORTH TRAVELLING TO, in saturated committed colour, a warm light source set against the cold blue of the evening. A plain pool at dusk is a failure.
 4. EVERYONE IN THE BATH IS COVERED. Whoever is in frame — whether the scene below names them or not — is either sunk in the water to the shoulders with only head and shoulders above the surface, or wrapped in a white cotton towel, or dressed in a cotton robe with a sash. One covering each, named plainly. Never describe a body. This is a warm wholesome family scene, and steam is the warm air over hot water, never a veil over anyone.
-5. EVERY FLAT PANEL IS PLAIN OR CARRIES ONE SMALL PAINTED PICTURE — the board above the entrance, the entry curtain, the round lantern faces, the plank by the doorway, the eave boards, the fan's paper face, the buckets, the trays and the towels. The WALL to either side of the doorway is bare smooth timber and plaster, left empty. Whichever panel you leave undescribed is the one that comes back wrong, so describe them all. A picture is only a sprig, leaf, circle, wave, moon, mountain outline, pine or crane.
+5. EVERY FLAT PANEL IS PLAIN OR CARRIES ONE SMALL PAINTED PICTURE — the entry curtain, the round lantern faces, the plank by the doorway, the eave boards, the fan's paper face, the buckets, the trays and the towels. Above the entrance there is only deep eave shadow and the roof's own timber. The WALL to either side of the doorway is bare smooth timber and plaster, left empty. Whichever panel you leave undescribed is the one that comes back wrong, so describe them all. A picture is only a sprig, leaf, circle, wave, moon, mountain outline, pine or crane.
 6. IF THE SEASON DOES NOT SUIT THE PLACE, KEEP THE PLACE and write the air as the plain still evening air there instead.
 
 ★━━━ 1. THE BATH (the hero) ━━━
@@ -225,7 +225,7 @@ Write ONE line of comma-separated phrases, ONE phrase per bracket below, in exac
 [the pool itself — its mass, rim and material — and the place it sits in],
 [THICK BANKS OF STEAM standing over the water and rolling over the rim, and both colours the light brings, on the surfaces they land on],
 [the inn further back and turned, its warm lit windows],
-[the board above its entrance, its entry curtain, its lantern faces, its doorway plank and its eave boards — every one of them plain and smooth, or carrying one small painted picture and nothing else — and the bare empty smooth wall to either side of the doorway],
+[its entry curtain, its lantern faces, its doorway plank and its eave boards — every one of them plain and smooth, or carrying one small painted picture and nothing else — with only deep eave shadow above the entrance, and the bare empty smooth wall to either side of the doorway],
 [the small hand-made things at the rim, their faces and sides plain and unmarked],
 [the air and the season],${wildlife ? '\n[the small animal],' : ''}${
     bather

@@ -1324,6 +1324,23 @@ charm detail implying a substrate makes the room supply that substrate), one lev
 that held **19 of 20**: **THE GOODS LAW** — identify a stall by its CARGO, piled so it shapes the
 boat's whole silhouette, and delete the symbol from the template, the output order and every seed that
 carried it. **A pictorial marking is only safe where the thing it sits on is certain to be in frame.**
+> **CONFIRMED INDEPENDENTLY ON A SECOND BOT, WITH A RATE (2026-09-23).** MangaBot `onsen-evening`
+> spent a whole round on a "signage lever" and the graded result splits exactly along this line. Its
+> spec put one painted picture on each flat panel, and the panels divided into two classes:
+> - **cloth and non-sign surfaces: clean.** The noren rendered its painted pine sprig / white crane /
+>   wave motif correctly **6 of 6**, and lantern faces, doorway planks and eave boards were clean too
+>   (matching this bot's earlier 9/9 measurement on exactly those surfaces).
+> - **the SIGN-SHAPED BOARD: 2 of 6 came back with gibberish lettering**, one a prominent
+>   kanji-style board over the entrance — against a pool clause that explicitly said *"carrying one
+>   painted pine sprig and no other marking"*.
+>
+> So the dividing line is not "is it flat" or "did I say no markings", it is **is this object's SHAPE
+> already a sign**. A board over a doorway is a signboard; cloth, a plank in a wall, a lantern's paper
+> face and an eave board are not. Fix applied: the board deleted from all three layers it lived in (20
+> pool clauses, the template's flat-panel rule, and the required output order), its motifs moved onto
+> the noren / plank / lantern. **Do not try to word a signboard safely. Delete the noun and move the
+> motif to a surface whose shape is not a sign.**
+
 
 **24. THE CROSSWISE LAW BEATS A CANAL/ROAD CORRIDOR — and a BRIDGE is its own corridor generator.**
 Completes lesson 17. The fix that took corridors 2/5 → 0/5 and held **0 of 20** after: *"the canal
