@@ -57,7 +57,25 @@ function gated(picker, pools, slot, axisKey, p) {
 
 // ─── wiring derived from a SCENE_PATHS map { key: builder } ───
 const mediumByPath = (m) => Object.fromEntries(Object.keys(m).map((k) => [k, SCENE_MEDIUM]));
-const modelByPath = (m) => Object.fromEntries(Object.keys(m).map((k) => [k, SCENE_MODELS]));
+/**
+ * Derive `modelByPath` for the scene paths, honouring a path's OWN declared pin.
+ *
+ * This used to be `Object.keys(m).map(k => [k, SCENE_MODELS])` — it threw the
+ * builder away and hard-assigned all five models, so a path that self-declares
+ * `module.exports.models` rendered correctly under the QA wrapper (which does
+ * honour it) and then SILENTLY LOST THE PIN the moment it was merged. That is
+ * the worst shape of divergence: it works in testing and regresses in
+ * production, with nothing failing.
+ *
+ * It matters on this bot specifically because flux-dev and flux-1.1-pro-ultra
+ * are excluded here, measured independently on volcano-forge, ice-cavern,
+ * campfire-night, floating-market-canal and castle-town-gate: they return
+ * smooth paintings with no pixel structure, and ultra stamps a gibberish
+ * signature. An explicit `modelByPath` entry in index.js still overrides this,
+ * since it is spread first.
+ */
+const modelByPath = (m) =>
+  Object.fromEntries(Object.entries(m).map(([k, b]) => [k, b.models || SCENE_MODELS]));
 const vibesByPath = (m) =>
   Object.fromEntries(Object.entries(m).map(([k, b]) => [k, b.vibes || ['nostalgic', 'enchanted']]));
 
