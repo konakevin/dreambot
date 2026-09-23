@@ -91,8 +91,8 @@ Then the rest, grouped by bot to reuse each bot's audit.
 | --- | --- | --- | --- | --- | --- |
 | 1 | DinoBot | courtship-display | 4 | **PASS ~4.6, AWAITING GRADE** | bespoke arena pool fixed the lone-animal miss structurally |
 | 2 | ToyBot | puppet-theatre | 3 | **PASS ~4.7, AWAITING GRADE** | prefix reorder fixed the empty stage; positive crowd-out killed the text prior |
-| 3 | PixelBot | volcano-forge | - | not started | |
-| 4 | FaeBot | mushroom-apothecary | - | not started | |
+| 3 | PixelBot | volcano-forge | 3+1 | **PASS ~4.7, AWAITING GRADE** | agent built; ultra pinned OUT (renders exteriors on interior prompts); text repair validated |
+| 4 | FaeBot | mushroom-apothecary | 3+2 | validating wall-text fix | best render 5.0; amber cast fixed path-scoped |
 | 5 | BloomBot | alpine-wildflower-meadow | - | not started | |
 | 6 | BloomBot | coastal-cliff-bloom | - | not started | |
 | 7 | BloomBot | orchid-cloud-forest | - | not started | |

@@ -35,6 +35,7 @@ const SCENE_PATHS = {
   'pixel-shoreline': require('./paths/pixel-shoreline'), // batch 3 (agent) + orchestrator R4, PASS 4.62
   'pixel-skyward': require('./paths/pixel-skyward'), // batch 3 (agent), PASS R2 4.64
   'pixel-ruins': require('./paths/pixel-ruins'), // batch 4 (agent) + orchestrator R3, CLOSE 4.48 — Kevin's decision
+  'volcano-forge': require('./paths/volcano-forge'), // batch 5 (agent), 3 rounds — R1 PASS 4.50; R2 four clean renders avg 4.75
 };
 
 const pathBuilders = {
@@ -90,6 +91,15 @@ module.exports = {
   // Per-path model pins land here when a specific path needs a specific model.
   modelByPath: {
     ...scene.modelByPath(SCENE_PATHS),
+    // volcano-forge only: flux-1.1-pro-ultra rendered an EXTERIOR golden-hour vista with a
+    // gibberish sign on an interior prompt (the same failure class as pixel-campfire-night), and
+    // flux-dev dropped the named machinery and rendered a "small, far off" figure at hero scale.
+    // The firelit INTERIOR is this path's whole identity, so it runs on the flux-2 family.
+    'volcano-forge': {
+      'black-forest-labs/flux-2-pro': 1,
+      'black-forest-labs/flux-2-max': 1,
+      'black-forest-labs/flux-2-flex': 1,
+    },
     // pixel-campfire-night only: flux-1.1-pro-ultra rendered a golden-hour SUNSET on an
     // aurora-and-stars night prompt and stamped a fake copyright mark on it (2026-09-19).
     // Night is this path's whole identity, so it runs on the four models that held it.
@@ -163,7 +173,7 @@ module.exports = {
   // cozy-farming-life-sim: pulled from rotation 2026-09-19 for a rework (cozy-cute pixel
   // farm, FarmBot-in-pixels). Kept renderable + hidden here until the rework is approved.
   // The scene paths went live 2026-09-19; only the pulled farm path stays parked here.
-  shadowPaths: ['cozy-farming-life-sim'],
+  shadowPaths: ['cozy-farming-life-sim', 'volcano-forge'],
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.

@@ -9161,6 +9161,209 @@ VARIETY (~25): a hanging fern-frond; a cluster of glowing toadstools; a draped c
     ],
     instructions: `Each entry is ONE WATER OR SPECIAL FEATURE, 20-40 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific feature type, (b) position, (c) painterly detail. NO dwelling / lived-in / garden / wildlife / lighting / weather / forest / pathway. NO modern. NO grave vocabulary. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
   },
+
+  // ════════════════════════════════════════════════════════
+  // MUSHROOM-APOTHECARY PATH (2026-09-22). FaeBot's FIRST
+  // INTERIOR register — the inside of a working fae remedy-shop
+  // hollowed out of a giant mushroom. The ROOM is the hero.
+  //
+  // Three laws are baked into EVERY recipe below because the
+  // pool dominates the brief (playbook #1 principle):
+  //   1. MARKING LAW — every label/tag is PICTORIAL or BLANK.
+  //      Flux renders gibberish lettering; an apothecary is a
+  //      label-magnet, so the entries themselves must never
+  //      offer a text-bearing surface.
+  //   2. CONTINUITY LAW — the window view is written as part of
+  //      the SAME unbroken frame (outside light falls back onto
+  //      the sill), never as a second zone. Naming "split" or
+  //      "panel" would seed them (negation leak), so the pool
+  //      describes the correct composition positively instead.
+  //   3. ONE-ANIMAL-AXIS LAW — creatures live ONLY in the
+  //      inhabitant axis (two axes that can both supply an
+  //      animal will render both).
+  // Also: positive-only entries, asymmetric massing (the
+  // fae-cottage silhouette-collapse + the cathedral-nave law),
+  // no-actor object states (the implied-human-subject trap),
+  // and no laboratory/chemistry vocabulary (modern-prior nouns).
+  // ════════════════════════════════════════════════════════
+
+  faebot_mushroom_apothecary_room: {
+    format: 'simple',
+    theme: `FAEBOT MUSHROOM-APOTHECARY ROOM — the INTERIOR of a working fae apothecary hollowed out inside a giant mushroom. This is the HERO of the picture: the room itself. Each entry 35-55 words describing ONE such interior — its curved organic architecture, its shelving, its counter, its way up to a loft, ONE window opening, and the vantage the painting is taken from.
+
+THE BAR — every entry reads as a warm, lived-in, densely stocked little shop a viewer aches to step into. Curved walls of pale pleated mushroom gill-flesh and honey-toned mushroom-timber; shelves bent to follow the curve; a worn counter; a ladder, plank stair or rope-ladder up to a loft or gallery; ONE round or oval opening in the wall giving onto the forest. Crowded, crooked, loved, warm.
+
+SHAPE-VARIETY LAW (load-bearing) — name the room's MASSING and PLAN explicitly so no two entries collapse to the same shape: a broad low cap-chamber with a domed gill ceiling; a tall narrow stalk-shaft with a spiral stair winding the wall; a two-level room with a loft gallery on one flank; a bell-shaped chamber pinched toward the top; a long bowed room under a leaning cap; a snug corner nook tucked beneath the gill-vault; a wide bay hollowed into the side of the stalk; a stepped split-level with the counter on the lower floor; a round chamber with a deep shelf-alcove cut into one wall; a low broad room with the ceiling dipping close over the counter.
+
+ASYMMETRY LAW — every interior is IRREGULAR: one flank taller than the other, shelf-bays of uneven height and depth, the stair or ladder set off to one side, the counter turned three-quarters to the view so one end recedes into the picture. Shelves curve and wander with the wall, crowding into crooked tiers of different depths, never in straight even matched lines and never mirrored on both sides.
+
+VANTAGE LAW — close each entry by naming where the VIEW sits, never a viewer's body or posture: seen from just inside the doorway; seen from the far end of the counter looking down its length; seen from the foot of the ladder looking up past the loft rail; seen from a low corner with the shelf-wall rising overhead; seen from the counter's end with the opening off to one side.
+
+THE WONDER LAW — the architecture itself is quietly impossible and delightful, and every entry names ONE architectural marvel: gill-flesh walls that glow faintly from within like a lit lampshade; shelves that curve up and around the wall in one continuous impossible spiral into the loft; a stair of bracket-fungus steps growing straight out of the wall; a shelf-bay hollowed into a single vast gill; a loft floor of woven root that you can see the lamplight through; a section of wall gone translucent so the stock behind it glows through; a counter grown in one piece out of the floor; a ceiling that has sprouted small mushrooms of its own along the beams; a ladder of living stems still in leaf; a well of warm light dropping all the way down the stalk from a cap-window far above.
+
+THE CHARM LAW — one clever detail per entry: a shelf built around a root that came through the wall, a step worn into a dish, a knot-hole used as a cubby-hole, a cap-shaped niche just big enough for one jar, a stool tucked under the counter, a little hatch in the loft floor.
+
+MATERIAL LAW — everything is grown or fae-made: mushroom gill-flesh, mushroom-timber, bark, woven willow, birch-bark, beeswax, stoneware, hand-blown glass, hand-forged dark iron, twine, dried rush matting. Timeless fae craft, centuries before our own world.
+
+Write only what IS in the room. This is a herbalist's shop, never a laboratory or a chemistry bench. Do NOT use the words laboratory, lab, beaker, test tube, flask-rack, microscope, pharmacy, chemist, clinic, sign, signboard, label, writing, lettering, inscription, ledger, book, page, chart, poster, menu. No people, no animals and no birds in this axis. No colonnade, nave, cathedral, ranked rows or symmetry. No collapse, ruin, cobwebs or abandonment — the shop is open and in use. This axis owns the ARCHITECTURE only: do not describe light, colour or time of day (another axis owns those), and never describe light as a blade, bar, column, pillar, ribbon or coin. Phrase every entry POSITIVELY — describe what the room IS, never what it is not (no "not", "no", "without" or "never" anywhere in an entry).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE mushroom-apothecary interior in 35-55 words. MANDATORY, in this order: (a) the room's named massing/plan, (b) its curving crowded shelving plus the counter, (c) its way up to a loft or gallery, (d) ONE window opening, (e) the vantage the painting is taken from. Positive description only — describe what IS there. No text-bearing surfaces, no people, no animals. Output a NUMBERED list, one entry per line, no internal newlines.
+
+EXAMPLES (3):
+1. A broad low cap-chamber under a domed ceiling of pale pleated gill-flesh, shelf-bays of uneven height curving around the wall, a scarred mushroom-timber counter turned three-quarters away, a rope-ladder climbing to a loft gallery on the left flank, one oval opening cut low beside it, seen from just inside the doorway.
+2. A tall narrow stalk-shaft with a spiral stair winding the inner wall, willow-woven shelves crowding upward with it in crooked tiers, a small round counter wedged at the bottom, a slatted loft floor overhead with twine strung along its rail, one high round opening throwing light down the shaft, seen from the foot of the stair looking up.
+3. A stepped split-level room under a leaning cap, the counter on the lower floor with a worn stoneware basin at its far end, shelves deepening and shallowing along the higher wall, three plank steps and a short ladder to a loft nook on the right, one wide oval opening off to one side, seen from the counter's end looking down its length.`,
+  },
+
+  faebot_mushroom_apothecary_wares: {
+    format: 'simple',
+    theme: `FAEBOT MUSHROOM-APOTHECARY SHELF STOCK — the dense wall of MAGICAL remedy-ware crowding the shelves of a fae apothecary inside a giant mushroom. Each entry 30-50 words describing ONE shelf-wall's worth of stock.
+
+THE BAR — this shelf is the reason a viewer wants to be let in and allowed to browse. Density PLUS WONDER. Dozens of small unmatched vessels crowded two and three deep, and what is inside them is visibly IMPOSSIBLE and beautiful: it glows, it drifts, it moves, it holds weather or a season or a tiny living thing. SATURATED JEWEL COLOUR lit from within — emerald, sapphire, amethyst, ruby, gold, turquoise, rose — against warm lamplight. A shelf of plain brown crockery is a FAILED entry.
+
+THE WONDER LAW (load-bearing) — every entry names at least TWO vessels whose contents are frankly magical, described concretely enough to paint. Draw on these and invent beyond them: a bottle holding its own small thunderstorm with a live fork of lightning inside; a jar of captured fireflies serving as the shelf's lamp; a phial where a tiny perfect tree has grown and turned to autumn; seeds hanging motionless in mid-air inside their glass; bottled dawn, bottled sunset, bottled moonlight, a bottled sea-storm; a jar of slow gold spores falling inside it like snow; a green flame burning underwater in a stoppered flask; a potion separated into seven bright bands; a bottle of snowflakes that never land; a phial where one bright little fish swims; a decanter whose liquid pours upward; a jar holding a single note of birdsong visible as a bright ripple; a cork straining against something eager; a bottle of night sky with real stars in it; a syrup that glows brighter the darker the room gets; a flask where a rose opens and closes; a jar of held breath with mist turning slowly; a bottle of will-o-wisps clustered at the shoulder; a phial of pure colour with no liquid at all; a jar of coiled green lightning; a stoppered bottle holding one tiny full moon; a phial where warm rain falls forever on a thimble of moss; an hourglass-shaped bottle whose sand is glowing pollen; a jar in which a seedling sprouts, flowers and seeds again in a loop; a bell-jar of drifting luminous jellyfish-caps.
+
+THE CHARM LAW — every entry carries ONE small clever detail the eye finds on second look: a stopper carved as a curled leaf, a jar once broken and mended along its cracks with gold, a bottle that has frosted the shelf beneath it, a phial too warm to shelve so it stands in a saucer of water, a jar whose glow lights its neighbour, a vessel with a tiny hinged shutter to dim it, a bottle weighted down under a stone so it will not drift off the shelf.
+
+MARKING LAW (never break it) — every marking is PICTORIAL or BLANK. A label carries one small painted picture and nothing else: a painted sprig, leaf, berry cluster, moon, flame, drop, spiral, bee, star or crescent. Otherwise the vessel is wax-sealed, twine-tied with a dried sprig tucked under the string, ringed with dyed thread, tagged with a small blank scrap of birch-bark, or left entirely plain. Describe ONLY the painted picture, the wax, the sprig, the thread, the blank tag or the plain surface. Shelf edges and the counter front are plain smooth unmarked timber.
+
+VESSEL VARIETY — hand-blown glass phials, squat stoneware pots, corked bottles of green and amber glass, waxed paper twists, beeswax tins, woven-willow boxes, snail-shell cups, birch-bark cylinders, acorn-cup measures, stoppered gourds, hooped firkins, pinch-bowls, a bell-jar, a long-necked decanter.
+
+Write only what IS on the shelf, phrased positively. Do NOT use the words label writing, lettering, script, letters, words, handwriting, inscription, engraved name, name-tag, price, ledger, sign, signboard, poster, chart, book or page. Never a laboratory, beaker or test tube. No people; an animal appears only as one tiny creature sealed INSIDE a vessel as a wonder. No dusty, empty or abandoned shelves.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE crowded shelf-wall in 30-50 words. MANDATORY — (a) three or more different vessel kinds crowded together, (b) at least TWO frankly magical contents described concretely, in saturated jewel colour, (c) ONE clever charm detail, (d) markings that are only a small painted picture, wax, a tied sprig, dyed thread, a blank scrap or a plain surface. Output a NUMBERED list, one entry per line, no internal newlines.
+
+EXAMPLES (3):
+1. Hand-blown phials crowded three deep beside squat stoneware pots, one phial holding its own small thunderstorm with a live violet fork of lightning, another a tiny tree gone full autumn-gold, every stopper sealed in red wax with a small painted sprig, and one jar frosted so hard it has whitened the plain timber beneath it.
+2. A bell-jar of drifting luminous blue jellyfish-caps surrounded by corked emerald bottles and woven-willow boxes, one bottle pouring its amber syrup gently upward against the cork, another glowing brighter as the room darkens, a tied heather sprig on each box, the nearest jar's green light falling across its neighbour's blank bark tag.
+3. Squat sapphire-glazed pots and birch-bark cylinders wedged around a jar of captured fireflies lighting the whole bay gold, beside a phial where warm rain falls forever on a thimble of moss, wax-sealed and thread-ringed, one small bottle weighted under a river stone so it will not drift off the shelf.`,
+  },
+
+  faebot_mushroom_apothecary_remedy_work: {
+    format: 'simple',
+    theme: `FAEBOT MUSHROOM-APOTHECARY REMEDY WORK — the MAGICAL work IN PROGRESS on and around the counter of a fae apothecary, rendered as OBJECT STATES so the picture tells a story without anybody in it. Each entry 30-50 words.
+
+NO-ACTOR LAW (load-bearing) — describe the OBJECTS and what they are doing or how they were left, never a person doing something. Write "a mortar left mid-grind, the pestle standing in a paste that is throwing off slow green sparks" and never "she grinds the herbs". No hands, no arms, no fingers, no figure, no "someone". The work shows in the objects.
+
+THE BAR — one clear MAGICAL event the eye reads in two seconds, plus one or two supporting details. The magic is visible and beautiful and slightly funny or clever — this is a fae shop, not a chemistry bench. A merely tidy herbal chore is a FAILED entry.
+
+THE WONDER LAW — the work in progress is always visibly enchanted. Draw on these and invent beyond them: a copper still dripping liquid LIGHT into a thimble-flask, each drop flaring as it lands; a mortar mid-grind whose paste throws slow green sparks up the pestle; a twig-and-acorn balance weighing a single moonbeam against a pinch of gold spores, the beam winning; an open jar with a slow spiral of luminous spores climbing out of it and turning under the ceiling; a poultice half-spread on linen that is knitting its own edges closed; a funnel of folded birch-bark pouring starlight into a bottle already full of it; a bottle half-decanted into three cups, each cup a different colour from the same liquid; a tincture settling in a tall glass with its sediment falling UPWARD in a slow bright cloud; a kettle steaming a single perfect ring that hangs in the air unbroken; a paper twist half-folded around seeds that keep lifting off the counter; a small press screwed part-way down with green light beading at its lip; a stoppered jar cooling in a basin where the water has frozen in rings around it; a candle-flame bent sideways over a bowl and held there; a rose-petal salve in a pot that has sprouted three new buds along its rim; a phial being filled by a thread of rain coming in through the wall and finding it; a mortar of crushed berries whose stain is slowly spreading into the shape of a leaf; a sieve of seed-heads whose chaff is drifting up instead of down; a crucible cooling with a bead of resin inside it that holds a tiny frozen flame; a cup of steeping tea with the leaf circling on its own against the water; a bundle of stems tied and hung that is already budding again; a bowl of water with a root soaking that has grown a thread of blossom along the rim; a honey jar tipped over with a slow golden thread running to the counter edge and stopping there in a neat hovering bead; two wands of glass laid across a bowl with a spark passing slowly between them; a drying tray where half the petals have turned luminous and glow pale gold as they lie.
+
+THE CHARM LAW — every entry carries ONE small clever detail: a saucer set underneath to catch what drips, a stone laid on a lid to hold something down, a cork already chewed, a tally of pebbles counting the drops, a folded leaf used as a bookmark in a stack of paper twists, a thimble set out ready.
+
+Write only what IS present, phrased positively. No hands, no arms, no people, no animals. Do NOT use the words laboratory, lab, beaker, test tube, microscope, syringe, pipette, thermometer, recipe card, label writing, lettering, inscription, quill, ledger, page or book. Never describe light as coins, jewels, gems, a bar, a blade, a column or a ribbon — light is a glow, a patch, a streak or a soft shaft (a named object renders as that literal object). No chemistry — this is fae herbal magic.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE magical work-in-progress as an OBJECT STATE in 30-50 words — the enchanted thing itself, one or two supporting details, and ONE clever charm detail. Never a person, never hands. Output a NUMBERED list, one entry per line, no internal newlines.
+
+EXAMPLES (3):
+1. A copper still dripping liquid light into a waiting thimble-flask, each drop flaring white as it lands and fading to gold, a saucer set underneath to catch what misses, and a little tally of river pebbles counting the drops along the counter edge.
+2. An open jar with a slow spiral of luminous blue spores climbing out of it and turning gently under the ceiling, the lid laid aside with a stone on it, and a second empty jar standing ready with its cork already chewed.
+3. A twig-and-acorn balance weighing one thin moonbeam against a pinch of gold spores, the beam winning and the pan tipped, a thimble set out ready beneath it and a folded leaf marking a place in the stack of paper twists.`,
+  },
+
+  faebot_mushroom_apothecary_hanging_stock: {
+    format: 'simple',
+    theme: `FAEBOT MUSHROOM-APOTHECARY HANGING STOCK — the dense, half-enchanted dressing overhead: everything strung, hung and drying from the ceiling, beams and rafters of a fae apothecary inside a giant mushroom. Each entry 25-45 words describing ONE overhead layer.
+
+THE BAR — the ceiling is as full as the shelves AND as magical. It presses down into the top of the frame, and at least part of it is doing something a real ceiling could not. Plain brown drying herbs alone is a FAILED entry — give the overhead layer colour, light or motion.
+
+THE WONDER LAW — draw on these and invent beyond them: strings of dried caps that each hold a small ember of light; a drying rack whose petals have gone translucent and glow like stained glass; bundles hanging upside-down that are budding again in the warmth; a hoop hung with little caged wisps bobbing at different heights; seed-pods on strings drifting slowly sideways against the draught; a braid of silver bulbs each with a bright spark at its heart; a net of luminous spore-sacs breathing faintly brighter and dimmer; garlands of berries that glow red from within like coals; a rack of feathers that catch and hold the lamplight; strips of bark curling and uncurling gently on their line; a swag of flowers frozen in mid-fall on their stems; a cluster of beeswax bags glowing softly with what is inside them; a row of small baskets with one lifting a hand's breadth higher than its hook; a mat of purple-flowered stems turning slowly like a mobile; a long chain of dried moon-shaped caps thinning to slivers at one end; bundles wrapped in birch-bark cones with a thread of gold light leaking from each tip; a hanging tray of drying moss with tiny mushrooms sprouting along its rim as it dries; a rope of knotted roots with one knot glowing where it was tied; thistle-heads holding a faint blue static so they lean toward each other; a chain of apple-rings gone amber-transparent like lenses; sheaves of grasses whose seed-heads spark when the draught moves them; a trailing vine still carrying a few shrivelled leaves and one fresh impossible bloom.
+
+THE CHARM LAW — one clever detail per entry: one hook left bare, a bundle tied with a mismatched ribbon, a cap fallen and caught in the net below, a basket that has drifted out of line, a knot done up crooked, a tray propped on a stick to keep it level.
+
+Write only what IS hanging there, phrased positively. No people, no animals, no birds. Anything tagged carries only a small painted picture or a blank scrap of bark. No cobwebs, no rot, no abandonment. Never describe a matched pair flanking anything and never use the word flanking; hang things at uneven heights and in odd groupings. No "not", "no", "without" or "never" anywhere in an entry.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE overhead layer in 25-45 words, hung at uneven heights, with at least one visibly enchanted quality and ONE clever charm detail. Output a NUMBERED list, one entry per line, no internal newlines.
+
+EXAMPLES (3):
+1. Strings of dried caps threaded across the ceiling in long loose swags, each cap holding a small ember of orange light so the whole ceiling reads like a low constellation, one cap fallen and caught in the net below.
+2. A willow drying rack slung on four twisted cords above the counter, its trays of petals gone translucent and glowing like stained glass in rose and violet, the rack propped level on a short stick at one corner.
+3. A hoop of twine hung with little caged wisps bobbing at mismatched heights, their pale green light swinging across the bundles beside them, one hook on the hoop left bare where something was taken down.`,
+  },
+
+  faebot_mushroom_apothecary_light_event: {
+    format: 'simple',
+    theme: `FAEBOT MUSHROOM-APOTHECARY LIGHT EVENT — the MONEY SHOT of this path: the one thing the light is doing inside the shop, plus the palette and time of day that light brings. Each entry 25-45 words.
+
+THE BAR — every entry names (a) the light's source, (b) the exact SURFACE it lands on and what that surface does with it, (c) the palette of the whole room under it. Name the LIT SURFACE, always — light is a glow, a patch, a pool, a soft shaft, a streak on a thing. The interior always keeps a warm lit core somewhere; the rolled light event decides everything else.
+
+TIME-OF-DAY SPREAD — vary widely across entries: bright green-gold forest morning; hazy noon; low honey afternoon; rose-and-amber sunset; deep blue dusk with the lamps carrying the room; full night lit only by lamp, brazier and glowing jars; grey rain-light with the lamps lit early; pearl-pale mist-morning; the first cold clear light after rain.
+
+VARIETY MANDATE — about 22 distinct events: a low shaft of green-gold morning light coming in through the opening and landing square on the counter, lighting the dust and the rim of every phial in its path; lamplight passing through a row of coloured glass bottles and laying soft pools of amber, green and rose along the counter-top; a single jar of luminous spores glowing from inside and lighting its shelf-bay from beneath; a beeswax lamp hung low over the counter so its warm circle falls on the work while the rest of the room sinks into soft brown shadow; late honey-coloured light raking sideways across the gill-flesh ceiling and picking out every pleat; the glow of a small brazier underlighting a copper still and warming the undersides of the hanging bundles; cool blue dusk filling the opening while a lamp holds the counter warm, the two colours meeting across the floor; rain-grey light flattening the opening while lamplight makes the crowded jars glow like sweets; a narrow slant of afternoon sun through a gap overhead landing on the floorboards in a soft-edged patch; light bouncing up off a pale stoneware basin and filling the shadows under the shelves; the last rose-amber of sunset laid along the top shelf alone with everything below it in deep warm dusk; morning mist-light coming in flat and pearl-pale so every colour in the room goes gentle; a cluster of glow-worm lanterns over the loft rail dropping soft green-white light down the ladder; firelight throwing the shadows of the hanging bundles up the curved wall; a shaft finding the hand-blown glass of one tall bottle and lighting a soft green patch on the wall behind it; a single candle-lamp on the counter with the whole room reduced to amber close to it and deep umber beyond; warm light leaking up through the gaps in the loft floor onto the ceiling above; noon light flooding in white and even so every colour on the shelves reads at once; a lamp set behind the crowded shelves so the jars glow and the shelf-fronts go to silhouette; the cold clear light after rain coming in sharp and washing the counter pale; low sun catching only the underside of the cap-ceiling and leaving the shelves in warm shade; a handful of drifting luminous spores glowing softly as they pass across the dark of the room.
+
+THE VIVID LAW (load-bearing) — colour is SATURATED and COMMITTED, never muted, washed out or tasteful-grey. Every entry names at least TWO distinct colours in play, and at least half the entries pit a warm light against a cool one so the room is never one flat hue of amber. Jewel colour in the glassware is always part of the effect: the light passes through the stock and throws emerald, sapphire, amethyst, ruby and gold across the room.
+
+Write only what IS present. Light is never a column, pillar, wall, bar, tower, ring, ribbon or coin, and never a metal or a coin or a jewel — it is a glow, a patch, a pool, a streak, a soft shaft. No people, no animals, no birds. No flat featureless washes — every entry has a feature the eye can find.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE light event in 25-45 words — the source, the exact lit surface and what it does with the light, then the palette of the whole room. Output a NUMBERED list, one entry per line, no internal newlines.
+
+EXAMPLES (3):
+1. A low shaft of green-gold morning light in through the opening, landing square on the counter and lighting the rim of every phial in its path, the rest of the room a warm honeyed dusk.
+2. A beeswax lamp hung low over the counter, its warm circle falling on the work below while the crowded shelves fade into soft brown shadow and the gill-flesh ceiling glows dull amber.
+3. Cool blue dusk filling the opening while a single lamp holds the counter warm, the two colours meeting across the floorboards, the jars nearest the lamp glowing gold and those nearest the opening gone slate-blue.`,
+  },
+
+  faebot_mushroom_apothecary_window_view: {
+    format: 'simple',
+    theme: `FAEBOT MUSHROOM-APOTHECARY WINDOW VIEW — what lies outside the apothecary's one opening, written as PART OF THE SAME CONTINUOUS PICTURE. Each entry 25-45 words.
+
+CONTINUITY LAW (load-bearing, never break it) — the forest is glimpsed THROUGH the opening as one unbroken painted frame, the way a painter captures a room with a view. Every entry must do three things: (a) name the opening as part of the room — its sill, its soft frame of gill-flesh, the jars standing on it, the twine strung across it, the bunch hanging beside it; (b) name the forest beyond as seen THROUGH that opening, softer and hazier and smaller in the frame than the room; (c) bring the outside light BACK IN onto something inside — the sill, the counter edge, the nearest jars, the floorboards. The room and the forest are stitched together by that returning light and by the things standing on the sill.
+
+THE WONDER LAW — this is a fae world, so roughly half the glimpses show something a viewer has never seen: a grove of other giant mushrooms standing like a village of parasols; a river running with faint light; a whole hillside of glowing caps at dusk; a waterfall falling into mist that rises back up; a sky with two moons; a drift of luminous pollen crossing the clearing like slow gold snow; a tree in blossom out of season; fireflies rising in a column from a hollow. The other half stay real, specific, beautiful woodland.
+
+THE BAR — one specific, lovely forest glimpse, never a generic green blur. Enough that the eye reads WHERE this little shop stands.
+
+VARIETY MANDATE — about 22 distinct glimpses beyond the opening: a sunlit birch understory; a fern bank dripping after rain; a mossy stream with light skipping on it; the foot of a vast root-buttressed oak; a bluebell drift under hazel; a wet dark branch carrying one cluster of red berries; a clearing full of tall foxgloves; the shoulder of another giant mushroom leaning close; a slope of autumn beech in full copper; a soft grey wall of morning mist with trunks fading into it; snow-laden spruce boughs; a hollow lane of arching bramble; a still pool holding the sky; a green-gold gap of afternoon light between two trunks; fresh rain falling through the leaves; a lantern-hung path curving away; a mushroom ring in deep moss; drifting cherry-blossom; night trunks with a faint glow of luminous moss between them; a wide fern meadow with seed-heads catching light; a dark stand of holly with light coming through it; a soft distant waterfall.
+
+Write only what IS present. The outside is always secondary, soft and smaller in the frame than the room. No people, no animals, no birds and no insects anywhere in this axis. Never compare a distant thing to a body part or to an animal (no "smaller than a finger", no "shaped like" anything) — describe its real size against a stem, a cork or a jar instead. No window frames of milled timber, no glazing bars, no shutters with hardware, no modern glass — the opening is cut straight through the living mushroom wall, its edge soft and thick, sometimes with a scrap of woven mesh or a hanging leaf across part of it.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE view through the opening in 25-45 words, and it MUST name (a) the opening as part of the room with something standing on its sill, (b) the softer forest seen through it, (c) the outside light coming back in onto something inside. One continuous picture. Output a NUMBERED list, one entry per line, no internal newlines.
+
+EXAMPLES (3):
+1. Through the oval opening cut in the living wall, a sunlit birch understory stands soft and hazy beyond, its green-gold light coming back in across the sill where three corked phials and a stoneware pot catch it.
+2. Past the crowded sill with its row of little jars and the herb bunch hanging beside the opening, a fern bank drips after rain in soft grey-green, its cool light washing the counter edge just inside.
+3. The thick soft edge of the round opening frames the foot of a vast root-buttressed oak beyond, hazed and dim, while a single warm gap of light between the roots reaches in and lies along the floorboards.`,
+  },
+
+  faebot_mushroom_apothecary_air: {
+    format: 'simple',
+    theme: `FAEBOT MUSHROOM-APOTHECARY AIR — what the AIR inside the shop is doing. Each entry 12-25 words. This axis owns the air alone: particles, steam, haze, draught, scent made visible. It never names a light source, a colour or a time of day.
+
+THE WONDER LAW — roughly half the entries are visibly magical air: luminous spores drifting through the room like slow gold snow; a fine glitter suspended and turning; motes that glow faintly where the light finds them; a thread of coloured smoke holding its shape; pollen-light settling on everything; a slow drift of tiny sparks rising from the floor.
+
+VARIETY MANDATE — about 20 distinct states: motes of fine herb-dust turning slowly in the air; a thin ribbon of steam lifting and bending off something hot; a low soft haze of drying-herb smoke gathering under the ceiling; a drift of pale spores hanging almost still; a cool draught from the opening stirring the hanging bundles; a scatter of loose petals lifting off a tray; air thick, settled and quiet with dust suspended in it; a faint plume of resin-smoke curling upward; pollen-fine grains drifting across the room; a slow swirl where warm air rises off a brazier; a clean damp draught carrying rain-air in from outside; soft flakes of dried leaf floating down; a hush of still, close, well-stocked air; tiny seed-fluff wandering the room; steam beading and running on the inside of the opening's soft edge; a wisp of bruised-leaf vapour drifting off the counter; air shivering faintly over something warm; a fine settling of dust along the top of the highest shelf; a puff of spore-dust knocked loose from a hanging bundle; the air barely moving, everything hanging exactly where it was left.
+
+Write only what IS present, phrased POSITIVELY — never use "not", "no", "without" or "never" inside an entry (write "holding thick" rather than "not yet thinning"). No colours, no light sources, no times of day, no people, no animals, no birds.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE state of the indoor air in 12-25 words. Air only — no colour, no light, no time of day. Output a NUMBERED list, one entry per line, no internal newlines.
+
+EXAMPLES (3):
+1. Motes of fine herb-dust turning slowly through the room, thickest above the counter where the work was left.
+2. A thin ribbon of steam lifting and bending off something hot, fraying before it reaches the hanging bundles.
+3. A cool draught in from the opening stirring the hung herbs so the whole ceiling sways a little.`,
+  },
+
+  faebot_mushroom_apothecary_inhabitant: {
+    format: 'simple',
+    theme: `FAEBOT MUSHROOM-APOTHECARY INHABITANT — ONE small living presence in the shop, small and quiet, never the hero. Each entry 20-40 words. Alternate: roughly half the entries are ONE PALM-SIZED WINGED FAE and half are ONE WHOLE SMALL FOREST CRITTER.
+
+THE FAE LAW (load-bearing) — a palm-sized fae in the painterly Brian Froud and Charles Vess painted-fantasy register: a FULL BEAUTIFUL FACE with real eyes and real hair, delicately pointed ears, and visible gossamer or insect wings (dragonfly-clear, luna-moth green, lacewing gold, beetle-shell iridescent, petal). Slender elegant realistic proportions. Dressed modestly and prettily in fae-craft garments that cover the body — a petal-silk bodice, a layered leaf-dress, a woven-grass wrap, a moss-velvet tunic, an apron of soft birch-bark. Vary hair colour, wing type, dress colour and posture across entries. Give the fae a quiet occupation among the stock and a place to be: perched on a jar rim, standing on the counter beside a phial as tall as her forearm, sitting on the loft rail, halfway up the ladder with a bundle, tucked into a shelf-bay among the pots. The fae proves the scale of the shop.
+
+THE CRITTER LAW — ONE whole, complete, recognisable, adorable real animal, full head and body, calm and at home: a dormouse, a wren, a robin, a hedgehog, a red squirrel, a toad, a snail, a bumblebee, a fat bumbling moth, a field mouse, a newt, a wood-mouse, a chaffinch, a shrew, a ladybird, a small tortoise, a folded sleeping bat, a frog. Never looming, never scary, never a disembodied part. Give it a spot: curled asleep in an empty basket, perched on the sill among the jars, drinking from a saucer, dozing in a patch of sun on the counter, sitting on the rim of a stoneware pot.
+
+Never a human. Never a bald, round-headed, white, featureless, dot-eyed or faceless being; never a body merged into wood or bark. Do NOT use the words woman, man, girl, boy, lady, person, child, young, old or elderly, and no age words at all — convey everything physically.
+
+Never give the fae or the critter anything written or readable and never a text-bearing surface — no book, no ledger, no scroll, no parchment, no note, no label with a name, no reading and no writing; a wordless occupation always (tying a sprig, filling a phial, sorting seeds, carrying a bundle). Never describe light as a bar, blade, column or ribbon — a soft patch or a warm glow. THE VIVID + CLEVER LAW — dress the fae in SATURATED jewel colour (deep rose, emerald, sapphire, marigold, violet) so she reads instantly against the warm room, and give every inhabitant ONE clever piece of business the eye discovers on second look: riding a floating seed like a raft, using a glowing jar as a reading-lamp, hauling a phial twice her size in a sling, hanging upside-down from a hook to reach a low shelf, asleep in an acorn measure, balancing a drop of light on one palm, wearing a thimble as a hat.
+
+Write only what IS present. Small, quiet and secondary — the room stays the hero.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE small inhabitant in 20-40 words — either a palm-sized winged fae with a full beautiful face, pointed ears, visible wings and covering fae-craft dress, or ONE whole recognisable little animal. Include where it is and what quiet thing it is doing. Alternate fae and critter through the list. Output a NUMBERED list, one entry per line, no internal newlines.
+
+EXAMPLES (3):
+1. A palm-sized fae perched on the rim of a wide stoneware jar, clear dragonfly wings folded back, chestnut curls pinned with a twig, a moss-green leaf-dress and a birch-bark apron, reaching into the jar for a pinch of dried petals.
+2. A dormouse curled asleep in an empty willow basket on the lower shelf, whole and round and velvet-furred, its tail tucked over its nose.
+3. A palm-sized fae halfway up the ladder with a bundle of dried stems over one shoulder, luna-moth-green wings still, silver hair in a long plait, a petal-silk bodice over layered grey skirts.`,
+  },
 };
 
 const recipe = POOL_RECIPES[POOL];

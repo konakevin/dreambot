@@ -542,6 +542,19 @@ New crowd path (Kevin: "at least half a dozen per scene, purpose-built for large
 
 Also: Sonnet echoes template bans as negations ("no fairy posed for camera") into prompts — CLIP can't negate, wasted tokens; the template's output instruction now says "describe only what IS present, never negations."
 
+## mushroom-apothecary — FaeBot's FIRST INTERIOR register, and how to beat the split-panel + label traps (2026-09-22, FaeBot — 3 rounds, R3 avg ~4.4, one 5/5 reference render)
+
+FaeBot was 100% outdoor vistas (vistas / forests / villages / courts / markets / wilds) with no interior register at all. `mushroom-apothecary` is the inside of a working fae remedy-shop hollowed out of a giant mushroom: 8 axes (room / wares / hanging_stock / remedy_work / **light_event** ★money-shot / window_view / air + `inhabitant` on a 0.5 gate), built FUNCTION-FORM and self-contained so it loads its own seed JSONs and needs zero `pools.js` / `archetypes.js` / `archetype-templates.js` edits (the ToyBot Stage-O pattern, and the right choice in a shared tree). Reusable results:
+
+1. **THE SPLIT-PANEL TRAP IS FULLY SOLVED, AND THE FIX BELONGS IN THE POOL, NOT JUST THE TEMPLATE — 0 failures in 15 renders.** An interior plus "something through a window" renders as a hard-divided two-zone image. The cure is a three-part CONTINUITY LAW written into every `window_view` entry: (a) name the opening as part of the ROOM (its sill, its soft thick edge, the jars standing on it, the twine across it), (b) name the forest as seen THROUGH it, softer and hazier and smaller in frame, (c) bring the outside light BACK IN onto something inside (the sill, the counter edge, the nearest jars, the floorboards). That returning light is what stitches the zones into one frame. Never name "split" or "panel" — naming seeds them. This law is portable to any interior-with-a-view path on any bot.
+2. **AN APOTHECARY IS A LABEL-MAGNET, AND THE SURFACE YOU FORGET TO DESCRIBE IS THE ONE THAT GETS LETTERING.** R1 put a gibberish placard on a counter FRONT — a surface no pool ever described — while every label I *had* described came out correctly pictorial. Flux's shop prior backfills a sign onto any undescribed flat panel. Two levers, both needed: a MARKING LAW in the wares pool (each label carries one small PAINTED PICTURE and nothing else — a painted sprig, leaf, berry, moon, drop, spiral — or is wax-sealed / twine-tied with a sprig / ringed in dyed thread / tagged with a blank bark scrap / left plain), AND a positive plain-surface clause in the template's required OUTPUT ORDER: "the counter front, cupboard doors and shelf edges are plain smooth unmarked timber." It has to be in the ORDER list, not in a rules block — Sonnet only writes what it is told to write, so a PICTORIAL rules block never reaches Flux (confirms the PixelBot cool-rides law). After that clause: 0 text failures in 9 renders.
+3. **"THE SHOP IS EMPTY" ECHOES INTO THE PROMPT AS A NEGATION.** A no-figure branch worded "No one is in the room, the counter is empty of figures, the doorway is empty" put the literal phrase `no figures` into 4 of 6 prompts. Reword the absent-figure branch as a POSITIVE state of the room — "the room holds only its own quiet life: the warm light, the crowded stock, and the work sitting exactly where it was set down" — and add "describe only what IS present" to the output rule. Same family as the fairy-swarm ban-echo lesson; it bites hardest on any "nobody home" path.
+4. **A LOUD LAST WORD-CAP MOVES CONTENT BACK INTO FRAME EVEN WHEN SONNET IGNORES THE NUMBER.** Emitted prompts ran 320-346 words against a 105-140 ask, and the consistently-dropped element was whatever sat mid-prompt (`hanging_stock` rendered in 0 of 6). Compressing the brief 8193 → 6015 chars and making the cap the loud LAST block only moved the output to ~260 words — but the mid-prompt content came back into the prompt with real prominence and started rendering. Don't expect compliance with the number; expect the re-ordering to pay.
+5. **THE OWNER'S WONDER BAR IS A POOL-REGISTER DECISION, NOT A TEMPLATE ONE.** R1/R2 were clean, on-brief and *sober* — a "tasteful dim brown herbalist's room", which Kevin rejected on sight. What fixed it was rewriting three content pools (wares / remedy_work / hanging_stock) around a **WONDER LAW** (every entry names two frankly magical contents, described concretely enough to paint: a bottle holding its own thunderstorm, a jar of captured fireflies used as the shelf lamp, a phial where a tiny tree has turned to autumn, seeds hanging motionless in mid-air, a sealed full moon, chaff drifting upward), a **CHARM LAW** (one clever detail per entry the eye finds on second look — a jar mended with gold, a bottle weighted under a river stone so it will not drift off the shelf, a tiny hinged shutter to dim a glow, a saucer set under a drip), and a **VIVID LAW** in the light axis (two named colours per entry, half the entries pitting a warm light against a cool one, jewel colour thrown through the glassware). Avg 3.9 → 4.4, and the best render (a sealed full moon hanging under the gill-cap above hundreds of teal-and-gold glowing bottles in impossibly curving tiers) is a genuine screenshot. **A path that is merely defect-free is not done.**
+6. **MY OWN RECIPE SANCTIONED A KNOWN LITERALIZATION — sweep your recipe text against the playbook, not just the output.** I wrote "petals turned to small bright coins of light" into the remedy_work variety mandate and got exactly the documented gold-coins render. The OceanBot law applies to the person writing the recipe as much as to Sonnet. Fixed in both the entry and the mandate, plus an explicit light-as-object ban.
+7. **RESIDUAL — a bot-wide warm-glow cast out-votes a per-render light axis.** 4 of 6 R3 renders are a single amber hue even though `light_event` now names two colours per entry. The cause is upstream of the path: `promptPrefixByMedium.painted_fantasy_novel` ends "dreamy atmospheric painted glow" and the bot-wide `PROMPT_SUFFIX` adds "dreamy dappled light" — a fixed colour cast on EVERY FaeBot prompt (the ChibiBot "warm volumetric glow overrides the time-of-day axis" law, at the bot-wide wrapper layer). The path-level lever is a short `promptPrefixByPath` entry (it PREPENDS before the medium prefix); the real fix is auditing those two bot-wide strings.
+8. **flux-1.1-pro-ultra signed 3 of 15 renders** (a faint corner scrawl) and FaeBot's picker rolled ultra 15/15 despite two allowed models — consistent with the documented "ultra signs its work" model trait. Treat as a model-selection lever (`modelByPath`), never as a prompt defect; more suffix negation would only leak the word.
+
 ## Gender-locked character paths — ship a SEPARATE male path, never one neutral template (2026-06-11)
 
 Reinforces the gender-lock rule. FaeBot's feminine dryad-portrait pool had ~14 male "Leshy" seeds; the template was hard-feminine ("render **her** … **She** is …"). A male Leshy seed in a "she" template rendered "a girl with a beard" — androgynous mush. **Fix that worked:** (1) extract the male seeds out, (2) make the feminine recipes feminine-ONLY with explicit male bans, (3) build a NEW male-locked path (`forest-elder`) with its own he/his template. Don't try to make one path serve both genders. NOTE: the male gender-lock is **load-bearing**, so that path **skips two-pass polish** — Haiku compression strips "he/his/bearded" and androgyny returns.
@@ -948,6 +961,65 @@ regex catches it. In the 33-path run, three early paths returned frames that wer
 forgettable — a magnificent EMPTY puppet stage, a lone dinosaur standing in flat monochrome sand, a
 tasteful dim apothecary. Every one passed every mechanical check. This bar is the only thing that
 fails them. See [[feedback_dreambot_motto_whimsy_delight_bar]].
+
+---
+
+## Lessons from the 33-path run (2026-09-22) — agent-found, each cost real renders
+
+**1. A TEXT PRIOR HIDES IN SYNONYMS OF "TEXT", NOT JUST "RUNE".** PixelBot volcano-forge banned
+`rune|runic` and still rendered rune-like gibberish across an anvil, its dais and the wall, from a
+charm detail reading *"an anvil ringed with softly glowing marks"*. `marks` is a text-prior synonym.
+Add to the standing sweep on every scene path: `mark|marks|marking|glyph|sigil|stamped|engraved|
+etched|inscri|script|characters|plaque|sign`. A glowing carved shape is safe ONLY in the form proven
+on pixel-ruins (15/15 clean): *"a worn pictorial relief of a carved <shape> that glows softly from
+within the iron."*
+
+**2. THE SURFACE YOU FORGET TO DESCRIBE IS THE ONE THAT GETS LETTERING.** FaeBot mushroom-apothecary's
+one text failure appeared on a counter FRONT — the single flat panel no pool described — while every
+label it DID specify came out pictorial. Corollary, and this is the load-bearing half: a PICTORIAL
+rules block never reaches Flux unless the clause sits inside the template's required OUTPUT ORDER.
+Sonnet writes only what it is told to write.
+
+**3. ON AN INTERIOR PATH THE ROLLED LOOK DECIDES WHETHER THE ROOM EXISTS.** Ultima-tile and HD-voxel
+carry an isometric-diorama prior that replaces an enclosing hall with a void or open sky, even against
+"hall seen across a corner… chimney throat overhead". Camera words do not fix it. NAMING THE ENCLOSING
+SURFACES does: *"the hall's own stone stands behind the forge and closes the frame down both sides;
+its vault closes it overhead"*, in the hero block AND in the structure block. Took 3 diorama-in-a-void
+renders to 5/5 enclosed. Same family as the "name what the foreground IS" vista lesson.
+
+**4. A HERO POOL ENTRY MUST CONTAIN THE HERO'S DEFINING MASS, AND MUST LEAD WITH IT.** Four of 25
+volcano-forge entries named a forge room with no furnace mouth, and two LED with "bellows house" —
+Sonnet duly made the bellows house the hero and dropped the furnace entirely. The first-named-noun law
+applies INSIDE a seed, not just in a prefix.
+
+**5. A RECIPE THAT LISTS THE LITERAL COLOUR WORDS GETS THEM ECHOED BACK.** A palette recipe naming its
+colours returned 25 permutations of ~6 harmonies, with CAPS titles differing just enough to defeat
+signature dedup. Name the harmony's MOOD plus a wide vocabulary menu, and add "two entries may share
+at most one colour word".
+
+**6. `flux-1.1-pro-ultra` FAILS THE SAME WAY ON ANY CONDITION-IDENTITY PATH.** campfire-night = night;
+volcano-forge = firelit interior. Both times ultra reverted to a GOLDEN-HOUR EXTERIOR and added a fake
+inscription. Treat it as a standing model exclusion for any path whose identity is a lighting
+condition — it is a model trait, not a prompt defect.
+
+**7. "THE ROOM IS EMPTY" ECHOES INTO THE PROMPT AS A LITERAL `no figures`.** It reached 4 of 6
+FaeBot prompts. CLIP cannot negate, so any "nobody home" branch must be written as a POSITIVE state
+of the room.
+
+**8. SWEEP YOUR RECIPE TEXT AGAINST THIS PLAYBOOK, NOT JUST THE GENERATED OUTPUT.** The FaeBot agent's
+own recipe sanctioned *"coins of light"* — a literalization this playbook already records as rendering
+actual gold coins. The recipe is where a defect becomes systemic.
+
+**9. A PATH THAT REUSES A LANDSCAPE POOL AS ITS STAGE INHERITS THAT POOL'S PRIORITIES.** A landscape
+pool optimises for VISTA; a scene with actors needs an ARENA — a floor and an enclosing edge. DinoBot
+courtship-display reused the paleo-landscape biome and its wide-desert rolls produced a lone animal
+stranded in flat monochrome sand. A bespoke arena pool fixed it structurally. If a behaviour or
+character path renders its subject stranded in emptiness, check the provenance of its setting axis
+before touching the template.
+
+**10. AN INTERIOR PLUS A VIEW THROUGH AN OPENING — write it as ONE camera seeing one continuous
+space** with a bright window in it, never as two zones and never as a ban on panels. Stated that way
+it produced 0 split frames in 15 FaeBot renders and 0 in 6 DinoBot den renders.
 
 ---
 

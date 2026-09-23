@@ -37,6 +37,7 @@ const pathBuilders = {
   'goblin-market-lane': require('./paths/goblin-market-lane'),
   'frost-court': require('./paths/frost-court'),
   'spirit-beasts': require('./paths/spirit-beasts'),
+  'mushroom-apothecary': require('./paths/mushroom-apothecary'), // 2026-09-22 SHADOW — FaeBot's first interior
 };
 
 module.exports = {
@@ -87,6 +88,8 @@ module.exports = {
   // multi-figure lesson: a singular opener collapses the crowd to one hero.
   // Structural anchor only, no style/content language.
   promptPrefixByPath: {
+    'mushroom-apothecary':
+      'inside a tiny crowded fae apothecary, warm lamplight against jewel-coloured glowing glass',
     'fairy-swarm':
       'a lively gathering of many tiny palm-sized fairies together in one scene, a fairy crowd mid-story',
     'goblin-market':
@@ -146,7 +149,9 @@ module.exports = {
   // every public surface. QA in isolation, grade the shadow renders, then
   // promote them into history via scripts/promote-shadow-path.js and move the
   // string into `paths[]`.
-  shadowPaths: [], // Stage F paths promoted to live rotation 2026-08-16
+  // 'mushroom-apothecary' stays here until Kevin grades it. shadowPaths[] is invisible to the
+  // hourly dispatcher; going live = move the string into paths[] and change nothing else.
+  shadowPaths: ['mushroom-apothecary'], // Stage F paths promoted to live rotation 2026-08-16
 
   // Picker on with the BOT_MODEL_TALLY 6-model lineup (2026-05-30):
   // Banana + GPT-2 + Flux 2 Pro + Flux 1.1 Pro + Flux 1.1 Pro Ultra + Flux 2 Max.
@@ -183,6 +188,7 @@ module.exports = {
     enabled: true,
     maxRetries: 2,
     paths: [
+      'mushroom-apothecary',
       'dryad-portrait',
       'forest-elder',
       'female-druid',
@@ -218,6 +224,7 @@ module.exports = {
     // forest-elder: skip polish — the male GENDER-LOCK (he/his/bearded) is the
     // load-bearing element; Haiku compression strips it and androgyny returns.
     skipPaths: [
+      'mushroom-apothecary',
       'forest-elder',
       'female-druid',
       'female-druid-adventure',
