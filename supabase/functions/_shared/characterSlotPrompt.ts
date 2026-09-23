@@ -29,6 +29,17 @@ import { resolveCastGender, genderNoun, genderLockShout, type CastGender } from 
 import { varyFemaleHair, type HairSceneRegister } from './femaleHairVariation.ts';
 import { buildSceneHook } from './sceneHook.ts';
 import { normalizeActionBeat, depronounActionBeat, validateActionBeat } from './actionSafety.ts';
+import {
+  renderOutfitPlanLines,
+  planHasUserGarment,
+  missingUserOutfit,
+  userOutfitPhrase,
+  userOutfitAllowlist,
+  allowedByUser,
+  type OutfitPlan,
+  type OutfitSide,
+  type PersonOutfitPlan,
+} from './outfitPlan.ts';
 
 // ── Public types ─────────────────────────────────────────────────────────
 
@@ -114,6 +125,13 @@ export interface CharacterSlotPipelineInput {
    *  Nightly and first-dream never set it, so with it unset every path here is
    *  byte-identical (the same contract `authorAction` documents in reverse). */
   activityWardrobe?: boolean;
+  /** CREATE OUTFIT PLAN (CREATE_OUTFIT_PLAN.md, phase 3; outfitPlan.ts): who wears which colour, silhouette
+   *  and pattern, plus anything the user asked each person to wear. It replaces the one shared palette + cut
+   *  ("SPLIT it between them", which Sonnet mirrored in 62% of production couples) with one line per
+   *  person, exempts the user's own words from PLAIN_CLOTHES, and checks Sonnet kept them: a miss is a named
+   *  violation and a retry, and a second miss has code write the user's words in.
+   *  Unset → every path here is byte-identical. A holiday costumeLock wins over it. */
+  outfitPlan?: OutfitPlan | null;
   /** Whether the location is a REAL-WORLD place (not a fantasy/imagined dream
    * world). Drives the TRAVELER wardrobe rule: on real places the cast are
    * VISITORS and must wear contemporary travel clothes, never the traditional/
@@ -863,6 +881,50 @@ ${
 `;
 }
 
+/** Cast in slot order, labelled the way the brief names them (LEFT / RIGHT, or the one person). */
+function outfitSidesFor(input: CharacterSlotPipelineInput): OutfitSide[] {
+  const labels = input.cast.length === 2 ? ['LEFT', 'RIGHT'] : ['THE PERSON'];
+  return input.cast.map((m, i) => ({
+    role: m.role,
+    label: labels[i],
+    gender: resolveCastGender(m),
+  }));
+}
+
+/** The plan is live only when there is no holiday costume lock (the lock decides the whole outfit). */
+function activeOutfitPlan(input: CharacterSlotPipelineInput): OutfitPlan | null {
+  const locked = !!input.costumeLock && input.costumeLock.length === input.cast.length;
+  return !locked && input.outfitPlan ? input.outfitPlan : null;
+}
+
+/** WARDROBE section when an outfit plan is set (phase 3). The scene sets the garment TYPE and dress level for
+ *  both people (Kevin: "two women in a formal scene and one gets a dress and the other a jacket, that's
+ *  weird"); the plan varies colour, silhouette and pattern per person; the user's own words always win. */
+function buildOutfitPlanGuidance(
+  input: CharacterSlotPipelineInput,
+  plan: OutfitPlan,
+  location: string,
+  travelerRule: string
+): string {
+  const dual = input.cast.length === 2;
+  const dress = input.activityWardrobe
+    ? `DRESS THEM FOR WHAT THEY ARE DOING${input.action ? `: "${input.action}"` : ''}. Name the real garment the activity demands, then make it beautiful: cut, materials, one signature detail. Reach for the elevated name, never the basic one (a brushed midlayer not a fleece, a quilted down gilet not a puffer vest, a cable-knit roll-neck not a sweater).`
+    : 'Tailor it to this exact place, its climate and its register, and make it STAND OUT: a signature piece, named colours and materials.';
+  const level = dual
+    ? ' The scene sets the garment TYPE and the dress level for BOTH of them (a gala: gowns or a tux; a beach: swimwear or resort wear; the slopes: snow gear), so never put one in a gown and the other in a jacket unless the plan below asks for it. Vary colour, silhouette and pattern between them, never the dress level.'
+    : '';
+  const userDressed = planHasUserGarment(plan);
+  const basics = plan.people.some((p) => !p.garment)
+    ? `\n${userDressed ? "For anyone the plan does not dress in the user's own words: " : ''}NEVER everyday basics: no hoodie, henley, t-shirt, fleece, cargo pants, joggers, sweatpants, puffer vest, generic sneakers, and never the words casual, comfortable, practical or everyday. This is a DREAM, the outfit is part of the story.`
+    : '';
+  const traveler = travelerRule
+    ? `${travelerRule}${userDressed ? ' Clothing the user asked for in the plan always wins over this rule.' : ''}`
+    : '';
+  return `WARDROBE — you are the COSTUME DESIGNER dressing ${dual ? 'both people' : 'the person'} in a film shot at "${location}". ${dress}${level}
+The plan for each person. Follow it exactly:
+${renderOutfitPlanLines(plan, outfitSidesFor(input))}${basics}${traveler}`;
+}
+
 export function buildSlotBrief(input: CharacterSlotPipelineInput): string {
   const location = input.iconicAnchor || input.userPlace || 'the location';
   const wardrobeMood = wardrobeMoodFor(input.sceneRegister ?? null);
@@ -892,31 +954,34 @@ export function buildSlotBrief(input: CharacterSlotPipelineInput): string {
     : '';
   const costumeLock =
     input.costumeLock && input.costumeLock.length === input.cast.length ? input.costumeLock : null;
-  const climateGuidance = costumeLock
-    ? `WARDROBE — HOLIDAY COSTUME LOCK: this is a costume party and each character's costume is already DECIDED. ${
-        costumeLock.length === 2
-          ? `LEFT wears EXACTLY: "${costumeLock[0]}". RIGHT wears EXACTLY: "${costumeLock[1]}".`
-          : `The character wears EXACTLY: "${costumeLock[0]}".`
-      } The exact costume text is applied by code, so write the wardrobe field(s) as a SHORT reference only (3-6 words, e.g. "the vampire countess costume") and spend your words on the scene and the action. Let the scene, mood, props and action play off the costumes — the cape catching the lantern light, the hat brim in the fog. The costume is clothing, headwear and props only; the face stays fully clear by code.`
-    : (input.wardrobeAnchor
-        ? `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: flattering, cool, and distinctive, in pieces true to the period / setting / cultural register of "${location}". One on-location inspiration to draw from: "${input.wardrobeAnchor}". Adapt it into something bold and attractive for each character — flattering silhouette, rich materials, standout details, styled hair — or invent something equally on-location and eye-catching. NEVER plain, dowdy, mundane, frumpy, drab, or merely "historically accurate" — this is a DREAM, so make the outfit sing while staying true to the setting. Avoid generic "linen shirt + chinos" defaults.`
-        : `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: tailored to this exact place, its climate and its register, and built to STAND OUT — a signature piece, a flattering silhouette, named colours and materials, styled hair. A tropical reef, an alpine village, a desert ruin, a modern city and an arctic glacier each call for a different costume. ${
-            input.activityWardrobe
-              ? // ACTIVITY-ANCHORED (Create). The sentence this replaces named an unrelated
-                // aesthetic ("retro resort glamour") and Sonnet dutifully merged it with the
-                // place, which is how a snowboarder ends up in a cravat. The activity is the
-                // honest anchor, and Create already has it from the prompt splitter.
-                //
-                // The second half is NOT decoration: PLAIN_CLOTHES hard-bans fleece, puffer
-                // vest, sweater, pullover, jeans, chinos and "practical" in a wardrobe field.
-                // Asking for functional dress without naming the designed synonyms sends
-                // Sonnet straight at those words, burns both retries and lands on the generic
-                // couture fallback — strictly worse than the bug. So the ban list stays
-                // untouched and the brief routes around it instead.
-                `DRESS THEM FOR WHAT THEY ARE DOING${input.action ? `: "${input.action}"` : ''}. Name the real garment the activity demands — a snow shell and insulated trousers, a wetsuit, riding boots, chef's whites, a ballgown — and THEN make it beautiful: cut, materials, one signature detail. Reach for the elevated name, never the basic one (a brushed midlayer not a fleece, a quilted down gilet not a puffer vest, a cable-knit roll-neck not a sweater). PALETTE for this render: ${wardrobePalette} — SPLIT it between them, each leading with a DIFFERENT colour from that range so they coordinate without matching. They are a couple on the same outing, not a matching set: never the same colour head to toe on both. CUT for this render: ${wardrobeCut} — vary the SHAPE, not just the colour, and pick a different GARMENT for each of them; most activities have several correct answers (in snow: a shell, a one-piece suit, bib-and-brace, a parka, an anorak, a gilet over a midlayer), so do not default to the most obvious one twice.`
-              : `WARDROBE REGISTER for this render: ${wardrobeMood}.`
-          } NEVER everyday basics: no hoodie, henley, t-shirt, fleece, cargo pants, joggers, sweatpants, puffer vest, generic sneakers, and never the words casual, comfortable, practical or everyday — this is a DREAM, the outfit is part of the story.`) +
-      travelerRule;
+  const outfitPlan = activeOutfitPlan(input);
+  const climateGuidance = outfitPlan
+    ? buildOutfitPlanGuidance(input, outfitPlan, location, travelerRule)
+    : costumeLock
+      ? `WARDROBE — HOLIDAY COSTUME LOCK: this is a costume party and each character's costume is already DECIDED. ${
+          costumeLock.length === 2
+            ? `LEFT wears EXACTLY: "${costumeLock[0]}". RIGHT wears EXACTLY: "${costumeLock[1]}".`
+            : `The character wears EXACTLY: "${costumeLock[0]}".`
+        } The exact costume text is applied by code, so write the wardrobe field(s) as a SHORT reference only (3-6 words, e.g. "the vampire countess costume") and spend your words on the scene and the action. Let the scene, mood, props and action play off the costumes — the cape catching the lantern light, the hat brim in the fog. The costume is clothing, headwear and props only; the face stays fully clear by code.`
+      : (input.wardrobeAnchor
+          ? `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: flattering, cool, and distinctive, in pieces true to the period / setting / cultural register of "${location}". One on-location inspiration to draw from: "${input.wardrobeAnchor}". Adapt it into something bold and attractive for each character — flattering silhouette, rich materials, standout details, styled hair — or invent something equally on-location and eye-catching. NEVER plain, dowdy, mundane, frumpy, drab, or merely "historically accurate" — this is a DREAM, so make the outfit sing while staying true to the setting. Avoid generic "linen shirt + chinos" defaults.`
+          : `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: tailored to this exact place, its climate and its register, and built to STAND OUT — a signature piece, a flattering silhouette, named colours and materials, styled hair. A tropical reef, an alpine village, a desert ruin, a modern city and an arctic glacier each call for a different costume. ${
+              input.activityWardrobe
+                ? // ACTIVITY-ANCHORED (Create). The sentence this replaces named an unrelated
+                  // aesthetic ("retro resort glamour") and Sonnet dutifully merged it with the
+                  // place, which is how a snowboarder ends up in a cravat. The activity is the
+                  // honest anchor, and Create already has it from the prompt splitter.
+                  //
+                  // The second half is NOT decoration: PLAIN_CLOTHES hard-bans fleece, puffer
+                  // vest, sweater, pullover, jeans, chinos and "practical" in a wardrobe field.
+                  // Asking for functional dress without naming the designed synonyms sends
+                  // Sonnet straight at those words, burns both retries and lands on the generic
+                  // couture fallback — strictly worse than the bug. So the ban list stays
+                  // untouched and the brief routes around it instead.
+                  `DRESS THEM FOR WHAT THEY ARE DOING${input.action ? `: "${input.action}"` : ''}. Name the real garment the activity demands — a snow shell and insulated trousers, a wetsuit, riding boots, chef's whites, a ballgown — and THEN make it beautiful: cut, materials, one signature detail. Reach for the elevated name, never the basic one (a brushed midlayer not a fleece, a quilted down gilet not a puffer vest, a cable-knit roll-neck not a sweater). PALETTE for this render: ${wardrobePalette} — SPLIT it between them, each leading with a DIFFERENT colour from that range so they coordinate without matching. They are a couple on the same outing, not a matching set: never the same colour head to toe on both. CUT for this render: ${wardrobeCut} — vary the SHAPE, not just the colour, and pick a different GARMENT for each of them; most activities have several correct answers (in snow: a shell, a one-piece suit, bib-and-brace, a parka, an anorak, a gilet over a midlayer), so do not default to the most obvious one twice.`
+                : `WARDROBE REGISTER for this render: ${wardrobeMood}.`
+            } NEVER everyday basics: no hoodie, henley, t-shirt, fleece, cargo pants, joggers, sweatpants, puffer vest, generic sneakers, and never the words casual, comfortable, practical or everyday — this is a DREAM, the outfit is part of the story.`) +
+        travelerRule;
 
   const forbiddenList = `━━━ FORBIDDEN IN ANY FIELD — your output will be rejected if you violate ━━━
 - Camera / lens / framing: close-up, wide shot, medium shot, low angle, 85mm, depth of field, fisheye
@@ -1110,8 +1175,12 @@ ${
 
 right_wardrobe (18-28 words)
   The RIGHT character — a ${right.gender}${rightBuildHint} (${right.identity}): the same standard,
-  a DIFFERENT complete outfit that pairs with LEFT's (they dressed for the same evening, not in
-  the same clothes). Same climate rules. Do NOT describe body, face, hair (locked) or pose.`
+  ${
+    outfitPlan
+      ? 'dressed by the RIGHT line of the wardrobe plan above.'
+      : `a DIFFERENT complete outfit that pairs with LEFT's (they dressed for the same evening, not in
+  the same clothes). Same climate rules.`
+  } Do NOT describe body, face, hair (locked) or pose.`
     : `left_wardrobe (8-15 words)
   Clothing worn by the LEFT character — a ${left.gender}${leftBuildHint} (${left.identity}).
   ${climateGuidance}
@@ -1119,7 +1188,11 @@ right_wardrobe (18-28 words)
 
 right_wardrobe (8-15 words)
   Clothing worn by the RIGHT character — a ${right.gender}${rightBuildHint} (${right.identity}).
-  Same climate rules and wardrobe mood as LEFT. Pick distinctive wardrobe in the chosen mood.
+  ${
+    outfitPlan
+      ? 'Follow the RIGHT line of the wardrobe plan above.'
+      : 'Same climate rules and wardrobe mood as LEFT. Pick distinctive wardrobe in the chosen mood.'
+  }
   Do NOT describe body, face, hair (locked). Do NOT describe pose.`
 }
 
@@ -1235,7 +1308,30 @@ function wardrobeFields(slots: CharacterSlots): string[] {
   if ('left_wardrobe' in slots) out.push(slots.left_wardrobe, slots.right_wardrobe);
   return out.filter((f) => !!f);
 }
-export function validateSlots(slots: CharacterSlots): string[] {
+
+/** Wardrobe field names — the keys of a per-field allowlist. */
+export type WardrobeField = 'wardrobe' | 'left_wardrobe' | 'right_wardrobe';
+/** Words the USER asked each person to wear (outfit plan): exempt from PLAIN_CLOTHES in that field, because
+ *  "me and Steph in jeans and t-shirts" is a request to honor, not a lapse to fix. Absent = no exemptions. */
+export type WardrobeAllow = Partial<Record<WardrobeField, string[]>>;
+
+function wardrobeEntries(slots: CharacterSlots): [WardrobeField, string][] {
+  const out: [WardrobeField, string][] = [];
+  if ('wardrobe' in slots) out.push(['wardrobe', slots.wardrobe]);
+  if ('left_wardrobe' in slots) {
+    out.push(['left_wardrobe', slots.left_wardrobe], ['right_wardrobe', slots.right_wardrobe]);
+  }
+  return out.filter(([, t]) => !!t);
+}
+
+/** Plain-clothes words in a wardrobe field that the user did NOT ask for. */
+function disallowedPlain(field: string, text: string, allow?: WardrobeAllow): string[] {
+  const words = text.match(new RegExp(PLAIN_CLOTHES.source, 'gi')) ?? [];
+  const mine = allow ? (allow[field as WardrobeField] ?? []) : [];
+  return words.filter((w) => !mine.length || !allowedByUser(w, mine));
+}
+
+export function validateSlots(slots: CharacterSlots, allow?: WardrobeAllow): string[] {
   const violations = new Set<string>();
   const fields: string[] = [
     slots.scene_description,
@@ -1250,16 +1346,15 @@ export function validateSlots(slots: CharacterSlots): string[] {
     }
   }
   const plain = new Set<string>();
-  for (const w of wardrobeFields(slots)) {
-    for (const m of w.match(new RegExp(PLAIN_CLOTHES.source, 'gi')) ?? [])
-      plain.add(m.toLowerCase());
+  for (const [field, w] of wardrobeEntries(slots)) {
+    for (const m of disallowedPlain(field, w, allow)) plain.add(m.toLowerCase());
   }
   if (plain.size > 0) violations.add(`plain_clothes(${Array.from(plain).join(', ')})`);
   return Array.from(violations);
 }
 /** The retry brief names the exact phrase that tripped each rule — "occlusion" alone sent Sonnet back with
  *  the same masks twice (nophoto20 #7, 2026-09-18). */
-export function describeViolations(slots: CharacterSlots): string {
+export function describeViolations(slots: CharacterSlots, allow?: WardrobeAllow): string {
   const named: Record<string, string> = {
     scene_description: slots.scene_description,
     mood: slots.mood,
@@ -1278,8 +1373,9 @@ export function describeViolations(slots: CharacterSlots): string {
       if (m) lines.push(`- ${name}: "${m[0]}" in ${field}`);
     }
     if (/wardrobe/.test(field)) {
-      const m = text.match(PLAIN_CLOTHES);
-      if (m) lines.push(`- plain_clothes: "${m[0]}" in ${field} — dress them to stand out instead`);
+      const m = disallowedPlain(field, text, allow);
+      if (m.length)
+        lines.push(`- plain_clothes: "${m[0]}" in ${field} — dress them to stand out instead`);
     }
   }
   return lines.join('\n');
@@ -1288,13 +1384,14 @@ export function describeViolations(slots: CharacterSlots): string {
  *  mask must not cost the wardrobe Sonnet wrote (the snorkel couple shipped in a fleece and a hoodie). */
 export function salvageSlots(
   parsed: CharacterSlots,
-  fallback: CharacterSlots
+  fallback: CharacterSlots,
+  allow?: WardrobeAllow
 ): { slots: CharacterSlots; replaced: string[] } {
   const replaced: string[] = [];
   const clean = (field: string, text: string, isWardrobe: boolean): string => {
     const bad =
       FORBIDDEN_PATTERNS.some(({ regex }) => regex.test(text)) ||
-      (isWardrobe && PLAIN_CLOTHES.test(text));
+      (isWardrobe && disallowedPlain(field, text, allow).length > 0);
     if (!bad) return text;
     replaced.push(field);
     return (fallback as unknown as Record<string, string>)[field] ?? '';
@@ -1335,6 +1432,23 @@ function fallbackSlots(input: CharacterSlotPipelineInput): CharacterSlots {
     mood: moodFallback,
     props: '',
   };
+}
+
+/** One wardrobe field's text, or null when the slots have no such field. */
+function wardrobeOf(slots: CharacterSlots, field: WardrobeField): string | null {
+  if (field === 'wardrobe') return 'wardrobe' in slots ? slots.wardrobe : null;
+  if (!('left_wardrobe' in slots)) return null;
+  return field === 'left_wardrobe' ? slots.left_wardrobe : slots.right_wardrobe;
+}
+
+/** Replace one wardrobe field. */
+function withWardrobe(slots: CharacterSlots, field: WardrobeField, text: string): CharacterSlots {
+  if ('left_wardrobe' in slots) {
+    if (field === 'left_wardrobe') return { ...slots, left_wardrobe: text };
+    if (field === 'right_wardrobe') return { ...slots, right_wardrobe: text };
+    return slots;
+  }
+  return field === 'wardrobe' ? { ...slots, wardrobe: text } : slots;
 }
 
 /** Overwrite the wardrobe slot(s) with the locked costume text (cast order: LEFT, RIGHT). */
@@ -1900,6 +2014,34 @@ export async function runCharacterSlotPipeline(
   const castCount = input.cast.length as 1 | 2;
   const slotBrief = buildSlotBrief(input);
   const fallbackReasons: string[] = [];
+
+  // OUTFIT PLAN (phase 3). Everything below is inert without it: no allowlist, no lock checks, no stamps.
+  const outfitPlan = activeOutfitPlan(input);
+  const outfitSides = outfitPlan ? outfitSidesFor(input) : [];
+  const fieldOf = (i: number): WardrobeField =>
+    castCount === 1 ? 'wardrobe' : i === 0 ? 'left_wardrobe' : 'right_wardrobe';
+  const personFor = (role: string): PersonOutfitPlan | null =>
+    outfitPlan ? (outfitPlan.people.find((p) => p.role === role) ?? null) : null;
+  const allow: WardrobeAllow | undefined = outfitPlan
+    ? Object.fromEntries(
+        outfitSides.map((side, i) => {
+          const person = personFor(side.role);
+          return [fieldOf(i), person ? userOutfitAllowlist(person) : []];
+        })
+      )
+    : undefined;
+  /** Sides whose wardrobe dropped what the user asked for. */
+  const lockMisses = (parsed: CharacterSlots) =>
+    outfitSides
+      .map((side, i) => {
+        const person = personFor(side.role);
+        const field = fieldOf(i);
+        const text = wardrobeOf(parsed, field);
+        const missing = person && text !== null ? missingUserOutfit(text, person) : [];
+        return { side: side.label, field, missing };
+      })
+      .filter((m) => m.missing.length > 0);
+  const missedOnce = new Set<string>();
   let slots: CharacterSlots | null = null;
   let rawResponse = '';
   let lastAttemptBrief = slotBrief;
@@ -1926,23 +2068,38 @@ export async function runCharacterSlotPipeline(
       rawResponse = sonnet.rawResponse;
       retries = attempt;
       const parsed = parseSlotsJson(sonnet.text, castCount);
-      const violations = validateSlots(parsed);
+      const misses = lockMisses(parsed);
+      for (const m of misses) missedOnce.add(m.side);
+      const violations = [
+        ...validateSlots(parsed, allow),
+        ...misses.map((m) => `outfit_lock(${m.side}:${m.missing.join('+')})`),
+      ];
       if (violations.length === 0) {
         slots = parsed;
         break;
       }
       lastParsed = parsed;
       fallbackReasons.push(`slot_violations_attempt_${attempt + 1}:${violations.join('|')}`);
-      lastAttemptBrief = `${slotBrief}\n\n━━━ YOUR PREVIOUS OUTPUT WAS REJECTED ━━━\nThese exact phrases broke the rules:\n${describeViolations(parsed)}\nRewrite the JSON without them. Keep the same fields; only the content changes. Props must never cover a face (a mask is pushed up on the forehead or held away from the face); wardrobe must be a costume-designer outfit, never everyday basics.`;
+      const lockLines = misses
+        .map(
+          (m) =>
+            `\n- outfit_lock: ${m.field} dropped ${m.missing.join(', ')}, which the user asked for. Keep the user's exact words in ${m.field}.`
+        )
+        .join('');
+      lastAttemptBrief = `${slotBrief}\n\n━━━ YOUR PREVIOUS OUTPUT WAS REJECTED ━━━\nThese exact phrases broke the rules:\n${describeViolations(parsed, allow)}${lockLines}\nRewrite the JSON without them. Keep the same fields; only the content changes. Props must never cover a face (a mask is pushed up on the forehead or held away from the face); wardrobe must be a costume-designer outfit, never everyday basics.`;
     } catch (err) {
       fallbackReasons.push(`slot_parse_error_attempt_${attempt + 1}:${(err as Error).message}`);
       lastAttemptBrief = `${slotBrief}\n\n━━━ RETRY ━━━\nYour previous output was not parseable JSON. Output ONLY a single valid JSON object — no markdown fences, no commentary, no extra text. Start with { and end with }.`;
     }
   }
 
+  // Only the outfit lock failed (every rule passed): keep Sonnet's slots; the lock is written in below.
+  if (!slots && outfitPlan && lastParsed && validateSlots(lastParsed, allow).length === 0) {
+    slots = lastParsed;
+  }
   if (!slots) {
     if (lastParsed) {
-      const salvaged = salvageSlots(lastParsed, fallbackSlots(input));
+      const salvaged = salvageSlots(lastParsed, fallbackSlots(input), allow);
       slots = salvaged.slots;
       fallbackReasons.push(
         `character_slot_fallback_used:partial(${salvaged.replaced.join(',') || 'none'})`
@@ -1958,6 +2115,46 @@ export async function runCharacterSlotPipeline(
   if (input.costumeLock && input.costumeLock.length === castCount) {
     slots = applyCostumeLock(slots, input.costumeLock);
     fallbackReasons.push('costume_lock');
+  }
+
+  // OUTFIT PLAN: stamp the rolls, then guarantee the user's own words. A side that still dropped them after
+  // the retries (or came from a fallback) is written from the user's request by code: plain, but exactly
+  // what they asked for.
+  if (outfitPlan) {
+    fallbackReasons.push(
+      `outfit_colour:${outfitPlan.colourMode}`,
+      `outfit_cut:${outfitPlan.cutMode}`
+    );
+    fallbackReasons.push(
+      `outfit_pattern:${outfitSides
+        .map((side) => {
+          const p = personFor(side.role);
+          return !p || !p.pattern
+            ? 'solid'
+            : p.patternSource === 'user'
+              ? 'user'
+              : p.patternAsTrim
+                ? 'trim'
+                : 'roll';
+        })
+        .join('|')}`
+    );
+    outfitSides.forEach((side, i) => {
+      const person = personFor(side.role);
+      const phrase = person ? userOutfitPhrase(person) : null;
+      if (!person || !phrase || !slots) return;
+      const field = fieldOf(i);
+      const text = wardrobeOf(slots, field);
+      if (text === null) return;
+      if (missingUserOutfit(text, person).length) {
+        slots = withWardrobe(slots, field, phrase);
+        fallbackReasons.push(`outfit_lock:${side.label}:code_applied`);
+      } else {
+        fallbackReasons.push(
+          `outfit_lock:${side.label}:${missedOnce.has(side.label) ? 'retried' : 'kept'}`
+        );
+      }
+    });
   }
 
   // Scene-first action (SCENE_FIRST_ACTION_PLAN.md): the authored beat ships ONLY if it passes

@@ -353,3 +353,196 @@ export function planOutfits(
   }
   return { colourMode, cutMode, people };
 }
+
+// ── Writing the plan into the brief (phase 3) ───────────────────────────
+//
+// Everything below is text and checks for the character slot brief. It lives here, not in
+// characterSlotPrompt.ts, so that file can import it without an import cycle.
+
+export interface OutfitSide {
+  role: string;
+  /** 'LEFT' | 'RIGHT' for a couple, 'THE PERSON' solo. */
+  label: string;
+  gender: 'male' | 'female' | null;
+}
+
+const noun = (g: OutfitSide['gender']): string =>
+  g === 'female' ? 'the woman' : g === 'male' ? 'the man' : 'this person';
+
+/** How a pattern is worn: a print where the garment can carry one, a trim where it cannot (so a wetsuit or
+ *  chef's whites never get a literal floral). */
+const PATTERN_HOW =
+  'as a print where the garment can carry one, otherwise as a trim or accent piece';
+
+function colourLine(p: PersonOutfitPlan, partnerLabel: string | null): string {
+  if (p.colourSource === 'implied')
+    return "Colour: the garment's own known colours. Do not recolour it.";
+  if (!p.colour) return '';
+  if (p.colourSource === 'user') return `Colour: ${p.colour.lead}, exactly as asked.`;
+  const avoid =
+    p.avoidColours.length && partnerLabel
+      ? ` NEVER wear ${p.avoidColours.join(' or ')} (${partnerLabel}'s colour${p.avoidColours.length > 1 ? 's' : ''}).`
+      : '';
+  return p.colour.accent
+    ? `Colour: lead with ${p.colour.lead}, accent with ${p.colour.accent}.${avoid}`
+    : `Colour: ${p.colour.lead} is their colour; build the outfit in it and its tones, with at most small neutral basics.${avoid}`;
+}
+
+function patternLine(p: PersonOutfitPlan): string {
+  if (p.patternSource === 'user' && p.pattern) return `Pattern: "${p.pattern}", exactly as asked.`;
+  if (p.pattern && p.patternAsTrim) return `Trim: ${p.pattern}, as a trim or accent only.`;
+  if (p.pattern) return `Pattern: ${p.pattern}, ${PATTERN_HOW}.`;
+  if (p.colourSource === 'implied') return '';
+  return 'Pattern: none, solid colour.';
+}
+
+/** One line per person for the WARDROBE section. `sides` is the cast in slot order (LEFT, RIGHT). */
+export function renderOutfitPlanLines(plan: OutfitPlan, sides: readonly OutfitSide[]): string {
+  const byRole = new Map(plan.people.map((p) => [p.role, p]));
+  return sides
+    .map((side, i) => {
+      const p = byRole.get(side.role);
+      if (!p) return '';
+      const partner = sides.length === 2 ? sides[1 - i].label : null;
+      const parts: string[] = [];
+      if (p.garment) parts.push(`wears the user's own request, "${p.garment}". Keep those words.`);
+      parts.push(colourLine(p, partner));
+      parts.push(
+        `Silhouette: ${p.silhouette}${p.garment ? ', as far as the garment allows' : ''}.`
+      );
+      parts.push(patternLine(p));
+      return `- ${side.label} (${noun(side.gender)}): ${parts.filter(Boolean).join(' ')}`;
+    })
+    .filter(Boolean)
+    .join('\n');
+}
+
+/** True when any person wears something the user asked for (the brief then lets that win over its own
+ *  "never everyday basics" and traveler rules). */
+export function planHasUserGarment(plan: OutfitPlan): boolean {
+  return plan.people.some((p) => !!p.garment);
+}
+
+// ── Checking Sonnet kept the user's words ────────────────────────────────
+
+const GARMENT_EQUIV: readonly string[][] = [
+  ['t-shirt', 'tshirt', 't shirt', 'tee'],
+  ['tux', 'tuxedo'],
+  ['jeans', 'denim'],
+  ['sweater', 'jumper', 'knit', 'pullover'],
+  ['hoodie', 'hooded'],
+  ['trousers', 'pants', 'slacks'],
+  ['sneaker', 'trainer'],
+  ['swimsuit', 'swimwear', 'one-piece', 'bathing suit'],
+  ['spacesuit', 'space suit', 'pressure suit'],
+];
+const PATTERN_EQUIV: readonly string[][] = [
+  ['flower', 'floral', 'botanical', 'hibiscus', 'blossom'],
+  ['stripe', 'striped', 'pinstripe'],
+  ['check', 'checked', 'plaid', 'tartan', 'gingham'],
+  ['polka', 'dot', 'spotted'],
+  ['hawaiian', 'tropical', 'aloha'],
+  ['leopard', 'animal print', 'cheetah'],
+];
+const GENERIC_HEAD = /^(outfits?|clothes|clothing|costumes?|attire|looks?|gear|wear)$/i;
+const FILLER = new Set([
+  'the',
+  'and',
+  'with',
+  'some',
+  'very',
+  'fancy',
+  'sexy',
+  'sleek',
+  'looking',
+  'cute',
+  'nice',
+]);
+
+/** Singular stem: dresses → dress, boxes → box, hats → hat, jeans → jean; never "shoes" → "sho". */
+const stem = (w: string): string => {
+  const l = w.toLowerCase();
+  if (/(ss|us|is)$/.test(l)) return l;
+  if (/(sses|xes|ches|shes)$/.test(l)) return l.slice(0, -2);
+  return l.replace(/s$/, '');
+};
+function mentions(text: string, word: string, equiv: readonly string[][]): boolean {
+  const t = text.toLowerCase();
+  const s = stem(word);
+  if (s.length >= 3 && t.includes(s)) return true;
+  const group = equiv.find((g) => g.some((x) => stem(x) === s || x === word.toLowerCase()));
+  return !!group && group.some((x) => t.includes(stem(x)));
+}
+const contentWords = (phrase: string): string[] =>
+  phrase.split(/[^A-Za-z0-9'-]+/).filter((w) => w.length >= 3 && !FILLER.has(w.toLowerCase()));
+
+/** Head nouns of each garment in a request: "jeans and t-shirts" → [jeans, t-shirts]; "dresses with banners"
+ *  → [dresses] (a "with" clause is a detail, not a garment). */
+function garmentHeads(garment: string): string[][] {
+  return garment
+    .split(/\s*(?:,|\band\b|&|\bplus\b)\s*/i)
+    .map((seg) => seg.split(/\bwith\b/i)[0].trim())
+    .filter(Boolean)
+    .map((seg) => {
+      const words = contentWords(seg);
+      if (!words.length) return [];
+      const head = words[words.length - 1];
+      // "Detroit lions cheerleading outfit": the head is generic, so any real word of it counts.
+      return GENERIC_HEAD.test(head) && words.length > 1 ? words.slice(0, -1) : [head];
+    })
+    .filter((alts) => alts.length > 0);
+}
+
+/** What the user asked this person to wear that `wardrobe` dropped. Empty = kept. */
+export function missingUserOutfit(wardrobe: string, p: PersonOutfitPlan): string[] {
+  const missing: string[] = [];
+  if (p.garment) {
+    for (const alts of garmentHeads(p.garment)) {
+      if (!alts.some((w) => mentions(wardrobe, w, GARMENT_EQUIV)))
+        missing.push(`"${alts[alts.length - 1]}"`);
+    }
+  }
+  if (p.colourSource === 'user' && p.colour) {
+    const words = contentWords(p.colour.lead).filter((w) => colourFamiliesOf(w).length > 0);
+    for (const w of words.length ? words : contentWords(p.colour.lead)) {
+      if (!new RegExp(`\\b${w.replace(/[^a-z0-9-]/gi, '')}`, 'i').test(wardrobe))
+        missing.push(`"${w}"`);
+    }
+  }
+  if (p.patternSource === 'user' && p.pattern) {
+    const words = contentWords(p.pattern);
+    if (words.length && !words.some((w) => mentions(wardrobe, w, PATTERN_EQUIV))) {
+      missing.push(`"${words[words.length - 1]}"`);
+    }
+  }
+  return missing;
+}
+
+/** The user's request as a wardrobe string, for when Sonnet drops it twice: plain but exactly what they
+ *  asked for (plus the planned trim). */
+export function userOutfitPhrase(p: PersonOutfitPlan): string | null {
+  if (!p.garment && p.colourSource !== 'user' && p.patternSource !== 'user') return null;
+  const colour = p.colourSource === 'user' && p.colour ? `${p.colour.lead} ` : '';
+  const garment = p.garment ?? 'outfit';
+  const pattern =
+    p.patternSource === 'user' && p.pattern
+      ? /^with\b/i.test(p.pattern)
+        ? ` ${p.pattern}`
+        : ` in ${p.pattern}`
+      : '';
+  const trim = p.patternAsTrim && p.pattern ? `, with ${p.pattern} trim` : '';
+  return `${colour}${garment}${pattern}${trim}`;
+}
+
+/** Words the user asked this person to wear: exempt from the plain-clothes ban on their wardrobe field
+ *  ("jeans and t-shirts" is a request to honor, not a lapse to fix). */
+export function userOutfitAllowlist(p: PersonOutfitPlan): string[] {
+  return [p.garment, p.colourSource === 'user' && p.colour ? p.colour.lead : null, p.pattern]
+    .filter((x): x is string => !!x)
+    .map((x) => x.toLowerCase());
+}
+
+/** Is a plain-clothes word covered by something the user asked for? */
+export function allowedByUser(word: string, allow: readonly string[]): boolean {
+  return allow.some((phrase) => mentions(phrase, word, GARMENT_EQUIV));
+}

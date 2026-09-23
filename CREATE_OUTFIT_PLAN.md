@@ -248,6 +248,36 @@ Where it fails, verified by reading the outfits:
   on a person the user said nothing about), both sunglasses prompts stripped by code, 0 errors.
 - Full gate green: 214 suites / 4,206 tests, tsc, deno check.
 
+## Phase 3 done (2026-09-23): couples brief + enforcement (inert until Create passes a plan)
+
+- `characterSlotPrompt.ts`: new optional input `outfitPlan`. With it, the WARDROBE section is one line per
+  person (colour / never the partner's colour / silhouette / pattern, or the user's own words), the scene
+  sets the garment TYPE and dress level for both, "SPLIT it between them" and "pick a different GARMENT"
+  are gone, the basics ban and traveler rule yield to what the user asked for. `validateSlots` /
+  `describeViolations` / `salvageSlots` take a per-field allowlist (user words exempt from PLAIN_CLOTHES in
+  their own field only). The retry loop treats a dropped user word as a named violation
+  (`outfit_lock(LEFT:"red")`); a second miss has code write the user's phrase in (`outfit_lock:<side>:
+kept|retried|code_applied`). Stamps: `outfit_colour`, `outfit_cut`, `outfit_pattern`. Holiday costume
+  lock still wins. Without the input: byte-identical (golden fixture + all 215 suites green).
+- `outfitPlan.ts`: `renderOutfitPlanLines`, `missingUserOutfit`, `userOutfitPhrase`,
+  `userOutfitAllowlist`, `allowedByUser` (tee/t-shirt, jeans/denim, floral/flowers equivalences).
+- `__tests__/lib/outfitPlanBrief.test.ts`: 35 tests (brief text, allowlist per field, lock check table,
+  fallback phrase, pipeline: kept / retried / code_applied / jeans honored / no-plan unchanged).
+- Live couples (`--variant=plan`, 22 couple prompts x 3 = 66, text only), against the phase 0 baseline:
+
+  | Measure                                  | Baseline                   | Plan                                                                                             |
+  | ---------------------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------ |
+  | User garment kept                        | 88%                        | 75/75 (100%)                                                                                     |
+  | User colour kept                         | 88%                        | 41/42; the miss is a Lakers jersey the code wrote in as "Lakers jerseys" (team colours, correct) |
+  | Wears the partner's colour (the mirror)  | 38% of no-clothing couples | 0/66                                                                                             |
+  | Wears their own rolled colour            | n/a                        | 48/48                                                                                            |
+  | Dress next to a suit, same-gender formal | 22%                        | 0/9                                                                                              |
+  | Jeans + t-shirts honored                 | t-shirts 0/3               | yes                                                                                              |
+
+  Rolls landed across all four colour x cut combinations. Patterns read right, including on snow gear
+  (a tropical-leaf lining on a ski jacket). Open question for Kevin: a tux gets recoloured under "their
+  garment, our colour" (one run: a turquoise tuxedo with floral lapels).
+
 ## Porting to nightly later
 
 `planOutfits`, the pools and the brief wiring live in `_shared`; nightly would pass the same flag with

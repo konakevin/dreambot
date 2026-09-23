@@ -36,6 +36,11 @@ import { rollCreateSceneAxes } from '../supabase/functions/_shared/createSceneAx
 import { resolveCastForPrompt } from '../supabase/functions/_shared/castResolver.ts';
 import { callSonnet } from '../supabase/functions/_shared/llm.ts';
 import {
+  planOutfits,
+  DEFAULT_OUTFIT_ROLLS,
+  type OutfitPlan,
+} from '../supabase/functions/_shared/outfitPlan.ts';
+import {
   extractOutfitSpec,
   outfitSpecStamps,
   type OutfitPerson,
@@ -65,6 +70,8 @@ const ONLY = arg('only', '')
 const CONCURRENCY = Number(arg('concurrency', '4'));
 /** pipeline = today's Create text pipeline end to end; extract = the phase-2 outfit reader only. */
 const MODE = arg('mode', 'pipeline');
+/** today = the live Create path; plan = phase 3: outfit reader + per-person plan in the slot brief. */
+const VARIANT = arg('variant', 'today');
 if (!OUT) throw new Error('--out=<dir> is required');
 
 // ── corpus ─────────────────────────────────────────────────────────────
@@ -467,8 +474,57 @@ interface Result {
     partner: ReturnType<typeof check>;
     mirrored: boolean | null;
     formalTypeMismatch: boolean | null;
+    /** plan variant: every person we coloured wears their own colour. */
+    ownColourKept?: boolean | null;
+    /** plan variant: someone wears their partner's colour (the mirror). */
+    crossColour?: boolean | null;
   };
+  plan?: OutfitPlan | null;
   error?: string;
+}
+
+// The distinctive word(s) of a palette colour: "cobalt blue" → cobalt, "soft coral" → coral.
+const GENERIC_COLOUR = new Set([
+  'blue',
+  'green',
+  'pink',
+  'red',
+  'yellow',
+  'purple',
+  'orange',
+  'brown',
+  'white',
+  'black',
+  'grey',
+  'gray',
+  'deep',
+  'soft',
+  'warm',
+  'pale',
+  'light',
+  'dark',
+]);
+function colourTokens(name: string): string[] {
+  const words = name
+    .toLowerCase()
+    .split(/[^a-z]+/)
+    .filter(Boolean);
+  const distinct = words.filter((w) => !GENERIC_COLOUR.has(w));
+  return distinct.length ? distinct : words.slice(-1);
+}
+const wears = (outfit: string, colour: string): boolean =>
+  colourTokens(colour).some((t) => new RegExp(`\\b${t}`, 'i').test(outfit));
+function planColourChecks(plan: OutfitPlan, outfitByRole: Record<string, string>) {
+  let own: boolean | null = null;
+  let cross = false;
+  for (const p of plan.people) {
+    const mine = outfitByRole[p.role] ?? '';
+    if (p.colourSource === 'roll' && p.colour) {
+      own = (own ?? true) && wears(mine, p.colour.lead);
+      for (const avoid of p.avoidColours) if (wears(mine, avoid)) cross = true;
+    }
+  }
+  return { ownColourKept: own, crossColour: plan.colourMode === 'solo' ? null : cross };
 }
 
 async function renderOne(c: Case, run: number): Promise<Result> {
@@ -480,7 +536,26 @@ async function renderOne(c: Case, run: number): Promise<Result> {
   const base = { id: c.id, run, shape: c.shape, prompt: c.prompt, cleaned };
 
   if (c.shape === 'couple') {
-    const split = await splitPromptScene(cleaned, 2, KEY);
+    const legend: OutfitPerson[] = [
+      { role: 'self', label: 'the user', gender: c.self },
+      {
+        role: 'plus_one',
+        label: /^[A-Z]/.test(c.partner!.name) ? c.partner!.name : `the user's ${c.partner!.name}`,
+        gender: c.partner!.gender,
+      },
+    ];
+    const [split, specOut] = await Promise.all([
+      splitPromptScene(cleaned, 2, KEY),
+      VARIANT === 'plan' ? extractOutfitSpec(raw, legend, KEY) : Promise.resolve(null),
+    ]);
+    const plan =
+      VARIANT === 'plan'
+        ? planOutfits(
+            ['self', 'plus_one'],
+            DEFAULT_OUTFIT_ROLLS,
+            specOut && specOut.source === 'read' ? specOut.result.byRole : {}
+          )
+        : null;
     const selfM = castMember('self', c.self);
     const partM = castMember('plus_one', c.partner!.gender, c.partner!.relationship);
     const flip = Math.random() < 0.5;
@@ -513,6 +588,7 @@ async function renderOne(c: Case, run: number): Promise<Result> {
       activityWardrobe: true,
       action:
         split.action ?? 'standing side by side, one with a hand resting on the other’s shoulder',
+      ...(plan ? { outfitPlan: plan } : {}),
     };
     const res = await runCharacterSlotPipeline(slotInput, KEY);
     const slots = res.slots as DualSlots;
@@ -539,7 +615,12 @@ async function renderOne(c: Case, run: number): Promise<Result> {
       selfOutfit,
       partnerOutfit,
       finalPrompt,
-      fallbackReasons: [`create_scene_split:${split.source}`, ...res.fallbackReasons],
+      fallbackReasons: [
+        `create_scene_split:${split.source}`,
+        ...(specOut ? outfitSpecStamps(specOut, 2) : []),
+        ...res.fallbackReasons,
+      ],
+      plan,
       checks: {
         self: check(selfOutfit, c.expectSelf),
         partner: check(partnerOutfit, c.expectPartner),
@@ -547,6 +628,7 @@ async function renderOne(c: Case, run: number): Promise<Result> {
           ? mirrored(palette, slots.left_wardrobe, slots.right_wardrobe)
           : null,
         formalTypeMismatch: formal,
+        ...(plan ? planColourChecks(plan, { self: selfOutfit, plus_one: partnerOutfit }) : {}),
       },
     };
   }
@@ -757,7 +839,10 @@ const garment = t(),
   colour = t(),
   pattern = t();
 const mirror = t(),
-  formal = t();
+  formal = t(),
+  ownColour = t(),
+  crossColour = t();
+let codeApplied = 0;
 let plainViolations = 0,
   wardrobeFallbacks = 0,
   errors = 0;
@@ -792,6 +877,22 @@ for (const r of results) {
       marks.push('mirror');
     }
   }
+  if (r.checks.ownColourKept !== undefined && r.checks.ownColourKept !== null) {
+    ownColour.total++;
+    if (r.checks.ownColourKept) ownColour.pass++;
+    else marks.push('own-colour✗');
+  }
+  if (r.checks.crossColour !== undefined && r.checks.crossColour !== null) {
+    crossColour.total++;
+    if (r.checks.crossColour) {
+      crossColour.pass++;
+      marks.push('wears-partner-colour');
+    }
+  }
+  if (r.fallbackReasons.some((f) => /outfit_lock:.*code_applied/.test(f))) {
+    codeApplied++;
+    marks.push('lock-code-applied');
+  }
   if (r.checks.formalTypeMismatch !== null) {
     formal.total++;
     if (r.checks.formalTypeMismatch) {
@@ -817,6 +918,11 @@ console.log(`user colour kept  : ${pct(colour)}`);
 console.log(`user pattern kept : ${pct(pattern)}`);
 console.log(`palette mirrored (no-clothing couples) : ${pct(mirror)}`);
 console.log(`dress next to suit (same-gender formal): ${pct(formal)}`);
+if (VARIANT === 'plan') {
+  console.log(`[plan] wears their own rolled colour : ${pct(ownColour)}`);
+  console.log(`[plan] wears the partner's colour    : ${pct(crossColour)}`);
+  console.log(`[plan] user outfit written in by code: ${codeApplied}`);
+}
 console.log(
   `plain-clothes violations: ${plainViolations}   wardrobe fallbacks: ${wardrobeFallbacks}`
 );

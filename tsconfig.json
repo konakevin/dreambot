@@ -15,6 +15,7 @@
     "scripts/qa-outfit-text.ts",
     "__tests__/lib/outfitPlan.test.ts",
     "__tests__/lib/outfitSpec.test.ts",
+    "__tests__/lib/outfitPlanBrief.test.ts",
     "__tests__/lib/styleContractEmptyPool.test.ts",
     "__tests__/lib/coupleDegradeSoloRung.test.ts",
     "__tests__/lib/lookBanRefitKeepsModel.test.ts",
