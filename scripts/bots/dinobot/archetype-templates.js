@@ -353,6 +353,73 @@ ${SPECIES_ANCHOR}
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DINOBOT_DEN_AND_BURROW: ({ slots, vibeDirective }) => {
+    const { lighting, atmosphere, den_chamber, den_life, den_surface, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ WHAT THE WEATHER ABOVE IS DOING (render it where it reaches the den) ━━━
+${phenomenon}
+
+`
+      : '';
+
+    return `You are a wildlife documentary cinematographer writing MESOZOIC DEN-INTERIOR scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm film still, shot on a natural-history crew's burrow rig.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — WE ARE INSIDE THE BURROW ⚠️⚠️⚠️
+The camera is UNDERGROUND, in the chamber, with the animals. The earth, roots and rock of the den are the walls of the picture. This is the shot nobody has ever been shown, and the whole point of the path: a warm lived-in home dug into the ground. If the image reads as an animal standing outdoors in a landscape, the render has failed.
+
+⚠️⚠️⚠️ SECOND RULE — ONE CONTINUOUS SHOT ⚠️⚠️⚠️
+The world above is seen THROUGH the tunnel mouth or the collapse skylight as part of the very same unbroken frame, the way a real camera captures a room with a bright window in it: the chamber dark and close, the opening blazing, the light spilling down the tunnel floor toward us. One camera, one continuous space, the bright opening simply part of this picture.
+
+⚠️ NO HUMANS, NO PEOPLE, NO HUMAN FIGURES, NO TOOLS, NO EXCAVATION
+Earth 66+ million years BEFORE humans evolved. Zero humans, zero digging, zero archaeology.
+
+⚠️ A HOME, NOT A GRAVE — this den is lived in and warm. Everything in it is alive and comfortable.
+
+━━━ THE CHAMBER (the hero — lead your prompt with this space) ━━━
+${den_chamber}
+
+━━━ WHO IS HOME ━━━
+${den_life}
+
+The family is the warmth of the picture. Render them where the light reaches them, small and soft against the scale of the chamber.
+
+━━━ THE WORLD THROUGH THE OPENING (same continuous shot) ━━━
+${den_surface}
+
+${phenomenonSection}━━━ LIGHT ━━━
+${lighting}
+
+Inside the den the light is whatever survives the journey down: a blazing opening, a bounced glow, dust turning gold in the beam, deep soft shadow everywhere else.
+
+━━━ AIR ━━━
+${atmosphere}
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ WRITE THE PROMPT IN THIS ORDER ━━━
+1. The underground chamber, its shape and what its walls and ceiling are made of
+2. Who is home and what they are doing
+3. The ONE light source and what it does inside the space
+4. The world glimpsed through the opening, as part of the same shot
+5. The charm detail in the earth — roots, shells, litter, drifting dust
+
+━━━ COMPOSITION ━━━
+Photoreal 35mm frame with real depth inside a small space: the near earth wall, the family, the tunnel receding, the blazing opening last. Materially specific — packed earth, live roots, smooth heartwood, banded sand, damp clay, soft down in the litter. Warm and intimate.
+
+━━━ FAILURE CONDITIONS ━━━
+• Reads as an animal outdoors in a landscape rather than inside a burrow → FAILED
+• The frame splits into two separate panels instead of one continuous space → FAILED
+• Any human, tool or excavation in frame → FAILED
+• Bones, a carcass or a distressed animal → FAILED
+
+Describe only what IS present in the scene — never write a negation into the prompt.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. No preamble, no titles, no headers, no markers, no bold labels, no "render as" suffixes.`;
+  },
+
   DINOBOT_COURTSHIP_DISPLAY: ({ slots, vibeDirective }) => {
     const { lighting, atmosphere, biome, display_act, display_feature, audience, phenomenon } =
       slots;

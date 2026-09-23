@@ -125,6 +125,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  DINOBOT_DEN_AND_BURROW: {
+    description:
+      'PATH-BESPOKE — DinoBot den-and-burrow path (2026-09-22). THE DELIGHT ANGLE: nobody has ever been shown the inside of a dinosaur burrow, so the hero is the UNDERGROUND itself — a dished nest hollow under a woven root ceiling, a cutaway of two or three chambers at different depths, the entrance tunnel seen from inside as a blazing disc of daylight, a chamber open to a river with light bouncing off the water onto the ceiling. 3 path-bespoke axes: den_chamber (the space, its materials, its ONE light source) / den_life (who is home and what they are doing — the warmth, tender or funny over solemn) / den_surface (the world through the opening, written as ONE continuous shot so it never renders as a pasted-in second panel, per the split-panel trap). Plus the 80%-gated phenomenon and universal lighting + atmosphere. A lived-in home: no bones, no death, no distress.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['den_chamber', 'den_life', 'den_surface'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DINOBOT_HERD_MIGRATION: {
     description:
       'PATH-BESPOKE — DinoBot herd-migration path (2026-05-17 axis-system migration). COLOSSAL DINOSAUR HERDS crossing alien-Mesozoic landscapes. Hero foreground dinosaurs (35-55% frame) + massive 50-200 strong herd extending into vanishing-point haze. Silhouettes scream DINOSAUR (neck-S-curves, crests, frills, plate-rows, spike-tails) never wildebeest. Reuses HERD_SCENES (200 fat-seed herd scenes) + DINOBOT_PALEO_LANDSCAPE_BIOME (200 alien-Mesozoic biome). Adds one new path-bespoke pool for herd-specific small accents. BBC-Planet-Earth-meets-Prehistoric-Planet documentary cinematography. 3 path-bespoke axes (biome / herd_scene / surprise_element) + 80%-gated phenomenon + universal lighting + atmosphere.',

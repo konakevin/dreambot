@@ -28,6 +28,7 @@ const pathBuilders = {
   'storm-season': require('./paths/storm-season'), // Stage D2 SHADOW
   'polar-dinos': require('./paths/polar-dinos'), // Stage D3 SHADOW
   'courtship-display': require('./paths/courtship-display'), // 2026-09-22 SHADOW — display behaviour
+  'den-and-burrow': require('./paths/den-and-burrow'), // 2026-09-22 SHADOW — inside the burrow
 };
 
 // Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
@@ -179,7 +180,7 @@ module.exports = {
   // hourly dispatcher and renders only via `iter-bot --mode courtship-display --post`, which posts
   // it hidden (shadow=true / is_public=false). Going live = move the string to paths[] and change
   // NOTHING else about how it renders (the go-live xerox rule).
-  shadowPaths: ['courtship-display'], // Stage D paths promoted to live 2026-08-16 (DINO_SHADOW_PATHS const kept — drives polish-OFF skip)
+  shadowPaths: ['courtship-display', 'den-and-burrow'], // Stage D paths promoted to live 2026-08-16 (DINO_SHADOW_PATHS const kept — drives polish-OFF skip)
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -188,7 +189,7 @@ module.exports = {
   chaos: {
     enabled: true,
     // New axis-system paths skip chaos for the MVP so the hero composition is what gets judged.
-    skipPaths: ['courtship-display'],
+    skipPaths: ['courtship-display', 'den-and-burrow'],
     allowSubjectChaosPaths: [
       'paleo-landscape',
       'herd-migration',
@@ -211,6 +212,7 @@ module.exports = {
     preservePhrasesByPath: {},
     skipPaths: [
       'courtship-display',
+      'den-and-burrow',
       'paleo-landscape',
       'swamp-river',
       'ocean-reptiles',

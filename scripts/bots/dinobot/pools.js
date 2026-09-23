@@ -50,6 +50,11 @@ module.exports = {
   DINOBOT_COURTSHIP_FEATURE: load('dinobot_courtship_feature'),
   DINOBOT_COURTSHIP_AUDIENCE: load('dinobot_courtship_audience'),
   DINOBOT_COURTSHIP_ARENA: load('dinobot_courtship_arena'),
+  // den-and-burrow (2026-09-22) — inside the burrow: the space, who is home, the world through
+  // the opening (that last one written as ONE continuous shot, per the split-panel trap).
+  DINOBOT_DEN_CHAMBER: load('dinobot_den_chamber'),
+  DINOBOT_DEN_LIFE: load('dinobot_den_life'),
+  DINOBOT_DEN_SURFACE: load('dinobot_den_surface'),
   DINOBOT_PALEO_LANDSCAPE_MEGAFLORA: load('dinobot_paleo_landscape_megaflora'),
   DINOBOT_PALEO_LANDSCAPE_PHENOMENON: load('dinobot_paleo_landscape_phenomenon'),
   DINOBOT_PALEO_LANDSCAPE_SURPRISE_ELEMENT: load('dinobot_paleo_landscape_surprise_element'),

@@ -1489,6 +1489,100 @@ HARD RULES:
 
 Output: ONE act per line. No numbering. No quotes.`,
 
+  // ── den-and-burrow (2026-09-22) ─────────────────────────────────────────────────────────────
+  // THE DELIGHT ANGLE: nobody has seen inside a dinosaur burrow. The hero is the UNDERGROUND
+  // itself — a cutaway of packed-earth chambers, root ceilings, a shaft of daylight down the
+  // entrance tunnel, hatchlings heaped in a nest hollow. Familiar animal, never-seen place.
+
+  dinobot_den_chamber: `Generate DEN-INTERIOR descriptions for DinoBot's den-and-burrow path — the inside of a dinosaur's burrow, which is a place almost nobody has ever been shown. Each is ONE comma-separated line, 30-45 words.
+
+THE BAR (Kevin's motto): playful, adventurous, VIVID, beautiful, clever. Saturated committed colour and dramatic light, never muted. Every entry carries ONE CHARM DETAIL that makes it that den and no other. This axis exists to show people something they have NEVER SEEN.
+
+THE HERO is the underground space: the shape of the chamber, what its walls and ceiling are made of, and the ONE light source reaching it.
+
+Variety mandate (rotate widely):
+- ~18% A round nest hollow at the tunnel's end, floor dished and lined, the ceiling a woven mat of live roots
+- ~15% A cutaway of the whole burrow system — two or three chambers at different depths joined by sloping tunnels, seen as a cross-section through the earth
+- ~12% The entrance tunnel from INSIDE, looking out at a blazing disc of daylight with the silhouette of the world beyond
+- ~10% A chamber dug into a riverbank, one wall open to the water, light bouncing up off the river onto the ceiling
+- ~10% A chamber under a fallen giant's root-plate, the trunk's underside forming the roof
+- ~8% A deep cool chamber with a seep of water down one wall and a shallow pool on the floor
+- ~8% A hollow inside a living tree's base, the walls smooth heartwood
+- ~7% A chamber whose ceiling has partly collapsed into a skylight with plants leaning in and light pouring down
+- ~7% A sandy chamber in a dune bank, walls banded in colour like layered cake
+- ~5% A den taken over from something else — an older, bigger burrow adapted, its entrance too large for its tenant
+
+EVERY ENTRY INCLUDES:
+- THE CHAMBER'S SHAPE and scale (a dished hollow, a long low gallery, a tall shaft, a two-level system)
+- WHAT THE WALLS AND CEILING ARE MADE OF, specifically: packed red earth, woven live roots, smooth heartwood, banded sand, river clay, rock with a seep
+- THE ONE LIGHT SOURCE and what it does inside: daylight down the tunnel mouth, a collapse skylight, light bounced up off water, a glow through a root gap
+- ONE VIVID CHARM DETAIL: a root that has grown into a natural handrail, a scatter of iridescent beetle shells in the floor litter, a drift of shed down caught in the roots, a fossil shell standing out of the wall, dust turning gold in the light-beam, tiny white rootlets glowing where the light hits them
+
+HARD RULES:
+- NO humans, no people, no tools, no excavation, no archaeology. Earth 66 million years before humans.
+- NO glowing/magical/bioluminescent anything. Real earth, real roots, real light.
+- NO bones, no carcasses, no death. This is a LIVED-IN home.
+- Describe only what IS present. Never write a negation.
+
+Output: ONE chamber per line. No numbering. No quotes.`,
+
+  dinobot_den_life: `Generate DEN-LIFE descriptions for DinoBot's den-and-burrow path — who is home and what they are doing in the burrow right now. Each is ONE comma-separated line, 20-35 words.
+
+THE BAR: playful, adventurous, vivid, clever. This is the WARMTH of the picture — a home with somebody in it. Tender, funny, or cosy beats solemn every time.
+
+Variety mandate:
+- ~20% A heap of hatchlings asleep in a tangle, one upside down, one with its head on another's back
+- ~15% A parent curled around the nest hollow, body making the wall of the room
+- ~12% One hatchling venturing up the tunnel toward the light while the others watch from the dark
+- ~10% A parent squeezing in through a tunnel plainly too small for it, shoulders scraping the roof
+- ~10% Hatchlings tumbling and play-wrestling in the floor litter, dust up in the light
+- ~8% A parent grooming or nosing a hatchling, the hatchling squirming
+- ~8% One hatchling asleep in a ridiculous spot — wedged in a root fork, on top of a sibling, half out of the nest
+- ~7% A juvenile too big for the den now, folded awkwardly into a chamber it has outgrown
+- ~5% A parent asleep with hatchlings piled on top of it
+- ~5% Empty of adults, hatchlings alone and alert, all heads turned the same way toward the tunnel
+
+EVERY ENTRY INCLUDES:
+- WHO is present (a parent, a clutch of hatchlings, a juvenile) and HOW MANY
+- WHAT THEY ARE DOING, as an active verb, mid-moment
+- ONE TENDER OR FUNNY DETAIL that makes it a family rather than a specimen
+
+HARD RULES:
+- NO humans. NO death, NO blood, NO predation, NO distress. This is a safe warm home.
+- Feathered and scaly body plans both welcome; say which so Flux renders a dinosaur.
+- Describe only what IS present. Never write a negation.
+
+Output: ONE den-life beat per line. No numbering. No quotes.`,
+
+  dinobot_den_surface: `Generate SURFACE-ABOVE descriptions for DinoBot's den-and-burrow path — the world at ground level immediately above or outside the burrow, glimpsed as part of the same continuous shot. Each is ONE comma-separated line, 20-32 words.
+
+WHY THIS AXIS: an underground chamber with a tunnel mouth needs the world beyond that mouth to read as ONE continuous space, not a separate pasted-in panel. So this axis describes what is visible THROUGH the opening, as part of the same unbroken frame.
+
+THE BAR: vivid, beautiful, clever. Saturated colour and dramatic light in the world above, so the tunnel mouth reads as a blazing window.
+
+Variety mandate:
+- ~20% Fern and cycad undergrowth crowding right up to the entrance, fronds leaning in over the lip
+- ~15% A hot open plain beyond, bleached bright, heat shimmer above the grass
+- ~12% A river running past the bank the den is dug into, light off the water
+- ~10% Deep forest, the ground dappled, a single hard shaft coming down near the mouth
+- ~10% Rain falling on the world above, water running over the lip and beading on the roots
+- ~8% Dawn or dusk colour filling the opening, the entrance a disc of orange
+- ~8% A dune slope above with sand trickling over the entrance edge in a thin stream
+- ~7% Snow or frost on the world above, breath visible at the mouth
+- ~5% Blossom or seed-fluff drifting past the opening and settling inside
+- ~5% Something large passing at a distance above, legs only, seen from below through the mouth
+
+EVERY ENTRY INCLUDES:
+- THE WORLD ABOVE, specifically, and its LIGHT
+- HOW IT MEETS THE OPENING — fronds leaning in, water running over the lip, sand trickling, light spilling down the tunnel floor
+- It reads as one continuous shot: the same camera sees the chamber and the world through the mouth
+
+HARD RULES:
+- NO humans, NO structures, NO paths, NO modern anything.
+- Describe only what IS present. Never write a negation.
+
+Output: ONE surface description per line. No numbering. No quotes.`,
+
   dinobot_courtship_arena: `Generate DISPLAY-ARENA descriptions for DinoBot's courtship-display path — the STAGE the display happens on. Each is ONE comma-separated line, 25-40 words.
 
 WHY THIS POOL EXISTS: the path first REUSED the paleo-landscape biome pool, which is written landscape-first. A vast empty dune field is a magnificent landscape and a terrible stage — the draws that rolled one came back as a lone animal standing in flat monochrome sand. A display needs an ARENA: enclosed enough to hold a gathering, vivid enough to be worth looking at.

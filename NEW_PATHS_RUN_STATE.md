@@ -99,7 +99,7 @@ Then the rest, grouped by bot to reuse each bot's audit.
 | 8 | BrickBot | airfield-biplanes | - | not started | |
 | 9 | BrickBot | balloon-festival | - | not started | |
 | 10 | BrickBot | archaeology-dig | - | not started | |
-| 11 | DinoBot | den-and-burrow | - | not started | |
+| 11 | DinoBot | den-and-burrow | 1 | **PASS ~4.7, AWAITING GRADE** | designed from the motto: the hero is the unseen underground |
 | 12 | DinoBot | undergrowth-scale | - | not started | |
 | 13 | DinoBot | tidal-flat-tracks | - | not started | |
 | 14 | DinoBot | amber-forest | - | not started | |
@@ -122,6 +122,32 @@ Then the rest, grouped by bot to reuse each bot's audit.
 | 31 | ToyBot | bath-toy-flotilla | - | not started | |
 | 32 | ToyBot | sand-toy-beachworks | - | not started | |
 | 33 | ToyBot | snow-globe-world | - | not started | |
+
+### 3. DinoBot `den-and-burrow` — PASS at ROUND 1, ~4.7
+
+**The first path designed FROM the motto rather than retrofitted, and it shows.** Kevin's list said
+"den and burrow life", which invites a dinosaur standing outside a hole. Applying "show people the
+unseen": dinosaurs are maximally familiar, but essentially nobody has been shown the INSIDE of a
+burrow. So the hero became the underground itself.
+
+Axes: `den_chamber` (the space, its materials, its ONE light source) / `den_life` (who is home —
+written playful over solemn, per the bar: a heap of hatchlings with one upside down, a parent
+squeezing through a tunnel plainly too small for it, a juvenile folded into a chamber it has
+outgrown) / `den_surface` (the world through the opening, as ONE continuous shot). Phenomenon gate
+dropped to 0.5 from the bot's usual 0.8 — underground, most weather does not reach.
+
+**Pre-empted a documented trap instead of discovering it:** an interior plus a view through an
+opening, described as two zones, renders as a hard-split comic panel. Written positively as one
+camera seeing one continuous space with a bright window in it. Zero split frames in six renders.
+
+**R1 draws:** a chamber of banded earth strata with a tangle of hatchlings, one flat on its back
+paws-up, a root hanging through, the tunnel mouth blazing with a fern leaning in and rootlets lit
+where the light catches them, light spilling down the floor toward camera. And a red-earth chamber,
+roots across the ceiling, a clutch of fluffy feathered hatchlings all facing the blazing oval.
+
+**Minor register nit for Kevin's eye:** the feathered hatchlings read slightly duckling-ish. Left
+alone deliberately — real feathered hatchlings do look like that and the playbook warns against
+over-correcting a non-defect.
 
 ## The agent brief template (reuse verbatim; only §PATH changes)
 
