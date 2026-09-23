@@ -1268,8 +1268,19 @@ function parseSlotsJson(text: string, castCount: 1 | 2): CharacterSlots {
 
 const FORBIDDEN_PATTERNS: { name: string; regex: RegExp }[] = [
   { name: 'looking-direction', regex: /\blooking\s+(at|toward|into|across|up\s+at|out|over)\b/i },
-  { name: 'gazing', regex: /\bgazing\b/i },
-  { name: 'watching-staring', regex: /\b(watching|observing|staring|peering)\b/i },
+  // Activity NAMES ("whale watching", "bird-watching", "star gazing", "people watching") describe the outing, not
+  // where the cast looks; the pose line keeps the faces to camera. Without the exemption a user's "whale watching"
+  // failed both attempts and the scene was swapped for the generic fallback (3 of 3, 2026-09-23 outfit harness).
+  // "watching the sunset", "gazing at the stars" still fail. Same list as actionSafety.ts DIRECTION_WORDS.
+  {
+    name: 'gazing',
+    regex: /\b(?<!\b(?:whale|dolphin|bird|wildlife|people|storm|star)[-\s])gazing\b/i,
+  },
+  {
+    name: 'watching-staring',
+    regex:
+      /\b(?<!\b(?:whale|dolphin|bird|wildlife|people|storm|star)[-\s])(watching|observing|staring|peering)\b/i,
+  },
   { name: 'facing-each-other', regex: /\bfacing\s+(each\s+other|one\s+another)\b/i },
   { name: 'face-to-face', regex: /\bface[-\s]to[-\s]face\b/i },
   { name: 'turned-toward', regex: /\bturned\s+(toward|to|away)\s+/i },

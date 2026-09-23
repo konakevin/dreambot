@@ -28,9 +28,10 @@ export const TOO_ENERGETIC =
 
 // Eye-direction / body-orientation words the slot validator already forbids in every
 // Sonnet-written field: they turn a face away from the lens or lock the two faces on each
-// other (no_dual_split). Kept in sync with FORBIDDEN_PATTERNS in characterSlotPrompt.ts.
+// other (no_dual_split). Kept in sync with FORBIDDEN_PATTERNS in characterSlotPrompt.ts, including the activity-name
+// exemption ("whale watching", "star gazing" name an outing, not a gaze; 2026-09-23).
 export const DIRECTION_WORDS =
-  /\blooking\s+(at|toward|into|across|up\s+at|out|over)\b|\bgazing\b|\b(watching|observing|staring|peering)\b|\bfacing\s+(each\s+other|one\s+another)\b|\bface[-\s]to[-\s]face\b|\bturned\s+(toward|to|away)\s+|\beye\s+contact\b|\b(from\s+behind|back\s+view|rear\s+view|back\s+of\s+(the|her|his|their)\s+head)\b|\b(side\s+profile|profile\s+shot)\b/i;
+  /\blooking\s+(at|toward|into|across|up\s+at|out|over)\b|\b(?<!\b(?:whale|dolphin|bird|wildlife|people|storm|star)[-\s])gazing\b|\b(?<!\b(?:whale|dolphin|bird|wildlife|people|storm|star)[-\s])(watching|observing|staring|peering)\b|\bfacing\s+(each\s+other|one\s+another)\b|\bface[-\s]to[-\s]face\b|\bturned\s+(toward|to|away)\s+|\beye\s+contact\b|\b(from\s+behind|back\s+view|rear\s+view|back\s+of\s+(the|her|his|their)\s+head)\b|\b(side\s+profile|profile\s+shot)\b/i;
 
 // People are referred to by role ("one … the other"), never by pronoun: a pronoun in a
 // beat can re-gender a cast member under the swap (the slot validator bans them too).
