@@ -1845,39 +1845,58 @@ gutted a working pool. The rule:
   lesson 17's case, and the fix is structural (a crop law, a different framing form), not deletion.
 Count which entries produced the failures before deciding. It is one query on the stored prompts.
 
-**54. ⭐⭐⭐ EMITTED PROMPT LENGTH PREDICTS THE GRADE — measured per-render, not inferred.** The
-attention-curve laws (12/22/34) have always been argued from whether a NAMED thing rendered. PixelBot
-`observatory-tower` graded 15 renders blind and then sorted them by emitted word count:
+**54. ⭐ PROMPT LENGTH vs GRADE — A WITHIN-PATH OBSERVATION THAT DOES **NOT** GENERALISE, AND THE
+DISTINCTION THAT MATTERS.** Recorded with its own refutation attached, because I wrote this as a
+three-star fleet law and then failed to replicate it within the hour.
 
-| emitted words | avg grade |
+**What was measured.** PixelBot `observatory-tower` graded 15 renders, then sorted them by emitted word
+count: the 8 shortest (235-278w) averaged **4.51**, the 7 longest (289-339w) **3.87**, every prompt
+≥323w graded 3.0-3.6. Real for that path, one round, n=15 split 8/7.
+
+**What refuted the generalisation.** I then pulled the median emitted length of all **25** graded paths
+in this run and correlated it against their grades:
+
+| test | result |
 |---|---|
-| 8 shortest (235-278w) | **4.51 — above the pass bar** |
-| 7 longest (289-339w) | 3.87 |
+| all 25 paths pooled | r = **-0.18** |
+| bot-centred (each bot's own mean removed) | r = **-0.05** — no relationship |
+| paths with median <300w (n=12) | avg grade 4.38 |
+| paths with median ≥350w (n=6) | avg grade 4.18 |
 
-and **every prompt at or above 323 words graded 3.0-3.6.** Same path, same pools, same models, same
-round — the only variable is how many words the roll happened to produce. This reframes length from "a
-thing that can push a clause off the end" to **the single highest-leverage dial on a path's average**,
-and it means a path whose median sits near the cliff is one long roll away from a bad render every
-batch. Check a disappointing path's length distribution BEFORE rewriting any of its content: if the
-long tail is where the bad grades are, no amount of better wording in the pools will fix it, because
-the words are not the problem, the count is.
+and the per-bot slopes point in *different directions*: DinoBot **r = +0.92** (its longest path is its
+best, and the best of the whole run), BloomBot -0.89, ToyBot -0.60, FaeBot 0.00, PixelBot -0.27. Two of
+the shortest paths in the fleet are `ice-cavern` (276w, 3.8) and `bath-toy-flotilla` (284w, 3.0), so
+short buys nothing on its own. And FarmBot `apiary-beekeeping` runs **578 words** and grades 4.37.
 
-⚠️ **The 323-word number is NOT portable — measure the slope, never import the threshold.** Checked
-immediately against a second bot and it does not transfer: FarmBot `apiary-beekeeping`'s DELIVERED
-prompts run **476-613 words (median 578)**, nearly double PixelBot's cliff, and that path grades 4.37.
-A prompt length that is fatal on one bot is unremarkable on another, because the budget competes with
-whatever that bot's shared medium fragment already spent (FarmBot's is 273 words before the scene even
-starts). So the portable claim is the **negative slope inside a single path**, not any absolute count.
-Sort that path's own renders by emitted length and look at the two halves; a threshold borrowed from
-another bot's build will send you trimming pools that were never the problem.
+**The distinction I had blurred, which is the actual lesson.** Two different claims were being treated
+as one:
+- ✅ **POSITION of a specific element, proven by INTERVENTION** — move one clause and watch that clause
+  render or vanish (5-10% of the prompt renders 6/6, past ~30% renders 0/6; the roofline noun at word
+  ~104 rendered 6/6 while the blade word at ~177 rendered 0/6). Measured causally on three bots by
+  changing one thing. **This stands, and it is what lessons 12/22/34 actually say.**
+- ❌ **TOTAL LENGTH predicting OVERALL grade** — an observational correlation on a single path that does
+  not replicate across 25.
 
-**Instrumented as of migration 546:** `bot_run_log.prompt_words` stamps the exact emitted word count on
-every run, success AND failure, so this is now one `GROUP BY` instead of a build's worth of grading.
-Before it, the question could not even be asked about failures — a failed render writes no `uploads`
-row and `prompt_preview` caps at 2000 chars, so every prompt past ~312 words read as exactly 312. That
-is precisely why "do longer prompts trip Replicate's content filter more often?" was unanswerable for
-apiary's 3-in-26 E005 rate: all 23 of its delivered prompts exceed the cap, so every one of them
-reported the same number and the comparison carried zero information.
+So: use length to reason about **whether a named element you care about will survive**, which is a
+causal question you can test by moving it. Do not use a path's total length as a proxy for its quality,
+and never trim a pool because its prompts are "too long" without first naming the element you expect
+that trim to rescue. A path's grade is set by what is IN the attended region, not by how much sits
+after it. `observatory-tower`'s own residual is best restated that way: its long rolls push
+`reading_tool` and `room_dressing` off the end, and those two axes are what its bare-walled 3.0 renders
+were missing — that is lesson 34, already known, and it is a claim about two specific axes rather than
+about word count.
+
+**Instrumented anyway** (migration 546, `bot_run_log.prompt_words`): the column is worth having
+regardless of which way this went, because the question was previously unanswerable on failures — a
+failed render writes no `uploads` row, and `prompt_preview` caps at 2000 chars, so every prompt past
+~312 words read as exactly 312. That cap is why "do longer prompts trip Replicate's content filter more
+often?" could not be answered for apiary's 3-in-26 E005 rate at all: all 23 of its delivered prompts
+exceed the cap and reported the same number.
+
+**The process lesson, which is the durable one:** an observational split of one path's renders is a
+HYPOTHESIS. Before writing it into the playbook as a law, test it against the paths already built — the
+data was already in the database and cost one query. I had written this up, committed it, and put it at
+the top of Kevin's grading sheet before running that query.
 
 **55. ⭐⭐ SONNET ANCHORS WORD COUNT ON YOUR EXAMPLES, NOT ON YOUR NUMBER — and restating a cap is a
 nudge, not a control.** Sharpens lesson 46. A generator asking for 35-50 words produced a median of

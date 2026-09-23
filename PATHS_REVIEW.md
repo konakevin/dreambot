@@ -13,29 +13,28 @@ version will cover all 35. Full per-path detail, every measured round and every 
 
 ---
 
-## The one finding worth your time, if you only read one thing
+## A correction you should see before the tables
 
-**A render's grade tracks how LONG its prompt was, more than anything else I changed.** PixelBot
-`observatory-tower` graded 15 renders, then sorted them by word count after the fact:
+Mid-run I thought I had found the headline result: on PixelBot `observatory-tower`, sorting its 15
+renders by prompt length put the 8 shortest at avg **4.51** and the 7 longest at **3.87**. I wrote that
+up as a fleet law and had it at the top of this sheet.
 
-| emitted words | avg grade |
-| --- | --- |
-| the 8 shortest (235-278w) | **4.51 — above the pass bar** |
-| the 7 longest (289-339w) | 3.87 |
+**Then I tested it against all 25 graded paths and it did not hold.** Bot-centred correlation between a
+path's median prompt length and its grade: **r = -0.05**, i.e. nothing. DinoBot's four paths trend the
+*opposite* way (r = +0.92 — its longest path is the best of the entire run). Two of the shortest paths
+in the fleet, `ice-cavern` (276w) and `bath-toy-flotilla` (284w), grade 3.8 and 3.0. FarmBot
+`apiary-beekeeping` runs 578 words and grades 4.37.
 
-Same path, same pools, same models, same round. The only difference is how many words that roll
-happened to produce, and every prompt at or above 323 words graded 3.0-3.6. This is the same mechanism
-behind four separate fixes in this run, and it is why decision #1 below is the biggest lever on the
-board.
+So **do not read "shorter prompt" as "better path" anywhere in this sheet.** What survives is the
+narrower claim this project already had evidence for, and it is about position rather than total length:
+if a specific element you care about sits late in the prompt, it does not render, and you can prove that
+by moving it and re-rendering. That is a per-element, testable claim. A path's overall quality is set by
+what is in the attended region, not by how much text follows it.
 
-**The caveat, because I got this wrong first and corrected it:** the 323-word number is NOT portable.
-FarmBot's prompts run nearly double that (median 578) and its paths still grade 3.8-4.4, because the
-budget competes with whatever that bot's shared fragment already spent. What travels is the downward
-slope inside one path, never a threshold borrowed from another bot. I have added
-`bot_run_log.prompt_words` (migration 546) so this is now one query per path instead of a build's worth
-of grading, on failures as well as successes.
-
----
+I have left the mechanism in place as a diagnostic (`bot_run_log.prompt_words`, migration 546) because
+it makes the question cheap to ask per path, including on failed renders where it was previously
+impossible. But the "trim the pools" lever on `observatory-tower` below is stated as what it really is:
+two named axes getting pushed off the end, not a word-count problem.
 
 ## Passing the plan's bar (avg ≥ 4.5, nothing below 4)
 
@@ -63,7 +62,7 @@ of grading, on failures as well as successes.
 | 4.4 | DinoBot | `amber-forest` | ~1 in 4 renders the resin OPAQUE, losing the lens half of the premise. Lever: the clean-medium opt-out, already applied at merge |
 | 4.37 | FarmBot | `apiary-beekeeping` | was 3.83; removing the per-bee detail exemption took giant bees 3/5 → 0/6. Residual: Replicate's filter trips on this path |
 | 4.27 | BrickBot | `balloon-festival` | ~1 in 6 goes wide-and-distant and loses the scale ruler, saturation and text control at once. Lever: purge the camera pool by frame-size |
-| 4.26 | PixelBot | `observatory-tower` | an astronomer's tower, the dome slot open to the night. **Text 0/15** on the fleet's highest text-risk subject, won by moving every pinned thing onto curved plaster instead of a flat board. Best frame 5.0: a figure on the ladder handing a steaming mug down to a small one reaching up. Lever: trim the 186 of 225 over-cap pool entries |
+| 4.26 | PixelBot | `observatory-tower` | an astronomer's tower, the dome slot open to the night. **Text 0/15** on the fleet's highest text-risk subject, won by moving every pinned thing onto curved plaster instead of a flat board. Best frame 5.0: a figure on the ladder handing a steaming mug down to a small one reaching up. Lever: its long rolls push `reading_tool` and `room_dressing` off the end, and those two axes are exactly what the bare-walled 3.0 renders were missing |
 | ~4.2 | FaeBot | `honey-harvest` | beat the naked-cherub trap that sank `acorn-boat-regatta`, 6/6 first try, by opening with a fae *at work mid-movement* rather than a static description. Two 4.5s. Also settled a fleet question: the Replicate content-filter wall is the whole flux-2 family, not one model |
 | 4.2 | SteamBot | `rooftop-telegraph` | the vantage reaches only 1 of 6 prompts — and that render is the 4.8. Lever: give the vantage its own output-order item |
 | 4.13 | BloomBot | `coastal-cliff-bloom` | the postcard vista, ~4 of 6, and NOT beatable by wording ("cliff" reached 0 of 24 prompts and the cliff rendered anyway). Lever: halve a 6.6 KB template |
@@ -100,9 +99,12 @@ I deliberately did not action any of these, because each touches live content.
    273 words, starting at **word 4** of every prompt, across **35 live paths**. Sonnet's actual scene
    does not begin until word ~277, and content past ~30% of a prompt renders at roughly zero. So the
    entire attended region of every FarmBot render is generic preamble, identical every time. This is
-   one constant in one file. The finding at the top of this sheet is the same mechanism measured
-   per-render for the first time, which is what moved this from "a thing I believe" to "the biggest
-   lever on the board". The same mechanism, fixed on two other bots this run, took one path's
+   one constant in one file. This rests on the INTERVENTION evidence, not on any
+   length-vs-grade correlation: the same fix on two other bots took one path's frame-filling failure
+   2/6 → 0/6 and another's clock faces 3/6 → 1/6, each by moving or deleting one fragment and
+   re-rendering. Counter-evidence, stated fairly: FarmBot's `apiary-beekeeping` carries this very
+   fragment, runs 578 words, and still grades 4.37 — so the fragment is not fatal, and the honest claim
+   is that it wastes the attended region, not that it ruins the bot. The same mechanism, fixed on two other bots this run, took one path's
    frame-filling failure 2/6 → 0/6 and another's clock faces 3/6 → 1/6.
 2. **The fleet-wide `no text, no watermarks` suffix.** A negation CLIP cannot process, on every bot.
    Measured at 8 renders per arm and **inconclusive** — 0/8 with it vs 1/8 without. Resolving it needs
