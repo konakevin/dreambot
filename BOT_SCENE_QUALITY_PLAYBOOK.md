@@ -1862,6 +1862,23 @@ batch. Check a disappointing path's length distribution BEFORE rewriting any of 
 long tail is where the bad grades are, no amount of better wording in the pools will fix it, because
 the words are not the problem, the count is.
 
+⚠️ **The 323-word number is NOT portable — measure the slope, never import the threshold.** Checked
+immediately against a second bot and it does not transfer: FarmBot `apiary-beekeeping`'s DELIVERED
+prompts run **476-613 words (median 578)**, nearly double PixelBot's cliff, and that path grades 4.37.
+A prompt length that is fatal on one bot is unremarkable on another, because the budget competes with
+whatever that bot's shared medium fragment already spent (FarmBot's is 273 words before the scene even
+starts). So the portable claim is the **negative slope inside a single path**, not any absolute count.
+Sort that path's own renders by emitted length and look at the two halves; a threshold borrowed from
+another bot's build will send you trimming pools that were never the problem.
+
+**Instrumented as of migration 546:** `bot_run_log.prompt_words` stamps the exact emitted word count on
+every run, success AND failure, so this is now one `GROUP BY` instead of a build's worth of grading.
+Before it, the question could not even be asked about failures — a failed render writes no `uploads`
+row and `prompt_preview` caps at 2000 chars, so every prompt past ~312 words read as exactly 312. That
+is precisely why "do longer prompts trip Replicate's content filter more often?" was unanswerable for
+apiary's 3-in-26 E005 rate: all 23 of its delivered prompts exceed the cap, so every one of them
+reported the same number and the comparison carried zero information.
+
 **55. ⭐⭐ SONNET ANCHORS WORD COUNT ON YOUR EXAMPLES, NOT ON YOUR NUMBER — and restating a cap is a
 nudge, not a control.** Sharpens lesson 46. A generator asking for 35-50 words produced a median of
 143 because every example written underneath the ask was itself 55-70 words. Rewriting the examples to

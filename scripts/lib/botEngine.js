@@ -260,6 +260,22 @@ async function callModelWithRetry({ model, brief, maxTokens, anthropicKey }) {
  */
 const BANNED_INFLECTIONS = "(?:s|es|ren|'s|s')?";
 
+/**
+ * Word count of an emitted prompt, stamped onto every `bot_run_log` row as
+ * `prompt_words` (migration 546).
+ *
+ * This exists because prompt LENGTH turned out to be the strongest single
+ * predictor of a render's grade (playbook lesson 54), and until this column
+ * there was no way to ask the question on failures at all: a failed render
+ * writes no `uploads` row, and `prompt_preview` caps at 2000 chars, so every
+ * long prompt reads as the same number.
+ */
+function countPromptWords(prompt) {
+  if (!prompt || typeof prompt !== 'string') return null;
+  const n = prompt.trim().split(/\s+/).filter(Boolean).length;
+  return n > 0 ? n : null;
+}
+
 function findBannedPhrase(text, phrases) {
   if (!text || !phrases || phrases.length === 0) return null;
   for (const raw of phrases) {
@@ -2004,6 +2020,9 @@ async function runBot(opts) {
         cost_cents: costCents,
         // 300 is fine on SUCCESS: the full prompt is on the uploads row.
         prompt_preview: finalPrompt.slice(0, 300),
+        // ...but the WORD COUNT is stamped exactly, on success and failure alike,
+        // because the uploads join is the expensive half of every length query.
+        prompt_words: countPromptWords(finalPrompt),
         sonnet_retries: claudeMeta.retries,
         sonnet_fell_back_to_secondary: claudeMeta.fellBackToSecondary,
         sonnet_truncated: claudeMeta.truncated,
@@ -2055,6 +2074,9 @@ async function runBot(opts) {
           // sat past the cut, so the cause was simply not recoverable from history.
           // `prompt_preview` is a text column, so a longer slice needs no migration.
           prompt_preview: finalPrompt ? finalPrompt.slice(0, 2000) : null,
+          // The cap above makes every prompt past ~312 words read as 312, which
+          // is exactly why the length question was unanswerable on failures.
+          prompt_words: countPromptWords(finalPrompt),
           sonnet_retries: claudeMeta.retries,
           sonnet_fell_back_to_secondary: claudeMeta.fellBackToSecondary,
           sonnet_truncated: claudeMeta.truncated,
@@ -2096,6 +2118,7 @@ module.exports = {
   // this matcher are load-bearing (over-blocking killed 19% of one path's renders;
   // under-blocking would put a human in a no-humans bot's render)
   findBannedPhrase,
+  countPromptWords,
   flux,
   download,
   weightedPick,

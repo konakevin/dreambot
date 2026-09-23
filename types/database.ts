@@ -360,6 +360,7 @@ export type Database = {
           model: string | null;
           path: string | null;
           prompt_preview: string | null;
+          prompt_words: number | null;
           sonnet_fell_back_to_secondary: boolean | null;
           sonnet_retries: number | null;
           sonnet_truncated: boolean | null;
@@ -380,6 +381,7 @@ export type Database = {
           model?: string | null;
           path?: string | null;
           prompt_preview?: string | null;
+          prompt_words?: number | null;
           sonnet_fell_back_to_secondary?: boolean | null;
           sonnet_retries?: number | null;
           sonnet_truncated?: boolean | null;
@@ -400,6 +402,7 @@ export type Database = {
           model?: string | null;
           path?: string | null;
           prompt_preview?: string | null;
+          prompt_words?: number | null;
           sonnet_fell_back_to_secondary?: boolean | null;
           sonnet_retries?: number | null;
           sonnet_truncated?: boolean | null;
