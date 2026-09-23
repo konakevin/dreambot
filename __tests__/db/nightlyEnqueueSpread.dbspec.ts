@@ -60,8 +60,10 @@ beforeAll(async () => {
   await pool.query('CREATE TABLE public.engine_config (id integer PRIMARY KEY)');
   await pool.query('INSERT INTO public.engine_config (id) VALUES (1)');
   await pool.query(extract(sql, 'ALTER TABLE public.engine_config', ';'));
+  // Same parameter name as the real function: other specs create it in this shared DB first, and CREATE OR
+  // REPLACE cannot rename a parameter.
   await pool.query(
-    'CREATE OR REPLACE FUNCTION public.is_dream_eligible(p uuid) RETURNS boolean LANGUAGE sql AS $f$ SELECT true $f$'
+    'CREATE OR REPLACE FUNCTION public.is_dream_eligible(p_user_id uuid) RETURNS boolean LANGUAGE sql AS $f$ SELECT true $f$'
   );
   await pool.query(extract(sql, 'CREATE OR REPLACE FUNCTION public.enqueue_nightly_dreams', '$$;'));
 });
