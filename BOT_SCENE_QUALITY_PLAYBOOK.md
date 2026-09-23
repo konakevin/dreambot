@@ -1585,6 +1585,38 @@ audit the pool as a SET and delete the offending class rather than adding words.
 > that can distinguish a MODEL fact from a CONTENT fact.** Here that experiment is one variable: run
 > the same model on an unrelated path on the same bot.
 
+> **AND THE FULL RESOLUTION, including my own two over-corrections, because the method matters more
+> than the answer (measured over 1,192 flux-2 runs).**
+>
+> | path | E005 |
+> | --- | --- |
+> | faebot/star-charting | **10 / 13 (77%)** |
+> | farmbot/apiary-beekeeping | **3 / 26 (12%)** |
+> | twelve other flux-2 paths | **0** across 400+ runs |
+> | flux-2 family overall | 13 / 1192 = 1.1% |
+>
+> The trigger IS path-specific. I had reached that, then RETRACTED it because every failure carried
+> the identical Replicate id `uIJ6l3ruRD` across two models and two bots, which I read as a cached
+> canned response and therefore as evidence AGAINST content. **That inference was the mistake: an id
+> appearing in 13 of 13 is far better explained as a STATIC string inside Replicate's E005 message
+> than as a per-request identifier. I treated a constant as a signal.**
+>
+> **Two transferable method notes, which are the real value here:**
+> 1. **Before treating an identifier as evidence, establish that it VARIES.** A field that is
+>    constant across every observation carries no information about causation, and reasoning from it
+>    will point you confidently in the wrong direction.
+> 2. **Denominators decide attribution.** The question was never "does this path fail" but "does it
+>    fail MORE than comparable paths on the same model". Twelve clean paths at 0 across 400+ runs is
+>    what settled it, and that query was one line away the whole time.
+>
+> What the two failing paths share, and the twelve clean ones do not, is a CLOSE HUMAN OR HUMANOID
+> BODY: an adult fae described in physical proportion, and close-range human hands among bee swarms.
+> The clean paths are landscapes, towns, food and vistas. But a reword arm targeting the clothing
+> clause went 0 of 4, so it is not that clause — it is the pose, the proportion vocabulary, or the
+> combination. Ablate the POSE axis and the proportion clause separately, 8 attempts per arm, and do
+> NOT blanket-soften the appearance pool: its adult-proportions law is exactly what beat the
+> naked-putto trap that cost a sibling path 5 of 6 renders.
+
 **36. THE POSITION-COLOUR-COUNT LAW — information shown without a single character, 0 text in 26
 renders on the fleet's highest text-risk subject.** A star chart is a diagram covered in writing, and
 lesson 23 says even the standard "one small painted picture" move invents a signboard when its
