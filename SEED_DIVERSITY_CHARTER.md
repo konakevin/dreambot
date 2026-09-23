@@ -213,6 +213,59 @@ by this module before any generation runs, or the generator will keep accepting 
 
 ---
 
+## 6b. Safety rules — non-negotiable, Kevin 2026-09-23
+
+> "we need to be extremely careful doing this btw, dry-run before actually mutating the pools is
+> necessary to validate what we think will happen. and then when we backfill, again, need to be
+> careful so that the new seed pool entries are correct"
+
+This is riskier than the render cleanup earlier the same day, and in a worse way. A bad delete fails
+loudly and is caught by a count. A bad *rewrite* silently degrades what 18 live bots post twice a day,
+and nothing in CI would notice, because the entry count and the JSON shape stay valid.
+
+### Every mutation script obeys these
+
+1. **DRY RUN IS THE DEFAULT.** `--execute` required. The dry run prints, per pool: entries before,
+   distinct before, which clusters were judged redundant, the exact old → new text of every proposed
+   rewrite, and entries/distinct after. Nothing is accepted until that output has been read.
+2. **Back up the pool file before the first write**, to a timestamped path outside the repo, same as
+   the render cleanup did. Plus git, which already tracks these files.
+3. **NEVER DELETE.** Rewrite in place. A post-write assertion fails the run if the entry count dropped
+   by even one.
+4. **One pool at a time, verified, then the next.** No fleet-wide blind run. A batch that touches 40
+   pools before anyone looks at the first is how this goes wrong.
+5. **Prove on ONE pool, show Kevin, stop.** `faebot_flower_fairy_scale_prover` is the natural
+   candidate: worst in the fleet, 200 entries, 69 distinct. Nothing else gets touched until he has seen
+   that pool's before/after.
+
+### Every rewritten or backfilled entry must pass, before it is written
+
+| check | why |
+| --- | --- |
+| distinct from every existing entry, LLM-judged **and** lexically | the entire point; a rewrite that lands on another existing idea is a no-op |
+| matches the pool's register — length band, sentence shape, vocabulary | these pools feed a specific bot's voice; an off-register entry renders wrong even if it is unique |
+| passes the bot's own `bannedPhrases` | a human noun in a no-humans bot's pool kills the render at `banned-phrase-check` |
+| passes `scripts/sweep-bot-seed-defects.js` | the known bad-render phrase families: negation leaks, metaphorical light-as-object, per-object personification, off-limits size rulers |
+| no text-prior nouns (signs, labels, banners) | the fleet's most persistent render defect |
+| JSON re-parses and the array length is >= the original | catches a malformed write before it reaches a bot |
+
+### The real proof is a render, not a number
+
+An audit passing only proves the text changed. After a pool is repaired, its path gets a **6-render
+shadow batch**, reviewed in the app, before the pool is trusted. A repaired pool that renders worse has
+failed regardless of what `distinct` says — the same standard every path in the 35-path push was held
+to, and the same reason `acorn-boat-regatta` got four rounds instead of one.
+
+### Order of operations, fixed
+
+```
+prove one pool  ->  Kevin reviews  ->  one bot end to end  ->  render batch  ->  Kevin reviews
+    ->  remaining bots worst-first  ->  CI gate last
+```
+
+The CI gate lands **last**, not first: turning it on while 46 pools are still over the ceiling would
+block every unrelated commit that happens to touch a seed file.
+
 ## 7. Open questions for Kevin
 
 1. **Is 100 distinct ideas the bar for every scene pool, or should hot pools go deeper?** A pool drawn
