@@ -177,3 +177,21 @@ reserved interactive slot during a nightly swap, paid that cold start inside its
   is 3. The ceiling is `fly_dual_swap_slots × (1 + swap_gate_max_wait_ms / 25 s)` = 5 today (`heavyCapCeiling`).
   Runbook (QUEUE_WORKERS_REFACTOR.md) and CLAUDE.md now say: one swap per machine; scale Fly, then
   `fly_dual_swap_slots`, then the heavy cap. The July "~10 swaps per machine" rule is marked superseded.
+
+## Live (2026-09-23 ~21:50 UTC, migration 553): a capacity retry keeps the couple
+
+The 09-23 worker test showed the gap: a couple lost its swap to capacity, re-queued, and the retry re-rolled the
+whole dream and came back a SOLO. Now the failed attempt records `{cast_role: 'dual', partner_id}` on its queue row
+(`record_capacity_retry_pin`, one atomic jsonb merge, only while `in_progress`, service role only), the nightly
+dispatcher forwards `payload.capacity_retry`, and the render keeps the couple the way the holiday day-of does
+(`preRolledType = 'face_swap_dual'`, a production path; NOT `force_cast_role`, which would switch on the first-dream
+showcase cascade) and keeps the same +1. Look, vibe, scene and model re-roll. Not a QA flag (no `force_`/`qa_`
+prefix), so the dream stays a real one. Stamps: `capacity_retry_pin:any|partner`, `capacity_retry_pin:couple_held`,
+`capacity_retry_pin_recorded:true`.
+
+- Verified live through the real worker (placeholder lease holding the batch slot): attempt 1 couple on flux-1.1-pro
+  → no slot in 45 s → re-queued with the pin + partner `68505c28` → attempt 2 couple on flux-1.1-pro, same partner,
+  slot after 9.7 s, first-try swap (`dual_attempts:1`), completed. No solo.
+- Tests: `__tests__/lib/capacityRetryPin.test.ts` (parse, hold rules, partner, never-throws, not-QA, every wiring
+  hop, pin applied after the day-of pre-roll), `__tests__/db/capacityRetryPin.dbspec.ts` (merge keeps other keys,
+  null payload, leaves a finished job alone).

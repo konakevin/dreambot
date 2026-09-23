@@ -282,7 +282,8 @@ describe('wiring (source guards — the edge functions cannot run in jest)', () 
       'if (!queueJobId || isFirstDream || strict_face_swap || maxRetries <= 0) return false;'
     );
     expect(n).toContain('const capacityRetry = err instanceof SwapCapacityRetryError;');
-    expect(n).toContain('if (capacityRetry) fallbackReasons.push(...err.reasons);');
+    // The failed attempt's log row carries the swap stamps (and, since migration 553, records the couple pin).
+    expect(n).toContain('if (capacityRetry) { fallbackReasons.push(...err.reasons);');
   });
 
   it('migration 549 ships the gate and the retry INERT, and removes the arms-wide pose', () => {

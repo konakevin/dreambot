@@ -66,6 +66,12 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
   // pin inputs after the QA check, so the upload is a real user dream.
   const redream =
     payload && payload.redream && typeof payload.redream === 'object' ? payload.redream : null;
+  // Capacity-retry pin (migration 553): the previous attempt was a couple that lost its swap to capacity; the render
+  // keeps the couple and its +1. Written by the render's own failed attempt, never by a client.
+  const capacityRetry =
+    payload && payload.capacity_retry && typeof payload.capacity_retry === 'object'
+      ? payload.capacity_retry
+      : null;
   const res = await fetch(`${supabaseUrl}/functions/v1/nightly-dreams`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${workerToken}` },
@@ -73,6 +79,7 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
       user_id: userId,
       queue_job_id: queueJobId,
       ...(redream ? { redream } : {}),
+      ...(capacityRetry ? { capacity_retry: capacityRetry } : {}),
     }),
   });
   let data: Record<string, unknown> = {};

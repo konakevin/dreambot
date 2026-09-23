@@ -140,6 +140,12 @@ import { orderDualSides, shouldFlipDualSide } from '../_shared/dualSideOrder.ts'
 import { genderSafeDualSwap, identityThreshold } from '../_shared/dualSwapPipeline.ts';
 import { SwapCapacityRetryError } from '../_shared/swapCapacityGate.ts';
 import {
+  parseCapacityRetryPin,
+  pinnedPartner,
+  recordCapacityRetryPin,
+  shouldHoldCouple,
+} from '../_shared/capacityRetryPin.ts';
+import {
   aHashFromDecoded,
   hammingDistance,
   persistBufferToStorage,
@@ -453,6 +459,9 @@ Deno.serve(async (req) => {
     applyRedreamPins(body)
   );
   const redreamPins = parseRedreamPins(body);
+  // CAPACITY-RETRY PIN (migration 553): the previous attempt of this queue job was a couple that lost its swap to
+  // capacity; keep the couple (and its +1) this time. Not a QA flag; applied at the +1 roll and the pre-roll below.
+  const capacityPin = parseCapacityRetryPin(body);
   // force_look = force_medium + the override-library exemption + honest stamps (Phase A2). Every
   // downstream `force_medium` read sees the pinned look key.
   const force_medium: string | undefined = force_look ?? force_medium_raw;
@@ -487,6 +496,8 @@ Deno.serve(async (req) => {
   let replicatePredictionId: string | null = null;
   const fallbackReasons: string[] = [];
   if (redreamPins) fallbackReasons.push(`redream:${redreamPins.sourceUploadId}`);
+  if (capacityPin)
+    fallbackReasons.push(`capacity_retry_pin:${capacityPin.partnerId ? 'partner' : 'any'}`);
   // Nightly model policy (mig 468, NIGHTLY_MODEL_POLICY_PLAN.md): resolved ONCE per render. 'off' =
   // the legacy picker everywhere below; 'shadow' = legacy still renders, the policy resolver runs beside
   // it at every pick site and stamps policy_shadow:<site>:match|diff; 'on' = the policy table decides.
@@ -722,7 +733,11 @@ Deno.serve(async (req) => {
       nightlyProfile.active_partner_id
     );
     if ((nightlyProfile.partner_library?.length ?? 0) > 0) {
-      const roll = rollPartner(eligiblePartners, recentPartnerIds, Math.random);
+      // A capacity retry keeps the +1 the failed attempt rolled (migration 553), while still enabled.
+      const keptPartner = pinnedPartner(capacityPin, eligiblePartners);
+      const roll = keptPartner
+        ? { partner: keptPartner, reason: 'capacity_retry_pin', poolSize: eligiblePartners.length }
+        : rollPartner(eligiblePartners, recentPartnerIds, Math.random);
       nightlyProfile.dream_cast = mirrorPartnerIntoCast(
         nightlyProfile.dream_cast,
         roll.partner
@@ -919,6 +934,28 @@ Deno.serve(async (req) => {
       preRolledCastRole = inputs.forceCastRole;
       preRolledComposition = inputs.forceComposition;
       fallbackReasons.push(`holiday_day_of_preroll:${dayOfHoliday.key}:${preRolledType}`);
+    }
+    // CAPACITY-RETRY PIN (migration 553): this job's last attempt was a couple that lost its swap to capacity, so it
+    // stays a couple. Same override as the day-of above (a production path), NOT the first-dream showcase cascade
+    // that force_cast_role would switch on; the medium, look, vibe and scene still roll fresh.
+    if (
+      shouldHoldCouple(capacityPin, {
+        hasSelf,
+        hasPlusOne,
+        forceMedium: !!force_medium,
+        forceCastRoleSet: force_cast_role !== undefined,
+      })
+    ) {
+      if (preRolledType !== 'face_swap_dual') {
+        preRolledType = 'face_swap_dual';
+        const inputs = mapDreamTypeToInputs(preRolledType, chaosTier, chaosCfg);
+        preRolledMediumToken = inputs.mediumToken;
+        preRolledCastRole = inputs.forceCastRole;
+        preRolledComposition = inputs.forceComposition;
+      }
+      fallbackReasons.push('capacity_retry_pin:couple_held');
+    } else if (capacityPin) {
+      fallbackReasons.push('capacity_retry_pin:not_applied');
     }
     // QA `force_pure_scene` applies at the PRE-ROLL as well as downstream (2026-09-14). It used to take effect
     // only at effectiveComposition (~line 1100), which is AFTER the minimal style contract is built — so a batch
@@ -5900,7 +5937,12 @@ Output ONLY the prompt.`;
     // A capacity re-queue carries the swap stamps gathered before the throw (dual_swap_error, gate waits), so
     // the failed attempt's log row says exactly why it went back to the queue.
     const capacityRetry = err instanceof SwapCapacityRetryError;
-    if (capacityRetry) fallbackReasons.push(...err.reasons);
+    if (capacityRetry) {
+      fallbackReasons.push(...err.reasons);
+      // Keep the couple (and its +1) on the retry the worker is about to queue (migration 553). Never throws.
+      const pinned = await recordCapacityRetryPin(supabase, queueJobId, rolledPartnerId);
+      fallbackReasons.push(`capacity_retry_pin_recorded:${pinned}`);
+    }
 
     // Record the failure so a silent cohort-wide outage is queryable. The
     // success path logs to ai_generation_log; without this, failures left no
