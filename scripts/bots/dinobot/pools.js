@@ -49,6 +49,7 @@ module.exports = {
   DINOBOT_COURTSHIP_ACT: load('dinobot_courtship_act'),
   DINOBOT_COURTSHIP_FEATURE: load('dinobot_courtship_feature'),
   DINOBOT_COURTSHIP_AUDIENCE: load('dinobot_courtship_audience'),
+  DINOBOT_COURTSHIP_ARENA: load('dinobot_courtship_arena'),
   DINOBOT_PALEO_LANDSCAPE_MEGAFLORA: load('dinobot_paleo_landscape_megaflora'),
   DINOBOT_PALEO_LANDSCAPE_PHENOMENON: load('dinobot_paleo_landscape_phenomenon'),
   DINOBOT_PALEO_LANDSCAPE_SURPRISE_ELEMENT: load('dinobot_paleo_landscape_surprise_element'),

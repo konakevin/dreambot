@@ -27,7 +27,12 @@
 module.exports = {
   archetype: 'DINOBOT_COURTSHIP_DISPLAY',
   pools: {
-    biome: 'DINOBOT_PALEO_LANDSCAPE_BIOME',
+    // ROUND 4 (2026-09-22): swapped off the REUSED landscape biome for a bespoke ARENA pool.
+    // The reused pool is written landscape-first, and its wide-desert rolls produced the run's
+    // clearest miss against Kevin's motto — a lone animal standing in flat monochrome sand, clean
+    // and completely forgettable. An arena has a floor, an enclosing edge, room for a gathering,
+    // and one vivid charm detail per entry.
+    biome: 'DINOBOT_COURTSHIP_ARENA',
     display_act: 'DINOBOT_COURTSHIP_ACT',
     display_feature: 'DINOBOT_COURTSHIP_FEATURE',
     audience: 'DINOBOT_COURTSHIP_AUDIENCE',

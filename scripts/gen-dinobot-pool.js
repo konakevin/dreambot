@@ -1489,6 +1489,39 @@ HARD RULES:
 
 Output: ONE act per line. No numbering. No quotes.`,
 
+  dinobot_courtship_arena: `Generate DISPLAY-ARENA descriptions for DinoBot's courtship-display path — the STAGE the display happens on. Each is ONE comma-separated line, 25-40 words.
+
+WHY THIS POOL EXISTS: the path first REUSED the paleo-landscape biome pool, which is written landscape-first. A vast empty dune field is a magnificent landscape and a terrible stage — the draws that rolled one came back as a lone animal standing in flat monochrome sand. A display needs an ARENA: enclosed enough to hold a gathering, vivid enough to be worth looking at.
+
+THE BAR (Kevin's motto, 2026-09-22): playful, adventurous, VIVID, beautiful, clever. Saturated committed colour and dramatic light, never muted and never tasteful-grey. Every entry carries ONE CHARM DETAIL that makes it that arena and no other. Show something unseen, or something familiar redressed as something more interesting.
+
+Variety mandate (rotate widely):
+- ~15% A lek worn bare by generations — packed earth, a ring of scrapes, the vegetation beaten back in a rough circle
+- ~12% A river sandbar or shingle spit, water on both sides, the far bank rising in layers
+- ~12% A fern clearing in tall forest, light coming down in hard columns through the canopy gap
+- ~10% A volcanic ash flat with steam venting from fissures, colour banded into the crust
+- ~10% A bloom-covered meadow at full flower, colour to the horizon, seed-heads at knee height
+- ~10% A tidal mudflat at low water, a perfect mirror under a huge sky
+- ~8% A lakeshore with the water gone still, reeds at the margin
+- ~8% A rock amphitheatre — a natural bowl of tiered stone, an obvious stage floor
+- ~8% A forest gap where a giant has fallen, the trunk itself the stage
+- ~7% A high saddle between ridges with cloud pouring through below
+
+EVERY ENTRY INCLUDES:
+- THE GROUND underfoot, specifically, because the display churns it (packed earth, wet shingle, ash crust, deep bloom, cracked mud, moss)
+- AN ENCLOSING EDGE that makes it a stage rather than an emptiness — a treeline, a bank, a ridge, a rock wall, reeds, cloud
+- ONE VIVID CHARM DETAIL: steam curling from a fissure, a mirror-perfect reflection, one impossibly huge fallen trunk, a drift of blossom caught in a hollow, hot colour banded through the crust, fireflies already up at dusk, a cloud-river pouring over the saddle
+- ROOM FOR SEVERAL ANIMALS. This arena has to hold a displayer plus onlookers, so it reads as a place with a floor, not a distant panorama.
+
+HARD RULES:
+- NO humans, no people, no observers. Earth 66 million years before humans.
+- NO modern anything: no fences, no structures, no signage, no paths.
+- NO glowing/magical/bioluminescent terrain. Real geology and real plants, vividly lit.
+- Mega-flora is welcome (tree ferns, cycads, araucaria, horsetails at scale) and makes it unmistakably Mesozoic.
+- Describe only what IS present. Never write a negation.
+
+Output: ONE arena per line. No numbering. No quotes.`,
+
   dinobot_courtship_feature: `Generate DISPLAY-ANATOMY descriptions for DinoBot's courtship-display path — the SIGNATURE DETAIL the whole shot is about. Each is ONE comma-separated line, 20-35 words.
 
 This is the money-shot axis: the piece of anatomy actively doing the displaying, described so a viewer can see how it works.

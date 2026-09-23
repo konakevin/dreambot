@@ -6,6 +6,37 @@ state 4-4.5 before 3 rounds you can move on."*
 
 So this run is autonomous. Everything lands in `shadowPaths[]` and waits for his grade.
 
+## ⭐ THE BAR — Kevin's direction, 2026-09-22, above everything else in this file
+
+Verbatim: *"dreambot is supposed to add whimsy and delight, so make sure the renders are playful,
+adventerous, vivid, beautiful, clever, all the fun things about this app, we want to embody in any new
+paths - they should branch out and show people unseen things before, or something they've seen
+redressed as something more interesting. it's basically the dreambot motto - delight users, and aim
+for the stars with creativity and quality"*
+
+**This outranks "no defects".** A render that is technically on-brief but sober, plain or merely
+competent is a MISS, not a pass. The five adjectives to design against are PLAYFUL, ADVENTUROUS,
+VIVID, BEAUTIFUL, CLEVER.
+
+How to apply it, per path:
+
+1. **The two acceptable outcomes:** show people something they have NEVER SEEN, or take something
+   familiar and REDRESS it as something more interesting. Of every pool entry, ask: is this the
+   obvious version of this idea, or the surprising one? Ship the surprising one.
+2. **VIVID is literal** — saturated committed colour and dramatic light. Not muted, not washed out,
+   not tasteful-grey. A monochrome-sand render is a miss even when it is competent.
+3. **CLEVER means a charm detail** the eye discovers on second look. PixelBot's own plan already
+   demands "ONE CHARM DETAIL that makes it that ruin and no other" — that standard is now fleet-wide
+   for these paths.
+4. **ADVENTUROUS beats static.** Mid-action beats parked, a story beat beats a tableau, and a bit of
+   comedy is welcome where the bot's register allows it.
+5. **This is a grading lens, not just a design note.** When judging a round, a clean-but-sober frame
+   scores below the bar and is worth a fix round. Do not bank "no hard fails" as a pass.
+
+Every agent brief from here carries this verbatim, and the three agents in flight when it arrived
+(PixelBot volcano-forge, FaeBot mushroom-apothecary, BrickBot airfield-biplanes) were sent it
+mid-build with a path-specific reading of what it means for their subject.
+
 ## Hard constraints on this run
 
 - **Nothing goes public.** Every path is wired into `shadowPaths[]`, never `paths[]`. A
@@ -58,8 +89,8 @@ Then the rest, grouped by bot to reuse each bot's audit.
 
 | # | Bot | Path | Rounds | State | Notes |
 | --- | --- | --- | --- | --- | --- |
-| 1 | DinoBot | courtship-display | 3 | **AWAITING GRADE** | good draws 4.5, ~1/6 lone-animal residual; lever = bespoke arena pool |
-| 2 | ToyBot | puppet-theatre | 1 | R1 rendering | |
+| 1 | DinoBot | courtship-display | 4 | **PASS ~4.6, AWAITING GRADE** | bespoke arena pool fixed the lone-animal miss structurally |
+| 2 | ToyBot | puppet-theatre | 3 | **PASS ~4.7, AWAITING GRADE** | prefix reorder fixed the empty stage; positive crowd-out killed the text prior |
 | 3 | PixelBot | volcano-forge | - | not started | |
 | 4 | FaeBot | mushroom-apothecary | - | not started | |
 | 5 | BloomBot | alpine-wildflower-meadow | - | not started | |
@@ -91,6 +122,72 @@ Then the rest, grouped by bot to reuse each bot's audit.
 | 31 | ToyBot | bath-toy-flotilla | - | not started | |
 | 32 | ToyBot | sand-toy-beachworks | - | not started | |
 | 33 | ToyBot | snow-globe-world | - | not started | |
+
+## The agent brief template (reuse verbatim; only §PATH changes)
+
+Every dispatched agent gets this. Written down so dispatch is consistent across 33 paths and so a
+fresh session can pick the run up without re-deriving it.
+
+```
+You are building ONE new content path for <BOT>, end to end, in /Users/kevinmchenry/Development/apps/dreambot.
+
+PATH: `<key>` — <one-line concept>
+
+## READ FIRST, IN FULL — hard repo rule
+1. BOT_SCENE_QUALITY_PLAYBOOK.md (canonical cross-bot brain) — including the MOTTO section at the top
+2. <the bot's own plan doc if it has one: PIXELBOT_SCENES_PLAN.md, FARMBOT_PATH_BUILD_STATE.md, ...>
+3. Two existing <BOT> path files + its gen script + its pools.js, to learn the real shape rather than guess it
+
+## ⭐ THE BAR — Kevin's motto, outranks "no defects"
+"dreambot is supposed to add whimsy and delight, so make sure the renders are playful, adventerous,
+vivid, beautiful, clever, all the fun things about this app, we want to embody in any new paths - they
+should branch out and show people unseen things before, or something they've seen redressed as
+something more interesting. it's basically the dreambot motto - delight users, and aim for the stars
+with creativity and quality"
+
+A render that is on-brief, clean and free of every hard fail but is SOBER, plain or merely competent is
+a MISS, not a pass. Never bank "no defects" as a pass. Design AND grade against: PLAYFUL, ADVENTUROUS,
+VIVID, BEAUTIFUL, CLEVER.
+- Two acceptable outcomes: show the never-seen, or redress the familiar as more interesting. Of each
+  pool entry ask "is this the obvious version or the surprising one" and ship the surprising one.
+- VIVID is literal: saturated committed colour, dramatic light. Monochrome/muted = a miss.
+- CLEVER = one charm detail per entry that makes it that scene and no other.
+- ADVENTUROUS beats static: mid-action over parked, a story beat over a tableau. Comedy welcome where
+  the bot's register allows.
+<PATH-SPECIFIC READING: name the dull failure this path will drift toward, and 6-10 concrete
+delightful alternatives. This is the most valuable part of the brief — write it properly.>
+
+## Gap + axis design
+<why the bot needs this path; 5-8 bespoke axes, one signature money-shot axis, the load-bearing
+constraint stated as the template's first rule>
+
+## Hard rules
+- Every test render is a SHADOW post (in-memory wrapper from the bot-paths skill: monkey-patch
+  bot.buildBrief, push the key onto bot.paths IN MEMORY ONLY, pass shadow:true). Delete the wrapper after.
+- NEVER edit the bot's index.js or pools.js — single-writer, orchestrator-owned. require() your own
+  seed JSONs from your own path file. Report the exact lines for me to merge.
+- NEVER run git checkout / restore / clean / stash / reset. An agent destroyed uncommitted work that
+  way before. If you think you need to revert, STOP and report.
+- MVP-25 only. Never scale.
+- node scripts/check-pool-headroom.js before EVERY render batch; proceed only on OK.
+- 6 renders per round (5 for PixelBot). Up to 3 rounds. ONE variable per round. Stop early when good.
+- Diagnose every sub-bar render by reading the ACTUAL stored ai_prompt from the DB (service-role key in
+  .env.local), never from the image alone. READ THE MATCHED TEXT of any regex before acting on it.
+- View every render: download + Read the actual jpg.
+- Traps that have bitten real paths: subject/medium front-load collapsing the environment; modern-prior
+  nouns; human leak; silhouette collapse; no-prior creatures rendering as human grafts; Sonnet refusing
+  when a brief says NON-NEGOTIABLE / AUTHORITY / OVERRIDES; negation leak (CLIP cannot negate — crowd
+  out with a positive instead); Flux injecting hardware/lettering into blank surfaces.
+
+## Report back
+1. Round count + per-render read of the final round, against the BAR not just against defects.
+2. The EXACT lines to merge into index.js (and pools.js / archetypes.js / archetype-templates.js).
+3. Files created.
+4. Residual defect + the one lever you would pull next.
+5. Any real bug or reusable lesson, for the playbook.
+
+Work autonomously. Do not ask questions; make the call and record your reasoning.
+```
 
 ## Per-path log
 
@@ -146,7 +243,28 @@ an ARENA.
 lek ground, a scraped display ground, a riverbank flat, a forest gap) instead of reusing the
 landscape biome. That is a pool change, not a template change, and it is the last thing I would try.
 
-**Verdict to grade: the good draws are 4.5, the weak draw is ~3. Kevin's call from the app.**
+**ROUND 4 (bar-driven, after Kevin's motto landed mid-run — new requirement, not a re-attempt).**
+Under the motto the lone-animal-in-flat-sand draw is not an accepted residual, it is the exact miss
+the bar names: clean, defect-free and forgettable. So I did the fix I had deferred and swapped the
+REUSED `DINOBOT_PALEO_LANDSCAPE_BIOME` for a bespoke `DINOBOT_COURTSHIP_ARENA` pool (25). Every entry
+is required to have a floor, an enclosing edge, room for a gathering, and one vivid charm detail:
+*"packed red earth worn bare by generations of display, a rough circle of scrapes edged by a wall of
+tree-ferns three metres tall, amber afternoon light flooding the floor"*, *"a wide river sandbar of
+pale amber shingle, water running fast on both sides, the far bank terraced in red clay and dark
+araucaria"*.
+
+**Result: the failure mode is gone structurally** — there are no wide-empty-desert entries left to
+roll. R4 draws: a ceratopsian striding on worn red earth with its frill flushed and backlit, dust up,
+three more of its kind behind it in the haze, conifer wall enclosing the ground; and a sail-backed
+theropod mid-call with its sail blazing translucent orange against a low sun, two onlookers on the
+track. Vivid, mid-action, audience present.
+
+**VERDICT: PASS at round 4, ~4.6. Awaiting Kevin's grade.**
+
+**Reusable lesson:** a path that REUSES a landscape pool as its stage inherits that pool's priorities.
+A landscape pool optimises for vista; a scene with actors needs an ARENA — a floor and an enclosing
+edge. If a character/behaviour path renders its subject stranded in emptiness, check whether its
+setting axis was borrowed from a landscape path before touching the template.
 
 ### 2. ToyBot `puppet-theatre`
 

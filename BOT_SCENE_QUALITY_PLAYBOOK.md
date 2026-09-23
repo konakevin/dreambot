@@ -917,6 +917,40 @@ Sonnet brief composition adds ~$1; Haiku polish (where enabled) negligible.
 
 ---
 
+## ⭐ THE MOTTO — Kevin, 2026-09-22 (the top-level bar, above every rubric below)
+
+Verbatim: *"dreambot is supposed to add whimsy and delight, so make sure the renders are playful,
+adventerous, vivid, beautiful, clever, all the fun things about this app, we want to embody in any new
+paths - they should branch out and show people unseen things before, or something they've seen
+redressed as something more interesting. it's basically the dreambot motto - delight users, and aim
+for the stars with creativity and quality"*
+
+**This outranks "no defects," and it is a GRADING lens, not just a design note.** A render that is
+on-brief, clean and free of every hard fail but is sober, plain or merely competent is a **MISS**.
+Never bank "no defects" as a pass.
+
+**The two acceptable outcomes** for any new path, bucket or pool rewrite: show people something they
+have **never seen**, or take something familiar and **redress it as something more interesting**. Of
+every pool entry ask *is this the obvious version of this idea, or the surprising one?* and ship the
+surprising one.
+
+- **VIVID is literal** — saturated committed colour, dramatic light. Not muted, washed out, or
+  tasteful-grey. A monochrome frame is a miss even when technically competent.
+- **CLEVER = one charm detail** the eye finds on second look. `PIXELBOT_SCENES_PLAN.md` already
+  demanded "ONE CHARM DETAIL that makes it that ruin and no other" — that is now the fleet standard.
+- **ADVENTUROUS beats static** — mid-action over parked, a story beat over a tableau. Comedy is
+  welcome where the bot's register allows (a toy is played WITH).
+- **PLAYFUL is the house tone.** Sober industrial/documentary realism is the enemy on every bot except
+  EarthBot, whose whole lane it is.
+
+**Why this needed writing down:** the failure it guards against is not a defect, so no lint, sweep or
+regex catches it. In the 33-path run, three early paths returned frames that were clean AND
+forgettable — a magnificent EMPTY puppet stage, a lone dinosaur standing in flat monochrome sand, a
+tasteful dim apothecary. Every one passed every mechanical check. This bar is the only thing that
+fails them. See [[feedback_dreambot_motto_whimsy_delight_bar]].
+
+---
+
 ## North Star — the actual goal
 
 **Every render must be a 10/10 poster-worthy frame.**
