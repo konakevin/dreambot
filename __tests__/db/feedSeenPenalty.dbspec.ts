@@ -289,12 +289,14 @@ async function insertPost(id: string, authorId: string, age: string, likes: numb
   );
 }
 
+// Cross-call comparisons use 5 decimals: now() advances between the two get_feed
+// calls, so time-decayed terms drift ~1e-8. Real effects here are >= 0.04.
 it('544: an UNSEEN post under 24h gets exactly +0.40; 0 turns it off', async () => {
   await insertIdenticalPosts([P_UNSEEN], AUTHOR, '12 hours');
   const on = (await feedScores('forYou')).get(P_UNSEEN)!;
   await setConfig('feed_unseen_fresh_bonus', 0);
   const off = (await feedScores('forYou')).get(P_UNSEEN)!;
-  expect(on - off).toBeCloseTo(0.4, 6);
+  expect(on - off).toBeCloseTo(0.4, 5);
 });
 
 it("544: a SEEN fresh post gets no bonus (no re-serving today's posts every open)", async () => {
@@ -307,7 +309,7 @@ it("544: a SEEN fresh post gets no bonus (no re-serving today's posts every open
   const on = (await feedScores('forYou')).get(P_SEEN1)!;
   await setConfig('feed_unseen_fresh_bonus', 0);
   const off = (await feedScores('forYou')).get(P_SEEN1)!;
-  expect(on).toBeCloseTo(off, 8);
+  expect(on).toBeCloseTo(off, 5);
 });
 
 it('544: older posts (7d+) ignore engagement — 40 likes scores like 0 likes', async () => {
@@ -341,7 +343,7 @@ it("544: older posts take turns — every author's first pick before anyone's se
   // 0 = off: all four tie again.
   await setConfig('feed_older_turn_step', 0);
   s = await feedScores('forYou');
-  for (const id of [P_A1, P_A2, P_A3]) expect(s.get(id)!).toBeCloseTo(b, 8);
+  for (const id of [P_A1, P_A2, P_A3]) expect(s.get(id)!).toBeCloseTo(b, 5);
 });
 
 it('544: the fresh/throwback knobs never touch the Following tab', async () => {
@@ -356,5 +358,5 @@ it('544: the fresh/throwback knobs never touch the Following tab', async () => {
   await setConfig('feed_older_ignore_engagement', false);
   await setConfig('feed_older_turn_step', 0);
   const after = await feedScores('following');
-  for (const id of [P_A1, P_A2]) expect(after.get(id)!).toBeCloseTo(before.get(id)!, 8);
+  for (const id of [P_A1, P_A2]) expect(after.get(id)!).toBeCloseTo(before.get(id)!, 5);
 });
