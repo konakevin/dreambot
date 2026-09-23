@@ -1,6 +1,8 @@
 # Create outfits: per-person colour + honoring what the user asks for
 
-Status: PLAN, decisions in (2026-09-23). Nothing built. Create solo + couples; nightly port later.
+Status: LIVE for everyone since 2026-09-23 (migration 548, Kevin: "go for it"). Create solo + couples.
+Rollback: `UPDATE engine_config SET create_outfit_rolls = false, create_outfit_user_lock = false WHERE id = 1;`
+(instant, no deploy). Nightly port: not started (see the end).
 
 Kevin: "can we make each person wear only their own colour, or even mismatched colors and patterns/fabrics
 ... we can have matchy like that, i like it, but can we also have the post by koi?" and "if the user
@@ -308,7 +310,7 @@ kept|retried|code_applied`). Stamps: `outfit_colour`, `outfit_cut`, `outfit_patt
   runs alongside the setting/action split), one plan per render, solo → `compilePrompt({ outfitPlan })` +
   `enforceSoloOutfit` before post-processing, couples → `slotInput.outfitPlan`. Face-swap cast renders
   with self / plus*one only (no pets, no Dream Art, no photo modes). Stamps: `outfit_spec:*`,
-`outfit_preview`, `outfit_colour/cut/pattern`, `outfit_lock:_`, `outfit_occluder_\*`.
+`outfit*preview`, `outfit_colour/cut/pattern`, `outfit_lock:*`, `outfit*occluder*\*`.
 - Wiring guard: `createEngineWiring.test.ts` (6 fields + both call sites).
 - Rollback: `UPDATE engine_config SET create_outfit_rolls = false, create_outfit_user_lock = false,
 create_outfit_preview_user_ids = '{}' WHERE id = 1;` (instant, no deploy).
@@ -333,6 +335,14 @@ Found and fixed:
   mismatch left (a blazer suit next to a ball gown at a "Fashion Show", where a suit is plausible);
   baseline was 22%.
 - Harness: "ballgown" now counts as a gown.
+
+## Phase 7 (2026-09-23): LIVE
+
+Kevin reviewed the preview renders ("the test renders look good to me … go for it"). Migration 548 sets
+`create_outfit_rolls = true`, `create_outfit_user_lock = true` (50/50/50). Watch for the first 24h, from
+`ai_generation_log.fallback_reasons` on Create: `outfit_lock:*:code_applied` rate (the code had to write
+the user's words in), `outfit_spec:fallback` rate (the read failed open), `outfit_occluder_*`, and the dual
+swap hold rate (`dual_attempts:1` vs `rerender_for_dual` / `dual_degrade_single`) against the week before.
 
 ## Porting to nightly later
 
