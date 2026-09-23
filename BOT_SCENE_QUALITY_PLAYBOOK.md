@@ -966,6 +966,31 @@ fails them. See [[feedback_dreambot_motto_whimsy_delight_bar]].
 
 ## Lessons from the 33-path run (2026-09-22) — agent-found, each cost real renders
 
+> **⚠️ FLEET BUG FOUND AND FIXED MID-RUN (2026-09-22) — read this before diagnosing ANY "the render is
+> missing something the brief clearly described" symptom.** `botEngine.callClaude()` wrote every brief
+> with a hardcoded `maxTokens: 400`. A brief that ran past it came back `stop_reason: 'max_tokens'`,
+> cut off MID-WORD, and the tail of the prompt — normally the OUTPUT-ORDER block carrying the path's
+> closing instructions — was **silently deleted**. Nothing logged it, nothing stamped it, no render
+> failed. Measured across 1,496 live bot renders: **6.7% truncated fleet-wide, 21.4% on FarmBot**
+> (better than 1 in 5 on a live public bot).
+>
+> It cost CONTENT, not just quality. Two FarmBot paths diagnosed this exact truncation correctly and
+> then designed AROUND it, reasonably believing a shared cap was immovable:
+> `farmbot-halloween-costume-parade` **still caps its cast at 2 humans instead of 3** because figure 3
+> kept getting cut off, and `barn-animal-shelter-interior` had to reorder its sections to get the
+> animals into the prompt at all. Both workarounds are now unnecessary.
+>
+> **Fixed:** one shared `BRIEF_MAX_TOKENS = 1200` (a brief states its own word count, so a bigger
+> ceiling does not make prompts longer — it only stops cutting them off; you pay only for tokens
+> generated, so unused headroom is free), `stop_reason` now warns loudly, and truncation is stamped to
+> `sonnet_truncated` for DB forensics. Locked by `__tests__/lib/briefTokenBudgetGuard.test.ts`.
+>
+> **The standing lesson: never design a path around a token ceiling.** If content late in a brief goes
+> missing, check `sonnet_truncated` and the console for `✂️ TRUNCATED` before you touch a pool, reorder
+> a template, or cut a cast member. And the general form — *a silent cap is worse than a loud failure*:
+> the API told us every single time, in `stop_reason`, and we threw the field away.
+
+
 **1. A TEXT PRIOR HIDES IN SYNONYMS OF "TEXT", NOT JUST "RUNE".** PixelBot volcano-forge banned
 `rune|runic` and still rendered rune-like gibberish across an anvil, its dais and the wall, from a
 charm detail reading *"an anvil ringed with softly glowing marks"*. `marks` is a text-prior synonym.
@@ -1020,6 +1045,38 @@ before touching the template.
 **10. AN INTERIOR PLUS A VIEW THROUGH AN OPENING — write it as ONE camera seeing one continuous
 space** with a bright window in it, never as two zones and never as a ban on panels. Stated that way
 it produced 0 split frames in 15 FaeBot renders and 0 in 6 DinoBot den renders.
+
+**11. WHEN THE PATH IS "LOOK THROUGH A CONTAINER", THE CONTAINER IS A KNOB WITH THREE POSITIONS AND
+BOTH ENDS FAIL.** ToyBot snow-globe-world, measured 6 renders per position. Naming it as an OBJECT
+("a glass dome … and the turned base as a narrow sliver below") gave **5 of 6 gift-shop product
+shots** — CLIP renders the first-named noun and discards the scale qualifier, so "only a thin rim"
+bought nothing. Reducing it to an ABSTRACTION ("thick curved glass whose only trace is a band of
+refraction") gave **0 of 6 any glass at all** — six lovely dioramas with the path's identity
+deleted. What works is CONCRETE BUT CROPPED: name it plainly, say WHERE IN THE FRAME it sits, and
+give it a crop as the counter-anchor — *"through the thick curved glass WALL of a snow globe, the
+bright wet glass ARCING ACROSS THE TOP CORNERS and RUNNING OFF ITS EDGES"* — with base / stand /
+shelf / table / room absent from every layer that reaches Flux. **9 of 9 on the fixed spec.**
+Generalises to any window / porthole / doorway / aquarium / vitrine / viewfinder path. Two
+corollaries: a CONTENT pool entry that could only be seen from OUTSIDE the intended frame drags the
+whole object into shot (10 of 25 vessel entries described feet and undersides no close camera could
+see), and a path whose identity IS the camera must hand-author its own vantages rather than consume
+the bot's shared camera axis.
+
+**12. A PROTECTIVE CLAUSE CAN SUMMON THE VERY SURFACE IT PROTECTS — this is the INVERSE of lesson 2,
+and it fails in the opposite direction.** Lesson 2 says the surface you forget to describe is the one
+that gets lettering, so describe every surface. But SteamBot brass-glasshouse shows the limit: the
+clause *"every dial and gauge is a blank white enamel face with one slim brass needle"* is, to Flux,
+**a description of a clock face** — and Flux's clock prior ships numerals no matter how the clause is
+worded. Writing "blank" does not subtract; naming `dial` adds. For a surface whose SHAPE is itself a
+text prior — **dial, gauge, clock, book spine, screen, sign-board, keyboard, label, banner, scroll** —
+describing it safely is not possible. The only move that works is **deleting the noun from every layer
+that reaches Flux**, including the shared ones. So the rule splits by surface type: a *flat generic*
+surface (a counter front, a wall panel, a crate side) must be positively described or it grows text
+(lesson 2); a *text-shaped* surface must be removed entirely, because any description of it is a
+summons. Corollary on tracing: brass-glasshouse's residual traced by elimination NOT to the path but
+to two SHARED constants — `promptPrefixByMedium.steambot_neutral` ("clockwork machinery") and
+`STEAMBOT_NEUTRAL_STYLE` ("glass gauges"), present in 18 of 18 prompts. **When a text residual
+survives a clean path, grep the bot-wide prefix and medium strings before touching the path's pools.**
 
 ---
 
@@ -3605,6 +3662,63 @@ Built dark-launched (`shadowPaths:['lego-city','lego-trains','haunted-brick','mi
 - **Cute-spooky is a distinct register from GothBot (haunted-brick):** the #1 rule is PLAYFUL Halloween (Creator Haunted House / Hidden Side / Monster Fighters / Scooby-Doo) — smiling ghost/witch/vampire/skeleton minifigs, candy, cauldrons, friendly bats, ZERO gore. Stated as a dominant top block, it lands first-try (4.83). Ban "nightmare before christmas". GothBot owns REAL gothic; keep these two lanes separate.
 - **Microscale is the hardest BrickBot concept — Flux's minifig-scale LEGO-city prior is overwhelming (micro-skyline):** R0 rendered 6/6 as detailed minifig-scale cities (overlapping lego-city), not the LEGO Architecture microscale look. What moved the needle: reframing the whole thing as a "tiny microscale model on a small dark DISPLAY BASEPLATE, held-in-two-hands size, shot as an elevated product photo" as the DOMINANT top block. What HURT: (a) proper nouns leak as printed text — literally naming "LEGO Architecture Skylines" / "nameplate" made Flux print "SKYLINES" on a building; use a generic descriptive form + positively specify "clean smooth brick, no lettering"; (b) a water/boats axis + river/harbor subjects + immersive street-level camera angles all force minifig-scale — dropped the `water_or_green` axis and biased camera to "elevated product-shot showing the whole model on its base". After 3 rounds the framing lands consistently and the text-leak is gone, but Flux still adds tiny minifigs at the base on ~half → ~4.2, marked for future iteration (future lever: trim remaining immersive camera values / stronger no-figure scale anchor). **Takeaway: microscale-architecture on a LEGO-photography bot needs the "product photo of a small model on a display base" framing to win against the minifig-scale prior — and never name the product line as a proper noun (it prints).**
 
+### `airfield-biplanes` (2026-09-23, SHADOW) — the aviation path, and the SYMMETRY law
+
+BrickBot's 18th path and its first aviation subject (17 live paths covered space / pirates / city / trains /
+castle / mech / western / theme-park / aquatic / winter / forest / islands / macro-display / girly / haunted /
+landscapes / lego-masters and nothing flew). Landed ~4.3 across the final batches after 3 rounds + a fix probe
+(R0 ~2.7 → R1 ~3.6 → R2 ~3.7 with one 5.0 → R3 ~3.6 with 4 of 6 at 4.0-4.5 → probe 3/3 clean). Six lessons,
+four of them cross-bot:
+
+- **⚠️ THE SYMMETRY LAW (the big one, cross-bot): on a LEGO-photography bot, an AXIAL or PLAN-VIEW camera entry
+  is a hard-fail generator, and it will out-vote every anti-front-on mandate in the template.** Across four
+  batches EVERY hard fail traced to just 3 of 25 camera entries — "compressed telephoto straight down the long
+  axis of the strip", "camera at the far threshold looking back down its length", and "steep down-shot from
+  almost directly overhead, the plan-form read flat". They produced: a mirrored glass-corridor with no readable
+  aircraft, a symmetric hangar portrait with a figure balanced on each side, a snow strip receding dead up the
+  middle, and one render that dropped the aeroplane entirely and substituted a LEGO-City racing car. The
+  template already carried BrickBot's proven CAMERA-IS-A-MANDATORY-DRIVING-AXIS block AND an explicit
+  asymmetry rule, and they still lost. **The fix is to purge the entries, not to strengthen the mandate** —
+  every framing must be off-axis by construction, with the subject turned so one flank recedes and nothing
+  lining up with the frame edges. After the purge: 3/3 clean, zero corridors, zero mirrors, zero subject-loss.
+  This is the OceanBot CAMERA-FRAMING-AS-LAW rot in a new costume — sweep `straight down the (long axis|length)|
+down its length|directly overhead|plan-form|vanishing point` in any camera pool before R0.
+- **Even-count phrasing in a SEED is a second symmetry driver, and it is self-inflicted.** "a minifigure spotter
+  on each side", "each wingtip clearing the door frame", "hedge borders on both sides", "two crew planted
+  shoulder-width apart" each rendered as a mirrored composition. Reword to one-sided and unbalanced ("one
+  spotter at the near wingtip, another further back down the flank"). Confirms the PixelBot even-count lesson
+  on a photoreal-brick bot.
+- **A COMEDY beat brings its own VENUE, and two venues in one prompt render as mush.** Pushing the money-shot
+  axis for playfulness (a duck pond, a hay bale, a jetty, a dog-sled, a jungle clearing) made the moment axis
+  carry a place, which then fought the airfield axis — one render resolved a duck-pond splashdown plus a
+  volcano-rim strip plus a hangar into an unreadable glass corridor. Fix is the documented permissive-template
+  clause: **if the rolled moment carries its own venue, that venue WINS and the setting axis contributes only
+  its FURNITURE and its CHARM DETAIL.** One place per frame, always.
+- **The LANDSCAPE is what photoreal-drifts on a vehicle path, not the vehicle.** The aeroplanes read as
+  unmistakable brick from R0 (studs, plate seams, strut cages, minifig C-hands) while the GROUND went
+  photoreal — real grass, a real canyon wall, real straw. Naming each drift surface as parts in the template's
+  brick block ("rock and cliffs are stacked slope bricks in courses, turf is a green plate mosaic with moulded
+  tuft elements, snow is white plates and tiles") flipped a photoreal canyon into a visibly brick-stepped one
+  in one round. Generalises to every BrickBot path whose hero is a vehicle.
+- **Tilt-shift vs deep-focus, decided the wrong way first.** I withheld the deep-focus `promptPrefixByPath`
+  on the theory that photoreal drift was the bigger risk for an aviation subject. Wrong: BrickBot's
+  `photography` medium fragment literally contains "natural bokeh", so without the prefix 4 of 6 R0 renders
+  collapsed to a hero-on-bokeh product shot with the airfield an unreadable smear — while the brick signal
+  held perfectly on all 6 without any tilt-shift help. **Confirms the Stage-B rule with no exception: WIDE
+  subject → deep-focus prefix; INTIMATE subject → tilt-shift. An airfield is wide.**
+- **Airfield text is real and only ~80% solvable at MVP.** Registrations, serials and stencils are one of
+  Flux's strongest aviation priors. Naming the plain surface IN THE SEED (the cool-rides fix) works, but it has
+  to cover EVERY text-prone surface independently: the first pass covered fuselage flanks and rudders and Flux
+  promptly stencilled a float instead. After also naming floats, pontoons, skis and wheel spats as "smooth
+  unmarked brick", plus grandstands/rails/marquees in the template, the rate fell to roughly 1 in 4-6 small
+  gibberish marks on a fuselage side. Treat that as the known residual, not a recipe defect — and note it is
+  the same ~1/6 band GothBot tombstones, YumBot storefronts and PixelBot shop signs all sit in.
+- Config: 8 bespoke axes + a 50%-gated `field_event`; NO `register` axis (LEGO's aviation heritage is a thin
+  conceptual space and a register pool would cap near 15 and repeat — Lesson 10), so the era/role signature
+  rides on the `aircraft` hero entry instead. Camera pool HAND-AUTHORED. Own gen script
+  (`scripts/gen-brickbot-airfield-pools.js`) rather than recipes bolted into the 5.8k-line shared one.
+
+
 ---
 
 ## CANONICAL REFERENCE — MangaBot per-path migration (2026-05-22)
@@ -3778,6 +3892,22 @@ Built 3 SHADOW ToyBot paths, each a distinct TOY MATERIAL/TYPE rendered as a cin
 4. **ToyBot is NOT a no-humans bot** — unlike TinyBot. Toy-human figurines (peg-people, painted board-game figures, tin soldiers) are ON-BRAND (ToyBot already renders dolls / GI-Joe / action figures). So the "no humans" rule that dominated TinyBot Stage N does NOT apply — a peg-person or tin soldier is just another toy. Don't over-suppress figures here.
 5. **Wiring a shadow path into a bot that has none:** ToyBot had zero shadow infrastructure. Added a `const <BOT>_SHADOW_PATHS = [...]` + a `shadowPaths:` key (the engine checks `bot.paths.includes || (bot.shadowPaths||[]).includes`), plus each path into `pathBuilders`, `modelByPath`, `mediumByPath`, `mediumStyles`, and the `chaos`/`sensoryAnchors` skip lists (curated dioramas — skip both so nothing scrambles the material look). NOT into `paths[]` (that's the public rotation). twoPassPolish is already disabled bot-wide, so no skip needed there.
 
+### ToyBot `snow-globe-world` — the CONTAINED-WORLD register, and the THREE-POSITION GLASS KNOB (2026-09-22, SHADOW, 3 rounds + probe, R3 6/6 framing ≈ 4.5)
+
+ToyBot's 24th path and its first CONTAINED WORLD: every other path photographs toys ON a surface, so a world sealed behind curved glass is a new optical and compositional problem rather than a new subject. Function-form, self-contained (its own 4 seed JSONs `require`d from the path file, zero `pools.js` touch). Axes: `globe_world` (the sealed place, hero, leads) + `weather_inside` (what the water and flakes are doing, money shot) + `globe_vessel` (glass / refraction / wear, sits LAST) + `moment_inside` on a 0.7 gate, plus a HAND-AUTHORED in-file vantage array. Five lessons, four of them cross-bot:
+
+1. **⭐ THE HEADLINE — ON A LOOK-THROUGH-A-CONTAINER PATH, "HOW THE CONTAINER IS SPECIFIED" IS A KNOB WITH THREE POSITIONS, AND BOTH ENDS FAIL.** The framing was the path's whole identity and it took all three rounds to find the middle. Measured, 6 renders each: **R0 — the container named as an OBJECT** (`'a whole tiny world alive inside a glass dome … the curved glass showing only as a thin bright rim … and the turned base as a narrow sliver below'`). CLIP renders the first-named noun and **ignores the scale qualifier**, so "only a thin rim" / "a narrow sliver" bought nothing: **5 of 6 came back as the gift-shop product shot** — whole globe on a stand, bokeh room behind, interior gone to mush. The defect was in MY OWN `promptPrefixByMedium`, the one layer that leads CLIP. **R1 — the container reduced to an ABSTRACTION** (`'thick curved glass whose only trace is a bright wet band of refraction'`). Flux has no prior for that, so it rendered **no glass at all: 0 of 6** — six beautiful tilt-shift dioramas with the path's entire identity deleted. **R2/R3 — the container CONCRETE BUT CROPPED**: `'extreme close-up shot through the thick curved glass WALL of a snow globe, the bright wet glass ARCING ACROSS THE TOP CORNERS of the picture and RUNNING OFF ITS EDGES'`, with base / stand / foot / shelf / table / room absent from every layer that reaches Flux. **R2 5/6, R3 6/6, probe 3/3 — 9 of 9 on the shipping spec, zero product shots.** The generalisable rule: **a container is specified as a CROPPED FRAME ELEMENT — name it concretely, say WHERE IN THE FRAME it sits, and give it a CROP as the counter-anchor ("running off the picture's edges"). A scale qualifier alone always loses; an abstraction renders nothing.** Applies to any window / porthole / doorway / aquarium / vitrine / dome / viewfinder path on any bot.
+
+2. **A POOL ENTRY THAT COULD ONLY BE SEEN FROM OUTSIDE THE INTENDED FRAME DRAGS THE WHOLE OBJECT INTO SHOT.** 10 of 25 `globe_vessel` entries described the thing from outside — "three small bun feet, one replaced", "green baize glued to the underside, one corner lifting", "the base is a fat cotton reel". Every one of those is *physically un-seeable* from a camera two inches from the glass, so rolling one forces Flux to pull the camera back. Rewritten as glass-at-the-curve / refraction / a band of colour along the very bottom edge. **Add a FRAMING TEST to any recipe whose path has a fixed camera: "could this camera actually SEE this? if the detail needs the whole object in shot, it fails."** Sibling of the camera-framing-as-LAW rot, one layer down: here the *content* pool hijacked the composition.
+
+3. **A VEHICLE AND A SHOPFRONT EACH CARRY THEIR OWN SEPARATE TEXT PRIOR, AND A PICTORIAL CLAUSE ONLY COVERS THE SURFACES IT NAMES.** R2 lettered a fishing-boat HULL. Appending a per-entry crowd-out to the 16 vehicle-bearing seeds ("its flanks and panels one plain block of painted colour wearing a single small painted picture") cleared hulls — and R3 promptly lettered a bakery **shopfront band above the windows**, a surface no pool and no clause had named, while that same render's door panel, shutters and awnings all came out correctly pictorial. This is the FaeBot counter-front law confirmed a third time, now with the enumeration that actually holds: **shutters, door panels, awnings, hulls, hanging shop-brackets AND the wide shopfront band above the windows** — and the clause has to sit inside the template's required OUTPUT ORDER, because Sonnet writes only what it is told to write. Text: 1/6 → 1/6 → 0/3 on the probe.
+
+4. **DO NOT LET A SHARED CAMERA POOL NEAR A PATH WHOSE IDENTITY IS THE CAMERA.** ToyBot's `CAMERA_FRAMING` pool is figure-and-real-world-surface centric ("drone-overhead establishing shot of the full kitchen counter", "figures in the middle distance with foreground grass blades"). This path deliberately does **not** consume `sharedDNA.camera` — it carries six hand-authored vantages inline, all inside the one "pressed to the glass" family, hero-agnostic, naming where the CAMERA sits and never a posture. Confirms "treat the camera pool as hand-written, not generated", and extends it: when the camera IS the path, a shared camera axis is not a variety source, it is a hijack.
+
+5. **SHALLOW DOF IS ON-REGISTER FOR TOYBOT AND SHOULD NOT BE CHASED.** 5 of 6 R2/R3 renders blurred the far half of the world despite `deep focus front to back, edge-to-edge sharpness` in the prefix — Flux's tilt-shift macro prior is the same signal that says "everything here is a miniature" (BrickBot LESSON 1), and tin-toy-parade (4.9) and board-game-world (4.67) both ask for shallow DOF on purpose. Judged as register, not defect, and the round was spent on the text prior instead. Worth remembering before anyone burns a round fighting bokeh on this bot.
+
+**Residuals (accepted):** the recency picker clustered duplicate worlds inside single 6-render rounds (2 pairs in R0, 1 pair in R2/R3 each) — the pool is 25 and the round is 6, so it reads as picker recency-window behaviour rather than a pool gap; a cross-axis compatibility clause ("if the moment names a place the world does not have, adapt or drop it") did NOT hold, so a harbour rowboat still turned up in a desert and a cherry orchard; and one probe render came back glossy-Disney-CG rather than hand-painted miniature. Files: `paths/snow-globe-world.js`, `gen-seeds/toybot/gen-snow-globe-world.js`, 4 × `seeds/toybot_snow_globe_*.json` (25 each).
+
 ### YumBot Stage P — function-form on a look-register bot + the no-humans transfer (2026-08-16, SHADOW)
 
 Built 3 SHADOW YumBot paths — `kawaii-drinks` (4.83), `holiday-sweets` (5.0, a flawless batch), `food-village` (4.92). YumBot is a declarative look-register bot, but I built these FUNCTION-FORM and they were among the strongest batches of the whole run. Keys:
@@ -3840,6 +3970,72 @@ Built 4 SHADOW scene paths on the `steambot_neutral` + 6-look register (each a l
 2. **The "living mass" framing also made figures too prominent** (competing with the architecture the path is actually about).
 
 **The fix (both, one edit):** rewrote the template so ARCHITECTURE + the DOCKED FLEET are the heroes and people are "small, distant, fully-clothed figures dotting the platforms — background texture, never a foreground crowd." NSFW fails went 4/6 → 1/6 (within normal recovery range) AND the figure scale became perfect — tiny clothed dock figures reading as lived-in depth (a lone red-coated woman on a stair, a man-and-child on the quay, one figure waving up at a departing ship). **Cross-bot rule: for any environment-dominant scene path on flux-1.1, keep humans as a sparse distant background accent, never a "crowd/mass/throng" — it both trips the NSFW filter and steals the frame from the subject.** (Same family as the [[bot-as-product environment collapse]] but inverted: there the SUBJECT was over-amplified; here the CROWD is.)
+
+---
+
+### `brass-glasshouse` (2026-09-22/23, SHADOW) — SteamBot's first GREEN register, and two bot-level laws
+
+SteamBot's 17th path and the first that is alive: all 16 live paths were metal, stone, sky, water or crowd,
+and its four interiors (cozy-steampunk / steampunk-labs / clocktower-heart / celestial-observatory) are all
+dark warm-amber brass-and-timber boxes. `brass-glasshouse` is the inside of a great Victorian iron-and-glass
+conservatory built as a MACHINE for keeping a jungle alive — 8 axes (house / specimen / planting / machinery /
+**light** ★money-shot / wet_air / charm + `keeper` on a 0.35 gate), function-form and self-contained (loads
+its own 8 seed JSONs, zero `pools.js` / `archetypes.js` edits — the FaeBot mushroom-apothecary pattern).
+3 rounds × 6 shadow renders on flux-1.1-pro: R1 ~4.0 → R2 ~4.1 with the identity fixed → R3 five of six at
+4.0-4.8, best of run 4.8, split-panel **0 of 18**. Five reusable findings:
+
+1. **⚠️ A PROTECTIVE CLAUSE CAN SUMMON THE SURFACE IT PROTECTS — the inverse of lesson 2, and it costs
+   renders.** Following "cover every flat panel positively", the template said *"every dial and gauge is a
+   blank white enamel face with one slim brass needle"*. That sentence **is a clock face**, and flux-1.1-pro's
+   clock prior always ships numerals: it produced a wall of roman-numeraled clocks in one render and a
+   numeraled gable dial in another. Lesson 2 still holds for FLAT panels (counter fronts, crate sides, tier
+   fronts, door glass — describe them plain and they come out plain), but for a surface whose SHAPE is itself
+   a strong text prior — a dial, a clock, a book spine, a screen, a sign-board — the only safe move is to
+   **delete the noun from every layer**, not to describe it safely. Corollary: audit your own protective
+   clauses as text-priors, the same way you audit pool content.
+2. **⚠️ ON THIS BOT THE READABLE-CLOCK PRIOR IS BOT-WIDE, AND NO PATH CAN FIX IT.** Proven by elimination:
+   after de-dialing the path completely, the failing render's prompt body contained **zero** dial / gauge /
+   clock / needle tokens, yet Flux made a roman-numeraled clock with gibberish lettering the hero of the
+   frame. The only such tokens in the whole prompt were `promptPrefixByMedium.steambot_neutral`
+   ("Victorian-industrial **clockwork machinery**") and `STEAMBOT_NEUTRAL_STYLE` ("exposed gears … **glass
+   gauges** … impossible **clockwork** engineering"), shared by all 16 SteamBot paths, and `PROMPT_SUFFIX`'s
+   "no text, no words" cannot negate it. **So any SteamBot path where a clock is off-premise inherits a
+   readable-text risk from the bot's own prefix.** The fix is bot-level (a path-own medium that drops those
+   three tokens; exact lines are in the footer of `paths/brass-glasshouse.js`) — do not spend a round trying
+   to prompt around it, and check the bot-wide wrapper strings BEFORE blaming a new path's pools.
+3. **⚠️ A POLISH-SKIPPED PATH HAS A HARD 400-TOKEN CEILING, AND IT TRUNCATES MID-WORD IN SILENCE.**
+   `botEngine.callClaude` is called with `maxTokens: 400` on the single-pass branch (`maxTokens: 600` only for
+   the two-pass concept call). A brief that makes Sonnet write 300+ words gets its LAST clauses cut off
+   mid-sentence with no warning and no log line — observed twice here ("…catching the broad wet surface of,"
+   and "…warm amber-"), each time silently deleting the tail of the output order (the charm detail, the
+   keeper, the style restatement). This is the mechanical half of the FaeBot "loud last word-cap" lesson:
+   the cap is not a taste preference, it is a BUDGET. Every new path should count the words of its emitted
+   `ai_prompt` in round 1 and cut the output-order list until it lands under ~250.
+4. **THE FIRST-NAMED-NOUN LAW APPLIES TO THE WHOLE ASSEMBLED PROMPT, NOT JUST THE PREFIX — so a hybrid
+   premise must put its WEAKER half early.** This path's premise is *machine* × *jungle*. With the botanical
+   clauses at position 5-6 of 10, the front of the emitted prompt was nothing but machine nouns (bot prefix +
+   medium fragment + structure + machinery) and 2 of 6 renders came back as a boiler room with a fern:
+   on-brief by the text, off-premise by the picture. Moving specimen + planting to clauses 3-4 and changing
+   the opening naming clause to *"the inside of a great Victorian glasshouse **packed with growing things**"*
+   took botanical presence from 4/6 to **6/6** in one round. When a path fuses two registers, the bot's own
+   wrapper is already voting for one of them — lead with the other.
+5. **THE CONTINUITY LAW GENERALISES FROM "A VIEW THROUGH A WINDOW" TO "THE WHOLE ENVELOPE IS GLASS", AND IT
+   IS 0-FOR-18 ON FAILURES.** Where an interior-plus-window path names the opening as part of the room, a
+   path enclosed BY glass states it once, positively, as a rule: *"the outside arrives ONLY as light — pale,
+   soft, out of focus, smaller and hazier than everything inside — and its light comes back IN onto a broad
+   wet leaf, the grating, the brass edge of a tier."* Combined with the snow-globe CONCRETE-BUT-CROPPED law
+   in every structure seed (ribs "arcing up and off both top corners", the glazed flank "running out past the
+   left edge"), it gave zero split frames and zero exterior product-shots in 18 renders. Two supporting
+   choices worth copying: the **vantage is baked into the end of each structure seed** ("seen obliquely from
+   the edge of the sunken bed, looking up along the ribs") rather than rolled as a separate camera axis — all
+   25 audited as a set for plan views, axial centre-line shots and exteriors, of which there are none — and
+   `sharedDNA.scenePalette` is deliberately NOT consumed, because SteamBot's 200-entry brass/amber/coal
+   palette pool would have crushed the green-and-glass identity into another warm box.
+
+Also confirmed here: the SteamBot **homogenization TRIAD** is easy to honour on a scene path with a gated
+figure — keep the figure axis to pose/staging/props with a garment-word sweep over it, put the one clothing
+line in the template, and say "tiny and far off down the house" **inside the output-order clause**, not only
+in the section body (that is what took the R1 foreground top-hatted figure to a correct 4%-of-frame keeper).
 
 ---
 
@@ -4070,6 +4266,77 @@ Lessons (all verified on renders, prompts read from `ai_prompt`):
   and time columns. A backdated post with zero likes is honest; a backdated post with seeded hearts is
   feed-gaming. Check the busiest single day afterwards (3 was the peak here) and how many promoted posts
   landed in the last 24 hours (1) — that pair is the proof the blend did not slam the feed.
+
+### ice-cavern (2026-09-23, SHADOW, 3 rounds: 4.00 → 3.86 → 4.06, CLOSE not a PASS)
+
+PixelBot's second interior after volcano-forge, and its cold counterpart. R2 #1 (flux-2-max, Amiga look)
+scored 4.8 and is the reference render: a great pale whale asleep inside the banded ice wall over an arch,
+two tiny lantern-carrying adventurers below it, footprints crossing untouched frost. Every lesson below is
+diagnosed from the stored `ai_prompt`, and the first three generalise to any path whose hero is a MATERIAL.
+
+- **A CLEAR/TRANSPARENT VOLUME DESCRIBED WITH ITS OWN EDGES RENDERS AS A GLASS DISPLAY CASE OR AN AQUARIUM
+  TANK.** Three of five R0 renders did it — a shoal of fish in a rectangular tank, a glowing stag in a
+  museum vitrine on a plinth, a seal in a glass cube — from pool wording as innocent as "held in clear
+  ice", "a whole wall of clear ice" and "beneath the glass floor". Flux's nearest concept for "a creature
+  suspended in a transparent rectangular volume, lit from behind" IS a display case. The fix that worked:
+  the thing is BURIED DEEP INSIDE the room's own continuous wall or floor, "seen through a great thickness
+  of it, with the wall's own ice reading above it, below it and on both sides of it", and the phrase is
+  "the clear floor ice", never "the glass floor". Cases and tanks disappeared for the rest of the build.
+- **"HEART" IS A SHAPE PRIOR, NOT A PLACE-CENTRE PRIOR.** volcano-forge's "heart-crystal set in the
+  furnace's throat" rendered fine because a forge has an obvious centre; "a great glowing heart of pale
+  blue ice set deep in the wall" rendered a floating CUT HEART-SHAPED GEM, reading as a collectible
+  pickup, and dragged the gemstone register the recipe had explicitly banned. Write "a great glowing mass
+  of pale blue ice buried deep inside the wall" or "a deep glow burning far back inside the wall". Same
+  family as the halo RING and the light COLUMN: a shape word in the name becomes the shape on screen.
+- **NAMING THE ENCLOSING SURFACES IS NOT ENOUGH WHEN THE ROOM'S MATERIAL IS THE PATH'S IDENTITY — NAME
+  WHAT THE SURFACES ARE MADE OF.** R0 said "the ice walls closing both sides" in the emitted prompt and
+  still rendered a dark ROCK cave four times out of five (Flux's "cavern interior" prior is dark rock, and
+  its "vault / rib / arch / ledge / stair" prior is cut masonry). Adding one clause that describes the
+  room's own material construction — "the walls, the floor and the vault are all pale blue and white ice
+  in flat stepped bands, old layers sagging and bending as they run through the wall, white cracks
+  reaching across the floor, every edge a hard pixel step" — took ice-built chambers from 1 of 5 to 3 of
+  5. This is the interior form of the proven per-path pixel-SURFACE clause (skyward R0→R1, 2.0 → 4.8): a
+  global medium lock does not reach the material of the room itself.
+- **A HERO THAT IS A VOLUME CANNOT OWN 40 TO 60 PERCENT OF A FRAME.** The hero pool named CHAMBERS ("a
+  broad chamber", "a vast dome", "a spiralling tunnel") — all negative space — and four of five R1 renders
+  had no readable hero and a dead upper half. volcano-forge works because its hero is a MASS (the
+  furnace-and-anvil heart) standing inside a room. Re-pointing the template's hero block at "the biggest
+  STANDING MASS OF ICE in the chamber, drawn from what the chamber's own entry names" lifted the
+  cinematographer lens only 3.4 → 3.5 → 3.6 over the three rounds, but it removed the "no hero at all"
+  class from three of five renders and took the best render 4.6 → 4.8. Corollary and the R2 residual: once
+  you demand a standing mass, every hero entry must CONTAIN one — the icicle-ceiling, thin-ceiling and clear-floor buckets name
+  hanging or flat heroes, so Sonnet emitted "the biggest standing mass of ice filling the middle distance"
+  with nothing after it and Flux filled the gap with a wall relief.
+- **THE "WORN PICTORIAL RELIEF" CHARM DETAIL IS SAFE ON STONE AND A LIABILITY ON ICE.** It held 15 of 15
+  on pixel-ruins, but on an ice path it rendered a large CENTRED HERALDIC EAGLE twice (R2 #2 and #4, both
+  sub-4 and both square-on and mirrored) plus a framed wall plaque in R1 — and each time it BUILT ITSELF A
+  MASONRY WALL to be carved into, because a carved relief needs a carveable surface. It never produced
+  lettering, so the text guard held; the defect is the emblem and the masonry it summons. Generalises: a
+  charm detail that implies a substrate will change the room's material to supply that substrate.
+- **A CAMERA ENTRY PLACED ON THE HERO'S OWN STRUCTURE REMOVES THE HERO** (R0 #4, 3.2): "camera high on a
+  natural arch of ice" put the camera on the arch, so the arch — the hero — was not in frame at all and
+  the render became four unrelated objects in a tunnel. Hand-authored camera pools need a pass asking, for
+  every entry, whether the camera is standing ON something the hero pool can roll.
+- **A CAMERA ENTRY DESCRIBING A NARROW APERTURE RENDERS A PEEPHOLE VIGNETTE** (R2 #4): "camera inside a
+  narrow cleft in the wall" drew a dark border all the way around the frame, which destroys the enclosure
+  reading it was meant to create. Frame-edge foreground is a near EDGE, never a surround.
+- **Light stayed an object across all three rounds even with every banned word swept out of the pools.**
+  Sonnet re-derived "shaft" from a clean entry in R0 (a solid cone under a bell), and in R1/R2 "daylight
+  pouring through a crack" rendered a solid draped gold curtain and "warm light through one thin wall"
+  rendered a flat salmon rectangle. On a path whose light passes THROUGH a translucent material, the
+  light-is-light rule has to live in the TEMPLATE, not only in the recipes — the pools were swept clean and
+  it happened anyway. This is the recorded next lever after the relief.
+- **flux-1.1-pro-ultra and flux-dev were pinned OUT from R0** on volcano-forge's evidence rather than
+  rediscovered; ultra fails any condition-identity path (a firelit interior, a night, a blue-lit ice
+  interior) with a golden-hour exterior plus a fake sign. The flux-2 family held the medium on 15 of 15
+  renders here (medium lens averaged 4.9), across the SNES, VGA, Ultima-tile, Amiga, HD-voxel and
+  early-high-def looks. No diorama-in-a-void render occurred in 15, so volcano-forge's enclosure fix
+  transferred intact.
+- **The warm-counter-light mandate in the palette recipe is the single best anti-monochrome lever.**
+  Requiring every palette entry to end by attaching a warm or saturated accent to the light ("warm honey
+  only in the lit places") put a warm accent in 15 of 15 renders; the lighting lens never dropped below
+  3.0 and averaged 4.2 even in the weak rounds. Kevin's "a single warm accent against all that cold is the
+  whole trick" is now measured.
 
 ## DinoBot
 

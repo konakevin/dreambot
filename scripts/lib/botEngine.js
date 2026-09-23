@@ -187,7 +187,20 @@ async function callModelWithRetry({ model, brief, maxTokens, anthropicKey }) {
       const raw = data.content?.[0]?.text ?? '';
       const text = raw.trim().replace(/^["']|["']$/g, '');
       if (text.length < 10) throw new Error(`${model} response too short`);
-      return { text, retries: attempt };
+      // FAIL LOUD ON TRUNCATION. `stop_reason: 'max_tokens'` means the model was
+      // cut off mid-word and the tail of the prompt — usually the output-order
+      // block that carries the path's closing instructions — was silently
+      // deleted. This was invisible for months: measured 2026-09-22 at 6.7% of
+      // all bot prompts fleet-wide and 21.4% on FarmBot, with nothing in any log
+      // to say so. Never let it be silent again.
+      const truncated = data.stop_reason === 'max_tokens';
+      if (truncated) {
+        console.warn(
+          `  ✂️  TRUNCATED: ${model} hit max_tokens=${maxTokens} — the prompt tail was cut mid-word. ` +
+            `Raise maxTokens for this call or shorten the brief. Tail: …${text.slice(-70)}`
+        );
+      }
+      return { text, retries: attempt, truncated };
     }
     lastErr = `${res.status}: ${(await res.text()).slice(0, 200)}`;
     if (!RETRYABLE_STATUSES.has(res.status)) {
@@ -209,9 +222,33 @@ async function callModelWithRetry({ model, brief, maxTokens, anthropicKey }) {
  * Sonnet with retry + Haiku fallback. Returns { text, modelUsed, retries,
  * fellBackToSecondary }. Throws if BOTH models exhausted.
  */
+/**
+ * Output-token budget for a brief-writing call.
+ *
+ * WHY THIS IS GENEROUS, AND WHY IT MATTERS. Every brief already states its own
+ * word count ("110-140 WORDS, COUNT THEM"), so the model writes to the brief,
+ * not to this ceiling — raising it does NOT make prompts longer. All it does is
+ * stop CUTTING OFF the ones that ran past it. It was 400 for years and the tail
+ * of the prompt was being deleted silently: measured 2026-09-22 across 1,496 bot
+ * renders at 6.7% truncated mid-sentence fleet-wide, 21.4% on FarmBot alone.
+ *
+ * It also cost content, not just quality. Two FarmBot paths diagnosed this
+ * exact truncation correctly and then designed AROUND it, on the reasonable
+ * belief that a shared cap was "not something a single path can change":
+ * `farmbot-halloween-costume-parade` caps its cast at 2 humans rather than 3
+ * because figure 3 got cut off, and `barn-animal-shelter-interior` had to
+ * reorder its sections to get the animals in at all. Paths should be shaped by
+ * what makes a good picture, never by an invisible token ceiling.
+ *
+ * You only pay for tokens actually generated, so unused headroom is free.
+ * `stop_reason: 'max_tokens'` now warns loudly, so if a brief ever does run
+ * past this, it says so instead of silently shipping a half-written prompt.
+ */
+const BRIEF_MAX_TOKENS = 1200;
+
 async function callClaude({
   brief,
-  maxTokens = 400,
+  maxTokens = BRIEF_MAX_TOKENS,
   primary = PRIMARY_MODEL,
   secondary = SECONDARY_MODEL,
   anthropicKey,
@@ -220,7 +257,13 @@ async function callClaude({
   if (!key) throw new Error('ANTHROPIC_API_KEY missing');
   try {
     const r = await callModelWithRetry({ model: primary, brief, maxTokens, anthropicKey: key });
-    return { text: r.text, modelUsed: primary, retries: r.retries, fellBackToSecondary: false };
+    return {
+      text: r.text,
+      modelUsed: primary,
+      retries: r.retries,
+      fellBackToSecondary: false,
+      truncated: r.truncated,
+    };
   } catch (primaryErr) {
     console.warn(`  ⚠️ ${primary} failed → falling back to ${secondary}: ${primaryErr.message}`);
     try {
@@ -230,6 +273,7 @@ async function callClaude({
         modelUsed: secondary,
         retries: r.retries,
         fellBackToSecondary: true,
+        truncated: r.truncated,
       };
     } catch (secondaryErr) {
       // Both exhausted — caller is responsible for fail-loud behavior.
@@ -1173,7 +1217,7 @@ async function runBot(opts) {
   let renderModel = 'black-forest-labs/flux-dev';
   let sharedDNA = null;
   let picker = null;
-  let claudeMeta = { retries: 0, fellBackToSecondary: false };
+  let claudeMeta = { retries: 0, fellBackToSecondary: false, truncated: false };
   let localPath = null;
   let imageUrl = null;
 
@@ -1352,7 +1396,7 @@ async function runBot(opts) {
             // Pass 1: Sonnet writes a vivid extended concept (no compression pressure)
             const conceptWords = tp.conceptWords || 150;
             const conceptBrief = extendBriefForConcept(brief, conceptWords);
-            const sonnet = await callClaude({ brief: conceptBrief, maxTokens: 600 });
+            const sonnet = await callClaude({ brief: conceptBrief, maxTokens: BRIEF_MAX_TOKENS });
             // Pass 2: Haiku polishes to Flux-ready length, preserving anchor phrases.
             // Per-path word range overrides global (vampire-girls-2 needs more headroom).
             const polishedWords =
@@ -1374,7 +1418,7 @@ async function runBot(opts) {
             });
             const haiku = await callClaude({
               brief: polishBrief,
-              maxTokens: 400,
+              maxTokens: BRIEF_MAX_TOKENS,
               primary: SECONDARY_MODEL,
               secondary: PRIMARY_MODEL,
             });
@@ -1383,10 +1427,11 @@ async function runBot(opts) {
               modelUsed: `${sonnet.modelUsed}+${haiku.modelUsed}`,
               retries: sonnet.retries + haiku.retries,
               fellBackToSecondary: sonnet.fellBackToSecondary || haiku.fellBackToSecondary,
+              truncated: sonnet.truncated || haiku.truncated,
             };
           }
           // Standard single-pass
-          return callClaude({ brief, maxTokens: 400 });
+          return callClaude({ brief, maxTokens: BRIEF_MAX_TOKENS });
         };
 
         const claude = await generateMiddle();
@@ -1394,6 +1439,7 @@ async function runBot(opts) {
           retries: claude.retries,
           fellBackToSecondary: claude.fellBackToSecondary,
           modelUsed: claude.modelUsed,
+          truncated: Boolean(claude.truncated),
         };
         middle = claude.text;
         if (useTwoPass) {
@@ -1830,6 +1876,7 @@ async function runBot(opts) {
         prompt_preview: finalPrompt.slice(0, 300),
         sonnet_retries: claudeMeta.retries,
         sonnet_fell_back_to_secondary: claudeMeta.fellBackToSecondary,
+        sonnet_truncated: claudeMeta.truncated,
       });
     }
 
@@ -1872,6 +1919,7 @@ async function runBot(opts) {
           prompt_preview: finalPrompt ? finalPrompt.slice(0, 300) : null,
           sonnet_retries: claudeMeta.retries,
           sonnet_fell_back_to_secondary: claudeMeta.fellBackToSecondary,
+          sonnet_truncated: claudeMeta.truncated,
         });
       } catch (logErr) {
         console.warn(`  ⚠️ failed to write bot_run_log: ${logErr.message}`);

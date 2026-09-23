@@ -175,13 +175,33 @@ function accepts(t) {
       try {
         const data = await callSonnet({
           model: 'claude-sonnet-5',
-          max_tokens: 8000,
+          // 32000, not 8000. Sonnet spends most of its output budget on EXTENDED
+          // THINKING before it writes the array — measured 6,254 thinking tokens
+          // out of 7,244 on a 10-entry batch, leaving under 1,000 for the answer
+          // itself. At 8000 the thinking fit but the JSON got cut off mid-array on
+          // most batches, and because a truncated array has no closing `]`,
+          // `lastIndexOf(']')` returned -1 and the slice silently became '' —
+          // surfacing only as "Unexpected end of JSON input". That quietly left
+          // 76 of 200 entries un-rewritten and stalled the pool's object ratio at
+          // 1.11 against a 1.5 target. You pay only for tokens generated.
+          max_tokens: 32000,
           messages: [
             { role: 'user', content: `${INSTRUCTION}\n\nRewrite these ${slice.length} entries:\n${JSON.stringify(slice.map((s) => s.t), null, 1)}` },
           ],
         });
         const txt = (data.content || []).map((c) => c.text || '').join('');
-        arr = JSON.parse(txt.slice(txt.indexOf('['), txt.lastIndexOf(']') + 1));
+        if (data.stop_reason === 'max_tokens') {
+          throw new Error(
+            `response hit max_tokens (thinking ${data.usage?.output_tokens_details?.thinking_tokens ?? '?'} ` +
+              `of ${data.usage?.output_tokens ?? '?'} output tokens) — raise max_tokens`
+          );
+        }
+        const open = txt.indexOf('[');
+        const close = txt.lastIndexOf(']');
+        if (open === -1 || close < open) {
+          throw new Error(`no JSON array in response (len ${txt.length}): ${txt.slice(0, 120)}`);
+        }
+        arr = JSON.parse(txt.slice(open, close + 1));
       } catch (e) {
         console.log(`  batch ${b / BATCH + 1} attempt ${attempt + 1} failed: ${String(e.message).slice(0, 90)}`);
         continue;

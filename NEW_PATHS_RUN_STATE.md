@@ -85,6 +85,51 @@ The four strongest first, so a flaw in my pipeline shows up on work worth having
 
 Then the rest, grouped by bot to reuse each bot's audit.
 
+## Fleet fixes landed during this run (found while building paths, not while looking for bugs)
+
+### 1. Silent prompt truncation — `maxTokens: 400` (FIXED 2026-09-22)
+
+Surfaced by the SteamBot brass-glasshouse agent, which noticed two of its prompts ending
+`"…the broad wet surface of,"` and `"…warm amber-"`. Root cause: `botEngine.callClaude()` wrote every
+brief with a hardcoded `maxTokens: 400`. A brief that ran past it returned `stop_reason: 'max_tokens'`,
+cut MID-WORD, and the tail of the prompt — normally the output-order block with the path's closing
+instructions — was silently deleted. No log line, no stamp, no failed render.
+
+**Measured before the fix, across 1,496 live bot renders** (auto-derived each bot's fixed suffix,
+stripped it, then checked where Sonnet's own text ended):
+
+| bot | renders | truncated |
+| --- | --- | --- |
+| **farmbot** | 388 | **83 (21.4%)** |
+| brickbot | 81 | 5 (6.2%) |
+| faebot | 83 | 5 (6.0%) |
+| steambot | 72 | 4 (5.6%) |
+| gothbot | 54 | 2 (3.7%) |
+| tinybot | 72 | 1 (1.4%) |
+| **fleet total** | **1,496** | **100 (6.7%)** |
+
+FarmBot is a LIVE public bot posting 2×/day: better than one render in five has been shipping a
+half-written prompt for months.
+
+**It cost content, not just quality.** Two FarmBot paths diagnosed this exact truncation correctly and
+then designed AROUND it, on the reasonable belief that a shared cap was "not something a single path
+can change" (their own comments say so):
+
+- `farmbot-halloween-costume-parade` **caps its cast at 2 humans instead of 3**, because figure 3 kept
+  getting cut off and rendered in plain clothes.
+- `barn-animal-shelter-interior` had to **reorder its sections** to get the animals into the prompt.
+
+**Fix:** one shared `BRIEF_MAX_TOKENS = 1200`; `stop_reason` now warns loudly (`✂️ TRUNCATED`);
+truncation stamped to `sonnet_truncated` for DB forensics. Locked by
+`__tests__/lib/briefTokenBudgetGuard.test.ts` (6 tests, verified to go red if the cap regresses).
+Raising the ceiling does NOT lengthen prompts — every brief states its own word count — and you pay
+only for tokens generated, so unused headroom is free.
+
+**→ OPEN FOR KEVIN (live-path content change, not doing it unasked):** both FarmBot workarounds are now
+unnecessary. Un-capping the costume parade to 3 humans and un-reordering the barn path would restore
+content those paths were designed to have. Both are LIVE public paths, so that is his call.
+
+
 ## Status
 
 | # | Bot | Path | Rounds | State | Notes |
@@ -93,7 +138,7 @@ Then the rest, grouped by bot to reuse each bot's audit.
 | 2 | ToyBot | puppet-theatre | 3 | **PASS ~4.7, AWAITING GRADE** | prefix reorder fixed the empty stage; positive crowd-out killed the text prior |
 | 3 | PixelBot | volcano-forge | 3+1 | **PASS ~4.7, AWAITING GRADE** | agent built; ultra pinned OUT (renders exteriors on interior prompts); text repair validated |
 | 4 | FaeBot | mushroom-apothecary | 6 | **PASS ~4.7, AWAITING GRADE** | 3 agent + 3 mine, each on a distinct verified defect: amber cast, wall text, ultra signature |
-| 5 | BloomBot | alpine-wildflower-meadow | - | not started | |
+| 5 | BloomBot | alpine-wildflower-meadow | - | queued | |
 | 6 | BloomBot | coastal-cliff-bloom | - | not started | |
 | 7 | BloomBot | orchid-cloud-forest | - | not started | |
 | 8 | BrickBot | airfield-biplanes | 5 | **PASS w/ residual, AWAITING GRADE** | best draws 4.5 (biplane wheels-off over a brick garden); gibberish wing text ~1-2/6, a known fleet band |
@@ -101,8 +146,8 @@ Then the rest, grouped by bot to reuse each bot's audit.
 | 10 | BrickBot | archaeology-dig | - | not started | |
 | 11 | DinoBot | den-and-burrow | 1 | **PASS ~4.7, AWAITING GRADE** | designed from the motto: the hero is the unseen underground |
 | 12 | DinoBot | undergrowth-scale | 1 | **PASS ~4.8, AWAITING GRADE** | best of the run: the giant rendered as ONLY a tail with ripples spreading from its tip across the puddle |
-| 13 | DinoBot | tidal-flat-tracks | - | not started | |
-| 14 | DinoBot | amber-forest | - | not started | |
+| - | DinoBot | tidal-flat-tracks | - | queued | |
+| - | DinoBot | amber-forest | - | queued | |
 | 15 | FaeBot | autumn-seed-gathering | - | not started | |
 | 16 | FaeBot | acorn-boat-regatta | - | not started | |
 | 17 | FaeBot | star-charting | - | not started | |
@@ -118,7 +163,7 @@ Then the rest, grouped by bot to reuse each bot's audit.
 | 27 | PixelBot | observatory-tower | - | not started | |
 | 28 | PixelBot | floating-market-canal | - | not started | |
 | 29 | SteamBot | rooftop-telegraph | - | not started | |
-| 30 | SteamBot | brass-glasshouse | - | not started | |
+| 30 | SteamBot | brass-glasshouse | 3+1 | **PASS ~4.75, AWAITING GRADE** | SteamBot's first green/wet/translucent interior (all 16 live paths are metal/stone/sky/water/crowd). MERGED + look validated: the rolled look IMPROVED it (agent 4.0-4.8 without a look → 4.75 with). Best: a colossal moss-clad tree filling a glazed rotunda with the ring balcony curving past it. Text 0/6; the clock residual survives only as a brass gauge SHAPE, no numerals, so the bespoke-medium lever was NOT spent |
 | 31 | ToyBot | bath-toy-flotilla | - | not started | |
 | 32 | ToyBot | sand-toy-beachworks | - | not started | |
 | 33 | ToyBot | snow-globe-world | 4 | **PASS ~4.47, AWAITING GRADE** | 9/9 framing on the shipped glass spec; best render an aurora over a single lit window |
@@ -247,6 +292,22 @@ bends through it). Do not port a charm formula across materials without re-testi
 Also from that build, and Kevin's own instinct now measured: **requiring every palette entry to
 attach a WARM ACCENT to the light put one in 15 of 15 renders.** "A single warm accent against all
 that cold is the whole trick" is a reliable anti-monochrome lever, not just a taste note.
+
+### Promoted-bucket paths: the shared-axis dilution to expect
+
+`desert-dunes` and `snowline-forest` are clones of `paleo-landscape` with only the biome swapped, so
+they inherit its `megaflora` axis — which is written for LUSH JUNGLE (mega-cycads, tree-ferns,
+vine-cathedrals, mega-fungi). Both pass (~4.5 and ~4.6) and both show the predicted dilution: a
+dune render grew a cycad palm beside a flash-flood stream, and a snowline render came back as a
+mega-mushroom forest on a snowy slope. Beautiful, on-brand, and not quite the stated identity.
+
+**This was flagged in each path's header BEFORE rendering, and the fix is named there:** a bespoke
+`desert_flora` / `alpine_flora` pool, not a template change. Left undone on purpose — the renders
+clear the bar, and Kevin grades whether the identity matters more than the extra pool costs.
+
+**The general rule:** a clone inherits every axis it does not override, and an axis written for the
+parent's register will quietly pull the clone back toward the parent. When cloning, ask of each
+inherited axis: *was this written for a world my new biome actually has?*
 
 ## The agent brief template (reuse verbatim; only §PATH changes)
 

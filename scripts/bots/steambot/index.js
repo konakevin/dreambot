@@ -33,6 +33,7 @@ const pathBuilders = {
   'celestial-observatory': require('./paths/celestial-observatory'), // Stage M2 SHADOW
   'clocktower-heart': require('./paths/clocktower-heart'), // Stage M3 SHADOW
   'skydock-harbor': require('./paths/skydock-harbor'), // Stage M4 SHADOW
+  'brass-glasshouse': require('./paths/brass-glasshouse'), // Stage N1 SHADOW
 };
 
 // THE SteamBot look — crisp + vivid + cinematic. NO "hyperreal" / "photoreal"
@@ -109,6 +110,7 @@ const STEAMBOT_LOOK_PATHS = new Set([
   'celestial-observatory', // Stage M2 SHADOW
   'clocktower-heart', // Stage M3 SHADOW
   'skydock-harbor', // Stage M4 SHADOW
+  'brass-glasshouse', // Stage N1 SHADOW
 ]);
 
 // Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
@@ -164,6 +166,10 @@ module.exports = {
     'celestial-observatory': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'], // Stage M2 SHADOW
     'clocktower-heart': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'], // Stage M3 SHADOW
     'skydock-harbor': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'], // Stage M4 SHADOW
+    // Stage N1 SHADOW — pro ONLY, no ultra. The path's subject is a whole glazed
+    // dome read floor-to-apex; ultra frames tighter and crops the dome away
+    // (the same tighter-framing behaviour measured on couples 2026-09-17).
+    'brass-glasshouse': ['black-forest-labs/flux-1.1-pro'],
   },
 
   // SteamBot's custom medium keys. Bot-internal — do NOT exist in
@@ -298,7 +304,11 @@ module.exports = {
   ],
 
   // Dark-launched (shadow) paths — renderable on demand, hidden from public + rotation.
-  shadowPaths: [], // Stage M paths promoted to live 2026-08-16 (STEAM_SHADOW_PATHS const retained — still drives the polish-OFF skip list below)
+  // Stage N1: brass-glasshouse is SHADOW — the bot's first green/wet/translucent
+  // interior (all 16 live paths are metal/stone/sky/water/crowd, and its four
+  // interiors are dark warm-amber brass boxes). Go-live = move this string into
+  // `paths` above and change nothing else.
+  shadowPaths: ['brass-glasshouse'], // Stage M paths promoted to live 2026-08-16 (STEAM_SHADOW_PATHS const retained — still drives the polish-OFF skip list below)
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -310,7 +320,10 @@ module.exports = {
     // their own built-in identity (multi-color glow / crowd-event). Chaos was
     // injecting extra subjects + surreal geometry ("stairs that resolve into
     // nothing") that read as crammed/confusing. Skip chaos on those two.
-    skipPaths: ['steampunk-labs', 'steampunk-spectacle'],
+    // brass-glasshouse: the glasshouse IS the subject and it is already dense
+    // (dome + spiral stair + ring balcony + specimen); chaos-injected extra
+    // subjects crowd the one thing the path exists to show.
+    skipPaths: ['steampunk-labs', 'steampunk-spectacle', 'brass-glasshouse'],
     allowSubjectChaosPaths: [
       'steampunk-scene',
       'airship-skies',
@@ -339,6 +352,8 @@ module.exports = {
       'cozy-steampunk',
       'steampunk-labs',
       ...STEAM_SHADOW_PATHS, // nautilus-depths (SHADOW) — axis path, polish OFF
+      'brass-glasshouse', // Stage N1 SHADOW — Haiku compression strips the glass/
+      // condensation/specimen detail stack down to "a greenhouse"
     ],
     polishedWordsByPath: {
       'sexy-steampunk-woman': '80-110',
@@ -498,6 +513,7 @@ module.exports = {
       'celestial-observatory': 'scene', // Stage M2 SHADOW
       'clocktower-heart': 'scene', // Stage M3 SHADOW
       'skydock-harbor': 'scene', // Stage M4 SHADOW
+      'brass-glasshouse': 'scene', // Stage N1 SHADOW
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
