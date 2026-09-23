@@ -12,7 +12,6 @@ const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
   'amber-forest': require('./paths/amber-forest'), // 2026-09-22 SHADOW — the resin forest
-  'tidal-flat-tracks': require('./paths/tidal-flat-tracks'), // 2026-09-23 SHADOW — the giant has already gone
   'dino-portrait': require('./paths/dino-portrait'),
   'dino-action': require('./paths/dino-action'),
   'paleo-landscape': require('./paths/paleo-landscape'),
@@ -99,7 +98,7 @@ module.exports = {
     // are concrete.
     'google/gemini-2-image': {
       medium: 'dinobot_gpt_clean',
-      skipPaths: ['amber-forest', 'tidal-flat-tracks'],
+      skipPaths: ['amber-forest'],
     },
   },
   promptPrefixByMedium: {
@@ -123,7 +122,6 @@ module.exports = {
     // amber-forest behaviour. Weights rather than a hard pin: flux-2-pro 3.75 (n=4) vs
     // gemini 3.80 (n=6) is inside the noise at that size, and each owns a different
     // half of the build's best work.
-    'tidal-flat-tracks': { 'black-forest-labs/flux-2-pro': 60, 'google/gemini-2-image': 40 },
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -216,7 +214,6 @@ module.exports = {
   // NOTHING else about how it renders (the go-live xerox rule).
   shadowPaths: [
     'amber-forest',
-    'tidal-flat-tracks',
     'courtship-display',
     'den-and-burrow',
     'desert-dunes',
@@ -233,7 +230,6 @@ module.exports = {
     // New axis-system paths skip chaos for the MVP so the hero composition is what gets judged.
     skipPaths: [
       'amber-forest',
-      'tidal-flat-tracks',
       'courtship-display',
       'den-and-burrow',
       'desert-dunes',
@@ -262,7 +258,6 @@ module.exports = {
     preservePhrasesByPath: {},
     skipPaths: [
       'amber-forest',
-      'tidal-flat-tracks',
       'courtship-display',
       'den-and-burrow',
       'desert-dunes',
@@ -294,7 +289,7 @@ module.exports = {
     // limestone cave entrance"), which is a hostile injection on a wide-open tidal flat.
     // Decisive reason: all 15 graded renders ran with this OFF, so shipping it ON would
     // ship config that was never rendered. Supported since sensoryAnchors.js:152.
-    skipPaths: ['tidal-flat-tracks'],
+    skipPaths: [],
     requiredChannels: ['lightcolor'],
     pathContext: {
       'dino-portrait': 'dinosaur',

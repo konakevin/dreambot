@@ -58,7 +58,6 @@ const SKIP_LEGACY_PER_PATH = new Set([
   // day its string moves into paths[].
   'airfield-biplanes',
   'balloon-festival',
-  'archaeology-dig',
 ]);
 for (const p of PATHS) {
   if (SKIP_LEGACY_PER_PATH.has(p)) continue;

@@ -36,10 +36,8 @@ const SCENE_PATHS = {
   'pixel-skyward': require('./paths/pixel-skyward'), // batch 3 (agent), PASS R2 4.64
   'pixel-ruins': require('./paths/pixel-ruins'), // batch 4 (agent) + orchestrator R3, CLOSE 4.48 — Kevin's decision
   'volcano-forge': require('./paths/volcano-forge'), // batch 5 (agent), 3 rounds — R1 PASS 4.50; R2 four clean renders avg 4.75
-  'ice-cavern': require('./paths/ice-cavern'), // batch 5 (agent), 3 rounds — R2 4.06 CLOSE; ref render R2 #1 4.8
   'floating-market-canal': require('./paths/floating-market-canal'), // batch 5 (agent), 4 rounds — R3 PASS 4.52 (min 4.2); corridor 0/5, text 0/5
   'castle-town-gate': require('./paths/castle-town-gate'), // wave 5 (agent), 3 rounds — R0 3.02 → R1 4.46 → R2 PASS 4.64 (min 4.3); text 0/10 on the pin
-  'observatory-tower': require('./paths/observatory-tower'), // wave 6 (agent), 3 rounds — R0 4.42 → R1 3.96 → R2 4.26 CLOSE; ref render 5.0; text 0/15
   // NOTE: no modelByPath entry needed — this path self-declares its flux-2 pin on the
   // builder, and scene.modelByPath now honours builder.models (fixed 61f04d93).
 };
@@ -110,11 +108,6 @@ module.exports = {
     // rediscovered. A blue-lit ice INTERIOR is a lighting condition, and flux-1.1-pro-ultra reverts
     // any condition-identity path to a golden-hour EXTERIOR with a fake sign; flux-dev drops named
     // features and renders a "small, far off" figure at hero scale.
-    'ice-cavern': {
-      'black-forest-labs/flux-2-pro': 1,
-      'black-forest-labs/flux-2-max': 1,
-      'black-forest-labs/flux-2-flex': 1,
-    },
     // floating-market-canal: the flux-2 family only, pinned from R0 on volcano-forge +
     // ice-cavern + campfire-night's measured evidence rather than rediscovered.
     // flux-1.1-pro-ultra SIGNS its work, and a fake signature is a hard TEXT fail on what is
@@ -216,10 +209,8 @@ module.exports = {
   shadowPaths: [
     'cozy-farming-life-sim',
     'volcano-forge',
-    'ice-cavern',
     'floating-market-canal',
     'castle-town-gate',
-    'observatory-tower',
   ],
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts

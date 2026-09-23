@@ -42,7 +42,6 @@ const pathBuilders = {
   'haunted-brick': require('./paths/haunted-brick'), // Stage B3 SHADOW
   'airfield-biplanes': require('./paths/airfield-biplanes'), // aviation path (2026-09-23) SHADOW
   'balloon-festival': require('./paths/balloon-festival'), // mass-ascension path (2026-09-23) SHADOW
-  'archaeology-dig': require('./paths/archaeology-dig'), // excavation path (2026-09-23) SHADOW
 };
 
 module.exports = {
@@ -69,10 +68,6 @@ module.exports = {
     // It is a 50/50 SPLIT and not a pin ON PURPOSE: the R1 model probe was a NULL
     // (pro 2.43 vs ultra 2.20 at n=3 per arm, below resolution — lesson 42), both arms
     // failed identically, and BrickBot only allows these two. Do not tidy it into a pin.
-    'archaeology-dig': {
-      'black-forest-labs/flux-1.1-pro': 50,
-      'black-forest-labs/flux-1.1-pro-ultra': 50,
-    },
   },
   // (history) modelByPath was previously Object.fromEntries(
   //   pools.PATHS.map(p => [p, {'flux-1.1-pro': 100}])) — every path
@@ -82,22 +77,6 @@ module.exports = {
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
-
-  // nano-banana clean-render override (2026-06-07). This model reads the
-  // MOC-photography prefix/suffix as "go abstract"; the clean medium
-  // (+ empty promptPrefixByMedium) lets the seed's LEGO build lead.
-  // mediumByPath — NEW on this bot. LOAD-BEARING and the largest measured lever in the
-  // archaeology-dig build (+0.78 on the round average). BrickBot's stock wrapper is 83
-  // words in three stacked layers (promptPrefixByPath 15 + promptPrefix 55 + the
-  // `photography` DB flux_fragment 27), which put the scene start at 19-34% of the emitted
-  // prompt — every path law past the ~30% attention cliff — even though every law was
-  // already in 6 of 6 prompts. The fragment's CONTENT is hostile too: "natural bokeh,
-  // accurate skin tones, photographic realism" (bokeh on a path whose differentiator is a
-  // background surface, skin tones on a bot that renders plastic). A 28-word path-own
-  // medium took scene start to 8-16%, colour bands 1/6 -> 6/6, corridors 4/6 -> 1/6,
-  // round avg 2.32 -> 3.10. Code-only: no dream_mediums row needed, because
-  // fetchMediumFluxFragment returns '' on an unknown key and mediumStyles overrides it.
-  mediumByPath: { 'archaeology-dig': 'brickbot_dig' },
 
   mediumStyles: {
     brickbot_gpt_clean: blocks.GPT_CLEAN,
@@ -172,7 +151,7 @@ module.exports = {
   // never looks for a legacy pool triplet. On go-live it must be added to PATHS *and* to
   // SKIP_LEGACY_PER_PATH in the SAME edit — PATHS alone makes pools.js call
   // load('airfield_biplanes_scenes') and throw at require time, taking the whole bot down.
-  shadowPaths: ['airfield-biplanes', 'balloon-festival', 'archaeology-dig'], // Stage B paths promoted to live rotation 2026-08-16
+  shadowPaths: ['airfield-biplanes', 'balloon-festival'], // Stage B paths promoted to live rotation 2026-08-16
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -192,7 +171,6 @@ module.exports = {
       'haunted-brick',
       'airfield-biplanes',
       'balloon-festival',
-      'archaeology-dig',
     ],
     allowSubjectChaosPaths: pools.PATHS,
   },
@@ -207,7 +185,6 @@ module.exports = {
     // scene-prop detail) when compressing 150 → 70-100 words.
     skipPaths: [
       'balloon-festival',
-      'archaeology-dig',
       'airfield-biplanes',
       'pirates',
       'space',

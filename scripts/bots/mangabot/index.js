@@ -49,7 +49,6 @@ const pathBuilders = {
   'anime-halloween-cozy': require('./paths/anime-halloween-cozy'),
   'anime-haunted-school': require('./paths/anime-haunted-school'),
   'anime-witch-familiar': require('./paths/anime-witch-familiar'),
-  'onsen-evening': require('./paths/onsen-evening'), // 2026-09-23 SHADOW — outdoor hot-spring evening
   'game-center-arcade': require('./paths/game-center-arcade'), // 2026-09-23 SHADOW — game centre at night
 };
 
@@ -103,7 +102,6 @@ module.exports = {
   // fires here. Banana still serves the 4 style-locked paths via 'anime'.
   mediumByPath: {
     'game-center-arcade': 'mangabot_anime_neutral',
-    'onsen-evening': 'mangabot_anime_neutral',
     'neo-tokyo': 'mangabot_anime_neutral',
     'shonen-action': 'mangabot_anime_neutral',
     'isekai-fantasy': 'mangabot_anime_neutral',
@@ -168,7 +166,6 @@ module.exports = {
   // path only; nightshade belongs on the dark-occult path only.
   vibesByPath: {
     'game-center-arcade': ['cinematic', 'voltage', 'shimmer', 'nostalgic', 'whimsical', 'cozy', 'enchanted', 'dark'],
-    'onsen-evening': ['cozy','peaceful','nostalgic','enchanted','cinematic','whimsical','ethereal','shimmer'],
     kawaii: [
       'cozy',
       'peaceful',
@@ -216,7 +213,7 @@ module.exports = {
 
   // Stage I paths promoted to live rotation 2026-08-16 (shadowPaths emptied;
   // MANGA_SHADOW_PATHS const retained — still drives twoPassPolish.skipPaths).
-  shadowPaths: ['onsen-evening', 'game-center-arcade'],
+  shadowPaths: ['game-center-arcade'],
 
   // Seasonal-window paths (2026-09-07) — drawn ONLY when
   // engine_config.bots_seasonal_enabled is true AND the named holiday window
@@ -245,7 +242,6 @@ module.exports = {
     // turns it into a cold swimming pool. flux-1.1-pro-ultra excluded a priori (standing exclusion
     // for any path whose identity is a lighting condition). These two hold it: 14 renders, zero
     // taste-line failures, zero steam failures.
-    'onsen-evening': ['black-forest-labs/flux-2-pro', 'black-forest-labs/flux-2-max'],
     'ghibli-painterly': 'sdxl',
   },
 
@@ -256,7 +252,6 @@ module.exports = {
   chaos: {
     enabled: true,
     skipPaths: [
-      'onsen-evening',
       'game-center-arcade',
       // Halloween seasonal candidates (promoted from AlphaBot 2026-09-07) —
       // protect the curated MVP composition Kevin approved during QA.
@@ -295,7 +290,6 @@ module.exports = {
     // back to back-to-camera despite the rewritten templates because
     // Haiku had stripped the camera_framing description entirely.
     skipPaths: [
-      'onsen-evening',
       'game-center-arcade',
       'isekai-fantasy',
       'ghibli-countryside',
@@ -356,11 +350,11 @@ module.exports = {
   // back-filled 2-4 bare-backed bathers into pools whose brief named none. That is the onsen form
   // of the documented "unstated figure renders as a modern tourist" law. The covering rule is on
   // every render including the no-figure branch, and this is the backstop.
-  nudityCheck: { enabled: true, maxRetries: 2, paths: ['onsen-evening'] },
+  nudityCheck: { enabled: true, maxRetries: 2, paths: [] },
   sensoryAnchors: {
     // onsen-evening: MangaBot's scene `lightcolor` pool carries setting nouns ("the manga aisle
     // corner", "the late-night parking lot"), which inject a SECOND scene into a fixed-place path.
-    skipPaths: ['onsen-evening', 'game-center-arcade'],
+    skipPaths: ['game-center-arcade'],
     enabled: true,
     requiredChannels: ['lightcolor'],
     pathContext: {

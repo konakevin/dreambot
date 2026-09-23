@@ -23,9 +23,6 @@ const { REGION_KEYS_GENERAL, regionRosterPrompt } = require('./species-roster');
 const { ALL_ENABLED_AI_MODELS } = require('../../lib/imageModels');
 
 const pathBuilders = {
-  'alpine-wildflower-meadow': require('./paths/alpine-wildflower-meadow'), // 2026-09-23 SHADOW — the snowline meadow
-  'coastal-cliff-bloom': require('./paths/coastal-cliff-bloom'), // 2026-09-23 SHADOW — the sea cliff
-  'orchid-cloud-forest': require('./paths/orchid-cloud-forest'), // 2026-09-23 SHADOW — orchids on wet bark
   // 2026-05-16: landscape migration attempted + REVERTED — legacy compose.js
   // outperformed the new declarative archetype. Declarative version preserved
   // at paths/landscape.js for reference, legacy stays canonical.
@@ -85,24 +82,12 @@ module.exports = {
     // alpine-wildflower-meadow: REQUIRED, not a preference — it bypasses pickModel
     // so the code-only medium needs no dream_mediums row. Both models kept 50/50:
     // ultra signed 0 of 13 renders on this path, so no pin to pro is needed.
-    'alpine-wildflower-meadow': [
-      'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-1.1-pro',
-    ],
     // coastal-cliff-bloom: WEIGHTED, deliberately not pinned. A 3-per-arm split
     // looked decisive (postcard vista 1 of 9 on ultra vs 7 of 9 on pro) and a hard
     // ultra pin was nearly shipped on it; the 6-render confirmation came back 3.92,
     // not 4.50. Pooled over 24 renders: ultra 4.03, pro 3.75 — the edge is real but
     // about half the apparent size, and pinning bought nothing over the split.
-    'coastal-cliff-bloom': {
-      'black-forest-labs/flux-1.1-pro-ultra': 70,
-      'black-forest-labs/flux-1.1-pro': 30,
-    },
     // orchid-cloud-forest: both models 50/50 — ultra signed 0 of 21 renders here.
-    'orchid-cloud-forest': [
-      'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-1.1-pro',
-    ],
     'tropical-grove': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'flower-arrangement': [
       'black-forest-labs/flux-1.1-pro',
@@ -115,12 +100,6 @@ module.exports = {
   // of more blooms" and "the sky clean and clear", which fight bare rock and a
   // storm-lit sky respectively.
   promptSuffixByPath: {
-    'orchid-cloud-forest':
-      'render every named species as that exact species in its named colour, every flower in frame growing on wet mossy bark and branches, water beaded on every leaf and petal, depth built from the mist thickening between the trunks until it swallows the far trees, the near plants crisply rendered, no text, no words, no watermarks, gallery quality',
-    'coastal-cliff-bloom':
-      'render every named species as that exact species in its named colour, the seaward side of every plant dried brown and the sheltered side green, the flowers at the edge silhouetted directly against the open water far below them, the far horizon a flat hard line, every layer crisply rendered, no text, no words, no watermarks, gallery quality',
-    'alpine-wildflower-meadow':
-      'render every named species as that exact species in its named colour, bare broken rock and old snow visible between the flowers, the far ranges hard-edged and each one paler than the last, every layer crisply rendered, no text, no words, no watermarks, gallery quality',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -140,14 +119,8 @@ module.exports = {
     // Positive-only: this string is concatenated STRAIGHT into the Flux prompt, so a
     // negation here is the dangerous class (lesson 32). Note MIST, not "cloud" — see
     // the path header: "cloud" is the correct ecosystem word and a cumulus prior.
-    'orchid-cloud-forest':
-      'a wet tropical cloud-forest slope, orchids and bromeliads rooted in moss on the branches and bark of the trees, thick white mist standing in the air between the trunks at eye level, more wet mossy trunks and hanging moss filling every gap behind them',
     // Carries the three wind-and-salt facts, because the prefix is the only slot
     // that reliably renders on this path (measured 0/6 → 4/6).
-    'coastal-cliff-bloom':
-      'a close low bank of flowers filling the near frame, every plant cut flat and level across its top, every flower leaning the same way inland, the seaward half of each plant dried brown and the sheltered half green, the ground stopping in one hard straight line right across the picture, the flowers along that line silhouetted directly against open water lying far below them',
-    'alpine-wildflower-meadow':
-      'a high-altitude wildflower meadow at the snowline, low tight flowers in dense clumps between bare grey broken rock and old snow lying in the meadow, a snowfield and bare peak standing above the flower line, thin hard clear mountain light',
     'great-blossom-tree':
       'a single colossal ancient flowering tree, towering high in full bloom against open sky',
     'jack-and-the-giant-flower':
@@ -172,9 +145,6 @@ module.exports = {
   // both now banned bot-wide (FLUX-only).
   cleanMediumByModel: {},
   mediumByPath: {
-    'alpine-wildflower-meadow': 'bloom_alpine_meadow',
-    'coastal-cliff-bloom': 'bloom_coastal_cliff',
-    'orchid-cloud-forest': 'bloom_cloud_forest',
   },
 
   mediumStyles: {
@@ -247,7 +217,7 @@ module.exports = {
   // DARK-LAUNCH shadow paths (BOT_DARK_LAUNCH_PLAN.md + mig 376) — NOT in the
   // live paths[] rotation; render only via `iter-bot --mode <path> --post`
   // (shadow: hidden, admin-only). Promote = move the string into paths[].
-  shadowPaths: ['alpine-wildflower-meadow', 'coastal-cliff-bloom', 'orchid-cloud-forest'], // Stage A paths promoted to live rotation 2026-08-16
+  shadowPaths: [], // Stage A paths promoted to live rotation 2026-08-16
 
   // Seasonal-window paths (scripts/lib/botSeasonal.js) — drawn ONLY when
   // engine_config.bots_seasonal_enabled is true AND the named holiday window
@@ -274,9 +244,6 @@ module.exports = {
     // hanging-flowers skips chaos for the MVP — protect the overhead-canopy
     // walkway composition while validating (2026-06-22; revisit after sign-off).
     skipPaths: [
-      'alpine-wildflower-meadow',
-      'coastal-cliff-bloom',
-      'orchid-cloud-forest',
       'flower-arrangement',
       'hanging-flowers',
       'water-garden',
@@ -320,9 +287,6 @@ module.exports = {
     // declarative axis-system paths. Single-pass Sonnet preserves slot-pool
     // richness; Haiku compression drops bespoke vocabulary to hit word count.
     skipPaths: [
-      'alpine-wildflower-meadow',
-      'coastal-cliff-bloom',
-      'orchid-cloud-forest',
       'landscape',
       'closeup',
       'tropical-paradise',
@@ -367,135 +331,8 @@ module.exports = {
     //     DEFAULT_POOLS, which are written for a FIGURE ("the press of jewelry at
     //     the throat", "boots sinking into soft ground") on a bot that bans people.
     poolsByChannelByPath: {
-      'orchid-cloud-forest': {
-        lightcolor: [
-          'light coming through one thin fern leaf so the leaf reads as lit right through',
-          'the mist behind the near limb packed so bright the wet flowers look cut out of it',
-          'every beaded drop on every leaf holding one hard white point of light',
-          'one saturated colour loud against wet near-black green everywhere else',
-          'wet bark going almost black and mirror-bright where the water runs over it',
-          'the standing water in a bromeliad holding a small reversed picture of the branches above',
-        ],
-        smell: [
-          'wet moss and rotting wood',
-          'cold clean rain on warm bark',
-          'air so wet it has almost no smell of its own',
-        ],
-        sound: [
-          'water dripping off a hundred leaf tips at once, none of them together',
-          'one unseen bird calling twice somewhere in the mist',
-          'rain arriving on the canopy long before it arrives here',
-          'the whole forest dripping steadily with no wind at all',
-        ],
-        touch: [
-          'moss soaking wet and cold right through',
-          'bark slick enough that nothing holds on it',
-          'petals cool and waxy and beaded over',
-        ],
-        temperature: [
-          'warm and soaking at the same moment',
-          'the mist cold on the skin while the wood stays warm',
-          'no dry surface anywhere in the frame',
-        ],
-        weight: [
-          'a limb bent down under the weight of everything growing on it',
-          'moss so waterlogged it sags away from the bark',
-          'one drop hanging heavy off a leaf tip and not falling',
-        ],
-        air: [
-          'air thick enough to see, standing still between the trunks',
-          'mist pouring sideways through a gap fast enough to watch',
-          'the air so full of water it is beading out onto the moss',
-        ],
-      },
-      'coastal-cliff-bloom': {
-        lightcolor: [
-          'light coming straight through the low petals from behind so they read as lit glass',
-          'every shadow edge cut hard with no softness anywhere in it',
-          'the white water below throwing light back up under the flowers',
-          'one band of the flowers lit and the rest of the ground held flat and dark',
-          'wet rock going almost black and mirror-bright where the water has come over it',
-          'the orange lichen burning brighter than anything else in the frame',
-          'the sky darkening steadily from the sea horizon to the top of the frame',
-        ],
-        smell: [
-          'salt and crushed flower stems',
-          'wet rock and cold seaweed lifting off the water',
-          'clean hard air carrying nothing but salt',
-        ],
-        sound: [
-          'the sea working somewhere below the edge and never stopping',
-          'wind steady and unbroken over ground-low flowers',
-          'one gull call carried sideways past the edge',
-          'loose stones shifting where the ground has broken away',
-        ],
-        touch: [
-          'petals stiff and waxy and gritty with dried salt',
-          'sun hot on the rock while the wind stays cold',
-          'short wiry grass springing back flat the moment it is let go',
-        ],
-        temperature: [
-          'full sun and a cold wind at the same moment',
-          'the shaded side of every stone holding damp cold',
-          'spray landing cold on warm stone',
-        ],
-        weight: [
-          'low flowers pressed flat and held there by constant wind',
-          'stems bent permanently one way and staying bent',
-          'wet foam sagging off a blade of grass',
-        ],
-        air: [
-          'air so clean the far horizon stays a hard line',
-          'a shred of blown foam dragging through the flowers',
-          'salt haze lifting off the water below the edge',
-        ],
-      },
-      'alpine-wildflower-meadow': {
-        lightcolor: [
-          'light coming straight through the low petals from behind so they read as lit glass',
-          'every shadow edge cut hard with no softness anywhere in it',
-          'the old snow throwing light back up underneath the flowers',
-          'one part of the slope lit and the rest of it held flat and dark',
-          'wet stone going almost black and mirror-bright where the water runs over it',
-          'the sky darkening steadily from the ridge line to the top of the frame',
-        ],
-        smell: [
-          'cold stone and crushed flower stems',
-          'snowmelt running over clean gravel',
-          'thin dry air carrying almost no scent at all',
-        ],
-        sound: [
-          'meltwater running somewhere under the snow',
-          'one marmot whistle carrying right across the slope',
-          'wind steady and unbroken over ground-low flowers',
-          'loose stones shifting and settling downslope',
-        ],
-        touch: [
-          'petals stiff and waxy in the cold',
-          'sun hot on the stone while the air stays freezing',
-          'grit and old granular snow underfoot',
-        ],
-        temperature: [
-          'full sun and near-freezing at the same moment',
-          'frost still holding in every shadow',
-          'the snow patch throwing cold up out of the ground',
-        ],
-        weight: [
-          'low flowers pressed flat by constant wind',
-          'wet snow sagging off a rock edge',
-          'stems bent under the weight of last season\u2019s seed heads',
-        ],
-        air: [
-          'air so thin the far distance stays hard-edged',
-          'a shred of cloud dragging through the flowers',
-          'grit lifting off the loose stone in a gust',
-        ],
-      },
     },
     pathContext: {
-      'alpine-wildflower-meadow': 'scene',
-      'coastal-cliff-bloom': 'scene',
-      'orchid-cloud-forest': 'scene',
       landscape: 'scene',
       closeup: 'scene',
       cozy: 'scene',

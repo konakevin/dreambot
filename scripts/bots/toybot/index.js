@@ -57,10 +57,7 @@ const pathBuilders = {
   'board-game-world': require('./paths/board-game-world'),
   'wooden-toy-land': require('./paths/wooden-toy-land'),
   'tin-toy-parade': require('./paths/tin-toy-parade'),
-  'puppet-theatre': require('./paths/puppet-theatre'), // 2026-09-22 SHADOW — proscenium framing
   'snow-globe-world': require('./paths/snow-globe-world'), // 2026-09-22 SHADOW — contained world behind cropped glass
-  'bath-toy-flotilla': require('./paths/bath-toy-flotilla'), // 2026-09-22 SHADOW — bath as ocean, toys as fleet
-  'sand-toy-beachworks': require('./paths/sand-toy-beachworks'), // 2026-09-23 SHADOW — sand engineering epic, the toys are the tools
   // Halloween seasonal candidates — promoted from AlphaBot (2026-09), see
   // seasonalPaths.halloween below. Self-contained function-form builders
   // (own material-look text inline; no per-medium style injection needed).
@@ -118,10 +115,6 @@ module.exports = {
     // puppet-theatre mirrors the tin-toy lineup: the curated handmade-material register needs
     // flux, and keeping the lineup identical to a proven bespoke-medium path means the medium is
     // the only thing being tested.
-    'puppet-theatre': {
-      'black-forest-labs/flux-1.1-pro': 100,
-      'black-forest-labs/flux-1.1-pro-ultra': 100,
-    },
     // snow-globe-world mirrors the tin-toy / puppet-theatre lineup so the GLASS FRAMING was the
     // only variable under test. 15 renders on the final spec: 8 pro / 7 ultra, and no per-model
     // difference in whether the framing held.
@@ -134,18 +127,12 @@ module.exports = {
     // produced both lowest-scoring frames), while pro produced every frame with a correct bath
     // edge. Extends the standing ultra exclusion from a LIGHTING condition to a CAMERA-HEIGHT
     // condition.
-    'bath-toy-flotilla': {
-      'black-forest-labs/flux-1.1-pro': 100,
-    },
     // sand-toy-beachworks — ultra pinned OUT from round 0, on the SIBLING's measured evidence
     // rather than a fresh probe. bath-toy-flotilla put 4 renders through ultra on a path whose
     // identity is a CAMERA HEIGHT and got 4 framing failures plus both of its lowest frames;
     // this path's identity is the same class of condition, so all 18 renders ran on pro and no
     // round was spent re-measuring an arm already known (lesson 42: a 3-per-arm split hands you
     // a confident WRONG verdict).
-    'sand-toy-beachworks': {
-      'black-forest-labs/flux-1.1-pro': 100,
-    },
   },
 
   // mediumByPath — each path locks to its medium.
@@ -174,10 +161,7 @@ module.exports = {
     'board-game-world': 'board_game_diorama',
     'wooden-toy-land': 'wooden_toy_diorama',
     'tin-toy-parade': 'tin_toy_diorama',
-    'puppet-theatre': 'puppet_theatre_diorama',
     'snow-globe-world': 'snow_globe_diorama',
-    'bath-toy-flotilla': 'bath_flotilla_diorama',
-    'sand-toy-beachworks': 'sand_beachworks_diorama',
     // Halloween seasonal candidates (promoted from AlphaBot 2026-09) — each
     // builder is fully self-contained (inlines its own material-look text),
     // so its medium key carries no injected style (see mediumStyles below).
@@ -535,7 +519,6 @@ module.exports = {
     // (magic glow is banned in every pool and fights "played completely straight"), coquette
     // (pastel blush fights every committed palette), ancient (ages the bath into a ruin),
     // surreal (register-breaker), and voltage (its slice ends on "signage", a text prior).
-    'bath-toy-flotilla': ['cinematic', 'epic', 'nostalgic', 'whimsical', 'shimmer'],
     // sand-toy-beachworks — curated from the actual dream_vibes.directive TEXT, not guessed.
     // Dropped: ethereal and shimmer (both prescribe soft diffused light, which IS the
     // bleached-beach failure this path's light law exists to beat), peaceful ("absolute
@@ -547,7 +530,6 @@ module.exports = {
     // a path made of branded plastic). nostalgic is KEPT but is the one to watch: it ends
     // "everything softer than it really was", the only kept vibe that argues with the hard
     // raking light.
-    'sand-toy-beachworks': ['cinematic', 'epic', 'nostalgic', 'whimsical'],
     'snow-globe-world': [
       'cinematic',
       'cozy',
@@ -736,7 +718,7 @@ module.exports = {
   // dispatcher never auto-posts them; reachable only via explicit --mode.
   // 'puppet-theatre' stays here until Kevin grades it. shadowPaths[] is invisible to the hourly
   // dispatcher and renders only via `iter-bot --mode puppet-theatre --post`, posted hidden.
-  shadowPaths: ['puppet-theatre', 'snow-globe-world', 'bath-toy-flotilla', 'sand-toy-beachworks'], // Stage O paths promoted to live rotation 2026-08-16 (TOY_SHADOW_PATHS const retained for reference)
+  shadowPaths: ['snow-globe-world'], // Stage O paths promoted to live rotation 2026-08-16 (TOY_SHADOW_PATHS const retained for reference)
 
   // Seasonal-only paths (2026-09-07) — drawn ONLY when
   // engine_config.bots_seasonal_enabled is true AND the named holiday window
@@ -815,11 +797,8 @@ module.exports = {
       'wooden-toy-land',
       'tin-toy-parade',
       // puppet-theatre: chaos would scramble the proscenium framing, which IS the path.
-      'puppet-theatre',
       // snow-globe-world: same reason — chaos would scramble the cropped-glass framing.
       'snow-globe-world',
-      'bath-toy-flotilla',
-      'sand-toy-beachworks',
       // Halloween seasonal candidates (promoted from AlphaBot 2026-09) —
       // protect the curated MVP composition validated during QA.
       'vintage-halloween-toybox',
@@ -877,8 +856,6 @@ module.exports = {
     // re-enabled per-path.
     skipPaths: [
       'snow-globe-world',
-      'bath-toy-flotilla',
-      'sand-toy-beachworks',
       'vintage-halloween-toybox',
       'spooky-dollhouse-diorama',
       'toy-graveyard-diorama',
@@ -896,8 +873,6 @@ module.exports = {
     enabled: true,
     skipPaths: [
       'snow-globe-world',
-      'bath-toy-flotilla',
-      'sand-toy-beachworks',
       'model-train-world',
       'toybox-chaos',
       'plush-world',

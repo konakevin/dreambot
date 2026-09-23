@@ -47,10 +47,6 @@ const blocks = require('./shared-blocks');
 const pools = require('./pools');
 
 const pathBuilders = {
-  'apiary-beekeeping': require('./paths/apiary-beekeeping'), // SHADOW — awaiting Kevin's grade
-  'lambing-season': require('./paths/lambing-season'), // SHADOW — awaiting Kevin's grade
-  'sheep-shearing-day': require('./paths/sheep-shearing-day'), // SHADOW — 3 rounds, ~4.4, 18/18 rendered, zero content-filter failures
-  'hay-baling-summer': require('./paths/hay-baling-summer'), // SHADOW — 3 rounds, R3 ~3.97, 18/18 rendered, zero content-filter failures
   'animal-feeding-time': require('./paths/animal-feeding-time'),
   'cozy-bakery-afternoon': require('./paths/cozy-bakery-afternoon'),
   'autumn-village-market': require('./paths/autumn-village-market'),
@@ -216,7 +212,7 @@ module.exports = {
   // apiary-beekeeping: NEW path, dark until Kevin grades it. FarmBot had no
   // apiary content anywhere — honey only as food on a cheeseboard, hives only
   // as a distant prop. Go-live = move this string into `paths` above.
-  shadowPaths: ['apiary-beekeeping', 'lambing-season', 'sheep-shearing-day', 'hay-baling-summer'],
+  shadowPaths: [],
 
   cycleAllPaths: true,
 

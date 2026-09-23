@@ -34,7 +34,6 @@ const pathBuilders = {
   'clocktower-heart': require('./paths/clocktower-heart'), // Stage M3 SHADOW
   'skydock-harbor': require('./paths/skydock-harbor'), // Stage M4 SHADOW
   'brass-glasshouse': require('./paths/brass-glasshouse'), // Stage N1 SHADOW
-  'rooftop-telegraph': require('./paths/rooftop-telegraph'), // Stage N2 SHADOW
 };
 
 // THE SteamBot look — crisp + vivid + cinematic. NO "hyperreal" / "photoreal"
@@ -128,7 +127,6 @@ const STEAMBOT_LOOK_PATHS = new Set([
   'clocktower-heart', // Stage M3 SHADOW
   'skydock-harbor', // Stage M4 SHADOW
   'brass-glasshouse', // Stage N1 SHADOW
-  'rooftop-telegraph', // Stage N2 SHADOW
 ]);
 
 // Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
@@ -192,7 +190,6 @@ module.exports = {
     // (measured on three bots this run including this bot's airship-female), and
     // ultra reverts to a golden-hour exterior on any path whose identity is a
     // LIGHTING condition — this path's is warm lamp against cold sky.
-    'rooftop-telegraph': ['black-forest-labs/flux-1.1-pro'],
   },
 
   // SteamBot's custom medium keys. Bot-internal — do NOT exist in
@@ -214,7 +211,6 @@ module.exports = {
     ...Object.fromEntries([...STEAMBOT_LOOK_PATHS].map((p) => [p, 'steambot_neutral'])),
     // Stage N2 SHADOW — path-own medium, dropping the bot-wide clock vocabulary.
     // MUST stay AFTER the spread above or the derived value overwrites it.
-    'rooftop-telegraph': 'steambot_rooftop',
   },
 
   mediumStyles: {
@@ -340,7 +336,7 @@ module.exports = {
   // interior (all 16 live paths are metal/stone/sky/water/crowd, and its four
   // interiors are dark warm-amber brass boxes). Go-live = move this string into
   // `paths` above and change nothing else.
-  shadowPaths: ['brass-glasshouse', 'rooftop-telegraph'], // Stage M paths promoted to live 2026-08-16 (STEAM_SHADOW_PATHS const retained — still drives the polish-OFF skip list below)
+  shadowPaths: ['brass-glasshouse'], // Stage M paths promoted to live 2026-08-16 (STEAM_SHADOW_PATHS const retained — still drives the polish-OFF skip list below)
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -355,7 +351,7 @@ module.exports = {
     // brass-glasshouse: the glasshouse IS the subject and it is already dense
     // (dome + spiral stair + ring balcony + specimen); chaos-injected extra
     // subjects crowd the one thing the path exists to show.
-    skipPaths: ['steampunk-labs', 'steampunk-spectacle', 'brass-glasshouse', 'rooftop-telegraph'],
+    skipPaths: ['steampunk-labs', 'steampunk-spectacle', 'brass-glasshouse'],
     allowSubjectChaosPaths: [
       'steampunk-scene',
       'airship-skies',
@@ -384,7 +380,6 @@ module.exports = {
       'cozy-steampunk',
       'steampunk-labs',
       ...STEAM_SHADOW_PATHS, // nautilus-depths (SHADOW) — axis path, polish OFF
-      'rooftop-telegraph', // Stage N2 SHADOW — Haiku strips the crop/crosswise/blade-state clauses
       'brass-glasshouse', // Stage N1 SHADOW — Haiku compression strips the glass/
       // condensation/specimen detail stack down to "a greenhouse"
     ],
@@ -527,7 +522,7 @@ module.exports = {
     // panels", "the furnace observation porthole"). On a rooftop that is both a
     // setting contradiction and a second light instruction fighting the axis that
     // owns the palette. All three QA rounds ran with it skipped.
-    skipPaths: ['rooftop-telegraph'], // Stage N2 SHADOW
+    skipPaths: [], // Stage N2 SHADOW
     pathContext: {
       // Switched 'female'→'scene' 2026-05-15 to escape body-coded sensory
       // anchors ("tight around her throat", "corset constricting her ribs",
@@ -554,8 +549,7 @@ module.exports = {
       'clocktower-heart': 'scene', // Stage M3 SHADOW
       'skydock-harbor': 'scene', // Stage M4 SHADOW
       'brass-glasshouse': 'scene', // Stage N1 SHADOW
-      'rooftop-telegraph': 'scene', // Stage N2 SHADOW
-    },
+      },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
 
