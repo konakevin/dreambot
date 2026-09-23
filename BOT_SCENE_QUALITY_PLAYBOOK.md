@@ -2046,6 +2046,62 @@ photograph of bare human feet, and it was beaten by leading every entry with SHA
 name (*"a three-toed hollow as broad as a small pond"*) — lesson 48's colour-first/species-last in a new
 costume. `beach` reached **0 of 15** prompts and no render showed a human print.
 
+**65. ⭐⭐⭐ THE POSITIONAL LAW, PROVEN ON AN OBJECT, WITH THE CLEANEST BEFORE/AFTER IN THIS FILE.**
+ToyBot `sand-toy-beachworks` needed the toy tool in frame (it is the path's whole premise: the toys are
+the tools that built the castle). One variable, additive, prefix only, nothing removed:
+
+| round | position of the first tool noun in the emitted prompt | tool rendered |
+|---|---|---|
+| R1 | 39%, 39%, 44%, 59%, 81%, 81% | **1 of 6** |
+| R2 | 5%, 5%, 5%, 5%, 5%, 6% | **6 of 6** |
+
+This is the claim that SURVIVES lesson 54's retraction, and it is the form to use: **an element's
+position, changed deliberately, with the render rate measured before and after.** Note it is an OBJECT
+here, not a clause or a rule, which is the third confirmation and the first on a physical thing.
+
+**It also bought a second axis for free, and that generalises:** saturated colour went **0/6 → 4/6**,
+because the one bright object in a frame of neutral sand *is* the colour. **When an axis owns the
+palette and keeps losing, check whether the thing that CARRIES the colour is even in frame** before
+touching the palette pool.
+
+**66. ⭐⭐ A SEED-LEVEL SURFACE IS NECESSARY BUT NOT SUFFICIENT — POSITION GATES IT, AND THE TWO RULES
+COMPOSE.** Lesson 13 says a surface named in a seed sticks 9/9. Same build shows the boundary: the
+matte/chalky finish WAS in every seed's own opening noun phrase, built in from round 0 as the sibling's
+named lever, and the toys still rendered factory-fresh glossy **6 of 6** — because that seed text lands
+at **86-91% of the emitted prompt, or is dropped entirely**. The same dead zone the tool sat in before
+R2 moved it. So the composed rule is: **name the surface in the seed AND get it into the first ~10%.**
+Neither half works alone, and "it is in the seed" is not evidence that it reached the prompt.
+
+**67. ⭐⭐ A RULER INSTRUCTION DRAGS THE RULER OBJECT INTO WHICHEVER POOL CAN NAME IT — SO GIVE THE
+RULER A SINGLE OWNER.** The other half of lesson 61, and together they make one complete rule. The hero
+recipe asked for *"a ruler welded and in frame, the upturned bucket at the tower's base"* and **24 of 25**
+generated hero entries then named a bucket or a shovel — so the separate tools axis added a SECOND one
+to the same frame, doubling the text-bearing plastic faces on the bot whose hardest defect is lettering.
+Caught by a local dry run before any render was spent.
+
+The fix is single-owner: **ban the tool noun from the hero recipe** and let the tools axis own it.
+Sonnet then produced a strictly better form unprompted — `bucket-cast turrets`, `a shovel-blade deep`,
+`a full bucket-rim wide` — **an in-frame ruler expressed as a UNIT or a VERB, with zero extra objects.**
+Generalises to any path whose natural ruler is an object another axis already owns. Combined with
+lesson 61: **put the ruler LAW in the template, ban the ruler NOUN from every pool but its owner, and
+prefer unit/verb forms over a second physical object.**
+
+**68. ⭐ AN ALLOW-LIST CROSS-AXIS FILTER IS THE WRONG SHAPE WHEN A PATH HAS SEVERAL BODIES OF THE SAME
+SUBSTANCE.** The sibling `bath-toy-flotilla` converged on an allow-list because a bathtub holds ONE body
+of water, so any two water statements that disagree are a real contradiction. This path has a moat,
+canals, pools and the sea — so "a dead-flat moat" and "a breaching canal" are not a contradiction at
+all. The allow-list blocked **12 of 25** moments, **4 of them wrongly**; a tightly worded ban-list gives
+**19 of 25**. Count the path's distinct instances of the substance before choosing the filter shape.
+
+**69. ⭐ VERIFY YOUR OWN DRY RUN BEFORE YOU TOUCH THE PATH — tooling manufactures false negatives.** The
+build's dry-run printer had a regex alternation that bound wrongly and reported the story beat ABSENT in
+**10 of 12** composed briefs. The beat was present every time. This is the third instance of this exact
+class in one run: a guard test reported a nonexistent second bug because a semicolon inside an
+explanatory comment ended its match early, and a truncation detector reported 100% because it checked
+terminal punctuation on prompts whose appended suffix never ends in punctuation. **When a check says
+something is missing, confirm the check against one hand-read example before acting on it.** A false
+negative costs a whole round, and it is indistinguishable from a real defect until you look.
+
 ---
 
 ## North Star — the actual goal

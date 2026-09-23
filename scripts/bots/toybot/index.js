@@ -60,6 +60,7 @@ const pathBuilders = {
   'puppet-theatre': require('./paths/puppet-theatre'), // 2026-09-22 SHADOW — proscenium framing
   'snow-globe-world': require('./paths/snow-globe-world'), // 2026-09-22 SHADOW — contained world behind cropped glass
   'bath-toy-flotilla': require('./paths/bath-toy-flotilla'), // 2026-09-22 SHADOW — bath as ocean, toys as fleet
+  'sand-toy-beachworks': require('./paths/sand-toy-beachworks'), // 2026-09-23 SHADOW — sand engineering epic, the toys are the tools
   // Halloween seasonal candidates — promoted from AlphaBot (2026-09), see
   // seasonalPaths.halloween below. Self-contained function-form builders
   // (own material-look text inline; no per-medium style injection needed).
@@ -136,6 +137,15 @@ module.exports = {
     'bath-toy-flotilla': {
       'black-forest-labs/flux-1.1-pro': 100,
     },
+    // sand-toy-beachworks — ultra pinned OUT from round 0, on the SIBLING's measured evidence
+    // rather than a fresh probe. bath-toy-flotilla put 4 renders through ultra on a path whose
+    // identity is a CAMERA HEIGHT and got 4 framing failures plus both of its lowest frames;
+    // this path's identity is the same class of condition, so all 18 renders ran on pro and no
+    // round was spent re-measuring an arm already known (lesson 42: a 3-per-arm split hands you
+    // a confident WRONG verdict).
+    'sand-toy-beachworks': {
+      'black-forest-labs/flux-1.1-pro': 100,
+    },
   },
 
   // mediumByPath — each path locks to its medium.
@@ -167,6 +177,7 @@ module.exports = {
     'puppet-theatre': 'puppet_theatre_diorama',
     'snow-globe-world': 'snow_globe_diorama',
     'bath-toy-flotilla': 'bath_flotilla_diorama',
+    'sand-toy-beachworks': 'sand_beachworks_diorama',
     // Halloween seasonal candidates (promoted from AlphaBot 2026-09) — each
     // builder is fully self-contained (inlines its own material-look text),
     // so its medium key carries no injected style (see mediumStyles below).
@@ -307,6 +318,18 @@ module.exports = {
     // lost the fleet's variety (first-vessel noun at 60% of the prompt vs 4%).
     bath_flotilla_diorama:
       'photographed from on the water down among the toys, every hull cut by the waterline with the water climbing it, a fleet of scuffed sun-faded well-chewed rubber and plastic bath toys under way as real vessels, the bath\u2019s own enamel side curving up behind them and cropped out of frame, cinematic photoreal macro, per-drop water and foam, tactile worn rubber and wet chrome',
+    // sand_beachworks_diorama — the R2 measured spec, and the ORDER of its clauses is
+    // load-bearing. The bucket sits at word 14 (5% of the emitted prompt) because R1 measured a
+    // tool noun at 39-81% rendering 1 of 6 and R2 measured the SAME noun at 5% rendering 6 of 6.
+    // That is the positional law proven by intervention, and it carried a second axis for free:
+    // saturated colour went 0/6 -> 4/6, because the one bright object in a frame of neutral sand
+    // IS the colour. The crosswise clause took the beach crowd 1/6 -> 0/6 (a frame with no open
+    // beach has nowhere to put sunbathers). The light law is here rather than in the seeds because
+    // it is identical on every render, so it costs nothing in variety. The FINISH is deliberately
+    // NOT here: it lives in the tools seeds' own opening noun phrases, because the sibling's R4
+    // proved that buying a finish with prefix words costs the hero its variety.
+    sand_beachworks_diorama:
+      'shot from sand level among the walls and canals of a half-built sandcastle, a plastic bucket cropped close in the near corner of the frame, the near wall crossing the picture from the left edge to the right edge, both ends cropped, its wet cut face rising out of the bottom of frame, its tallest towers standing against a bright band of water along the top edge, sand giving way or water filling right now, low raking sun and every ridge\u2019s shadow long across the sand, wet sand near-black against pale dry sand, cinematic photoreal, tactile packed wet sand',
     snow_globe_diorama:
       'extreme close-up shot through the thick curved glass wall of a snow globe, the bright wet glass arcing across the top corners of the picture and running off its edges, the whole tiny world inside filling the rest of the frame edge to edge, deep focus front to back with edge-to-edge sharpness so its own far distance and its own lit windows and its own road all stay readable, fine specks suspended in the water in front of it, hand-painted plaster and resin miniature with visible brush-marks, warm practical light raking in from one side through the water, tactile painted-miniature and wet-glass texture',
     puppet_theatre_diorama:
@@ -513,6 +536,18 @@ module.exports = {
     // (pastel blush fights every committed palette), ancient (ages the bath into a ruin),
     // surreal (register-breaker), and voltage (its slice ends on "signage", a text prior).
     'bath-toy-flotilla': ['cinematic', 'epic', 'nostalgic', 'whimsical', 'shimmer'],
+    // sand-toy-beachworks — curated from the actual dream_vibes.directive TEXT, not guessed.
+    // Dropped: ethereal and shimmer (both prescribe soft diffused light, which IS the
+    // bleached-beach failure this path's light law exists to beat), peaceful ("absolute
+    // stillness" contradicts the collapse-in-progress beat), cozy (its directive is room nouns
+    // on an outdoor path), ancient ("weathered stone, crumbling monuments" turns the sandcastle
+    // into real stone), arcane + enchanted (magic glow fights "played completely straight"),
+    // coquette (pastel pink fights the one saturated plastic accent), nightshade, surreal (a
+    // documented register-breaker), and voltage (its directive ends on "signage", a text prior on
+    // a path made of branded plastic). nostalgic is KEPT but is the one to watch: it ends
+    // "everything softer than it really was", the only kept vibe that argues with the hard
+    // raking light.
+    'sand-toy-beachworks': ['cinematic', 'epic', 'nostalgic', 'whimsical'],
     'snow-globe-world': [
       'cinematic',
       'cozy',
@@ -701,7 +736,7 @@ module.exports = {
   // dispatcher never auto-posts them; reachable only via explicit --mode.
   // 'puppet-theatre' stays here until Kevin grades it. shadowPaths[] is invisible to the hourly
   // dispatcher and renders only via `iter-bot --mode puppet-theatre --post`, posted hidden.
-  shadowPaths: ['puppet-theatre', 'snow-globe-world', 'bath-toy-flotilla'], // Stage O paths promoted to live rotation 2026-08-16 (TOY_SHADOW_PATHS const retained for reference)
+  shadowPaths: ['puppet-theatre', 'snow-globe-world', 'bath-toy-flotilla', 'sand-toy-beachworks'], // Stage O paths promoted to live rotation 2026-08-16 (TOY_SHADOW_PATHS const retained for reference)
 
   // Seasonal-only paths (2026-09-07) — drawn ONLY when
   // engine_config.bots_seasonal_enabled is true AND the named holiday window
@@ -784,6 +819,7 @@ module.exports = {
       // snow-globe-world: same reason — chaos would scramble the cropped-glass framing.
       'snow-globe-world',
       'bath-toy-flotilla',
+      'sand-toy-beachworks',
       // Halloween seasonal candidates (promoted from AlphaBot 2026-09) —
       // protect the curated MVP composition validated during QA.
       'vintage-halloween-toybox',
@@ -842,6 +878,7 @@ module.exports = {
     skipPaths: [
       'snow-globe-world',
       'bath-toy-flotilla',
+      'sand-toy-beachworks',
       'vintage-halloween-toybox',
       'spooky-dollhouse-diorama',
       'toy-graveyard-diorama',
@@ -860,6 +897,7 @@ module.exports = {
     skipPaths: [
       'snow-globe-world',
       'bath-toy-flotilla',
+      'sand-toy-beachworks',
       'model-train-world',
       'toybox-chaos',
       'plush-world',
