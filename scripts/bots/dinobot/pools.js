@@ -67,6 +67,10 @@ module.exports = {
   DINOBOT_UNDERGROWTH_RESIDENT: load('dinobot_undergrowth_resident'),
   DINOBOT_UNDERGROWTH_GIANT: load('dinobot_undergrowth_giant'),
   DINOBOT_PALEO_LANDSCAPE_MEGAFLORA: load('dinobot_paleo_landscape_megaflora'),
+  // COLD sibling of the pool above, for snowline-forest. The warm one's own recipe
+  // says "NEVER cold-monochrome" and all 8 of its formations are tropical, so a cold
+  // path consuming it rendered frost-rimed jungle lagoons.
+  DINOBOT_SNOWLINE_FOREST_FLORA: load('dinobot_snowline_forest_flora'),
   DINOBOT_PALEO_LANDSCAPE_PHENOMENON: load('dinobot_paleo_landscape_phenomenon'),
   DINOBOT_PALEO_LANDSCAPE_SURPRISE_ELEMENT: load('dinobot_paleo_landscape_surprise_element'),
   DINOBOT_PALEO_LANDSCAPE_SKY: load('dinobot_paleo_landscape_sky'),

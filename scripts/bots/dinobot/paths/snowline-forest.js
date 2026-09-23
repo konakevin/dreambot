@@ -37,16 +37,23 @@
  * `dinobot_snowline_forest_biome` in `scripts/gen-dinobot-pool.js`, so production size is
  * `node scripts/gen-dinobot-pool.js --pool dinobot_snowline_forest_biome --target 200`.
  *
- * Watch at grade time: the shared `megaflora` axis is written for LUSH jungle (mega-cycads,
- * tree-ferns, vine cathedrals) and a snowline wants sparse wind-flagged conifers. If renders come
- * back as a jungle with snow added, a bespoke `alpine_flora` pool is the fix — not the template.
+ * MEGAFLORA: now its OWN cold pool, not the shared one. This was flagged in this header before the
+ * first render ("if renders come back as a jungle with snow added, a bespoke alpine_flora pool is
+ * the fix") and it duly happened — the shared pool's own PALETTE LOCK says "NEVER cold-monochrome"
+ * and all 8 of its formations are lush tropical (cycads, palms, tree-ferns, vine-curtains,
+ * fan-cap mushroom-trees, ginkgo groves), so a cold archetype over a warm flora pool still rendered
+ * frost-rimed jungle lagoons. `DINOBOT_SNOWLINE_FOREST_FLORA` (recipe
+ * `dinobot_snowline_forest_flora`) is the cold sibling: wind-flagged conifers, krummholz, the
+ * tree-line itself, avalanche scars, cloud-layer forests. Validated at 0 tropical leak across all
+ * six banned families, snow in 19 of 25, warm accents present but never dominant (the proven
+ * one-warm-accent anti-monochrome lever).
  */
 
 module.exports = {
   archetype: 'DINOBOT_SNOWLINE_FOREST',
   pools: {
     biome: 'DINOBOT_SNOWLINE_FOREST_BIOME',
-    megaflora: 'DINOBOT_PALEO_LANDSCAPE_MEGAFLORA',
+    megaflora: 'DINOBOT_SNOWLINE_FOREST_FLORA',
     phenomenon: 'DINOBOT_PALEO_LANDSCAPE_PHENOMENON',
     surprise_element: 'DINOBOT_PALEO_LANDSCAPE_SURPRISE_ELEMENT',
     sky_layer: 'DINOBOT_PALEO_LANDSCAPE_SKY',

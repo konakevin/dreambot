@@ -783,6 +783,35 @@ GOOD examples:
 
 Output: ONE biome per line. No numbering. No quotes.`,
 
+  // COLD sibling of dinobot_paleo_landscape_megaflora, for the snowline-forest path.
+  // The warm pool's own PALETTE LOCK ("NEVER cold-monochrome") and its 8 formations are
+  // all lush jungle, so a snowline path consuming it rendered frosty tree-fern lagoons
+  // instead of a high conifer forest. See the archetype block at the bottom of
+  // scripts/bots/dinobot/archetype-templates.js for the matching template fix.
+  dinobot_snowline_forest_flora: `Generate HIGH-ALTITUDE COLD-FOREST MEGAFLORA descriptions for DinoBot's snowline-forest path. Each is ONE comma-separated line, 30-50 words, describing the huge prehistoric plant-life of a Mesozoic forest AT THE SNOWLINE — where the trees thin out, the snow begins, and the air is thin and cold.
+
+This is the FLORA that makes a COLD ancient landscape feel vast and severe and beautiful. Wind-flagged conifers. Snow-loaded boughs. Krummholz twisted flat by wind. Bare rock and ice above the tree-line. The awe here is SCALE plus HARSHNESS, not lushness.
+
+⚠️ PALETTE LOCK — every entry is COLD: snow-white, glacial cyan, cobalt and slate-blue shadow, near-black wet trunks, dark blue-green needles, pale low-angle winter sun on the lit faces. Committed and saturated, never washed-out and never grey-monochrome — shadow blues go DEEP and lit snow reads BRIGHT. NEVER warm golden-bronze, NEVER amber, NEVER autumn-gold: that is the warm paleo-landscape pool's job, not this one.
+
+⚠️ ONE WARM ACCENT IS ALLOWED AND WANTED — a single small warm note against all that cold is the proven anti-monochrome lever (measured 15 of 15 renders on the nightly cold work): rust-orange scrub, a copper-needled dying conifer, ochre lichen on rock, low amber sun on one ridge. ONE per entry, small, never the dominant tone.
+
+⚠️ NO TROPICAL FLORA — no cycads, no palms, no tree-ferns, no vine-curtains, no fan-cap mushroom-trees, no ginkgo groves. Those belong to the warm pool. This world is conifers, needles, moss, lichen, bare rock, snow and ice.
+
+⚠️ VARIETY MANDATE — equal weight across these formations. NEVER let one dominate:
+- ~15% WIND-FLAGGED CONIFER STANDS — ancient conifers with all branches swept to one side by prevailing wind, trunks leaning, snow packed on the lee
+- ~15% SNOW-LOADED MEGA-CONIFER CATHEDRAL — 200ft Araucaria and podocarps with boughs bent under deep snow, dark trunks, blue shadow between
+- ~13% KRUMMHOLZ AT THE TREE-LINE — ancient trees dwarfed and twisted flat across rock by wind and ice, centuries old and knee-high, snow drifted through them
+- ~13% THE TREE-LINE ITSELF — the forest visibly ENDING partway up a slope, bare rock and snowfield above, scattered survivors standing alone beyond it
+- ~12% FROST-RIMED GIANTS — huge conifers with every needle and cone furred in hoarfrost, catching low sun, breath-fog cold
+- ~12% AVALANCHE SCARS AND DEADFALL — a swathe cut through the forest, snapped trunks silvered and bare, new growth coming up through the snow in the gap
+- ~10% MOSS AND LICHEN ROCK GARDENS — house-sized boulders under the canopy, furred in frozen moss and pale lichen, meltwater ice glazing their faces
+- ~10% CLOUD-LAYER FORESTS — the forest rising into and out of a cloud deck, tops emerging above a sea of cloud, everything below dissolved in cold white
+
+Each entry names CONCRETE physical things — a trunk, a bough, a drift, a scar, a boulder, a needle-cone, an ice glaze — never just atmosphere adjectives. Ground the scale against something countable.
+
+Output: ONE flora entry per line. No numbering. No quotes.`,
+
   dinobot_paleo_landscape_megaflora: `Generate PRIMORDIAL MEGAFLORA descriptions for DinoBot's paleo-landscape path. Each is ONE comma-separated line, 30-50 words, describing the IMPOSSIBLY HUGE prehistoric plant-life that defines a Mesozoic / Jurassic / Cretaceous landscape — mega-trees, giant ferns, cycads, primordial conifers, ancient horsetails, mushroom-tree groves, gnarled iconic mega-trees, karst-tower cliff-trees.
 
 This is the FLORA that makes a paleo-landscape feel ALIEN and AWE-INSPIRING. Mushroom-tree groves with fan-cap mega-fungi. Iconic single mega-trees. Karst-tower mountains with golden cliff-foliage. Cycad-palm groves on rust-volcanic plains. Mega-conifer cathedrals with sun-shafts.
