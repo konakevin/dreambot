@@ -58,8 +58,8 @@ Then the rest, grouped by bot to reuse each bot's audit.
 
 | # | Bot | Path | Rounds | State | Notes |
 | --- | --- | --- | --- | --- | --- |
-| 1 | DinoBot | courtship-display | - | not started | |
-| 2 | ToyBot | puppet-theatre | - | not started | |
+| 1 | DinoBot | courtship-display | 3 | **AWAITING GRADE** | good draws 4.5, ~1/6 lone-animal residual; lever = bespoke arena pool |
+| 2 | ToyBot | puppet-theatre | 1 | R1 rendering | |
 | 3 | PixelBot | volcano-forge | - | not started | |
 | 4 | FaeBot | mushroom-apothecary | - | not started | |
 | 5 | BloomBot | alpine-wildflower-meadow | - | not started | |
@@ -129,6 +129,24 @@ drops, the path collapses into the animal portrait DinoBot already has six paths
 nesting-ground's proven MINIMUM-2 mandate, since that path's whole identity rests on it and it is
 known to work on this exact bot. Also stopped the audience section describing itself as small
 (3-10% of frame), which was telling Flux it was droppable. Nothing else touched.
+
+**Round 3 result — the mandate lands, with a residual.** Moving the audience to position 2 worked:
+one draw came back as FOUR ceratopsians with inflated red throat sacs, two facing off in the
+foreground and two more watching from the midground, across a frozen river under a dust devil. That
+is the path working as designed.
+
+One draw in six still came back as a lone sauropod standing in an empty sand gully — no display, no
+audience, flat monochrome palette. **3 ROUNDS USED. Residual defect, with a diagnosis I did not
+spend a fourth round on:** the weak draws correlate with the WIDE-OPEN DESERT rolls from
+`DINOBOT_PALEO_LANDSCAPE_BIOME`, which this path REUSES from `paleo-landscape`. That pool is written
+landscape-first — a vast empty dune field is a great landscape and a terrible stage. A display needs
+an ARENA.
+
+**The round-4 lever if Kevin wants it:** give the path its own bespoke `arena` pool (a clearing, a
+lek ground, a scraped display ground, a riverbank flat, a forest gap) instead of reusing the
+landscape biome. That is a pool change, not a template change, and it is the last thing I would try.
+
+**Verdict to grade: the good draws are 4.5, the weak draw is ~3. Kevin's call from the app.**
 
 ### 2. ToyBot `puppet-theatre`
 

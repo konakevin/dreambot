@@ -48,6 +48,9 @@ Keep every mechanism visible and charming: strings running up out of frame to a 
 ━━━ THE STAGECRAFT DETAIL ━━━
 ${stagecraft}
 
+━━━ WHAT THE PAINTED SURFACES CARRY ━━━
+Every flat, backcloth and cut-out is painted edge to edge with PICTORIAL SCENERY — trees, arches, waves, rooftops, hills, clouds, a moon, a doorway — so no panel is left as a bare surface. Where the play would want a notice or a crest, the painter has given it a painted emblem instead: a sun, a crescent, a star, a flower, a heraldic beast, a curl of gilt scrollwork.
+
 ━━━ THE MATERIAL LOOK ━━━
 EVERYTHING is handmade toy-theatre material: painted cardboard flats with visible brush-marks and honest cut edges, timber battens, cord, foil, tissue, gauze, tiny warm bulbs. Chipped gilt on the arch, scuffed stage boards, fingerprints in the paint. Warm practical light only — the footlights, a clip lamp, a candle-stub. Real photographed objects with real texture, never CGI, never a digital illustration.
 
@@ -64,7 +67,6 @@ ${vibeDirective.slice(0, 150)}
 • Light comes from above rather than raking up from the footlights → FAILED
 • Any real human, puppeteer or human hand in frame → FAILED
 • Puppets read as living creatures or as creepy dolls → FAILED
-• Readable lettering anywhere → FAILED
 
 Describe only what IS present in the scene — never write a negation into the prompt.
 
