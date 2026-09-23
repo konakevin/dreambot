@@ -1852,6 +1852,13 @@ enclosure law, 5 "negation" hits were comparative rulers ("no higher than the lo
 "missing count" hits were counts the regex did not know ("Fourteen", "Sixteen"). A blind purge would
 have deleted the enclosure law and the roof. **Read every sweep hit; reword only the real ones.**
 
+**Quantified a third time on FaeBot `autumn-seed-gathering`: 48 raw hits → 17 real, a 65% false-positive
+rate.** A blind purge there would have deleted the path's translucency premise (every *"veins standing
+dark through it"*, the whole reason the path works), the bot's established autumn colour vocabulary
+(8 × "rust"), every hair colour, and the drifts of accumulated down (the noun sense of "drift").
+Across three builds the false-positive rate on these sweeps has never been below about two thirds, so
+treat a sweep as a READING LIST, never as a delete queue.
+
 **54. ⭐ PROMPT LENGTH vs GRADE — A WITHIN-PATH OBSERVATION THAT DOES **NOT** GENERALISE, AND THE
 DISTINCTION THAT MATTERS.** Recorded with its own refutation attached, because I wrote this as a
 three-star fleet law and then failed to replicate it within the hour.
@@ -2101,6 +2108,56 @@ explanatory comment ended its match early, and a truncation detector reported 10
 terminal punctuation on prompts whose appended suffix never ends in punctuation. **When a check says
 something is missing, confirm the check against one hand-read example before acting on it.** A false
 negative costs a whole round, and it is indistinguishable from a real defect until you look.
+
+**70. ⭐⭐⭐ BEFORE CONCLUDING "MODEL FACT", PRINT THE ASSEMBLED PROMPT AND READ WHAT SITS BETWEEN YOUR
+PREFIX AND SONNET'S TEXT.** The most valuable process lesson in this file, and it caught a wrong
+conclusion one step before it was acted on. FaeBot `autumn-seed-gathering` round 1 produced six clean,
+pretty, **sober fairy pinups**: costume 0/6, pale monochrome 6/6, the story beat ~1/6. The stored
+prompts showed every one of the path's laws **present AND correctly placed** — action at 1%, costume at
+8%, stand at 11%, all 6 of 6. Lesson 33 says a correctly-placed element that renders zero times is a
+MODEL fact, so the next step was a flux-2 probe, which `honey-harvest` had already proven unshippable
+on this bot. That round would have been spent confirming a false conclusion.
+
+What the ASSEMBLED prompt showed: **35 words of FaeBot's bot-wide medium register sitting between the
+path prefix and Sonnet's scene, at 18-25% of the emitted prompt, on 6 of 6 renders** — *"soft ethereal
+painterly … dreamy atmospheric painted glow"*. On a path whose premise is a wind rodeo that is the
+literal opposite instruction, and all six renders were precisely what it describes. flux-1.1-pro could
+render everything asked of it; **it was being told not to.**
+
+Swapping that register for a path-own one of the SAME LENGTH (35 → 33 words, lineage anchors preserved
+verbatim) took **costume 0/6 → 4/6, saturated palette 0/6 → 6/6, near-nudity 2/6 → 0/6, average
+2.27 → 3.33.** So lesson 33's "correctly placed" must be established against the ASSEMBLED prompt, not
+against the path file — a law at 1-11% still loses to a MANDATE at 18-25%, because position is not the
+only thing that matters when the competing text is an explicit instruction about register. This is
+lesson 37's fourth bot and **the first time the offender was CONTENT rather than LENGTH**: the wrapper
+was not crowding the path out, it was contradicting it.
+
+**71. ⭐⭐ "WINGED X" MAKES X AN ANIMAL — AND ONE TOKEN CANNOT SERVE TWO REFERENTS IN THE SAME PROMPT.**
+Same build. The pools used `wing` for a SEED 34 times and for the FAE 33 times across 175 entries, a
+near-perfect 50/50 split, and every emitted prompt carried 3-5 of them mixed together. Flux cannot bind
+"winged" to the seed rather than to the flying humanoid in the same frame, so the airborne seeds
+rendered as moths and birds. Deleting the token from every seed reference and naming the SHAPE instead
+(*"a papery tan blade with a fat nut bead at one end"*), keeping `wings` exclusively for the fae:
+winged-seed prompts **5/6 → 3/6 → 0/6**, blade-seeds **0 → 5/6**, bird-shaped seeds **~3/6 → 1/6**,
+with median prompt length held flat (333/329/336) so the gain was not bought with length.
+
+**The honest limit, which the agent stated rather than hid:** birds still appear ~1 in 6 with ZERO
+winged-seed tokens, so the token was *a* cause and not the only one — small pale shapes scattered in
+open sky is a bird composition regardless of the noun. **The generalisable form is a cheap pre-render
+check, not an experiment: grep your pools for any token that refers to two different things and count
+both senses.** One query would have caught this before round 1.
+
+**72. ⭐ SWEEP YOUR OWN EDIT TEXT, NOT JUST THE MODEL'S OUTPUT.** Two instances in one build. The
+recipe banned `moss-velvet` by name and Sonnet re-derived it anyway, precisely in the one entry whose
+semantics demanded softness (lesson 41 again, at MVP-25). And the author's own FIX text reintroduced
+`tiny` — the single token this bot lost a whole path to (`acorn-boat-regatta`, 3.07, five of six
+renders as naked cherubs). A ban list you wrote does not exempt you from it.
+
+**Related, and it is lesson 44 in a new costume:** a shared LAW BLOCK's examples leak into satellite
+axes that have no business with them. A `DELIGHT_LAW` block whose examples were a boot, a pebble and a
+beetle put those objects into 4 of 25 entries of the `light` axis, which owns the palette only, and one
+composed brief duplicated the same charm across two axes. **Satellite axes inherit vocabulary from your
+examples even when the example lives in a shared block rather than in that axis's own recipe.**
 
 ---
 

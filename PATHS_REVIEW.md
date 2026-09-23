@@ -7,7 +7,7 @@ Going live is moving one string from `shadowPaths[]` into `paths[]` and changing
 To look at any path's renders: they are shadow posts on that bot's own profile, reviewable in the app.
 To render more of one: `node scripts/iter-bot.js --bot <bot> --mode <path> --count 6 --post --shadow`.
 
-⏳ **STATUS: 32 of 35 built, 3 outstanding** (2 rendering now, 1 queued). This sheet is updated as each wave merges; the final
+⏳ **STATUS: 33 of 35 built, 2 outstanding** (both rendering now). This sheet is updated as each wave merges; the final
 version will cover all 35. Full per-path detail, every measured round and every residual lives in
 `NEW_PATHS_RUN_STATE.md`; the cross-bot laws all this produced are in `BOT_SCENE_QUALITY_PLAYBOOK.md`.
 
@@ -67,6 +67,7 @@ two named axes getting pushed off the end, not a word-count problem.
 | ~4.2 | FaeBot | `honey-harvest` | beat the naked-cherub trap that sank `acorn-boat-regatta`, 6/6 first try, by opening with a fae *at work mid-movement* rather than a static description. Two 4.5s. Also settled a fleet question: the Replicate content-filter wall is the whole flux-2 family, not one model |
 | 4.2 | SteamBot | `rooftop-telegraph` | the vantage reaches only 1 of 6 prompts — and that render is the 4.8. Lever: give the vantage its own output-order item |
 | 4.02 | DinoBot | `tidal-flat-tracks` | the giant has already walked through: filling trackways, a drag mark, the flat as a mirror. ⚠️ **Look at round 2, not round 3** — round 3's fix was right but a separate 3-entry sky defect rolled twice and cost the round. Best frame ~4.9: a colony of amber-shelled periwinkles has moved into a single dinosaur footprint while a black squall with a saffron gap lies flat in the standing water. Lever: purge the 6 pool entries that describe a continuous furrow rather than discrete hollows (4.19 vs 2.83 mean) |
+| 4.15 | FaeBot | `autumn-seed-gathering` | fae working the autumn seed harvest, hanging off pods in a gale. Went **2.27 → 4.15**, the biggest arc of the run, and beat the naked-cherub trap that sank `acorn-boat-regatta`. Best frame 4.6: a fae in a green leaf-cloth work dress hanging off a colossal split pod at full stretch, hair streaming, the air solid white with tufts. ⚠️ Grade round 3 only, the earlier twelve renders on the profile are the pale batches. Lever: delete one output-order item so the pod and the backlit halo move into the attended half |
 | 4.13 | BloomBot | `coastal-cliff-bloom` | the postcard vista, ~4 of 6, and NOT beatable by wording ("cliff" reached 0 of 24 prompts and the cliff rendered anyway). Lever: halve a 6.6 KB template |
 
 ## Under the bar — my read is these need a decision, not another round

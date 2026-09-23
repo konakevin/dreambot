@@ -40,6 +40,8 @@ const pathBuilders = {
   'mushroom-apothecary': require('./paths/mushroom-apothecary'), // 2026-09-22 SHADOW — FaeBot's first interior
   'acorn-boat-regatta': require('./paths/acorn-boat-regatta'), // 2026-09-22 SHADOW — FaeBot's first ACTION path
   'star-charting': require('./paths/star-charting'), // 2026-09-23 SHADOW — FaeBot's first NIGHT-SKY / knowledge path
+  'honey-harvest': require('./paths/honey-harvest'), // 2026-09-23 SHADOW — FaeBot's first FOOD/FORAGING + first HEIST
+  'autumn-seed-gathering': require('./paths/autumn-seed-gathering'), // 2026-09-23 SHADOW — FaeBot's first MOTION/PHYSICS + first AUTUMN path
 };
 
 module.exports = {
@@ -55,7 +57,13 @@ module.exports = {
   // flower-fairy uses painted_fantasy_novel (FaeBot's default) so it
   // matches the soft painterly look of the other FaeBot paths
   // (Manchess + Giancola + Bonner painted-fantasy lineage).
-  // mediumByPath omitted — flower-fairy falls through to defaultMedium.
+  // mediumByPath — ADDED 2026-09-23 for autumn-seed-gathering; flower-fairy and every
+  // other path still fall through to defaultMedium, which is what the old comment here
+  // described. This path needs its own medium because the bot-wide register is what was
+  // beating it: see promptPrefixByMedium below. Worth +1.06 on the round average.
+  mediumByPath: {
+    'autumn-seed-gathering': 'faebot_seedfall',
+  },
 
   // Override the DB flux_fragment for this medium key with the locked
   // painted-fantasy-novel directive (Manchess + Giancola + Bonner + Wyeth
@@ -64,6 +72,7 @@ module.exports = {
   mediumStyles: {
     painted_fantasy_novel: blocks.PAINTED_FANTASY_NOVEL_MEDIUM,
     faebot_gpt_clean: blocks.GPT_CLEAN,
+    faebot_seedfall: 'autumn seedfall fantasy concept art, painterly',
   },
 
   // nano-banana clean-render override (2026-06-07; no gpt-image-2 in FaeBot's
@@ -82,6 +91,19 @@ module.exports = {
     painted_fantasy_novel:
       'soft ethereal painterly fantasy illustration, visible oil-brushwork, painted fantasy concept art, Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage, dreamy atmospheric painted glow',
     faebot_gpt_clean: '',
+    // faebot_seedfall — the single highest-value change on this path (avg 2.27 -> 3.33).
+    // The bot-wide `painted_fantasy_novel` prefix above is a 35-word REGISTER MANDATE
+    // ("soft ethereal painterly ... dreamy atmospheric painted glow") and the engine lands
+    // it at 18-25% of the emitted prompt, BETWEEN the path prefix and Sonnet's scene, on
+    // 6 of 6 renders. On a path whose premise is a wind rodeo it is the literal opposite
+    // instruction, and it won: costume 0/6, pale monochrome 6/6, the beat ~1/6, even though
+    // every one of the path's own laws was present AND correctly placed at 1-11%.
+    // Swapping it for a path-own register of the SAME LENGTH (35 -> 33 words, lineage
+    // anchors kept verbatim) took costume 0/6 -> 4/6, saturated palette 0/6 -> 6/6 and
+    // near-nudity 2/6 -> 0/6. Rollback = delete this entry plus the mediumByPath and
+    // mediumStyles entries, which returns the path to its round-1 state.
+    faebot_seedfall:
+      'painted fantasy concept art, visible oil-brushwork, Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage, saturated autumn colour, hard directional light, everything in the frame moving on a strong wind',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -95,6 +117,19 @@ module.exports = {
     // humanoid is a naked-cherub prior). Do not demote it to buy room for anything
     // else — a measured round that did exactly that lost wings in 4 of 6 and the
     // costume in 3 of 6.
+    // honey-harvest: the first EIGHT WORDS are the path. With a static portrait
+    // opener the beat rendered 0 of 12 across two rounds while sitting in 12 of 12
+    // prompts; putting "hard at work, caught mid-movement" IN FRONT of the figure
+    // clause — additively, nothing removed — took it to 6 of 6. Do not demote the
+    // fae clause (lesson 34) and do not tidy out the action.
+    'honey-harvest':
+      'one slender grown fae hard at work, caught mid-movement with her whole body committed, painted large and close in the foreground, in a layered fae-craft coat and hood with open wings, on a great tree limb that fills one side of the picture and runs out of frame, pale honeycomb hanging under it in overlapping sheets with gold honey lit through them, forty small bees around her',
+    // autumn-seed-gathering: inherits honey-harvest's measured opener verbatim (the action
+    // clause IN FRONT of the figure clause). The stalk-fills-one-side clause is the
+    // anti-vista law, and "two hundred white seed tufts" carries the count from the prefix
+    // on 6 of 6 renders, which is why the output order's own air item is the named lever.
+    'autumn-seed-gathering':
+      'one slender grown fae hard at work, caught mid-movement with her whole body committed, painted large and close in the foreground, in a layered fae-craft coat with open wings, on a great dry autumn stalk that fills one side of the picture and runs out of frame, a split seed pod at her shoulder taller than she is, and two hundred white seed tufts sailing past her on the wind',
     'star-charting':
       'one slender grown fae close in the foreground, painted large, in a layered fae-craft coat and hood with open wings, on a high woodland perch whose broad surface fills the near frame, beneath a blazing saturated night sky of indigo, violet and green',
     // acorn-boat-regatta: a path staged on a LINEAR feature (a stream) renders as a receding
@@ -167,7 +202,13 @@ module.exports = {
   // string into `paths[]`.
   // 'mushroom-apothecary' stays here until Kevin grades it. shadowPaths[] is invisible to the
   // hourly dispatcher; going live = move the string into paths[] and change nothing else.
-  shadowPaths: ['mushroom-apothecary', 'acorn-boat-regatta', 'star-charting'], // Stage F paths promoted to live rotation 2026-08-16
+  shadowPaths: [
+    'mushroom-apothecary',
+    'acorn-boat-regatta',
+    'star-charting',
+    'honey-harvest',
+    'autumn-seed-gathering',
+  ], // Stage F paths promoted to live rotation 2026-08-16
 
   // Picker on with the BOT_MODEL_TALLY 6-model lineup (2026-05-30):
   // Banana + GPT-2 + Flux 2 Pro + Flux 1.1 Pro + Flux 1.1 Pro Ultra + Flux 2 Max.
@@ -209,6 +250,23 @@ module.exports = {
     // attempts on this path's content (flux-1.1-pro is 23 of 23), which is fine for a
     // shadow path and not shippable on a 2x/day cron. See the tracker for the lever.
     'star-charting': ['black-forest-labs/flux-2-pro'],
+    // honey-harvest: flux-1.1-pro ONLY — 12 of 12 delivered, zero signatures.
+    // MEASURED so nobody re-runs it: flux-2-pro renders the premise BETTER (beat
+    // 2/4, cups 4/4) and is unshippable — it signed 4 of 4 and took 20 safety
+    // retries for 4 deliveries. flux-2-FLEX hits the SAME E005 wall on the same
+    // content, so this is a flux-2 FAMILY fact, not a flux-2-pro one: there is no
+    // shippable flux-2 option for a FaeBot path with a close adult-fae body.
+    'honey-harvest': { 'black-forest-labs/flux-1.1-pro': 1 },
+    // autumn-seed-gathering: flux-1.1-pro ONLY — 18 of 18 delivered, zero E005, zero
+    // signatures. Load-bearing for TWO reasons. (1) FaeBot's picker rolled ultra on 15 of
+    // 15 mushroom-apothecary renders and ultra signs its work, so an unpinned pick puts
+    // readable text on the path. (2) This path uses a code-only medium key with no
+    // `dream_mediums` row, and modelByPath is checked BEFORE pickModel (botEngine ~1723),
+    // so the pin keeps the picker out of it entirely. NOTE, corrected from the build
+    // report: an absent row does NOT break the picker — `mediumModelsCache.get()` returns
+    // undefined and it falls THROUGH to a default pool. The risk is an unpinned roll
+    // (i.e. ultra), not an exception.
+    'autumn-seed-gathering': { 'black-forest-labs/flux-1.1-pro': 1 },
   },
   // modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
   // Original locks (restore individual lines if a path needs pinning again):
@@ -240,6 +298,8 @@ module.exports = {
       'mushroom-apothecary',
       'acorn-boat-regatta',
       'star-charting',
+      'honey-harvest',
+      'autumn-seed-gathering',
       'dryad-portrait',
       'forest-elder',
       'female-druid',
@@ -278,6 +338,8 @@ module.exports = {
       'mushroom-apothecary',
       'acorn-boat-regatta',
       'star-charting',
+      'honey-harvest',
+      'autumn-seed-gathering',
       'forest-elder',
       'female-druid',
       'female-druid-adventure',
