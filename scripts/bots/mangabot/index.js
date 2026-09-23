@@ -50,6 +50,7 @@ const pathBuilders = {
   'anime-haunted-school': require('./paths/anime-haunted-school'),
   'anime-witch-familiar': require('./paths/anime-witch-familiar'),
   'onsen-evening': require('./paths/onsen-evening'), // 2026-09-23 SHADOW — outdoor hot-spring evening
+  'game-center-arcade': require('./paths/game-center-arcade'), // 2026-09-23 SHADOW — game centre at night
 };
 
 // Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
@@ -101,6 +102,7 @@ module.exports = {
   // cleanMediumByModel banana→gpt_clean swap (which would skip the look) never
   // fires here. Banana still serves the 4 style-locked paths via 'anime'.
   mediumByPath: {
+    'game-center-arcade': 'mangabot_anime_neutral',
     'onsen-evening': 'mangabot_anime_neutral',
     'neo-tokyo': 'mangabot_anime_neutral',
     'shonen-action': 'mangabot_anime_neutral',
@@ -165,6 +167,7 @@ module.exports = {
   // Per-path vibe curation (2026-07-03 audit): coquette belongs on the cute
   // path only; nightshade belongs on the dark-occult path only.
   vibesByPath: {
+    'game-center-arcade': ['cinematic', 'voltage', 'shimmer', 'nostalgic', 'whimsical', 'cozy', 'enchanted', 'dark'],
     'onsen-evening': ['cozy','peaceful','nostalgic','enchanted','cinematic','whimsical','ethereal','shimmer'],
     kawaii: [
       'cozy',
@@ -213,7 +216,7 @@ module.exports = {
 
   // Stage I paths promoted to live rotation 2026-08-16 (shadowPaths emptied;
   // MANGA_SHADOW_PATHS const retained — still drives twoPassPolish.skipPaths).
-  shadowPaths: ['onsen-evening'],
+  shadowPaths: ['onsen-evening', 'game-center-arcade'],
 
   // Seasonal-window paths (2026-09-07) — drawn ONLY when
   // engine_config.bots_seasonal_enabled is true AND the named holiday window
@@ -235,6 +238,7 @@ module.exports = {
   // 37 hearted SDXL-era renders. SDXL R0 batch confirmed the looser feel is the
   // whole point. Trade-off: ~3x slower (10-18s vs 5s), PNG output (heavier).
   modelByPath: {
+    'game-center-arcade': ['black-forest-labs/flux-2-pro', 'black-forest-labs/flux-2-max'],
     // onsen-evening: measured over 24 renders, reading the STAMPED model not the picked one.
     // flux-1.1-pro back-fills BARE-BACKED bathers into a pool whose brief named none, and drifts
     // to a full daylight sunset. flux-dev renders a hot spring with NO STEAM in 3 of 4, which
@@ -253,6 +257,7 @@ module.exports = {
     enabled: true,
     skipPaths: [
       'onsen-evening',
+      'game-center-arcade',
       // Halloween seasonal candidates (promoted from AlphaBot 2026-09-07) —
       // protect the curated MVP composition Kevin approved during QA.
       'anime-halloween-festival',
@@ -291,6 +296,7 @@ module.exports = {
     // Haiku had stripped the camera_framing description entirely.
     skipPaths: [
       'onsen-evening',
+      'game-center-arcade',
       'isekai-fantasy',
       'ghibli-countryside',
       'neo-tokyo',
@@ -354,7 +360,7 @@ module.exports = {
   sensoryAnchors: {
     // onsen-evening: MangaBot's scene `lightcolor` pool carries setting nouns ("the manga aisle
     // corner", "the late-night parking lot"), which inject a SECOND scene into a fixed-place path.
-    skipPaths: ['onsen-evening'],
+    skipPaths: ['onsen-evening', 'game-center-arcade'],
     enabled: true,
     requiredChannels: ['lightcolor'],
     pathContext: {

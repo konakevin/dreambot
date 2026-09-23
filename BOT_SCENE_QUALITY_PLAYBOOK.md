@@ -1812,6 +1812,39 @@ bot-wide look-override in `buildBrief` uses "NON-NEGOTIABLE / AUTHORITY / OVERRI
 measured at ~28% Sonnet refusal on FarmBot in 2026-09. It showed 0 refusals in 21 renders here, so it
 is not firing — but it rides all 24 live paths, so it is Kevin's call rather than a path-level fix.
 
+**51. ⭐⭐⭐ FILLING A SURFACE DOES NOT REMOVE THE LETTERING — IT MIGRATES IT TO THE NEAREST REMAINING
+UNFILLED STRIP. On a subject made ENTIRELY of text-shaped surfaces you must shrink the text-bearing
+AREA, not fill surfaces one at a time.** MangaBot `game-center-arcade`, the hardest text subject
+attempted, tracked across three rounds:
+
+| round | where the lettering was | rate |
+| --- | --- | --- |
+| R1 | the machine fronts (large lit faces turned to camera) | 5/6 |
+| R2 | the header band between glass and bulbs | 6/6 |
+| R3 | the compressed background band (a wall sign above the machines) | 7/12 |
+
+**The rate barely moved — but PROMINENCE fell every round as the available area shrank**, and by R3 only
+2 of 12 were prominent. This is the limit of lesson 27's delete-and-fill: it relocates text rather than
+removing it whenever another unfilled text-shaped surface remains. The win condition on such a subject
+is to leave no unfilled strip at all, which usually means a crop rather than more filling.
+
+**52. ⭐⭐ A FRAMING LAW CAN BE A TEXT FIX — crop is a text lever.** Same build, from one change: the
+crosswise/concrete-but-cropped law (lessons 17/24) cut corridors **3/6 → 0/12** *and* cut lettering
+prominence at the same time, for a reason worth internalising — **a receding rank of eight machines
+shows eight header bands; a cropped near wall shows two.** On any subject whose every surface is a text
+prior, reducing how many of those surfaces are in frame beats describing each one safely.
+
+**53. ⭐⭐ "PURGE THE OFFENDING POOL CLASS" IS NOT UNIVERSAL — CHECK THE DISTRIBUTION FIRST.** A genuine
+correction to the BrickBot precedent (lesson 35's "audit the pool as a SET and delete the class"). On
+this build the 5 corridor renders traced to **5 DIFFERENT camera entries**, including the two worded
+most explicitly against corridors — so there was no offending class to purge, and purging would have
+gutted a working pool. The rule:
+- **hard fails CONCENTRATE in a few entries → purge that class** (BrickBot's camera pool, FaeBot's
+  rock-parented perches, MangaBot's sign-shaped board).
+- **hard fails spread evenly across entries → the feature's own prior is beating the words**, which is
+  lesson 17's case, and the fix is structural (a crop law, a different framing form), not deletion.
+Count which entries produced the failures before deciding. It is one query on the stored prompts.
+
 ---
 
 ## North Star — the actual goal
