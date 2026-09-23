@@ -1845,6 +1845,48 @@ gutted a working pool. The rule:
   lesson 17's case, and the fix is structural (a crop law, a different framing form), not deletion.
 Count which entries produced the failures before deciding. It is one query on the stored prompts.
 
+**54. ⭐⭐⭐ EMITTED PROMPT LENGTH PREDICTS THE GRADE — measured per-render, not inferred.** The
+attention-curve laws (12/22/34) have always been argued from whether a NAMED thing rendered. PixelBot
+`observatory-tower` graded 15 renders blind and then sorted them by emitted word count:
+
+| emitted words | avg grade |
+|---|---|
+| 8 shortest (235-278w) | **4.51 — above the pass bar** |
+| 7 longest (289-339w) | 3.87 |
+
+and **every prompt at or above 323 words graded 3.0-3.6.** Same path, same pools, same models, same
+round — the only variable is how many words the roll happened to produce. This reframes length from "a
+thing that can push a clause off the end" to **the single highest-leverage dial on a path's average**,
+and it means a path whose median sits near the cliff is one long roll away from a bad render every
+batch. Check a disappointing path's length distribution BEFORE rewriting any of its content: if the
+long tail is where the bad grades are, no amount of better wording in the pools will fix it, because
+the words are not the problem, the count is.
+
+**55. ⭐⭐ SONNET ANCHORS WORD COUNT ON YOUR EXAMPLES, NOT ON YOUR NUMBER — and restating a cap is a
+nudge, not a control.** Sharpens lesson 46. A generator asking for 35-50 words produced a median of
+143 because every example written underneath the ask was itself 55-70 words. Rewriting the examples to
+obey their own cap cut the median ~35% — a real win from touching nothing but the examples — but
+**186 of 225 entries still finished over cap.** So: the examples ARE the spec, and if you need a cap to
+actually bind, the only thing that binds it is an explicit max-length pass over the generated output.
+Write the examples short, then measure the result; never assume the number was read.
+
+**56. ⭐⭐ A NARROW BRIGHT OPENING IN A DARK INTERIOR IS A LIGHT-CONE GENERATOR.** PixelBot `ice-cavern`
+logged this as an open residual; `observatory-tower` confirmed it on a second, unrelated interior —
+solid white and solid green volumetric cones in 2 of 5 renders whose prompts contained **zero**
+light-object words. The geometry alone summons it: a small bright aperture plus a dark enclosure is a
+god-ray composition in the training data, so the model supplies the beam whether or not you asked. On
+any path whose light arrives THROUGH an opening, the light-is-light rule (light as illumination on
+surfaces, not as a solid object) has to live in the path TEMPLATE, where it applies to every roll —
+putting it in the recipes only covers the rolls that happen to mention light.
+
+**57. A CURVED WALL IS A SAFE SUBSTRATE WHERE A FLAT PANEL IS NOT.** A practical corollary to lesson
+27's dividing line (is the SHAPE already a sign?). The brief for `observatory-tower` wanted a pinned
+cork board — a flat bounded rectangle, i.e. a sign shape, and a guaranteed lettering prior. Moving
+every pinned object into the tower's own **curving plaster** kept the whole idea (pins, thread,
+constellation charts, beads on wires) and rendered clean in every roll that drew it, with **0 text
+across 15 renders** on the fleet's highest text-risk subject. When a premise needs things attached to a
+surface, attach them to a curved or irregular one and the text prior never engages.
+
 ---
 
 ## North Star — the actual goal

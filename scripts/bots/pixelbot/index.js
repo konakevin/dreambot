@@ -39,6 +39,9 @@ const SCENE_PATHS = {
   'ice-cavern': require('./paths/ice-cavern'), // batch 5 (agent), 3 rounds — R2 4.06 CLOSE; ref render R2 #1 4.8
   'floating-market-canal': require('./paths/floating-market-canal'), // batch 5 (agent), 4 rounds — R3 PASS 4.52 (min 4.2); corridor 0/5, text 0/5
   'castle-town-gate': require('./paths/castle-town-gate'), // wave 5 (agent), 3 rounds — R0 3.02 → R1 4.46 → R2 PASS 4.64 (min 4.3); text 0/10 on the pin
+  'observatory-tower': require('./paths/observatory-tower'), // wave 6 (agent), 3 rounds — R0 4.42 → R1 3.96 → R2 4.26 CLOSE; ref render 5.0; text 0/15
+  // NOTE: no modelByPath entry needed — this path self-declares its flux-2 pin on the
+  // builder, and scene.modelByPath now honours builder.models (fixed 61f04d93).
 };
 
 const pathBuilders = {
@@ -216,6 +219,7 @@ module.exports = {
     'ice-cavern',
     'floating-market-canal',
     'castle-town-gate',
+    'observatory-tower',
   ],
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
