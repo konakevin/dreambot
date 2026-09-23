@@ -111,7 +111,7 @@ Then the rest, grouped by bot to reuse each bot's audit.
 | 20 | FarmBot | lambing-season | - | not started | |
 | 21 | FarmBot | sheep-shearing-day | - | not started | |
 | 22 | FarmBot | hay-baling-summer | - | not started | |
-| 23 | MangaBot | onsen-evening | - | not started | |
+| 23 | MangaBot | onsen-evening | 4+1 | validating signage lever | 4.2, taste line 6/6; ultra+1.1-pro+dev all pruned on measured evidence |
 | 24 | MangaBot | game-center-arcade | - | not started | |
 | 25 | PixelBot | castle-town-gate | - | not started | |
 | 26 | PixelBot | ice-cavern | 3+1 | validating charm fix | agent 4.06 CLOSE; carved-relief charm replaced with ice-native charms |
@@ -176,6 +176,40 @@ Three separate paths needed the same move today, and it is now the default:
 **Sonnet writes only what the output order tells it to write.** A PICTORIAL/plain-surface rule sitting
 in a mid-template rules block gets paraphrased away — in both BrickBot failures the surface WAS named,
 just late. If a clause is load-bearing, it belongs in the ordered list, not in the rules.
+
+### ⭐ LESSON 13 — a surface named in a SEED is clean; named only in the TEMPLATE it is a coin flip
+
+MangaBot `onsen-evening`, over 24 renders, produced the sharpest measurement of the run on the text
+prior — and it REFINES lesson 2 rather than repeating it:
+
+| where the surface was named | gibberish rate |
+| --- | --- |
+| in a POOL ENTRY (noren, lantern faces, doorway plank, eave boards, cup, fan) | **clean 9/9** |
+| only in the TEMPLATE's output order | **a coin flip** |
+| nowhere (the vertical board Flux inserts unprompted) | **~0% clean** |
+
+So the output order gets a clause INTO the prompt; the SEED is what makes it STICK. When a text
+prior survives a correctly-ordered template clause, move the law into the pool's entries.
+
+**And "blank" is a negation CLIP cannot use — delete the object class instead.** *"A wooden tag
+hanging by the step, blank and pale"* rendered two pseudo-kanji. Removing the tag class fixed it;
+describing it never did. Give the surface a PICTURE, never an absence.
+
+### ⭐ LESSON 14 — an UNSTATED figure renders as the genre's default, and on a bath path that is NUDE
+
+The documented "unstated figure renders as a modern tourist" law (FaeBot fae-wilds-village) has an
+onsen form: flux-1.1-pro back-filled 2-4 bare-backed bathers into pools whose brief named NO figure.
+The fix is the covering rule on EVERY render including the no-figure branch, plus a model prune.
+MangaBot gained its first `nudityCheck` block as the backstop.
+
+**Three more models now excluded on measured evidence, alongside flux-1.1-pro-ultra:**
+- `flux-1.1-pro` — back-fills nude figures, and drifts to a full daylight sunset on an evening path
+- `flux-dev` — renders a hot spring with NO STEAM in 3 of 4, turning it into a cold swimming pool
+- both join ultra on the standing exclusion list for any path whose identity is a lighting condition
+
+Also confirmed for the third time: **Sonnet ignores a word cap but obeys the ORDER.** 349 words
+against a 95-120 ask, yet hoisting bath+steam to positions 1-2 took steam from 3/6 to 6/6 rendered
+and ended all content-dropping. Expect the re-ordering to pay, never the number.
 
 ### ⭐ LESSON 11 — a LOOK-THROUGH-A-CONTAINER path: the container is a knob and BOTH ENDS FAIL
 
