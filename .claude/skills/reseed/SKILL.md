@@ -157,6 +157,12 @@ flavour element only to the kinds that really carry it (water notes to water poc
 dry ones), keep type-owned hosts to their types (no pond "inside a hollow log"), and re-read the
 after-set for SAMENESS before calling a pool done, not just for entry-fidelity.
 
+**`assign()` must not draw only from the least-used few.** The usual loop draws each axis from its 4-5
+least-used values and retries; inside ONE call the usage never changes, so if those few are exhausted
+it fails 400 times and the slot goes unfilled although hundreds of combinations are free (YumBot second
+pass: 44 of 45 "unassignable" on a 264-combination space). After ~200 random tries, walk every
+combination in usage order (the YumBot config shows the pattern).
+
 **Before any full run, prove the assignment space offline** (hidden-corner and the YumBot festival
 pool each wasted a whole run on this): load the config, parse the pool, keep the first of each group,
 then call `cfg.assign(slot, { usage, groups })` for every rewrite slot and count the nulls. If any slot

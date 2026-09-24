@@ -93,10 +93,16 @@ const DEPTH = [
   'painted depth into pearl-mist distance',
 ];
 
+// named trees before the generic families ("autumn maple grove" is the maple grove; "alder-lined
+// stream" is the alder stream)
 const BIOME_RULES = [
   ['oak cathedral', /oak-cathedral|oak cathedral|vaulted canopy/i],
   ['hero tree', /hero-tree|world-tree|colossal/i],
   ['wisteria arbor', /wisteria/i],
+  ['maple grove', /maple/i],
+  ['larch glade', /larch/i],
+  ['alder stream', /alder/i],
+  ['willow carr', /willow/i],
   ['waterfall glade', /waterfall/i],
   ['stream clearing', /stream/i],
   ['fern grotto', /fern-grotto|fern grotto|grotto/i],
@@ -142,7 +148,8 @@ const pick = (rules, text, fallback) => {
 // is the biome, not a signature texture
 const stem = (w) => w.toLowerCase().replace(/s$/, '');
 const overlaps = (biome, texture) => {
-  const bw = biome.split(/[- ]/).filter((w) => w.length >= 4).map(stem);
+  const phrase = biome + ' ' + ((BIOMES[biome] && BIOMES[biome].words) || '');
+  const bw = phrase.split(/[- ]/).filter((w) => w.length >= 4).map(stem);
   const tw = texture.split(/[- ]/).filter((w) => w.length >= 4).map(stem);
   return bw.some((b) => tw.some((t) => t.startsWith(b) || b.startsWith(t)));
 };

@@ -205,15 +205,21 @@ const perchUse = {};
 function assign(slot, ctx) {
   const { usage, groups } = ctx;
   const among = (list, k) => list[Math.floor(Math.random() * Math.min(k, list.length))];
-  for (let attempt = 0; attempt < 400; attempt++) {
-    const family = among(
-      byUsage(Object.keys(FAMILY), usage, (k) => 'family:' + k),
-      5
-    );
-    const arr = among(
-      byUsage(Object.keys(ARR), usage, (k) => 'arr:' + k),
-      4
-    );
+  const families = Object.keys(FAMILY).filter((f) => !/kendama|senbei|kokeshi|omikuji|temari|daruma|maneki-neko|ema rack|shrine bell|shishi-odoshi/.test(f));
+  // random among the least-used first; past 200 tries, walk every family × arrangement in usage order
+  for (let attempt = 0; attempt < 400 + families.length * Object.keys(ARR).length; attempt++) {
+    let family;
+    let arr;
+    if (attempt < 200) {
+      family = among(byUsage(families, usage, (k) => 'family:' + k), 5);
+      arr = among(byUsage(Object.keys(ARR), usage, (k) => 'arr:' + k), 4);
+    } else {
+      const i = attempt - 200;
+      const fl = byUsage(families, usage, (k) => 'family:' + k);
+      const al = byUsage(Object.keys(ARR), usage, (k) => 'arr:' + k);
+      family = fl[i % fl.length];
+      arr = al[Math.floor(i / fl.length) % al.length];
+    }
     // a rim needs a tub, basin, well or box; levels need steps, a yagura or a shelf; you cannot sit
     // on top of a lantern rope, a curtain or a streamer
     // small or obscure perches (a kendama pile, a senbei tin, a kokeshi row, an omikuji box, temari,

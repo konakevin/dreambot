@@ -122,8 +122,8 @@ const PHEN_RULES = [
   ['ice halo', /halo/i],
   ['zodiacal light', /zodiacal/i],
   ['twin suns', /twin suns|two suns|second sun/i],
+  ['giant storm', /storm spot|great spot|churning storm|great storm/i],
   ['gas giant', /gas giant|banded storms/i],
-  ['giant storm', /storm spot|great spot|churning storm/i],
   ['moon conjunction', /moons? align|conjunction|three moons/i],
   ['rogue planet', /rogue planet/i],
   ['ring plane', /rings? seen edge-on|planetary rings|ring plane/i],
@@ -133,10 +133,10 @@ const PHEN_RULES = [
 const PLACE_RULES = [
   ['mirrored in the water below', /mirrored|reflected|reflection/i],
   ['behind her silhouette', /behind her|her silhouette|edges of her/i],
-  ['on the horizon', /horizon/i],
-  ['overhead', /overhead|above|zenith|across the sky/i],
   ['in the mid-distance', /mid-distance|middle distance|between distant peaks/i],
-  ['across the deep distance', /deep distance|far distance|deep landscape|across the/i],
+  ['on the horizon', /on the horizon|at the horizon|horizon line|low on the horizon/i],
+  ['overhead', /overhead|above|zenith|across the sky/i],
+  ['across the deep distance', /deep distance|far distance|deep landscape|across the|horizon/i],
 ];
 const pick = (rules, text, fallback) => {
   for (const [k, re] of rules) if (re.test(text)) return k;

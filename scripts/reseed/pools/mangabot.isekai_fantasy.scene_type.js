@@ -173,7 +173,7 @@ Examples already in the pool (match their voice and length):
 ${examples.map((e) => '- ' + e).join('\n')}
 
 Rules:
-- Open with EXACTLY the category opener given, then EXACTLY the scene motif given (its own nouns, in your own natural wording), then the energy note given.
+- Open with EXACTLY the category opener given, then EXACTLY the scene motif given (its own nouns, in your own natural wording), then the energy note given. The motif given is the ONLY scene motif in the entry: add none of the other canon motifs (no second rune-circle, status-window, cloud sea, island waterfall, quest board or slime unless it IS the motif given).
 - Painterly cel-shaded anime keyframe; mana-glow, status-windows and rune-circles are canon. One composition per entry.
 - Never Western photoreal medieval (no Witcher / Skyrim / D&D / Game of Thrones), never gritty or desaturated, never generic fantasy. Describe only what is present; write no negative words.
 

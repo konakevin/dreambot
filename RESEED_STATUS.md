@@ -71,7 +71,11 @@ commit + push, row + log here.
 - **epic-sunset: DONE** (8 + 8 pairs reviewed, 15/16 carried: one after-render's entry was dropped by
   Sonnet and rendered a grey overcast beach; the harness flagged it); close-out commit next.
 - **national-parks: DONE** (8 + 8 pairs reviewed, 16/16 carried); close-out commit next.
-- **hidden-corner: FIRST PAIRS FAILED MY REVIEW (a regression in visible variety), fixing.** The
+- **hidden-corner: DONE on the second pass** (8 + 8 on the same slots, 16/16 carried: a sandstone
+  alcove, a root-arch tunnel, a cave pool with flowers, a boreal bog pool, a fungi-strewn log nook, a
+  sunlit glade and two mossy creeks; pairs https://claude.ai/artifact/2Z1qMdFwwnkHM5ZBNmxdMQ). The
+  first pass below is kept as the record of why. Close-out commit next.
+- _(first pass)_ **hidden-corner: FIRST PAIRS FAILED MY REVIEW (a regression in visible variety), fixing.** The
   pool was written (70 → 199 distinct, 130 rewrites) and 16/16 prompts carried the entry, but five of
   the eight "after" renders are the same mossy waterfall gorge while the "before" set had a mossy
   oak, a sunset creek, two tide pools with sea stars and a flower cove. Cause found in the config, not
@@ -80,7 +84,10 @@ commit + push, row + log here.
   grotto "inside a hollow log" because the log hosts were open to every type. Fixed (water note only
   on water pockets, a floor note on dry ones, a "water in a dry pocket" check, owned hosts). Next =
   restore the backup, regenerate the dry-type and mis-hosted rewrites via a filtered `--resume`,
-  re-execute, re-render the same slots, and only then judge. Pairs of the failed pass:
+  re-execute, re-render the same slots, and only then judge. DONE through re-execute: 71 sound water
+  rewrites kept, 59 regenerated (0 water words in dry pockets), pool written again (backup
+  `~/poolbackup-earthbot-hidden_corner-subject-1790231224039.json`), re-render running to `hc2/` on the
+  same eight slots. Pairs of the failed pass:
   https://claude.ai/artifact/1TFknEsNuF5ZpNCMFgVhJS. Lesson for the skill: a flavour element added to
   every entry becomes the render; flavour must follow the entry's own kind.
 - **BloomBot carpets:** shared factory `scripts/reseed/lib/carpetPool.js` (the pilot's species-set
@@ -101,8 +108,33 @@ commit + push, row + log here.
   visible gain nil" and the flag stays for Kevin.
 - **FaeBot anchors:** all three pools WRITTEN (forest-fairy 71 → 260 distinct, 25 → 68 kinds;
   dryad-portrait 52 → 200, 17 → 66 kinds; enchanted-vista 59 → 200, 20 → 69 kinds; backups
-  `~/poolbackup-faebot-*-foreground_anchor-*`). forest-fairy + enchanted-vista chains rendering
-  (`ffa/`, `eva/`); dryad's anchor is 40%-gated so its pairs come last.
+  `~/poolbackup-faebot-*-foreground_anchor-*`). **enchanted-vista pairs reviewed: the anchor is
+  invisible.** 16/16 prompts carried the entry, and the eight after-renders are the same painted
+  enchanted forest as the eight before (glowing tree, arch of branches, mushrooms come from the vista's
+  hero / biome / light axes; a wild-garlic clump or an owl feather at the frame edge never reads). The
+  scaling doc's own rule applies: a repeated axis is invisible, a repeated subject is the complaint.
+  Close for the anchor pools = "text unique, visible gain nil, harmless"; no dryad renders will be
+  spent. Pairs https://claude.ai/artifact/UNCzN3UM8WLECQLLJ7Enoe. **Confirmed on the portrait path
+  too:** forest-fairy-scene pairs (15/16 carried) are eight beautiful, varied fae portraits before and
+  eight after, and in none of the sixteen can the anchor be picked out (a thistle head, wild garlic,
+  bracket fungi, an owl feather never read at the frame edge). Pairs
+  https://claude.ai/artifact/6biQPY43Bk1ED4G9p2P31q. All three anchor pools: **DONE as text-unique;
+  the axis is invisible on both paths.**
+- **FaeBot queen-of-the-forest biome:** pool WRITTEN (26 → 197 distinct on forest type + first
+  texture; 11 → 35 forest types; 171 rewrites, 3 unfilled = kept originals; backup
+  `~/poolbackup-faebot-queen_of_forest-biome-*`); renders queued (`qb/`) behind the YumBot re-render.
+  **posed_setting** full run in flight.
+- **YumBot festival second pass:** pool WRITTEN (97 → 199 distinct; 45 rewrites regenerated onto
+  strong-prior perches; backup `~/poolbackup-yumbot-japanese_festival-scene_type-1790231416555.json`),
+  same eight slots re-rendering as `yf2/` once a lane frees.
+- **Track B started: BrickBot balloon-festival `fleet` (the path's subject: the sky full of
+  balloons).** Config `scripts/reseed/pools/brickbot.balloon_festival.fleet.js` (same = launch
+  situation + nearest balloon's pattern + the shaped balloon; 30 situations × 12 patterns × 40 shaped
+  balloons; LEGO-register checks: a stated count ≥ two dozen, a height spread, an element word, no
+  massing nouns). `--grow 75` dry run in flight to `brickbot_balloon_fleet/grow` (25 originals kept
+  byte-identical; the pool only grows). Next = review, execute, forced renders on NEW entries only.
+- **Last five Track A runs** (mangabot isekai, flower-fantasy carpet, desert bloom, starbot
+  phenomenon, dragonbot castle biome) chained in `<pool>/full`; marker `last-five.done`.
 - **FaeBot (queen biome + three foreground-anchor pools):** shared factory
   `scripts/reseed/lib/faeAnchorPool.js` (same = anchor kind + position in frame; ~65 real forest
   anchors × 8 positions; nothing glowing per the playbook) + `faebot.queen_of_forest.biome.js` (same =
@@ -168,6 +200,8 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | earthbot | african-landscape    | `african_landscape_subject` (string entries)     | 200     | 69 → 200 distinct (same = habitat + light moment); 52 → 111 habitats, 10 → 12 light moments; 69 originals kept | none needed | 8 + 8 paired, shadow; 16/16 carried; self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | earthbot | asia-landscape       | `asia_landscape_subject` (string entries)        | 200     | 72 → 200 distinct (same = habitat + light moment); 45 → 115 places, 12 light moments; 72 originals kept | none needed | 8 + 8 paired, shadow; 16/16 carried; self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | earthbot | national-parks       | `national_parks_subject` (object entries)        | 189     | 76 → 189 distinct (same = geological province + formation + POV); 17 provinces, ~95 formations with explicit key regexes; 76 originals kept | none needed (EPIC_VISTA archetype hands the entry through) | 8 + 8 paired, shadow; 16/16 carried; self-reviewed (5 clear, 3 partial) | **DONE** | (close-out) | 2026-09-23 |
+| earthbot | hidden-corner        | `hidden_corner_subject` (string entries)         | 200     | 70 → 199 distinct (same = pocket type + habitat + host feature); 12 types × 12 habitats, hosts owned per type; 70 originals kept | none needed | first 8 + 8 failed review (one waterfall gorge), second 8 + 8 pass; 16/16 carried | **DONE** | (close-out) | 2026-09-24 |
+| faebot   | forest-fairy-scene / dryad-portrait / enchanted-vista | `faebot_*_foreground_anchor` (string entries) | 260 / 200 / 200 | 71 → 260, 52 → 200, 59 → 200 distinct (same = anchor kind + position); kinds 25 → 68, 17 → 66, 20 → 69 | none | 8 + 8 on two paths: the anchor axis is invisible in all 32 renders | **DONE (text-unique; visible gain nil)** | (close-out) | 2026-09-24 |
 | earthbot | epic-sunset          | `epic_sunset_subject` (object entries)           | 200     | 80 → 200 distinct (same = sky family + palm arrangement + sand); skies 7 → 10, palms 8 → 9, sands 3 → 7; 80 originals kept | none needed (EPIC_VISTA archetype hands the entry through) | 8 + 8 paired, shadow; 15/16 carried (one Sonnet drop, flagged); self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 33 → 120 line-ups (same = 4+ shared species, 3 when only 3); 26 → 70 species; red 35 → 20 | same fix                                                              | same batch                                         | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
 
@@ -259,6 +293,31 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-24 · earthbot/hidden-corner `hidden_corner_subject` · DONE on the second pass (self-reviewed).**
+  String entries "A <pocket> <where it hides> — <lush details>". 70 → 199 distinct (same = pocket type +
+  habitat + host feature), 12 pocket types across 12 habitats with hosts owned per type, 70 originals
+  kept. Five runs: the first three left slots unfilled (the type × habitat × host space was smaller
+  than the pool for tide pools and log nooks; the host parser read "root pocket" as a root plate); the
+  fourth filled everything and FAILED my render review, because I had given every rewrite a water note
+  (a seep, a pool, droplets) as flavour and five of eight after-renders came back as the same mossy
+  waterfall gorge, a visible regression against the originals' oak, sunset creek, tide pools and flower
+  cove. Fifth run: water notes only on water pockets, a floor note on dry ones, "water in a dry
+  pocket" rejected, log hosts kept to log nooks and root pockets; 71 sound rewrites kept, 59
+  regenerated. Second pairs on the same slots: a sandstone alcove under a ledge, a creek under bank
+  roots, a root-arch tunnel, a cave pool with white flowers, a fungi-strewn log nook, a mossy hollow,
+  a boreal bog pool with spruce, a sunlit glade. Water still appears in most (the path's own axes add
+  it; half the pocket types are water), but no two look alike. Lesson in the skill: flavour follows
+  the entry's own kind; review the after-set for sameness, not just fidelity. Pairs: first pass
+  https://claude.ai/artifact/1TFknEsNuF5ZpNCMFgVhJS, second https://claude.ai/artifact/2Z1qMdFwwnkHM5ZBNmxdMQ,
+  proposal https://claude.ai/artifact/TKWfBQBcgxbL1LUrdXzph2.
+- **2026-09-24 · faebot foreground_anchor ×3 · DONE as text-unique; the axis is invisible.** Shared
+  factory (same = anchor kind + position in frame, ~65 real forest anchors, nothing glowing). All three
+  pools rewritten (kinds 25 → 68, 17 → 66, 20 → 69), 16 + 16 paired renders on enchanted-vista and
+  forest-fairy-scene with the entry in the prompt 31 of 32 times, and the anchor cannot be picked out
+  in any of them: the vista's hero / biome / light and the fairy portrait fill the frame; a thistle
+  head or an owl feather at the edge never reads. The scaling doc's rule held: a repeated axis is
+  invisible, a repeated subject is the complaint. No dryad renders spent. Pairs
+  https://claude.ai/artifact/UNCzN3UM8WLECQLLJ7Enoe, https://claude.ai/artifact/6biQPY43Bk1ED4G9p2P31q.
 - **2026-09-23 · earthbot/national-parks `national_parks_subject` · DONE (self-reviewed).** Object
   entries, no park / landmark / vantage names by recipe (the geology carries the identity). 76 → 189
   distinct (same = geological province + formation + POV), 17 provinces × ~95 formations each with an
