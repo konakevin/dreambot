@@ -72,7 +72,7 @@ this file in the same commit.
 - [x] **pixelbot/floating-market-canal** — 8/8 pools at ≥100 and clean; smoke 1/3 delivered, 2 failed; 2026-09-24 21:31 UTC
 - [x] **pixelbot/volcano-forge** — 9/9 pools at ≥100 and clean (camera originals restored from git 21:58 UTC); smoke 3/3 delivered; 2026-09-24 21:53 UTC
 - [x] **faebot/mushroom-apothecary** — 7/7 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 22:09 UTC
-- [ ] **faebot/acorn-boat-regatta** — 7 pools
+- [x] **faebot/acorn-boat-regatta** — 7/7 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 22:27 UTC
 - [ ] **faebot/star-charting** — 7 pools
 - [ ] **dinobot/amber-forest** — 5 pools
 - [ ] **dinobot/courtship-display** — 3 pools
@@ -143,13 +143,13 @@ this file in the same commit.
 | faebot/mushroom-apothecary | faebot_mushroom_apothecary_remedy_work | 25 | 100 | 3 | clean | yes | ✅ |
 | faebot/mushroom-apothecary | faebot_mushroom_apothecary_wares | 25 | 100 | 2 | clean | yes | ✅ |
 | faebot/mushroom-apothecary | faebot_mushroom_apothecary_window_view | 25 | 100 | 2 | clean | yes | ✅ |
-| faebot/acorn-boat-regatta | faebot_regatta_bankside | 25 |  |  |  |  | ⬜ |
-| faebot/acorn-boat-regatta | faebot_regatta_course_furniture | 25 |  |  |  |  | ⬜ |
-| faebot/acorn-boat-regatta | faebot_regatta_race_moment | 25 |  |  |  |  | ⬜ |
-| faebot/acorn-boat-regatta | faebot_regatta_racers | 25 |  |  |  |  | ⬜ |
-| faebot/acorn-boat-regatta | faebot_regatta_shore | 25 |  |  |  |  | ⬜ |
-| faebot/acorn-boat-regatta | faebot_regatta_stream_course | 25 |  |  |  |  | ⬜ |
-| faebot/acorn-boat-regatta | faebot_regatta_water_light | 25 |  |  |  |  | ⬜ |
+| faebot/acorn-boat-regatta | faebot_regatta_bankside | 25 | 100 | 1 | clean | yes | ✅ |
+| faebot/acorn-boat-regatta | faebot_regatta_course_furniture | 25 | 100 | 1 | clean | yes | ✅ |
+| faebot/acorn-boat-regatta | faebot_regatta_race_moment | 25 | 100 | 1 | clean | yes | ✅ |
+| faebot/acorn-boat-regatta | faebot_regatta_racers | 25 | 100 | 1 | clean | yes | ✅ |
+| faebot/acorn-boat-regatta | faebot_regatta_shore | 25 | 100 | 1 | clean | yes | ✅ |
+| faebot/acorn-boat-regatta | faebot_regatta_stream_course | 25 | 100 | 1 | clean | yes | ✅ |
+| faebot/acorn-boat-regatta | faebot_regatta_water_light | 25 | 100 | 2 | clean | yes | ✅ |
 | faebot/star-charting | faebot_starchart_air | 25 |  |  |  |  | ⬜ |
 | faebot/star-charting | faebot_starchart_company | 25 |  |  |  |  | ⬜ |
 | faebot/star-charting | faebot_starchart_reading_tool | 25 |  |  |  |  | ⬜ |
