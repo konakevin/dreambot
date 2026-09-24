@@ -105,43 +105,26 @@ A specific atmospheric detail adding magic-pretty texture (NOT competing with th
 The unifying mandate: a WHIMSICAL ENCHANTED garden vignette with MULTIPLE pretty hero flowers + MULTIPLE cute pleasant pollinators (3-6+ insects across the scene). PULLED-BACK framing — a wider garden-vignette view, NOT a tight macro close-up of a single bloom. Multiple flower species blooming together; multiple butterflies / bumblebees / dragonflies / ladybugs / fireflies / moths flying / landed / hovering throughout. Happy enchanted fairytale storybook energy.
 
 THE LOOK — Studio Ghibli enchanted garden / Disney secret-garden discovery / Beatrix Potter watercolor / IG vivid-pollinator-cast / Pinterest enchanted-flower-meadow:
-- MULTIPLE HERO FLOWERS (3-5+ different species blooming together as co-hero) — SOFT PASTEL color register (varied across the FULL color spectrum, not biased toward pinks/purples/reds), varied shapes, fills the scene with floral abundance
+- MULTIPLE HERO FLOWERS (3-6 different species blooming together as co-hero) — the FLOWER ENTRY below names the species, each one's colour, and the colour register (soft pastel OR rich clear); varied shapes, fills the scene with floral abundance
 - A CAST OF 3-6+ CUTE PLEASANT POLLINATORS — flying / landed / hovering THROUGHOUT the scene at different positions, different species, multiple sizes
 - CUTE-RENDERED INSECTS — friendly, charming, slightly storybook-charming-cute (NOT scary, NOT menacing, NOT realistic-creepy-detailed) — bigger soft eyes, fuzzier rounder bodies, friendly poses
 - PULLED-BACK GARDEN VIGNETTE — a wider intimate-garden view (NOT macro single-flower close-up — that's the closeup path)
-- WHIMSICAL ENCHANTED AMBIENT — vivid soft pastel light, magical-pretty atmosphere, optional particles, fairytale storybook feel
-- CRISP SHARP-LAYERED BACKGROUND — more blooms / soft sky / pastel wash in crisp tack-sharp detail
+- WHIMSICAL ENCHANTED AMBIENT — soft magical light in the entry's colour register, magical-pretty atmosphere, optional particles, fairytale storybook feel
+- CRISP SHARP-LAYERED BACKGROUND — more blooms / soft sky / a wash in the entry's register, in crisp tack-sharp detail
 
-━━━ COLOR REGISTER — SOFT WATERCOLOR PASTEL (MANDATORY) ━━━
+━━━ COLOR REGISTER — SET BY THE FLOWER ENTRY ━━━
 
-Every visible flower is rendered in a SOFT PASTEL color register — soft watercolor hues, NOT vivid saturated jewel-tones. Think:
-  - PALE PINK / SOFT CORAL / DUSTY PEACH (not hot-pink / magenta)
-  - SOFT LAVENDER / PALE VIOLET / PERIWINKLE (not deep-purple / electric-violet)
-  - PALE BABY-BLUE / SKY-BLUE / SOFT CORNFLOWER (not cobalt / electric-blue)
-  - SOFT BUTTERCUP-YELLOW / PALE GOLD / CREAM (not vivid sunflower-yellow)
-  - PALE APRICOT / SOFT TANGERINE / DUSTY ORANGE (not vivid neon-orange)
-  - PALE TURQUOISE / SEAFOAM / MINT (refreshing soft additions)
-  - SOFT IVORY / OFFWHITE / CREAM
-  - DUSTY ROSE / PALE MAUVE / BLUSH
+The flower entry below ends with its own colour register. Render that register EXACTLY (soft pastel OR rich clear, per the entry), and give every flower the colour words the entry gives it, colour first and the flower after:
+  - "soft pastel watercolor register" → every flower in soft watercolor hues (pale pink, soft lavender, baby-blue, buttercup, cream, apricot, mint, blush), a light airy wash, gentle throughout.
+  - "rich clear watercolor register" → every flower in clear saturated natural colour (true scarlet, cobalt, golden yellow, deep violet, clean white, leaf green), luminous and clean, each flower one clear hue, the entry's dominant colour family leading with a couple of accents, every flower still readable as itself.
 
-The whole image reads as a soft watercolor painting / pastel-color-palette / IG vivid-magical-hour register. NEVER vivid saturated jewel-tone / electric / neon.
-
-⚠️ COLOR DISTRIBUTION MANDATE — across the pool of 25, the dominant flower colors must distribute evenly:
-  - ~4 BLUE-DOMINANT (soft baby-blue / periwinkle / pale-cornflower / pale-turquoise)
-  - ~4 VIOLET-DOMINANT (soft lavender / pale-violet / pale-lilac)
-  - ~4 YELLOW-DOMINANT (soft buttercup / pale-gold / pale-cream)
-  - ~4 WHITE/CREAM-DOMINANT (ivory / offwhite / cream / soft-white)
-  - ~3 ORANGE-DOMINANT (pale apricot / soft tangerine / dusty orange)
-  - ~3 PINK-DOMINANT (pale-pink / dusty-rose / blush)
-  - ~3 MULTI-COLOR-RAINBOW (mixed soft-pastel across the spectrum)
-
-NEVER bias toward pink/purple/red. The full spectrum is in play, soft-pastel registers only.
+One intentional palette per frame, led by the entry's dominant colour family (its "<FAMILY>-DOMINANT" tag). The light, sky and background wash take the same register as the flowers.
 
 ━━━ HARD MANDATES (every render) ━━━
 
-1. **MULTIPLE HERO FLOWERS** — 3-5+ different flower species blooming together as co-hero. Mix shapes (dahlias / cosmos / peonies / daisies / tulips / lupines / etc.) and colors for whimsical floral abundance. NEVER a single hero — the scene is FULL OF FLOWERS.
+1. **MULTIPLE HERO FLOWERS** — the flower entry's 3-6 species blooming together as co-hero, exactly the species and colours the entry names. Mix shapes for whimsical floral abundance. NEVER a single hero — the scene is FULL OF FLOWERS.
 
-2. **A CAST OF 3-6+ CUTE POLLINATORS WITH A FOCAL HERO** — describe MULTIPLE pleasant insects at different positions and actions. CRITICAL — ONE of the cast is the FOCAL POLLINATOR rendered FRONT-AND-CENTER, larger and more prominent (sharp focus + vivid color contrasting against the soft pastel background + crisp wing-pattern / fuzzy-body detail), so the viewer's eye lands on it first. The supporting 2-4+ insects fill the scene with life — smaller, in midground, hovering in the background, perched on leaves — without competing with the focal hero.
+2. **A CAST OF 3-6+ CUTE POLLINATORS WITH A FOCAL HERO** — describe MULTIPLE pleasant insects at different positions and actions. CRITICAL — ONE of the cast is the FOCAL POLLINATOR rendered FRONT-AND-CENTER, larger and more prominent (sharp focus + colour contrasting against the flowers behind it + crisp wing-pattern / fuzzy-body detail), so the viewer's eye lands on it first. The supporting 2-4+ insects fill the scene with life — smaller, in midground, hovering in the background, perched on leaves — without competing with the focal hero.
 
 3. **CUTE-RENDERED, NOT MENACING** — every insect rendered in a charming storybook-cute way. Soft fuzzy bodies, friendly proportions, slightly-stylized cute eyes, friendly poses (drinking nectar peacefully, gently hovering, sleepy-cozy landed). NEVER detailed-realistic-creepy / menacing / scary / oversized / aggressive. Think Disney secret-garden cute, not nature-documentary realistic.
 
@@ -151,7 +134,7 @@ NEVER bias toward pink/purple/red. The full spectrum is in play, soft-pastel reg
 
 6. **CRISP SHARP-LAYERED BACKGROUND** — crisp floral mass / sky / pastel wash behind, tack-sharp detail.
 
-7. **ENCHANTED HAPPY MOOD** — fairytale storybook joy. Soft pastel magical light bathing everything. Happy, peaceful, welcoming, magical-pretty. NEVER moody / dark / dramatic / harsh / scary.
+7. **ENCHANTED HAPPY MOOD** — fairytale storybook joy. Soft magical light, in the entry's register, bathing everything. Happy, peaceful, welcoming, magical-pretty. NEVER moody / dark / dramatic / harsh / scary.
 
 🚫 KEY GUARDS:
   • MULTIPLE flowers + MULTIPLE cute storybook insects — never a single-flower-single-insect macro, never realistic-creepy bugs (no spiders / wasps / flies)
@@ -159,8 +142,10 @@ NEVER bias toward pink/purple/red. The full spectrum is in play, soft-pastel reg
   • Soft enchanted magical-pretty light — never harsh / moody / dark
   • 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO HANDS, NO BODY PARTS anywhere in frame 🚫🚫🚫
 
-━━━ THE MULTI-FLOWER FOCAL SCENE (3-5+ hero flowers + supporting cluster) ━━━
+━━━ THE FLOWER ENTRY — the hero flowers of THIS render: species, colours, register ━━━
 ${flower_focal_cluster}
+
+These are the flowers of the scene, exactly as named and coloured here. No other species join them.
 
 ━━━ THE POLLINATOR CAST (3-6+ cute pleasant insects at different positions) ━━━
 ${hero_pollinator}
@@ -169,34 +154,26 @@ The insects are CUTE-rendered (charming storybook-friendly, NOT realistic-creepy
 ${particlesSection}━━━ COMPOSITION CRAFT — WHIMSICAL ENCHANTED GARDEN VIGNETTE ━━━
 
   • PULLED-BACK GARDEN VIEW — wider intimate-garden vignette, NOT a tight macro close-up
-  • FOREGROUND: 3-5+ different flower species clustered together as co-hero, filling the lower 50-65% of frame
+  • FOREGROUND: the entry's 3-6 flower species clustered together as co-hero, filling the lower 50-65% of frame
   • MIDDLE/AROUND: 3-6+ cute pollinators positioned at different spots in the scene (some on flowers, some hovering, some flying in the background space)
-  • BACKGROUND: crisp sharp layers of more blooms / soft sky / pastel wash in tack-sharp detail
+  • BACKGROUND: crisp sharp layers of more blooms / soft sky / a wash in the entry's register, in tack-sharp detail
   • DEPTH: foreground-sharp flowers + sharp insects in middle / crisp sharp-layered background
-  • COLOR: rich saturated multi-color foreground (mix flower colors freely), crisp sharp-layered pastel background
+  • COLOR: the entry's register throughout — foreground flowers in the entry's own colours, background layers lighter in the same register
   • MOOD: enchanted happy fairytale storybook — whimsical, peaceful, welcoming, magical-pretty
 
 ━━━ AMBIENT LIGHTING ━━━
 ${lighting}
 
-Reinterpret the rolled lighting as SOFT ENCHANTED MAGICAL light bathing the scene — warm pastel ambient, gentle warm-pink or warm-amber or soft-cream or pale-lavender wash. The light is whimsical and fairytale-pretty, NOT harsh / dramatic / moody / dark. Think Studio Ghibli enchanted garden + Disney secret-garden discovery + IG vivid-magical-hour.
-
-━━━ COLOR PALETTE — STRICT ━━━
-${sharedDNA.palette}
-
-━━━ FLOWER SPECIES — STRICT ━━━
-${sharedDNA.roster}
-
-Pick 3-5 species from the roster as multi-hero blooming together. Mix shapes (large bloom + medium bloom + delicate bloom) and colors freely for whimsical floral abundance.
+Reinterpret the rolled lighting as SOFT ENCHANTED MAGICAL light bathing the scene, tinted to MATCH the entry's register: a gentle cream / pale-lavender / warm-pink wash for a soft pastel entry; clear golden or clean cool daylight for a rich clear entry. The light is whimsical and fairytale-pretty, NOT harsh / dramatic / moody / dark. Think Studio Ghibli enchanted garden + Disney secret-garden discovery + IG vivid-magical-hour.
 
 ━━━ DEFAULTS TO RESIST ━━━
-MULTI flowers + MULTI cute insects (not single-flower-single-insect, not realistic-creepy bugs); pulled-back vignette not macro; soft-pastel light; only roster species; ABSOLUTE HARD BAN on humans / figures / silhouettes / hands.
+MULTI flowers + MULTI cute insects (not single-flower-single-insect, not realistic-creepy bugs); pulled-back vignette not macro; light and colour in the entry's register; only the entry's species; ABSOLUTE HARD BAN on humans / figures / silhouettes / hands.
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
-[WHIMSICAL ENCHANTED garden vignette PULLED-BACK composition with 3-5+ multi-species flowers blooming together filling lower 50-65% of frame], [the 3-6+ cute pollinator cast at different positions throughout the scene — landed / hovering / flying / perched — explicit species + positions], [supporting crisp sharp-layered background of more soft blooms / pastel sky-wash]${magical_particles ? ', [magical particles drifting in the air]' : ''}, [soft enchanted magical pastel ambient light bathing the scene], [storybook-cute insect rendering — friendly charming NOT realistic-creepy], [shallow DOF, tack-sharp detail, fairytale-storybook aesthetic — Studio Ghibli / Disney secret-garden / IG vivid-magical-hour]
+[WHIMSICAL ENCHANTED garden vignette PULLED-BACK composition with the entry's 3-6 flower species blooming together, each named with its colour, filling lower 50-65% of frame, then the entry's colour register stated in the prompt as "soft pastel colours throughout" or "rich clear saturated colours throughout"], [the 3-6+ cute pollinator cast at different positions throughout the scene — landed / hovering / flying / perched — explicit species + positions], [supporting crisp sharp-layered background of more blooms / sky-wash in the entry's register]${magical_particles ? ', [magical particles drifting in the air]' : ''}, [soft enchanted magical light in the entry's register bathing the scene], [storybook-cute insect rendering — friendly charming NOT realistic-creepy], [shallow DOF, tack-sharp detail, fairytale-storybook aesthetic — Studio Ghibli / Disney secret-garden / IG vivid-magical-hour]
 
 CRITICAL — MULTIPLE pretty flowers + MULTIPLE cute storybook insects in a PULLED-BACK enchanted-garden VIGNETTE. Happy welcoming whimsical mood. CUTE not menacing insects. ABSOLUTE HARD BAN ON HUMANS.
 
@@ -1678,7 +1655,9 @@ Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO �
 
   BLOOMBOT_WATER_GARDEN: ({ slots, sharedDNA, vibeDirective }) => {
     const { water_body, water_flora, reflection, bank_planting, water_life } = slots;
-    const banks = (Array.isArray(bank_planting) ? bank_planting : [bank_planting]).filter(Boolean).join('; ');
+    const banks = (Array.isArray(bank_planting) ? bank_planting : [bank_planting])
+      .filter(Boolean)
+      .join('; ');
     const lifeSection = water_life
       ? `\n━━━ WATER LIFE (small, distant, secondary — never steals from the blooms) ━━━\n${water_life}\n`
       : '';
@@ -1718,9 +1697,7 @@ Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO �
 
   BLOOMBOT_FLOWER_FIELDS: ({ slots, sharedDNA, vibeDirective }) => {
     const { field_geometry, crop_bloom, vantage, field_backdrop, field_event } = slots;
-    const eventSection = field_event
-      ? `\n━━━ ATMOSPHERIC EVENT ━━━\n${field_event}\n`
-      : '';
+    const eventSection = field_event ? `\n━━━ ATMOSPHERIC EVENT ━━━\n${field_event}\n` : '';
     return `You are a fine-art landscape photographer writing a CULTIVATED FLOWER-FIELD scene description. A planted mega-field where the GEOMETRIC PATTERN of blocked color reads instantly — tulip stripes, lavender rows, a sunflower sea — flowers filling the frame to the horizon. This is lush TEMPERATE cultivated farmland with green foliage — the fertile flower-farming country of Holland / the Skagit Valley / Provence.
 
 ━━━ ZERO HUMANS + NO FARM STRUCTURES — NEVER ━━━
@@ -1795,9 +1772,7 @@ Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO �
   BLOOMBOT_RAIN_GARDEN: ({ slots, sharedDNA, vibeDirective }) => {
     const { garden_scene, rain_state, wet_detail, storm_light, storm_event } = slots;
     const wet = (Array.isArray(wet_detail) ? wet_detail : [wet_detail]).filter(Boolean).join('; ');
-    const eventSection = storm_event
-      ? `\n━━━ STORM EVENT ━━━\n${storm_event}\n`
-      : '';
+    const eventSection = storm_event ? `\n━━━ STORM EVENT ━━━\n${storm_event}\n` : '';
     return `You are a fine-art floral painter writing a RAIN-DRENCHED FLOWER-GARDEN scene description. A lush garden in the rain — abundant blooms glossy and heavy with wet, their color DEEPENED and saturated by the water, the rain clearly VISIBLE.
 
 ━━━ RAIN IS VISIBLE + COLOR IS SATURATED ━━━

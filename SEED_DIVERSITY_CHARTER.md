@@ -300,6 +300,10 @@ a rejected approach, including me. Five of these are my own wrong turns in a sin
 | 16  | Use the lexical same-idea measure as the ACCEPTANCE gate                   | **REJECTED** (pilot, confirming §5b)           | It reports **0% redundant** on the repaired pilot pool, which a manual read found ~1/3 recombinant. The 7-entry alpine cluster survives as 7 clusters at the calibrated 0.60 and only merges to 3 at 0.30 — below calibration. Lexical = free CI tripwire and prefilter. LLM judge = acceptance                                                                                                                                                                                                |
 | 17  | Let each tool pick its own same-idea threshold                             | **MUST FIX before rollout** (pilot)            | `reseed-subject-pool.js` clusters and validates at **0.48**; `ideaSimilarity.SAME_IDEA` is **0.60**; `audit-seed-redundancy.js` uses the constant. The repair tool and the fleet audit have therefore been grading pools on different scales, which is half of how the wrong numbers got reported. One constant, referenced everywhere, no literals                                                                                                                                            |
 | 18  | Report a distinct/redundant figure without naming its settings             | **BANNED** (pilot)                             | Threshold × stripping basis moved the pilot pool between 8 and 137 distinct ideas. Three different numbers were reported to Kevin for one change because of this. Every figure states threshold AND basis, or it is not quoted                                                                                                                                                                                                                                                                 |
+| 19  | Rewrite each near-copy IN PLACE into a new line-up of the same kind        | **ACCEPTED** (resumed pilot, 2026-09-23)       | Kevin: same pool, all colours welcome, vary within the motif. Keeps format, settings, count and the first original of every line-up; only the restatements change. For this pool a "line-up" is the set of flower species, and two entries are the same line-up when they share 4+ of their 5-6 flowers. That is a pool-specific basis and is stated with every figure. See §6f                                                                                                              |
+| 20  | Let Sonnet choose the flowers of a rewrite                                 | **REJECTED** (resumed pilot)                   | It converges: batch after batch reused the same dozen species. The tool now assigns each slot's species BEFORE Sonnet writes, from a roster of real flowers in their real hues, least-used first, under a per-species cap, and Sonnet only words them. Same lesson as "never let the LLM invent the varying element"                                                                                                                                                                             |
+| 21  | Use the LLM same-idea judge as the acceptance gate for THIS pool           | **DEMOTED to advisory** (resumed pilot)        | On a pool whose entries all share one format, the judge reads "same colour family" as "same idea" and blocked 9 of 12 green/red/orange slots. Mechanical overlap (≤2 shared species with every other entry) is the gate here; the judge's opinion is recorded on the change as `judgeNote` (10 of 81), not used to reject                                                                                                                                                                       |
+| 22  | Leave the template's own colour/species blocks alone when repairing a pool | **REJECTED** (resumed pilot)                   | `BLOOMBOT_FLOWER_FRIENDS` injected a STRICT florist palette and a STRICT species roster AFTER the entry, so Sonnet swapped the entry's flowers for the roster on 1 of 3 forced renders, and the entry's register words reached 0 of 3 Flux prompts. A subject-pool repair is invisible while the template carries a second subject source. Fixed in a separate second pass on that template only (§6f)                                                                                          |
 
 ### Scope, corrected
 
@@ -330,8 +334,8 @@ have enough paths?) and is not this task.
 | Identify every path's SUBJECT pool                      | **done**                                     | `SUBJECT_POOL_MAP.json`, all 18 live bots, 715 subject pools resolved, 66 names unresolved (mostly ChibiBot `creature*` slots)                                                                             |
 | Audit idea-count for subject pools only                 | **done**                                     | **154 subject pools under 100 distinct ideas, ~4,930 entries to author.** YumBot 24, EarthBot 21, MangaBot 18, BloomBot 14, FaeBot 12, StarBot 11, ChibiBot 11, OceanBot 9, TinyBot 7, PixelBot 7, rest 20 |
 | Agree the broadened concept range, per pool, with Kevin | **pilot range set**                          | 15 categories, inside the path's documented bounds                                                                                                                                                         |
-| Re-seed ONE pool, render 6, Kevin reviews               | **done — pool PASSED, renders INCONCLUSIVE** | 125 entries / 63 ideas / 50% redundant → **137 / 130 / 5%**. 6 shadow renders all succeeded but only 1 drew a new seed, so they prove nothing broke, not that variety improved. See §6e.                   |
-| Roll out to remaining pools                             | not started                                  | blocked on the two §6e fixes (per-category count 10→3, and replacing `ideaKeyOf`)                                                                                                                          |
+| Re-seed ONE pool, render 6, Kevin reviews               | **first attempt REVERTED; resumed and DONE** | First attempt (category method) reverted, §6e. Resumed 2026-09-23 with the in-place method, §6f: 125 → 125 entries, **44 → 125 distinct line-ups** (basis: same line-up = 4+ shared species of 5-6, greedy in pool order), 39 → 154 species, daisies in 100 → 30. Commit `e672068b`. Forced shadow renders on the NEW entries, 3 + 8, reviewed in the app. |
+| Roll out to remaining pools                             | not started                                  | the in-place tool is pool-specific (a flower roster, a species parser); the next pool needs its own notion of "line-up" and its own roster before the method transfers                                    |
 | CI gate                                                 | not started                                  | lands LAST, per §6b                                                                                                                                                                                        |
 
 ### PILOT — `bloombot/flower-friends`, COMPLETE 2026-09-23
@@ -365,22 +369,13 @@ idea in a handful of colourways, dominated by powder-blue / pale-violet / lilac 
 clusters. That is why every flower-friends render is a pastel bouquet, and it is the part no
 deduplication-only approach would have fixed.
 
-**Method being proved** (`scripts/reseed-subject-pool.js`, dry-run by default):
-
-1. Cluster the pool, KEEP one representative of every existing idea. Nothing is thrown away; the 117
-   restatements simply do not survive, and the backup holds the original.
-2. The operator supplies CATEGORIES — kinds of idea the pool should cover but does not. This is the
-   step that matters, and it is what dedup-only would have missed.
-3. Generate per category, then validate every entry: lexical distinctness against existing AND against
-   other new entries, register/length band, no negation, no text-prior nouns. Rejections are reported
-   with reasons, never silently dropped.
-4. Re-measure, then **6 shadow renders** on the path and review in the app. The render is the proof; the
-   audit only proves the text changed.
-
-15 categories authored for the pilot, all inside the path's bounds: bold saturated colourways, one
-single dramatic bloom, tropical/exotic, dark and moody, spiky/architectural, seed heads and spent
-blooms, flowering herbs, climbers and pendant forms, water-adjacent, wild meadow, night bloomers,
-post-rain/dew-laden, autumn, early spring, grasses in flower.
+~~**Method being proved** (`scripts/reseed-subject-pool.js`, dry-run by default): cluster, keep one
+representative per idea, operator-supplied CATEGORIES, generate per category, validate, 6 shadow
+renders. 15 categories were authored (bold colourways, single dramatic bloom, tropical, dark and moody,
+spiky, seed heads, herbs, climbers, water-adjacent, wild meadow, night bloomers, post-rain, autumn,
+early spring, grasses).~~ **STRUCK 2026-09-23.** The category method changed what the pool is (§6c row
+10 is superseded for repairs; see SEED_POOL_REPAIR_HANDOFF.md §2) and the script was deleted. The
+method that actually repaired this pool is in §6f.
 
 **What the pilot had to establish before anything else is touched:** that expanding categories measurably
 raises distinct ideas, that the generated entries survive validation at an acceptable rate, that the
@@ -514,6 +509,59 @@ materially; re-estimate on the first rollout batch rather than projecting from t
   filtered, since by Kevin's definition appearance is not the scene.
 - **Real cost.** The earlier ~$140 estimate assumed purify-and-backfill. Expanding concept space on ~50
   pools is closer to authoring new pools and will cost more. Re-estimate after the one-pool trial.
+
+## 6f. RESUMED PILOT 2026-09-23 — the in-place repair that landed
+
+Kevin's answers that set the scope: same pool, resume it; all colours welcome, not only pastel; stay
+within the motif and increase variety within it. Tool: `scripts/repair-flower-focal-cluster.js`.
+Commit `e672068b`. Full ledger: `SEED_POOL_REPAIR_HANDOFF.md` §9.
+
+**What "the same" means for this pool, stated once.** An entry is a flower line-up (its 5-6 species).
+Two entries are the same line-up when they share 4 or more species; the first of each line-up in pool
+order is the kept original. Every figure below uses that basis. It is pool-specific: the next pool needs
+its own definition before any number is quoted.
+
+| measure (basis above)               | before  | after   |
+| ----------------------------------- | ------- | ------- |
+| entries                             | 125     | 125     |
+| distinct line-ups                   | 44      | 125     |
+| max species shared by any two       | 5       | 3       |
+| flower species                      | 39      | 154     |
+| entries with daisies                | 100     | 30      |
+| colour families                     | 7       | 9       |
+| rich-colour entries (rest pastel)   | 0       | 40      |
+
+**Method (what transfers to the next pool).**
+
+1. Parse every entry into its varying element (here: species keys, with aliases so alchemilla and
+   lady's-mantle are one flower). Group by the pool-specific "same" rule. Keep the first of each group.
+2. Plan the rewrites: fill the families the pool is short of, evenly; alternate registers.
+3. **Assign the varying element before the LLM writes** (row 20): a roster of real items with real
+   attributes, least-used first, per-item cap, and a pairwise rule (≤2 shared with every other entry).
+   The LLM only words the assignment in the pool's exact format and gets the assignment back as a check.
+4. Check reality with a second LLM call (here: does that flower grow in that colour, hue family only,
+   "when in doubt, true"). The first attempt with Haiku rejected real colours; Sonnet with a hue-family
+   question is right.
+5. Dry run writes a proposal + report; a review page shows every before/after pair; only then
+   `--execute`, which backs up outside the repo and asserts count and format.
+6. Force renders across the NEW entries (picker proxy on the subject slot), shadow-posted, reviewed in
+   the app. Unforced renders test the old pool (§6e).
+
+**What the renders showed.** Batch 1 (3 forced, old template): the entry's flowers reached the prompt
+on 2 of 3, the entry's register words on 0 of 3, and the third render's flowers were replaced by the
+template's own STRICT species roster. Batch 2 (8 forced, after the template's second pass, row 22): the
+entry's flowers led the scene on 8 of 8 and the register phrase reached the Flux prompt on 8 of 8. On
+the picture: the rich register visibly lands where the family is a strong Flux colour (pink, red,
+multi: saturated and family-dominant); blue and white "rich" read only mildly stronger than pastel; and
+**green did not render green in any of its 3 renders** (both registers, both templates): the companion
+species' own colours win, the flower×colour render-prior lesson of the playbook. Pollinators: one tiny
+butterfly in 11 renders, the pre-existing prompt-order defect of §6e (unchanged by this work, still a
+separate job).
+
+**Known imbalance, not fixed.** The register alternated by slot parity and the family rotated by slot
+index, so register and family came out coupled: orange and yellow rewrites are all pastel, blue and
+white rewrites all rich, green 12 rich / 1 pastel, red 12 pastel / 1 rich. Decouple them on the next
+pool (roll register per family) or fix here with a small follow-up pass.
 
 ## 7. Open questions for Kevin
 

@@ -5,6 +5,10 @@
 Read this whole file before touching a pool. The objective is sound and the diagnosis is largely
 sound. The *method* I built is wrong and was reverted. Most of the value here is in not repeating it.
 
+**UPDATE 2026-09-23, later session: the pilot pool was repaired in place and committed (`e672068b`).
+§9 at the bottom records what was done, the numbers with their basis, and what the renders showed.
+§5 and §7 are updated to match; the rest of this file is left as written.**
+
 ---
 
 ## 1. The objective, in Kevin's words
@@ -151,18 +155,19 @@ No choice of {threshold, stripping basis} gets both labelled cases right.
 
 | thing | state |
 | --- | --- |
-| `scripts/bots/bloombot/seeds/bloombot_flower_friends_flower_focal_cluster.json` | **reverted to its original 125 entries**, byte-identical to `740eb03c`. Commit `8886dd88`. |
-| Backup of that pool | `~/poolbackup-bloombot-BLOOMBOT_FLOWER_FRIENDS_FLOWER_FOCAL_CLUSTER-1790203792485.json` (the same 125) |
+| `scripts/bots/bloombot/seeds/bloombot_flower_friends_flower_focal_cluster.json` | **repaired in place, commit `e672068b`** (see §9): 125 entries, 44 originals kept verbatim, 81 near-copies rewritten. Before that it was reverted to its original 125 (`8886dd88`, byte-identical to `740eb03c`). |
+| Backup of that pool | original 125: `~/poolbackup-bloombot-flower_focal_cluster-1790213976305.json` (taken by the repair tool right before the write; the older `~/poolbackup-bloombot-BLOOMBOT_FLOWER_FRIENDS_FLOWER_FOCAL_CLUSTER-1790203792485.json` is the same 125) |
+| `scripts/repair-flower-focal-cluster.js` | **the tool that did the repair.** Dry run by default, `--execute --from <proposal.json>` writes after a backup. §9 describes it. |
 | `a0d1b387` | the bad work: 74 category-generated entries, plus the charter rewrite and the new test. Pool part reverted; charter and test still in tree. |
 | `scripts/lib/ideaSimilarity.js` | keep. Header now documents both failure modes honestly. Has a new `clusterPool(…, {formatFrom})` option for fixed-basis comparison. |
 | `__tests__/lib/ideaSimilarity.test.ts` | **keep.** 12 tests, all pass, locks both failure modes. |
-| `scripts/reseed-subject-pool.js` | **do not run.** Built on the category method. Rewrite or delete. |
+| `scripts/reseed-subject-pool.js` | **deleted 2026-09-23** (it was built on the category method). `scripts/repair-flower-focal-cluster.js` replaces it. |
 | `scripts/identify-subject-pools.js` + `SUBJECT_POOL_MAP.json` | useful. An LLM reads each path file and names its subject pool. 715 subject pools resolved, ~66 unresolved (mostly ChibiBot `creature*` slots). Classifying by filename or slot name does NOT work — no naming convention exists, and FarmBot's 34 paths and TinyBot's 18 are function-form with no slot map at all. |
 | `scripts/audit-seed-redundancy.js`, `SEED_REDUNDANCY_AUDIT.md` | numbers are floors per §4. |
 | `scripts/audit-pool-repeat-risk.js`, `POOL_BACKFILL_AUDIT.md` | **RETRACTED** as a work list (the cycle-length error). Both carry the retraction in-file. |
-| `SEED_DIVERSITY_CHARTER.md` | mixed. §1-§3 objective/diagnosis good. §4 targets carry a warning banner. §6e documents the pilot. **Its "Method being proved" section still describes the category method — strike that.** |
+| `SEED_DIVERSITY_CHARTER.md` | mixed. §1-§3 objective/diagnosis good. §4 targets carry a warning banner. §6e documents the first pilot; its "Method being proved" section is struck and §6f records the resumed pilot's in-place method. |
 | 6 shadow renders | in `uploads`, `recipe->>path = 'flower-friends'`, `is_public=false`/`is_posted=false`. HTML sheet at `~/Desktop/flower-friends-pilot-renders.html`. Only **1 of 6** drew a new seed, so they tested the old pool. |
-| `scripts/_tmp-ff-forced-newseeds.js` | throwaway forced-seed renderer. **UNVERIFIED** — its dry run did not show the forced seed reaching the brief, and I never determined whether the interception is broken or `runBot`'s dry-run return simply omits the brief text. Fix or delete. |
+| `scripts/_tmp-ff-forced-newseeds.js` | **deleted 2026-09-23.** The interception it used (a picker proxy on `pickWithRecency` for the subject slot) was verified separately: the forced entry reaches the brief, and `runBot`'s dry-run return simply omits the brief text. The verified forced-render harness lived in the session scratchpad; §9 gives the recipe. |
 
 Untracked `scripts/_tmp-*.js` files in the tree belong to other efforts. Leave them alone.
 
@@ -196,6 +201,12 @@ Untracked `scripts/_tmp-*.js` files in the tree belong to other efforts. Leave t
 ---
 
 ## 7. One real, unresolved question about `flower_focal_cluster`
+
+**RESOLVED 2026-09-23.** Kevin: same pool, resume it; all colours are welcome, it does not have to be
+only pastel; stay within the motif but increase variety within it. So the rewrites span 9 colour
+families (adding red and green) and about a third carry a "rich clear watercolor register" alongside
+the pastel majority. The archetype's pastel-only mandate was then loosened in a separate second pass so
+the entry's own register decides (§9). The original reasoning is kept below.
 
 Do not act on this without Kevin. It is a pool-intent call, not an inference.
 
@@ -261,7 +272,6 @@ guessed wrong in the other direction.
 
 ### Do NOT
 
-- run `scripts/reseed-subject-pool.js` as it stands
 - invent categories, axes, or a structure for a pool
 - change any pool's prompt prefix, register, format or subject matter
 - delete original entries to improve a percentage
@@ -271,3 +281,66 @@ guessed wrong in the other direction.
   named at 52-59% of every prompt, past the attention region, so it is invisible in 5 of 6 renders; the
   fix is prompt ORDER, and "co-hero" is in all 125 original entries so it predates this work) but it is
   a separate job
+
+---
+
+## 9. What was done 2026-09-23 (resumed pilot), by the agent that picked this up
+
+**Kevin's answers** to §7 and to the open scope questions: same pool, resume it; all colours welcome,
+not only pastel; stay within the motif but increase variety within it.
+
+**Method: rewrite the near-copies in place.** `scripts/repair-flower-focal-cluster.js`.
+
+- A "line-up" is an entry's set of flower species (parsed from the "X + Y + Z blooming together" list,
+  with aliases so alchemilla and lady's-mantle count once). Two entries are the same line-up when they
+  share 4 or more species (greedy, pool order). The first of each line-up is kept verbatim.
+- Every other entry is rewritten in place. Its species are assigned BEFORE Sonnet writes, from a roster
+  of ~150 real flowers with their real hue letters, least-used first, per-species cap 6, and a pairwise
+  rule: ≤2 species shared with every other entry. Sonnet only words the assignment in the pool's exact
+  format and is checked against it (missing or extra species = reject). A second Sonnet call checks
+  each colour is one the flower really grows in (hue family only, "when in doubt, true"; Haiku rejected
+  real colours). The Haiku same-idea judge is advisory on this pool (it reads same colour family as
+  same idea); its notes are stored on the change.
+- Colour families filled evenly over 9 (adds red and green); registers alternate, ~1/3 "rich clear
+  watercolor register", the rest "soft pastel watercolor register".
+- Dry run wrote a proposal + report; Kevin reviewed every before/after pair on a page
+  (https://claude.ai/artifact/KrvnYYwyTod7xBLufC6Tbn) and approved; `--execute` backed the pool up to
+  `~/poolbackup-bloombot-flower_focal_cluster-1790213976305.json` and wrote it. Commit `e672068b`.
+
+**Numbers, basis as above:** 125 → 125 entries; 44 → 125 distinct line-ups; max species shared by any
+two entries 5 → 3; 39 → 154 species; daisies in 100 → 30 entries; 7 → 9 colour families (13-16 each);
+rich-register entries 0 → 40. Two kept originals still carry an invented colour ("pale-turquoise
+scabiosa", #4 and #25); Kevin was told and left them.
+
+**Second pass, the template.** Forced renders of the new entries under the old `BLOOMBOT_FLOWER_FRIENDS`
+template showed the pool alone changes little: the entry's register words reached 0 of 3 Flux prompts,
+the template's own "soft pastel magical light" reached all 3, and on 1 of 3 Sonnet replaced the
+entry's flowers with the template's STRICT species roster (the template injected BloomBot's rolled
+florist palette and roster AFTER the entry). The template now defers to the entry: the pastel-only
+block and the pool-of-25 colour distribution mandate are gone, the colour register is "set by the
+flower entry" with one line per register, the light and background wash tie to it, the STRICT palette
+and roster blocks are removed, and the STRUCTURE block asks for the entry's flowers with their colours
+first and the register phrase ("soft pastel colours throughout" / "rich clear saturated colours
+throughout") in the prompt. After: entry flowers led 8 of 8 forced renders, register phrase in 8 of 8.
+
+**Renders, 11 forced shadow posts (3 before the template change, 8 after), reviewed in the app.** Rich
+lands where the family is a strong Flux colour (pink, red, multi). Blue/white rich read mildly stronger
+than pastel. Green never rendered green (3 of 3): companion species' priors win. One tiny butterfly in
+11: the pollinator defect above, untouched.
+
+**Forced-render recipe** (the harness lived in the session scratchpad; rebuild in five lines): wrap
+`bot.buildBrief` so that for `path === 'flower-friends'` it passes a picker proxy
+`{ ...picker, pickWithRecency: (pool, axis) => axis === 'flower_focal_cluster' ? forcedText : picker.pickWithRecency(pool, axis) }`,
+then `runBot({ bot, path: 'flower-friends', vibe: 'random', dryRun: false, post: true, shadow: true, source: 'iter-bot', label, idx })`
+one entry at a time behind `waitForHeadroom({ min: 25 })`. Verified: the forced entry reaches the brief
+(`brief-composer` passes the slot name straight through).
+
+**Known imbalance, not fixed.** Register alternated by slot parity while family rotated by slot index,
+so they came out coupled: orange and yellow rewrites all pastel; blue and white all rich; green 12 rich
+/ 1 pastel; red 12 pastel / 1 rich. Next pool: roll the register per family. Here: a small follow-up
+pass if Kevin wants it.
+
+**What transfers to the next pool, and what does not.** The method (parse the varying element, define
+"same" for that pool, keep the first of each group, pre-assign from a real roster, LLM words + LLM
+reality check, dry run + review page + backup + execute, forced renders on NEW entries) transfers. The
+parser, the roster and the "same" rule are pool-specific and must be written per pool.
