@@ -39,6 +39,11 @@ const PATHS = [
   'lego-city',
   'lego-trains',
   'haunted-brick',
+  // balloon-festival — promoted to live rotation 2026-09-24 on Kevin's word, after its fleet
+  // pool was grown 25 → 106 (RESEED_STATUS.md Track B row 0). Function-form path: it is also in
+  // SKIP_LEGACY_PER_PATH below (no legacy triplet) and in chaos.skipPaths + twoPassPolish.skipPaths
+  // in index.js, so it renders exactly as its shadow renders were graded.
+  'balloon-festival',
 ];
 
 const toFile = (p) => p.replace(/-/g, '_');

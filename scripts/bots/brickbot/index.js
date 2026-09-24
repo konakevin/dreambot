@@ -41,7 +41,7 @@ const pathBuilders = {
   'lego-trains': require('./paths/lego-trains'), // Stage B2 SHADOW
   'haunted-brick': require('./paths/haunted-brick'), // Stage B3 SHADOW
   'airfield-biplanes': require('./paths/airfield-biplanes'), // aviation path (2026-09-23) SHADOW
-  'balloon-festival': require('./paths/balloon-festival'), // mass-ascension path (2026-09-23) SHADOW
+  'balloon-festival': require('./paths/balloon-festival'), // mass-ascension path (2026-09-23), LIVE 2026-09-24
 };
 
 module.exports = {
@@ -151,7 +151,9 @@ module.exports = {
   // never looks for a legacy pool triplet. On go-live it must be added to PATHS *and* to
   // SKIP_LEGACY_PER_PATH in the SAME edit — PATHS alone makes pools.js call
   // load('airfield_biplanes_scenes') and throw at require time, taking the whole bot down.
-  shadowPaths: ['airfield-biplanes', 'balloon-festival'], // Stage B paths promoted to live rotation 2026-08-16
+  // balloon-festival left shadowPaths for PATHS on 2026-09-24 (pools.js). airfield-biplanes stays
+  // shadow until Kevin promotes it.
+  shadowPaths: ['airfield-biplanes'], // Stage B paths promoted to live rotation 2026-08-16
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.

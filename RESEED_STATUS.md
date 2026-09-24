@@ -260,13 +260,11 @@ commit + push, row + log here.
 
 ## Flags for Kevin
 
-1. **BrickBot `balloon-festival` is NOT in the live rotation** (Kevin asked 2026-09-23 to make sure it
-   is). It is registered as SHADOW only (`scripts/bots/brickbot/index.js` `shadowPaths`); `pools.PATHS`
-   does not list it. The file's own GO-LIVE TRAP note: it must be added to `PATHS` **and**
-   `SKIP_LEGACY_PER_PATH` in the SAME edit or `pools.js` throws at require time and takes the whole bot
-   down. Its 9 pools are 25 deep (MVP). Not flipped by me: a public bot posting from 25-deep pools is
-   what Track B exists to prevent. It is Track B row 5; I will move it to the FRONT of Track B and scale
-   it first. Say the word and I add it to `PATHS` + `SKIP_LEGACY_PER_PATH` (one edit) right after.
+1. _(resolved 2026-09-24)_ **BrickBot `balloon-festival` is LIVE** on Kevin's word: added to
+   `pools.PATHS` (it was already in `SKIP_LEGACY_PER_PATH`, `chaos.skipPaths` and
+   `twoPassPolish.skipPaths`, so it renders exactly as its graded shadow renders) and removed from
+   `shadowPaths`. It joins BrickBot's flat shuffle-bag rotation (18 live paths) from the next
+   dispatcher tick. Its fleet pool is 106 deep; its eight axis pools are still 25 (doc §9 q1).
 2. _(resolved 2026-09-23)_ hawaii-flowers verdict was withdrawn (harness bug) and re-measured: the
    beach entry does show through (sand colour reliably, shore form partly); see the log.
 3. **YumBot `festival_scene_type`: "same" had to include the cluster's arrangement.** The pool's
@@ -389,7 +387,7 @@ slot name. Tool: the same core with `--grow N` (append N new entries; the pool o
 
 | # | bot      | path                    | pools | subject pool (verify)                    | status | commits | date |
 | - | -------- | ----------------------- | ----- | ---------------------------------------- | ------ | ------- | ---- |
-| 0 | brickbot | balloon-festival        | 9     | `brickbot_balloon_fleet` (verified: the path header calls the fleet the subject) | **subject DONE**: 25 → 106 entries, 106 distinct (situation + nearest pattern + shaped balloon), originals byte-identical; 8 new + 4 originals shadow-rendered (12/12 carried) and reviewed; 8 axis pools untouched pending Kevin (doc §9 q1); still shadow (Flags #1) | (close-out) | 2026-09-24 |
+| 0 | brickbot | balloon-festival        | 9     | `brickbot_balloon_fleet` (verified: the path header calls the fleet the subject) | **subject DONE**: 25 → 106 entries, 106 distinct (situation + nearest pattern + shaped balloon), originals byte-identical; 8 new + 4 originals shadow-rendered (12/12 carried) and reviewed; 8 axis pools untouched pending Kevin (doc §9 q1); **LIVE 2026-09-24** (Flag 1 resolved) | a9aee0f0 + go-live | 2026-09-24 |
 | 1 | tinybot  | snow-globe-world        | 4     | `tinybot_snow_globe_worlds` (verified: the path calls the WORLD the hero, it opens the prompt) | **subject DONE**: 25 → 104 entries, 104 distinct world types (roster of 93 real places with their own drifting particle), originals byte-identical; 8 new + 4 originals shadow-rendered (12/12 carried) and reviewed: a subway platform, an oil platform in a storm sea, a sluice camp, an abbey on a tidal causeway, a clock-tower square, houseboats on a canal, an aqueduct and a bee yard in wildflowers each read as their own world; still shadow | (close-out) | 2026-09-24 |
 | 2 | mangabot | game-center-arcade      | 7     | `game_center_arcade_room` (verified: "the room is the hero subject") | **subject DONE**: 25 → 104 entries, 103 distinct room features (the composition lock is prepended by the config; Sonnet writes only the tail), originals byte-identical; 12 forced shadow renders, 7 rendered (5 failed on Replicate's safety filter, flux-2-pro E005, originals and new alike, see Flag 5); of the 7, the room feature reads in the originals' way (a stair rail, a prize shelf, a capsule landing; a stool with a coat, a glass door, a capsule pile) and the machines and glass wall carry every frame; still shadow | (close-out) | 2026-09-24 |
 | 3 | steambot | brass-glasshouse        | 8     | `steambot_brass_glasshouse_house` (verified: "HERO, first in order") | **subject DONE (visible gain modest)**: 25 → 104 entries, 104 distinct house FORMS (viaduct, orangery, tufa fernery, ravine barrel, courtyard, turntable floor …), originals byte-identical; 8 new + 4 originals shadow-rendered (10/12 carried, two Sonnet drops flagged): the structure reads in about half (a roofed courtyard with its stone windows and pool, a great dome, a lower level seen through a glass floor, a wave-roofed hall); the rest are "a Victorian glasshouse" with the planting and machinery axes carrying the picture. The thin `_keeper` 14 / `_wet_air` 16 are axis pools, left for Kevin's call (doc §9 q1); still shadow | (close-out) | 2026-09-24 |
