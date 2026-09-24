@@ -62,9 +62,12 @@ commit + push, row + log here.
 - **european-wilderness: DONE** (8 + 8 pairs reviewed, 16/16 carried; pairs
   https://claude.ai/artifact/Xc9F5zcFabvFXuPqhCAt6o); close-out commit next.
 - **african-landscape: DONE** (8 + 8 pairs reviewed, 16/16 carried); close-out commit next.
-- **asia-landscape:** pool WRITTEN (72 → 200 distinct, 45 → 115 places, 128 rewrites; backup
-  `~/poolbackup-earthbot-asia_landscape-subject-*`); chain rendering slots 115,104,190,80,33,102,195,54
-  to `as/` (`as/done`). Next = pairs, self-review, commit + push.
+- **asia-landscape: DONE** (8 + 8 pairs reviewed, 16/16 carried); close-out commit next. EarthBot's
+  Track A subject pools are now all done except national-parks and hidden-corner (runs in flight).
+- **yumbot/japanese-festival `festival_scene_type`:** config
+  `scripts/reseed/pools/yumbot.japanese_festival.scene_type.js` (same = perch FAMILY: the one festival
+  object the five foods gather on; mats ×28, spread cloths ×24, shrine steps ×16, koi-pond stones ×9;
+  unknown perches stay their own idea). Roster of ~55 real matsuri perch families. Smoke next.
 - **epic-sunset: DONE** (8 + 8 pairs reviewed, 15/16 carried: one after-render's entry was dropped by
   Sonnet and rendered a grey overcast beach; the harness flagged it); close-out commit next.
 - **national-parks:** full run (third start) running to `national_parks/full3` at ~60% acceptance
@@ -120,7 +123,7 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | earthbot | australian-outback   | `australian_outback_subject` (string entries)    | 200     | 64 → 200 distinct (same = place + light moment); 40 → 91 places, 9 → 10 light moments; 64 originals kept | none needed | 8 valid pairs (5 + 3 extra), shadow; 16/16 carried; self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | earthbot | european-wilderness  | `european_wilderness_subject` (string entries)   | 200     | 77 → 200 distinct (same = place + light moment); 53 → 127 places, 9 → 10 light moments; 77 originals kept | none needed | 8 + 8 paired, shadow; 16/16 carried; self-reviewed | **DONE** | 7dc553bd | 2026-09-23 |
 | earthbot | african-landscape    | `african_landscape_subject` (string entries)     | 200     | 69 → 200 distinct (same = habitat + light moment); 52 → 111 habitats, 10 → 12 light moments; 69 originals kept | none needed | 8 + 8 paired, shadow; 16/16 carried; self-reviewed | **DONE** | (close-out) | 2026-09-23 |
-| earthbot | asia-landscape       | `asia_landscape_subject` (string entries)        | 200     | 72 → 200 distinct (same = habitat + light moment); 45 → 115 places, 12 light moments; 72 originals kept | none needed | 8 + 8 rendering | `pool written` | | 2026-09-23 |
+| earthbot | asia-landscape       | `asia_landscape_subject` (string entries)        | 200     | 72 → 200 distinct (same = habitat + light moment); 45 → 115 places, 12 light moments; 72 originals kept | none needed | 8 + 8 paired, shadow; 16/16 carried; self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | earthbot | epic-sunset          | `epic_sunset_subject` (object entries)           | 200     | 80 → 200 distinct (same = sky family + palm arrangement + sand); skies 7 → 10, palms 8 → 9, sands 3 → 7; 80 originals kept | none needed (EPIC_VISTA archetype hands the entry through) | 8 + 8 paired, shadow; 15/16 carried (one Sonnet drop, flagged); self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 33 → 120 line-ups (same = 4+ shared species, 3 when only 3); 26 → 70 species; red 35 → 20 | same fix                                                              | same batch                                         | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
 
@@ -212,6 +215,18 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-23 · earthbot/asia-landscape `asia_landscape_subject` · DONE (self-reviewed).** Landmark
+  factory with the recipe's cultural bans (no temples / torii / pagodas / stupas / statues / prayer
+  flags / lanterns / monks; no rice terraces or agriculture). 72 → 200 distinct (same = habitat + light
+  moment), 45 → 115 real places across the recipe's 14 composition groups (Fuji lakes, Huangshan cloud
+  seas, karst rivers and bays, pillar forests, cedar and bamboo forests, sakura, Hokkaido and Jilin
+  winter, travertine lakes, the Tibetan plateau, Gobi and Taklamakan, volcanoes, gorges), 12 light
+  moments, 72 originals kept. Pairs (8 + 8, 16/16 carried): before had Halong Bay twice, Yakushima,
+  Arashiyama, Zhangjiajie, Huangshan, Yoshino and Ijen; after is Fuji over Ashinoko, the Kali Gandaki
+  gorge, the Hoh Xil plateau, Fuji with sakura at Kawaguchiko, Sanqingshan's pillars in a cloud sea,
+  Batur's caldera, and two Flux drifts (Kushiro's frozen marsh came back as a marsh stream under a
+  rainbow; Hokkaido's boreal forest as a mountain river with autumn trees). Pairs
+  https://claude.ai/artifact/74QwkBtVbteW4ScQ7rK8UZ, proposal https://claude.ai/artifact/EGc1otpKFWWKoGLCnpnszc.
 - **2026-09-23 · earthbot/epic-sunset `epic_sunset_subject` · DONE (self-reviewed).** Object entries;
   the recipe (R4) makes every entry a flat tropical beach sunset on purpose, so the varying element is
   the sunset PICTURE: sky family + palm arrangement + sand. 80 → 200 distinct; sky families 7 → 10
