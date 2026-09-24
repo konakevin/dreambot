@@ -1,0 +1,147 @@
+/* global __dirname */
+/**
+ * earthbot / australian-outback / subject — Australian raw habitat, THE LAND IS THE HERO.
+ * Recipe: scripts/gen-earthbot-pool.js `australian_outback_subject` (toponym first; a camera-angle
+ * phrase; a dramatic lighting moment; Australia-coded materials; bans photographer names, Aboriginal
+ * rock art, humans / vehicles / buildings / boardwalks, American Southwest analogues, wildlife-as-hero,
+ * negation). Pool 2026-09-23: 200 entries, 93 openers, Uluru / Coober Pedy / Whitehaven / Lake Eyre /
+ * Devils Marbles / Twelve Apostles / Bungle Bungle / Wilpena repeated 6-9 times each. Same idea = same
+ * place + same light moment.
+ */
+const path = require('path');
+const { landmarkPool } = require('../lib/landmarkPool');
+
+const GROUPS = {
+  'red-centre': 5,
+  kimberley: 4,
+  flinders: 2,
+  'salt-lakes': 3,
+  deserts: 2,
+  'tropical-north': 3,
+  rainforest: 2,
+  coast: 3,
+  tasmania: 2,
+  'east-ranges': 2,
+  west: 2,
+};
+const PLACES = [
+  ['Uluru', 'monolith', 'red-centre'],
+  ['Kata Tjuta', 'domes', 'red-centre'],
+  ['Kings Canyon', 'sandstone rim', 'red-centre'],
+  ['Karlu Karlu Devils Marbles', 'granite boulders', 'red-centre'],
+  ['Rainbow Valley', 'banded sandstone bluff', 'red-centre'],
+  ['Ormiston Gorge', 'quartzite gorge and waterhole', 'red-centre'],
+  ['Standley Chasm', 'narrow red chasm', 'red-centre'],
+  ['Chambers Pillar', 'sandstone pillar', 'red-centre'],
+  ['Simpson Desert', 'red parallel dunes', 'red-centre'],
+  ['Bungle Bungle Purnululu', 'beehive domes', 'kimberley'],
+  ['Cathedral Gorge', 'amphitheatre gorge', 'kimberley'],
+  ['Karijini Gorge', 'red-iron-banded gorge', 'kimberley'],
+  ['Hancock Gorge', 'narrow banded slot gorge', 'kimberley'],
+  ['Mitchell Falls', 'tiered waterfall', 'kimberley'],
+  ['Windjana Gorge', 'limestone reef gorge', 'kimberley'],
+  ['Geikie Gorge', 'white-and-orange limestone walls', 'kimberley'],
+  ['Lake Argyle', 'flooded red-rock lake', 'kimberley'],
+  ['Wilpena Pound Flinders Ranges', 'natural amphitheatre', 'flinders'],
+  ['Brachina Gorge', 'banded rock gorge', 'flinders'],
+  ['Gawler Ranges', 'organ-pipe rhyolite', 'flinders'],
+  ['Kati Thanda Lake Eyre', 'salt flat', 'salt-lakes'],
+  ['Lake Hart', 'salt lake', 'salt-lakes'],
+  ['Lake Gairdner', 'white salt pan', 'salt-lakes'],
+  ['Lake Tyrrell', 'shallow salt lake mirror', 'salt-lakes'],
+  ['Hutt Lagoon', 'pink salt lake', 'salt-lakes'],
+  ['Lake Hillier', 'pink lake', 'salt-lakes'],
+  ['Lake Ballard', 'salt pan', 'salt-lakes'],
+  ['Coober Pedy Breakaways', 'moon-plain badlands', 'deserts'],
+  ['Painted Desert Arckaringa', 'ochre-banded mesas', 'deserts'],
+  ['Pinnacles Desert', 'limestone spires', 'deserts'],
+  ['Little Sandy Desert', 'red dune field', 'deserts'],
+  ['Kakadu', 'wetland floodplain', 'tropical-north'],
+  ['Jim Jim Falls', 'escarpment waterfall', 'tropical-north'],
+  ['Twin Falls', 'gorge waterfall', 'tropical-north'],
+  ['Litchfield Florence Falls', 'twin plunge waterfall', 'tropical-north'],
+  ['Nitmiluk Katherine Gorge', 'sandstone gorge', 'tropical-north'],
+  ['Wallaman Falls', 'single-drop waterfall', 'tropical-north'],
+  ['Daintree', 'rainforest', 'rainforest'],
+  ['Mossman Gorge', 'rainforest boulder river', 'rainforest'],
+  ['Millaa Millaa Falls', 'rainforest waterfall', 'rainforest'],
+  ['Tarkine', 'temperate rainforest', 'rainforest'],
+  ['Twelve Apostles', 'limestone sea stacks', 'coast'],
+  ['Whitehaven Beach Whitsundays', 'silica-sand swirls', 'coast'],
+  ['Hill Inlet', 'tidal sand swirls', 'coast'],
+  ['Lucky Bay', 'white-sand bay', 'coast'],
+  ['Bay of Fires', 'orange-lichen granite boulders', 'coast'],
+  ['Wineglass Bay', 'curved bay under granite peaks', 'coast'],
+  ['Great Australian Bight', 'sea cliffs', 'coast'],
+  ['Cape Le Grand', 'granite headland beach', 'coast'],
+  ['Cradle Mountain', 'dolerite peak over Dove Lake', 'tasmania'],
+  ['Lake St Clair', 'glacial lake', 'tasmania'],
+  ['Russell Falls', 'tiered forest waterfall', 'tasmania'],
+  ['Cape Pillar', 'dolerite sea columns', 'tasmania'],
+  ['Blue Mountains Three Sisters', 'sandstone spires', 'east-ranges'],
+  ['Wollemi', 'sandstone canyon wilderness', 'east-ranges'],
+  ['Grampians', 'sandstone ridges', 'east-ranges'],
+  ['Warrumbungles', 'volcanic spires', 'east-ranges'],
+  ['Kosciuszko main range', 'alpine snowgrass plateau', 'east-ranges'],
+  ['Wave Rock', 'granite wave', 'west'],
+  ['Kalbarri Natures Window', 'sandstone arch', 'west'],
+  ['Murchison Gorge', 'red sandstone gorge', 'west'],
+  ['Valley of the Giants', 'tingle forest', 'west'],
+  ['Stirling Range', 'peaks over wildflower plain', 'west'],
+  ['Yardie Creek', 'red-walled gorge', 'west'],
+];
+const LIGHT = [
+  'molten-red dusk',
+  'blood-red sunset',
+  'dawn',
+  'cobalt midday',
+  'blue-hour',
+  'Milky Way night',
+  'mist-shrouded dawn',
+  'golden hour',
+  'storm light',
+];
+const LIGHT_RULES = [
+  ['Milky Way night', /milky way|starry|night/i],
+  ['mist-shrouded dawn', /mist-shrouded|misty dawn|mist/i],
+  ['molten-red dusk', /molten|dusk/i],
+  ['blood-red sunset', /blood-red|sunset/i],
+  ['storm light', /storm/i],
+  ['blue-hour', /blue[- ]hour/i],
+  ['golden hour', /golden[- ]hour/i],
+  ['cobalt midday', /midday|noon/i],
+  ['dawn', /dawn|sunrise|first light|alpenglow/i],
+];
+
+module.exports = landmarkPool({
+  name: 'earthbot/australian_outback/subject',
+  poolFile: path.join(__dirname, '../../bots/earthbot/seeds/australian_outback_subject.json'),
+  intro:
+    'Australian raw habitat, one real place per entry, THE LAND IS THE HERO: red-centre monoliths and gorges, Kimberley domes, salt lakes, deserts, tropical-north escarpments and wetlands, rainforest, iconic coast, Tasmania, the eastern ranges and the west.',
+  GROUPS,
+  PLACES,
+  LIGHT,
+  LIGHT_RULES,
+  voice:
+    '- Include one camera-angle phrase (low-angle hero stance / drone POV aerial / canopy POV / waterline reflection / silhouette / wide cinematic vista). Australia-coded materials only: rust-red iron oxide, round-weathered sandstone, striped beehive sandstone, limestone spires, red river gum, ghost gum, spinifex, banksia, pink salt, silica sand, myrtle-beech. Wildlife, if any, is matchstick-tiny in the distance.',
+  extraBans: [
+    ['cultural', /\b(rock art|cave painting|petroglyph|Ubirr|Nourlangie)\b/i],
+    [
+      'analogue-us',
+      /\b(Monument Valley|Sedona|Antelope|Bryce|saguaro|Joshua tree|juniper|sagebrush)\b/i,
+    ],
+    ['built-au', /\b(boardwalk|viewing platform|signage|sign|lookout deck)\b/i],
+  ],
+  aliases: {
+    'Uluru monolith': 'Uluru',
+    'Coober Pedy moon-plain badlands': 'Coober Pedy Breakaways',
+    'Whitehaven Beach': 'Whitehaven Beach Whitsundays',
+    'Lake Eyre': 'Kati Thanda Lake Eyre',
+    'Devils Marbles': 'Karlu Karlu Devils Marbles',
+    'Bungle Bungle': 'Bungle Bungle Purnululu',
+    Purnululu: 'Bungle Bungle Purnululu',
+    'Wilpena Pound': 'Wilpena Pound Flinders Ranges',
+    Karijini: 'Karijini Gorge',
+    'Three Sisters': 'Blue Mountains Three Sisters',
+  },
+});

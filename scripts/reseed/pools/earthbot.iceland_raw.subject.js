@@ -1,0 +1,136 @@
+/* global __dirname */
+/**
+ * earthbot / iceland-raw / subject — Iceland's raw geology, one named place per entry.
+ * Recipe: scripts/gen-earthbot-pool.js `iceland_raw_subject` (INTERIOR geology leads, coast a minor
+ * accent; toponym first; light moment in the subject; bans photographer names, sheep, cropland, any
+ * building, Vík village, negation, analogues). Pool 2026-09-23: 200 entries over 38 places, 9 copies of
+ * each big name. Same idea = same place + same light moment.
+ */
+const path = require('path');
+const { landmarkPool } = require('../lib/landmarkPool');
+
+const GROUPS = {
+  glaciers: 5,
+  waterfalls: 5,
+  canyons: 2,
+  highlands: 4,
+  volcanic: 5,
+  lagoon: 2,
+  coast: 2,
+};
+const PLACES = [
+  ['Vatnajökull', 'glacier tongue', 'glaciers'],
+  ['Sólheimajökull', 'glacier tongue', 'glaciers'],
+  ['Svínafellsjökull', 'crevassed glacier tongue', 'glaciers'],
+  ['Breiðamerkurjökull', 'glacier face', 'glaciers'],
+  ['Fjallsjökull', 'glacier snout', 'glaciers'],
+  ['Skaftafellsjökull', 'glacier tongue', 'glaciers'],
+  ['Kvíárjökull', 'glacier tongue between moraine walls', 'glaciers'],
+  ['Langjökull', 'ice cap edge', 'glaciers'],
+  ['Mýrdalsjökull', 'ice cap', 'glaciers'],
+  ['Vatnajökull ice cave', 'blue ice interior', 'glaciers'],
+  ['Katla ice cave', 'ash-banded ice interior', 'glaciers'],
+  ['Dettifoss', 'thunder waterfall', 'waterfalls'],
+  ['Goðafoss', 'horseshoe waterfall', 'waterfalls'],
+  ['Gullfoss', 'two-tier waterfall', 'waterfalls'],
+  ['Skógafoss', 'waterfall', 'waterfalls'],
+  ['Seljalandsfoss', 'waterfall', 'waterfalls'],
+  ['Háifoss', 'canyon waterfall', 'waterfalls'],
+  ['Dynjandi', 'tiered waterfall', 'waterfalls'],
+  ['Glymur', 'ribbon waterfall', 'waterfalls'],
+  ['Hengifoss', 'red-banded cliff waterfall', 'waterfalls'],
+  ['Kirkjufellsfoss', 'twin waterfall', 'waterfalls'],
+  ['Brúarfoss', 'blue cascade', 'waterfalls'],
+  ['Hraunfossar', 'lava-field springs cascade', 'waterfalls'],
+  ['Selfoss', 'wide-lipped waterfall', 'waterfalls'],
+  ['Öxarárfoss', 'rift waterfall', 'waterfalls'],
+  ['Gljúfrabúi', 'hidden-canyon waterfall', 'waterfalls'],
+  ['Stuðlagil', 'basalt canyon', 'canyons'],
+  ['Svartifoss', 'basalt-column waterfall', 'canyons'],
+  ['Aldeyjarfoss', 'basalt-column waterfall', 'canyons'],
+  ['Fjaðrárgljúfur', 'moss-walled canyon', 'canyons'],
+  ['Ásbyrgi', 'horseshoe canyon', 'canyons'],
+  ['Múlagljúfur', 'canyon', 'canyons'],
+  ['Jökulsárgljúfur', 'basalt gorge', 'canyons'],
+  ['Landmannalaugar', 'rhyolite ridge', 'highlands'],
+  ['Kerlingarfjöll', 'rhyolite highland', 'highlands'],
+  ['Fjallabak', 'highland lava plain', 'highlands'],
+  ['Þórsmörk', 'glacier valley', 'highlands'],
+  ['Mælifell', 'moss-green cone in black sand', 'highlands'],
+  ['Herðubreið', 'table volcano', 'highlands'],
+  ['Bláhnúkur', 'blue-black rhyolite peak', 'highlands'],
+  ['Brennisteinsalda', 'sulphur-streaked mountain', 'highlands'],
+  ['Hveradalir', 'steaming valley', 'highlands'],
+  ['Sprengisandur', 'black interior desert', 'highlands'],
+  ['Eldhraun', 'moss-on-lava field', 'volcanic'],
+  ['Þingvellir', 'continental rift wall', 'volcanic'],
+  ['Silfra', 'rift fissure', 'volcanic'],
+  ['Strokkur', 'geyser', 'volcanic'],
+  ['Námafjall', 'sulphur mud-pot field', 'volcanic'],
+  ['Askja Víti', 'crater lake', 'volcanic'],
+  ['Krafla', 'steaming lava field', 'volcanic'],
+  ['Hverfjall', 'tephra crater', 'volcanic'],
+  ['Kerið', 'crater lake', 'volcanic'],
+  ['Lakagígar', 'crater row', 'volcanic'],
+  ['Holuhraun', 'young lava field', 'volcanic'],
+  ['Fagradalsfjall', 'fresh lava field', 'volcanic'],
+  ['Dimmuborgir', 'lava pillar field', 'volcanic'],
+  ['Grjótagjá', 'lava cave hot spring', 'volcanic'],
+  ['Hveravellir', 'highland hot-spring field', 'volcanic'],
+  ['Gunnuhver', 'steam vent field', 'volcanic'],
+  ['Jökulsárlón', 'glacier lagoon', 'lagoon'],
+  ['Fjallsárlón', 'glacier lagoon', 'lagoon'],
+  ['Diamond Beach', 'iceberg shards', 'lagoon'],
+  ['Reynisfjara', 'black-sand beach', 'coast'],
+  ['Dyrhólaey', 'sea arch', 'coast'],
+  ['Vestrahorn', 'mountain over black dunes', 'coast'],
+  ['Kirkjufell', 'arrowhead mountain', 'coast'],
+  ['Hvítserkur', 'sea stack', 'coast'],
+  ['Látrabjarg', 'sea cliff', 'coast'],
+  ['Djúpalónssandur', 'black pebble beach', 'coast'],
+  ['Rauðasandur', 'red-sand beach', 'coast'],
+  ['Snæfellsjökull', 'glacier-capped volcano', 'coast'],
+];
+const LIGHT = [
+  'golden hour',
+  'blue-hour',
+  'polar overcast',
+  'low-winter-sun rake',
+  'storm-break',
+  'midnight sun',
+  'dawn',
+  'sunset',
+];
+const LIGHT_RULES = [
+  ['low-winter-sun rake', /low[- ]winter[- ]sun|winter rake|low sun rake/i],
+  ['storm-break', /storm[- ]break|storm[- ]light|storm/i],
+  ['midnight sun', /midnight[- ]sun/i],
+  ['polar overcast', /polar[- ]overcast|overcast|flat light/i],
+  ['blue-hour', /blue[- ]hour/i],
+  ['golden hour', /golden[- ]hour/i],
+  ['dawn', /dawn|sunrise|first light/i],
+  ['sunset', /sunset|dusk/i],
+];
+
+module.exports = landmarkPool({
+  name: 'earthbot/iceland_raw/subject',
+  poolFile: path.join(__dirname, '../../bots/earthbot/seeds/iceland_raw_subject.json'),
+  intro:
+    "Iceland's raw geology, one real place per entry, gallery-print tier: glacier tongues and ice caves, waterfalls, basalt canyons, rhyolite highlands, moss-on-lava, rift walls, geothermal fields, craters, the glacier lagoon, and a little black-sand coast.",
+  GROUPS,
+  PLACES,
+  LIGHT,
+  LIGHT_RULES,
+  voice:
+    '- Icelandic materials only: basalt, glacier ice, black volcanic sand, Icelandic moss, rhyolite colour banding, sulphur crust, pumice, tephra. Uninhabited: no sheep, no cropland, no buildings of any kind. Describe Iceland on its own terms.',
+  extraBans: [
+    ['iceland-bans', /\b(sheep|cropland|farmhouse|church|village|Vík village|lighthouse)\b/i],
+  ],
+  aliases: {
+    'Vatnajökull glacier tongue': 'Vatnajökull',
+    'Jökulsárlón glacier lagoon': 'Jökulsárlón',
+    'Reynisfjara black-sand beach': 'Reynisfjara',
+    'Diamond Beach iceberg shards': 'Diamond Beach',
+    'Askja Víti crater lake': 'Askja Víti',
+  },
+});

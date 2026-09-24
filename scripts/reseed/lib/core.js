@@ -107,6 +107,18 @@ const shuffle = (a) =>
 const byUsage = (items, usage, keyOf = (x) => x) =>
   shuffle(items).sort((m, n) => (usage[keyOf(m)] || 0) - (usage[keyOf(n)] || 0));
 
+// Entries may be strings or objects ({ tags, description } pools). A config with object entries
+// supplies entryText(entry) → string and build(text, slot) → entry; the LLM only ever sees text.
+const textOf = (cfg, e) => (cfg.entryText ? cfg.entryText(e) : e);
+const buildOf = (cfg, text, slot) => (cfg.build ? cfg.build(text, slot) : text);
+// Optional cfg.normalize(text) → text runs on every LLM candidate BEFORE the checks (mechanical
+// format housekeeping the originals all share, e.g. a trailing period; never content).
+const normalizeOf = (cfg, t) => (cfg.normalize ? cfg.normalize(t) : t);
+const sameEntry = (a, b) =>
+  typeof a === 'string' && typeof b === 'string'
+    ? a === b
+    : JSON.stringify(a) === JSON.stringify(b);
+
 // ── Grouping ─────────────────────────────────────────────────────────────────────────────────────
 /** Greedy, pool order: the first entry of every group is kept; later members are rewrite slots. */
 function group(pool, parsed, sameGroup) {
@@ -125,7 +137,7 @@ function sharedKeys(a, b) {
 }
 
 function measurePool(cfg, pool) {
-  const parsed = pool.map(cfg.parse);
+  const parsed = pool.map((e) => cfg.parse(textOf(cfg, e)));
   const { kept } = group(pool, parsed, cfg.sameGroup);
   let maxShared = 0;
   for (let i = 0; i < parsed.length; i++)
@@ -147,7 +159,7 @@ async function runReseed(cfg, argv) {
   if (argv.includes('--execute')) return execute(cfg, flag('--from'));
 
   const pool = JSON.parse(fs.readFileSync(cfg.poolFile, 'utf8'));
-  const parsed = pool.map(cfg.parse);
+  const parsed = pool.map((e) => cfg.parse(textOf(cfg, e)));
   let { kept, slots } = group(pool, parsed, cfg.sameGroup);
   const GROW = Number(flag('--grow') || 0);
   if (GROW) {
@@ -175,7 +187,9 @@ async function runReseed(cfg, argv) {
     Object.entries(groups)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 12)
-      .forEach(([k, n]) => console.log(`  #${Number(k) + 1} ×${n}  ${pool[k].slice(0, 90)}…`));
+      .forEach(([k, n]) =>
+        console.log(`  #${Number(k) + 1} ×${n}  ${textOf(cfg, pool[k]).slice(0, 90)}…`)
+      );
     const tally = {};
     slots.forEach((s) => {
       const t = (s.tags || []).join(' ');
@@ -190,10 +204,11 @@ async function runReseed(cfg, argv) {
   }
 
   fs.mkdirSync(OUT, { recursive: true });
-  const lens = pool.map((e) => e.length);
+  const lens = pool.map((e) => textOf(cfg, e).length);
   const lenBand = cfg.lenBand || [Math.min(...lens) - 20, Math.max(...lens) + 60];
-  const examples = cfg.examples ? cfg.examples(kept, pool) : kept.slice(0, 6).map((k) => pool[k]);
-  const working = kept.map((k) => pool[k]);
+  const texts = pool.map((e) => textOf(cfg, e));
+  const examples = cfg.examples ? cfg.examples(kept, texts) : kept.slice(0, 6).map((k) => texts[k]);
+  const working = kept.map((k) => texts[k]);
   const groupsList = kept.map((k) => parsed[k]);
   const usage = {};
   const keyUsage = cfg.keyUsage || ((p) => p.keys);
@@ -225,7 +240,14 @@ async function runReseed(cfg, argv) {
     working.push(c.new);
     groupsList.push(p);
     keyUsage(p).forEach((k) => (usage[k] = (usage[k] || 0) + 1));
-    done.push({ ...s, new: c.new, attempts: c.attempts, judgeNote: c.judgeNote, resumed: true });
+    done.push({
+      ...s,
+      new: c.new,
+      entry: buildOf(cfg, c.new, s),
+      attempts: c.attempts,
+      judgeNote: c.judgeNote,
+      resumed: true,
+    });
   }
   const LIMIT = Number(flag('--limit') || 0);
   const todo = slots.filter((s) => !priorByIndex.has(s.index));
@@ -280,7 +302,7 @@ async function runReseed(cfg, argv) {
     }
     for (let i = 0; i < live.length; i++) {
       const s = live[i];
-      const cand = String(out[i] || '').trim();
+      const cand = normalizeOf(cfg, String(out[i] || '').trim());
       s.attempts++;
       s.textAttempts++;
       const problems = [];
@@ -340,13 +362,13 @@ async function runReseed(cfg, argv) {
       // accepted: the working pool now holds the real text (its parse replaces the planned keys)
       working.push(cand);
       groupsList.splice(groupsList.indexOf(s.groupEntry), 1, candParsed);
-      done.push({ ...s, new: cand });
+      done.push({ ...s, new: cand, entry: buildOf(cfg, cand, s) });
       process.stdout.write(`  ✓ #${s.index + 1} ${(s.tags || []).join(' ')}\n`);
     }
   }
 
   const filled = pool.slice();
-  for (const d of done) if (d.new) filled[d.index] = d.new;
+  for (const d of done) if (d.new) filled[d.index] = d.entry !== undefined ? d.entry : d.new;
   // grow mode: an unfilled appended slot leaves no hole
   const proposal = filled.filter((e) => e !== undefined);
   const unfilled = done.filter((d) => !d.new);
@@ -365,7 +387,7 @@ async function runReseed(cfg, argv) {
       .map((d) => ({
         index: d.index + 1,
         tags: d.tags || [],
-        old: d.old,
+        old: d.old === null ? null : textOf(cfg, d.old),
         new: d.new,
         attempts: d.attempts,
         ...(d.judgeNote ? { judgeNote: d.judgeNote } : {}),
@@ -390,12 +412,14 @@ function execute(cfg, from) {
   }
   if (proposal.length > before.length) {
     // grow mode: every original stays byte-identical at its index; only appended entries are new
-    const moved = before.filter((e, i) => proposal[i] !== e).length;
+    const moved = before.filter((e, i) => !sameEntry(proposal[i], e)).length;
     if (moved) throw new Error(`${moved} originals differ in a grow proposal; refusing`);
   }
   // Unchanged entries must be byte-identical originals; changed ones must pass the strict format.
   const bad = proposal.filter(
-    (e, i) => e !== before[i] && (typeof e !== 'string' || !cfg.formatRe.test(e))
+    (e, i) =>
+      !sameEntry(e, before[i]) &&
+      (typeof textOf(cfg, e) !== 'string' || !cfg.formatRe.test(textOf(cfg, e)))
   );
   if (bad.length) throw new Error(`${bad.length} changed entries fail the format check; refusing`);
   const backup = path.join(
@@ -406,7 +430,7 @@ function execute(cfg, from) {
   fs.writeFileSync(cfg.poolFile, JSON.stringify(proposal, null, 2) + '\n');
   const check = JSON.parse(fs.readFileSync(cfg.poolFile, 'utf8'));
   if (check.length !== proposal.length) throw new Error('post-write count mismatch');
-  const changed = proposal.filter((e, i) => e !== before[i]).length;
+  const changed = proposal.filter((e, i) => !sameEntry(e, before[i])).length;
   console.log(
     `backed up to ${backup}; wrote ${check.length} entries (${changed} changed) to ${cfg.poolFile}`
   );

@@ -99,6 +99,12 @@ const textOf = (e) => (typeof e === 'string' ? e : e.description || e.text || JS
 // Force the subject slot(s): wrap buildBrief so the picker hands the path our entry for a forced slot
 // and behaves normally for every other slot. brief-composer passes the slot name straight through to
 // picker.pickWithRecency(pool, slot), which is what makes this work (verified on the pilot).
+//
+// The picker must hand back the entry's TEXT, never the raw object: brief-composer maps tagged pools
+// ({ tags, description }) to their description strings BEFORE picking, so a forced object reached the
+// template as "[object Object]" and Sonnet invented the whole scene (2026-09-23: every hawaii-flowers
+// and coastal-vista pair rendered that way; the pool text never reached the prompt). `carried` below
+// asserts it on every render so this cannot happen silently again.
 let forced = null; // { slot: entry }
 const original = bot.buildBrief;
 bot.buildBrief = function (opts) {
@@ -106,10 +112,26 @@ bot.buildBrief = function (opts) {
   const real = opts.picker;
   const proxy = {
     ...real,
-    pickWithRecency: (p, axis) => (axis in forced ? forced[axis] : real.pickWithRecency(p, axis)),
+    pickWithRecency: (p, axis) =>
+      axis in forced ? textOf(forced[axis]) : real.pickWithRecency(p, axis),
   };
   return original.call(bot, { ...opts, picker: proxy });
 };
+
+// Did the forced entry reach the final prompt? Sonnet rewrites the brief, so we look for the entry's
+// leading words (a place name, a species, a POV opener) rather than the whole text: the first two
+// words with 4+ letters, or any 4 of its first 14 long words.
+function carried(entry, finalPrompt) {
+  if (!finalPrompt) return false;
+  const fp = finalPrompt.toLowerCase();
+  const words = textOf(entry)
+    .split(/[\s,;.:()]+/)
+    .filter((w) => w.length >= 4)
+    .map((w) => w.toLowerCase());
+  const lead = words.slice(0, 2).every((w) => fp.includes(w));
+  const hits = words.slice(0, 14).filter((w) => fp.includes(w)).length;
+  return lead || hits >= 4;
+}
 
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
@@ -145,8 +167,15 @@ bot.buildBrief = function (opts) {
         shadow: true,
         source: 'iter-bot',
       });
+      const carriedBySlot = Object.fromEntries(
+        SLOTS.map((s) => [s, carried(entries[s], r.finalPrompt)])
+      );
+      const dropped = SLOTS.filter((s) => r.ok && !carriedBySlot[s]);
       console.log(
-        `[${label}] ${r.ok ? 'OK ' + (r.imageUrl || '') : 'FAIL ' + r.errorStage + ' ' + r.error} | ${tag}`
+        `[${label}] ${r.ok ? 'OK ' + (r.imageUrl || '') : 'FAIL ' + r.errorStage + ' ' + r.error} | ${tag}` +
+          (dropped.length
+            ? `\n  !! WARNING: the forced ${dropped.join('+')} entry did NOT reach the final prompt (Sonnet dropped it, or the path overrides the slot)`
+            : '')
       );
       results.push({
         k,
@@ -154,6 +183,7 @@ bot.buildBrief = function (opts) {
         tag,
         entries,
         ok: r.ok,
+        carried: carriedBySlot,
         url: r.imageUrl || null,
         model: r.recipe && r.recipe.model,
         finalPrompt: r.finalPrompt || null,
@@ -167,7 +197,14 @@ bot.buildBrief = function (opts) {
     }
   }
   fs.writeFileSync(path.join(OUT, 'render-results.json'), JSON.stringify(results, null, 1));
-  console.log(`${results.filter((r) => r.ok).length}/${results.length} rendered → ${OUT}`);
+  const okRuns = results.filter((r) => r.ok);
+  const carriedAll = okRuns.filter((r) => SLOTS.every((s) => r.carried[s])).length;
+  console.log(
+    `${okRuns.length}/${results.length} rendered → ${OUT}; forced entry reached the prompt in ${carriedAll}/${okRuns.length}` +
+      (carriedAll < okRuns.length
+        ? ' — do NOT judge the pool from these renders until that is understood'
+        : '')
+  );
 })().catch((e) => {
   console.error('ERR', e.message);
   process.exit(1);
