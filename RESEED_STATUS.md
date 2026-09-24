@@ -135,9 +135,14 @@ commit + push, row + log here.
   "wildflower meadow" both rendered as ponds; after, the entries show as an autumn maple grove, a
   waterfall glade with mossy boulders, a golden larch glade, a violet bluebell wood and an oak-trunk
   throne. Streams and meadows still lose to the path's tree-throne prior about half the time (Flux,
-  accepted). Pairs https://claude.ai/artifact/8Lm2f2DbqWvGGxiSKRtJRp. **posed_setting:** pool WRITTEN
-  (backup `~/poolbackup-faebot-queen_of_forest-posed_setting-*`), 8 + 8 rendered (`qp/`, 16/16
-  carried), review next.
+  accepted). Pairs https://claude.ai/artifact/8Lm2f2DbqWvGGxiSKRtJRp. **posed_setting: DONE (real
+  visible gain)** (29 → 192 distinct on natural spot + pose; spots 21 → 37, poses 10 → 12; 163
+  rewrites, 8 unfilled kept as originals; backup `~/poolbackup-faebot-queen_of_forest-posed_setting-*`).
+  Pairs on the same eight slots, 16/16 carried: every after-render shows its written spot AND pose (a
+  heather bank at the forest edge, a hand on a pine trunk, seated in a beech's root buttress, wading
+  under a willow curtain, a half-turn in a birch glade, a house-sized boulder, the rim of a plunge
+  pool, stepping stones across a stream); the before set was already 7/8 faithful but drew from 29
+  ideas. Pairs https://claude.ai/artifact/LdEmpUvD5fHjzDFFuKMh1y.
 - **YumBot festival: DONE on the second pass** (pool 97 → 199 distinct; 45 rewrites regenerated onto
   strong-prior perches; backup `~/poolbackup-yumbot-japanese_festival-scene_type-1790231416555.json`).
   Same eight slots re-rendered, 16/16 carried: six of eight show the named candy-apple tray, mikoshi
@@ -231,8 +236,9 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | faebot   | forest-fairy-scene / dryad-portrait / enchanted-vista | `faebot_*_foreground_anchor` (string entries) | 260 / 200 / 200 | 71 → 260, 52 → 200, 59 → 200 distinct (same = anchor kind + position); kinds 25 → 68, 17 → 66, 20 → 69 | none | 8 + 8 on two paths: the anchor axis is invisible in all 32 renders | **DONE (text-unique; visible gain nil)** | (close-out) | 2026-09-24 |
 | yumbot   | japanese-festival    | `festival_scene_type` (string entries)           | 200     | 97 → 199 distinct (same = perch family + arrangement); 82 → 100 perch families; 97 originals kept | none | first 8 + 8 weak (obscure perches), second 8 + 8 pass; 16/16 carried | **DONE** (flag 3) | (close-out) | 2026-09-24 |
 | bloombot | flower-fantasy       | `bloombot_flower_fantasy_floor_carpet` (string) | 134     | 30 → 131 line-ups (same = 4+ shared species); 27 → 78 species; 30 originals kept | none | 8 + 8 paired, shadow; 14/16 carried; carpet colour shows, species never (supporting axis) | **DONE (modest visible gain by design)** | (close-out) | 2026-09-24 |
-| bloombot | desert-bloom         | `bloombot_desert_bloom_bloom_explosion` (string) | 198    | 51 → 196 line-ups (same = 4+ shared species); 19 → 103 desert species; 51 originals kept | none | 8 + 8 paired, shadow; 12/16 carried (Sonnet drops flagged); the path paints pink whatever the entry names, before and after | **DONE (text-unique; visible gain nil)** | (close-out) | 2026-09-24 |
-| faebot   | queen-of-the-forest  | `faebot_queen_of_forest_biome` (string)          | 200     | 26 → 197 distinct (same = forest type + first texture); 11 → 35 forest types; 26 originals kept | none | 8 + 8 paired, shadow; 15/16 carried; autumn maples, waterfall glade, golden larch, bluebell wood now show where two cherry-blossom scenes did | **DONE (real visible gain)** | (close-out) | 2026-09-24 |
+| bloombot | desert-bloom         | `bloombot_desert_bloom_bloom_explosion` (string) | 198    | 51 → 196 line-ups (same = 4+ shared species); 19 → 103 desert species; 51 originals kept | none | 8 + 8 paired, shadow; 12/16 carried (Sonnet drops flagged); the path paints pink whatever the entry names, before and after | **DONE (text-unique; visible gain nil)** | 61629837 | 2026-09-24 |
+| faebot   | queen-of-the-forest  | `faebot_queen_of_forest_biome` (string)          | 200     | 26 → 197 distinct (same = forest type + first texture); 11 → 35 forest types; 26 originals kept | none | 8 + 8 paired, shadow; 15/16 carried; autumn maples, waterfall glade, golden larch, bluebell wood now show where two cherry-blossom scenes did | **DONE (real visible gain)** | 61629837 | 2026-09-24 |
+| faebot   | queen-of-the-forest  | `faebot_queen_of_forest_posed_setting` (string)  | 200     | 29 → 192 distinct (same = natural spot + pose); spots 21 → 37, poses 10 → 12; 37 originals kept (8 unfilled) | none | 8 + 8 paired, shadow; 16/16 carried; every after-render shows its written spot and pose | **DONE (real visible gain)** | (close-out) | 2026-09-24 |
 | earthbot | epic-sunset          | `epic_sunset_subject` (object entries)           | 200     | 80 → 200 distinct (same = sky family + palm arrangement + sand); skies 7 → 10, palms 8 → 9, sands 3 → 7; 80 originals kept | none needed (EPIC_VISTA archetype hands the entry through) | 8 + 8 paired, shadow; 15/16 carried (one Sonnet drop, flagged); self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 33 → 120 line-ups (same = 4+ shared species, 3 when only 3); 26 → 70 species; red 35 → 20 | same fix                                                              | same batch                                         | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
 
@@ -324,6 +330,14 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-24 · faebot/queen-of-the-forest `posed_setting` · DONE (real visible gain, self-reviewed).**
+  String entries "<Posed/Standing/Seated …> <natural spot>, <body>, <hands>, <gown> …". 29 → 192
+  distinct (same = natural spot + pose), spots 21 → 37 (heather bank, pine-needle floor, root
+  buttress, willow pool, birch glade, house-sized boulder, plunge-pool rim, stepping stones …), poses
+  10 → 12, 163 rewrites, 8 unfilled slots kept as originals. Pairs on the same eight slots, 16/16
+  carried: all eight after-renders show their written spot and pose; the before set was 7/8 faithful
+  but drew from 29 ideas (a tree-archway, a grotto mouth, a lily pond, a mossy boulder recur). Pairs
+  https://claude.ai/artifact/LdEmpUvD5fHjzDFFuKMh1y.
 - **2026-09-24 · faebot/queen-of-the-forest `forest_biome` · DONE (real visible gain, self-reviewed).**
   String entries "<forest type> with <signature texture>, <mid-tier>, <floor>, <light>". 26 → 197
   distinct (same = forest type + first texture), 11 → 35 forest types, 26 originals kept, 3 unfilled
