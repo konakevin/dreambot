@@ -188,10 +188,16 @@ commit + push, row + log here.
   background axis under a character hero. Pairs https://claude.ai/artifact/M2YACVZhXK7tCMLxeutw1B.
   NOTE the queue mislabelled this pool's path as cosmic-vista; the pool belongs to `space-femme` (the
   config keeps its file name, `starbot.cosmic_vista.space_femme_phenomenon.js`).
-- **DragonBot castle `castle_biome`: pool WRITTEN** (50 → 168 distinct on biome + first hero
-  feature after the parser fix, 118 rewrites, 0 unfilled; backup
-  `~/poolbackup-dragonbot-iconic_landscape-castle_biome-1790233787532.json`); paired renders running
-  (`dc/`, `--bot dragonbot --path castle --slot biome`). The path is `castle`, not iconic-landscape.
+- **DragonBot castle `castle_biome`: DONE (text-unique; visible gain modest)** (50 → 168 distinct
+  on biome + first hero feature after the parser fix, 118 rewrites, 0 unfilled; backup
+  `~/poolbackup-dragonbot-iconic_landscape-castle_biome-1790233787532.json`). Pairs on the same
+  eight slots (`dc/`), 7/8 → 8/8 carried: the castle axis fills the frame and the biome shows only as
+  a foreground strip, about 3 of 8 either way. Before: golden barley fields, golden birch leaves, a
+  plunge-pool with twin falls read; after: rose banks + pink blossom trees + lavender, wild daisies,
+  a lavender field read, and the yew forest gave dark red-leaved woods. Larch valley, cedar forest,
+  oak-island lake and chalk downs did not survive the castle. Nothing regressed; the pool no longer
+  says "vast emerald mountain valley" 23 times. Pairs https://claude.ai/artifact/S2CudVACt69TRxq818Uoer.
+  The path is `castle`, not iconic-landscape (the config keeps its file name).
 - **FaeBot dryad-portrait `forest_backdrop`:** full run in flight (`faebot_dryad_portrait_forest_backdrop/full`,
   25 → ~200 on forest type + first texture via the queen biome rules).
 - **FaeBot (queen biome + three foreground-anchor pools):** shared factory
@@ -275,7 +281,8 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | faebot   | queen-of-the-forest  | `faebot_queen_of_forest_biome` (string)          | 200     | 26 → 197 distinct (same = forest type + first texture); 11 → 35 forest types; 26 originals kept | none | 8 + 8 paired, shadow; 15/16 carried; autumn maples, waterfall glade, golden larch, bluebell wood now show where two cherry-blossom scenes did | **DONE (real visible gain)** | 61629837 | 2026-09-24 |
 | faebot   | queen-of-the-forest  | `faebot_queen_of_forest_posed_setting` (string)  | 200     | 29 → 192 distinct (same = natural spot + pose); spots 21 → 37, poses 10 → 12; 37 originals kept (8 unfilled) | none | 8 + 8 paired, shadow; 16/16 carried; every after-render shows its written spot and pose | **DONE (real visible gain)** | 71a0adef | 2026-09-24 |
 | mangabot | isekai-fantasy       | `isekai_scene_type` (string)                     | 200     | 127 → 195 distinct (same = category + scene motif); 11 categories; 132 originals kept (5 unfilled) | none (flag 4: the template composites ~8 axes) | 8 + 8 paired, shadow; carried 4/8 → 7/8; readable ~3/8 either way | **DONE (text-unique; visible gain modest)** | 2d7390c9 | 2026-09-24 |
-| starbot  | space-femme          | `space_femme_phenomenon` (string)                | 200     | 40 → 196 distinct (same = phenomenon + placement); 21 → 46 phenomena; 40 originals kept | none | 8 + 8 paired, shadow; 6/8 → 8/8 carried; the phenomenon never reads under the femme hero, before or after | **DONE (text-unique; visible gain nil)** | (close-out) | 2026-09-24 |
+| starbot  | space-femme          | `space_femme_phenomenon` (string)                | 200     | 40 → 196 distinct (same = phenomenon + placement); 21 → 46 phenomena; 40 originals kept | none | 8 + 8 paired, shadow; 6/8 → 8/8 carried; the phenomenon never reads under the femme hero, before or after | **DONE (text-unique; visible gain nil)** | e91cbcf6 | 2026-09-24 |
+| dragonbot| castle               | `castle_biome` (string)                          | 168     | 50 → 168 distinct (same = biome + first hero feature); 45 → 67 keys; 50 originals kept | none | 8 + 8 paired, shadow; 7/8 → 8/8 carried; biome reads as a foreground strip ~3/8 either way under the castle | **DONE (text-unique; visible gain modest)** | (close-out) | 2026-09-24 |
 | earthbot | epic-sunset          | `epic_sunset_subject` (object entries)           | 200     | 80 → 200 distinct (same = sky family + palm arrangement + sand); skies 7 → 10, palms 8 → 9, sands 3 → 7; 80 originals kept | none needed (EPIC_VISTA archetype hands the entry through) | 8 + 8 paired, shadow; 15/16 carried (one Sonnet drop, flagged); self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 33 → 120 line-ups (same = 4+ shared species, 3 when only 3); 26 → 70 species; red 35 → 20 | same fix                                                              | same batch                                         | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
 
@@ -367,6 +374,16 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-24 · dragonbot/castle `castle_biome` · DONE (text-unique; visible gain modest).** String
+  entries "<Biome words>, <first hero feature>, <second feature>, <light> …" (the castle is another
+  axis, never named). 50 → 168 distinct (same = biome + first hero feature), 36 biomes × 30 hero
+  features, 118 rewrites, 50 originals kept, 0 unfilled. The first full run rejected half its
+  candidates on a parser that read the moor's own heather as the hero and "hidden glade of ancient
+  cedars" as the cedar forest (fixed: owned words, earliest match, hero spans skipped, the biome's
+  own "walls" exempt from the castle ban). Pairs on the same eight slots, 7/8 → 8/8 carried: the
+  castle fills the frame and the biome shows as a foreground strip in ~3 of 8 either way (barley,
+  golden birches, a plunge-pool before; rose banks with blossom and lavender, daisies, a lavender
+  field, dark red-leaved yews after). Pairs https://claude.ai/artifact/S2CudVACt69TRxq818Uoer.
 - **2026-09-24 · starbot/space-femme `phenomenon` · DONE (text-unique; visible gain nil).** String
   entries "<Phenomenon> <verb> <placement in frame>, <trans-colour detail>, <impact>". 40 → 196
   distinct (same = phenomenon + placement), 21 → 46 phenomena from a roster of 48 real or canon
