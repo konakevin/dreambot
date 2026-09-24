@@ -167,6 +167,26 @@ commit + push, row + log here.
   profile for Kevin.
 - **Last five Track A runs** (mangabot isekai, flower-fantasy carpet, desert bloom, starbot
   phenomenon, dragonbot castle biome) chained in `<pool>/full`; marker `last-five.done`.
+- **MangaBot isekai-fantasy `scene_type`: DONE (text-unique; visible gain modest, path flag 4)**
+  (127 → 195 distinct on category + motif, 11 categories, 68 rewrites, 5 unfilled kept as originals;
+  backup `~/poolbackup-mangabot-isekai_fantasy-scene_type-*`). Pairs on the same eight slots: carried
+  4/8 before and 7/8 after, and even a carried entry shows only partly, because the path's template
+  composites eight axes (demon lord, goblin trio, healing vial, floating island, mana shimmer …) into
+  one Sonnet prompt and the polish mashes them: a "magic-cast palms to the ground" read, an academy
+  glasshouse read, a guild desk read; a harpy encounter came out a moonlit river, a chain-whip duel
+  came out a cauldron scene. The before set behaved the same (three guild halls read, the rest were
+  mashups). Pairs https://claude.ai/artifact/2vVJ8ED3EfKYAXnMNKxAMA.
+- **StarBot space-femme `phenomenon`: pool WRITTEN** (160 rewrites after two resumes; backup
+  `~/poolbackup-starbot-cosmic_vista-space_femme_phenomenon-1790233624567.json`); paired renders
+  running (`sf/`, `--bot starbot --path space-femme --slot phenomenon`; the phenomenon fires on ~70%
+  of renders so some carried=false are the gate, not a drop). NOTE the queue mislabelled this pool's
+  path as cosmic-vista; the pool belongs to `space-femme`.
+- **DragonBot castle `castle_biome`: pool WRITTEN** (50 → 168 distinct on biome + first hero
+  feature after the parser fix, 118 rewrites, 0 unfilled; backup
+  `~/poolbackup-dragonbot-iconic_landscape-castle_biome-1790233787532.json`); paired renders running
+  (`dc/`, `--bot dragonbot --path castle --slot biome`). The path is `castle`, not iconic-landscape.
+- **FaeBot dryad-portrait `forest_backdrop`:** full run in flight (`faebot_dryad_portrait_forest_backdrop/full`,
+  25 → ~200 on forest type + first texture via the queen biome rules).
 - **FaeBot (queen biome + three foreground-anchor pools):** shared factory
   `scripts/reseed/lib/faeAnchorPool.js` (same = anchor kind + position in frame; ~65 real forest
   anchors × 8 positions; nothing glowing per the playbook) + `faebot.queen_of_forest.biome.js` (same =
@@ -211,6 +231,14 @@ commit + push, row + log here.
    a torii"). If you would rather the pool shrink to ~120 truly distinct perches, say so; nothing else
    in the entries changed.
 
+4. **MangaBot `isekai-fantasy`: the path's template composites ~8 axes into one Sonnet prompt**
+   (scene type + demon lord + goblin trio + healing vial + floating island + mana shimmer + …), so
+   the scene-type entry reaches the picture only partly, before and after the reseed (carried 4/8
+   before, 7/8 after; readable in ~3/8 either way). The pool is now unique (127 → 195); the lever
+   for visible variety is the path (fewer axes per render, or the scene type as the hero line the
+   others defer to, as the pilot did for flower-friends). I did not touch a public bot's path
+   without your word. Pairs https://claude.ai/artifact/2vVJ8ED3EfKYAXnMNKxAMA.
+
 **Accepted Flux limits (Kevin 2026-09-23, do not chase):** species render in their own prior colour
 (a green-titled flower line-up renders pink/white); a rich register only reads on strong-colour
 families. "You can't force Flux out of its trained data, the existing behaviours are fine."
@@ -238,7 +266,8 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | bloombot | flower-fantasy       | `bloombot_flower_fantasy_floor_carpet` (string) | 134     | 30 → 131 line-ups (same = 4+ shared species); 27 → 78 species; 30 originals kept | none | 8 + 8 paired, shadow; 14/16 carried; carpet colour shows, species never (supporting axis) | **DONE (modest visible gain by design)** | (close-out) | 2026-09-24 |
 | bloombot | desert-bloom         | `bloombot_desert_bloom_bloom_explosion` (string) | 198    | 51 → 196 line-ups (same = 4+ shared species); 19 → 103 desert species; 51 originals kept | none | 8 + 8 paired, shadow; 12/16 carried (Sonnet drops flagged); the path paints pink whatever the entry names, before and after | **DONE (text-unique; visible gain nil)** | 61629837 | 2026-09-24 |
 | faebot   | queen-of-the-forest  | `faebot_queen_of_forest_biome` (string)          | 200     | 26 → 197 distinct (same = forest type + first texture); 11 → 35 forest types; 26 originals kept | none | 8 + 8 paired, shadow; 15/16 carried; autumn maples, waterfall glade, golden larch, bluebell wood now show where two cherry-blossom scenes did | **DONE (real visible gain)** | 61629837 | 2026-09-24 |
-| faebot   | queen-of-the-forest  | `faebot_queen_of_forest_posed_setting` (string)  | 200     | 29 → 192 distinct (same = natural spot + pose); spots 21 → 37, poses 10 → 12; 37 originals kept (8 unfilled) | none | 8 + 8 paired, shadow; 16/16 carried; every after-render shows its written spot and pose | **DONE (real visible gain)** | (close-out) | 2026-09-24 |
+| faebot   | queen-of-the-forest  | `faebot_queen_of_forest_posed_setting` (string)  | 200     | 29 → 192 distinct (same = natural spot + pose); spots 21 → 37, poses 10 → 12; 37 originals kept (8 unfilled) | none | 8 + 8 paired, shadow; 16/16 carried; every after-render shows its written spot and pose | **DONE (real visible gain)** | 71a0adef | 2026-09-24 |
+| mangabot | isekai-fantasy       | `isekai_scene_type` (string)                     | 200     | 127 → 195 distinct (same = category + scene motif); 11 categories; 132 originals kept (5 unfilled) | none (flag 4: the template composites ~8 axes) | 8 + 8 paired, shadow; carried 4/8 → 7/8; readable ~3/8 either way | **DONE (text-unique; visible gain modest)** | (close-out) | 2026-09-24 |
 | earthbot | epic-sunset          | `epic_sunset_subject` (object entries)           | 200     | 80 → 200 distinct (same = sky family + palm arrangement + sand); skies 7 → 10, palms 8 → 9, sands 3 → 7; 80 originals kept | none needed (EPIC_VISTA archetype hands the entry through) | 8 + 8 paired, shadow; 15/16 carried (one Sonnet drop, flagged); self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 33 → 120 line-ups (same = 4+ shared species, 3 when only 3); 26 → 70 species; red 35 → 20 | same fix                                                              | same batch                                         | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
 
@@ -330,6 +359,16 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-24 · mangabot/isekai-fantasy `scene_type` · DONE (text-unique; visible gain modest; flag 4).**
+  String entries "<Category> composition, <anime scene with a canon motif>, <energy note>". 127 → 195
+  distinct (same = category + scene motif), 11 categories kept at their weights, 68 rewrites, 5
+  unfilled left as originals; the brief forbids adding other canon motifs (a first pass put a rune
+  circle in every magic-cast entry). Pairs on the same eight slots: the entry reached the final prompt
+  4/8 before and 7/8 after, and read in the picture ~3/8 either way (a palms-to-the-ground earth
+  spell, an academy glasshouse, a guild desk; guild halls in the before set), because the path's
+  template composites ~8 axes into one prompt and the polish mashes them (a harpy encounter came out
+  a moonlit river, a chain-whip duel a cauldron). Nothing regressed; the lever is the path (flag 4).
+  Pairs https://claude.ai/artifact/2vVJ8ED3EfKYAXnMNKxAMA.
 - **2026-09-24 · faebot/queen-of-the-forest `posed_setting` · DONE (real visible gain, self-reviewed).**
   String entries "<Posed/Standing/Seated …> <natural spot>, <body>, <hands>, <gown> …". 29 → 192
   distinct (same = natural spot + pose), spots 21 → 37 (heather bank, pine-needle floor, root
