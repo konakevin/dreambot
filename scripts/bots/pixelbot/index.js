@@ -37,7 +37,10 @@ const SCENE_PATHS = {
   'pixel-ruins': require('./paths/pixel-ruins'), // batch 4 (agent) + orchestrator R3, CLOSE 4.48 — Kevin's decision
   'volcano-forge': require('./paths/volcano-forge'), // batch 5 (agent), 3 rounds — R1 PASS 4.50; R2 four clean renders avg 4.75
   'floating-market-canal': require('./paths/floating-market-canal'), // batch 5 (agent), 4 rounds — R3 PASS 4.52 (min 4.2); corridor 0/5, text 0/5
-  'castle-town-gate': require('./paths/castle-town-gate'), // wave 5 (agent), 3 rounds — R0 3.02 → R1 4.46 → R2 PASS 4.64 (min 4.3); text 0/10 on the pin
+  // 'castle-town-gate': require('./paths/castle-town-gate'), — DISABLED 2026-09-24 (Kevin): its
+  // prompts trip Replicate's safety checker on every Flux model (see the shadowPaths note below).
+  // wave 5 (agent), 3 rounds — R0 3.02 → R1 4.46 → R2 PASS 4.64 (min 4.3); text 0/10 on the pin.
+  // Files + pools left in place; re-enable = uncomment this line and put it back in shadowPaths.
   // NOTE: no modelByPath entry needed — this path self-declares its flux-2 pin on the
   // builder, and scene.modelByPath now honours builder.models (fixed 61f04d93).
 };
@@ -187,6 +190,12 @@ module.exports = {
     'pixel-shoreline',
     'pixel-skyward',
     'pixel-ruins',
+    // batch-5 scene paths promoted to live 2026-09-24 on Kevin's word after the reseed program
+    // grew each hero pool 25 → 104/105 (RESEED_STATUS.md Track B rows 7-8); last two days of
+    // shadow renders: volcano-forge 32/32, floating-market-canal 35/35 across the scene model set.
+    // Faithful xerox: they stay in SCENE_PATHS, so medium / model set / vibes are unchanged.
+    'volcano-forge',
+    'floating-market-canal',
     // ─── the in-game flavour paths Kevin kept ───
     'cozy-rpg-town',
     'side-scroller-world',
@@ -205,13 +214,15 @@ module.exports = {
   // Dark-launched (shadow) paths — renderable on demand, hidden from public + rotation.
   // cozy-farming-life-sim: pulled from rotation 2026-09-19 for a rework (cozy-cute pixel
   // farm, FarmBot-in-pixels). Kept renderable + hidden here until the rework is approved.
-  // The scene paths went live 2026-09-19; only the pulled farm path stays parked here.
-  shadowPaths: [
-    'cozy-farming-life-sim',
-    'volcano-forge',
-    'floating-market-canal',
-    'castle-town-gate',
-  ],
+  // The scene paths went live 2026-09-19 (volcano-forge + floating-market-canal 2026-09-24);
+  // only the pulled farm path stays parked here. castle-town-gate was DISABLED 2026-09-24
+  // (Kevin): its prompts trip Replicate's safety checker on EVERY Flux model (1.1-pro, ultra,
+  // flux-2-pro, flux-2-max) — replay of the exact flagged text flagged 5/5 arms, and 5 of 5
+  // pipeline renders on flux-1.1-pro failed after the engine's full retry ladder. Bisection
+  // showed a combination trigger involving the "figure hauling a heavy basket up on a rope"
+  // clause (removing it un-flags 3/3; alone it does not flag), not settled further. Its
+  // builder line in SCENE_PATHS is commented out so nothing can render it by accident.
+  shadowPaths: ['cozy-farming-life-sim'],
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.

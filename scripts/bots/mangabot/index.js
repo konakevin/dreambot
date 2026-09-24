@@ -49,7 +49,10 @@ const pathBuilders = {
   'anime-halloween-cozy': require('./paths/anime-halloween-cozy'),
   'anime-haunted-school': require('./paths/anime-haunted-school'),
   'anime-witch-familiar': require('./paths/anime-witch-familiar'),
-  'game-center-arcade': require('./paths/game-center-arcade'), // 2026-09-23 SHADOW — game centre at night
+  // 'game-center-arcade': require('./paths/game-center-arcade'), — DISABLED 2026-09-24 (Kevin):
+  // its prompts trip Replicate's safety checker on every Flux model (see the shadowPaths note
+  // below for the bisected trigger). Files + pools left in place; re-enable = reword the two
+  // "schoolgirl" play-moment entries, uncomment this line and put it back in shadowPaths.
 };
 
 // Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
@@ -213,7 +216,14 @@ module.exports = {
 
   // Stage I paths promoted to live rotation 2026-08-16 (shadowPaths emptied;
   // MANGA_SHADOW_PATHS const retained — still drives twoPassPolish.skipPaths).
-  shadowPaths: ['game-center-arcade'],
+  // game-center-arcade was DISABLED 2026-09-24 (Kevin): its prompts trip Replicate's safety
+  // checker on EVERY Flux model (1.1-pro, ultra, flux-2-pro) — 3 of 6 pipeline renders on
+  // flux-1.1-pro failed after the engine's full retry ladder. A clause bisection pinned the
+  // trigger to one pool line: "a schoolgirl in a navy blazer occupying half the picture's
+  // height" (seeds/game_center_arcade_play_moment.json, 2 entries) — that clause alone flags 3/3,
+  // the full prompt without it flags 0/3. If the path ever comes back, reword those two entries
+  // first. Its builder line in pathBuilders is commented out so nothing can render it by accident.
+  shadowPaths: [],
 
   // Seasonal-window paths (2026-09-07) — drawn ONLY when
   // engine_config.bots_seasonal_enabled is true AND the named holiday window

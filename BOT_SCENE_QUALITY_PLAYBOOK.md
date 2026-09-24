@@ -1635,6 +1635,28 @@ audit the pool as a SET and delete the offending class rather than adding words.
 > NOT blanket-soften the appearance pool: its adult-proportions law is exactly what beat the
 > naked-putto trap that cost a sibling path 5 of 6 renders.
 
+> **RESOLVED 2026-09-24 by bisection — and the "close humanoid body" reading above was ALSO wrong.**
+> Kevin: "models have never been the cause of a bot's path failing to render." Measured: replay the
+> exact flagged prompt text across models with one attempt and no retry, then bisect the clauses
+> (halves → leave-one-out → 3× confirm of the culprit alone and of the prompt without it).
+>
+> | path | what flags it | model or content |
+> | --- | --- | --- |
+> | faebot/star-charting | the MEDIUM's named-artist clause "Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage" — alone 3/3 on flux-2-pro, prompt without it 0/3; same prompts pass flux-1.1-pro and ultra 13/13 each; `safety_tolerance` 5 changes nothing | **MODEL**: the flux-2 checker rejects named living artists, 1.1 does not |
+> | mangabot/game-center-arcade | one pool line, "a schoolgirl in a navy blazer occupying half the picture's height" — alone 3/3, without 0/3, on flux-1.1-pro | **CONTENT**: flags on every Flux model |
+> | pixelbot/castle-town-gate | combination involving "a small figure … hauling a heavy basket up on a rope hand over hand" (removing it un-flags 3/3, alone 0/3) | **CONTENT**: flags on every Flux model |
+>
+> Three method points that outlast these paths. (1) **The engine hides flags.** `botEngine.flux()`
+> retries a safety flag 2× on the same prompt, then the render loop re-rolls every pool pick up to
+> 3×, so `bot_run_log` records only the ninth failure; the last 60 dispatcher runs carried 23
+> flagged attempts on flux-1.1-pro/ultra (330 prompt builds) and zero logged failures. Count
+> "safety-filter" lines per attempt, never rows. (2) **Replay the exact text before theorising.**
+> One prompt on two models with nothing else changed splits MODEL from CONTENT in one call; the
+> body-plan hypothesis above cost a reword arm and was never tested this way. (3) **Bisect, don't
+> soften.** Halves then leave-one-out finds a single clause in ~10 calls; the culprit is rarely the
+> socially obvious word. Rule for medium authors: a fragment that NAMES ARTISTS cannot ship on a
+> flux-2 model.
+
 **36. THE POSITION-COLOUR-COUNT LAW — information shown without a single character, 0 text in 26
 renders on the fleet's highest text-risk subject.** A star chart is a diagram covered in writing, and
 lesson 23 says even the standard "one small painted picture" move invents a signboard when its

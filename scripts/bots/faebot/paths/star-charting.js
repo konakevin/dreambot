@@ -145,6 +145,17 @@
  *   Not a content drop; flux-1.1-pro renders the fae and the sky and discards
  *   the small hand-object every time.
  *
+ *   ⭐ RESOLVED 2026-09-24 — LIVE on flux-1.1-pro (Kevin's call; pin rolled back in
+ *   faebot/index.js). The E005 attribution below IS settled now: a clause-level
+ *   bisection of the exact flagged prompts found the trigger is the MEDIUM's
+ *   named-artist clause ("Greg Manchess + Donato Giancola + Paul Bonner + Brian
+ *   Froud painted-fantasy lineage") — alone it flags 3/3 on flux-2-pro, the full
+ *   prompt without it flags 0/3, and the same text passes flux-1.1-pro and ultra
+ *   13/13 each. safety_tolerance 5 changes nothing (14/15 flagged either way). It
+ *   was never the body-plan vocabulary. Kevin graded the flux-1.1-pro batch as
+ *   very good and did not miss the instrument; 47/47 delivered since, zero flags.
+ *   The history below is kept as written.
+ *
  *   Swapping ONE variable to flux-2-pro, same prompts, same pools:
  *     instrument rendered 3 of 3 (from 0 of 22) · warm light 3 of 3 (from 2 of
  *     22) · a genuine costume-designer wardrobe 3 of 3 · avg ~4.5 vs ~2.8.
@@ -302,7 +313,9 @@ If it will not all fit, the large near fae, the vivid sky and the perch's crop a
  *         'star-charting':
  *           'painted fantasy concept art, soft brushwork, atmospheric night illustration, luminous saturated night colour, deep indigo and violet sky with one warm lamplight against it, Brian Froud + Mononoke painted-fantasy lineage',
  *       },
- *  7. modelByPath — add. flux-2-pro ONLY, and this line IS the path: the
+ *  7. modelByPath — SHIPPED AS flux-1.1-pro (2026-09-24, see the RESOLVED note in
+ *     the header; the flux-2-pro history below is kept as written). Original text:
+ *     add. flux-2-pro ONLY, and this line IS the path: the
  *     reading instrument rendered 0 of 22 on flux-1.1-pro and 3 of 3 on
  *     flux-2-pro off identical prompts and pools (full numbers in the header).
  *     flux-1.1-pro-ultra stays excluded per playbook lesson 6 (a lighting-

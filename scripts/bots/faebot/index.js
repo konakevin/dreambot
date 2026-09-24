@@ -210,6 +210,13 @@ module.exports = {
     'goblin-market-lane',
     'frost-court',
     'spirit-beasts',
+    // Promoted to live rotation 2026-09-24 on Kevin's word after the reseed program grew each
+    // path's subject pool 25 → 100+ (RESEED_STATUS.md Track B rows 10-12). Last two days of
+    // shadow renders: mushroom-apothecary 45/45, acorn-boat-regatta 38/38, star-charting 47/47
+    // on the flux-1.1 family. Faithful xerox except star-charting's model pin (see modelByPath).
+    'mushroom-apothecary',
+    'acorn-boat-regatta',
+    'star-charting',
   ],
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -222,13 +229,8 @@ module.exports = {
   // every public surface. QA in isolation, grade the shadow renders, then
   // promote them into history via scripts/promote-shadow-path.js and move the
   // string into `paths[]`.
-  // 'mushroom-apothecary' stays here until Kevin grades it. shadowPaths[] is invisible to the
-  // hourly dispatcher; going live = move the string into paths[] and change nothing else.
-  shadowPaths: [
-    'mushroom-apothecary',
-    'acorn-boat-regatta',
-    'star-charting',
-  ], // Stage F paths promoted to live rotation 2026-08-16
+  // mushroom-apothecary, acorn-boat-regatta and star-charting left here for paths[] on 2026-09-24.
+  shadowPaths: [], // Stage F paths promoted to live rotation 2026-08-16
 
   // Picker on with the BOT_MODEL_TALLY 6-model lineup (2026-05-30):
   // Banana + GPT-2 + Flux 2 Pro + Flux 1.1 Pro + Flux 1.1 Pro Ultra + Flux 2 Max.
@@ -261,15 +263,17 @@ module.exports = {
     'acorn-boat-regatta': {
       'black-forest-labs/flux-1.1-pro': 1,
     },
-    // star-charting: flux-2-pro ONLY, and this is the strongest model finding of the
-    // run. On flux-1.1-pro the reading instrument — the entire reason the path exists
-    // — rendered 0 of 22 while every law sat in 6 of 6 emitted prompts; three rounds
-    // of prompt work moved it 0/6, 0/6, 0/6. One model swap, same prompts and pools:
-    // instrument 3 of 3, warm light 3 of 3, real wardrobe 3 of 3, ~2.8 -> ~4.5.
-    // ⚠️ GO-LIVE IS BLOCKED: flux-2-pro's safety classifier delivered only 3 of 11
-    // attempts on this path's content (flux-1.1-pro is 23 of 23), which is fine for a
-    // shadow path and not shippable on a 2x/day cron. See the tracker for the lever.
-    'star-charting': ['black-forest-labs/flux-2-pro'],
+    // star-charting: flux-1.1-pro ONLY (rolled back from flux-2-pro 2026-09-24, Kevin's call).
+    // The flux-2-pro pin (2026-09-23) rendered the reading instrument 3 of 3 where flux-1.1-pro
+    // rendered it 0 of 22, but it is unshippable: flux-2's checker returned E005 on 23 of 29
+    // pipeline attempts, and a clause-bisection on 2026-09-24 found the trigger is the
+    // MEDIUM's named-artist clause ("Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud
+    // painted-fantasy lineage") — that clause alone flags 3/3 on flux-2-pro and the full prompt
+    // without it flags 0/3; the same prompts pass flux-1.1-pro 13/13 and ultra 13/13 (replay of
+    // the exact flagged text). The flux-1.1-pro renders are the batch Kevin graded as very good
+    // (23/23 + 47/47 since, zero flags). The instrument is a nice-to-have he did not miss.
+    // Do NOT re-pin to a flux-2 model while the medium names artists.
+    'star-charting': ['black-forest-labs/flux-1.1-pro'],
     // honey-harvest: flux-1.1-pro ONLY — 12 of 12 delivered, zero signatures.
     // MEASURED so nobody re-runs it: flux-2-pro renders the premise BETTER (beat
     // 2/4, cups 4/4) and is unshippable — it signed 4 of 4 and took 20 safety

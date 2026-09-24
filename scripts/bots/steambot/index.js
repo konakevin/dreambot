@@ -329,14 +329,16 @@ module.exports = {
     'celestial-observatory',
     'clocktower-heart',
     'skydock-harbor',
+    // brass-glasshouse — promoted to live rotation 2026-09-24 on Kevin's word after its house
+    // pool was grown 25 → 104 (RESEED_STATUS.md Track B row 3); 30/30 shadow renders delivered
+    // on flux-1.1-pro over the last two days. The bot's first green/wet/translucent interior.
+    // Faithful xerox: nothing else about how it renders changed.
+    'brass-glasshouse',
   ],
 
   // Dark-launched (shadow) paths — renderable on demand, hidden from public + rotation.
-  // Stage N1: brass-glasshouse is SHADOW — the bot's first green/wet/translucent
-  // interior (all 16 live paths are metal/stone/sky/water/crowd, and its four
-  // interiors are dark warm-amber brass boxes). Go-live = move this string into
-  // `paths` above and change nothing else.
-  shadowPaths: ['brass-glasshouse'], // Stage M paths promoted to live 2026-08-16 (STEAM_SHADOW_PATHS const retained — still drives the polish-OFF skip list below)
+  // brass-glasshouse left here for paths[] on 2026-09-24.
+  shadowPaths: [], // Stage M paths promoted to live 2026-08-16 (STEAM_SHADOW_PATHS const retained — still drives the polish-OFF skip list below)
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.

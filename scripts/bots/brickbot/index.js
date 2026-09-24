@@ -147,13 +147,12 @@ module.exports = {
 
   // Dark-launched paths — renderable via `iter-bot --mode <path> --post`
   // (shadow posts, admin-only), NOT in live rotation until promoted into PATHS.
-  // ⚠ GO-LIVE TRAP: while this sits in shadowPaths it is NOT in PATHS, so the legacy PER_PATH loop
-  // never looks for a legacy pool triplet. On go-live it must be added to PATHS *and* to
-  // SKIP_LEGACY_PER_PATH in the SAME edit — PATHS alone makes pools.js call
-  // load('airfield_biplanes_scenes') and throw at require time, taking the whole bot down.
-  // balloon-festival left shadowPaths for PATHS on 2026-09-24 (pools.js). airfield-biplanes stays
-  // shadow until Kevin promotes it.
-  shadowPaths: ['airfield-biplanes'], // Stage B paths promoted to live rotation 2026-08-16
+  // ⚠ GO-LIVE TRAP for any future function-form path: while it sits in shadowPaths it is NOT in
+  // PATHS, so the legacy PER_PATH loop never looks for a legacy pool triplet. On go-live it must
+  // be added to PATHS *and* to SKIP_LEGACY_PER_PATH in the SAME edit — PATHS alone makes pools.js
+  // call load('<path>_scenes') and throw at require time, taking the whole bot down.
+  // balloon-festival and airfield-biplanes both left here for PATHS on 2026-09-24 (pools.js).
+  shadowPaths: [], // Stage B paths promoted to live rotation 2026-08-16
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.

@@ -205,21 +205,24 @@ module.exports = {
     'dino-nights',
     'storm-season',
     'polar-dinos',
-  ],
-
-  // Dark-launched paths — renderable on demand, hidden from public + rotation.
-  // 'courtship-display' stays here until Kevin grades it. A shadowPaths[] path is invisible to the
-  // hourly dispatcher and renders only via `iter-bot --mode courtship-display --post`, which posts
-  // it hidden (shadow=true / is_public=false). Going live = move the string to paths[] and change
-  // NOTHING else about how it renders (the go-live xerox rule).
-  shadowPaths: [
+    // Promoted to live rotation 2026-09-24 on Kevin's word after the reseed program grew each
+    // path's own subject pool 25 → 100+ (RESEED_STATUS.md Track B rows 13-18; the four SHARED
+    // paleo pools were not touched). Every one rendered clean in the last two days of shadow
+    // renders on its pinned models. Faithful xerox: nothing else about how they render changed.
     'amber-forest',
     'courtship-display',
     'den-and-burrow',
     'desert-dunes',
     'snowline-forest',
     'undergrowth-scale',
-  ], // Stage D paths promoted to live 2026-08-16 (DINO_SHADOW_PATHS const kept — drives polish-OFF skip)
+  ],
+
+  // Dark-launched paths — renderable on demand, hidden from public + rotation. A shadowPaths[]
+  // path is invisible to the hourly dispatcher and renders only via `iter-bot --mode <path>
+  // --post`, which posts it hidden (shadow=true / is_public=false). Going live = move the string
+  // to paths[] and change NOTHING else about how it renders (the go-live xerox rule).
+  // The six 2026-09 paths left here for paths[] on 2026-09-24.
+  shadowPaths: [], // Stage D paths promoted to live 2026-08-16 (DINO_SHADOW_PATHS const kept — drives polish-OFF skip)
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.

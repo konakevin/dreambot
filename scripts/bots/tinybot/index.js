@@ -108,6 +108,11 @@ module.exports = {
     'tiny-winter-village',
     'tiny-night-market',
     'tiny-carnival',
+    // snow-globe-world — promoted to live rotation 2026-09-24 on Kevin's word after its worlds
+    // pool was grown 25 → 104 (RESEED_STATUS.md Track B row 1) and 12 forced shadow renders on
+    // this bot read clean (flux-1.1-pro 12/12 delivered). Faithful xerox: the four snow-globe
+    // config keys below are unchanged.
+    'snow-globe-world',
   ],
 
   // Seasonal-window-gated paths (botSeasonal.js) — drawn ONLY when
@@ -128,9 +133,8 @@ module.exports = {
 
   // Stage N paths promoted to live rotation 2026-08-16 (shadowPaths emptied;
   // TINY_SHADOW_PATHS const retained — still drives allowSubjectChaosPaths below).
-  // snow-globe-world stays SHADOW: it was graded on ToyBot, and moving it changes the
-  // bot wrapper around it, so the look wants re-validating here before going live.
-  shadowPaths: ['snow-globe-world'],
+  // snow-globe-world left here for paths[] on 2026-09-24 (re-validated on this bot first).
+  shadowPaths: [],
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.

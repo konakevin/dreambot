@@ -207,6 +207,11 @@ commit + push, row + log here.
   trunks, a waterfall and a mossy trunk read; rowan berries, a cedar grove and a beech cathedral did
   not. What reads after is new to the path (the old 15 types had none of those). Pairs
   https://claude.ai/artifact/Bxa2xLsVi2cQdnyF5yyC1T.
+- **TRACK B WENT LIVE 2026-09-24 (later).** On Kevin's word, 15 of the 18 shadow paths are in
+  `paths[]` (plus balloon-festival earlier in the day = 16 live); game-center-arcade and
+  castle-town-gate are DISABLED (builders commented out) because their prompts trip Replicate's
+  safety checker on every Flux model; star-charting went live on flux-1.1-pro after a bisection showed
+  its flux-2-pro E005 wall was the medium's named-artist clause. Full accounting in Flags 5 and 6.
 - **PROGRAM COMPLETE 2026-09-24 late.** Track A (every subject pool in the queue) and Track B (all 18
   shadow paths, 20 subject pools grown from MVP-25 to 100+ distinct, originals byte-identical, nothing
   promoted) are DONE and committed, each with reviewed forced shadow renders and a sheet link in the
@@ -283,13 +288,43 @@ commit + push, row + log here.
    others defer to, as the pilot did for flower-friends). I did not touch a public bot's path
    without your word. Pairs https://claude.ai/artifact/2vVJ8ED3EfKYAXnMNKxAMA.
 
-5. **MangaBot `game-center-arcade` trips Replicate's safety filter on flux-2-pro** (E005 "flagged
-   as sensitive", two retries each, 5 of 12 forced renders in the Track B harness, originals and new
-   entries alike). The path is locked to flux-2-pro; the prompts are soft toys behind glass. The pool
-   is not the cause (the failures hit original entries too). If the path goes live, expect ~40% of
-   its posts to fail at render until the model lock or the prompt's fur-and-glass wording is looked
-   at. Not touched by me. **PixelBot castle-town-gate hit it too** (3 of 12, its scene model set),
-   so this is a Replicate-side filter on the scene models, not one bot's wording.
+5. _(resolved 2026-09-24 — the earlier wording of this flag was WRONG in both directions)_ **The
+   safety-filter failures were three different things, and none was "the scene models".** Kevin
+   challenged the claim that a model had ever made a path fail, so it was measured properly: the exact
+   flagged prompt text replayed across models (one attempt, no retry), then a clause-by-clause
+   bisection per path (`scratchpad e005/replay.js`, `bisect.js`; 95 calls).
+   - **faebot/star-charting = a MODEL fact.** The same prompts pass flux-1.1-pro 13/13 and ultra 13/13
+     and fail flux-2-pro 14/15 (E005) at safety_tolerance 2 and 5 alike. Culprit = the medium's
+     named-artist clause ("Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy
+     lineage"): alone 3/3 flagged, full prompt without it 0/3. The flux-2 checker rejects named
+     artists; 1.1 does not. **Pin rolled back to flux-1.1-pro** (the batch Kevin graded as very good:
+     23/23 then, 47/47 since, zero flags) and the path is LIVE.
+   - **mangabot/game-center-arcade = a CONTENT fact.** Flagged on every Flux model, 1.1-pro included
+     (3 of 6 pipeline renders failed after the engine's full retry ladder). Culprit = one pool line,
+     "a schoolgirl in a navy blazer occupying half the picture's height"
+     (`seeds/game_center_arcade_play_moment.json`, 2 entries): alone 3/3, without 0/3. **DISABLED**
+     on Kevin's word (builder commented out, removed from shadowPaths; files and pools left in place;
+     re-enable = reword those two entries first).
+   - **pixelbot/castle-town-gate = a CONTENT fact, combination trigger.** Flagged on every Flux model
+     (5 of 5 pipeline renders on flux-1.1-pro failed). Removing "a small figure on the wall walkway
+     hauling a heavy basket up on a rope hand over hand …" un-flags 3/3, but that clause alone does
+     not flag, so it is that clause plus something else; not chased. **DISABLED** on Kevin's word.
+   - **Why the run log looked clean on the 1.1 family:** `botEngine.flux()` retries a flag 2× on the
+     same prompt and the render loop then re-rolls all pool picks up to 3×, so one logged failure is
+     up to 9 flagged calls. The last 60 dispatcher runs show 23 flags across 330 prompt builds on
+     flux-1.1-pro/ultra, every one recovered. Kevin's evidence (paths never fail on his models) and
+     the log agree; the flags were simply invisible. Measure per ATTEMPT, not per logged render.
+6. _(resolved 2026-09-24)_ **Track B go-live (Kevin: "get all the other working paths seeded and
+   pushed live").** 15 paths moved from `shadowPaths[]` to `paths[]` (faithful xerox, nothing else
+   about how they render changed except star-charting's pin above): tinybot snow-globe-world; steambot
+   brass-glasshouse; brickbot airfield-biplanes (pools.PATHS, already in SKIP_LEGACY_PER_PATH and both
+   skip lists); pixelbot volcano-forge + floating-market-canal; faebot mushroom-apothecary +
+   acorn-boat-regatta + star-charting; dinobot amber-forest, courtship-display, den-and-burrow,
+   desert-dunes, snowline-forest, undergrowth-scale. Every one delivered 100% of its shadow renders on
+   its pinned models over the previous two days (bot_run_log). The persisted path shuffle-bag (mig 283)
+   is roster-change-robust, so they enter each bot's rotation from the next dispatcher tick. Not run:
+   `scripts/promote-shadow-path.js` (the historical blend of graded keepers into each bot's past feed)
+   — it needs Kevin's keeper IDs, and the cron will fill history at cadence anyway.
 
 **Accepted Flux limits (Kevin 2026-09-23, do not chase):** species render in their own prior colour
 (a green-titled flower line-up renders pink/white); a rich register only reads on strong-colour
@@ -378,8 +413,9 @@ varied."_ Source of truth for what they are and how to treat them: **`NEW_PATH_P
 (read it in full before starting one). Opposite starting condition from Track A (thin pools that were
 never scaled, not deep pools of one idea), same bar: the SUBJECT pool reaches 100+ genuinely distinct
 ideas, every original kept, intent/format/prefix unchanged, forced shadow renders on NEW entries
-reviewed by Kevin. **Do not promote any of them to `paths[]`** (Kevin's call) and **do not touch the 4
-shared DinoBot paleo pools** (`_phenomenon`, `_sky`, `_megaflora`, `_surprise_element`).
+reviewed by Kevin. **Do not promote any of them to `paths[]`** (Kevin's call — lifted 2026-09-24: 16
+are LIVE, 2 DISABLED, see Flags 5-6) and **do not touch the 4 shared DinoBot paleo pools**
+(`_phenomenon`, `_sky`, `_megaflora`, `_surprise_element`).
 
 None of these 18 are in `SUBJECT_POOL_MAP.json` (it was built from `paths[]`); identify each path's
 subject pool by reading the path file (or `scripts/identify-subject-pools.js` pointed at it), never by
