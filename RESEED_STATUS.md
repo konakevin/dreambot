@@ -207,11 +207,15 @@ commit + push, row + log here.
   trunks, a waterfall and a mossy trunk read; rowan berries, a cedar grove and a beech cathedral did
   not. What reads after is new to the path (the old 15 types had none of those). Pairs
   https://claude.ai/artifact/Bxa2xLsVi2cQdnyF5yyC1T.
-- **Track B in flight:** TinyBot snow-globe `worlds` (config `tinybot.snow_globe_world.worlds.js`,
-  same = world type, roster of 93 places with their drifting particle; `--grow 80` running) and
-  MangaBot arcade `room` (config `mangabot.game_center_arcade.room.js`, same = the one room feature;
-  the composition LOCK is prepended by `normalize`, Sonnet writes only the tail; roster 87; smoke
-  running).
+- **Track B, Track A closed.** Every Track A queue pool is DONE (see the status table). Track B now:
+  **snow-globe `worlds` DONE** (25 → 104; 12/12 shadow renders reviewed, sheet
+  https://claude.ai/artifact/8oc82ziUopkUgYPtJrhVP4; the pool never names the glass, and two of the
+  twelve renders still drew the whole globe on a base, which is the path's own known failure mode,
+  not the pool's). **arcade `room` WRITTEN** (25 → 104; renders `ar/` in flight). **glasshouse
+  `house` grow** and **airfield `aircraft` grow** in flight. Next configs: PixelBot castle-town-gate
+  `gatehouse` (same = gatehouse type + the one made thing), floating-market-canal `canal_town`,
+  volcano-forge `forge`; then FaeBot ×3, DinoBot ×6 (subject pools only, never the four shared
+  paleo pools). Render sheets for grow runs: `node scripts/reseed/sheet-page.js <dir> <out.html>`.
 - **FaeBot (queen biome + three foreground-anchor pools):** shared factory
   `scripts/reseed/lib/faeAnchorPool.js` (same = anchor kind + position in frame; ~65 real forest
   anchors × 8 positions; nothing glowing per the playbook) + `faebot.queen_of_forest.biome.js` (same =
@@ -361,10 +365,10 @@ slot name. Tool: the same core with `--grow N` (append N new entries; the pool o
 | # | bot      | path                    | pools | subject pool (verify)                    | status | commits | date |
 | - | -------- | ----------------------- | ----- | ---------------------------------------- | ------ | ------- | ---- |
 | 0 | brickbot | balloon-festival        | 9     | `brickbot_balloon_fleet` (verified: the path header calls the fleet the subject) | **subject DONE**: 25 → 106 entries, 106 distinct (situation + nearest pattern + shaped balloon), originals byte-identical; 8 new + 4 originals shadow-rendered (12/12 carried) and reviewed; 8 axis pools untouched pending Kevin (doc §9 q1); still shadow (Flags #1) | (close-out) | 2026-09-24 |
-| 1 | tinybot  | snow-globe-world        | 4     | `…_worlds`                               | queued |         |      |
-| 2 | mangabot | game-center-arcade      | 7     | ?                                        | queued |         |      |
-| 3 | steambot | brass-glasshouse        | 8     | ? (thinnest: `_keeper` 14, `_wet_air` 16) | queued |         |      |
-| 4 | brickbot | airfield-biplanes       | 9     | `brickbot_airfield_aircraft`?            | queued |         |      |
+| 1 | tinybot  | snow-globe-world        | 4     | `tinybot_snow_globe_worlds` (verified: the path calls the WORLD the hero, it opens the prompt) | **subject DONE**: 25 → 104 entries, 104 distinct world types (roster of 93 real places with their own drifting particle), originals byte-identical; 8 new + 4 originals shadow-rendered (12/12 carried) and reviewed: a subway platform, an oil platform in a storm sea, a sluice camp, an abbey on a tidal causeway, a clock-tower square, houseboats on a canal, an aqueduct and a bee yard in wildflowers each read as their own world; still shadow | (close-out) | 2026-09-24 |
+| 2 | mangabot | game-center-arcade      | 7     | `game_center_arcade_room` (verified: "the room is the hero subject") | pool WRITTEN: 25 → 104, 103 distinct room features (the composition lock is prepended by the config; Sonnet writes only the tail), originals byte-identical; 8 new + 4 originals rendering (`ar/`) | | 2026-09-24 |
+| 3 | steambot | brass-glasshouse        | 8     | `steambot_brass_glasshouse_house` (verified: "HERO, first in order") | grow run in flight (`steambot_glasshouse_house/grow`, same = the house FORM, roster 80); the thin `_keeper` 14 / `_wet_air` 16 are axis pools, left for Kevin's call | | 2026-09-24 |
+| 4 | brickbot | airfield-biplanes       | 9     | `brickbot_airfield_aircraft` (verified: "THE HERO") | smoke 4/4 clean; grow run in flight (same = the civil ROLE + its signature gadget, roster 81) | | 2026-09-24 |
 | 6 | pixelbot | castle-town-gate        | 10    | ? (seeds load lazily via `scenePaths.js`) | queued |         |      |
 | 7 | pixelbot | floating-market-canal   | 9     | ?                                        | queued |         |      |
 | 8 | pixelbot | volcano-forge           | 10    | ?                                        | queued |         |      |
@@ -387,6 +391,16 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-24 · Track B · tinybot/snow-globe-world `worlds` · subject DONE (25 → 104).** The world
+  inside the globe, "A/An <place> <verb> …; …; … <one thing caught mid-act>", 50-80 words, the place's
+  own drifting particle where it is not snow. Same = the world TYPE; roster of 93 real places
+  (lighthouse headland, polder windmills, tea terraces, fjord ferry, subway platform, oil platform,
+  sluice camp, tidal causeway abbey, clock-tower square, houseboat row, aqueduct, bee yard …); 79
+  appended in one `--grow 80` (one unfilled), originals byte-identical; six of the originals carry a
+  stray de-lettering clause that the examples strip and new entries ban. 12 forced shadow renders (8
+  new + 4 originals, 12/12 carried): every new world reads as its own place in the originals'
+  register; two renders drew the whole globe on a base (the path's own failure mode, the pool never
+  names the glass). Sheet https://claude.ai/artifact/8oc82ziUopkUgYPtJrhVP4.
 - **2026-09-24 · faebot/dryad-portrait `forest_backdrop` · DONE (text-unique; visible gain modest).**
   String entries "<Forest type> behind her with painted <texture> softly out-of-focus, painted …,
   tactile <foreground> anchoring her". 26 → 196 distinct (same = forest type + first texture via the
