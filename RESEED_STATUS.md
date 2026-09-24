@@ -41,13 +41,10 @@ queue), then Track B. Per pool: config in `scripts/reseed/pools/`, dry run to th
 self-review, `--execute`, forced paired renders (8 before + 8 after on the same slots), self-review,
 commit + push, row + log here.
 
-- **HARNESS BUG found 2026-09-23 (fixed in 5e2590c1):** the forced
-  render harness handed tagged pools' entries to the picker as raw objects, so the template got
-  "[object Object]" and Sonnet invented the scene. Every hawaii-flowers and coastal-vista pair so far
-  is INVALID (0 of 16 coastal prompts carried the entry). Both are being re-rendered on the same slots
-  with the fixed harness ("before" from the pool backups via `--pool subject=<backup>`): `hw2/` and
-  `cv2/` (chains, `done` marker file in each). Next = pairs pages, self-review, correct the hawaii log
-  verdict, close out both. String pools (BloomBot, andes) were never affected.
+- **hawaii-flowers + coastal-vista: DONE.** Re-rendered on the same slots with the fixed harness
+  (5e2590c1; entry reached the prompt 16/16 each); both pass on review, verdicts in the log. Pairs:
+  hawaii https://claude.ai/artifact/WUTDVdZ782GuJuz41nVk4q, coastal
+  https://claude.ai/artifact/4vvHDN7jpPkf3KMNLy7y3Y.
 - **andes-patagonia:** pool WRITTEN (backup `~/poolbackup-earthbot-andes_patagonia-subject-*.json`),
   8 + 8 paired renders self-reviewed (16/16 prompts carried the entry; the after set spreads across
   crater lake / salt-flat mirror / sea headland / cloud-sea spires / mesas instead of mostly snow
@@ -59,8 +56,12 @@ commit + push, row + log here.
   samples, execute, before/after renders (8 slots via `--indices`), pairs, commit + push.
 - **iceland-raw:** full dry run running (`iceland_raw/full`); then **european-wilderness** (queued in
   the same chain; marker `landmark-full.done`). Same close-out per pool.
-- **coastal-vista:** pool WRITTEN + committed (abb7e7fe); config + tooling still uncommitted; renders
-  re-running (see the harness bug above). Review page https://claude.ai/artifact/5GFg7q8Jd88DCuoWLiPXjT.
+- **iceland-raw:** full dry run done (162/162 rewrites, 0 unfilled); proposal normalized (trailing
+  period), self-reviewed, next = execute, before/after renders on `ic/sample.json` slots, pairs,
+  commit + push. **european-wilderness:** full dry run running (`european_wilderness/full`).
+- **australian-outback:** pool WRITTEN (backup `~/poolbackup-earthbot-australian_outback-subject-*`),
+  before/after chain rendering to `au/` (slots 159,102,184,165,111,55,199,192; `au/done` marker).
+  Next = pairs, self-review, commit pool + docs, push.
 - **After that:** EarthBot `andes_patagonia_subject` (55%), `australian_outback_subject` (53%),
   `iceland_raw_subject` (52%), `european_wilderness_subject` (50%), `epic_sunset_subject` (48%),
   `national_parks_subject` (40%), `hidden_corner_subject` (38%), `african_landscape_subject` (36%),
@@ -76,9 +77,8 @@ commit + push, row + log here.
    down. Its 9 pools are 25 deep (MVP). Not flipped by me: a public bot posting from 25-deep pools is
    what Track B exists to prevent. It is Track B row 5; I will move it to the FRONT of Track B and scale
    it first. Say the word and I add it to `PATHS` + `SKIP_LEGACY_PER_PATH` (one edit) right after.
-2. **hawaii-flowers verdict withdrawn.** The "modest visible gain" in the log was measured on renders
-   whose prompt never carried the beach entry (harness bug, see Resume). Re-rendering; the real
-   before/after verdict lands in the log when the `hw2` pairs are in.
+2. _(resolved 2026-09-23)_ hawaii-flowers verdict was withdrawn (harness bug) and re-measured: the
+   beach entry does show through (sand colour reliably, shore form partly); see the log.
 
 **Accepted Flux limits (Kevin 2026-09-23, do not chase):** species render in their own prior colour
 (a green-titled flower line-up renders pink/white); a rich register only reads on strong-colour
@@ -92,8 +92,8 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | -------- | -------------------- | ----------------------------------------------- | ------- | ------------------------------------------------------------ | --------------------------------------------------------------------- | ---------------------------------------------------- | -------- | ------------------------------------------------ | ---------- |
 | bloombot | flower-friends       | `bloombot_flower_friends_flower_focal_cluster`  | 125     | 44 → 125 line-ups (same = 4+ shared species of 5-6, greedy)  | template defers to entry; own hero mandate + prefix + suffix + order  | 3 + 8 + 8 forced; paired 8: "absolutely beautiful"   | **DONE** | e672068b, 2ff1223d, 21c5222a, e99f8147           | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_hummingbird_cast` | 153    | 47 → 153 casts (same = focal species + behaviour + flower); 17 → 40 species, 5 → 13 behaviours, 11 → 40 flowers | template: no STRICT roster/palette, entry is the only flower source, own hero mandate + prefix + suffix | 8 before + 8 after, paired, shadow; Kevin OK'd | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
-| earthbot | hawaii-flowers       | `hawaii_flowers_subject` (object entries)        | 200     | 17 → 200 distinct beaches (same = sand type + shore form + water state); 5 → 9 sand types, 3 → 10 shore forms, 4 → 8 water states; beach-only by design | template: 2 lines that hard-coded "sand crescent + calm surf" now defer to the entry | first 8 + 8 INVALID (harness bug: entry never reached the prompt); re-rendering (`hw2`) | `pool written` (verdict pending re-render) | 60c41e57, 5d7bbf9d | 2026-09-23 |
-| earthbot | coastal-vista        | `coastal_vista_subject` (object entries)         | 200     | 200/200 distinct coasts (same = region + feature + POV opener); recipe-weighted regions | none needed (EPIC_VISTA archetype hands the entry through as the vista subject) | first 8 + 8 INVALID (same bug); re-rendering (`cv2`) | `pool written` (verdict pending re-render) | abb7e7fe | 2026-09-23 |
+| earthbot | hawaii-flowers       | `hawaii_flowers_subject` (object entries)        | 200     | 17 → 200 distinct beaches (same = sand type + shore form + water state); 5 → 9 sand types, 3 → 10 shore forms, 4 → 8 water states; beach-only by design | template: 2 lines that hard-coded "sand crescent + calm surf" now defer to the entry | first 8 + 8 invalid (harness bug), re-rendered 8 + 8 valid (16/16 carried), self-reviewed | **DONE** | 60c41e57, 5d7bbf9d, 5e2590c1 | 2026-09-23 |
+| earthbot | coastal-vista        | `coastal_vista_subject` (object entries)         | 200     | 200/200 distinct coasts (same = region + feature + POV opener); recipe-weighted regions | none needed (EPIC_VISTA archetype hands the entry through as the vista subject) | first 8 + 8 invalid (same bug), re-rendered 8 + 8 valid (16/16 carried), self-reviewed | **DONE** | abb7e7fe, 5e2590c1 | 2026-09-23 |
 | earthbot | andes-patagonia      | `andes_patagonia_subject` (string entries)       | 200     | 42 → 200 distinct (same = place + light moment); 22 → 91 places, 11 light moments; 42 originals kept | none needed | 8 + 8 paired, shadow; 16/16 prompts carried the entry; self-reviewed | **DONE** | 5e2590c1 (tool) + close-out | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 33 → 120 line-ups (same = 4+ shared species, 3 when only 3); 26 → 70 species; red 35 → 20 | same fix                                                              | same batch                                         | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
 
@@ -158,11 +158,11 @@ slot name. Tool: the same core with `--grow N` (append N new entries; the pool o
 
 | # | bot      | path                    | pools | subject pool (verify)                    | status | commits | date |
 | - | -------- | ----------------------- | ----- | ---------------------------------------- | ------ | ------- | ---- |
+| 0 | brickbot | balloon-festival        | 9     | `…_fleet`? (verify)                      | queued, **FIRST** (Kevin 2026-09-23 wants it live; scale, then he says go: Flags #1) |         |      |
 | 1 | tinybot  | snow-globe-world        | 4     | `…_worlds`                               | queued |         |      |
 | 2 | mangabot | game-center-arcade      | 7     | ?                                        | queued |         |      |
 | 3 | steambot | brass-glasshouse        | 8     | ? (thinnest: `_keeper` 14, `_wet_air` 16) | queued |         |      |
 | 4 | brickbot | airfield-biplanes       | 9     | `brickbot_airfield_aircraft`?            | queued |         |      |
-| 5 | brickbot | balloon-festival        | 9     | `…_fleet`?                               | queued |         |      |
 | 6 | pixelbot | castle-town-gate        | 10    | ? (seeds load lazily via `scenePaths.js`) | queued |         |      |
 | 7 | pixelbot | floating-market-canal   | 9     | ?                                        | queued |         |      |
 | 8 | pixelbot | volcano-forge           | 10    | ?                                        | queued |         |      |
@@ -185,6 +185,18 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-23 · earthbot/coastal-vista + hawaii-flowers · DONE (valid re-render, self-reviewed).** Same
+  8 slots each, "before" from the pool backup, fixed harness, entry reached the prompt 16/16 per path.
+  Coastal: with the bug, 0 of 16 renders were even a coast (savanna, lava field, glacier, jungle
+  waterfall); now every render is the coast its entry names: Faroese stacks, an English chalk wall,
+  Svalbard pack-ice cliffs, a Madeira volcanic stack, Australian yellow limestone stacks, two Icelandic
+  black basalt arches, a Fiordland inlet, Big Sur, a Hawaiian sea cliff. The pool decides the picture;
+  no path change was needed (EPIC_VISTA hands the entry through as the vista subject). Pairs
+  https://claude.ai/artifact/4vvHDN7jpPkf3KMNLy7y3Y. Hawaii: the beach entry shows through, sand colour
+  reliably (black / white / golden as written), shore form partly (a straight strand, a motu islet, a
+  low-tide flat, a stream mouth all read); the scattered petals and the sky drama come from the path's
+  flower / sky axes, unchanged. The earlier "modest gain" line was wrong for the reason above. Pairs
+  https://claude.ai/artifact/WUTDVdZ782GuJuz41nVk4q.
 - **2026-09-23 · earthbot/andes-patagonia `andes_patagonia_subject` · DONE (self-reviewed).** First pool
   on the shared `landmarkPool` factory (string entries, "<Place> <feature> at <light>, …, foreground …,
   midground …, distant …, <sky>"). 42 → 200 distinct (same = place + light moment), 22 → 91 real places
