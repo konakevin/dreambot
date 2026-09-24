@@ -102,15 +102,15 @@ A specific atmospheric detail adding magic-pretty texture (NOT competing with th
 
 ━━━ THE CORE AESTHETIC — ENCHANTED MULTI-FLOWER GARDEN WITH A CAST OF CUTE INSECTS ━━━
 
-The unifying mandate: a WHIMSICAL ENCHANTED garden vignette with MULTIPLE pretty hero flowers + MULTIPLE cute pleasant pollinators (3-6+ insects across the scene). PULLED-BACK framing — a wider garden-vignette view, NOT a tight macro close-up of a single bloom. Multiple flower species blooming together; multiple butterflies / bumblebees / dragonflies / ladybugs / fireflies / moths flying / landed / hovering throughout. Happy enchanted fairytale storybook energy.
+The unifying mandate: a WHIMSICAL ENCHANTED garden vignette with ONE composed cluster of pretty hero flowers + a cast of cute pleasant pollinators (3-6 insects across the scene) plainly visible. PULLED-BACK framing — a wider garden-vignette view with open air around the cluster, NOT a tight macro close-up of a single bloom and NOT a wall of flowers. The entry's flower species blooming together as one cluster; butterflies / bumblebees / dragonflies / ladybugs / fireflies / moths flying / landed / hovering around it. Happy enchanted fairytale storybook energy.
 
 THE LOOK — Studio Ghibli enchanted garden / Disney secret-garden discovery / Beatrix Potter watercolor / IG vivid-pollinator-cast / Pinterest enchanted-flower-meadow:
-- MULTIPLE HERO FLOWERS (3-6 different species blooming together as co-hero) — the FLOWER ENTRY below names the species, each one's colour, and the colour register (soft pastel OR rich clear); varied shapes, fills the scene with floral abundance
+- ONE COMPOSED CLUSTER OF HERO FLOWERS (the entry's 3-6 species growing together as co-hero) — the FLOWER ENTRY below names the species, each one's colour, and the colour register (soft pastel OR rich clear); varied shapes, one readable arrangement with a focal bloom, holding roughly half the frame
 - A CAST OF 3-6+ CUTE PLEASANT POLLINATORS — flying / landed / hovering THROUGHOUT the scene at different positions, different species, multiple sizes
 - CUTE-RENDERED INSECTS — friendly, charming, slightly storybook-charming-cute (NOT scary, NOT menacing, NOT realistic-creepy-detailed) — bigger soft eyes, fuzzier rounder bodies, friendly poses
 - PULLED-BACK GARDEN VIGNETTE — a wider intimate-garden view (NOT macro single-flower close-up — that's the closeup path)
 - WHIMSICAL ENCHANTED AMBIENT — soft magical light in the entry's colour register, magical-pretty atmosphere, optional particles, fairytale storybook feel
-- CRISP SHARP-LAYERED BACKGROUND — more blooms / soft sky / a wash in the entry's register, in crisp tack-sharp detail
+- OPEN AIR AROUND THE CLUSTER — sky / soft garden depth / a wash in the entry's register, a few distant blooms at most, so the cluster and its insects read as the subject
 
 ━━━ COLOR REGISTER — SET BY THE FLOWER ENTRY ━━━
 
@@ -122,7 +122,7 @@ One intentional palette per frame, led by the entry's dominant colour family (it
 
 ━━━ HARD MANDATES (every render) ━━━
 
-1. **MULTIPLE HERO FLOWERS** — the flower entry's 3-6 species blooming together as co-hero, exactly the species and colours the entry names. Mix shapes for whimsical floral abundance. NEVER a single hero — the scene is FULL OF FLOWERS.
+1. **ONE COMPOSED CLUSTER OF HERO FLOWERS** — the flower entry's 3-6 species growing together as co-hero, exactly the species and colours the entry names, arranged as one cohesive cluster with a focal bloom. Composition over density: the cluster holds roughly half the frame with open air around it, never a wall of flowers edge to edge.
 
 2. **A CAST OF 3-6+ CUTE POLLINATORS WITH A FOCAL HERO** — describe MULTIPLE pleasant insects at different positions and actions. CRITICAL — ONE of the cast is the FOCAL POLLINATOR rendered FRONT-AND-CENTER, larger and more prominent (sharp focus + colour contrasting against the flowers behind it + crisp wing-pattern / fuzzy-body detail), so the viewer's eye lands on it first. The supporting 2-4+ insects fill the scene with life — smaller, in midground, hovering in the background, perched on leaves — without competing with the focal hero.
 
@@ -132,7 +132,7 @@ One intentional palette per frame, led by the entry's dominant colour family (it
 
 5. **PULLED-BACK GARDEN VIGNETTE — NOT MACRO** — the framing is a wider intimate-garden view where you can see multiple flower clusters and multiple insects all in the same scene. NOT extreme macro (that's closeup's territory) — pulled back enough to see a full whimsical multi-flower multi-insect tableau.
 
-6. **CRISP SHARP-LAYERED BACKGROUND** — crisp floral mass / sky / pastel wash behind, tack-sharp detail.
+6. **OPEN, SIMPLE BACKDROP** — sky / soft garden depth / a wash in the entry's register behind the cluster, a few distant blooms at most, crisp detail.
 
 7. **ENCHANTED HAPPY MOOD** — fairytale storybook joy. Soft magical light, in the entry's register, bathing everything. Happy, peaceful, welcoming, magical-pretty. NEVER moody / dark / dramatic / harsh / scary.
 
@@ -154,10 +154,10 @@ The insects are CUTE-rendered (charming storybook-friendly, NOT realistic-creepy
 ${particlesSection}━━━ COMPOSITION CRAFT — WHIMSICAL ENCHANTED GARDEN VIGNETTE ━━━
 
   • PULLED-BACK GARDEN VIEW — wider intimate-garden vignette, NOT a tight macro close-up
-  • FOREGROUND: the entry's 3-6 flower species clustered together as co-hero, filling the lower 50-65% of frame
-  • MIDDLE/AROUND: 3-6+ cute pollinators positioned at different spots in the scene (some on flowers, some hovering, some flying in the background space)
-  • BACKGROUND: crisp sharp layers of more blooms / soft sky / a wash in the entry's register, in tack-sharp detail
-  • DEPTH: foreground-sharp flowers + sharp insects in middle / crisp sharp-layered background
+  • THE CLUSTER: the entry's 3-6 flower species growing together as ONE composed cluster with a focal bloom, holding roughly half the frame
+  • THE CAST: the focal pollinator large, front-and-center, on or beside the focal bloom; 2-5 more cute pollinators placed around the cluster where the eye can find them (on flowers, hovering, flying in the open air)
+  • AROUND IT: open air — sky / soft garden depth / a wash in the entry's register, a few distant blooms at most
+  • DEPTH: cluster and insects sharp / a simple open backdrop behind
   • COLOR: the entry's register throughout — foreground flowers in the entry's own colours, background layers lighter in the same register
   • MOOD: enchanted happy fairytale storybook — whimsical, peaceful, welcoming, magical-pretty
 
@@ -173,9 +173,9 @@ MULTI flowers + MULTI cute insects (not single-flower-single-insect, not realist
 ${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
-[WHIMSICAL ENCHANTED garden vignette PULLED-BACK composition with the entry's 3-6 flower species blooming together, each named with its colour, filling lower 50-65% of frame, then the entry's colour register stated in the prompt as "soft pastel colours throughout" or "rich clear saturated colours throughout"], [the 3-6+ cute pollinator cast at different positions throughout the scene — landed / hovering / flying / perched — explicit species + positions], [supporting crisp sharp-layered background of more blooms / sky-wash in the entry's register]${magical_particles ? ', [magical particles drifting in the air]' : ''}, [soft enchanted magical light in the entry's register bathing the scene], [storybook-cute insect rendering — friendly charming NOT realistic-creepy], [shallow DOF, tack-sharp detail, fairytale-storybook aesthetic — Studio Ghibli / Disney secret-garden / IG vivid-magical-hour]
+[WHIMSICAL ENCHANTED garden vignette, PULLED-BACK: the FOCAL POLLINATOR named first — its species, large, cute, front-and-center on or beside the focal bloom — of ONE composed cluster of the entry's 3-6 flower species, each named with its colour, holding roughly half the frame, then the entry's colour register stated in the prompt as "soft pastel colours throughout" or "rich clear saturated colours throughout"], [the rest of the cute pollinator cast placed around the cluster — landed / hovering / flying — explicit species + positions], [open air around the cluster: sky / soft garden depth / a wash in the entry's register, a few distant blooms at most]${magical_particles ? ', [magical particles drifting in the air]' : ''}, [soft enchanted magical light in the entry's register bathing the scene], [storybook-cute insect rendering — friendly charming NOT realistic-creepy], [shallow DOF, crisp detail, fairytale-storybook aesthetic — Studio Ghibli / Disney secret-garden / IG vivid-magical-hour]
 
-CRITICAL — MULTIPLE pretty flowers + MULTIPLE cute storybook insects in a PULLED-BACK enchanted-garden VIGNETTE. Happy welcoming whimsical mood. CUTE not menacing insects. ABSOLUTE HARD BAN ON HUMANS.
+CRITICAL — ONE composed cluster of the entry's flowers + a plainly visible cast of cute storybook insects, open air around them, in a PULLED-BACK enchanted-garden VIGNETTE. Happy welcoming whimsical mood. CUTE not menacing insects. ABSOLUTE HARD BAN ON HUMANS.
 
 Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },

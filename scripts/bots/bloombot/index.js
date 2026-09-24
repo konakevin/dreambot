@@ -100,6 +100,12 @@ module.exports = {
   // of more blooms" and "the sky clean and clear", which fight bare rock and a
   // storm-lit sky respectively.
   promptSuffixByPath: {
+    // flower-friends: the bot suffix's "depth built from receding layers of more
+    // blooms" is a second frame-packing instruction; this path composes ONE
+    // cluster with open air around it (2026-09-23, Kevin: the path smothered
+    // its own subject pool). Species-colour faithfulness + text suppressor kept.
+    'flower-friends':
+      'render every named species as that exact species in its named color, no text, no words, no watermarks',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -125,6 +131,13 @@ module.exports = {
       'a single colossal ancient flowering tree, towering high in full bloom against open sky',
     'jack-and-the-giant-flower':
       'a single colossal flower on a giant flowering vine-stem, towering high against open sky',
+    // flower-friends: the bot-wide prefix ("abundant blooms filling the entire
+    // frame edge-to-edge", "dense overflowing bloom-mass") rendered every entry of
+    // the repaired subject pool as the same wall of flowers, with the co-hero
+    // insects never visible (2026-09-23, 11 forced renders). Short, positive,
+    // composition-first anchor; the flowers and insects come from the scene.
+    'flower-friends':
+      'enchanted storybook garden vignette, one composed cluster of flowers with cute pollinators, open air around it',
   },
 
   // cleanMediumByModel: gpt-image-2 AND nano-banana both render the bot-only
@@ -144,8 +157,7 @@ module.exports = {
   // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
   // both now banned bot-wide (FLUX-only).
   cleanMediumByModel: {},
-  mediumByPath: {
-  },
+  mediumByPath: {},
 
   mediumStyles: {
     // alpine-wildflower-meadow: LOAD-BEARING, not cosmetic. The bot-wide
@@ -330,8 +342,7 @@ module.exports = {
     // (b) the 1-2 stochastic channels fall through to sensoryAnchors' built-in
     //     DEFAULT_POOLS, which are written for a FIGURE ("the press of jewelry at
     //     the throat", "boots sinking into soft ground") on a bot that bans people.
-    poolsByChannelByPath: {
-    },
+    poolsByChannelByPath: {},
     pathContext: {
       landscape: 'scene',
       closeup: 'scene',
@@ -504,18 +515,27 @@ This is a NIGHT garden lit ONLY by the moon and stars. Abundant PALE, white, lum
     // — open sky + a dwarfed root world, scale via CONTRAST not frame-packing.
     const GREAT_TREE_MANDATE = `━━━ BLOOMBOT BAR — ONE COLOSSAL FLOWERING TREE (NON-NEGOTIABLE, READ FIRST) ━━━
 This is a SINGLE enormous ancient flowering tree (a giant cherry / wisteria / magnolia / jacaranda) in full bloom, as monumental as a cathedral, dominating the frame through SCALE. Its blooming crown towers high; the BLOOMS (not leaves) carry the color across the whole canopy. REQUIRED: OPEN SKY around and above the crown, and a small, normal-scale, natural world at its base (a tiny meadow / pool / stream / bluebell carpet) so the tree reads GIANT by contrast. It is ONE living, glorious, healthy flowering tree — NEVER dead, bare, spooky, gnarled-menacing, or winter. NOT a frame-filling wall of flowers, NOT a bloom-tunnel, NOT a macro — there MUST be open sky and a tiny dwarfed world. NEVER a person, NEVER a building or treehouse. Crisp, painterly, awe-inducing, with real negative space and open sky.`;
+    // flower-friends: COMPOSITION OVER DENSITY, same family as hanging-flowers.
+    // Under LUSH_HERO every entry of the repaired subject pool rendered as the
+    // same edge-to-edge multicolour wall and the co-hero insects appeared in 1 of
+    // 11 renders (2026-09-23). This path is one composed cluster of the entry's
+    // flowers with the pollinator cast visible and open air around it.
+    const FLOWER_FRIENDS_MANDATE = `━━━ BLOOMBOT BAR — ONE COMPOSED FLOWER CLUSTER WITH ITS POLLINATORS (READ FIRST) ━━━
+This is a COMPOSED storybook garden vignette, not a wall of flowers. The hero is ONE cohesive cluster of the flower entry's species, growing together as a florist would arrange them: a clear focal bloom, the others gathered around it in a readable shape, holding roughly half the frame. Around the cluster there is OPEN AIR: sky, soft garden depth, a few distant blooms at most, so the cluster reads as a designed centrepiece with breathing room. The pollinator cast is the CO-HERO and must be plainly visible: the focal insect large and front-and-center on or beside the focal bloom, the others placed where the eye can find them. Every flower is one of the entry's species in the entry's colour, in the entry's colour register. Composition over density: restrained, intentional, gorgeous, like a storybook illustration with a subject.`;
     const heroMandate =
       path === 'jack-and-the-giant-flower'
         ? GIANT_FLOWER_MANDATE
-        : path === 'hanging-flowers'
-          ? HANGING_FLOWERS_MANDATE
-          : path === 'water-garden'
-            ? WATER_GARDEN_MANDATE
-            : path === 'moon-garden'
-              ? MOON_GARDEN_MANDATE
-              : path === 'great-blossom-tree'
-                ? GREAT_TREE_MANDATE
-                : LUSH_HERO_MANDATE;
+        : path === 'flower-friends'
+          ? FLOWER_FRIENDS_MANDATE
+          : path === 'hanging-flowers'
+            ? HANGING_FLOWERS_MANDATE
+            : path === 'water-garden'
+              ? WATER_GARDEN_MANDATE
+              : path === 'moon-garden'
+                ? MOON_GARDEN_MANDATE
+                : path === 'great-blossom-tree'
+                  ? GREAT_TREE_MANDATE
+                  : LUSH_HERO_MANDATE;
     // Bot-wide "Medium Looks" override — the rolled look register sets the
     // rendering medium for THIS render. Leads the brief so Sonnet opens its
     // Flux prompt with these tokens (the medium is the leading CLIP anchor).
