@@ -144,9 +144,13 @@ module.exports = {
   // TinyBot had none of these four keys; they exist solely for this path, and every
   // value is carried over verbatim rather than re-derived.
   modelByPath: {
-    // ultra was measured OUT on ToyBot: it frames tighter and loses the cropped-glass
-    // arc that IS this path.
-    'snow-globe-world': { 'black-forest-labs/flux-1.1-pro': 100 },
+    // 50/50 pro / ultra (Kevin 2026-09-24, the fleet default for new paths). Ultra had been
+    // measured OUT on ToyBot for framing tighter and losing the cropped-glass arc that IS
+    // this path; a 12-render ultra probe on TinyBot's wrapper kept the arc in ~10 of 12 with
+    // no signatures and no safety flags, Kevin looked at them beside 12 pro renders and
+    // called ultra fine. Rollback = { 'black-forest-labs/flux-1.1-pro': 100 } plus the
+    // path's entry in DOCUMENTED_PRO_ONLY (__tests__/lib/proOnlyPinGuard.test.ts).
+    'snow-globe-world': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
   },
   mediumByPath: { 'snow-globe-world': 'snow_globe_diorama' },
   promptPrefixByMedium: {

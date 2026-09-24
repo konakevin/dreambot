@@ -29,9 +29,10 @@ const DOCUMENTED_PRO_ONLY: Record<string, string> = {
   'faebot/acorn-boat-regatta': 'ultra signed 1 of 3 round-0 renders (readable text = rubric fail)',
   'faebot/star-charting':
     'lighting-condition path (playbook lesson 6) and ultra signs; rolled back from flux-2-pro 2026-09-24',
-  'steambot/brass-glasshouse': 'ultra frames tighter and crops the glazed dome that is the subject',
-  'tinybot/snow-globe-world':
-    'ultra loses the cropped-glass arc that is the path (measured on ToyBot)',
+  'steambot/brass-glasshouse':
+    'ultra trips the safety filter on this path (8 flags in 12 renders vs 0 in 30 on pro, 2026-09-24)',
+  // tinybot/snow-globe-world left this list 2026-09-24: its ultra probe kept the glass arc and
+  // Kevin approved the renders, so it rolls 50/50 like the rest of the fleet.
 };
 
 type ModelPin = string | string[] | Record<string, number>;

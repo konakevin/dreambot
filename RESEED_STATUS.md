@@ -339,8 +339,9 @@ commit + push, row + log here.
    star-charting 8 of 12 (both stay pro-only); brass-glasshouse delivered 12/12 with the vault readable
    but ultra tripped the safety filter on 8 attempts (pro: 0 in 30) so it stays pro-only;
    snow-globe-world delivered 12/12 clean with the glass arc in ~10 of 12, so its ToyBot-era reason did
-   not reproduce and it is Kevin's call to flip to 50/50. Study page (renders + the 480-path inventory)
-   linked in chat 2026-09-24.
+   not reproduce; Kevin looked at the 12 ultra renders beside 12 pro renders ("ultra looks fine to me")
+   and the pin was flipped to the 50/50 roll the same evening. Three pro-only pins remain (regatta,
+   star-charting, brass-glasshouse). Study page (renders + the 480-path inventory) linked in chat.
 
 **Accepted Flux limits (Kevin 2026-09-23, do not chase):** species render in their own prior colour
 (a green-titled flower line-up renders pink/white); a rich register only reads on strong-colour
