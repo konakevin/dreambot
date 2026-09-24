@@ -207,6 +207,11 @@ commit + push, row + log here.
   trunks, a waterfall and a mossy trunk read; rowan berries, a cedar grove and a beech cathedral did
   not. What reads after is new to the path (the old 15 types had none of those). Pairs
   https://claude.ai/artifact/Bxa2xLsVi2cQdnyF5yyC1T.
+- **PROGRAM COMPLETE 2026-09-24 late.** Track A (every subject pool in the queue) and Track B (all 18
+  shadow paths, 20 subject pools grown from MVP-25 to 100+ distinct, originals byte-identical, nothing
+  promoted) are DONE and committed, each with reviewed forced shadow renders and a sheet link in the
+  log. Open items are only the Flags for Kevin (1–5) and the scaling doc's §9 questions (the axis
+  pools of the Track B paths). Nothing is in flight.
 - **Track B state 2026-09-24 (read the Track B table for per-path status).** DONE and committed:
   balloon fleet, snow-globe worlds, arcade room, airfield aircraft, glasshouse house. WRITTEN, renders
   in flight: PixelBot gatehouse (`pg/`), canal_town (`pc/`), forge (`pf/`). Grow runs in flight or
@@ -400,7 +405,7 @@ slot name. Tool: the same core with `--grow N` (append N new entries; the pool o
 | 14 | dinobot | courtship-display       | 5     | `dinobot_courtship_act` (verified: "the hero behaviour") | **subject DONE (real visible gain)**: 25 → 100 entries, 100 distinct (same = body plan + the act; 12 new body plans, 31 new acts), originals byte-identical; 12 forced shadow renders, 12/12 carried: every new act reads as its own documentary moment (a spinosaur slapping the shallows, a pachycephalosaur stacking pebbles, an iguanodont nudging an egg-shaped stone with a partner watching, a protoceratops dragging a flowering branch inside its scraped ring under storm light, a raptor with one arm-fan raised like a flag) and the new body plans render as dinosaurs; two anatomy misses (a protoceratops given a raptor's tail club; a therizinosaur with a theropod head) are Flux, the originals' sail-backs do the same; still shadow | (close-out) | 2026-09-24 |
 | 15 | dinobot | den-and-burrow          | 4     | `dinobot_den_chamber` (verified: "the hero") | **subject DONE (real visible gain)**: 25 → 105 in two grows, 94 distinct (same = chamber type + the light source; 15 new types, 15 new lights; the originals themselves held only 14 distinct pairs), originals byte-identical; 12 forced shadow renders, 12/12 carried: every new chamber reads as its own space with its own light (a hollow-log den with a storm flickering white through the mouth, a lava-tube den with glow-worm starlight, a cave behind a waterfall, a sun-cracked-mud chamber with twin light shafts, a reed-bed tunnel, an ice-bank den with a diffuse blue glow, a boulder-gap den on shed feathers); one render (the boulder gap) drew stone faces in the roof, Flux's own invention; still shadow | (close-out) | 2026-09-24 |
 | 16 | dinobot | desert-dunes            | 5     | `dinobot_desert_dunes_biome` (the path's own pool; the other four are the SHARED paleo pools, untouched) | **subject DONE (real visible gain)**: 25 → 101 in three grows, 98 distinct (same = landform + the paleo marker; 20 new landforms, 15 new markers), originals byte-identical; 12 forced shadow renders, 12/12 carried: the new landforms read (a white salt flat with ammonites in its crust, a yardang field with a fossil skull, a banded mesa above the dunes, a sand-buried dead forest under a storm, a cracked clay pan cupped in dune arms); the paleo marker reads in about half; the shared megaflora / phenomenon axes still add their own objects (a mushroom stand, ring clouds), which is the path, not the pool; still shadow | (close-out) | 2026-09-24 |
-| 17 | dinobot | snowline-forest         | 5     | `dinobot_snowline_forest_biome` (the path's own pool; `_flora` is its second bespoke pool, the other three are SHARED, untouched) | pool WRITTEN 25 → 108 in two grows (same = landform + the one detail, the five skyline refrains kept; 19 new landforms, 15 new details), originals byte-identical; 12 renders chained (`dsn/`) | | 2026-09-24 |
+| 17 | dinobot | snowline-forest         | 5     | `dinobot_snowline_forest_biome` (the path's own pool; `_flora` is its second bespoke pool, the other three are SHARED, untouched) | **subject DONE (real visible gain)**: 25 → 108 in two grows, 106 distinct (same = landform + the one detail, the five skyline refrains kept; 19 new landforms, 15 new details), originals byte-identical; 12 forced shadow renders, 12/12 carried: the new landforms read (a glacier tongue with a sauropod fording its meltwater, a burned stand of black snags on a frozen river, a rime-fogged stand with ice-shattered slabs, a moraine below a glacier snout, a snow bridge arching over a melt-stream, a cirque under an ochre horizon); the refrain's bare ridgelines hold; still shadow | (close-out) | 2026-09-24 |
 | 18 | dinobot | undergrowth-scale       | 4     | `dinobot_undergrowth_floor` AND `dinobot_undergrowth_resident` (the floor-as-landscape is the path's identity, the resident is what the picture is of; both grown) | **floor DONE (real visible gain where the feature is a strong noun)**: 25 → 104 in two grows, 103 distinct (same = floor feature + the small detail; 24 new features, 20 new details), originals byte-identical; 12 forced shadow renders, 10/12 carried (two Sonnet drops flagged): a split seed pod as a canyon, a hollow rotten log as an amber-fibred cave, and an undercut bank's root-hair veil (with a snail and the giant's legs above) read outright; a liverwort marsh reads partly; a flake of stone standing as a cliff did not read in either of its two renders (the resident takes the frame). **resident DONE (real visible gain)**: 23 → 108 in two grows, 101 distinct (same = body plan + the action; 12 new plans, 27 new actions), originals byte-identical; 12 forced shadow renders, 12/12 carried: the new residents read as their own animals in their own moments (a hadrosaur hatchling mid-leap over a puddle, a four-winged glider balancing on a mushroom cap, another with its tail ribbons in a bird-like pose, a juvenile theropod under a leaf with an arriving beetle, a pair sunning under a stump, a spined armoured juvenile at a puddle under the giant's legs); two of the new plans rendered as plain birds (the ground-nesting bird-like plan reads as a bird, expected); still shadow | (close-out) | 2026-09-24 |
 
 Order is the doc's suggested order (bespoke and unambiguous first, DinoBot last because of the shared
@@ -411,6 +416,19 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-24 · Track B · dinobot/snowline-forest `biome` · subject DONE (25 → 108; real visible
+  gain).** The high conifer forest at the snowline: "<Mesozoic landform> <light>, <what wind and rime
+  do to the araucaria>, <snow against bare rock>, <one detail>, <the skyline refrain>", no full stop.
+  Same = landform + detail; 19 new landforms (frozen waterfall, wind-scoured plateau, moraine ridge,
+  glacier tongue, rime-fog stand, hot-spring clearing, cornice edge, scree slope, krummholz mat,
+  ice-crusted lake, snow arch, sun-cupped snowfield, rock spire, burned snowline, wind gap, tarn
+  outflow, frost-heave meadow, ice cave mouth, ridge shoulder) and 15 new details (spindrift, blue
+  ice glaze, hoar-frost feathers, a crevasse line, alpenglow, frost-cracked rock …); the detail is
+  parsed as the LAST one named because rime, melt and cloud are landform flavour in the originals; 83
+  appended in two grows, originals byte-identical. 12 forced shadow renders, 12/12 carried, every
+  new landform reads. Sheet https://claude.ai/artifact/Eu3meQLSGmwqfwCKLzvnDW. **Track B is closed: all 18
+  shadow paths have their subject pool at 100+ distinct entries** (20 pools including undergrowth's
+  two and the fleet), every original byte-identical, every path still shadow.
 - **2026-09-24 · Track B · dinobot/desert-dunes `biome` · subject DONE (25 → 101; real visible gain).**
   The paleo desert vista: "<landform> <light>, <height in feet>, <texture>, <paleo marker>, <far
   distance in haze>", no full stop. Same = landform + marker; 20 new landforms (yardang field, salt
