@@ -191,6 +191,23 @@ actually produces (assigned value first, other-axis words later) before the run,
 The tell in a log: dozens of "differs from the assignment (missing X; extra Y)" where Y is a word from
 the assigned value's own description.
 
+**Track B grow configs, what worked across eleven paths (2026-09-24).** Same = one or two axes read
+from the entry's OWN title or opener ("THE <TYPE> AND THE <MADE THING>:", "<HALL> WITH THE <CHARM>:",
+the first hull named, the civil role word); the roster for new entries is the originals' kinds as
+RULES ONLY (`original: true`, never assigned) plus 40-90 new kinds each with its own one-line words,
+so Sonnet words the slot and never invents the varying element. A pool whose every entry opens with
+a fixed composition LOCK (the arcade room) keeps the lock in the config: `examples()` strips it,
+`normalize()` prepends it, `formatRe`/`mechanical` test the tail. Before the smoke, run
+`mechanical()` over the ORIGINALS with their own parse as the assignment: every check the originals
+fail is a check to drop (they lacked a "far distance", a semicolon, a stance word); and run it over
+the roster's own words assembled into a candidate: every fail there is a regex that does not match
+its own key phrase or a banned word inside the roster (a "sunset" in a light, "nothing" in an
+attitude). A brief that gives a word range gets "COUNT THEM; over N is cut" or Sonnet drifts 20%
+long. Render sheets for grow runs (no before/after pair): `node scripts/reseed/sheet-page.js <dir>
+<out.html> --title T`. Replicate's safety filter on flux-2-pro (E005) can fail a third of a harness
+batch on a harmless path (arcade soft toys); it hits originals too, so it is a path flag, not a pool
+verdict.
+
 **A retry batch of look-alike slots comes back reordered.** Sonnet answers a JSON array by POSITION;
 a `--resume` batch of "3 rogue planets + 3 phosphorescent fogs" came back swapped eight times running
 and all six stayed unfilled. Run a resume with `RESEED_BATCH=1` (env override of `batchSize`).

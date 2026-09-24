@@ -207,6 +207,18 @@ commit + push, row + log here.
   trunks, a waterfall and a mossy trunk read; rowan berries, a cedar grove and a beech cathedral did
   not. What reads after is new to the path (the old 15 types had none of those). Pairs
   https://claude.ai/artifact/Bxa2xLsVi2cQdnyF5yyC1T.
+- **Track B state 2026-09-24 (read the Track B table for per-path status).** DONE and committed:
+  balloon fleet, snow-globe worlds, arcade room, airfield aircraft, glasshouse house. WRITTEN, renders
+  in flight: PixelBot gatehouse (`pg/`), canal_town (`pc/`), forge (`pf/`). Grow runs in flight or
+  chained: regatta fleet, starchart astronomer, apothecary room, undergrowth floor, then den chamber,
+  courtship act, amber grove. Smokes running: desert biome, snowline biome, undergrowth resident.
+  Per pool close-out = review the grow report (sameness + voice), `--grow N --execute --from`, verify
+  the originals byte-identical, 12 forced shadow renders (8 new + 4 originals) via
+  `render-forced-entries.js --slot <axis key> --pool <axis key>=<seeds json>`, `sheet-page.js`,
+  review, tracker row + log, commit the pool. Scene-path axis keys: PixelBot `ctg_gatehouse` /
+  `fmc_canal_town` / `forge_forge`; FaeBot `regatta_boat_fleet` / `apothecary_room` /
+  `starchart_astronomer`; DinoBot `amber_grove` / `display_act` / `den_chamber` / `biome` (desert-dunes
+  and snowline-forest both, archetype slot maps) / `undergrowth_floor` / `undergrowth_resident`.
 - **Track B, Track A closed.** Every Track A queue pool is DONE (see the status table). Track B now:
   **snow-globe `worlds` DONE** (25 → 104; 12/12 shadow renders reviewed, sheet
   https://claude.ai/artifact/8oc82ziUopkUgYPtJrhVP4; the pool never names the glass, and two of the
@@ -273,7 +285,8 @@ commit + push, row + log here.
    entries alike). The path is locked to flux-2-pro; the prompts are soft toys behind glass. The pool
    is not the cause (the failures hit original entries too). If the path goes live, expect ~40% of
    its posts to fail at render until the model lock or the prompt's fur-and-glass wording is looked
-   at. Not touched by me.
+   at. Not touched by me. **PixelBot castle-town-gate hit it too** (3 of 12, its scene model set),
+   so this is a Replicate-side filter on the scene models, not one bot's wording.
 
 **Accepted Flux limits (Kevin 2026-09-23, do not chase):** species render in their own prior colour
 (a green-titled flower line-up renders pink/white); a rich register only reads on strong-colour
@@ -376,19 +389,19 @@ slot name. Tool: the same core with `--grow N` (append N new entries; the pool o
 | 2 | mangabot | game-center-arcade      | 7     | `game_center_arcade_room` (verified: "the room is the hero subject") | **subject DONE**: 25 → 104 entries, 103 distinct room features (the composition lock is prepended by the config; Sonnet writes only the tail), originals byte-identical; 12 forced shadow renders, 7 rendered (5 failed on Replicate's safety filter, flux-2-pro E005, originals and new alike, see Flag 5); of the 7, the room feature reads in the originals' way (a stair rail, a prize shelf, a capsule landing; a stool with a coat, a glass door, a capsule pile) and the machines and glass wall carry every frame; still shadow | (close-out) | 2026-09-24 |
 | 3 | steambot | brass-glasshouse        | 8     | `steambot_brass_glasshouse_house` (verified: "HERO, first in order") | **subject DONE (visible gain modest)**: 25 → 104 entries, 104 distinct house FORMS (viaduct, orangery, tufa fernery, ravine barrel, courtyard, turntable floor …), originals byte-identical; 8 new + 4 originals shadow-rendered (10/12 carried, two Sonnet drops flagged): the structure reads in about half (a roofed courtyard with its stone windows and pool, a great dome, a lower level seen through a glass floor, a wave-roofed hall); the rest are "a Victorian glasshouse" with the planting and machinery axes carrying the picture. The thin `_keeper` 14 / `_wet_air` 16 are axis pools, left for Kevin's call (doc §9 q1); still shadow | (close-out) | 2026-09-24 |
 | 4 | brickbot | airfield-biplanes       | 9     | `brickbot_airfield_aircraft` (verified: "THE HERO") | **subject DONE**: 25 → 105 entries, 105 distinct civil roles (each with its own LEGO gadget; silhouette, colour, engine, marking and emblem spread as flavour), originals byte-identical; 8 new + 4 originals shadow-rendered (12/12 carried): every new aircraft is a brick biplane in its written colour (a scarlet floatplane, an olive island-hopper with crates, a sand crop-sprayer mid-spray, a hot-pink biplane over a tropical town, a cream-and-crimson estate plane with a kite); one ORIGINAL (the single-wing racer) rendered as a car, the path's own known drift; still shadow | (close-out) | 2026-09-24 |
-| 6 | pixelbot | castle-town-gate        | 10    | ? (seeds load lazily via `scenePaths.js`) | queued |         |      |
-| 7 | pixelbot | floating-market-canal   | 9     | ?                                        | queued |         |      |
-| 8 | pixelbot | volcano-forge           | 10    | ?                                        | queued |         |      |
-| 9 | pixelbot | cozy-farming-life-sim   | 4     | already at production depth: verify only | queued |         |      |
-| 10 | faebot  | acorn-boat-regatta      | 8     | `faebot_regatta_boat_fleet`?             | queued |         |      |
-| 11 | faebot  | mushroom-apothecary     | 8     | ?                                        | queued |         |      |
-| 12 | faebot  | star-charting           | 8     | ?                                        | queued |         |      |
-| 13 | dinobot | amber-forest            | 6     | `dinobot_amber_resident`?                | queued |         |      |
-| 14 | dinobot | courtship-display       | 5     | ?                                        | queued |         |      |
-| 15 | dinobot | den-and-burrow          | 4     | ?                                        | queued |         |      |
-| 16 | dinobot | desert-dunes            | 5     | ?                                        | queued |         |      |
-| 17 | dinobot | snowline-forest         | 5     | ?                                        | queued |         |      |
-| 18 | dinobot | undergrowth-scale       | 4     | `dinobot_undergrowth_resident`? (23)     | queued |         |      |
+| 6 | pixelbot | castle-town-gate        | 10    | `pixelbot_castle_town_gate_gatehouse` (verified: "the hero is THE GATEHOUSE MASS") | **subject DONE (real visible gain)**: 25 → 104 entries, 104 distinct (same = gate type + the one made thing; 20 types × 59 charms), originals byte-identical; 12 forced shadow renders, 9 rendered (3 failed on Replicate's safety filter, see Flag 5, PixelBot too), 9/9 carried: every new gatehouse reads as written (a terrace gate with a hanging garden on its top and a rain barrel, a market-arch gate with awnings and clay jars, a twin-tower gate with a dovecote and drying fish, a market arch under a carved green-man head with its bell); still shadow | (close-out) | 2026-09-24 |
+| 7 | pixelbot | floating-market-canal   | 9     | `pixelbot_floating_market_canal_canal_town` (verified: "the hero is the CANAL MARKET ITSELF: the town's defining built mass") | pool WRITTEN: 25 → 104 (same = built mass + the one thing; 22 masses × 60 things), originals byte-identical; renders queued (`pc/`) | | 2026-09-24 |
+| 8 | pixelbot | volcano-forge           | 10    | `pixelbot_volcano_forge_forge` (verified: "the hero is the FORGE'S HEART") | pool WRITTEN: 25 → 105 (same = hall type + the one magical charm; 20 halls × 50 charms), originals byte-identical; renders queued (`pf/`) | | 2026-09-24 |
+| 9 | pixelbot | cozy-farming-life-sim   | 4     | already at production depth: verify only | **verified by count** (195 / 200 / 200 / 200); not reseeded, it is a public-depth path already and was never MVP-25 | | 2026-09-24 |
+| 10 | faebot  | acorn-boat-regatta      | 8     | `faebot_regatta_boat_fleet` (verified: "HERO, leads") | grow run in flight (same = the odd thing + the lead hull; 61 new charms × 27 hull kinds) | | 2026-09-24 |
+| 11 | faebot  | mushroom-apothecary     | 8     | `faebot_mushroom_apothecary_room` (verified: "The ROOM is the hero") | grow run in flight (same = room shape + the one odd feature; 26 shapes × 30 new features) | | 2026-09-24 |
+| 12 | faebot  | star-charting           | 8     | `faebot_starchart_astronomer` (verified: "THE FAE (painted large and near — the hero)") | grow run in flight (same = wing kind + outer garment + build; 10 × 16 × 12) | | 2026-09-24 |
+| 13 | dinobot | amber-forest            | 6     | `dinobot_amber_grove` (verified: the path's hero is "a MATERIAL and its OPTICS", the resident is gated) | grow run chained (same = grove form + the resin feature; 30 forms × 45 features) | | 2026-09-24 |
+| 14 | dinobot | courtship-display       | 5     | `dinobot_courtship_act` (verified: "the hero behaviour") | grow run chained (same = body plan + the act; 18 plans × 31 new acts) | | 2026-09-24 |
+| 15 | dinobot | den-and-burrow          | 4     | `dinobot_den_chamber` (verified: "the hero") | grow run chained (same = chamber type + the light source; 25 types × 26 lights) | | 2026-09-24 |
+| 16 | dinobot | desert-dunes            | 5     | `dinobot_desert_dunes_biome` (the path's own pool; the other four are the SHARED paleo pools, untouched) | smoke running (same = landform + the paleo marker; 40 landforms × 20 markers) | | 2026-09-24 |
+| 17 | dinobot | snowline-forest         | 5     | `dinobot_snowline_forest_biome` (the path's own pool; `_flora` is its second bespoke pool, the other three are SHARED, untouched) | smoke running (same = landform + the one detail, skyline refrain kept; 35 landforms × 25 details) | | 2026-09-24 |
+| 18 | dinobot | undergrowth-scale       | 4     | `dinobot_undergrowth_floor` AND `dinobot_undergrowth_resident` (the floor-as-landscape is the path's identity, the resident is what the picture is of; both grown) | floor grow in flight (same = floor feature + the small detail); resident smoke running (same = body plan + the action) | | 2026-09-24 |
 
 Order is the doc's suggested order (bespoke and unambiguous first, DinoBot last because of the shared
 pools). Open questions for Kevin are in that doc §9 (axis pools too or subject only; is 100 the floor
@@ -398,6 +411,14 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-24 · Track B · pixelbot/castle-town-gate `gatehouse` · subject DONE (25 → 104; real visible
+  gain).** The hero mass: "THE <TYPE> AND THE <MADE THING>: <mass turned three-quarters>, <the wall out
+  of frame both ways>, <the ground band>, <a dressing>, and <the made thing>", pixel register, the
+  path's own laws kept (no heraldry, no jargon, a carved animal only as a head above the arch). Same
+  = type + made thing; 12 new types (twin-tower, brick gable, bridge-tower, rock tunnel, stair, roofed,
+  lantern tower, market arch, terrace, covered bridge, chapel, mill) and 41 new made things; 79
+  appended, one unfilled, originals byte-identical. 12 forced shadow renders, 9 rendered (3 on the
+  safety filter), 9/9 carried and every new one reads. Sheet https://claude.ai/artifact/VP6rTZnMhLpm8wMVCgvMeH.
 - **2026-09-24 · Track B · steambot/brass-glasshouse `house` · subject DONE (25 → 104; visible gain
   modest).** The glasshouse STRUCTURE: form, the enclosing glass named where the frame crops it, the
   way up, the vantage last. Same = the house form; roster of 80 (twin naves, viaduct house, rotunda,
