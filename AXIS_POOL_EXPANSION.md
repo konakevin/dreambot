@@ -59,7 +59,7 @@ this file in the same commit.
 
 <!-- CHECKLIST:START -->
 - [x] **brickbot/balloon-festival** — 8/8 pools at ≥100 and clean; smoke 1/3 delivered, 2 failed; 2026-09-24 19:56 UTC
-- [ ] **brickbot/airfield-biplanes** — 8 pools
+- [x] **brickbot/airfield-biplanes** — 8/8 pools at ≥100 and clean; smoke 0/3 delivered, 3 failed; 2026-09-24 20:19 UTC
 - [ ] **tinybot/snow-globe-world** — 3 pools
 - [ ] **mangabot/game-center-arcade** — 6 pools
 - [ ] **steambot/brass-glasshouse** — 7 pools
@@ -89,14 +89,14 @@ this file in the same commit.
 | brickbot/balloon-festival | brickbot_balloon_hero | 25 | 100 | 3 | clean | yes | ✅ |
 | brickbot/balloon-festival | brickbot_balloon_light | 25 | 100 | 3 | clean | yes | ✅ |
 | brickbot/balloon-festival | brickbot_balloon_moment | 25 | 100 | 3 | clean | yes | ✅ |
-| brickbot/airfield-biplanes | brickbot_airfield_build_technique | 25 |  |  |  |  | ⬜ |
-| brickbot/airfield-biplanes | brickbot_airfield_camera_framing | 25 |  |  |  |  | ⬜ |
-| brickbot/airfield-biplanes | brickbot_airfield_field_event | 25 |  |  |  |  | ⬜ |
-| brickbot/airfield-biplanes | brickbot_airfield_flight_moment | 25 |  |  |  |  | ⬜ |
-| brickbot/airfield-biplanes | brickbot_airfield_ground_crew_beat | 25 |  |  |  |  | ⬜ |
-| brickbot/airfield-biplanes | brickbot_airfield_lighting | 25 |  |  |  |  | ⬜ |
-| brickbot/airfield-biplanes | brickbot_airfield_palette | 25 |  |  |  |  | ⬜ |
-| brickbot/airfield-biplanes | brickbot_airfield_setting | 25 |  |  |  |  | ⬜ |
+| brickbot/airfield-biplanes | brickbot_airfield_build_technique | 25 | 100 | 3 | clean | yes | ✅ |
+| brickbot/airfield-biplanes | brickbot_airfield_camera_framing | 25 | 100 | 3 | clean | yes | ✅ |
+| brickbot/airfield-biplanes | brickbot_airfield_field_event | 25 | 100 | 3 | clean | yes | ✅ |
+| brickbot/airfield-biplanes | brickbot_airfield_flight_moment | 25 | 100 | 3 | clean | yes | ✅ |
+| brickbot/airfield-biplanes | brickbot_airfield_ground_crew_beat | 25 | 100 | 3 | clean | yes | ✅ |
+| brickbot/airfield-biplanes | brickbot_airfield_lighting | 25 | 100 | 3 | clean | yes | ✅ |
+| brickbot/airfield-biplanes | brickbot_airfield_palette | 25 | 100 | 3 | clean | yes | ✅ |
+| brickbot/airfield-biplanes | brickbot_airfield_setting | 25 | 100 | 3 | clean | yes | ✅ |
 | tinybot/snow-globe-world | tinybot_snow_globe_moments | 25 |  |  |  |  | ⬜ |
 | tinybot/snow-globe-world | tinybot_snow_globe_vessel | 25 |  |  |  |  | ⬜ |
 | tinybot/snow-globe-world | tinybot_snow_globe_weather | 25 |  |  |  |  | ⬜ |
@@ -229,3 +229,6 @@ shadow, so they cannot be selected twice.
   restarted; the first pool then reached 100 clean in 3 rounds.
 - 2026-09-24 19:41 UTC — Phase B done, out of order on purpose (it has no dependency on Phase A):
   479 renders activated, all verified public + backdated; see the table above.
+- 2026-09-24 19:56 UTC — brickbot/balloon-festival: 8/8 pools at 100, clean, originals intact. Smoke
+  1/3: the two failures were `Replicate timed out after 90s` at the flux stage (an upstream stall,
+  not the pools); the delivered render composed normally on the grown pools.
