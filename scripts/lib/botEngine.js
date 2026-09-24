@@ -34,6 +34,7 @@ const path = require('path');
 const https = require('https');
 const { createClient } = require('@supabase/supabase-js');
 const { pickModel, BOT_BANNED_MODELS } = require('./modelPicker');
+const { modelCostCents } = require('./imageModels');
 const { applyBotConfigOverlay } = require('./botConfig');
 const { pickFromBag, withRetry } = require('./botCycle');
 const { resolveSeasonalPath } = require('./botSeasonal');
@@ -377,7 +378,30 @@ async function callClaude({
 // ─────────────────────────────────────────────────────────────
 
 // Approximate cost per Flux-dev render in cents.
-const FLUX_COST_CENTS = 3; // $0.03 per render
+// Per-render IMAGE cost for the run log, by the model that actually rendered. Source of
+// truth is the `image_models` table (the same rows the app's pricing reads), read once per
+// process; `imageModels.js` carries a mirror as the fallback when the read fails. This
+// replaced a flat 3¢ constant on 2026-09-24: that constant stamped every model the same,
+// so ultra (6¢, ~36% of fleet renders) and flux-2-max (7¢) were undercounted for months.
+let _imageModelCostCache = null;
+async function getImageModelCostCents(sb, model) {
+  if (!_imageModelCostCache) {
+    _imageModelCostCache = new Map();
+    try {
+      const { data, error } = await sb.from('image_models').select('id,cost_cents');
+      if (error) throw error;
+      for (const r of data || []) {
+        if (typeof r.cost_cents === 'number') _imageModelCostCache.set(r.id, r.cost_cents);
+      }
+    } catch (err) {
+      console.warn(
+        `  ⚠️ image_models cost lookup failed (${err && err.message}); using the code mirror`
+      );
+    }
+  }
+  const fromDb = _imageModelCostCache.get(model);
+  return typeof fromDb === 'number' ? fromDb : modelCostCents(model);
+}
 
 const SDXL_VERSION = '7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc';
 
@@ -2001,8 +2025,9 @@ async function runBot(opts) {
     }
 
     const durationMs = Date.now() - startedAt;
+    const imageCostCents = await getImageModelCostCents(sb, renderModel);
     const costCents = Math.round(
-      (MODEL_COST_PER_CALL_CENTS[claudeMeta.modelUsed] || 0) + FLUX_COST_CENTS
+      (MODEL_COST_PER_CALL_CENTS[claudeMeta.modelUsed] || 0) + imageCostCents
     );
 
     // 14. Write run log (success)

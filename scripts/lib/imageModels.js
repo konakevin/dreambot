@@ -75,6 +75,42 @@ const ALL_ENABLED_AI_MODELS = [
   'black-forest-labs/flux-2-max', // 7¢
 ];
 
+// Per-render image cost in cents, by model id. The source of truth is the `image_models`
+// table (the same rows the app's pricing reads); the bot engine reads that table once per
+// process for the run log and falls back to THIS mirror when the read fails. Keep the two
+// in step when a price changes (2026-09-24 values). Anything unlisted costs the anchor.
+const DEFAULT_MODEL_COST_CENTS = 3;
+const MODEL_COST_CENTS = Object.freeze({
+  'black-forest-labs/flux-schnell': 1,
+  'black-forest-labs/flux-krea-dev': 1,
+  'black-forest-labs/flux-dev': 3,
+  'black-forest-labs/flux-1.1-pro': 4,
+  'black-forest-labs/flux-1.1-pro-ultra': 6,
+  'black-forest-labs/flux-2-dev': 3,
+  'black-forest-labs/flux-2-pro': 3,
+  'black-forest-labs/flux-2-flex': 6,
+  'black-forest-labs/flux-2-max': 7,
+  'black-forest-labs/flux-kontext-pro': 4,
+  'black-forest-labs/flux-kontext-max': 5,
+  'openai/gpt-image-1': 7,
+  'openai/gpt-image-2': 6,
+  'google/gemini-2-image': 4,
+  'google/gemini-3-image-preview': 13,
+  'xai/grok-imagine-image': 2,
+  'bytedance/seedream-4': 3,
+  'bytedance/seedream-4.5': 4,
+  sdxl: 2,
+});
+
+/** Cents per render for `model` from the code mirror; the anchor price for an unknown id. */
+function modelCostCents(model) {
+  const c = MODEL_COST_CENTS[model];
+  return typeof c === 'number' ? c : DEFAULT_MODEL_COST_CENTS;
+}
+
 module.exports = {
   ALL_ENABLED_AI_MODELS,
+  MODEL_COST_CENTS,
+  DEFAULT_MODEL_COST_CENTS,
+  modelCostCents,
 };
