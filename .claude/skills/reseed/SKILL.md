@@ -142,6 +142,18 @@ Update `RESEED_STATUS.md` (row + log entry, numbers with basis, commits), the pl
 lesson, the moment you learn it), `SEED_POOL_REPAIR_HANDOFF.md` §9 only if the method itself changed.
 Commit path fix + docs with explicit paths, reading the staged diff. Push only when Kevin says.
 
+## Track B: scaling a thin pool (grow, don't rewrite)
+
+`NEW_PATH_POOL_SCALING.md` lists 18 approved shadow paths whose pools sit at MVP-25. Same recipe,
+two differences: (1) nothing is rewritten, the pool only GROWS (`node scripts/reseed/reseed.js
+<config> --grow N` appends N new entries; `--execute` refuses unless every original is byte-identical
+at its old index); (2) with no roster of real items to hand, first build one: ask Sonnet for a list of
+~150 candidate instances of the pool's OWN varying element (boat designs for a boat-fleet pool, not
+new categories of boat), have it de-duplicated by an LLM read in small batches, and keep it in the
+config as the roster. Pre-assign from that roster exactly as in step 3. Subject pool first; axis pools
+only if Kevin asks. Never promote the path to `paths[]`, and never touch DinoBot's four shared paleo
+pools. Track B has its own table in `RESEED_STATUS.md`.
+
 ## Reporting to Kevin
 
 Short and plain. Numbers with their basis. Say what is proven and what is not. If the renders cannot

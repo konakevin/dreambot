@@ -35,6 +35,8 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | bot      | path                 | pool (seed file)                                | entries | distinct before → after (basis)                              | path fix                                                              | renders                                              | status   | commits                                          | date       |
 | -------- | -------------------- | ----------------------------------------------- | ------- | ------------------------------------------------------------ | --------------------------------------------------------------------- | ---------------------------------------------------- | -------- | ------------------------------------------------ | ---------- |
 | bloombot | flower-friends       | `bloombot_flower_friends_flower_focal_cluster`  | 125     | 44 → 125 line-ups (same = 4+ shared species of 5-6, greedy)  | template defers to entry; own hero mandate + prefix + suffix + order  | 3 + 8 + 8 forced; paired 8: "absolutely beautiful"   | **DONE** | e672068b, 2ff1223d, 21c5222a, e99f8147           | 2026-09-23 |
+| bloombot | flower-humming-birds | `bloombot_flower_humming_birds_hummingbird_cast` | 153    | (measuring)                                                  | template has the same STRICT roster/palette + LUSH prefix as its sister | not yet                                            | analysing | | 2026-09-23 |
+| bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 70 line-ups by the pilot rule (parser needs this pool's aliases) | same as above                                                     | not yet                                            | analysing | | 2026-09-23 |
 
 Status values: `queued` · `analysing` · `proposal ready` (dry run done, waiting on Kevin's OK) ·
 `pool written` · `path fixed` · `renders posted` (waiting on Kevin's verdict) · **DONE** · `skipped`
@@ -77,6 +79,48 @@ Recommended order: finish BloomBot first (`flower-humming-birds`: both of its po
 to flower-friends, same bot-wide prefix already understood), then EarthBot's `*_subject` pools (one
 motif each, e.g. `epic_sunset_subject` is 96% "tropical beach sunset with palms"), then FaeBot's
 enchanted-vista anchors.
+
+---
+
+## Track B: new shadow paths to SCALE from MVP-25 to production depth
+
+Kevin 2026-09-23: _"these are new ones that are still sitting at QA levels, so we need to scale them up
+to production size, and we should use our new dedupe method that actually makes sure the scenes are
+varied."_ Source of truth for what they are and how to treat them: **`NEW_PATH_POOL_SCALING.md`**
+(read it in full before starting one). Opposite starting condition from Track A (thin pools that were
+never scaled, not deep pools of one idea), same bar: the SUBJECT pool reaches 100+ genuinely distinct
+ideas, every original kept, intent/format/prefix unchanged, forced shadow renders on NEW entries
+reviewed by Kevin. **Do not promote any of them to `paths[]`** (Kevin's call) and **do not touch the 4
+shared DinoBot paleo pools** (`_phenomenon`, `_sky`, `_megaflora`, `_surprise_element`).
+
+None of these 18 are in `SUBJECT_POOL_MAP.json` (it was built from `paths[]`); identify each path's
+subject pool by reading the path file (or `scripts/identify-subject-pools.js` pointed at it), never by
+slot name. Tool: the same core with `--grow N` (append N new entries; the pool only grows).
+
+| # | bot      | path                    | pools | subject pool (verify)                    | status | commits | date |
+| - | -------- | ----------------------- | ----- | ---------------------------------------- | ------ | ------- | ---- |
+| 1 | tinybot  | snow-globe-world        | 4     | `…_worlds`                               | queued |         |      |
+| 2 | mangabot | game-center-arcade      | 7     | ?                                        | queued |         |      |
+| 3 | steambot | brass-glasshouse        | 8     | ? (thinnest: `_keeper` 14, `_wet_air` 16) | queued |         |      |
+| 4 | brickbot | airfield-biplanes       | 9     | `brickbot_airfield_aircraft`?            | queued |         |      |
+| 5 | brickbot | balloon-festival        | 9     | `…_fleet`?                               | queued |         |      |
+| 6 | pixelbot | castle-town-gate        | 10    | ? (seeds load lazily via `scenePaths.js`) | queued |         |      |
+| 7 | pixelbot | floating-market-canal   | 9     | ?                                        | queued |         |      |
+| 8 | pixelbot | volcano-forge           | 10    | ?                                        | queued |         |      |
+| 9 | pixelbot | cozy-farming-life-sim   | 4     | already at production depth: verify only | queued |         |      |
+| 10 | faebot  | acorn-boat-regatta      | 8     | `faebot_regatta_boat_fleet`?             | queued |         |      |
+| 11 | faebot  | mushroom-apothecary     | 8     | ?                                        | queued |         |      |
+| 12 | faebot  | star-charting           | 8     | ?                                        | queued |         |      |
+| 13 | dinobot | amber-forest            | 6     | `dinobot_amber_resident`?                | queued |         |      |
+| 14 | dinobot | courtship-display       | 5     | ?                                        | queued |         |      |
+| 15 | dinobot | den-and-burrow          | 4     | ?                                        | queued |         |      |
+| 16 | dinobot | desert-dunes            | 5     | ?                                        | queued |         |      |
+| 17 | dinobot | snowline-forest         | 5     | ?                                        | queued |         |      |
+| 18 | dinobot | undergrowth-scale       | 4     | `dinobot_undergrowth_resident`? (23)     | queued |         |      |
+
+Order is the doc's suggested order (bespoke and unambiguous first, DinoBot last because of the shared
+pools). Open questions for Kevin are in that doc §9 (axis pools too or subject only; is 100 the floor
+for a shadow path; go live before or after scaling).
 
 ---
 
