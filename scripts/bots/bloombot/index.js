@@ -106,6 +106,9 @@ module.exports = {
     // its own subject pool). Species-colour faithfulness + text suppressor kept.
     'flower-friends':
       'render every named species as that exact species in its named color, no text, no words, no watermarks',
+    // flower-humming-birds: same reason as its sister (reseed program, 2026-09-23).
+    'flower-humming-birds':
+      'render every named species as that exact species in its named color, no text, no words, no watermarks',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -138,6 +141,10 @@ module.exports = {
     // composition-first anchor; the flowers and insects come from the scene.
     'flower-friends':
       'enchanted storybook garden vignette, one composed cluster of flowers with cute pollinators, open air around it',
+    // flower-humming-birds: the bot-wide prefix rendered every entry of its flower pool as the same
+    // wall of pink peonies behind the bird (reseed program, 2026-09-23). Birds first, one cluster.
+    'flower-humming-birds':
+      'vibrant hummingbird garden vignette, a large iridescent hummingbird front-and-center over one composed cluster of flowers, open air around it',
   },
 
   // cleanMediumByModel: gpt-image-2 AND nano-banana both render the bot-only
@@ -522,20 +529,26 @@ This is a SINGLE enormous ancient flowering tree (a giant cherry / wisteria / ma
     // flowers with the pollinator cast visible and open air around it.
     const FLOWER_FRIENDS_MANDATE = `━━━ BLOOMBOT BAR — ONE COMPOSED FLOWER CLUSTER WITH ITS POLLINATORS (READ FIRST) ━━━
 This is a COMPOSED storybook garden vignette, not a wall of flowers. The hero is ONE cohesive cluster of the flower entry's species, growing together as a florist would arrange them: a clear focal bloom, the others gathered around it in a readable shape, holding roughly half the frame. Around the cluster there is OPEN AIR: sky, soft garden depth, a few distant blooms at most, so the cluster reads as a designed centrepiece with breathing room. The pollinator cast is the CO-HERO and must be plainly visible: the focal insect large and front-and-center on or beside the focal bloom, the others placed where the eye can find them. Every flower is one of the entry's species in the entry's colour, in the entry's colour register. Composition over density: restrained, intentional, gorgeous, like a storybook illustration with a subject.`;
+    // flower-humming-birds: sister of flower-friends. Hummingbirds are the hero; the flower entry's
+    // species are ONE composed cluster around them, not a frame-filling wall (reseed, 2026-09-23).
+    const FLOWER_HUMMING_BIRDS_MANDATE = `━━━ BLOOMBOT BAR — A HUMMINGBIRD CAST OVER ONE COMPOSED FLOWER CLUSTER (READ FIRST) ━━━
+This is a COMPOSED hummingbird garden vignette, not a wall of flowers. The hero is the hummingbird cast: the focal bird large and front-and-center, the others placed where the eye can find them, every bird airborne with iridescent plumage. The flowers are ONE cohesive cluster of the flower entry's species, each in the entry's colour, growing together as a florist would arrange them and holding roughly half the frame around and behind the birds. Around the cluster there is OPEN AIR: sky, soft garden depth, leaves, a few distant blooms at most, so the birds and their cluster read as the subject. Composition over density: restrained, intentional, gorgeous, vivid jewel-tone colour throughout.`;
     const heroMandate =
       path === 'jack-and-the-giant-flower'
         ? GIANT_FLOWER_MANDATE
-        : path === 'flower-friends'
-          ? FLOWER_FRIENDS_MANDATE
-          : path === 'hanging-flowers'
-            ? HANGING_FLOWERS_MANDATE
-            : path === 'water-garden'
-              ? WATER_GARDEN_MANDATE
-              : path === 'moon-garden'
-                ? MOON_GARDEN_MANDATE
-                : path === 'great-blossom-tree'
-                  ? GREAT_TREE_MANDATE
-                  : LUSH_HERO_MANDATE;
+        : path === 'flower-humming-birds'
+          ? FLOWER_HUMMING_BIRDS_MANDATE
+          : path === 'flower-friends'
+            ? FLOWER_FRIENDS_MANDATE
+            : path === 'hanging-flowers'
+              ? HANGING_FLOWERS_MANDATE
+              : path === 'water-garden'
+                ? WATER_GARDEN_MANDATE
+                : path === 'moon-garden'
+                  ? MOON_GARDEN_MANDATE
+                  : path === 'great-blossom-tree'
+                    ? GREAT_TREE_MANDATE
+                    : LUSH_HERO_MANDATE;
     // Bot-wide "Medium Looks" override — the rolled look register sets the
     // rendering medium for THIS render. Leads the brief so Sonnet opens its
     // Flux prompt with these tokens (the medium is the leading CLIP anchor).

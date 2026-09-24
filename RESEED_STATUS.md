@@ -35,8 +35,8 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | bot      | path                 | pool (seed file)                                | entries | distinct before → after (basis)                              | path fix                                                              | renders                                              | status   | commits                                          | date       |
 | -------- | -------------------- | ----------------------------------------------- | ------- | ------------------------------------------------------------ | --------------------------------------------------------------------- | ---------------------------------------------------- | -------- | ------------------------------------------------ | ---------- |
 | bloombot | flower-friends       | `bloombot_flower_friends_flower_focal_cluster`  | 125     | 44 → 125 line-ups (same = 4+ shared species of 5-6, greedy)  | template defers to entry; own hero mandate + prefix + suffix + order  | 3 + 8 + 8 forced; paired 8: "absolutely beautiful"   | **DONE** | e672068b, 2ff1223d, 21c5222a, e99f8147           | 2026-09-23 |
-| bloombot | flower-humming-birds | `bloombot_flower_humming_birds_hummingbird_cast` | 153    | (measuring)                                                  | template has the same STRICT roster/palette + LUSH prefix as its sister | not yet                                            | analysing | | 2026-09-23 |
-| bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 70 line-ups by the pilot rule (parser needs this pool's aliases) | same as above                                                     | not yet                                            | analysing | | 2026-09-23 |
+| bloombot | flower-humming-birds | `bloombot_flower_humming_birds_hummingbird_cast` | 153    | 47 → 153 casts (same = focal species + behaviour + flower); 17 → 40 species, 5 → 13 behaviours, 11 → 40 flowers | template: no STRICT roster/palette, entry is the only flower source, own hero mandate + prefix + suffix | 8 before + 8 after, paired, shadow; Kevin OK'd | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
+| bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 33 → 120 line-ups (same = 4+ shared species, 3 when only 3); 26 → 70 species; red 35 → 20 | same fix                                                              | same batch                                         | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
 
 Status values: `queued` · `analysing` · `proposal ready` (dry run done, waiting on Kevin's OK) ·
 `pool written` · `path fixed` · `renders posted` (waiting on Kevin's verdict) · **DONE** · `skipped`
@@ -126,6 +126,19 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-23 · bloombot/flower-humming-birds, both pools · renders posted.** Tool factored into
+  `scripts/reseed/` (core + a config per pool). Cast pool: 153 entries were 17 focal species × two
+  behaviours (hover 101, sip 51) × ~12 flowers; now 153 distinct casts from 40 real species with their
+  real plumage, 13 in-flight behaviours, 40 hummingbird flowers (47 originals kept). Flower pool: 33 →
+  120 distinct line-ups, 26 → 70 species, both entry shapes kept 60/60 (33 originals kept). Path fix
+  (same family as flower-friends): the template injected its own STRICT species roster + palette and a
+  species list in three places; the bot-wide prefix packed the frame. Before: 8 of 8 forced renders were
+  a wall of pink peonies behind one bird whatever the flower entry said. After: each render shows its own
+  bird (species, plumage, pose), open air, and the entry's colour family; flower species recognizability
+  stays partial (Flux priors, accepted). Parser lessons: split bird clauses on ";" first (commas inside a
+  plumage list are not clause breaks); a colour word that is also a flower name ("fuchsia") and a bare
+  word that is also a species ("vines" → trumpet vine) must not be aliases; the length band must widen
+  when the roster's names are longer than the originals'.
 - **2026-09-23 · pilot DONE · bloombot/flower-friends `flower_focal_cluster`.** First attempt (category
   method) reverted: it changed what the pool is. Resumed in place: 44 → 125 distinct line-ups, 39 → 154
   species, 9 colour families, 40 rich-register entries. Then two path fixes were needed before any of

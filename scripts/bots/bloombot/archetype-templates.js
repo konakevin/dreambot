@@ -197,10 +197,10 @@ A specific atmospheric detail adding magic-pretty texture (NOT competing with th
 
 ━━━ THE CORE AESTHETIC — VIBRANT ENCHANTED GARDEN WITH A CAST OF IRIDESCENT HUMMINGBIRDS ━━━
 
-The unifying mandate: a VIBRANT ENCHANTED garden vignette with MULTIPLE hummingbird-attracting flowers (trumpet vine, fuchsia, salvia, hibiscus, bee balm, columbine, butterfly bush, cardinal flower, lupine, foxglove, petunia, lantana, agastache, penstemon, etc.) + 2-4+ iridescent jewel-tone HUMMINGBIRDS positioned dynamically throughout the scene. PULLED-BACK framing — a wider garden-vignette view, NOT a tight macro. Vibrant saturated jewel-tone color register — the flowers and birds wear their natural bold colors.
+The unifying mandate: a VIBRANT ENCHANTED garden vignette with the flower entry's hummingbird-attracting flowers (it names the species and their colours) + 2-4+ iridescent jewel-tone HUMMINGBIRDS positioned dynamically throughout the scene. PULLED-BACK framing — a wider garden-vignette view, NOT a tight macro. Vibrant saturated jewel-tone color register — the flowers and birds wear their natural bold colors.
 
 THE LOOK — Audubon-meets-Studio-Ghibli enchanted garden / National-Geographic hummingbird-magazine spread / IG vivid-hummingbird-feeder / vibrant tropical-garden energy:
-- MULTIPLE HERO FLOWERS (3-5+ different hummingbird-attracting species blooming together) — vibrant saturated jewel-tone colors (red trumpet vine, fuchsia, vivid magenta bee balm, scarlet salvia, hot-pink fuchsia, bright orange hibiscus, deep purple lupine)
+- ONE COMPOSED CLUSTER OF HERO FLOWERS (the entry's 3-6 species growing together) — exactly the species and colours the flower entry names, vibrant saturated jewel-tone, one readable arrangement holding roughly half the frame around the birds
 - A CAST OF 2-4+ IRIDESCENT HUMMINGBIRDS — hovering / sipping nectar / mid-flight throughout the scene at different positions, varied species, varied poses
 - IRIDESCENT JEWEL-TONE PLUMAGE — ruby-throated / emerald-back / blue-violet crown / fiery-orange / magenta / metallic-green / sapphire — each hummingbird with a distinctive iridescent jewel-tone color story, wings often in motion-blur showing rapid flight
 - ONE FOCAL HUMMINGBIRD — front-and-center, larger, sharply rendered with crisp iridescent detail, the viewer's eye lands here first
@@ -214,7 +214,7 @@ THE LOOK — Audubon-meets-Studio-Ghibli enchanted garden / National-Geographic 
 
 2. **A CAST OF 2-4+ IRIDESCENT HUMMINGBIRDS WITH A LARGE FOCAL HERO** — describe 2-4+ hummingbirds at different positions and poses. CRITICAL — ONE is the FOCAL HUMMINGBIRD rendered FRONT-AND-CENTER, LARGE (occupying meaningful frame real estate — clearly visible and recognizable, NOT a tiny dot lost in flowers), sharply detailed with vivid iridescent jewel-tone plumage popping against the scene. Supporting hummingbirds in midground / hovering at other blooms / mid-flight in soft sharp-layered depth. The focal hummingbird is the FIRST thing the viewer sees.
 
-3. **HUMMINGBIRD-ATTRACTING FLOWERS AS SUPPORTING BACKDROP** — 3-5+ different hummingbird-magnet species in vibrant saturated jewel-tone colors (trumpet vine / fuchsia / salvia / hibiscus / bee balm / columbine / butterfly bush / cardinal flower / lupine / foxglove / petunia / lantana / agastache / penstemon / honeysuckle / morning glory). The flowers fill the foreground/midground as gorgeous garden context but DO NOT compete with the hummingbirds — they're the stage, not the star. NO soft-pastel — vibrant saturated jewel-tone colors.
+3. **THE ENTRY'S FLOWERS AS THE SUPPORTING GARDEN** — exactly the species the flower entry names, each in the colour it gives, as one composed cluster around and behind the birds. Gorgeous garden context that DOES NOT compete with the hummingbirds — the stage, not the star. NO soft-pastel — vibrant saturated jewel-tone colors.
 
 3. **IRIDESCENT JEWEL-TONE PLUMAGE** — describe each hummingbird's iridescent color story explicitly (ruby-throated / emerald-back / blue-violet crown / magenta-throat / metallic-green-and-fiery-orange / sapphire-throated / iridescent-coppery / etc.). Iridescent metallic shimmer is the signature.
 
@@ -232,8 +232,10 @@ THE LOOK — Audubon-meets-Studio-Ghibli enchanted garden / National-Geographic 
 
 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS / FIGURES / SILHOUETTES / FACES / BUST-PORTRAITS anywhere; the garden is empty of any human presence 🚫🚫🚫
 
-━━━ THE MULTI-FLOWER FOCAL SCENE (3-5+ hummingbird-attracting blooms) ━━━
+━━━ THE FLOWER ENTRY — the flowers of THIS render: species and colours ━━━
 ${flower_focal_cluster}
+
+These are the flowers of the scene, exactly as named and coloured here. No other species join them.
 
 ━━━ THE HUMMINGBIRD CAST (2-4+ iridescent hummingbirds with focal hero) ━━━
 ${hummingbird_cast}
@@ -242,10 +244,10 @@ The focal hummingbird is rendered FRONT-AND-CENTER with crisp iridescent jewel-t
 ${particlesSection}━━━ COMPOSITION CRAFT — VIBRANT ENCHANTED HUMMINGBIRD GARDEN VIGNETTE ━━━
 
   • PULLED-BACK GARDEN VIEW — wider intimate-garden vignette, NOT a tight macro close-up
-  • FOREGROUND: 3-5+ different hummingbird-attracting flower species in vibrant saturated jewel-tone colors filling the lower 50-65% of frame
-  • MIDDLE: 2-4+ iridescent hummingbirds positioned dynamically (focal hero front-and-center + supporting cast hovering / sipping / mid-flight)
-  • BACKGROUND: crisp sharp layers of more vibrant blooms / soft sky / leaves in tack-sharp detail
-  • DEPTH: sharp foreground flowers + sharp focal hummingbird / crisp background
+  • THE CAST: the focal hummingbird large, front-and-center; the supporting cast placed where the eye can find them (hovering / sipping / mid-flight)
+  • THE FLOWERS: the entry's species, each in its own colour, as ONE composed cluster around and behind the birds, holding roughly half the frame
+  • AROUND IT: open air — sky / soft garden depth / leaves, a few distant blooms at most
+  • DEPTH: sharp focal hummingbird + sharp cluster / a simple open backdrop behind
   • COLOR: rich vibrant saturated jewel-tone foreground (NOT soft-pastel), crisp sharp-layered background
   • MOOD: vibrant enchanted magical-pretty — Audubon-meets-Studio-Ghibli, lively, magical
 
@@ -254,22 +256,14 @@ ${lighting}
 
 Reinterpret the rolled lighting as VIBRANT WARM NATURAL light bathing the scene — warm sunlight / dappled light / golden-hour ambient with rich saturated color story. NOT harsh / dramatic / moody / dark. Think Audubon-painting + tropical-garden + IG-vibrant-hummingbird-feeder.
 
-━━━ COLOR PALETTE — STRICT ━━━
-${sharedDNA.palette}
-
-━━━ FLOWER SPECIES — STRICT ━━━
-${sharedDNA.roster}
-
-Pick 3-5 hummingbird-attracting species from the roster as multi-hero blooming together. Vibrant saturated jewel-tone colors.
-
 ━━━ DEFAULTS TO RESIST ━━━
-2+ hummingbirds (not single) in a pulled-back garden vignette (not macro); vibrant saturated jewel-tone (not soft-pastel); hummingbirds only (no insects / other birds); flowers growing in the wild; pretty enchanted vibrant light (not harsh / moody / dark); only roster species; ABSOLUTE HARD BAN on humans / figures / silhouettes.
+2+ hummingbirds (not single) in a pulled-back garden vignette (not macro); vibrant saturated jewel-tone (not soft-pastel); hummingbirds only (no insects / other birds); flowers growing in the wild; pretty enchanted vibrant light (not harsh / moody / dark); only the entry's species, in the entry's colours; ABSOLUTE HARD BAN on humans / figures / silhouettes.
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order (HUMMINGBIRDS LEAD) ━━━
-[the LARGE FOCAL HUMMINGBIRD front-and-center — primary hero of the frame — explicit species + iridescent jewel-tone plumage + dynamic pose (hovering / sipping / mid-flight) + wings in motion-blur + beak-to-flower or beak-extended detail — VIEWER'S EYE LANDS HERE FIRST], [the 1-3 supporting hummingbirds at different positions throughout the scene — hovering at other blooms / mid-flight in midground / banking sideways in sharp-layered depth — also with iridescent plumage], [the vibrant saturated jewel-tone hummingbird-attracting flowers as garden BACKDROP — 3-5+ species blooming together filling foreground/midground as supporting context (NOT competing with the hummingbirds)], [crisp sharp-layered background of soft vibrant blooms / leaves]${magical_particles ? ', [magical particles drifting in the air]' : ''}, [vibrant warm natural ambient light bathing the scene — golden-hour or dappled sunshine], [shallow DOF with hummingbirds in sharpest focus, tack-sharp detail, Audubon-meets-Studio-Ghibli aesthetic]
+[the LARGE FOCAL HUMMINGBIRD front-and-center — primary hero of the frame — explicit species + iridescent jewel-tone plumage + dynamic pose (hovering / sipping / mid-flight) + wings in motion-blur + beak-to-flower or beak-extended detail — VIEWER'S EYE LANDS HERE FIRST], [the 1-3 supporting hummingbirds at different positions throughout the scene — hovering at other blooms / mid-flight in midground / banking sideways in sharp-layered depth — also with iridescent plumage], [the entry's flowers, each named with its colour, as ONE composed cluster around and behind the birds (supporting, never competing with the hummingbirds)], [open air around the cluster: sky / soft garden depth / leaves, a few distant blooms at most]${magical_particles ? ', [magical particles drifting in the air]' : ''}, [vibrant warm natural ambient light bathing the scene — golden-hour or dappled sunshine], [shallow DOF with hummingbirds in sharpest focus, tack-sharp detail, Audubon-meets-Studio-Ghibli aesthetic]
 
 CRITICAL — LARGE FOCAL HUMMINGBIRD primary hero (NOT a tiny dot lost in flowers) + 1-3 supporting hummingbirds + vibrant jewel-tone flowers as BACKDROP (not the hero). The hummingbird is the WHOLE POINT. Naturalistic hummingbird species — no fantasy crowns. ABSOLUTE HARD BAN ON HUMANS.
 
