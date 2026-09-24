@@ -176,11 +176,18 @@ commit + push, row + log here.
   glasshouse read, a guild desk read; a harpy encounter came out a moonlit river, a chain-whip duel
   came out a cauldron scene. The before set behaved the same (three guild halls read, the rest were
   mashups). Pairs https://claude.ai/artifact/2vVJ8ED3EfKYAXnMNKxAMA.
-- **StarBot space-femme `phenomenon`: pool WRITTEN** (160 rewrites after two resumes; backup
-  `~/poolbackup-starbot-cosmic_vista-space_femme_phenomenon-1790233624567.json`); paired renders
-  running (`sf/`, `--bot starbot --path space-femme --slot phenomenon`; the phenomenon fires on ~70%
-  of renders so some carried=false are the gate, not a drop). NOTE the queue mislabelled this pool's
-  path as cosmic-vista; the pool belongs to `space-femme`.
+- **StarBot space-femme `phenomenon`: DONE (text-unique; visible gain nil)** (40 → 196 distinct on
+  phenomenon + placement, 21 → 46 phenomena, 160 rewrites after two resumes, 0 unfilled; backup
+  `~/poolbackup-starbot-cosmic_vista-space_femme_phenomenon-1790233624567.json`). Pairs on the same
+  eight slots (`sf/`), carried 6/8 before and 8/8 after: the phenomenon axis is invisible on this
+  path. The femme fills ~80% of every frame and the backdrop is generic neon energy (lightning, a
+  halo, lava seams, a sun) whatever the entry names; one after-render's spiral disc could pass for its
+  ice-crystal halo, and none of the fog / three moons / solar-wind veil / ash-column lightning /
+  binary eclipse / hyperspace streaks appear, exactly as none of the before set's nebula ring / falling
+  stars / conflagration / supernova / rift / black hole did. Same finding as the FaeBot anchors: a
+  background axis under a character hero. Pairs https://claude.ai/artifact/M2YACVZhXK7tCMLxeutw1B.
+  NOTE the queue mislabelled this pool's path as cosmic-vista; the pool belongs to `space-femme` (the
+  config keeps its file name, `starbot.cosmic_vista.space_femme_phenomenon.js`).
 - **DragonBot castle `castle_biome`: pool WRITTEN** (50 → 168 distinct on biome + first hero
   feature after the parser fix, 118 rewrites, 0 unfilled; backup
   `~/poolbackup-dragonbot-iconic_landscape-castle_biome-1790233787532.json`); paired renders running
@@ -267,7 +274,8 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | bloombot | desert-bloom         | `bloombot_desert_bloom_bloom_explosion` (string) | 198    | 51 → 196 line-ups (same = 4+ shared species); 19 → 103 desert species; 51 originals kept | none | 8 + 8 paired, shadow; 12/16 carried (Sonnet drops flagged); the path paints pink whatever the entry names, before and after | **DONE (text-unique; visible gain nil)** | 61629837 | 2026-09-24 |
 | faebot   | queen-of-the-forest  | `faebot_queen_of_forest_biome` (string)          | 200     | 26 → 197 distinct (same = forest type + first texture); 11 → 35 forest types; 26 originals kept | none | 8 + 8 paired, shadow; 15/16 carried; autumn maples, waterfall glade, golden larch, bluebell wood now show where two cherry-blossom scenes did | **DONE (real visible gain)** | 61629837 | 2026-09-24 |
 | faebot   | queen-of-the-forest  | `faebot_queen_of_forest_posed_setting` (string)  | 200     | 29 → 192 distinct (same = natural spot + pose); spots 21 → 37, poses 10 → 12; 37 originals kept (8 unfilled) | none | 8 + 8 paired, shadow; 16/16 carried; every after-render shows its written spot and pose | **DONE (real visible gain)** | 71a0adef | 2026-09-24 |
-| mangabot | isekai-fantasy       | `isekai_scene_type` (string)                     | 200     | 127 → 195 distinct (same = category + scene motif); 11 categories; 132 originals kept (5 unfilled) | none (flag 4: the template composites ~8 axes) | 8 + 8 paired, shadow; carried 4/8 → 7/8; readable ~3/8 either way | **DONE (text-unique; visible gain modest)** | (close-out) | 2026-09-24 |
+| mangabot | isekai-fantasy       | `isekai_scene_type` (string)                     | 200     | 127 → 195 distinct (same = category + scene motif); 11 categories; 132 originals kept (5 unfilled) | none (flag 4: the template composites ~8 axes) | 8 + 8 paired, shadow; carried 4/8 → 7/8; readable ~3/8 either way | **DONE (text-unique; visible gain modest)** | 2d7390c9 | 2026-09-24 |
+| starbot  | space-femme          | `space_femme_phenomenon` (string)                | 200     | 40 → 196 distinct (same = phenomenon + placement); 21 → 46 phenomena; 40 originals kept | none | 8 + 8 paired, shadow; 6/8 → 8/8 carried; the phenomenon never reads under the femme hero, before or after | **DONE (text-unique; visible gain nil)** | (close-out) | 2026-09-24 |
 | earthbot | epic-sunset          | `epic_sunset_subject` (object entries)           | 200     | 80 → 200 distinct (same = sky family + palm arrangement + sand); skies 7 → 10, palms 8 → 9, sands 3 → 7; 80 originals kept | none needed (EPIC_VISTA archetype hands the entry through) | 8 + 8 paired, shadow; 15/16 carried (one Sonnet drop, flagged); self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 33 → 120 line-ups (same = 4+ shared species, 3 when only 3); 26 → 70 species; red 35 → 20 | same fix                                                              | same batch                                         | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
 
@@ -359,6 +367,15 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-24 · starbot/space-femme `phenomenon` · DONE (text-unique; visible gain nil).** String
+  entries "<Phenomenon> <verb> <placement in frame>, <trans-colour detail>, <impact>". 40 → 196
+  distinct (same = phenomenon + placement), 21 → 46 phenomena from a roster of 48 real or canon
+  sky events, 160 rewrites, 40 originals kept. Two parser lessons cost a resume each (rule order vs
+  the leading axis; the phenomenon's own words parsed as the placement) and a homogeneous retry batch
+  came back reordered until `RESEED_BATCH=1`. Pairs on the same eight slots, 6/8 → 8/8 carried: the
+  phenomenon axis is invisible on space-femme, before and after; the femme is the hero and the
+  backdrop is generic neon energy whatever the entry names (one spiral disc could pass for the
+  ice-crystal halo). Pairs https://claude.ai/artifact/M2YACVZhXK7tCMLxeutw1B.
 - **2026-09-24 · mangabot/isekai-fantasy `scene_type` · DONE (text-unique; visible gain modest; flag 4).**
   String entries "<Category> composition, <anime scene with a canon motif>, <energy note>". 127 → 195
   distinct (same = category + scene motif), 11 categories kept at their weights, 68 rewrites, 5
