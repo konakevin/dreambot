@@ -198,8 +198,20 @@ commit + push, row + log here.
   oak-island lake and chalk downs did not survive the castle. Nothing regressed; the pool no longer
   says "vast emerald mountain valley" 23 times. Pairs https://claude.ai/artifact/S2CudVACt69TRxq818Uoer.
   The path is `castle`, not iconic-landscape (the config keeps its file name).
-- **FaeBot dryad-portrait `forest_backdrop`:** full run in flight (`faebot_dryad_portrait_forest_backdrop/full`,
-  25 → ~200 on forest type + first texture via the queen biome rules).
+- **FaeBot dryad-portrait `forest_backdrop`: DONE (text-unique; visible gain modest)** (26 → 196
+  distinct on forest type + first texture; 15 → 34 forest types, 8 → 30 textures; 170 rewrites, 4
+  unfilled kept as originals; backup `~/poolbackup-faebot-dryad_portrait-forest_backdrop-1790234225599.json`).
+  Pairs on the same eight slots (`fd/`), 8/8 → 7/8 carried: the backdrop is soft-focus by design
+  behind the portrait hero and reads about half the time either way. Before: oak trunks ×2, wisteria
+  ×2, willow fronds read; a fern grotto and a bioluminescent glen did not. After: toadstools, aspen
+  trunks, a waterfall and a mossy trunk read; rowan berries, a cedar grove and a beech cathedral did
+  not. What reads after is new to the path (the old 15 types had none of those). Pairs
+  https://claude.ai/artifact/Bxa2xLsVi2cQdnyF5yyC1T.
+- **Track B in flight:** TinyBot snow-globe `worlds` (config `tinybot.snow_globe_world.worlds.js`,
+  same = world type, roster of 93 places with their drifting particle; `--grow 80` running) and
+  MangaBot arcade `room` (config `mangabot.game_center_arcade.room.js`, same = the one room feature;
+  the composition LOCK is prepended by `normalize`, Sonnet writes only the tail; roster 87; smoke
+  running).
 - **FaeBot (queen biome + three foreground-anchor pools):** shared factory
   `scripts/reseed/lib/faeAnchorPool.js` (same = anchor kind + position in frame; ~65 real forest
   anchors × 8 positions; nothing glowing per the playbook) + `faebot.queen_of_forest.biome.js` (same =
@@ -282,7 +294,8 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | faebot   | queen-of-the-forest  | `faebot_queen_of_forest_posed_setting` (string)  | 200     | 29 → 192 distinct (same = natural spot + pose); spots 21 → 37, poses 10 → 12; 37 originals kept (8 unfilled) | none | 8 + 8 paired, shadow; 16/16 carried; every after-render shows its written spot and pose | **DONE (real visible gain)** | 71a0adef | 2026-09-24 |
 | mangabot | isekai-fantasy       | `isekai_scene_type` (string)                     | 200     | 127 → 195 distinct (same = category + scene motif); 11 categories; 132 originals kept (5 unfilled) | none (flag 4: the template composites ~8 axes) | 8 + 8 paired, shadow; carried 4/8 → 7/8; readable ~3/8 either way | **DONE (text-unique; visible gain modest)** | 2d7390c9 | 2026-09-24 |
 | starbot  | space-femme          | `space_femme_phenomenon` (string)                | 200     | 40 → 196 distinct (same = phenomenon + placement); 21 → 46 phenomena; 40 originals kept | none | 8 + 8 paired, shadow; 6/8 → 8/8 carried; the phenomenon never reads under the femme hero, before or after | **DONE (text-unique; visible gain nil)** | e91cbcf6 | 2026-09-24 |
-| dragonbot| castle               | `castle_biome` (string)                          | 168     | 50 → 168 distinct (same = biome + first hero feature); 45 → 67 keys; 50 originals kept | none | 8 + 8 paired, shadow; 7/8 → 8/8 carried; biome reads as a foreground strip ~3/8 either way under the castle | **DONE (text-unique; visible gain modest)** | (close-out) | 2026-09-24 |
+| dragonbot| castle               | `castle_biome` (string)                          | 168     | 50 → 168 distinct (same = biome + first hero feature); 45 → 67 keys; 50 originals kept | none | 8 + 8 paired, shadow; 7/8 → 8/8 carried; biome reads as a foreground strip ~3/8 either way under the castle | **DONE (text-unique; visible gain modest)** | 39ce32b2 | 2026-09-24 |
+| faebot   | dryad-portrait       | `faebot_dryad_portrait_forest_backdrop` (string) | 200     | 26 → 196 distinct (same = forest type + first texture); 15 → 34 types, 8 → 30 textures; 26 originals kept (4 unfilled) | none | 8 + 8 paired, shadow; 8/8 → 7/8 carried; the soft-focus backdrop reads ~half the time either way, new kinds read after | **DONE (text-unique; visible gain modest)** | (close-out) | 2026-09-24 |
 | earthbot | epic-sunset          | `epic_sunset_subject` (object entries)           | 200     | 80 → 200 distinct (same = sky family + palm arrangement + sand); skies 7 → 10, palms 8 → 9, sands 3 → 7; 80 originals kept | none needed (EPIC_VISTA archetype hands the entry through) | 8 + 8 paired, shadow; 15/16 carried (one Sonnet drop, flagged); self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 33 → 120 line-ups (same = 4+ shared species, 3 when only 3); 26 → 70 species; red 35 → 20 | same fix                                                              | same batch                                         | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
 
@@ -374,6 +387,14 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-24 · faebot/dryad-portrait `forest_backdrop` · DONE (text-unique; visible gain modest).**
+  String entries "<Forest type> behind her with painted <texture> softly out-of-focus, painted …,
+  tactile <foreground> anchoring her". 26 → 196 distinct (same = forest type + first texture via the
+  queen biome's rules, meadows and edges removed), 15 → 34 forest types, 8 → 30 textures, 170
+  rewrites, 26 originals kept, 4 unfilled. Pairs on the same eight slots, 8/8 → 7/8 carried: the
+  backdrop is a soft-focus axis behind the portrait hero and reads about half the time either way;
+  what reads after (toadstools, aspen trunks, a waterfall) is new to the path. Pairs
+  https://claude.ai/artifact/Bxa2xLsVi2cQdnyF5yyC1T. Track A's FaeBot pools are all closed.
 - **2026-09-24 · dragonbot/castle `castle_biome` · DONE (text-unique; visible gain modest).** String
   entries "<Biome words>, <first hero feature>, <second feature>, <light> …" (the castle is another
   axis, never named). 50 → 168 distinct (same = biome + first hero feature), 36 biomes × 30 hero
