@@ -78,7 +78,7 @@ this file in the same commit.
 - [x] **dinobot/courtship-display** — 3/3 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:21 UTC
 - [x] **dinobot/den-and-burrow** — 2/2 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:25 UTC
 - [x] **dinobot/desert-dunes** — 0/0 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:26 UTC
-- [ ] **dinobot/snowline-forest** — 1 pools
+- [x] **dinobot/snowline-forest** — 1/1 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:31 UTC
 - [ ] **dinobot/undergrowth-scale** — 1 pools
 <!-- CHECKLIST:END -->
 
@@ -167,7 +167,7 @@ this file in the same commit.
 | dinobot/courtship-display | dinobot_courtship_feature | 25 | 100 | 1 | clean | yes | ✅ |
 | dinobot/den-and-burrow | dinobot_den_life | 25 | 100 | 2 | clean | yes | ✅ |
 | dinobot/den-and-burrow | dinobot_den_surface | 25 | 100 | 1 | clean | yes | ✅ |
-| dinobot/snowline-forest | dinobot_snowline_forest_flora | 25 |  |  |  |  | ⬜ |
+| dinobot/snowline-forest | dinobot_snowline_forest_flora | 25 | 100 | 1 | clean | yes | ✅ |
 | dinobot/undergrowth-scale | dinobot_undergrowth_giant | 25 |  |  |  |  | ⬜ |
 <!-- POOLS:END -->
 
