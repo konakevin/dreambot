@@ -145,6 +145,11 @@ the template itself names the beach.) On every NEW path, open one `finalPrompt` 
 entry in it by eye before rendering the other seven. "Before" renders of a written pool come from the
 backup: `--pool <slot>=~/poolbackup-<bot>-<pool>-<ts>.json`.
 
+Two more tool rules (each cost a batch on 2026-09-23): `report.changes[].index` is 1-BASED, pass it to
+`--indices` unchanged (adding 1 rendered kept originals as "pairs"); and never post-process a
+proposal by hand (a manual trailing-period pass touched kept originals and `--execute` refused): put
+mechanical housekeeping in the config's `normalize(text)`, which runs only on LLM candidates.
+
 ### 7. Record and commit
 
 Update `RESEED_STATUS.md` (row + log entry, numbers with basis, commits), the playbook (every new

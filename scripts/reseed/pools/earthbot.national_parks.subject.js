@@ -15,30 +15,32 @@
  * The varying element = the SCENE: geological PROVINCE + FORMATION + POV. Same idea = all three match.
  * Rewrites pre-assign the three from a roster of real US-park geology (each formation real in its
  * province, with its real rock), least-used first, provinces weighted to the recipe's biome spread.
+ * Every formation carries an explicit key regex (its identifying noun) so the checks never depend on
+ * the LLM keeping our adjectives.
  */
 const path = require('path');
 const { shuffle, byUsage } = require('../lib/core');
 
 const poolFile = path.join(__dirname, '../../bots/earthbot/seeds/national_parks_subject.json');
 
-// ── Roster: province → formations (words the recipe would use, tags per the recipe's 8) ─────────
+// ── Roster: province → formations [words, tags, key] ────────────────────────────────────────────
 const P = {
   colorado: {
     weight: 5,
     anchor: 'Colorado Plateau',
     rocks: 'Navajo / Entrada / Wingate sandstone, Claron limestone, Vishnu schist',
     f: {
-      arch: ['freestanding rust-orange Entrada sandstone arch', ['desert']],
-      slot: ['banded Navajo sandstone slot canyon narrowing to shoulder width', ['desert']],
-      hoodoos: ['vermilion Claron limestone hoodoo amphitheater', ['desert']],
-      mesa: ['sheer-walled Wingate sandstone mesa above a desert plain', ['desert']],
-      strata: ['mile-deep layer-cake canyon strata down to black Vishnu schist', ['desert']],
-      slickrock: ['petrified cross-bedded Navajo sandstone dome field', ['desert']],
-      fins: ['parallel Entrada sandstone fin maze', ['desert']],
-      bridge: ['natural sandstone bridge spanning a dry wash', ['desert']],
-      petrified: ['agatized petrified-log badlands in banded bentonite', ['desert']],
-      monocline: ['tilted monocline reef of Wingate cliffs', ['desert']],
-      cliffwall: ['two-thousand-foot Navajo sandstone canyon wall', ['desert']],
+      arch: ['freestanding rust-orange Entrada sandstone arch', ['desert'], /\barch(?:es)?\b/],
+      slot: ['banded Navajo sandstone slot canyon narrowing to shoulder width', ['desert'], /slot/],
+      hoodoos: ['vermilion Claron limestone hoodoo amphitheater', ['desert'], /hoodoo/],
+      mesa: ['sheer-walled Wingate sandstone mesa above a desert plain', ['desert'], /\bmesa/],
+      strata: ['mile-deep layer-cake canyon strata down to black Vishnu schist', ['desert'], /strata|layer-cake|schist/],
+      slickrock: ['petrified cross-bedded Navajo sandstone dome field', ['desert'], /slickrock|sandstone dome|dome field|cross-bedded/],
+      fins: ['parallel Entrada sandstone fin maze', ['desert'], /\bfins?\b/],
+      bridge: ['natural sandstone bridge spanning a dry wash', ['desert'], /natural (?:sandstone |stone )?bridge|dry wash/],
+      petrified: ['agatized petrified-log badlands in banded bentonite', ['desert'], /petrified|agatized/],
+      monocline: ['tilted monocline reef of Wingate cliffs', ['desert'], /monocline/],
+      cliffwall: ['two-thousand-foot Navajo sandstone canyon wall', ['desert'], /canyon wall|sandstone wall/],
     },
   },
   sierra: {
@@ -46,14 +48,14 @@ const P = {
     anchor: 'Sierra Nevada',
     rocks: 'glacier-polished granite',
     f: {
-      face: ['glacier-polished three-thousand-foot granite face', ['alpine', 'temperate-forest']],
-      dome: ['exfoliating granite dome above a glacial valley', ['alpine']],
-      spires: ['granite spire crest above a glacial cirque', ['alpine']],
-      sequoia: ['cathedral-tall giant-sequoia grove', ['temperate-forest']],
-      tarn: ['mirror-clear granite-basin tarn', ['alpine']],
-      waterfall: ['free-leaping waterfall off a granite lip', ['alpine', 'temperate-forest']],
-      valley: ['U-shaped glacier-carved granite valley', ['alpine', 'temperate-forest']],
-      lake: ['cobalt subalpine lake in a granite bowl', ['alpine']],
+      face: ['glacier-polished three-thousand-foot granite face', ['alpine', 'temperate-forest'], /granite (?:face|wall|monolith)/],
+      dome: ['exfoliating granite dome above a glacial valley', ['alpine'], /granite dome|exfoliat/],
+      spires: ['granite spire crest above a glacial cirque', ['alpine'], /spire/],
+      sequoia: ['cathedral-tall giant-sequoia grove', ['temperate-forest'], /sequoia/],
+      tarn: ['mirror-clear granite-basin tarn', ['alpine'], /\btarn/],
+      waterfall: ['free-leaping waterfall off a granite lip', ['alpine', 'temperate-forest'], /waterfall|\bfalls?\b/],
+      valley: ['U-shaped glacier-carved granite valley', ['alpine', 'temperate-forest'], /U-shaped|glacier-carved (?:granite )?valley/],
+      lake: ['cobalt subalpine lake in a granite bowl', ['alpine'], /subalpine lake|granite bowl|alpine lake/],
     },
   },
   cascades: {
@@ -61,13 +63,13 @@ const P = {
     anchor: 'Cascade Range',
     rocks: 'andesite, pumice, basalt columns',
     f: {
-      volcano: ['fourteen-thousand-foot glaciated stratovolcano cone', ['alpine', 'volcanic']],
-      caldera: ['impossibly-cobalt caldera lake inside a collapsed volcano', ['volcanic', 'alpine']],
-      lava: ['fresh lava-blackened pumice plain', ['volcanic']],
-      oldgrowth: ['cathedral Douglas-fir and red-cedar old-growth', ['temperate-forest']],
-      waterfall: ['basalt-column waterfall in a fern gorge', ['temperate-forest']],
-      tarn: ['subalpine tarn under a glaciated cone', ['alpine', 'volcanic']],
-      blast: ['blast-zone pumice plain below a breached crater', ['volcanic']],
+      volcano: ['fourteen-thousand-foot glaciated stratovolcano cone', ['alpine', 'volcanic'], /stratovolcano|volcano cone|glaciated cone|volcanic cone/],
+      caldera: ['impossibly-cobalt caldera lake inside a collapsed volcano', ['volcanic', 'alpine'], /caldera/],
+      lava: ['fresh lava-blackened pumice plain', ['volcanic'], /pumice|lava-blackened|lava field/],
+      oldgrowth: ['cathedral Douglas-fir and red-cedar old-growth', ['temperate-forest'], /old-growth|Douglas-fir|red-?cedar/],
+      waterfall: ['basalt-column waterfall in a fern gorge', ['temperate-forest'], /waterfall|\bfalls?\b/],
+      tarn: ['subalpine tarn under a glaciated cone', ['alpine', 'volcanic'], /\btarn/],
+      blast: ['blast-zone pumice plain below a breached crater', ['volcanic'], /blast[- ]zone|breached crater/],
     },
   },
   rockies: {
@@ -75,13 +77,13 @@ const P = {
     anchor: 'Northern Rockies',
     rocks: 'limestone, shale, argillite, granite',
     f: {
-      headwall: ['seven-thousand-foot limestone and shale headwall', ['alpine']],
-      morainelake: ['jade moraine lake under a limestone headwall', ['alpine', 'temperate-forest']],
-      glacier: ['shrinking cirque glacier on a limestone shelf', ['alpine']],
-      arete: ['knife-edge arête ridge', ['alpine']],
-      larch: ['golden larch basin under granite spires', ['alpine', 'temperate-forest']],
-      spires: ['sky-piercing granite spires over a sagebrush valley', ['alpine']],
-      argillite: ['red-and-green argillite canyon with turquoise pools', ['alpine']],
+      headwall: ['seven-thousand-foot limestone and shale headwall', ['alpine'], /headwall/],
+      morainelake: ['jade moraine lake under a limestone headwall', ['alpine', 'temperate-forest'], /moraine lake/],
+      glacier: ['shrinking cirque glacier on a limestone shelf', ['alpine'], /cirque glacier|glacier on/],
+      arete: ['knife-edge arête ridge', ['alpine'], /ar[eê]te|knife-edge ridge/],
+      larch: ['golden larch basin under granite spires', ['alpine', 'temperate-forest'], /larch/],
+      spires: ['sky-piercing granite spires over a sagebrush valley', ['alpine'], /granite spires|sagebrush/],
+      argillite: ['red-and-green argillite canyon with turquoise pools', ['alpine'], /argillite/],
     },
   },
   yellowstone: {
@@ -89,11 +91,11 @@ const P = {
     anchor: 'Yellowstone Plateau',
     rocks: 'rhyolite, sinter, travertine',
     f: {
-      geyser: ['erupting cone geyser on a white sinter apron', ['volcanic']],
-      pool: ['cobalt thermal pool with a rust-orange mineral apron', ['volcanic']],
-      terraces: ['travertine terrace staircase of white and orange', ['volcanic']],
-      mudpots: ['grey boiling mudpot field', ['volcanic']],
-      canyon: ['yellow rhyolite canyon with a plunging waterfall', ['volcanic', 'alpine']],
+      geyser: ['erupting cone geyser on a white sinter apron', ['volcanic'], /geyser/],
+      pool: ['cobalt thermal pool with a rust-orange mineral apron', ['volcanic'], /thermal pool|cobalt pool|hot spring/],
+      terraces: ['travertine terrace staircase of white and orange', ['volcanic'], /travertine|terrace/],
+      mudpots: ['grey boiling mudpot field', ['volcanic'], /mudpot|mud pot/],
+      canyon: ['yellow rhyolite canyon with a plunging waterfall', ['volcanic', 'alpine'], /rhyolite/],
     },
   },
   pnw: {
@@ -101,13 +103,13 @@ const P = {
     anchor: 'Pacific Northwest',
     rocks: 'basalt, Sitka spruce, moss',
     f: {
-      rainforest: ['moss-draped temperate rainforest of colossal spruce', ['temperate-forest']],
-      seastacks: ['basalt sea-stack coast', ['coastal-temperate']],
-      tidepools: ['wave-cut basalt shelf of tide pools', ['coastal-temperate']],
-      headland: ['sea-cliff headland plunging into cold surf', ['coastal-temperate']],
-      waterfall: ['mossy basalt-gorge waterfall', ['temperate-forest']],
-      bigtrees: ['colossal Sitka spruce and hemlock grove', ['temperate-forest']],
-      river: ['glacial river braiding through rainforest', ['temperate-forest']],
+      rainforest: ['moss-draped temperate rainforest of colossal spruce', ['temperate-forest'], /rainforest/],
+      seastacks: ['basalt sea-stack coast', ['coastal-temperate'], /sea[- ]stack/],
+      tidepools: ['wave-cut basalt shelf of tide pools', ['coastal-temperate'], /tide[- ]pool/],
+      headland: ['sea-cliff headland plunging into cold surf', ['coastal-temperate'], /headland/],
+      waterfall: ['mossy basalt-gorge waterfall', ['temperate-forest'], /waterfall|\bfalls?\b/],
+      bigtrees: ['colossal Sitka spruce and hemlock grove', ['temperate-forest'], /Sitka|hemlock/],
+      river: ['glacial river braiding through rainforest', ['temperate-forest'], /braid/],
     },
   },
   alaska: {
@@ -115,14 +117,14 @@ const P = {
     anchor: 'Alaskan',
     rocks: 'glacier ice, granite, tundra',
     f: {
-      tidewater: ['calving tidewater glacier face', ['arctic-polar', 'alpine']],
-      icefield: ['continent-scale icefield spilling glaciers', ['arctic-polar', 'alpine']],
-      fjord: ['glacier-carved fjord walls', ['coastal-temperate', 'alpine']],
-      boreal: ['boreal spruce taiga under a granite massif', ['temperate-forest', 'alpine']],
-      tundra: ['autumn-red tundra under snow peaks', ['arctic-polar', 'alpine']],
-      braided: ['braided glacial river plain', ['alpine']],
-      spires: ['granite spire wall above a glacier', ['alpine', 'arctic-polar']],
-      volcano: ['smoking volcano over a caldera lake', ['volcanic', 'alpine']],
+      tidewater: ['calving tidewater glacier face', ['arctic-polar', 'alpine'], /tidewater|calving/],
+      icefield: ['continent-scale icefield spilling glaciers', ['arctic-polar', 'alpine'], /icefield|ice field|ice cap/],
+      fjord: ['glacier-carved fjord walls', ['coastal-temperate', 'alpine'], /fjord/],
+      boreal: ['boreal spruce taiga under a granite massif', ['temperate-forest', 'alpine'], /boreal|taiga/],
+      tundra: ['autumn-red tundra under snow peaks', ['arctic-polar', 'alpine'], /tundra/],
+      braided: ['braided glacial river plain', ['alpine'], /braid/],
+      spires: ['granite spire wall above a glacier', ['alpine', 'arctic-polar'], /spire/],
+      volcano: ['smoking volcano over a caldera lake', ['volcanic', 'alpine'], /volcano/],
     },
   },
   hawaii: {
@@ -130,13 +132,13 @@ const P = {
     anchor: 'Hawaiian volcanic shield',
     rocks: 'pāhoehoe and ʻaʻā lava, cinder',
     f: {
-      lava: ['lava-blackened shield flank of fresh pāhoehoe', ['volcanic']],
-      caldera: ['summit caldera floor of cooled lava', ['volcanic']],
-      seacliff: ['lava sea cliffs above a black-sand pocket', ['volcanic', 'coastal-tropical']],
-      crater: ['rainforest-rimmed pit crater', ['volcanic', 'tropical-jungle']],
-      cinder: ['cinder-cone desert of a summit crater basin', ['volcanic', 'desert']],
-      lavatube: ['collapsed lava-tube skylight', ['volcanic']],
-      rainforest: ['ʻōhiʻa and tree-fern rainforest on old lava', ['tropical-jungle', 'volcanic']],
+      lava: ['lava-blackened shield flank of fresh pāhoehoe', ['volcanic'], /p[āa]hoehoe|shield flank|lava flow/],
+      caldera: ['summit caldera floor of cooled lava', ['volcanic'], /caldera/],
+      seacliff: ['lava sea cliffs above a black-sand pocket', ['volcanic', 'coastal-tropical'], /sea cliff|black[- ]sand/],
+      crater: ['rainforest-rimmed pit crater', ['volcanic', 'tropical-jungle'], /pit crater/],
+      cinder: ['cinder-cone desert of a summit crater basin', ['volcanic', 'desert'], /cinder/],
+      lavatube: ['collapsed lava-tube skylight', ['volcanic'], /lava[- ]tube|skylight/],
+      rainforest: ['ʻōhiʻa and tree-fern rainforest on old lava', ['tropical-jungle', 'volcanic'], /ʻōhiʻa|ohia|tree[- ]fern/],
     },
   },
   sonoran: {
@@ -144,14 +146,14 @@ const P = {
     anchor: 'Mojave',
     rocks: 'monzogranite, alkali, badland clay',
     f: {
-      saguaro: ['saguaro forest on a boulder bajada', ['desert']],
-      joshua: ['Joshua-tree forest among monzogranite boulder piles', ['desert']],
-      alkali: ['salt-crusted alkali flat below fault-block ranges', ['desert']],
-      dunes: ['star-dune field of golden sand', ['desert']],
-      badlands: ['mustard-and-rust badlands', ['desert']],
-      playa: ['cracked playa with sliding-stone tracks', ['desert']],
-      canyon: ['marble-narrows canyon', ['desert']],
-      oasis: ['fan-palm oasis on a fault spring', ['desert']],
+      saguaro: ['saguaro forest on a boulder bajada', ['desert'], /saguaro/],
+      joshua: ['Joshua-tree forest among monzogranite boulder piles', ['desert'], /Joshua/],
+      alkali: ['salt-crusted alkali flat below fault-block ranges', ['desert'], /alkali|salt flat/],
+      dunes: ['star-dune field of golden sand', ['desert'], /dune/],
+      badlands: ['mustard-and-rust badlands', ['desert'], /badlands/],
+      playa: ['cracked playa with sliding-stone tracks', ['desert'], /playa/],
+      canyon: ['marble-narrows canyon', ['desert'], /marble|narrows/],
+      oasis: ['fan-palm oasis on a fault spring', ['desert'], /oasis/],
     },
   },
   greatbasin: {
@@ -159,9 +161,9 @@ const P = {
     anchor: 'Great Basin',
     rocks: 'limestone, quartzite',
     f: {
-      bristlecone: ['gnarled bristlecone pines on a limestone ridge', ['alpine', 'desert']],
-      dunes: ['tallest dunes in a mountain basin', ['desert']],
-      cave: ['marble cave of shields and stalactites', ['desert']],
+      bristlecone: ['gnarled bristlecone pines on a limestone ridge', ['alpine', 'desert'], /bristlecone/],
+      dunes: ['tallest dunes in a mountain basin', ['desert'], /dune/],
+      cave: ['marble cave of shields and stalactites', ['desert'], /\bcave|stalactite/],
     },
   },
   plains: {
@@ -169,9 +171,9 @@ const P = {
     anchor: 'Badlands',
     rocks: 'striped clay, columnar phonolite',
     f: {
-      striped: ['striped clay badlands eroding into spires', ['desert']],
-      prairie: ['mixed-grass prairie breaks over badlands', ['desert']],
-      tower: ['columnar igneous tower over a river plain', ['desert']],
+      striped: ['striped clay badlands eroding into spires', ['desert'], /badlands|striped clay/],
+      prairie: ['mixed-grass prairie breaks over badlands', ['desert'], /prairie/],
+      tower: ['columnar igneous tower over a river plain', ['desert'], /columnar|igneous tower/],
     },
   },
   appalachian: {
@@ -179,11 +181,11 @@ const P = {
     anchor: 'Appalachian',
     rocks: 'sandstone, rhododendron, cove hardwoods',
     f: {
-      ridges: ['layered blue deciduous ridges receding', ['temperate-forest']],
-      cascade: ['sandstone cascade in a rhododendron hollow', ['temperate-forest']],
-      gorge: ['sandstone-rim gorge', ['temperate-forest']],
-      cove: ['cove-hardwood forest of colossal tulip poplars', ['temperate-forest']],
-      bald: ['grassy bald on a high ridge', ['temperate-forest', 'alpine']],
+      ridges: ['layered blue deciduous ridges receding', ['temperate-forest'], /ridges/],
+      cascade: ['sandstone cascade in a rhododendron hollow', ['temperate-forest'], /cascade|rhododendron/],
+      gorge: ['sandstone-rim gorge', ['temperate-forest'], /gorge/],
+      cove: ['cove-hardwood forest of colossal tulip poplars', ['temperate-forest'], /cove|tulip/],
+      bald: ['grassy bald on a high ridge', ['temperate-forest', 'alpine'], /\bbald\b/],
     },
   },
   atlantic: {
@@ -191,9 +193,9 @@ const P = {
     anchor: 'cold Atlantic',
     rocks: 'pink granite',
     f: {
-      granite: ['pink granite domes meeting cold Atlantic surf', ['coastal-temperate']],
-      cobble: ['cobble beach under pink granite cliffs', ['coastal-temperate']],
-      spruce: ['spruce-fir forest on pink granite ledges', ['coastal-temperate', 'temperate-forest']],
+      granite: ['pink granite domes meeting cold Atlantic surf', ['coastal-temperate'], /granite dome|pink granite/],
+      cobble: ['cobble beach under pink granite cliffs', ['coastal-temperate'], /cobble/],
+      spruce: ['spruce-fir forest on pink granite ledges', ['coastal-temperate', 'temperate-forest'], /spruce/],
     },
   },
   florida: {
@@ -201,10 +203,10 @@ const P = {
     anchor: 'subtropical',
     rocks: 'limestone, sawgrass, mangrove',
     f: {
-      sawgrass: ['sawgrass river of grass with cypress domes', ['coastal-tropical']],
-      cypress: ['flooded bald-cypress swamp', ['coastal-tropical']],
-      mangrove: ['mangrove tunnel estuary', ['coastal-tropical']],
-      keys: ['coral-key shallows', ['coastal-tropical']],
+      sawgrass: ['sawgrass river of grass with cypress domes', ['coastal-tropical'], /sawgrass/],
+      cypress: ['flooded bald-cypress swamp', ['coastal-tropical'], /cypress swamp|bald-cypress|cypress/],
+      mangrove: ['mangrove tunnel estuary', ['coastal-tropical'], /mangrove/],
+      keys: ['coral-key shallows', ['coastal-tropical'], /coral[- ]key|coral shallows|reef shallows/],
     },
   },
   chihuahuan: {
@@ -212,10 +214,10 @@ const P = {
     anchor: 'Chihuahuan Desert',
     rocks: 'gypsum, fossil-reef limestone',
     f: {
-      gypsum: ['gypsum dune field of cream-white selenite', ['desert']],
-      reef: ['fossil-reef limestone escarpment', ['desert']],
-      rio: ['limestone canyon walls of a desert river', ['desert']],
-      cavern: ['limestone cavern of colossal stalagmites', ['desert']],
+      gypsum: ['gypsum dune field of cream-white selenite', ['desert'], /gypsum|selenite/],
+      reef: ['fossil-reef limestone escarpment', ['desert'], /fossil[- ]reef|reef escarpment|reef limestone/],
+      rio: ['limestone canyon walls of a desert river', ['desert'], /desert river|river canyon|canyon walls/],
+      cavern: ['limestone cavern of colossal stalagmites', ['desert'], /cavern|stalagmite/],
     },
   },
   greatlakes: {
@@ -223,9 +225,9 @@ const P = {
     anchor: 'freshwater',
     rocks: 'sandstone',
     f: {
-      seacaves: ['sandstone sea caves on a freshwater coast', ['coastal-temperate']],
-      dunes: ['perched dune bluffs over a freshwater sea', ['coastal-temperate', 'temperate-forest']],
-      cliffs: ['mineral-streaked sandstone cliffs', ['coastal-temperate']],
+      seacaves: ['sandstone sea caves on a freshwater coast', ['coastal-temperate'], /sea cave/],
+      dunes: ['perched dune bluffs over a freshwater sea', ['coastal-temperate', 'temperate-forest'], /dune/],
+      cliffs: ['mineral-streaked sandstone cliffs', ['coastal-temperate'], /cliffs?\b/],
     },
   },
   arctic: {
@@ -233,9 +235,9 @@ const P = {
     anchor: 'Arctic',
     rocks: 'permafrost, aufeis',
     f: {
-      tundra: ['polygonal permafrost tundra plain', ['arctic-polar']],
-      braided: ['braided river through treeless arctic mountains', ['arctic-polar', 'alpine']],
-      aufeis: ['aufeis ice sheet filling a valley floor', ['arctic-polar']],
+      tundra: ['polygonal permafrost tundra plain', ['arctic-polar'], /tundra|permafrost/],
+      braided: ['braided river through treeless arctic mountains', ['arctic-polar', 'alpine'], /braid/],
+      aufeis: ['aufeis ice sheet filling a valley floor', ['arctic-polar'], /aufeis/],
     },
   },
 };
@@ -277,33 +279,23 @@ const SURFACE = [
 // ── Parsing ─────────────────────────────────────────────────────────────────────────────────────
 const PROV_RULES = [
   ['chihuahuan', /gypsum|selenite|Chihuahuan|fossil[- ]reef|Guadalupe|Rio Grande/i],
-  ['yellowstone', /Yellowstone|geyser|sinter|travertine|thermal|mudpot|prismatic/i],
-  ['hawaii', /Hawaiian|pāhoehoe|pahoehoe|ʻaʻā|lava tube|ohia|ʻōhiʻa|shield/i],
+  ['yellowstone', /Yellowstone|geyser|sinter|travertine|thermal|mudpot|prismatic|rhyolite/i],
+  ['hawaii', /Hawaiian|pāhoehoe|pahoehoe|ʻaʻā|lava tube|lava-tube|ohia|ʻōhiʻa|shield/i],
   ['alaska', /Alaska|Alaskan|tidewater|icefield|ice field|fjord|taiga|Aleutian/i],
   ['arctic', /arctic|permafrost|aufeis|tundra/i],
-  ['florida', /sawgrass|cypress|mangrove|Everglades|coral key/i],
+  ['florida', /sawgrass|cypress|mangrove|Everglades|coral key|subtropical/i],
   ['atlantic', /Atlantic|pink granite/i],
   ['greatlakes', /freshwater|Great Lakes|Superior/i],
   ['greatbasin', /Great Basin|bristlecone/i],
-  ['plains', /Badlands|prairie|phonolite/i],
-  ['appalachian', /Appalachian|rhododendron|tulip poplar|cove[- ]hardwood|bald\b/i],
-  ['sonoran', /Mojave|Sonoran|saguaro|Joshua|alkali|playa|sliding-stone|fan-palm|bajada/i],
+  ['plains', /Badlands|prairie|phonolite|igneous tower/i],
+  ['appalachian', /Appalachian|rhododendron|tulip poplar|cove[- ]hardwood|\bbald\b/i],
+  ['sonoran', /Mojave|Sonoran|saguaro|Joshua|alkali|playa|sliding-stone|fan-palm|bajada|monzogranite/i],
   ['colorado', /Colorado Plateau|Navajo|Entrada|Wingate|Claron|Vishnu|hoodoo|slickrock|petrified|monocline|slot canyon|sandstone (?:arch|fin|mesa|bridge)/i],
   ['pnw', /Pacific Northwest|Sitka|sea[- ]stack|tide pool|temperate rainforest|hemlock|moss-draped/i],
   ['cascades', /Cascade|stratovolcano|caldera|pumice|blast[- ]zone|Douglas-fir|red-cedar/i],
   ['rockies', /Rockies|Rocky Mountain|argillite|larch|moraine lake|headwall|arête|arete|sagebrush/i],
-  ['sierra', /Sierra|sequoia|granite (?:face|dome|monolith|wall|lip|bowl|basin)|glacier-polished/i],
+  ['sierra', /Sierra|sequoia|granite (?:face|dome|monolith|wall|lip|bowl|basin|spire)|glacier-polished/i],
 ];
-const FEAT_RULES = [];
-for (const [pk, prov] of Object.entries(P))
-  for (const [fk, [words]] of Object.entries(prov.f)) {
-    const key = words
-      .split(' ')
-      .filter((w) => w.length > 4 && !/^(above|below|inside|through|under|over|with|of|the|and)$/i.test(w))
-      .slice(0, 3)
-      .map((w) => w.replace(/[^\wÀ-ɏ-]/g, ''));
-    FEAT_RULES.push([pk, fk, new RegExp(key.map((w) => `\\b${w}`).join('.*'), 'i')]);
-  }
 const GENERIC_FEATURE = [
   ['glacier', /glacier|icefield|crevasse/i],
   ['waterfall', /waterfall|cascade|\bfalls\b/i],
@@ -340,6 +332,8 @@ const POV_RULES = [
   ['Knee-level POV across', /^(?:Knee-level|Eye-level|Ground-level|Low POV across)/i],
 ];
 const entryText = (e) => (typeof e === 'string' ? e : e.description);
+const provRe = (pk) => PROV_RULES.find(([k]) => k === pk)[1];
+const featRe = (pk, fk) => new RegExp(P[pk].f[fk][2].source, 'i');
 function parse(text) {
   let province = 'other';
   for (const [k, re] of PROV_RULES)
@@ -348,11 +342,17 @@ function parse(text) {
       break;
     }
   let feature = null;
-  for (const [pk, fk, re] of FEAT_RULES)
-    if (pk === province && re.test(text)) {
-      feature = fk;
-      break;
+  if (P[province]) {
+    // the formation whose key matches EARLIEST in the text names the scene (the head noun leads)
+    let best = Infinity;
+    for (const fk of Object.keys(P[province].f)) {
+      const m = text.match(featRe(province, fk));
+      if (m && m.index < best) {
+        best = m.index;
+        feature = fk;
+      }
     }
+  }
   if (!feature) {
     for (const [k, re] of GENERIC_FEATURE)
       if (re.test(text)) {
@@ -432,7 +432,7 @@ Examples already in the pool (match their voice, order and length):
 ${examples.map((e) => '- ' + e).join('\n')}
 
 Rules:
-- Open with EXACTLY the POV opener given. Describe EXACTLY the formation given, in its real rock and its real region; you may name the broad regional anchor once ("${'Colorado Plateau'}", "Cascade Range" …) and never a park, a landmark, a trail or a viewpoint.
+- Open with EXACTLY the POV opener given. Describe EXACTLY the formation given, naming it with the formation's own noun (arch, slot canyon, hoodoo, geyser, tidewater glacier, saguaro forest …) in its real rock and its real region; you may name the broad regional anchor once ("Colorado Plateau", "Cascade Range" …) and never a park, a landmark, a trail or a viewpoint.
 - Drama vocabulary (vertigo-inducing, cathedral-vertical, razor-edge, mile-deep, continent-scale); a concrete scale anchor; surface character words.
 - Geology only: no weather, no light or time of day, no sky, no clouds, no fog or mist, no wildlife, no people, nothing built. Describe only what is present; write no negative words.
 
@@ -478,9 +478,8 @@ const BANS = [
 function mechanical(cand, slot) {
   const p = [];
   const a = slot.assignment;
-  const parsed = parse(cand);
-  if (parsed.province !== a.province) p.push(`province ${parsed.province}≠${a.province}`);
-  if (parsed.feature !== a.feature) p.push(`feature ${parsed.feature}≠${a.feature}`);
+  if (!provRe(a.province).test(cand)) p.push(`province words missing (${a.province})`);
+  if (!featRe(a.province, a.feature).test(cand)) p.push(`formation words missing (${a.feature})`);
   if (!cand.startsWith(a.pov.split(' ')[0])) p.push('pov changed');
   const words = cand.split(/\s+/).length;
   if (words < 24 || words > 52) p.push(`${words} words`);
