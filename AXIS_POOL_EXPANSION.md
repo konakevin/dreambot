@@ -67,7 +67,7 @@ this file in the same commit.
 - [x] **brickbot/balloon-festival** — 8/8 pools at ≥100 and clean; smoke 1/3 delivered, 2 failed; 2026-09-24 19:56 UTC
 - [x] **brickbot/airfield-biplanes** — 8/8 pools at ≥100 and clean; smoke 0/3 delivered, 3 failed; 2026-09-24 20:19 UTC
 - [x] **tinybot/snow-globe-world** — 3/3 pools at ≥100 and clean; smoke 1/3 delivered, 2 failed; 2026-09-24 20:30 UTC
-- [ ] **mangabot/game-center-arcade** — 5/6 pools at ≥100 and clean; smoke 0/3 delivered, 3 failed; 2026-09-24 20:49 UTC
+- [x] **mangabot/game-center-arcade** — 6/6 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:38 UTC
 - [x] **steambot/brass-glasshouse** — 7/7 pools at ≥100 and clean; smoke 0/3 delivered, 3 failed; 2026-09-24 21:06 UTC
 - [x] **pixelbot/floating-market-canal** — 8/8 pools at ≥100 and clean; smoke 1/3 delivered, 2 failed; 2026-09-24 21:31 UTC
 - [x] **pixelbot/volcano-forge** — 9/9 pools at ≥100 and clean (camera originals restored from git 21:58 UTC); smoke 3/3 delivered; 2026-09-24 21:53 UTC
@@ -106,12 +106,12 @@ this file in the same commit.
 | tinybot/snow-globe-world | tinybot_snow_globe_moments | 25 | 100 | 1 | clean | yes | ✅ |
 | tinybot/snow-globe-world | tinybot_snow_globe_vessel | 100 | 100 | 0 | clean | yes | ✅ |
 | tinybot/snow-globe-world | tinybot_snow_globe_weather | 100 | 100 | 0 | clean | yes | ✅ |
-| mangabot/game-center-arcade | game_center_arcade_camera | 25 | 100 | 1 | clean | yes | ✅ |
-| mangabot/game-center-arcade | game_center_arcade_extra_life | 25 | 100 | 4 | clean | yes | ✅ |
-| mangabot/game-center-arcade | game_center_arcade_machine | 25 | 100 | 1 | clean | yes | ✅ |
-| mangabot/game-center-arcade | game_center_arcade_neon_light | 25 | 100 | 1 | clean | yes | ✅ |
-| mangabot/game-center-arcade | game_center_arcade_play_moment | 25 | 83 | 5 | clean | yes | ⚠️ needs attention |
-| mangabot/game-center-arcade | game_center_arcade_prize_life | 25 | 100 | 1 | clean | yes | ✅ |
+| mangabot/game-center-arcade | game_center_arcade_camera | 100 | 100 | 0 | clean | yes | ✅ |
+| mangabot/game-center-arcade | game_center_arcade_extra_life | 100 | 100 | 0 | clean | yes | ✅ |
+| mangabot/game-center-arcade | game_center_arcade_machine | 100 | 100 | 0 | clean | yes | ✅ |
+| mangabot/game-center-arcade | game_center_arcade_neon_light | 100 | 100 | 0 | clean | yes | ✅ |
+| mangabot/game-center-arcade | game_center_arcade_play_moment | 83 | 100 | 1 | clean | yes | ✅ |
+| mangabot/game-center-arcade | game_center_arcade_prize_life | 100 | 100 | 0 | clean | yes | ✅ |
 | steambot/brass-glasshouse | steambot_brass_glasshouse_charm | 25 | 100 | 2 | clean | yes | ✅ |
 | steambot/brass-glasshouse | steambot_brass_glasshouse_keeper | 14 | 100 | 2 | clean | yes | ✅ |
 | steambot/brass-glasshouse | steambot_brass_glasshouse_light | 22 | 100 | 1 | clean | yes | ✅ |
