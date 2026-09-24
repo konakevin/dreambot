@@ -555,8 +555,22 @@ the picture: the rich register visibly lands where the family is a strong Flux c
 multi: saturated and family-dominant); blue and white "rich" read only mildly stronger than pastel; and
 **green did not render green in any of its 3 renders** (both registers, both templates): the companion
 species' own colours win, the flower×colour render-prior lesson of the playbook. Pollinators: one tiny
-butterfly in 11 renders, the pre-existing prompt-order defect of §6e (unchanged by this work, still a
-separate job).
+butterfly in 11 renders, the pre-existing prompt-order defect of §6e.
+
+**But every one of those 11 was the same edge-to-edge multicolour wall.** Kevin: "is everyone supposed
+to be as many colors and flowers as possible?" No: the bot-wide `PROMPT_PREFIX` ("abundant blooms
+filling the entire frame edge-to-edge", first tokens of every prompt), the `LUSH_HERO_MANDATE` (Sonnet
+brief) and the template's "FULL OF FLOWERS" lines packed every render regardless of the entry, so the
+pool repair was invisible in the picture. **Batch 3 (the same 8 entries, after the path's own
+composition fix: `FLOWER_FRIENDS_MANDATE` hero branch, `promptPrefixReplaceByPath`,
+`promptSuffixByPath`, focal insect first in the STRUCTURE block):** insects visible in 8 of 8 (first
+insect named at 33-41% of the prompt, was 52-59%), compositions differ per entry (open sky with a
+cluster, intimate single focal bloom, a giant butterfly on a red hibiscus), colour follows the entry
+(blue / white / pink / orange / red / multi each read as their family; green still does not), the
+register reads (soft peach pastel vs saturated scarlet). Kevin: "these are absolutely beautiful."
+**That is the proof the pilot needed: a repaired subject pool produces visibly different scenes, once
+the path lets the entry through.** Pairs page (before/after per entry): the session artifact "Flower
+Friends Path Fix".
 
 **Known imbalance, not fixed.** The register alternated by slot parity and the family rotated by slot
 index, so register and family came out coupled: orange and yellow rewrites are all pastel, blue and

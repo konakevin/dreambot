@@ -326,7 +326,22 @@ throughout") in the prompt. After: entry flowers led 8 of 8 forced renders, regi
 **Renders, 11 forced shadow posts (3 before the template change, 8 after), reviewed in the app.** Rich
 lands where the family is a strong Flux colour (pink, red, multi). Blue/white rich read mildly stronger
 than pastel. Green never rendered green (3 of 3): companion species' priors win. One tiny butterfly in
-11: the pollinator defect above, untouched.
+11: the pollinator defect above.
+
+**Third pass, the path's composition (the one that made the repair visible).** All 11 renders above were
+the same edge-to-edge multicolour wall; Kevin asked why. Cause: the bot-wide `PROMPT_PREFIX` ("abundant
+blooms filling the entire frame edge-to-edge", the first tokens of every Flux prompt), the
+`LUSH_HERO_MANDATE` in `buildBrief`, and the template's "FULL OF FLOWERS" / "filling the lower 50-65%"
+lines. Fix, path-only, in `scripts/bots/bloombot/index.js` + the template: a `FLOWER_FRIENDS_MANDATE`
+hero branch (one composed cluster of the entry's flowers, open air around it, the pollinator cast
+plainly visible; same family as hanging-flowers), `promptPrefixReplaceByPath['flower-friends']` (short,
+positive), `promptSuffixByPath['flower-friends']` (drops "receding layers of more blooms"), and the
+STRUCTURE block now names the focal pollinator FIRST, before the entry's flowers. No new medium key (a
+code-only medium would leave Dream Like This without a `dlt_clean_mediums` row). The same 8 entries
+re-rendered: insects visible 8 of 8 (first insect at 33-41% of the prompt, was 52-59%), compositions
+vary per entry, colour and register follow the entry. Kevin: "these are absolutely beautiful." The
+pilot's question is answered: a repaired pool gives visibly different scenes once the path lets the
+entry through. Still true: green line-ups do not render green.
 
 **Forced-render recipe** (the harness lived in the session scratchpad; rebuild in five lines): wrap
 `bot.buildBrief` so that for `path === 'flower-friends'` it passes a picker proxy
