@@ -154,6 +154,26 @@ config as the roster. Pre-assign from that roster exactly as in step 3. Subject 
 only if Kevin asks. Never promote the path to `paths[]`, and never touch DinoBot's four shared paleo
 pools. Track B has its own table in `RESEED_STATUS.md`.
 
+## Operating mode: delegated QA (Kevin, 2026-09-23)
+
+Kevin delegated both gates: _"do your own QA gating, maintain a report of which paths are done, and flag
+any that give you problems … i won't interrupt you anymore."_ So per pool: read every rewrite on the
+review page yourself, execute, read every render yourself, commit + push, update `RESEED_STATUS.md`
+(row, log, links). Put anything uncertain under **Flags for Kevin** in that file and mark the row
+`flagged`; never decide a pool's intent or a path's composition silently. What he did NOT delegate:
+taste. A template change is only ever a fidelity fix (a second subject source, a hard-coded shape or
+colour that overrides the entry); the day he delegated, he reverted a composition change I made from a
+"I like this one more" remark. When he asks a question, answer it and stop.
+
+Tool lessons since the pilot (already in the core/configs, listed so they are not re-learned):
+object entries need `entryText` + `build` in the config; the three axes of an assignment must draw
+independently (a shared attempt index locks them in step and retries the same dozen combinations);
+geography must be checked in `assign` (a motu is an atoll islet; green and red Hawaiian sands are
+pocket beaches); a colour word that is also a species name ("fuchsia") and a bare word that is also a
+species ("vines") must not be aliases; bird clauses split on ";" first; the length band widens when the
+roster's names are longer than the originals'; `--resume` on a report with the bad changes filtered
+out regenerates only those slots.
+
 ## Reporting to Kevin
 
 Short and plain. Numbers with their basis. Say what is proven and what is not. If the renders cannot

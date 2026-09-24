@@ -24,6 +24,39 @@ actually varying scenes."_ (2026-09-23, proven on the pilot below.)
    in the app, and he said they are good.
 4. This file updated, the pool + path fix committed, the playbook updated with any new lesson.
 
+**Operating mode since 2026-09-23 (Kevin):** _"iterate through all the paths … do your own QA gating,
+maintain a report of which paths are done, and flag any that give you problems … i won't interrupt you
+anymore."_ So the agent reviews every proposal and every render itself, commits + pushes per path, and
+records the review-page and pairs-page links in the row. Anything uncertain goes under **Flags for
+Kevin** below and the row is marked `flagged`; nothing uncertain is decided silently. Path fixes stay
+fidelity-only (a second subject source, a hard-coded shape that overrides the entry); composition and
+taste are never changed on the agent's own judgement.
+
+## Resume here (the agent updates this at every stage; read it first after a context reset)
+
+Kevin 2026-09-23: _"collect any problem paths or questions and make a note of them so we can revisit …
+without blocking you from getting through all the paths. go now, don't stop until you get all the way
+through."_ Work Track A worst-first (EarthBot `*_subject` pools next, then FaeBot, then the rest of the
+queue), then Track B. Per pool: config in `scripts/reseed/pools/`, dry run to the session scratch dir,
+self-review, `--execute`, forced paired renders (8 before + 8 after on the same slots), self-review,
+commit + push, row + log here.
+
+- **Current pool:** `earthbot/coastal-vista` `coastal_vista_subject` (200 object entries): config
+  `scripts/reseed/pools/earthbot.coastal_vista.subject.js` written (same = region + feature + rock;
+  32 distinct of 200); smoke test exposed parser precedence bugs (scale anchors with feature words,
+  region anchors containing "fjord"/"cliff"), fixed; next = re-smoke (`--limit 12`), full dry run to
+  the scratch dir `cv/full`, self-review, execute, 8 before + 8 after forced renders on the same
+  slots, close-out commit + push.
+- **After that:** EarthBot `andes_patagonia_subject` (55%), `australian_outback_subject` (53%),
+  `iceland_raw_subject` (52%), `european_wilderness_subject` (50%), `epic_sunset_subject` (48%),
+  `national_parks_subject` (40%), `hidden_corner_subject` (38%), `african_landscape_subject` (36%),
+  `asia_landscape_subject` (34%); same shape (object entries, a region/feature roster each), so clone
+  the coastal config. Then FaeBot `enchanted-vista` anchors, then the rest of `queue.js`, then Track B.
+
+## Flags for Kevin
+
+_(none yet)_
+
 **Accepted Flux limits (Kevin 2026-09-23, do not chase):** species render in their own prior colour
 (a green-titled flower line-up renders pink/white); a rich register only reads on strong-colour
 families. "You can't force Flux out of its trained data, the existing behaviours are fine."
@@ -36,6 +69,7 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | -------- | -------------------- | ----------------------------------------------- | ------- | ------------------------------------------------------------ | --------------------------------------------------------------------- | ---------------------------------------------------- | -------- | ------------------------------------------------ | ---------- |
 | bloombot | flower-friends       | `bloombot_flower_friends_flower_focal_cluster`  | 125     | 44 → 125 line-ups (same = 4+ shared species of 5-6, greedy)  | template defers to entry; own hero mandate + prefix + suffix + order  | 3 + 8 + 8 forced; paired 8: "absolutely beautiful"   | **DONE** | e672068b, 2ff1223d, 21c5222a, e99f8147           | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_hummingbird_cast` | 153    | 47 → 153 casts (same = focal species + behaviour + flower); 17 → 40 species, 5 → 13 behaviours, 11 → 40 flowers | template: no STRICT roster/palette, entry is the only flower source, own hero mandate + prefix + suffix | 8 before + 8 after, paired, shadow; Kevin OK'd | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
+| earthbot | hawaii-flowers       | `hawaii_flowers_subject` (object entries)        | 200     | 17 → 200 distinct beaches (same = sand type + shore form + water state); 5 → 9 sand types, 3 → 10 shore forms, 4 → 8 water states; beach-only by design | template: 2 lines that hard-coded "sand crescent + calm surf" now defer to the entry | 8 + 8 paired, shadow; self-reviewed | **DONE** (see log: modest visible gain) | 60c41e57 + close-out | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 33 → 120 line-ups (same = 4+ shared species, 3 when only 3); 26 → 70 species; red 35 → 20 | same fix                                                              | same batch                                         | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
 
 Status values: `queued` · `analysing` · `proposal ready` (dry run done, waiting on Kevin's OK) ·
@@ -126,6 +160,18 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-23 · earthbot/hawaii-flowers `hawaii_flowers_subject` · DONE (self-reviewed).** First object-
+  entry pool ({ tags, description }). 17 → 200 distinct beaches (same = sand type + shore form + water
+  state); 9 real sand types, 10 shore forms, 8 water states; each rewrite keeps its original's camera
+  opener; geography checked (a first pass produced 29 impossible combos such as "Big Island motu", fixed
+  by coherence rules in `assign` and a filtered `--resume`). Template: 2 lines that hard-coded "sand
+  crescent + calm surf" now defer to the entry. Renders (8 paired, shadow): honest read is that this
+  path's visible variety comes mostly from its lighting / sky / flower axes, which already varied
+  before; the beach entry shows through partly (sand colour, shore shape) and Flux draws black / white
+  / golden / pink sand reliably, green and red rarely. Nothing broke; the pool is unique; the visible
+  gain is modest. One render (#6) shows cliffs and a lava fall that the beach entry never named, from
+  the path's hero / phenomenon axes, not from this work. Tool lesson: the three axes of an assignment
+  must be drawn independently (a shared attempt index locked them in step and left 31 slots unfilled).
 - **2026-09-23 · bloombot/flower-humming-birds, both pools · renders posted.** Tool factored into
   `scripts/reseed/` (core + a config per pool). Cast pool: 153 entries were 17 focal species × two
   behaviours (hover 101, sip 51) × ~12 flowers; now 153 distinct casts from 40 real species with their

@@ -189,7 +189,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
       ? `\n\n━━━ RARE OPTICAL / WEATHER PHENOMENON (one signature real-Earth event, woven naturally into the scene) ━━━\n${phenomenon}\n\nCRITICAL — PHENOMENON-LIGHTING COMPATIBILITY: If this phenomenon physically contradicts the rolled lighting time-of-day (eclipse + daytime, aurora + midday, green flash needs exact sunset, sun-pillars need visible sun), DROP THE PHENOMENON entirely. Restrained truth beats forced impossibility.`
       : '';
 
-    return `You are a Hawaiian / tropical-paradise photographer writing a SINGLE epic HAWAIIAN BEACH SCENE for EarthBot. The signature: a ground-level tropical beach with TROPICAL FLOWERS tastefully sprinkled through the scene, palms silhouetted at the inland fringe, calm tropical surf, and the wider tropical beach extending behind. The flowers ARE the tropical character; the beach IS the scene. Both are EQUALLY visible — 50/50 partnership. Hawaii / Costa Rica / Maldives / Bali / Tahiti / Polynesia / Caribbean. Output wraps with style prefix + suffix.
+    return `You are a Hawaiian / tropical-paradise photographer writing a SINGLE epic HAWAIIAN BEACH SCENE for EarthBot. The signature: a ground-level tropical beach with TROPICAL FLOWERS tastefully sprinkled through the scene, the palms and the water exactly as the beach entry below describes them, and the wider tropical beach extending behind. The flowers ARE the tropical character; the beach IS the scene. Both are EQUALLY visible — 50/50 partnership. Hawaii / Costa Rica / Maldives / Bali / Tahiti / Polynesia / Caribbean. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — REAL HAWAIIAN / TROPICAL BEACH, NEVER SCI-FI ━━━
 
@@ -217,7 +217,7 @@ NEVER overwater bungalows, NEVER thatched huts, NEVER piers, NEVER docks, NEVER 
 
 ━━━ COMPOSITION MANDATE — 50/50 BEACH + FLOWERS PARTNERSHIP ━━━
 
-The viewer reads BOTH the beach and the flowers equally. The beach is the SCENE (~50% visual weight): sand crescent + palms + tropical surf + open horizon. The flowers are the TROPICAL CHARACTER (~50% visual weight): named-species accents distributed across the scene. Neither dominates.
+The viewer reads BOTH the beach and the flowers equally. The beach is the SCENE (~50% visual weight): exactly the beach the entry below describes (its sand colour, its shape, its water, its palms) + open horizon. The flowers are the TROPICAL CHARACTER (~50% visual weight): named-species accents distributed across the scene. Neither dominates.
 
 ━━━ TROPICAL FLOWERS (REINTERPRET — sprinkled THROUGH the scene, NOT clustered in foreground, NOT a wall) ━━━
 ${flowers}
