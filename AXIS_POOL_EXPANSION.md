@@ -70,7 +70,7 @@ this file in the same commit.
 - [ ] **mangabot/game-center-arcade** — 5/6 pools at ≥100 and clean; smoke 0/3 delivered, 3 failed; 2026-09-24 20:49 UTC
 - [x] **steambot/brass-glasshouse** — 7/7 pools at ≥100 and clean; smoke 0/3 delivered, 3 failed; 2026-09-24 21:06 UTC
 - [x] **pixelbot/floating-market-canal** — 8/8 pools at ≥100 and clean; smoke 1/3 delivered, 2 failed; 2026-09-24 21:31 UTC
-- [ ] **pixelbot/volcano-forge** — 9 pools
+- [ ] **pixelbot/volcano-forge** — 8/9 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 21:53 UTC
 - [ ] **faebot/mushroom-apothecary** — 7 pools
 - [ ] **faebot/acorn-boat-regatta** — 7 pools
 - [ ] **faebot/star-charting** — 7 pools
@@ -127,15 +127,15 @@ this file in the same commit.
 | pixelbot/floating-market-canal | pixelbot_floating_market_canal_palette | 25 | 100 | 3 | clean | yes | ✅ |
 | pixelbot/floating-market-canal | pixelbot_floating_market_canal_town_light | 25 | 100 | 2 | clean | yes | ✅ |
 | pixelbot/floating-market-canal | pixelbot_floating_market_canal_upper_town | 25 | 100 | 2 | clean | yes | ✅ |
-| pixelbot/volcano-forge | pixelbot_volcano_forge_air | 25 |  |  |  |  | ⬜ |
-| pixelbot/volcano-forge | pixelbot_volcano_forge_camera | 25 |  |  |  |  | ⬜ |
-| pixelbot/volcano-forge | pixelbot_volcano_forge_fire_event | 25 |  |  |  |  | ⬜ |
-| pixelbot/volcano-forge | pixelbot_volcano_forge_life | 25 |  |  |  |  | ⬜ |
-| pixelbot/volcano-forge | pixelbot_volcano_forge_light | 25 |  |  |  |  | ⬜ |
-| pixelbot/volcano-forge | pixelbot_volcano_forge_machinery | 25 |  |  |  |  | ⬜ |
-| pixelbot/volcano-forge | pixelbot_volcano_forge_moment | 25 |  |  |  |  | ⬜ |
-| pixelbot/volcano-forge | pixelbot_volcano_forge_palette | 25 |  |  |  |  | ⬜ |
-| pixelbot/volcano-forge | pixelbot_volcano_forge_vault | 25 |  |  |  |  | ⬜ |
+| pixelbot/volcano-forge | pixelbot_volcano_forge_air | 25 | 100 | 3 | clean | yes | ✅ |
+| pixelbot/volcano-forge | pixelbot_volcano_forge_camera | 25 | 100 | 3 | clean | NO | ⚠️ needs attention |
+| pixelbot/volcano-forge | pixelbot_volcano_forge_fire_event | 25 | 100 | 2 | clean | yes | ✅ |
+| pixelbot/volcano-forge | pixelbot_volcano_forge_life | 25 | 100 | 3 | clean | yes | ✅ |
+| pixelbot/volcano-forge | pixelbot_volcano_forge_light | 25 | 100 | 3 | clean | yes | ✅ |
+| pixelbot/volcano-forge | pixelbot_volcano_forge_machinery | 25 | 100 | 2 | clean | yes | ✅ |
+| pixelbot/volcano-forge | pixelbot_volcano_forge_moment | 25 | 100 | 3 | clean | yes | ✅ |
+| pixelbot/volcano-forge | pixelbot_volcano_forge_palette | 25 | 100 | 2 | clean | yes | ✅ |
+| pixelbot/volcano-forge | pixelbot_volcano_forge_vault | 25 | 100 | 3 | clean | yes | ✅ |
 | faebot/mushroom-apothecary | faebot_mushroom_apothecary_air | 25 |  |  |  |  | ⬜ |
 | faebot/mushroom-apothecary | faebot_mushroom_apothecary_hanging_stock | 25 |  |  |  |  | ⬜ |
 | faebot/mushroom-apothecary | faebot_mushroom_apothecary_inhabitant | 25 |  |  |  |  | ⬜ |
