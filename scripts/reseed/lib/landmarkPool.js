@@ -151,7 +151,10 @@ Reply with a JSON array of ${batch.length} strings only.`;
     const words = cand.split(/\s+/).length;
     if (words < wordRange[0] || words > wordRange[1]) p.push(`${words} words`);
     for (const f of FRAME) {
-      if (!new RegExp(f, 'i').test(cand) && !(f === 'midground' && /mid-distance/i.test(cand)))
+      if (
+        !new RegExp(f, 'i').test(cand) &&
+        !(f === 'midground' && /mid-distance|middle[- ]distance|mid-frame/i.test(cand))
+      )
         p.push(`no ${f}`);
     }
     for (const [bn, re] of BANS) {

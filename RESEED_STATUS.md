@@ -57,10 +57,8 @@ commit + push, row + log here.
 - **iceland-raw:** full dry run running (`iceland_raw/full`); then **european-wilderness** (queued in
   the same chain; marker `landmark-full.done`). Same close-out per pool.
 - **iceland-raw: DONE** (pool written, 8 + 8 pairs reviewed, 16/16 carried); close-out commit next.
-- **australian-outback:** pool WRITTEN; 8 + 8 pairs rendered but 3 of the sampled slots were kept
-  originals (my sampler added 1 to the report's already 1-based indices), so 5 valid pairs; 3 extra
-  changed slots (75,26,47) rendering to `au/before2` + `au/after2` (`au/done2` marker). Next = merge
-  into the pairs page, self-review, commit pool + docs, push.
+- **australian-outback: DONE** (8 valid pairs after 3 extra slots replaced the kept-original ones;
+  16/16 carried; pairs https://claude.ai/artifact/9UN8W8kkn492WnDUEAU8Da); close-out commit next.
 - **european-wilderness:** pool WRITTEN (backup `~/poolbackup-earthbot-european_wilderness-subject-*`;
   a first `--execute` was refused because my manual trailing-period pass had touched 4 kept originals,
   restored). Chain rendering slots 102,29,40,133,156,181,194,155 to `eu2/` (`eu2/done` marker; a
@@ -106,7 +104,7 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | earthbot | coastal-vista        | `coastal_vista_subject` (object entries)         | 200     | 200/200 distinct coasts (same = region + feature + POV opener); recipe-weighted regions | none needed (EPIC_VISTA archetype hands the entry through as the vista subject) | first 8 + 8 invalid (same bug), re-rendered 8 + 8 valid (16/16 carried), self-reviewed | **DONE** | abb7e7fe, 5e2590c1 | 2026-09-23 |
 | earthbot | andes-patagonia      | `andes_patagonia_subject` (string entries)       | 200     | 42 → 200 distinct (same = place + light moment); 22 → 91 places, 11 light moments; 42 originals kept | none needed | 8 + 8 paired, shadow; 16/16 prompts carried the entry; self-reviewed | **DONE** | 5e2590c1 (tool), db591a44 | 2026-09-23 |
 | earthbot | iceland-raw          | `iceland_raw_subject` (string entries)           | 200     | 38 → 200 distinct (same = place + light moment); 26 → 71 places, 8 → 9 light moments; 38 originals kept | none needed | 8 + 8 paired, shadow; 16/16 carried; self-reviewed | **DONE** | (close-out) | 2026-09-23 |
-| earthbot | australian-outback   | `australian_outback_subject` (string entries)    | 200     | 64 → 200 distinct (same = place + light moment); 40 → 91 places, 9 → 10 light moments; 64 originals kept | none needed | 5 valid pairs + 3 extra rendering; 16/16 carried | `pool written` | | 2026-09-23 |
+| earthbot | australian-outback   | `australian_outback_subject` (string entries)    | 200     | 64 → 200 distinct (same = place + light moment); 40 → 91 places, 9 → 10 light moments; 64 originals kept | none needed | 8 valid pairs (5 + 3 extra), shadow; 16/16 carried; self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | earthbot | european-wilderness  | `european_wilderness_subject` (string entries)   | 200     | 77 → 200 distinct (same = place + light moment); 53 → 127 places, 9 → 10 light moments; 77 originals kept | none needed | 8 + 8 rendering | `pool written` | | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 33 → 120 line-ups (same = 4+ shared species, 3 when only 3); 26 → 70 species; red 35 → 20 | same fix                                                              | same batch                                         | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
 
@@ -198,6 +196,19 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-23 · earthbot/australian-outback `australian_outback_subject` · DONE (self-reviewed).**
+  Landmark factory. 64 → 200 distinct (same = place + light moment), 40 → 91 real places across the
+  recipe's 11 regions (red centre, Kimberley, Flinders, salt lakes, deserts, tropical north, rainforest,
+  coast, Tasmania, eastern ranges, the west), 10 light moments, 64 originals kept. Factory fixes found
+  here: the format regex rejected a proper-noun light moment ("Milky Way night") and left 2 slots
+  unfilled; Sonnet drops the trailing period about half the time (now `normalize` in the config). Pairs
+  (8 valid, 16/16 carried; my first sample hit 3 kept originals because the report's indices are
+  already 1-based): Wilpena Pound → Yardie Creek gorge, Bungle Bungle → the Pinnacles at misty dawn and
+  Mitchell Falls under the Milky Way, Karijini → Geikie Gorge at dawn, Twelve Apostles → Rainbow Valley
+  at blood-red sunset, Kata Tjuta → Wallaman Falls, Uluru → Wollemi canyon under stars, Ormiston →
+  Cradle Mountain over Dove Lake. Every after render is the place its entry names.
+  Pairs https://claude.ai/artifact/9UN8W8kkn492WnDUEAU8Da, proposal
+  https://claude.ai/artifact/VpGjTxnfvtD3XzdY8LsdVy.
 - **2026-09-23 · earthbot/iceland-raw `iceland_raw_subject` · DONE (self-reviewed).** Landmark factory.
   38 → 200 distinct (same = place + light moment), 26 → 71 real places (glacier tongues and ice caves,
   waterfalls, basalt canyons, rhyolite highlands, volcanic fields, the lagoons, a little coast), 9 light
