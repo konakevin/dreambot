@@ -82,10 +82,36 @@ const FAMILY = {
   'fireworks': ['a hillside spot facing the fireworks', 'a riverbank straw mat facing the fireworks'],
 };
 const VERBS = ['clustered', 'gathered', 'huddled', 'nestled', 'arranged', 'perched', 'seated'];
+// How the cluster sits on its perch (every entry already states it: "around a tank", "on a mat",
+// "at the foot of a torii"). Roughly 55 perch families cannot make 200 distinct entries on their own,
+// so the idea is perch family + arrangement.
+const ARR = {
+  ring: 'in a ring around',
+  top: 'on top of',
+  edge: 'lined along the edge of',
+  rim: 'peeking over the rim of',
+  behind: 'half-hidden behind',
+  base: 'gathered at the base of',
+  leaning: 'leaning against',
+  levels: 'stacked up the levels of',
+};
+const ARR_RULES = [
+  ['rim', /over the rim|peeking over|over the edge of/i],
+  ['levels', /up the (?:steps|levels|tiers)|stacked up|on the (?:steps|tiers)/i],
+  ['edge', /along the edge|lined along|in a row along|along the rim|along the rail/i],
+  ['behind', /behind/i],
+  ['leaning', /leaning against|propped against|against the side/i],
+  ['base', /at the base|at the foot|beneath|under|below/i],
+  ['ring', /in a ring|circling|around|encircling/i],
+  ['top', /\bon\b|atop|across/i],
+];
 
 // ── Parsing ─────────────────────────────────────────────────────────────────────────────────────
 // family rules, specific first
 const FAMILY_RULES = [
+  // the drifts first: "a bench buried in sakura petal drift" is a sakura perch, not a bench
+  ['sakura drift', /sakura|cherry|petal/i],
+  ['maple drift', /maple|momiji/i],
   ['goldfish-scoop', /kingyo|goldfish/i],
   ['yo-yo tub', /yo-yo|yoyo/i],
   ['ring-toss', /ring-toss|ring toss/i],
@@ -132,8 +158,6 @@ const FAMILY_RULES = [
   ['tea house', /tea[- ]house|tatami|zabuton|cushion/i],
   ['bench', /bench/i],
   ['yatai', /yatai|stall|counter|crate/i],
-  ['sakura drift', /sakura|cherry|petal/i],
-  ['maple drift', /maple|momiji/i],
   ['stone garden', /gravel|stone garden/i],
   ['well', /\bwell\b/i],
   ['shishi-odoshi', /shishi|deer-scarer/i],
@@ -161,10 +185,11 @@ function parse(text) {
       .filter((w) => !/^(a|an|the|of|small|large|low|wide|flat|smooth|old|worn|wooden)$/.test(w));
     family = 'other:' + perch.slice(-3).join(' ');
   }
-  return { keys: [`family:${family}`], family };
+  const arr = pick(ARR_RULES, head, 'top');
+  return { keys: [`family:${family}`, `arr:${arr}`], family, arr };
 }
 function sameGroup(a, b) {
-  return a.family === b.family;
+  return a.family === b.family && a.arr === b.arr;
 }
 const verbOf = (text) => VERBS.find((v) => new RegExp(`^Five kawaii foods ${v}`, 'i').test(text)) || 'gathered';
 
@@ -182,13 +207,22 @@ function assign(slot, ctx) {
   for (let attempt = 0; attempt < 400; attempt++) {
     const family = among(
       byUsage(Object.keys(FAMILY), usage, (k) => 'family:' + k),
+      5
+    );
+    const arr = among(
+      byUsage(Object.keys(ARR), usage, (k) => 'arr:' + k),
       4
     );
-    const cand = { family };
+    // a rim needs a tub, basin, well or box; levels need steps, a yagura or a shelf; you cannot sit
+    // on top of a lantern rope, a curtain or a streamer
+    if (arr === 'rim' && !/goldfish|yo-yo|temizuya|well|omikuji|ramune|dango|senbei|koi pond/.test(family)) continue;
+    if (arr === 'levels' && !/shrine steps|yagura|daruma|kokeshi|maneki|mask stall|kakigori|stone garden/.test(family)) continue;
+    if (arr === 'top' && /chochin|bunting|noren|koinobori|tanabata|fireworks|furin/.test(family)) continue;
+    const cand = { family, arr };
     if (groups.some((g) => sameGroup(g.assignment ? g.assignment : g, cand))) continue;
     const perch = byUsage(FAMILY[family], perchUse)[0];
     perchUse[perch] = (perchUse[perch] || 0) + 1;
-    return { keys: [`family:${family}`], family, perch, tags: [family] };
+    return { keys: [`family:${family}`, `arr:${arr}`], family, arr, perch, tags: [family, arr] };
   }
   return null;
 }
@@ -197,13 +231,13 @@ function assign(slot, ctx) {
 function brief(batch, examples) {
   return `You write entries for one pool of a kawaii-food illustration bot: YumBot japanese-festival. Every entry is ONE cluster arrangement of five kawaii festival foods gathered at ONE traditional matsuri perch, 50-70 words, one line. Keep EXACTLY this shape:
 
-Five kawaii foods <verb> <on / around / at> <the perch> — one <pose>, one <pose>, one <pose>, one <pose>, one <pose>
+Five kawaii foods <verb> <arrangement> <the perch> — one <pose>, one <pose>, one <pose>, one <pose>, one <pose>
 
 Examples already in the pool (match their voice, structure and length):
 ${examples.map((e) => '- ' + e).join('\n')}
 
 Rules:
-- Open with "Five kawaii foods <verb given>" and name EXACTLY the perch given (its own noun, in your own natural wording). The perch is the only setting detail: no backdrop, no lanterns strung overhead, no sky, no weather, no lighting, no companions (other axes add those).
+- Open with "Five kawaii foods <verb given> <arrangement given> <the perch given>": keep the arrangement's key words and the perch's own noun, in your own natural wording. The perch is the only setting detail: no backdrop, no lanterns strung overhead, no sky, no weather, no lighting, no companions (other axes add those).
 - Five slight pose variations, each placed (left / center / right / front / back edge): one peeking, one tilted, one leaning, one looking up, one sitting tallest; natural family-portrait cluster, never a lineup and never acrobatics.
 - Traditional matsuri only; nothing modern; no people or animals; no writing, labels, signs or banners on anything. Describe only what is present; write no negative words.
 
@@ -211,7 +245,7 @@ Slots:
 ${batch
   .map((s, i) => {
     const a = s.assignment;
-    return `${i + 1}. verb "${s.verb}"; perch "${a.perch}"`;
+    return `${i + 1}. verb "${s.verb}"; arrangement "${ARR[a.arr]}"; perch "${a.perch}"`;
   })
   .join('\n')}
 
@@ -232,6 +266,7 @@ function mechanical(cand, slot) {
   const a = slot.assignment;
   const parsed = parse(cand);
   if (parsed.family !== a.family) p.push(`family ${parsed.family}≠${a.family}`);
+  if (parsed.arr !== a.arr) p.push(`arrangement ${parsed.arr}≠${a.arr}`);
   if (!new RegExp(`^Five kawaii foods ${slot.verb}\\b`, 'i').test(cand)) p.push('verb changed');
   const words = cand.split(/\s+/).length;
   if (words < 40 || words > 80) p.push(`${words} words`);
@@ -245,14 +280,19 @@ function mechanical(cand, slot) {
 }
 function measure(pool, parsed) {
   const o = {};
-  parsed.forEach((p) => (o[p.family] = (o[p.family] || 0) + 1));
-  return { families: Object.keys(o).length, byFamily: o };
+  const arr = {};
+  parsed.forEach((p) => {
+    o[p.family] = (o[p.family] || 0) + 1;
+    arr[p.arr] = (arr[p.arr] || 0) + 1;
+  });
+  return { families: Object.keys(o).length, byFamily: o, arrangements: arr };
 }
 
 module.exports = {
   name: 'yumbot/japanese_festival/scene_type',
   poolFile,
-  basis: 'perch family (what the five foods gather on or around); same when the family matches; greedy, pool order',
+  basis:
+    'perch family (what the five foods gather on or around) + how the cluster sits on it; same when both match; greedy, pool order',
   parse,
   sameGroup,
   planSlots,

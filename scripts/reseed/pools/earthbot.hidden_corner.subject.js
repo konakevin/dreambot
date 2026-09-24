@@ -113,6 +113,19 @@ const HOST = {
   thicket: 'a dense thicket that hides it from every side',
   'sinkhole rim': 'the rim of a shallow sinkhole',
   'tree cluster': 'the bases of three ancient trunks',
+  'wave-cut shelf': 'a wave-cut rock shelf',
+  'sea cave mouth': 'the mouth of a small sea cave',
+  'sea-stack base': 'the foot of a sea stack',
+  'nurse log': 'a nurse log sprouting saplings',
+  'hollow log': 'a hollow log open at one end',
+  'log jam': 'a tangle of storm-felled logs',
+  'glacial erratic': 'a glacial erratic left on the slope',
+  'split boulder': 'a boulder split clean in two',
+  'stump hollow': 'the hollow of a giant rotted stump',
+  'buttress roots': 'the buttress roots of a standing giant',
+  'bank roots': 'the exposed roots of an undercut bank',
+  'pour-off': 'a dry pour-off lip',
+  'seep wall': 'a weeping seep wall',
 };
 // which types make sense in which habitats
 const TYPE_HABITATS = {
@@ -129,12 +142,14 @@ const TYPE_HABITATS = {
   'spring source': ['temperate rainforest', 'deciduous hardwood', 'desert canyon', 'mediterranean scrub', 'boreal', 'prairie edge', 'subalpine', 'wetland'],
   'boulder hollow': ['subalpine', 'old-growth conifer', 'temperate rainforest', 'rocky coast', 'lava field'],
 };
+// types whose host is part of their nature get their own host lists (wide enough that every original
+// plus every rewrite can have a distinct type + habitat + host)
 const TYPE_HOSTS = {
-  'tide pool': ['cliff notch', 'boulder', 'ledge', 'outcrop'],
-  'canyon alcove': ['canyon wall', 'ledge', 'outcrop'],
-  'root pocket': ['root plate', 'tree cluster'],
-  'log nook': ['fallen log'],
-  'boulder hollow': ['boulder'],
+  'tide pool': ['cliff notch', 'boulder', 'ledge', 'outcrop', 'wave-cut shelf', 'sea cave mouth', 'sea-stack base', 'split boulder'],
+  'canyon alcove': ['canyon wall', 'ledge', 'outcrop', 'pour-off', 'seep wall', 'split boulder'],
+  'root pocket': ['root plate', 'tree cluster', 'stump hollow', 'buttress roots', 'bank roots'],
+  'log nook': ['fallen log', 'nurse log', 'hollow log', 'log jam'],
+  'boulder hollow': ['boulder', 'glacial erratic', 'split boulder'],
 };
 const WATER = [
   'a slow jade pool',
@@ -169,7 +184,6 @@ const HABITAT_RULES = [
   ['rocky coast', /tide[- ]pool|sea star|anemone|kelp|urchin|barnacle|rocky cove|sea cliff|coralline/i],
   ['lava field', /lava|pāhoehoe|pahoehoe|ohia|ʻōhiʻa|cinder|volcanic tube/i],
   ['mediterranean scrub', /holm oak|myrtle|rockrose|thyme|maquis|karst|travertine|olive|mediterranean/i],
-  ['desert canyon', /sandstone|slickrock|desert|slot|Navajo|chert|seep wall/i],
   ['cloud forest', /cloud forest|tree fern|epiphyt|bromeliad|tropical|jungle|(?<!temperate )rainforest/i],
   ['wetland', /cypress|swamp|sphagnum bog|pitcher plant|sundew|marsh|fen\b|bog\b|lily pad|cattail/i],
   ['subalpine', /subalpine|alpine|tarn|heather|glacier lily|paintbrush|talus|cirque/i],
@@ -178,14 +192,30 @@ const HABITAT_RULES = [
   ['temperate rainforest', /temperate rainforest|sword fern|deer fern|vine maple|salmonberry|Sitka|hemlock|nurse log|devil's club|licorice fern|old-growth temperate/i],
   ['deciduous hardwood', /oak|hickory|maple|beech|tulip|poplar|magnolia|hardwood|deciduous|trillium|bloodroot|wild ginger|foam-flower|hepatica|spicebush/i],
   ['old-growth conifer', /old-growth|conifer|Douglas-fir|red-cedar|redcedar|pine|fir\b|spruce|bunchberry|twinflower|feather moss/i],
+  // last: a hardwood hollow may sit on "sandstone slabs"; only the desert's own words decide
+  ['desert canyon', /slickrock|desert|slot canyon|alcove wall|Navajo|chert|seep wall|redrock|red-rock|canyon/i],
 ];
 const HOST_RULES = [
-  ['root plate', /root plate|root pocket|root cluster/i],
+  // "root pocket" is the TYPE; the host is the lifted root plate only when the head says so
+  ['root plate', /root plate|upturned root|lifted root|root mass|root wall/i],
   ['fallen log', /fallen|toppled|log nook|nurse log|downed/i],
   ['canyon wall', /canyon wall|alcove wall|undercut|slot/i],
   ['cliff notch', /cliff notch|sea-carved|notch|sea cliff/i],
   ['sinkhole rim', /sinkhole|doline/i],
+  ['stump hollow', /stump/i],
+  ['buttress roots', /buttress/i],
+  ['bank roots', /undercut bank|bank roots|roots of an undercut/i],
   ['tree cluster', /three ancient|between two ancient|trunk cluster|between .* trunks|bases of/i],
+  ['nurse log', /nurse log/i],
+  ['hollow log', /hollow log/i],
+  ['log jam', /log jam|storm-felled|tangle of .* logs/i],
+  ['sea cave mouth', /sea cave|cave mouth/i],
+  ['sea-stack base', /sea stack|sea-stack/i],
+  ['wave-cut shelf', /wave-cut shelf|rock shelf|wave-cut/i],
+  ['pour-off', /pour-off|pouroff/i],
+  ['seep wall', /seep wall|weeping wall/i],
+  ['glacial erratic', /erratic/i],
+  ['split boulder', /split boulder|boulder split|cleft boulder/i],
   ['thicket', /thicket|dense .* hides|screen of|screened by/i],
   ['boulder', /boulder/i],
   ['outcrop', /outcrop|gneiss|bedrock knob/i],
@@ -204,7 +234,8 @@ function parse(text) {
   const head = headOf(text);
   const type = pick(TYPE_RULES, head, 'pocket');
   const habitat = pick(HABITAT_RULES, text, 'forest');
-  const host = pick(HOST_RULES, head, 'ground');
+  // the host is named in the head; when the head names none, look in the first detail clause
+  const host = pick(HOST_RULES, head, null) || pick(HOST_RULES, text.split(/, /).slice(0, 2).join(', '), 'ground');
   return { keys: [`type:${type}`, `habitat:${habitat}`, `host:${host}`], type, habitat, host };
 }
 function sameGroup(a, b) {

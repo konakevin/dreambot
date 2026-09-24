@@ -70,11 +70,23 @@ commit + push, row + log here.
   unknown perches stay their own idea). Roster of ~55 real matsuri perch families. Smoke next.
 - **epic-sunset: DONE** (8 + 8 pairs reviewed, 15/16 carried: one after-render's entry was dropped by
   Sonnet and rendered a grey overcast beach; the harness flagged it); close-out commit next.
-- **national-parks:** full run (third start) running to `national_parks/full3` at ~60% acceptance
-  (remaining rejections are two formations named in one candidate; retries fill them).
-- **hidden-corner:** smoke passed after three parser fixes (type + host read from the opening clause,
-  cloud-forest lookbehind, moss/fern check only on forest habitats); full run running to
-  `hidden_corner/full`.
+- **national-parks: DONE** (8 + 8 pairs reviewed, 16/16 carried); close-out commit next.
+- **hidden-corner:** two runs left slots unfilled (52 then 63 of 130) because the assignment space
+  was too small: a tide pool had 4 hosts × 1 habitat for 17 originals, a log nook 1 host. Widened the
+  host lists per type (offline check: 129/129 assignable), `--resume` running to `hidden_corner/full3`
+  (keeps the 63). Next = review, execute, renders.
+- **yumbot festival:** first full run stalled at 24 rewrites (94 unfilled): ~55 real perch families
+  cannot make 200 distinct entries. Judgment call, flagged below: "same" now = perch family + how the
+  cluster sits on it (ring / on top / base / rim / edge / behind / leaning / levels), which every entry
+  already states. Offline check 103/103 assignable; `--resume` running to `yumbot_festival/full2`.
+- **FaeBot (queen biome + three foreground-anchor pools):** shared factory
+  `scripts/reseed/lib/faeAnchorPool.js` (same = anchor kind + position in frame; ~65 real forest
+  anchors × 8 positions; nothing glowing per the playbook) + `faebot.queen_of_forest.biome.js` (same =
+  forest type + first signature texture; 37 types). First smoke burned 80 calls on a format regex that
+  rejected the originals' trailing period (fixed); smoke2 running.
+- **Tool lesson (in the skill next):** before any full run, simulate `assign()` over every rewrite slot
+  offline and confirm every slot is assignable; an assignment space smaller than the pool wastes the
+  whole run.
 - **national-parks:** config `scripts/reseed/pools/earthbot.national_parks.subject.js` (object entries,
   189; same = geological province + formation + POV; 75 kept / 114 to rewrite; no park / landmark /
   vantage names, no weather / light / sky / wildlife). Smoke exposed brittle ordered-keyword feature
@@ -103,6 +115,13 @@ commit + push, row + log here.
    it first. Say the word and I add it to `PATHS` + `SKIP_LEGACY_PER_PATH` (one edit) right after.
 2. _(resolved 2026-09-23)_ hawaii-flowers verdict was withdrawn (harness bug) and re-measured: the
    beach entry does show through (sand colour reliably, shore form partly); see the log.
+3. **YumBot `festival_scene_type`: "same" had to include the cluster's arrangement.** The pool's
+   varying element (the festival perch the five foods gather on) has only ~55 real families, so 200
+   entries cannot all differ on it. I count "same" as perch family + arrangement (in a ring around /
+   on top of / at the base of / peeking over the rim / along the edge / behind / leaning against / up
+   the levels), which the entries already state ("around a goldfish tank", "on a mat", "at the foot of
+   a torii"). If you would rather the pool shrink to ~120 truly distinct perches, say so; nothing else
+   in the entries changed.
 
 **Accepted Flux limits (Kevin 2026-09-23, do not chase):** species render in their own prior colour
 (a green-titled flower line-up renders pink/white); a rich register only reads on strong-colour
@@ -124,6 +143,7 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | earthbot | european-wilderness  | `european_wilderness_subject` (string entries)   | 200     | 77 → 200 distinct (same = place + light moment); 53 → 127 places, 9 → 10 light moments; 77 originals kept | none needed | 8 + 8 paired, shadow; 16/16 carried; self-reviewed | **DONE** | 7dc553bd | 2026-09-23 |
 | earthbot | african-landscape    | `african_landscape_subject` (string entries)     | 200     | 69 → 200 distinct (same = habitat + light moment); 52 → 111 habitats, 10 → 12 light moments; 69 originals kept | none needed | 8 + 8 paired, shadow; 16/16 carried; self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | earthbot | asia-landscape       | `asia_landscape_subject` (string entries)        | 200     | 72 → 200 distinct (same = habitat + light moment); 45 → 115 places, 12 light moments; 72 originals kept | none needed | 8 + 8 paired, shadow; 16/16 carried; self-reviewed | **DONE** | (close-out) | 2026-09-23 |
+| earthbot | national-parks       | `national_parks_subject` (object entries)        | 189     | 76 → 189 distinct (same = geological province + formation + POV); 17 provinces, ~95 formations with explicit key regexes; 76 originals kept | none needed (EPIC_VISTA archetype hands the entry through) | 8 + 8 paired, shadow; 16/16 carried; self-reviewed (5 clear, 3 partial) | **DONE** | (close-out) | 2026-09-23 |
 | earthbot | epic-sunset          | `epic_sunset_subject` (object entries)           | 200     | 80 → 200 distinct (same = sky family + palm arrangement + sand); skies 7 → 10, palms 8 → 9, sands 3 → 7; 80 originals kept | none needed (EPIC_VISTA archetype hands the entry through) | 8 + 8 paired, shadow; 15/16 carried (one Sonnet drop, flagged); self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 33 → 120 line-ups (same = 4+ shared species, 3 when only 3); 26 → 70 species; red 35 → 20 | same fix                                                              | same batch                                         | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
 
@@ -215,6 +235,18 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-23 · earthbot/national-parks `national_parks_subject` · DONE (self-reviewed).** Object
+  entries, no park / landmark / vantage names by recipe (the geology carries the identity). 76 → 189
+  distinct (same = geological province + formation + POV), 17 provinces × ~95 formations each with an
+  explicit key regex (ordered-keyword checks were too brittle: Sonnet reorders adjectives), 76
+  originals kept. Three starts: the first two burned ~50 calls each on parse mismatches (a Mojave
+  badlands entry also says "badlands", which the Plains rule claimed) and a 52-word cap the originals
+  themselves exceed. Pairs (8 + 8, 16/16 carried): before was two Cascade caldera rims, two glaciers
+  and a Colorado gorge of eight; after is an Arctic headwall, Badlands clay spires, an Alaskan spire
+  wall and a sawgrass river, clearly, plus three partials where Flux's prior won (the fan-palm oasis
+  became a canyon, the Atlantic granite coast a peak over a cloud sea, the Great Basin dune crest a snow
+  ridge). Pairs https://claude.ai/artifact/BGvFHLFXsVsgXUB8bs3X6V, proposal
+  https://claude.ai/artifact/SoMhJHNKPCHZdv5t9QFYE6.
 - **2026-09-23 · earthbot/asia-landscape `asia_landscape_subject` · DONE (self-reviewed).** Landmark
   factory with the recipe's cultural bans (no temples / torii / pagodas / stupas / statues / prayer
   flags / lanterns / monks; no rice terraces or agriculture). 72 → 200 distinct (same = habitat + light

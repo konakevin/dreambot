@@ -1,758 +1,1192 @@
 [
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Low POV looking up through the narrows of a banded Navajo sandstone slot, walls pressing to shoulder-width at the floor, iron-oxide-stained rust-orange and deep burgundy striations spiraling six hundred feet sheer vertical above, wind-polished surfaces smooth as porcelain"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Aerial drone perspective over a vermilion sandstone hoodoo amphitheater on the Colorado Plateau, thousand-foot tiered clusters of cream-and-rust spires packed razor-edge in a ragged semicircular sprawl, frost-shattered debris fields blanketing the abyssal basin floor below"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
     "description": "Wide-angle wrapping the full south wall of a glacier-carved Sierra Nevada valley, a three-thousand-foot glacier-polished granite monolith rising sheer and vertical above the talus field, ancient conifers colonizing the moraine floor, knife-edge crack systems splitting the face top to bottom"
   },
   {
-    "tags": ["volcanic"],
+    "tags": [
+      "volcanic"
+    ],
     "description": "Aerial vantage over a two-thousand-foot-deep cobalt caldera lake of impossibly-saturated clarity, a dark cinder-cone island rising defiant from the center, twenty-six-hundred-foot pumice cliffs sheer vertical ringing the basin in razor-cut symmetry, obsidian-black waterline sharp as a blade"
   },
   {
-    "tags": ["alpine"],
+    "tags": [
+      "alpine"
+    ],
     "description": "Cliff-edge vantage looking down into a moraine-dammed tarn at the base of a catastrophically fractured Northern Rockies knife-edge arête, glacier-scoured quartzite walls plunging two thousand feet into jade-cold water, wind-scoured talus fanning from every couloir onto the frozen surface"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Knee-level POV across a continent-scale gypsum dune field of pure cream-white selenite wave-forms undulating toward a vanishing horizon, wind-scoured interdune hollows exposing bare crystalline crust, razor-edge crests casting geometric shadow lines across the pristine basin floor"
   },
   {
-    "tags": ["volcanic", "coastal-tropical"],
+    "tags": [
+      "volcanic",
+      "coastal-tropical"
+    ],
     "description": "Side-on at sea-level where a Hawaiian volcanic shield pahoehoe flow meets open ocean, white steam plume erupting catastrophic where fresh basalt pours into the surf, hardened glassy crust fractured in razor-cut slabs at the foreground edge, lava-blackened shoreline extending to the horizon"
   },
   {
-    "tags": ["temperate-forest"],
+    "tags": [
+      "temperate-forest"
+    ],
     "description": "Looking straight up through Pacific Northwest old-growth with twelve-foot moss curtains hanging vertical from every branch of a wildly uneven bigleaf maple stand, trunks of lurching, mismatched girth at irregular random spacing, one massive leaning giant crowding off-center, glacier-polished bedrock understory carpeted in emerald fern, spray-soaked root systems gripping fractured stone"
   },
   {
-    "tags": ["alpine", "volcanic"],
+    "tags": [
+      "alpine",
+      "volcanic"
+    ],
     "description": "Side-on across a wind-scoured alpine tarn at the foot of a Cascade Range glaciated stratovolcano cone, the sky-piercing summit rising fourteen thousand feet razor-cut above the treeline, pumice-grey flanks streaked by radial glacial scour, lupine colonizing the frost-heaved foreground basin"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Wide-angle from the canyon rim looking straight down a mile-deep Colorado Plateau gorge, banded strata cycling through six thousand feet of compressed geological time in iron-red, cream, violet, and charcoal horizontal ribbons, the Colorado River a silver thread on the abyssal floor"
   },
   {
-    "tags": ["coastal-temperate"],
+    "tags": [
+      "coastal-temperate"
+    ],
     "description": "Low POV from the surf-line looking up at a fifteen-hundred-foot pink granite dome rising sheer from cold Atlantic coast, glacier-polished exfoliation sheets sweeping the dome face in broad concentric arcs, krummholz spruce gripping the wind-scoured summit rim above the spray-soaked cliff base"
   },
   {
-    "tags": ["volcanic"],
+    "tags": [
+      "volcanic"
+    ],
     "description": "Wide-angle wrapping the Yellowstone Plateau geyser basin from ground level, cobalt thermal pools fringed by full-spectrum rust-orange and cream-white silica terraces radiating outward in razor-cut mineral rings, fumarole vents fracturing the iron-stained sinter crust across the abyssal flat"
   },
   {
-    "tags": ["temperate-forest", "alpine"],
+    "tags": [
+      "temperate-forest",
+      "alpine"
+    ],
     "description": "Looking straight up through a Sierra Nevada sequoia grove, a single off-center dominant trunk of cinnamon-red bark overwhelming the frame at six feet across, neighboring trunks of wildly varying girth scattered at uneven irregular distances, one massive fallen mossy giant crossing the foreground, glacier-polished granite slabs threading between root buttresses, wind-scoured ridge-line visible through a ragged canopy gap above"
   },
   {
-    "tags": ["alpine"],
+    "tags": [
+      "alpine"
+    ],
     "description": "Aerial drone perspective over an Alaskan boreal glaciated valley, a tidewater glacier calving towering-sheer ice blocks into a milky turquoise fjord inlet, lateral moraine ridges striping the valley walls in parallel horizontal scars, ice-fractured granite peaks plunging sheer three thousand feet to the terminal face"
   },
   {
-    "tags": ["desert", "volcanic"],
+    "tags": [
+      "desert",
+      "volcanic"
+    ],
     "description": "Low POV across an Mojave basalt lava field at the foot of a symmetrical cinder cone, razor-cut pahoehoe ridges and collapsed lava tubes fracturing the sun-baked black surface in continent-scale geometric patterns, the ochre-grey cone rising six hundred feet sheer above the hardened flow apron"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Side-on across a Colorado Plateau sandstone mesa rim, a freestanding rust-vermilion monolith rising eight hundred feet sheer from the talus apron below, wind-scoured cross-bedded strata cycling through iron-red and buff-cream in razor-cut horizontal bands, the fractured butte face split by vertical joint systems top to base"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Low POV from the canyon floor looking straight up a banded Entrada sandstone fin corridor, walls leaning inward at sixty degrees above, ochre and burgundy iron-stain striations compressed thousand-foot vertical, wind-polished undercuts hollowing the base into smooth sweeping alcoves at shoulder height"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
     "description": "Wide-angle from the valley floor wrapping a catastrophically fractured Sierra Nevada granite headwall, four hanging valleys releasing knife-edge ribbon cascades down a two-thousand-foot glacier-polished face, ancient lodgepole pines of wildly uneven girth colonizing the boulder-strewn moraine apron below at irregular random spacing, trunks leaning and jostling in organic asymmetric disorder"
   },
   {
-    "tags": ["volcanic"],
+    "tags": [
+      "volcanic"
+    ],
     "description": "Cliff-edge vantage looking straight down into a Hawaiian volcanic shield pit crater, sheer basalt walls plunging nine hundred feet vertical to a fractured hardened lava floor below, radial joint systems splitting the inner wall face in razor-cut geometric panels, lava-blackened ledges terracing the abyssal interior"
   },
   {
-    "tags": ["alpine"],
+    "tags": [
+      "alpine"
+    ],
     "description": "Low POV at the snout of a Northern Rockies valley glacier, catastrophic ice-fractured seracs stacking towering sheer above the terminus, lateral moraines striping both valley walls in parallel scour-lines six hundred feet up, glacier-polished quartzite bedrock exposed at the foreground edge in broad gleaming slabs"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Aerial drone perspective over a Colorado Plateau petrified forest flat, crystallized silica logs scattered continent-scale across a lavender-grey bentonite badlands plain, iron-rich amethyst and jasper-red mineralization bleeding vivid color through the fractured wood grain, wind-scoured clay pedestals supporting each fossilized trunk section"
   },
   {
-    "tags": ["temperate-forest"],
+    "tags": [
+      "temperate-forest"
+    ],
     "description": "Looking straight up through a Pacific Northwest old-growth Sitka spruce grove, trunks of wildly uneven girth ranging from four to eight feet across at irregular random spacing, one massive off-center dominant trunk commanding the frame while neighbors lean and curve away at odd angles, spray-soaked root buttresses gripping glacier-polished bedrock, deep emerald fern carpet wrapping the fractured basalt understory floor in unbroken dense cover"
   },
   {
-    "tags": ["alpine"],
+    "tags": [
+      "alpine"
+    ],
     "description": "Side-on across an Appalachian quartzite knife-edge ridge at treeline, bare frost-shattered scree cascading both flanks from the razor-edge crest, wind-scoured lichen-blackened boulders packing the narrow spine, successive parallel ridgelines receding in diminishing silhouette to the horizon across the glacially-broadened valley system"
   },
   {
-    "tags": ["volcanic", "alpine"],
-    "description": "Aerial drone perspective over a Cascade Range caldera rim, collapsed vent walls exposing stacked ash-flow tuff and andesite in razor-cut stratigraphic layers eight hundred feet deep, lava-dome remnants pushing fractured grey plugs through the pumice-grey crater floor, snow-filled radial gullies scoring the outer flanks below"
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "From the floor of an Arctic valley, a thousand-foot sheer vertical granite headwall rising above an aufeis ice sheet filling the valley floor in continent-scale layered permafrost slabs, cold-air-bitten east aspect preserving pressure-ridge corrugations across the opaque turquoise surface, fractured aufeis margins exposing razor-edge cross-sections of laminated seasonal ice"
   },
   {
-    "tags": ["coastal-temperate"],
+    "tags": [
+      "coastal-temperate"
+    ],
     "description": "Wide-angle from a sea-stack base looking back at a Pacific Northwest basalt headland, hexagonal columnar jointing stacking vertical eighty feet sheer above the spray-soaked surf platform, iron-stained orange mineral seep lines bleeding down the column faces, fractured block debris filling the surge channel below"
   },
   {
-    "tags": ["desert", "alpine"],
+    "tags": [
+      "desert",
+      "alpine"
+    ],
     "description": "Cliff-edge vantage looking down a Colorado Plateau canyon system where cream Navajo sandstone walls give way to dark Precambrian schist at the gorge floor, two-thousand-foot compressed strata banding from buff to iron-red to violet-black, the abyssal inner gorge cutting razor-narrow through billion-year-old metamorphic basement"
   },
   {
-    "tags": ["temperate-forest", "alpine"],
+    "tags": [
+      "temperate-forest",
+      "alpine"
+    ],
     "description": "Low POV at the base of an Appalachian granite waterfall gorge, glacier-carved plunge-pool walls rising spray-soaked and moss-blanketed sixty feet vertical, three-tiered stepped cascade pouring over fractured biotite-flecked ledges, dense hemlock colonizing every crack above the waterline up to the wind-scoured ridge above"
   },
   {
-    "tags": ["arctic-polar", "alpine"],
-    "description": "Aerial drone perspective over an Alaskan boreal fjord terminus where a retreating tidewater glacier has exposed fresh ice-scoured granite walls, lateral moraine benches terracing both valley flanks at four distinct recession levels, milky glacial meltwater pooling in the proglacial basin below fractured seracs along the active calving face"
+    "tags": [
+      "desert"
+    ],
+    "description": "Cliff-edge vantage looking down into a continent-scale Mojave alkali flat below serrated fault-block ranges of exfoliating monzogranite, razor-thin salt-crystal crusts tessellating the playa surface in blinding white geometric polygons, badland clay badlands aprons fanning from every canyon mouth in copper-and-ash alluvial skirts"
   },
   {
-    "tags": ["volcanic"],
+    "tags": [
+      "volcanic"
+    ],
     "description": "Wide-angle from ground level across a Yellowstone Plateau travertine terrace staircase, mineral-laden thermal water depositing cream-white calcium carbonate shelves cascading fifty feet down a hillside in razor-cut stepped pools, iron-orange and sulfur-yellow bacterial mat rings fringing each terrace edge, fractured sinter crust at the foreground margin"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Low POV looking up at a freestanding Wingate sandstone tower rising sheer six hundred feet from a Colorado Plateau slickrock platform, vertical joint-face surfaces wind-scoured to desert-varnish black, the squared-off summit cap of harder caprock overhanging the eroded shaft below, talus cone fanning wide at the fractured base"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Low POV looking straight up a banded Jurassic sandstone alcove ceiling, concave wind-hollowed undercut sweeping eighty feet overhead in smooth iron-stained sienna and cream ripple-cross-bedding, the polished curved wall pressing inward to a knife-edge shadow line at the lip above"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Aerial drone perspective over a Colorado Plateau cracked-clay flat, polygonal desiccation fracture networks tiling the burnt-sienna badlands surface in continent-scale geometric mosaic, eroded clay pedestals and wind-scoured bentonite knobs casting geometric shadow geometry across the fractured plain below"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
     "description": "Wide-angle from the valley floor wrapping a Northern Rockies glacial cirque headwall, a thousand-foot vertical quartzite backstop rising razor-edge above a boulder-strewn moraine lake, ancient subalpine fir colonizing the talus apron below in towering sheer dark-green wedge formations"
   },
   {
-    "tags": ["volcanic"],
+    "tags": [
+      "volcanic"
+    ],
     "description": "Ground-level side-on across a Hawaiian volcanic shield aa lava field, razor-cut fractured clinker ridges of collapsed basalt stacking jagged and lava-blackened across the sun-baked flat, the distant shield summit dome rising in a sweeping low-angle profile above the hardened flow surface"
   },
   {
-    "tags": ["alpine"],
+    "tags": [
+      "alpine"
+    ],
     "description": "Cliff-edge vantage looking down into a Sierra Nevada granite glacial canyon, glacier-polished diorite walls plunging two thousand feet sheer to the ice-carved valley floor, exfoliation sheet fractures sweeping the curved face in broad concentric arcs, talus fans spreading from every joint system below"
   },
   {
-    "tags": ["desert"],
-    "description": "Side-on across a Colorado Plateau cinder-red mesa system, three distinct sandstone stair-step benches descending in iron-red and cream banded horizontal slabs toward a shadow-filled canyon interior, wind-scoured cliff faces vertically striped by desert-varnish black mineral stain from caprock to talus apron"
+    "tags": [
+      "coastal-temperate",
+      "temperate-forest"
+    ],
+    "description": "Cliff-edge vantage looking down into a spruce-fir forest colonizing sheer pink granite ledges dropping two thousand meters to the cold Atlantic, iron-stained feldspar crystals blazing across every exposed face, lava-blackened lichen mats crusting the oldest surfaces, frost-shattered exfoliation slabs fanning across every lower terrace"
   },
   {
-    "tags": ["temperate-forest"],
+    "tags": [
+      "temperate-forest"
+    ],
     "description": "Low POV at the base of a Pacific Northwest old-growth coastal redwood stand, trunks of wildly uneven girth — some six feet across, others half that — erupting from a spray-soaked fern understory at irregular, unpredictable intervals, one massive trunk leaning noticeably left, fluted bark buttresses gripping fractured sandstone bedrock, a fallen mossy giant decomposing across the foreground, canopy closing in asymmetric patches far above"
   },
   {
-    "tags": ["alpine", "arctic-polar"],
-    "description": "Aerial drone perspective over an Alaskan boreal glaciated massif, a continent-scale icefield feeding six distinct outlet glaciers radiating down valley systems from a shared ice-dome summit, crevasse fields fracturing the glacier surfaces in razor-cut blue-walled grid patterns, nunatak peaks piercing the ice margin"
+    "tags": [
+      "coastal-temperate",
+      "temperate-forest"
+    ],
+    "description": "Side-on across a freshwater dune bluff of wind-stacked sandstone rising two-thousand-meter vertical above a jade inland sea, iron-stained cross-bedded foresets exposed in sheer cutbank faces, razor-edge crest lines serrating the bluff top in a sawtooth silhouette against the open basin beyond"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Wide-angle wrapping the interior of a Navajo sandstone wave formation, undulating cross-bedded strata flowing in frozen cream and rust-orange surf-wave curves across the slickrock surface, wind-polished troughs and razor-edge crests alternating in continent-scale rhythmic repetition toward the canyon wall beyond"
   },
   {
-    "tags": ["volcanic", "alpine"],
+    "tags": [
+      "volcanic",
+      "alpine"
+    ],
     "description": "Side-on at the base of a Cascade Range composite volcano's glacier-carved lateral flank, columnar andesite cliff faces exposed in razor-cut stratigraphic section eight hundred feet of sheer vertical stacking, ice-scoured channels plunging between alternating dark lava and pale ash-flow tuff banding down the fractured wall"
   },
   {
-    "tags": ["alpine"],
+    "tags": [
+      "alpine"
+    ],
     "description": "Low POV across a wind-scoured Northern Rockies alpine plateau at treeline, frost-shattered quartzite pavement stretching continent-scale toward a knife-edge ridge crest three thousand feet above, lichen-blackened boulders packing the frost-heaved surface, successive couloir gullies scoring the near-vertical headwall face above"
   },
   {
-    "tags": ["desert", "volcanic"],
+    "tags": [
+      "desert",
+      "volcanic"
+    ],
     "description": "Aerial drone perspective over a Sonoran Desert volcanic field, thirty symmetrical cinder cones of ochre-grey and rust-red ash arranged in a continent-scale en-echelon chain across a basalt lava plain, collapsed summit craters exposing razor-cut interior wall sections, lava-blackened flow aprons fanning from each cone base"
   },
   {
-    "tags": ["coastal-temperate"],
+    "tags": [
+      "coastal-temperate"
+    ],
     "description": "Low POV from a tidal surge channel looking up at a Pacific Northwest sea-arch spanning sixty feet of fractured basalt headland, columnar joint faces exposed in hexagonal section on the arch interior ceiling, spray-soaked iron-stained block debris packing the channel floor below the keystone above"
   },
   {
-    "tags": ["temperate-forest", "alpine"],
+    "tags": [
+      "temperate-forest",
+      "alpine"
+    ],
     "description": "Wide-angle from the canyon floor looking up a Pacific Northwest old-growth gorge wall, glacier-polished andesite rising four hundred feet of sheer vertical above a spray-soaked emerald moss carpet, ancient western red cedar gripping every horizontal ledge with flared root buttresses above the fractured talus base"
   },
   {
-    "tags": ["alpine"],
+    "tags": [
+      "alpine"
+    ],
     "description": "Aerial drone perspective over a Sierra Nevada granite batholith summit plateau, exfoliation-domed monoliths rising in razor-edge succession across the wind-scoured high-country flat, glacier-polished slabs gleaming between dark joint-crack shadows, a chain of cobalt tarns pooled in ice-scoured bedrock basins threading the plateau"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "From the canyon floor looking straight up a vertical-walled Permian limestone gorge in the Guadalupe escarpment, sheer eight-hundred-foot cream and grey fossil-reef walls pressing to forty-foot width at the floor, solution-enlarged joint systems dissolving sheer niches into the overhanging walls above"
   },
   {
-    "tags": ["volcanic"],
+    "tags": [
+      "volcanic"
+    ],
     "description": "Ground-level wide-angle across a Yellowstone Plateau geyser cone cluster, silica-encrusted pale-grey cone formations rising ten to thirty feet from the mineral-stained sinter apron, iron-orange bacterial mats ringing each vent opening, fractured sinter crust exposing thermal blue pool water at the foreground margin"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
     "description": "Low POV across a Northern Rockies glacial moraine lake, a towering sheer seven-thousand-foot limestone and shale headwall mirrored in the jade-cold water surface, subalpine larch colonizing the lateral moraine crest in diagonal gold-needled fringe above the spray-soaked foreground boulders"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Side-on across an American Southwest amphitheater of eroded Chinle mudstone badlands, violet and grey and ochre-red banded horizons undulating in fractured hummock topography across the basin floor, wind-scoured fins and clay pedestals rising ten to thirty feet in razor-cut vertical formations across the pale foreground flat"
   },
   {
-    "tags": ["coastal-temperate", "alpine"],
-    "description": "Aerial drone perspective over an Alaskan boreal fjord, glacier-scoured granite valley walls plunging three thousand feet sheer into the ink-dark inlet below, hanging tributary valleys releasing ribbon cascades straight down the polished face, terminal moraine ridges banking across the fjord mouth in parallel ice-deposited arcs"
+    "tags": [
+      "alpine",
+      "desert"
+    ],
+    "description": "Looking straight down the throat of a gnarled bristlecone-pine colonnade gripping a Great Basin limestone ridge at two-thousand-meter elevation, ancient contorted trunks splitting quartzite outcrops with iron-grip root systems, sun-baked south flank exposing bleached calcium-carbonate bedrock scoured to bare mineral grain, razor-edge dolomite fins jutting between root-pried boulder fields"
   },
   {
-    "tags": ["temperate-forest"],
+    "tags": [
+      "temperate-forest"
+    ],
     "description": "Looking straight up through an Appalachian old-growth mixed hardwood canopy from the gorge floor, tulip poplar and white oak trunks of jarringly uneven girth rising sheer vertical from a fractured limestone understory — one dominant trunk off-center and enormously thick, its neighbors leaning at odd angles and spaced with no apparent order, moss-blanketed limestone ledges terracing the spray-soaked gorge wall to both sides, root systems gripping every crack above"
   },
   {
-    "tags": ["desert", "alpine"],
+    "tags": [
+      "desert",
+      "alpine"
+    ],
     "description": "Wide-angle from a high sandstone rim looking down into a canyon system where Permian red-bed walls transition abruptly to glacier-polished Precambrian granite at the inner gorge, the compressed contact zone a razor-cut horizontal boundary line fifteen hundred feet below the rim, the abyssal floor a thread of shadow beyond"
   },
   {
-    "tags": ["volcanic"],
+    "tags": [
+      "volcanic"
+    ],
     "description": "Cliff-edge vantage looking straight down a Hawaiian volcanic shield pit chain, three aligned collapse craters each dropping two hundred feet of sheer basalt wall to a fractured hardened floor below, lava-bench terraces stepping the interior walls at distinct eruption levels, radial fracture networks tiling each crater floor"
   },
   {
-    "tags": ["alpine"],
+    "tags": [
+      "alpine"
+    ],
     "description": "Low POV at the fractured terminus of a Cascade Range cirque glacier, seracs of blue-white pressure ice jutting and tilting at chaotic angles forty feet above the snout, lateral moraines rising sheer on both flanks in parallel debris ridges, ice-scoured bedrock slabs gleaming glacier-polished in the proglacial foreground below the calving face"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Aerial drone perspective over a Colorado Plateau river-carved canyon labyrinth, razor-cut entrenched meander loops of Wingate sandstone walls spiraling five hundred feet deep in tight oxbow formations, sun-baked desert-varnish black cliff faces framing cream-floored canyon beds in continent-scale interlocking geometric maze"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Low POV from the canyon floor looking straight up a Permian red-bed sandstone chimney, sheer walls pressing to body-width at the base, iron-oxide-stained burgundy and ochre striations spiraling eight hundred feet of sheer vertical, wind-hollowed undercuts smoothing the lower walls into porcelain-curved alcoves"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Aerial drone perspective over a Colorado Plateau entrenched canyon labyrinth, razor-cut Wingate sandstone meander loops spiraling six hundred feet deep in tight oxbow formations, desert-varnish-black cliff faces framing cream-floored canyon beds in continent-scale interlocking geometric coils across the sun-baked plateau surface"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
-    "description": "Wide-angle from the valley floor wrapping a Sierra Nevada granite headwall, four hanging valleys releasing knife-edge ribbon cascades down a two-thousand-foot glacier-polished face, ancient lodgepole pine colonizing the boulder-strewn moraine apron below in a ragged, irregularly spaced scatter of dark crowns — trunks of uneven thickness clumped and gapped at random across the rocky terrain"
+    "tags": [
+      "desert"
+    ],
+    "description": "From the floor of a Badlands clay basin, knife-edge striped clay spires of alternating ash-white and iron-oxide-burnt sienna strata eroding into vertigo-inducing pinnacles thirty feet overhead, columnar phonolite intrusions splitting the badland walls in geometric dark pillars, lava-blackened clinker horizons banding every exposed escarpment face"
   },
   {
-    "tags": ["volcanic"],
-    "description": "Aerial vantage over a Cascade Range caldera rim, collapsed vent walls exposing stacked ash-flow tuff and andesite in razor-cut stratigraphic layers eight hundred feet deep, lava-dome remnants pushing fractured grey plugs through the pumice-grey crater floor, snow-filled radial gullies scoring the outer flanks below"
+    "tags": [
+      "alpine",
+      "arctic-polar"
+    ],
+    "description": "From the floor of a mile-deep Alaskan cirque, a cathedral-vertical granite spire wall rising sheer above the glacier's fractured blue ice, water-polished lower flanks gleaming where the ice sheet retreated, tundra colonizing the lateral moraine in a ragged fringe at the basin rim"
   },
   {
-    "tags": ["alpine"],
-    "description": "Cliff-edge vantage looking down into a Northern Rockies moraine-dammed tarn, glacier-scoured quartzite walls plunging two thousand feet into jade-cold water, wind-scoured talus fanning from every couloir, fractured arête crest razor-edge against the horizon above the catastrophically shattered headwall"
+    "tags": [
+      "coastal-tropical"
+    ],
+    "description": "From the floor of a subtropical limestone estuary, a spray-soaked mangrove tunnel arching overhead in a dense interlocking canopy of aerial root systems pressing wall-to-wall, calcium-white limestone shelving below the waterline, sawgrass plains stretching flat to the horizon beyond the tunnel mouth"
   },
   {
-    "tags": ["desert"],
-    "description": "Knee-level POV across a continent-scale gypsum dune field of pure cream-white selenite wave-forms undulating toward a vanishing horizon, wind-scoured interdune hollows exposing bare crystalline crust, razor-edge crests casting hard geometric shadow lines across the pristine basin floor below"
+    "tags": [
+      "desert"
+    ],
+    "description": "Side-on across a monumental fossil-reef limestone escarpment rising from the Chihuahuan Desert basin, gypsum dissolution caverns pocking the cliff face at every stratum, wind-scoured north faces striated with ancient marine organism impressions packed dense as cobblestone, talus cones of reef-fragment rubble fanning the base"
   },
   {
-    "tags": ["volcanic", "coastal-tropical"],
-    "description": "Side-on at sea-level where a Hawaiian volcanic shield pahoehoe flow meets open ocean, white steam plume erupting catastrophic where fresh basalt pours into the surf, hardened glassy crust fractured in razor-cut slabs at the foreground edge, lava-blackened shoreline extending continent-scale to the horizon"
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Looking straight down the throat of a monumental Arctic permafrost plain, sun-baked south flanks of polygonal tundra cells bulging in geometric tile patterns across the flat basin, aufeis sheets glassing over the low centers, frost-heaved ground splitting each polygon edge in repeating razor-cut fracture lines"
   },
   {
-    "tags": ["temperate-forest"],
-    "description": "Looking straight up through Pacific Northwest old-growth with twelve-foot moss curtains hanging vertical from every branch of a towering bigleaf maple stand, trunks of wildly uneven girth erupting from glacier-polished bedrock at random intervals — one massive off-center trunk dominating the frame, others leaning and curving away at odd angles, a collapsed mossy giant bridging the foreground, emerald fern carpeting the understory, spray-soaked root systems gripping fractured basalt below"
+    "tags": [
+      "coastal-temperate",
+      "alpine"
+    ],
+    "description": "Looking straight down the throat of a cathedral-vertical Alaskan glacier-carved fjord, glacier-polished granite walls plunging sheer into the tidewater basin below, blue serrated ice at the calving face fractured in jagged vertical columns, tundra clinging to the uppermost ledges above the trim line"
   },
   {
-    "tags": ["alpine", "volcanic"],
-    "description": "Side-on across a wind-scoured alpine tarn at the foot of a Cascade Range glaciated stratovolcano cone, the sky-piercing summit rising fourteen thousand feet razor-cut above the treeline, pumice-grey flanks streaked by radial glacial scour channels, frost-heaved pumice rubble colonizing the foreground basin margin"
+    "tags": [
+      "desert"
+    ],
+    "description": "Cliff-edge vantage looking down into a monumental Great Basin mountain-basin dune field, spray-soaked windward flanks of quartzite-and-limestone-dust dunes rising seven hundred feet from the basin floor in sweeping parabolic faces, iron-stained interdune corridors cutting geometric shadow lines between each massive ridge"
   },
   {
-    "tags": ["desert"],
-    "description": "Wide-angle from the canyon rim looking straight down a mile-deep Colorado Plateau gorge, banded strata cycling through six thousand feet of compressed geological time in iron-red, cream, violet, and charcoal horizontal ribbons, the river a silver thread on the abyssal shadowed floor far below"
+    "tags": [
+      "desert"
+    ],
+    "description": "From the floor of a fault-spring fan-palm oasis splitting the cold-air-bitten east aspect of a six-thousand-foot Mojave monzogranite escarpment, alkali-crusted badland clay shelves stepping down from the break zone, lichen-stippled boulders the size of houses tumbled across the fault trace, shattered exfoliation slabs fanning from the base in cathedral-scale debris aprons"
   },
   {
-    "tags": ["volcanic"],
-    "description": "Wide-angle wrapping the Yellowstone Plateau geyser basin from ground level, cobalt thermal pools fringed by full-spectrum rust-orange and cream-white silica terraces radiating outward in razor-cut mineral rings, fumarole vents fracturing the iron-stained sinter crust across the abyssal steam-venting flat"
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Cliff-edge vantage looking down into a water-polished Appalachian sandstone cascade plunging thousand-foot sheer vertical through a rhododendron hollow, cove-hardwood root systems gripping every horizontal ledge along the descent, moss-blackened joint planes splitting the face in parallel vertigo-inducing fracture arrays, angular talus choking the plunge pool floor below"
   },
   {
-    "tags": ["temperate-forest", "alpine"],
-    "description": "Looking straight up through a Sierra Nevada giant sequoia old-growth stand, trunks of staggering and uneven girth — one dominant cinnamon-red giant commanding the off-center foreground, others of noticeably lesser bulk scattered at irregular distances behind it, some leaning slightly, none aligned — rising two hundred fifty feet of sheer vertical scale, glacier-polished granite slabs threading between massive root buttresses at random angles, wind-scoured ridge-line visible through the asymmetric canopy gap far above"
+    "tags": [
+      "alpine",
+      "arctic-polar"
+    ],
+    "description": "Looking straight down the throat of an iron-stained Alaskan granite spire wall above a mile-deep tidewater glacier, cathedral-vertical joint systems splitting the monolith face in razor-edge crack arrays, blue-green glacier ice grinding the cirque floor in a continent-scale frozen river below, frost-shattered talus cones banking every ledge and couloir"
   },
   {
-    "tags": ["alpine", "arctic-polar"],
-    "description": "Aerial drone perspective over an Alaskan boreal tidewater glacier terminus, calving sheer-vertical ice blocks into a milky turquoise fjord inlet, lateral moraine ridges striping the valley walls in four parallel horizontal scars, ice-fractured granite peaks plunging sheer three thousand feet to the active calving face"
+    "tags": [
+      "desert"
+    ],
+    "description": "Cliff-edge vantage looking down into a lichen-crusted Mojave monzogranite boulder field hosting a Joshua-tree forest across a two-thousand-meter alkali basin floor, exfoliation domes rising razor-edge above the scatter in cathedral-vertical stacks, badland clay badlands fringing the eastern margin in vertigo-inducing eroded scarps, fractured joint blocks tumbled in every compass direction"
   },
   {
-    "tags": ["desert", "volcanic"],
-    "description": "Low POV across a Mojave basalt lava field at the foot of a symmetrical cinder cone, razor-cut pahoehoe ridges and collapsed lava tube depressions fracturing the sun-baked black surface in continent-scale geometric patterns, the ochre-grey cone rising six hundred feet sheer above the hardened flow apron"
+    "tags": [
+      "desert"
+    ],
+    "description": "From the floor of a knife-edge Great Basin dune crest towering above a mountain basin of limestone and quartzite bedrock, sun-baked south flank sand cascading in razor-edge slip-face sheets toward the valley floor, wind-scoured interdune corridors exposing bare quartzite pavement below, cathedral-scale dune ridges stacking in successive parallel crests toward the range front"
   },
   {
-    "tags": ["desert"],
-    "description": "Side-on across a Colorado Plateau sandstone mesa rim, a freestanding rust-vermilion monolith rising eight hundred feet sheer from its talus apron, wind-scoured cross-bedded strata cycling iron-red and buff-cream in razor-cut horizontal bands, vertical joint systems splitting the fractured butte face top to base"
+    "tags": [
+      "desert"
+    ],
+    "description": "Looking straight down the throat of a lava-blackened Mojave monzogranite boulder bajada hosting a continent-scale saguaro forest, alkali-flat hardpan spreading in razor-edge geometric cracks across the basin below, badland clay scarps eroding in vertigo-inducing vertical walls at the bajada margin, lichen-crusted exfoliation slabs armoring every exposed granite surface across the descent"
   },
   {
-    "tags": ["desert"],
-    "description": "Low POV from the canyon floor looking straight up a banded Entrada sandstone fin corridor, walls leaning inward sixty degrees above, ochre and burgundy iron-stain striations compressed thousand-foot vertical, wind-polished undercuts hollowing the base into smooth towering-sheer alcoves at shoulder height along both flanks"
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Knee-level POV across wind-abraded pink granite domes meeting cold Atlantic surf at a thousand-foot sheer vertical coastal headwall, frost-shattered exfoliation sheets peeling from every dome flank in concentric slabs, feldspar megacrysts erupting knuckle-size from the raw crystalline surface, tide-polished cobble aprons armoring every joint-fractured base"
   },
   {
-    "tags": ["alpine"],
-    "description": "Low POV at the snout of a Northern Rockies valley glacier, catastrophic ice-fractured seracs stacking sheer vertical above the terminus, lateral moraines striping both valley walls in parallel scour-lines six hundred feet up, glacier-polished quartzite bedrock gleaming at the foreground edge in broad smooth slabs"
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Knee-level POV across an Arctic permafrost tundra plain of polygonal ice-wedge networks, house-sized aufeis lobes heaving the surface into pressure ridges of blue-fractured ground ice, wind-scoured north faces of each polygon rim stripped to bare mineral substrate, continuous permafrost bedrock cracking the plain into a vast geometric mosaic"
   },
   {
-    "tags": ["desert"],
-    "description": "Aerial drone perspective over a Colorado Plateau petrified forest flat, crystallized silica logs scattered continent-scale across a lavender-grey bentonite badlands plain, iron-rich amethyst and jasper-red mineralization bleeding vivid color through fractured wood grain, wind-scoured clay pedestals supporting each fossilized trunk section above the eroded surface"
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Side-on across a cold Atlantic cobble beach of glacier-rounded pink granite beneath sheer cliff walls, six-thousand-foot cold-air-bitten east aspect feldspar faces splitting in exfoliation sheets above the intertidal zone, wave-worked cobbles packed in dense imbricated formations across the full beach width, razor-edge joint planes ruling the cliff face in vertical columns"
   },
   {
-    "tags": ["temperate-forest"],
-    "description": "Looking straight up through a Pacific Northwest old-growth Sitka spruce grove, trunks of wildly uneven girth ranging two to eight feet across rising two hundred feet at irregular, random spacing, one leaning trunk crossing another overhead, spray-soaked root buttresses gripping glacier-polished bedrock at odd angles, a fallen mossy giant half-buried in the understory, deep emerald fern carpet wrapping the fractured basalt floor in unbroken dense layered cover"
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Side-on across a continent-scale cove-hardwood forest of colossal tulip poplars rooted in water-polished Appalachian sandstone river cobble, trunk bases swelling cathedral-wide at the soil line, rhododendron thicket massing into an impenetrable understory beneath the canopy vault, root systems prying every exposed sandstone ledge into angular rubble"
   },
   {
-    "tags": ["alpine"],
-    "description": "Side-on across an Appalachian quartzite knife-edge ridge at treeline, bare frost-shattered scree cascading both flanks from the razor-edge crest, wind-scoured lichen-blackened boulders packing the narrow spine, successive parallel ridgelines receding in diminishing silhouette across the glacially-broadened valley system toward the horizon"
+    "tags": [
+      "alpine"
+    ],
+    "description": "From the floor of a knife-edge Alaskan glacial outwash plain braided by iron-stained meltwater channels cutting through granite-flour silt, house-sized granite erratics stranded mid-channel by retreating glacier ice, tundra mat colonizing every stabilized gravel bar between the active braids, exposed channel walls revealing laminated iron-stained sediment columns in sheer vertical section"
   },
   {
-    "tags": ["coastal-temperate"],
-    "description": "Low POV from a tidal surge channel looking up at a Pacific Northwest sea-arch spanning sixty feet of fractured basalt headland, hexagonal columnar joint faces exposed in section on the arch interior ceiling, spray-soaked iron-stained block debris packing the channel floor below the keystone"
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "From the floor of a Cascade Range basalt-column waterfall gorge, andesite-capped columns sixty feet in diameter stacking in perfect hexagonal tiers above a lava-blackened plunge pool, pumice-dusted ledges terracing the sheer walls, frost-shattered basalt debris fanning across the canyon floor in razor-edge scree fields"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "From the canyon floor looking straight up a vertical-walled Permian limestone gorge in the Guadalupe escarpment, sheer eight-hundred-foot cream and fossil-grey reef walls pressing to forty-foot width at the floor, solution-enlarged joint systems dissolving towering-sheer niches and overhanging scallops into the walls above"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
-    "description": "Low POV across a Northern Rockies glacial moraine lake, a towering-sheer seven-thousand-foot limestone and shale headwall mirrored in jade-cold water, subalpine larch colonizing the lateral moraine crest in diagonal needle-fringed silhouette above spray-soaked foreground boulders stacked at the waterline"
+    "tags": [
+      "coastal-temperate",
+      "temperate-forest"
+    ],
+    "description": "Low POV looking up at house-sized perched sandstone dune bluffs cantilevered over a freshwater sea, lichen-crusted ledge faces bristling with frost-pried fracture lines, iron-stained laminations tracing ancient wind-deposited cross-beds in sweeping diagonal arcs, talus aprons of collapsed blocks tumbling sheer to the waterline below"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Low POV looking straight up a Jurassic Navajo sandstone chimney narrowing to a body-width slit above, iron-oxide-saturated burgundy and sienna striations spiraling seven hundred feet sheer vertical, wind-hollowed undercuts polishing the lower walls into smooth porcelain-curved alcoves at chest height"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
-    "description": "Wide-angle from the valley floor wrapping a glacier-carved Sierra Nevada granite headwall, a sheer two-thousand-foot exfoliation-domed monolith rising vertical above the talus field, knife-edge crack systems bisecting the face, ancient Jeffrey pine colonizing every fractured ledge above the moraine apron"
+    "tags": [
+      "desert"
+    ],
+    "description": "Side-on across a Mojave badlands escarpment of mustard-and-rust monzogranite-derived clay, wind-scoured north faces stripped to raw alkali-white beneath eroded knife-edge ridgelines two thousand meters of relief above the basin, badland clay pinnacles fractured into crumbling vertical fins along every exposed flank"
   },
   {
-    "tags": ["desert"],
-    "description": "Aerial drone perspective over a Colorado Plateau entrenched canyon labyrinth, razor-cut Wingate sandstone meander loops spiraling five hundred feet deep in tight oxbow coils, desert-varnish-black cliff faces framing cream-floored canyon beds in continent-scale interlocking geometric maze across the sun-baked plateau surface"
+    "tags": [
+      "alpine",
+      "desert"
+    ],
+    "description": "From the floor of a knife-edge Great Basin limestone ridge colonized by gnarled bristlecone pines rooted into quartzite fissures, lichen-crusted dolomite outcrops pocking the ridge crest in ragged procession, frost-shattered carbonate rubble armoring every slope below the tree line, wind-scoured solution pockets dimpling every exposed slab"
   },
   {
-    "tags": ["volcanic", "alpine"],
+    "tags": [
+      "volcanic",
+      "alpine"
+    ],
     "description": "Cliff-edge vantage looking down into a Cascade Range composite volcano's summit crater, collapsed inner walls exposing stacked andesite and ash-flow tuff in razor-cut stratigraphic layers nine hundred feet deep, fractured lava-dome plugs pushing grey through the pumice-grey crater floor below"
   },
   {
-    "tags": ["alpine"],
-    "description": "Low POV at the fractured snout of a Cascade Range cirque glacier, pressure-blue seracs stacking forty feet sheer vertical above the terminus, lateral moraines banking steeply on both flanks in parallel debris ridges, ice-scoured diorite slabs gleaming glacier-polished across the proglacial foreground"
+    "tags": [
+      "coastal-tropical"
+    ],
+    "description": "From the floor of a continent-scale subtropical limestone platform dissolving beneath coral-key shallows, sawgrass prairie and mangrove root lattices colonizing every emergent marl ridge, cold-air-bitten east aspect ledges exposing bare oolitic limestone crust, solution holes pitting the karst surface to the waterline in ragged geometric clusters"
   },
   {
-    "tags": ["desert"],
-    "description": "Side-on across an American Southwest eroded Chinle mudstone badlands amphitheater, violet and grey and ochre-red banded horizons undulating in fractured hummock topography, wind-scoured clay pedestals and razor-cut fins rising ten to forty feet in dense geometric formations across the pale basin floor"
+    "tags": [
+      "alpine"
+    ],
+    "description": "From the floor of a Sierra Nevada glacier-carved cirque, thousand-foot sheer vertical walls of glacier-polished granite rising in unbroken slabs above a mirror-clear tarn, frost-shattered exfoliation sheets peeling in curved slabs from every exposed dome face, moraine debris ringing the basin in continuous boulder fields"
   },
   {
-    "tags": ["temperate-forest"],
-    "description": "Looking straight up through a Pacific Northwest old-growth western red cedar grove, trunks of wildly uneven girth ranging three to ten feet across at irregular, random, unpatterned spacing, one massive off-center trunk dominating the frame while others lean and curve around it, shredded-bark surfaces rising two hundred feet from spray-soaked root buttresses gripping fractured basalt at chaotic angles, a collapsed mossy elder slumping across the understory, unbroken emerald fern carpet wrapping the glacier-polished floor below"
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Side-on across a monumental Sierra Nevada glacier-polished granite lip from which a free-leaping waterfall launches into a spray-soaked vertical void, thousand-foot sheer vertical exfoliated cliff faces rising in sweeping convex slabs on either side, iron-stained seep lines striping the wet granite in dark vertical ribbons, fractured joint systems splitting the rim edge in geometric precision"
   },
   {
-    "tags": ["volcanic"],
+    "tags": [
+      "volcanic"
+    ],
     "description": "Ground-level wide-angle across a Yellowstone Plateau travertine terrace staircase, mineral-laden thermal water depositing cream-white calcium carbonate shelves cascading sixty feet down a hillside in razor-cut stepped pools, sulfur-yellow and iron-orange bacterial mat rings fringing each terrace lip above the fractured sinter apron"
   },
   {
-    "tags": ["alpine"],
+    "tags": [
+      "alpine"
+    ],
     "description": "Aerial drone perspective over a Northern Rockies glaciated massif, a continent-scale icefield feeding four distinct outlet glaciers radiating down parallel valley systems, crevasse fields fracturing the glacier surfaces in razor-cut blue-walled grid patterns, nunatak quartzite peaks piercing the ice margin at each flank"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Low POV across a Colorado Plateau slickrock platform, a freestanding Entrada sandstone arch spanning sixty feet of wind-scoured rust-vermilion stone, cross-bedded strata cycling sienna and cream through the keystone section, sun-baked talus apron spreading wide below the eroded portal"
   },
   {
-    "tags": ["volcanic", "coastal-tropical"],
+    "tags": [
+      "volcanic",
+      "coastal-tropical"
+    ],
     "description": "Aerial vantage over a Hawaiian volcanic shield aa lava field where a fresh flow has reached the coast, razor-cut clinker ridges of collapsed basalt stacking lava-blackened across the sun-baked flat, the shield summit dome rising in a sweeping low-angle profile above the hardened flow surface to the horizon"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
     "description": "Low POV across a Pacific Northwest glacial valley floor, a four-hundred-foot glacier-polished andesite gorge wall rising towering sheer above a spray-soaked emerald moss carpet, ancient western hemlock gripping every horizontal ledge with flared root buttresses above the fractured talus base below"
   },
   {
-    "tags": ["desert", "volcanic"],
-    "description": "Aerial drone perspective over a Sonoran Desert volcanic field, twenty symmetrical cinder cones of ochre-grey and rust-red ash arranged in a continent-scale en-echelon chain across a basalt lava plain, collapsed summit craters exposing razor-cut interior wall sections, lava-blackened flow aprons fanning from each cone base"
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Wide-angle wrapping the basin of a continent-scale blast-zone pumice plain below a breached Cascade Range andesite crater, fractured basalt columns ringing the inner rim in cathedral-vertical buttresses six hundred feet sheer, sun-baked south flank exposing raw pumice strata in ash-white and charcoal-grey bands, angular pyroclastic debris fields radiating outward across the entire basin floor"
   },
   {
-    "tags": ["coastal-temperate"],
-    "description": "Wide-angle from a sea-stack base looking back at a Pacific Northwest basalt headland, hexagonal columnar jointing stacking eighty-foot towering-sheer columns above the spray-soaked surge platform, iron-stained orange mineral seep lines bleeding down column faces, fractured block debris filling the foreground channel"
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Low POV looking up at a knife-edge Sierra Nevada U-shaped glacier-carved granite valley, glacier-polished granite walls rising four thousand feet sheer and vertical from the valley floor, cold-air-bitten east aspect streaked with exfoliation sheets peeling in continent-slab panels, talus cones fanning from every joint system onto the polished moraine below"
   },
   {
-    "tags": ["alpine"],
-    "description": "Cliff-edge vantage looking down into a Sierra Nevada granite glacial canyon, glacier-polished diorite walls plunging two thousand feet sheer to the ice-carved valley floor, exfoliation sheet fractures sweeping the curved face in broad concentric arcs, talus fans spreading from every joint system at the base"
+    "tags": [
+      "alpine"
+    ],
+    "description": "Side-on across a cathedral-vertical red-and-green argillite canyon of the Northern Rockies, limestone ledges banding the sheer walls in cream and charcoal above spray-soaked argillite faces plunging three hundred feet to turquoise pools, shale overhangs cantilevered in razor-thin horizontal slabs, granite intrusions splitting the lower walls in bolt-straight vertical dikes"
   },
   {
-    "tags": ["desert"],
-    "description": "From the canyon floor looking straight up a vertical-walled Permian limestone gorge in the Guadalupe escarpment, sheer eight-hundred-foot cream and fossil-grey reef walls pressing to fifty-foot width at the floor, solution-enlarged joint systems carving towering-sheer niches and overhanging scallops deep into the walls above"
+    "tags": [
+      "desert"
+    ],
+    "description": "Knee-level POV across a Mojave fault-spring fan-palm oasis ringed by six-thousand-foot monzogranite escarpments fractured into frost-shattered slab fields, alkali flats extending in salt-crusted crystalline sheets to the base of the fault scarp, badland clay badlands eroding into razor-edge knife-fin ridges along the basin margin, decomposed monzogranite grus blanketing the oasis floor in coarse amber sand"
   },
   {
-    "tags": ["temperate-forest", "alpine"],
-    "description": "Looking straight up through an Appalachian old-growth mixed hardwood gorge, twelve-story tulip poplar and white oak trunks rising sheer vertical from a fractured limestone understory, trunks of wildly uneven girth leaning at odd angles, some bowing outward over mossy ledges, moss-blanketed limestone terracing the spray-soaked gorge walls in irregular broken tiers, root systems gripping every horizontal crack in the wet stone"
+    "tags": [
+      "desert"
+    ],
+    "description": "Low POV looking up at a monumental Mojave Joshua-tree forest colonizing a chaotic monzogranite boulder pile, lava-blackened surfaces of stacked exfoliation domes rising forty feet in rounded cathedral forms, alkali flats stretching in pale crystalline sheets between the boulder clusters, weathering pits pocking every exposed monzogranite face in deep honeycomb hollows"
   },
   {
-    "tags": ["volcanic"],
-    "description": "Cliff-edge vantage looking straight down a Hawaiian volcanic shield pit crater chain, three aligned collapse craters each plunging two hundred feet of sheer basalt wall to fractured hardened floors below, lava-bench terraces stepping the interior walls at distinct eruption levels, radial fracture networks tiling each floor"
+    "tags": [
+      "alpine"
+    ],
+    "description": "Cliff-edge vantage looking down into a razor-edge Northern Rockies red-and-green argillite canyon, iron-stained walls of banded argillite and limestone plunging cathedral-vertical eight hundred feet to turquoise pools of impossible clarity below, shale fins splitting the rim into serrated knife-edge projections above the void, granite boulders littering the canyon floor in massive fractured blocks"
   },
   {
-    "tags": ["desert"],
-    "description": "Aerial drone perspective over a Colorado Plateau cracked-clay flat, polygonal desiccation fracture networks tiling the burnt-sienna badlands surface in continent-scale geometric mosaic, eroded clay pedestals and wind-scoured bentonite knobs projecting from the fractured plain in dense irregular field below"
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Cliff-edge vantage looking down into layered blue Appalachian sandstone ridges receding in mile-deep corrugated waves toward a vanishing horizon, cove hardwood canopy blanketing each successive fold in dense unbroken green, wind-scoured escarpment edges splitting into razor-edge ledges and fractured overhangs, rhododendron colonies rooting into every joint and crack along the plunging wall"
   },
   {
-    "tags": ["arctic-polar", "alpine"],
-    "description": "Aerial drone perspective over an Alaskan boreal fjord, glacier-scoured granite valley walls plunging three thousand feet sheer into the ink-dark inlet below, hanging tributary valleys releasing ribbon cascades straight down polished faces, terminal moraine ridges banking across the fjord mouth in parallel ice-deposited arcs"
+    "tags": [
+      "alpine",
+      "volcanic"
+    ],
+    "description": "Knee-level POV across the water-polished andesite apron of a fourteen-thousand-foot glaciated Cascade Range stratovolcano cone, house-sized pumice blocks scattered across the frozen debris field in catastrophic radial patterns, basalt column outcrops splitting the flanks in geometric vertical fractures, glacier ice compressing the summit crater rim into razor-edge serrated ridgelines"
   },
   {
-    "tags": ["desert"],
-    "description": "Side-on across a Colorado Plateau cinder-red mesa system, three distinct sandstone stair-step benches descending in iron-red and cream horizontal slabs toward a shadow-filled canyon interior, wind-scoured cliff faces vertically striped by desert-varnish black mineral stain from caprock overhangs to the talus apron below"
+    "tags": [
+      "alpine"
+    ],
+    "description": "Cliff-edge vantage looking down into a cobalt Sierra Nevada subalpine lake cradled in a thousand-foot sheer vertical glacier-polished granite bowl, wind-scoured north faces stripped bare to crystalline bedrock above the waterline, talus fans of fractured granite spreading from every couloir onto the submerged shelf, knife-edge joint systems ruling the encircling walls top to bottom"
   },
   {
-    "tags": ["alpine"],
-    "description": "Low POV across a wind-scoured Northern Rockies alpine plateau at treeline, frost-shattered quartzite pavement stretching continent-scale toward a knife-edge ridge crest three thousand feet above, lichen-blackened boulders packing the frost-heaved surface, successive couloir gullies scoring the near-vertical headwall face in radial scour lines"
+    "tags": [
+      "desert"
+    ],
+    "description": "Cliff-edge vantage looking down into a Chihuahuan Desert limestone canyon carved by a desert river two-thousand-meter sheer walls of fossil-reef limestone banded in cream and ash-grey, lichen-crusted ledges terracing the vertical faces in horizontal biological strata, gypsum seams threading the canyon walls in bright crystalline veins through the ancient reef matrix"
   },
   {
-    "tags": ["temperate-forest"],
-    "description": "Low POV at the base of a Pacific Northwest old-growth coastal redwood grove, rust-red trunks of wildly uneven girth — some six feet across, others twice that — rising three hundred feet sheer vertical from a spray-soaked fern understory, one massive fallen giant draped in thick moss dominates the left foreground, fluted bark buttresses gripping fractured sandstone bedrock, canopy closing in ragged broken patches far overhead"
+    "tags": [
+      "coastal-tropical"
+    ],
+    "description": "Knee-level POV across a monumental subtropical bald-cypress swamp rooted in lava-blackened limestone substrate, cathedral-vertical trunks rising from still water in dense columnar stands, sawgrass prairie pressing the cypress domes from every margin, mangrove root systems threading the peat and fractured limestone shelf at the basin perimeter"
   },
   {
-    "tags": ["volcanic"],
+    "tags": [
+      "volcanic"
+    ],
     "description": "Wide-angle wrapping a Yellowstone Plateau cobalt thermal pool from ground level, full-spectrum rust-orange and cream-white silica terraces radiating outward in razor-cut mineral rings from the boiling vent center, fumarole fractures splitting the iron-stained sinter crust across the abyssal mineral flat beyond"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
-    "description": "Low POV across a Northern Rockies glacial moraine lake, a sheer towering seven-thousand-foot limestone and shale headwall mirrored in jade-cold water, subalpine larch colonizing the lateral moraine crest in diagonal gold-needled silhouette above spray-soaked foreground boulders stacked dense at the waterline margin"
+    "tags": [
+      "coastal-temperate",
+      "alpine"
+    ],
+    "description": "Wide-angle wrapping the basin of an Alaskan glacier-carved fjord, house-sized granite erratics deposited along the tidewater margin by retreating ice, sun-baked south flank walls of bare fractured granite plunging thousand-foot sheer vertical into the glacial outwash below, tundra colonizing every horizontal ledge in dense compressed mats above the trimline"
   },
   {
-    "tags": ["desert"],
-    "description": "Low POV looking straight up a Jurassic Navajo sandstone chimney narrowing to a fist-width slit above, iron-oxide-saturated burgundy and sienna striations spiraling nine hundred feet sheer vertical, wind-hollowed undercuts polishing the lower walls into smooth porcelain-curved alcoves at waist height along both flanks"
+    "tags": [
+      "coastal-temperate",
+      "temperate-forest"
+    ],
+    "description": "Wide-angle wrapping the basin of a wind-sculpted freshwater sandstone perched dune bluff system towering three hundred feet above a continent-scale freshwater sea, knife-edge crests overhanging sheer erosional scarps, wind-scoured north faces stripped to bare cross-bedded grain, cobble-armored deflation hollows terracing the lakeward slope below"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
-    "description": "Wide-angle from the valley floor wrapping a glacier-carved Sierra Nevada granite headwall, a sheer two-thousand-foot exfoliation-domed monolith dominating the east wall above the talus field, knife-edge crack systems bisecting the face top to base, ancient Jeffrey pine colonizing every fractured ledge above the moraine apron below"
+    "tags": [
+      "temperate-forest",
+      "alpine"
+    ],
+    "description": "Low POV looking up at an Appalachian iron-stained sandstone grassy bald crowning a high quartzite ridge, mile-deep cove hardwood hollows falling away on every flank, rhododendron mats colonizing the frost-fractured ledge margins, exposed bedrock ribs radiating outward from the rounded summit dome"
   },
   {
-    "tags": ["volcanic"],
-    "description": "Wide-angle wrapping a Yellowstone Plateau cobalt thermal pool from ground level, full-spectrum rust-orange and cream-white silica terraces radiating outward in razor-cut mineral rings from the boiling vent center, fumarole fractures splitting the iron-stained sinter crust in geometric webs across the mineral flat beyond"
+    "tags": [
+      "coastal-tropical"
+    ],
+    "description": "Knee-level POV across a subtropical limestone plain where a continent-scale river of sawgrass parts around cathedral-vertical cypress domes rising from the karst shelf, fibrous sedge blades packed shoulder-to-shoulder across the hydroperiod flat, mangrove root tangles armoring the tidal fringe beyond"
   },
   {
-    "tags": ["alpine"],
-    "description": "Aerial drone perspective over a Northern Rockies glaciated massif, a continent-scale icefield feeding five distinct outlet glaciers radiating down parallel valley systems, crevasse fields fracturing the glacier surfaces in razor-cut blue-walled grid patterns, nunatak quartzite peaks piercing the ice margin at each lateral flank"
+    "tags": [
+      "arctic-polar",
+      "alpine"
+    ],
+    "description": "From the floor of a continent-scale Alaskan icefield spilling tidewater glaciers down thousand-foot sheer vertical granite headwalls, water-polished bedrock ribs emerging at the calving margin, tundra-draped nunataks piercing the ice surface at irregular intervals, deep crevasse fields splitting the glacial tongue into cathedral-vertical seracs"
   },
   {
-    "tags": ["temperate-forest"],
-    "description": "Looking straight up through a Pacific Northwest old-growth western red cedar grove, shredded-bark trunks of hugely uneven girth crowding at irregular random intervals — some leaning heavily, one tilting far off vertical, a moss-buried fallen giant anchoring the mid-ground — rising two hundred feet from spray-soaked root buttresses gripping fractured basalt, unbroken emerald fern carpet wrapping the glacier-polished understory floor in dense layered cover below"
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Aerial drone perspective over a golden larch basin cradled beneath cathedral-vertical Northern Rockies granite spires, cream-and-rust argillite ledges terracing the cirque walls above a moraine-dammed floor, wind-scoured north faces of shale and limestone stripped to raw gray stratigraphy, frost-shattered talus cascading in dense aprons to the basin center"
   },
   {
-    "tags": ["alpine", "arctic-polar"],
-    "description": "Aerial drone perspective over an Alaskan boreal tidewater glacier terminus, sheer towering ice blocks calving into a milky turquoise fjord inlet, lateral moraine ridges striping both valley walls in four parallel horizontal scars, ice-fractured granite peaks plunging sheer three thousand feet to the active calving face below"
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Side-on across a Yellowstone Plateau cobalt thermal pool ringed by a rust-orange sinter-and-travertine mineral apron, lichen-crusted rhyolite outcrops framing the six-thousand-foot caldera rim beyond, scalloped sinter terraces stepping outward in razor-edge horizontal bands, iron-and-sulfur-stained crust fracturing into polygonal plates at the apron margin"
   },
   {
-    "tags": ["desert", "volcanic"],
-    "description": "Aerial drone perspective over a Sonoran Desert volcanic field, twenty symmetrical cinder cones of ochre-grey and rust-red ash arranged in a continent-scale en-echelon chain across a basalt lava plain, collapsed summit craters exposing razor-cut interior wall sections, lava-blackened flow aprons fanning wide from each cone base"
+    "tags": [
+      "desert"
+    ],
+    "description": "Looking straight down the throat of a Great Basin mountain-basin dune field of compacted limestone and quartzite sand packed into vertigo-inducing crests towering seven hundred feet from trough to razor-edge summit, wind-scoured avalanche faces peeling in continuous sheets down the slip face, spray-soaked crystalline grains armoring the interdune corridors in pale mineral crust"
   },
   {
-    "tags": ["desert"],
-    "description": "Side-on across an American Southwest eroded Chinle mudstone badlands amphitheater, violet and grey and ochre-red banded horizons undulating in fractured hummock topography, wind-scoured clay pedestals and razor-cut fins rising ten to forty feet in dense geometric formations across the pale basin floor below"
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Looking straight down the throat of a cathedral-vertical Pacific Northwest glacial river braid carving through basalt bedrock, cold-air-bitten east aspect walls rising sheer above the gravel bars, Sitka spruce root systems prying apart jointed columnar faces, moss-plastered ledges colonizing every horizontal fracture in a continuous green armor"
   },
   {
-    "tags": ["coastal-temperate"],
-    "description": "Low POV from a tidal surge channel looking up at a Pacific Northwest sea-arch spanning sixty feet of fractured basalt headland, hexagonal columnar joint faces exposed in section on the arch interior ceiling, spray-soaked iron-stained block debris packing the foreground channel floor below the keystone above"
+    "tags": [
+      "arctic-polar",
+      "alpine"
+    ],
+    "description": "Aerial drone perspective over a monumental Alaskan tidewater glacier face calving into a granite-walled fjord, frost-shattered seracs the size of office towers toppling from a two-hundred-foot vertical ice cliff into the basin below, tundra-covered lateral moraines flanking the glacier tongue in parallel ridges of pulverized stone"
   },
   {
-    "tags": ["volcanic", "alpine"],
-    "description": "Cliff-edge vantage looking down into a Cascade Range composite volcano summit crater, collapsed inner walls exposing stacked andesite and ash-flow tuff in razor-cut stratigraphic layers nine hundred feet deep, fractured lava-dome plugs pushing fractured grey masses through the pumice-grey crater floor far below"
+    "tags": [
+      "alpine"
+    ],
+    "description": "Knee-level POV across a razor-edge Sierra Nevada granite bowl, a cobalt subalpine lake filling the glacier-carved basin to its lowest joint-fractured sill, glacier-polished grey granite walls rising cathedral-vertical on three sides, sun-baked south flank slabs exfoliating in broad concentric sheets above the waterline"
   },
   {
-    "tags": ["desert"],
-    "description": "From the canyon floor looking straight up a vertical-walled Permian limestone gorge in the Guadalupe escarpment, sheer eight-hundred-foot cream and fossil-grey reef walls pressing to fifty-foot width at the floor, solution-enlarged joint systems carving sheer vertical niches and overhanging scallops deep into the towering walls above"
+    "tags": [
+      "desert"
+    ],
+    "description": "Cliff-edge vantage looking down into a mile-deep Mojave cracked playa of alkali and badland clay scored by a constellation of sliding-stone tracks cutting arrow-straight across the iron-stained surface, monzogranite inselbergs rising from the basin margins in cathedral-vertical columns, deeply fractured feldspar faces shedding talus aprons onto the flat pan floor"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
-    "description": "Low POV at the base of an Appalachian granite waterfall gorge, glacier-carved plunge-pool walls rising spray-soaked and moss-blanketed seventy feet vertical, a four-tiered stepped cascade pouring over fractured biotite-flecked ledges, dense hemlock colonizing every crack above the waterline up to the wind-scoured ridge above"
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Side-on across a cathedral stand of Cascade Range Douglas-fir and red-cedar old-growth rooted in knife-edge andesite ridgeline rubble, lava-blackened basalt columns forming the vertical foundation walls beneath the root zone, pumice-dusted duff blanketing every horizontal surface between the buttressed trunks in a continuous rust-orange mineral carpet"
   },
   {
-    "tags": ["desert"],
-    "description": "Aerial drone perspective over a Colorado Plateau cracked-clay flat, polygonal desiccation fracture networks tiling the burnt-sienna badlands surface in continent-scale geometric mosaic, eroded clay pedestals and wind-scoured bentonite knobs projecting in irregular dense field across the fractured plain far below"
+    "tags": [
+      "arctic-polar"
+    ],
+    "description": "Low POV looking up at a continent-scale Arctic permafrost tundra plain of interlocking polygonal frost-crack networks spanning horizon to horizon, aufeis sheets heaving fractured slabs of translucent ice along every drainage margin, lichen-crusted cobble fields armoring the raised polygon rims in grey-green crust, six-thousand-foot Brooks Range argillite ridges walling the basin rim in cathedral verticality"
   },
   {
-    "tags": ["volcanic", "coastal-tropical"],
-    "description": "Side-on at sea-level where a Hawaiian volcanic shield pahoehoe flow meets open ocean, white steam plume erupting catastrophic where fresh basalt pours into the surf, hardened glassy crust fractured in razor-cut obsidian slabs at the foreground edge, lava-blackened shoreline extending continent-scale to the horizon"
+    "tags": [
+      "desert"
+    ],
+    "description": "Cliff-edge vantage looking down into a saguaro forest on a boulder bajada of Mojave monzogranite, house-sized exfoliated granite boulders half-buried in alkali-laced desert pavement, cold-air-bitten east aspect faces streaked pale where mineral salts leach through fractured stone, badland clay arroyos incising the lower bajada apron in razor-edge erosion channels"
   },
   {
-    "tags": ["alpine"],
-    "description": "Low POV at the fractured snout of a Cascade Range cirque glacier, pressure-blue seracs stacking forty feet sheer vertical above the terminus, lateral moraines banking steeply on both flanks in ragged debris ridges, ice-scoured diorite slabs gleaming glacier-polished across the proglacial foreground below the calving face"
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Aerial drone perspective over a U-shaped glacier-carved granite valley of the Sierra Nevada, water-polished granite slabs paving the valley floor in continent-scale sweeping curves, house-sized glacial erratics stranded mid-floor on the bare bedrock, lateral moraines banking both walls in frost-shattered debris rising to the trimline scar"
   },
   {
-    "tags": ["temperate-forest", "alpine"],
-    "description": "Looking straight up through an Appalachian old-growth mixed hardwood gorge, twelve-story tulip poplar and white oak trunks of wildly uneven girth rising sheer vertical from a fractured limestone understory at irregular, jumbled spacing — several leaning, one bowing sharply toward a moss-blanketed ledge — terracing the spray-soaked gorge walls in broken asymmetric tiers, root systems gripping every horizontal crack in the wet stone above"
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Looking straight down the throat of a moss-draped temperate rainforest of colossal Sitka spruce colonizing Pacific Northwest basalt benches, thousand-foot sheer vertical basalt columns rising through the canopy in cathedral-vertical tiers, glacier-polished basalt ledges sheened under layered moss carpets inches deep, root systems wedging fractured columnar joints apart along every exposed face"
   },
   {
-    "tags": ["coastal-temperate", "alpine"],
-    "description": "Aerial drone perspective over an Alaskan boreal fjord, glacier-scoured granite valley walls plunging three thousand feet sheer into the ink-dark inlet below, hanging tributary valleys releasing ribbon cascades straight down polished faces, terminal moraine ridges banking across the fjord mouth in parallel ice-deposited arcs"
+    "tags": [
+      "alpine"
+    ],
+    "description": "From the floor of a seven-thousand-foot limestone and shale headwall of the Northern Rockies, continent-scale stacked Precambrian argillite and pale limestone bands banding the face in horizontal register, spray-soaked granite talus cones fanning from every couloir base onto the valley floor, frost-shattered shale debris mantling every ledge in loose razor-edge splinters"
   },
   {
-    "tags": ["desert"],
-    "description": "Low POV across a Colorado Plateau slickrock platform, a freestanding Entrada sandstone arch spanning sixty feet of wind-scoured rust-vermilion stone, cross-bedded strata cycling sienna and cream through the keystone section above, sun-baked talus apron spreading wide below the eroded portal"
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Looking straight down the throat of a golden larch basin under granite spires of the Northern Rockies, two-thousand-meter limestone and argillite headwalls encircling the basin in razor-edge arête geometry, wind-scoured north faces stripped to bare grey shale and frost-riven granite, frost-shattered talus blanketing the basin floor in continent-scale aprons of angular debris"
   },
   {
-    "tags": ["volcanic"],
-    "description": "Ground-level wide-angle across a Yellowstone Plateau travertine terrace staircase, mineral-laden thermal water depositing cream-white calcium carbonate shelves cascading sixty feet down a hillside in razor-cut stepped pools, sulfur-yellow and iron-orange bacterial mat rings fringing each terrace lip above the fractured sinter apron below"
+    "tags": [
+      "desert"
+    ],
+    "description": "Knee-level POV across a razor-edge Entrada sandstone natural bridge spanning a dry wash on the Colorado Plateau, the spanning arch a full forty feet of wind-hollowed rust-red stone curving cathedral-vertical above the bone-dry cobble floor, iron-oxide-stained undersurface spray-soaked smooth from millennia of flash-flood surge, shattered sandstone debris fields fanning across the wash below"
   },
   {
-    "tags": ["desert"],
-    "description": "Wide-angle wrapping the interior of a Navajo sandstone wave formation, undulating cross-bedded strata flowing in frozen cream and rust-orange surf-wave curves across the slickrock surface, wind-polished troughs and razor-edge crests alternating in continent-scale rhythmic repetition stretching toward the canyon wall beyond"
+    "tags": [
+      "desert"
+    ],
+    "description": "Cliff-edge vantage looking down into a banded Navajo sandstone slot canyon narrowing to shoulder width on the Colorado Plateau, thousand-foot sheer vertical walls of rust-burgundy and cream striations corkscrewing into the shadowed floor below, wind-scoured north faces burnished porcelain-smooth where spiral curves tighten to body-width, fractured caprock debris choking the canyon throat"
   },
   {
-    "tags": ["temperate-forest"],
-    "description": "Low POV at the base of a Pacific Northwest old-growth coastal redwood grove, rust-red trunks of wildly uneven girth scattered at random irregular intervals — one dominant off-center trunk dwarfing its neighbors — rising three hundred feet sheer vertical from a spray-soaked fern understory, fluted bark buttresses gripping fractured sandstone bedrock, a moss-smothered fallen giant sprawling across the root-fractured floor, canopy closing in ragged asymmetric gaps far overhead"
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Looking straight down the throat of a two-thousand-meter blast-zone pumice plain below a breached crater in the Cascade Range, andesite rubble fields radiating in catastrophic furrows from the collapsed caldera rim, lichen-crusted basalt columns emerging from ash-gray pumice deposits in jagged vertical clusters, vertigo-inducing debris avalanche lobes fanning across the stripped plain"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
-    "description": "Low POV across a Northern Rockies glacial moraine lake, a sheer towering seven-thousand-foot limestone and shale headwall mirrored in jade-cold water, subalpine larch colonizing the lateral moraine crest in diagonal needle-fringed silhouette above spray-soaked foreground boulders stacked dense at the waterline margin"
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Side-on across a continent-scale travertine terrace staircase of white and orange on the Yellowstone Plateau, rhyolite-underlain sinter shelves stepping downslope in razor-edge mineral-encrusted risers packed hundreds of feet wide, sun-baked south flank crusted in crystalline calcium carbonate formations dense as stacked porcelain, angular sinter aprons fanning from every overflow ledge"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Low POV looking straight up a banded Jurassic sandstone chimney narrowing to fist-width above, iron-oxide-saturated burgundy and cream striations spiraling nine hundred feet sheer vertical, wind-hollowed undercuts smoothing the lower walls into porcelain-curved alcoves at waist height on both flanks"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
-    "description": "Wide-angle wrapping the full east wall of a glacier-carved Sierra Nevada valley, a two-thousand-foot glacier-polished granite monolith rising sheer above the moraine apron, knife-edge crack systems bisecting the dome face top to base, ancient Jeffrey pine colonizing every fractured ledge above the boulder field"
+    "tags": [
+      "desert"
+    ],
+    "description": "From the floor of a cracked playa with sliding-stone tracks across the Mojave, house-sized monzogranite boulders perched at the terminus of long parallel furrows scoring the alkali clay surface, glacier-polished badland clay panels cracked into geometric tessellations stretching to a vanishing basin rim, fractured playa crust heaving in razor-edge pressure ridges between stone tracks"
   },
   {
-    "tags": ["volcanic"],
+    "tags": [
+      "volcanic"
+    ],
     "description": "Aerial vantage over a Yellowstone Plateau cobalt thermal pool, full-spectrum rust-orange and cream-white silica terraces radiating outward in razor-cut mineral rings from the boiling vent center, fumarole fractures splitting the iron-stained sinter crust in geometric webs across the abyssal mineral flat beyond"
   },
   {
-    "tags": ["desert"],
-    "description": "Aerial drone perspective over a Colorado Plateau entrenched meander system, razor-cut Wingate sandstone oxbow walls spiraling six hundred feet deep in tight coils, desert-varnish-black cliff faces framing pale cream canyon beds in continent-scale interlocking geometric maze across the sun-baked plateau surface"
+    "tags": [
+      "alpine",
+      "arctic-polar"
+    ],
+    "description": "Aerial drone perspective over a six-thousand-foot Alaskan granite spire wall above a glacier, water-polished vertical granite faces sheering cathedral-straight from the crevassed ice field below, tundra-fringed moraine ridges curving in tight arcs around the glacier terminus, razor-edge arête systems splitting the spire wall in knife-thin crack lines top to base"
   },
   {
-    "tags": ["alpine"],
-    "description": "Cliff-edge vantage looking down into a Northern Rockies moraine-dammed tarn, glacier-scoured quartzite walls plunging two thousand feet sheer into jade-cold water, wind-scoured talus fanning from every couloir onto the frozen surface, fractured arête crest razor-edge against the treeless horizon above"
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Looking straight down the throat of a monumental wave-cut basalt shelf of tide pools along the Pacific Northwest coast, columnar-jointed basalt fracturing into geometric honeycomb platforms descending in stacked shelves to the surge channel below, frost-shattered edge surfaces roughened to coarse aggregate texture, Sitka-spruce-rooted bluffs overhanging the moss-crusted intertidal benches"
   },
   {
-    "tags": ["volcanic", "coastal-tropical"],
-    "description": "Side-on at sea-level where a Hawaiian volcanic shield pahoehoe flow meets open ocean, white steam plume erupting catastrophic where fresh basalt pours into the surf, hardened glassy obsidian crust fractured in razor-cut slabs at the foreground edge, lava-blackened shoreline receding to the horizon"
+    "tags": [
+      "desert"
+    ],
+    "description": "From the floor of a freestanding rust-orange Entrada sandstone arch on the Colorado Plateau, the sweeping eighty-foot span bridging sheer above fractured Wingate sandstone fins packed razor-edge across the slickrock below, lava-blackened desert-varnish streaks painting the haunch surfaces in mile-deep vertical curtains, talus debris colonizing the compacted sand floor of the alcove beneath"
   },
   {
-    "tags": ["temperate-forest"],
-    "description": "Looking straight up through a Pacific Northwest old-growth Sitka spruce stand, wildly uneven trunks ranging from two to eight feet in diameter lunging upward at irregular angles two hundred feet overhead, a massive leaning giant throwing its bulk off-center against the frame, spray-soaked root buttresses gripping glacier-polished basalt in gnarled asymmetric tangles, unbroken emerald fern carpet wrapping the fractured understory floor in dense layered cover"
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Low POV looking up at a jade moraine lake under a cathedral-vertical Northern Rockies limestone headwall, glacier-scoured argillite and limestone strata plunging two thousand feet sheer into the cold-air-bitten east aspect of the tarn basin, fractured shale ledges stepping the cliff face in razor-edge horizontal bands, bouldery glacial moraine damming the emerald water at the valley floor"
   },
   {
-    "tags": ["alpine", "volcanic"],
-    "description": "Side-on across a wind-scoured alpine tarn at the foot of a Cascade Range glaciated stratovolcano cone, the sky-piercing summit rising fourteen thousand feet razor-cut above the treeline, pumice-grey flanks streaked by radial glacial scour channels, frost-heaved pumice rubble blanketing the foreground basin"
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Looking straight down the throat of an iron-stained sandstone cascade in a rhododendron hollow of the Appalachian highlands, knife-edge sandstone ledges staircasing in tiered drops through a cove-hardwood-canopied gorge, iron-oxide-streaked surfaces coloring the bedrock face in deep rust and ochre curtains, fractured sandstone slabs wedged vertical along the cascade margins"
   },
   {
-    "tags": ["desert"],
-    "description": "Wide-angle from the canyon rim looking straight down a mile-deep Colorado Plateau gorge, banded strata cycling through six thousand feet of compressed geological time in iron-red, cream, violet, and charcoal horizontal ribbons, the river reduced to a silver thread on the abyssal shadowed floor below"
+    "tags": [
+      "arctic-polar",
+      "alpine"
+    ],
+    "description": "Looking straight down the throat of a mile-deep calving tidewater glacier face in the Alaskan coastal range, a lichen-crusted granite headwall buttressing six hundred feet of fractured glacial ice riven with cobalt crevasse systems, serrated pressure-ridge spines splitting the terminal face into cathedral-vertical ice columns, granite talus and glacial outwash fanning across the terminal moraine below"
   },
   {
-    "tags": ["coastal-temperate"],
-    "description": "Low POV from the surf-line looking up at a fifteen-hundred-foot pink granite dome rising sheer from the cold Atlantic coast, glacier-polished exfoliation sheets sweeping the dome face in broad concentric arcs, krummholz spruce gripping the wind-scoured summit rim above the spray-soaked cliff base"
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Aerial drone perspective over a two-thousand-meter glacier-polished granite face in the Sierra Nevada, a spray-soaked vertical expanse of exfoliation-sheeted granite sweeping three thousand feet from fractured summit rim to talus field below, ancient crack systems splitting the face in continuous knife-edge dihedrals, moraine-dammed tarns pooling cobalt-cold at the base of the apron"
   },
   {
-    "tags": ["temperate-forest", "alpine"],
-    "description": "Low POV at the base of an Appalachian granite waterfall gorge, plunge-pool walls rising spray-soaked and moss-blanketed seventy feet vertical, a four-tiered cascade pouring over fractured biotite-flecked ledges, dense hemlock colonizing every crack above the waterline up to the wind-scoured ridge above"
+    "tags": [
+      "desert"
+    ],
+    "description": "Knee-level POV across the thousand-foot sheer vertical base of a columnar phonolite tower rising from Badlands striped clay flats, wind-scoured north faces of the hexagonal columns roughened to coarse crystalline texture, eroded bentonite pedestals of ash-white and rust-red fanning across the river plain below"
   },
   {
-    "tags": ["desert"],
-    "description": "From the canyon floor looking straight up a vertical-walled Permian limestone gorge in the Guadalupe escarpment, sheer eight-hundred-foot cream and fossil-grey reef walls pressing to forty-foot width at the floor, solution-enlarged joint systems dissolving towering sheer niches and overhanging scallops deep into the walls"
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Wide-angle wrapping the basin of a continent-scale Northern Rockies larch hollow, golden larch forest flooring a limestone-and-argillite cirque beneath razor-edge granite spires fracturing into vertical couloirs, cold-air-bitten east aspect shale walls stratified in iron-red and charcoal-grey bands plunging to the moraine-rubbled basin floor"
   },
   {
-    "tags": ["arctic-polar", "alpine"],
-    "description": "Aerial drone perspective over an Alaskan boreal tidewater glacier terminus, towering sheer ice blocks calving into a milky turquoise fjord inlet, lateral moraine ridges striping both valley walls in four parallel horizontal scars, ice-fractured granite peaks plunging sheer three thousand feet to the active calving face"
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Low POV looking up at a monumental Cascade Range blast-zone pumice plain stretching from a catastrophically breached andesite crater rim, lava-blackened basalt column fields erupting from the pumice substrate in fractured vertical clusters, wind-scoured grey tephra surface etched to bare crystalline grit across the entire devastated plain"
   },
   {
-    "tags": ["volcanic"],
-    "description": "Cliff-edge vantage looking straight down a Hawaiian volcanic shield pit crater chain, three aligned collapse craters each plunging two hundred feet of sheer basalt wall to fractured hardened lava floors, lava-bench terraces stepping the interior walls at distinct eruption levels, radial fracture networks tiling each crater floor"
+    "tags": [
+      "arctic-polar",
+      "alpine"
+    ],
+    "description": "Wide-angle wrapping the basin of an Arctic braided river threading house-sized aufeis blocks across a treeless permafrost valley floor, iron-stained gravel bars splitting the channels into razor-thin sinuous strands, frost-heaved tundra polygons tessellating the valley flanks above the active floodplain in geometric precision"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
-    "description": "Wide-angle from the valley floor wrapping a catastrophically fractured Northern Rockies glacial cirque headwall, a thousand-foot vertical quartzite backstop rising razor-edge above a boulder-strewn moraine lake, ancient subalpine fir colonizing the talus apron below in ragged, uneven dark-green clusters sprawling asymmetrically across the rubble"
+    "tags": [
+      "temperate-forest",
+      "alpine"
+    ],
+    "description": "Side-on across an Alaskan boreal spruce taiga floor beneath a razor-edge granite massif calving glacier ice in fractured seracs above, glacier-polished bedrock knobs punctuating the tundra margin in smooth grey domes, deep lateral moraine ridges flanking the valley corridor in parallel cathedral-scale earthen walls"
   },
   {
-    "tags": ["desert"],
-    "description": "Aerial drone perspective over a Colorado Plateau petrified forest flat, crystallized silica logs scattered continent-scale across a lavender-grey bentonite badlands plain, iron-rich amethyst and jasper-red mineralization bleeding vivid color through fractured wood grain, wind-scoured clay pedestals supporting each fossilized trunk section"
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Knee-level POV across a collapsed lava-tube skylight punched through a Hawaiian volcanic shield pāhoehoe shelf, razor-edge obsidian rim encircling a vertical throat dropping into lava-blackened ʻaʻā rubble thirty feet below, ropy coil textures of solidified basaltic flow surrounding the breach in concentric iron-oxide rings, cinder debris mantling the fractured apron in granular black scree"
   },
   {
-    "tags": ["coastal-temperate"],
-    "description": "Wide-angle from a sea-stack base looking back at a Pacific Northwest basalt headland, hexagonal columnar jointing stacking eighty-foot towering sheer columns above the spray-soaked surge platform, iron-stained orange mineral seep lines bleeding down column faces, fractured block debris filling the foreground channel"
+    "tags": [
+      "desert"
+    ],
+    "description": "Aerial drone perspective over a freestanding rust-orange Entrada sandstone arch spanning cathedral-vertical above a fractured Colorado Plateau canyon floor, the elliptical opening framing eighty feet of clear negative space between massive fin walls, water-polished inner soffit curving in a seamless parabolic vault, cross-bedded strata striping the abutments in alternating cream and deep oxide-red bands"
   },
   {
-    "tags": ["temperate-forest"],
-    "description": "Low POV at the base of a Pacific Northwest old-growth coastal redwood stand, trunks of wildly uneven girth ranging from two to six feet across lunging upward at irregular spacing, a fallen mossy giant sprawling across the foreground ferns, fluted rust-red bark buttresses gripping fractured sandstone bedrock in asymmetric root tangles, the fractured canopy closing unevenly three hundred feet overhead in a ragged, off-center patchwork of interlocked boughs"
+    "tags": [
+      "coastal-tropical"
+    ],
+    "description": "Cliff-edge vantage looking down into a flooded subtropical bald-cypress swamp rooted in knife-edge dissolved-limestone solution trenches, centuries-old fluted trunks rising thirty feet from black standing water above the fractured karst floor, frost-shattered limestone rubble ringing the basin perimeter in angular collapse debris, sawgrass-colonized peat shelves terracing the shallow margins"
   },
   {
-    "tags": ["alpine"],
-    "description": "Low POV at the fractured snout of a Cascade Range cirque glacier, pressure-blue seracs stacking forty feet towering sheer above the terminus, lateral moraines banking sheer on both flanks in parallel debris ridges, ice-scoured diorite slabs gleaming glacier-polished across the proglacial foreground"
+    "tags": [
+      "coastal-temperate",
+      "temperate-forest"
+    ],
+    "description": "Wide-angle wrapping the basin of a spruce-fir forest colonizing pink granite ledges along a cold Atlantic headland, thousand-foot sheer vertical dome faces of exfoliated feldspar-rich plutonic slabs rising from the talus apron, the sun-baked south flank stripped to bare crystalline surfaces by centuries of spall, joint-block debris fields cascading from every pressure-release fracture to the basin floor"
   },
   {
-    "tags": ["desert"],
-    "description": "Low POV looking straight up a banded Permian red-bed sandstone chimney pressing to body-width at the floor, iron-oxide burgundy and burnt-sienna striations spiraling five hundred feet sheer vertical, wind-hollowed undercuts carving smooth porcelain alcoves into both walls at shoulder height"
+    "tags": [
+      "volcanic",
+      "alpine"
+    ],
+    "description": "Low POV looking up at an impossibly-cobalt caldera lake pooled inside a collapsed Cascade Range andesite volcano, house-sized pumice blocks tumbled along the waterline from the two-thousand-foot caldera rim above, wind-scoured north faces of the inner wall stripped to bare jointed basalt columns, a solitary cinder cone rising fifty feet above the lake surface at the basin center"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
-    "description": "Wide-angle from the talus floor wrapping a catastrophically shattered Sierra Nevada granite cirque headwall, exfoliation-peeled slabs stacked in razor-cut tiers above the moraine lake, knife-edge crack systems bisecting the two-thousand-foot face, ancient foxtail pine colonizing every fractured ledge above the boulder apron"
+    "tags": [
+      "desert"
+    ],
+    "description": "Knee-level POV across a tilted monocline reef of cathedral-vertical Wingate sandstone cliffs sweeping in a continuous Colorado Plateau escarpment for forty unbroken miles, lichen-crusted vertical faces streaked with dark desert varnish and iron-oxide oxide banding, cross-bedded caprock overhangs cantilevering ten feet beyond the face, shattered joint-block talus fanning from every tension crack to the valley floor"
   },
   {
-    "tags": ["volcanic"],
-    "description": "Ground-level wide-angle across a Yellowstone Plateau silica sinter flat, pale-grey geyser cones rising ten to forty feet from an iron-stained mineral apron, cobalt vent pools fringed by full-spectrum rust-orange and sulfur-yellow bacterial mats, fractured sinter crust exposing boiling blue water at the cracked foreground margin"
+    "tags": [
+      "desert"
+    ],
+    "description": "From the floor of a mustard-and-rust Mojave badlands dissected into six-thousand-foot eroded clay buttes and razor-finned ridges of iron-stained monzogranite, lava-blackened alkali-encrusted gully floors cutting between vertical thirty-foot pedestals of fractured bentonite clay, exfoliated monzogranite boulders perched on clay pedestals at every ridge crest, concentric erosion terraces banding every slope in alternating rust ochre and pale grey"
   },
   {
-    "tags": ["desert"],
-    "description": "Aerial drone perspective over a Colorado Plateau entrenched meander corridor, Wingate sandstone oxbow walls spiraling seven hundred feet deep in razor-cut tight coils, desert-varnish-black cliff faces framing pale buff canyon beds in continent-scale interlocking geometric loops across the sun-baked plateau surface"
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Side-on across a continent-scale Pacific Northwest basalt sea-stack coast, cathedral-vertical monoliths of columnar basalt rising sixty feet sheer from surge-churned tideline, frost-shattered slab faces split by vertical jointing into razor-edge prisms, Sitka spruce and deep velvet moss colonizing every horizontal ledge above the spray zone"
   },
   {
-    "tags": ["alpine"],
+    "tags": [
+      "alpine"
+    ],
     "description": "Side-on across a Northern Rockies knife-edge arête above treeline, frost-shattered quartzite scree cascading both flanks from the razor-edge spine, wind-scoured lichen-blackened boulders packing the narrow crest, four successive parallel ridgelines receding in diminishing relief across the glacially-broadened valley system below"
   },
   {
-    "tags": ["temperate-forest"],
-    "description": "Looking straight up through a Pacific Northwest old-growth bigleaf maple stand, trunks of wildly uneven girth lurching outward at irregular, unpredictable angles, twelve-foot moss curtains hanging from every branch in draping asymmetric sheets above glacier-polished bedrock, a dominant off-center trunk overwhelming the frame while smaller warped neighbors lean away in organic chaos, spray-soaked root systems gripping fractured basalt, unbroken emerald fern carpet wrapping the understory floor below"
+    "tags": [
+      "coastal-temperate",
+      "temperate-forest"
+    ],
+    "description": "Looking straight down the throat of a freshwater sandstone dune bluff collapsing two-thousand-meter vertical faces into a glacially-carved inland sea, iron-stained ochre and rust striations banding the sheer face in horizontal fault lines, wind-scoured crests crumbling in continuous cascades of loose granular debris onto the submerged sandstone shelf below"
   },
   {
-    "tags": ["desert", "alpine"],
-    "description": "Cliff-edge vantage looking down a Colorado Plateau canyon system where buff Navajo sandstone walls surrender abruptly to dark Precambrian schist at the inner gorge floor, billion-year-old metamorphic basement exposed in towering sheer razor-cut walls two thousand feet below the banded rim above"
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Side-on across a monumental Yellowstone Plateau mudpot field of grey boiling rhyolite-dissolved slurry churning in crater-pocked sinter flats, silica-rimmed mud calderas heaving in slow viscous rolls across a broad travertine apron, glacier-polished rhyolite outcrops rising above the sinter plain at the field margin, mineral-stained vent rims crusted in sulfur-yellow and iron-oxide-red concentric rings around each roiling basin"
   },
   {
-    "tags": ["volcanic", "coastal-tropical"],
+    "tags": [
+      "volcanic",
+      "coastal-tropical"
+    ],
     "description": "Low POV at surf-line where a Hawaiian volcanic shield pahoehoe toe meets open ocean, catastrophic white steam erupting where fresh basalt hits the surf, glassy obsidian crust fractured in razor-cut slabs at the foreground edge, lava-blackened bench extending in jagged tiers to the horizon"
   },
   {
-    "tags": ["alpine", "arctic-polar"],
-    "description": "Aerial drone perspective over an Alaskan boreal glaciated massif, a continent-scale icefield feeding seven outlet glaciers radiating down separate valley systems, blue-walled crevasse grids fracturing each glacier surface, nunatak granite spires piercing the ice margin at the lateral flanks in razor-edge succession"
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Cliff-edge vantage looking down into a cathedral-tall Sierra Nevada giant-sequoia grove rooted in glacier-polished granite, razor-edge furrows of ancient glacial striations crossing the bedrock floor between massive cinnamon-barked columns thirty feet in diameter, water-polished granite slabs mantling the grove floor in continuous fractured pavement"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Knee-level POV across a Sonoran Desert cracked-clay playa, continent-scale polygonal desiccation networks tiling the burnt-ochre surface in razor-cut geometric mosaic, wind-scoured clay pedestals rising ten feet above the fractured plain, eroded bentonite knobs casting hard geometric shadows across the pale basin floor"
   },
   {
-    "tags": ["coastal-temperate"],
+    "tags": [
+      "coastal-temperate"
+    ],
     "description": "Wide-angle from the surge-channel floor looking up at a Pacific Northwest columnar basalt sea-cliff, hexagonal jointing stacking eighty-foot towering sheer vertical columns above the spray-soaked platform, iron-orange mineral seep lines bleeding down every column face, fractured block debris filling the foreground tidal channel below"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
-    "description": "Low POV at the base of an Appalachian limestone waterfall gorge, solution-carved plunge-pool walls rising spray-soaked and moss-blanketed ninety feet vertical, a stepped three-tiered cascade pouring over fossil-grey ledges, dense hemlock root systems gripping every horizontal crack above the waterline to the wind-scoured rim"
+    "tags": [
+      "desert"
+    ],
+    "description": "Wide-angle wrapping the basin of a Colorado Plateau agatized petrified-log badlands in banded bentonite, mile-deep chromatic banding of Chinle Formation clays rippling purple, grey and ochre across the eroded terrain, spray-soaked crystalline agate logs shattered in situ across the deflated mudstone plain in glittering mineral cross-sections"
   },
   {
-    "tags": ["desert"],
-    "description": "Wide-angle wrapping a Colorado Plateau slickrock amphitheater of eroded Entrada sandstone fins, razor-edge parallel walls pressing together in tight corridors of iron-red and cream cross-bedded strata, wind-polished surfaces smooth as river stone, sun-baked talus debris blanketing the labyrinth floor below in rust-orange rubble"
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Looking straight down the throat of a knife-edge Sierra Nevada glacier-polished three-thousand-foot granite face plunging sheer vertical into the valley below, cold-air-bitten east aspect preserving continuous exfoliation sheets peeling in curved slabs from the monolithic surface, ancient glacial polish surviving in mirror-flat panels between vertical crack systems splitting the face top to bottom"
   },
   {
-    "tags": ["volcanic"],
-    "description": "Aerial vantage over a two-thousand-foot-deep Cascade Range caldera filled with impossibly-saturated cobalt water, pumice-grey cliffs sheer vertical ringing the basin in razor-cut walls, a dark cinder-cone island rising defiant from the center, obsidian-black waterline sharp as a blade at the base of the sheer inner walls"
+    "tags": [
+      "coastal-temperate"
+    ],
+    "description": "Wide-angle wrapping the basin of a freshwater coastline where glacier-polished Cambrian sandstone sea caves honeycomb a six-thousand-foot shoreline of buff-and-rust bluffs, wave-scalloped alcoves undercutting the cliff base in scalloped arches, stacked horizontal bedding planes tracing every recession of the ancient inland sea"
   },
   {
-    "tags": ["alpine"],
-    "description": "Cliff-edge vantage looking straight down into a Sierra Nevada granite glacial canyon, glacier-polished diorite walls plunging twenty-five hundred feet sheer to the ice-scoured valley floor, exfoliation sheet fractures sweeping the curved face in broad concentric arcs, talus aprons fanning from every joint crack at the base"
+    "tags": [
+      "temperate-forest",
+      "alpine"
+    ],
+    "description": "Looking straight down the throat of an Appalachian sandstone bald ridge where monumental spray-soaked quartzite outcrops breach the grassy crest, rhododendron thickets colonizing every fracture seam in the bedrock, cove hardwood canopy pressing the ridge walls from both flanks in dense unbroken tiers below"
   },
   {
-    "tags": ["desert"],
-    "description": "Aerial drone perspective over a Colorado Plateau petrified forest badlands flat, crystallized silica logs scattered continent-scale across a lavender-grey bentonite plain, iron-rich jasper-red and amethyst mineralization bleeding vivid pigment through fractured wood grain, wind-scoured clay pedestals elevating each fossilized trunk section above the eroded surface"
+    "tags": [
+      "arctic-polar",
+      "alpine"
+    ],
+    "description": "Cliff-edge vantage looking down into a two-thousand-meter Alaskan icefield of continent-scale compacted glacial mass spilling radial valley glaciers in every cardinal direction, lava-blackened granite nunataks piercing the ice surface like cathedral spires, crevasse fields fracturing the glacier tongues into razor-edge seracs above the terminal moraines"
   },
   {
-    "tags": ["temperate-forest", "alpine"],
-    "description": "Wide-angle from the valley floor wrapping a Pacific Northwest glacier-carved andesite gorge wall, four hundred feet of sheer vertical spray-soaked green rising above an emerald moss carpet, ancient western red cedar gripping every horizontal ledge with flared root buttresses, fractured talus colonized below the dripping face"
+    "tags": [
+      "desert"
+    ],
+    "description": "Aerial drone perspective over a wind-scoured Mojave monzogranite boulder bajada colonized by a six-thousand-foot-elevation saguaro forest, wind-scoured north faces of exfoliated granite domes rising cathedral-vertical above the bajada plain, alkali flat basins collecting angular granitic debris between the cactus columns, fractured boulder fields mantling every slope in geometric chaos"
   },
   {
-    "tags": ["volcanic", "alpine"],
-    "description": "Side-on across a wind-scoured alpine tarn below a Cascade Range composite volcano's northwest flank, the sky-piercing summit cone rising fourteen thousand feet razor-cut above the pumice-grey treeline, radial glacial scour channels striping the upper flanks, frost-heaved volcanic rubble colonizing the foreground basin margin"
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "From the floor of a thousand-foot sheer vertical Pacific Northwest temperate rainforest of colossal Sitka spruce, lichen-crusted basalt outcrops anchoring root systems of trees twelve feet in diameter at the base, moss-draped trunks rising in columnar vertical masse above a continuous fern-carpeted floor, nurse-log ridgelines decomposing into the dark substrate in parallel rows"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "From the canyon floor looking straight up a vertical-walled Permian limestone reef gorge, sheer nine-hundred-foot cream and fossil-grey walls pressing to thirty-foot width above, solution-enlarged joint systems dissolving towering sheer niches and scalloped overhangs deep into the cliff faces on both sides"
   },
   {
-    "tags": ["arctic-polar", "coastal-temperate"],
-    "description": "Aerial drone perspective over an Alaskan boreal fjord terminus, glacier-scoured granite walls plunging three thousand feet sheer into ink-dark salt water below, hanging tributary valleys releasing knife-edge ribbon cascades straight down polished faces, terminal moraine ridges arcing across the fjord mouth in parallel ice-deposited banks"
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Wide-angle wrapping the basin of a Cascade Range old-growth stand of monumental Douglas-fir and red-cedar, andesite and pumice substrate exposed between root systems in fractured geometric slabs, sun-baked south flank of the drainage revealing basalt column outcrops where soil gives way to sheer volcanic bedrock, pumice-pale mineral soil ringing every root crown"
   },
   {
-    "tags": ["temperate-forest"],
-    "description": "Looking straight up through a Sierra Nevada giant sequoia grove from ground level, trunks of wildly uneven girth — cinnamon-red bark ranging from four to nine feet across — lurching at irregular angles two hundred fifty feet overhead, glacier-polished granite slabs wedged between massive asymmetric root buttresses, the canopy closing to a ragged, off-center sliver of sky far above the spray-soaked understory floor"
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Looking straight down the throat of a grey boiling mudpot field venting through fractured Yellowstone Plateau rhyolite, sinter-rimmed craters packed shoulder-to-shoulder across a mile-deep hydrothermal basin, travertine-encrusted margins building razor-edge ledges of chalky mineral deposit, subsurface pressure fractures radiating outward through the bleached and chemically scoured crust"
   },
   {
-    "tags": ["desert", "volcanic"],
-    "description": "Aerial drone perspective over a Mojave volcanic field, thirty symmetrical cinder cones of ochre-grey and rust-red ash arranged in a continent-scale en-echelon chain across a basalt lava plain, collapsed summit craters exposing razor-cut interior wall sections, lava-blackened flow aprons fanning wide from each cone base"
+    "tags": [
+      "temperate-forest",
+      "alpine"
+    ],
+    "description": "From the floor of a grassy bald on a high Appalachian ridge, house-sized iron-stained sandstone outcrops breaking the open heath in ragged angular clusters, rhododendron thickets colonizing every sheltered break in the rock, cove hardwood canopy pressing dense against the bald margin in a cathedral wall of interlocked limb"
   },
   {
-    "tags": ["alpine"],
-    "description": "Low POV at the fractured snout of a Northern Rockies valley glacier, catastrophic ice-fractured seracs stacking towering sheer forty feet above the calving terminus, lateral moraines striping both valley flanks in parallel scour-lines eight hundred feet up, glacier-polished quartzite bedrock gleaming in broad smooth slabs at the foreground edge"
+    "tags": [
+      "alpine",
+      "temperate-forest"
+    ],
+    "description": "Cliff-edge vantage looking down into a free-leaping waterfall off a granite lip in the Sierra Nevada, knife-edge glacier-polished granite cornice projecting sheer above a spray-soaked vertical drop of several hundred feet, ancient exfoliation sheets peeling the canyon walls in great curved slabs, talus debris blanketing the plunge-pool basin below"
   },
   {
-    "tags": ["temperate-forest"],
-    "description": "Low POV at the base of an Appalachian old-growth mixed hardwood gorge, tulip poplar trunks of wildly uneven girth heaving upward twelve stories at random, off-kilter angles from a fractured limestone understory, moss-blanketed solution ledges terracing the spray-soaked gorge walls on both sides, root systems wedging into every horizontal crack in the wet grey stone above"
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Low POV looking up at a sandstone cascade in a rhododendron hollow on the cold-air-bitten east aspect of an Appalachian ridge, cathedral-vertical stratified sandstone faces channeling thin-sheet water across iron-stained ledges in broad overlapping curtains, rhododendron root systems gripping every horizontal crack, cove hardwood trunks rising in dense vertical columns above the hollow floor"
   },
   {
-    "tags": ["desert"],
-    "description": "Wide-angle wrapping the interior of a Navajo sandstone wave formation, undulating cross-bedded strata flowing in frozen cream and rust-orange surf-wave curves across the slickrock surface, wind-polished troughs and razor-edge crests alternating in continent-scale rhythmic repetition toward the canyon wall rising sheer beyond"
+    "tags": [
+      "temperate-forest"
+    ],
+    "description": "Knee-level POV across a moss-draped temperate rainforest of colossal spruce rooted in Pacific Northwest basalt, house-sized lichen-crusted nurse logs collapsing into the forest floor in slow biological dissolution, Sitka spruce columns rising to cathedral height with buttressed root systems gripping every fractured basalt surface, emerald moss blanketing each horizontal plane in deep unbroken carpet"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Low POV looking straight up a razor-narrow Permian red-bed canyon where opposing walls of iron-oxide-stained burgundy sandstone press to arm-span width, fractured cross-bedding cycling rust-red and cream vertical for four hundred feet above, wind-polished lower walls curving smooth as fired ceramic"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
-    "description": "Wide-angle from a glacial outwash flat wrapping a Sierra Nevada granite headwall, a continuous two-thousand-foot exfoliation-sheeted dome face curving sheer above the moraine field, knife-edge vertical crack systems splitting the pale grey stone top to base, ancient ponderosa pine colonizing the fractured talus apron below"
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Side-on across a collapsed lava-tube skylight on the sun-baked south flank of a Hawaiian volcanic shield, knife-edge ʻaʻā lava margins framing the rectangular void in jagged fractured walls of glassy basalt, pāhoehoe ropework spreading in concentric ridges away from the collapse zone, cinder debris cascading from the broken rim into the tube interior below"
   },
   {
-    "tags": ["volcanic"],
-    "description": "Ground-level wide-angle across a Yellowstone Plateau silica sinter terrace field, cobalt-core thermal pools ringed by full-spectrum rust-orange and sulfur-yellow bacterial mats, cream-white silica shelves stepping outward in razor-cut concentric rings, iron-stained sinter crust fractured in geometric webs across the steaming mineral flat"
+    "tags": [
+      "desert"
+    ],
+    "description": "Aerial drone perspective over a fault-sprung fan-palm oasis punching vertically from a Mojave monzogranite fracture zone, alkali badland clay badlands terracing a thousand-foot sheer vertical escarpment at the basin edge, wind-scoured north faces striated in ash-grey and iron-buff, columnar joint systems splitting the granite wall to its foundation"
   },
   {
-    "tags": ["alpine"],
+    "tags": [
+      "alpine"
+    ],
     "description": "Aerial drone perspective over a Northern Rockies knife-edge divide, a razor-thin quartzite spine dropping sheer two thousand feet on both flanks into separate glacier-carved basins, couloir gullies scoring the near-vertical headwalls in radial symmetry, moraine-dammed tarns pooled jade-cold in the cirque floors far below"
   },
   {
-    "tags": ["desert"],
-    "description": "Aerial drone perspective over an American Southwest vermilion sandstone hoodoo field, densely packed cream-capped rust-red spires rising forty to ninety feet from an eroded Claron limestone amphitheater floor, frost-shattered debris blanketing the labyrinth base, razor-edge fins and pedestals casting geometric shadow corridors across the basin"
+    "tags": [
+      "alpine",
+      "volcanic"
+    ],
+    "description": "Low POV looking up at a continent-scale glaciated Cascade Range andesite cone reflected in a subalpine tarn of jade-cold clarity, iron-stained pumice aprons fanning from every couloir onto the lakeshore cobbles, basalt columns rising cathedral-vertical along the caldera rim above the waterline"
   },
   {
-    "tags": ["temperate-forest"],
-    "description": "Looking straight up through a Pacific Northwest old-growth Douglas-fir stand, trunks of wildly uneven girth — deeply furrowed bark ranging from five to nine feet across — leaning and curving at irregular, unpredictable angles two hundred and seventy feet overhead, a fallen mossy giant angled across the spray-soaked fern floor in the foreground, glacier-polished andesite bedrock threading between asymmetric root buttresses, the canopy closing to a ragged, off-center jade-filtered gap above"
+    "tags": [
+      "temperate-forest",
+      "alpine"
+    ],
+    "description": "Wide-angle wrapping the basin of a mile-deep Alaskan granite massif above a boreal spruce taiga, lava-blackened tundra skirting the terminal moraine in a continent-scale dark apron, glacier ice calving cathedral-vertical seracs from the hanging cirque walls into the braided outwash plain below"
   },
   {
-    "tags": ["volcanic", "alpine"],
-    "description": "Cliff-edge vantage looking down into a Cascade Range composite volcano's breached summit crater, andesite and ash-flow tuff strata exposed in razor-cut stratigraphic sequence nine hundred feet deep, a fractured lava-dome plug pushing grey through the pumice floor, ice-filled radial gullies scoring the outer cone flanks below"
+    "tags": [
+      "desert"
+    ],
+    "description": "Aerial drone perspective over a two-thousand-meter expanse of mixed-grass prairie breaks collapsing into Badlands striped clay formations, glacier-polished columnar phonolite towers punctuating the eroded plateau edge in dark spires, razor-dissected ravines exposing layer-cake bentonite banding in alternating ash-grey and iron-red strata, badland pinnacles clustering in cathedral-dense fields across the basin"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Side-on across a Colorado Plateau entrenched meander where Wingate sandstone walls spiral six hundred feet sheer in tight oxbow coils, desert-varnish-black cliff faces pressing against cream canyon bed floors in continent-scale interlocking loops, the abyssal inner shadow cutting razor-narrow through the sun-baked plateau surface"
   },
   {
-    "tags": ["arctic-polar", "alpine"],
+    "tags": [
+      "arctic-polar",
+      "alpine"
+    ],
     "description": "Low POV at the calving margin of an Alaskan boreal tidewater glacier, towering sheer seracs of pressure-fractured blue-white ice rising sixty feet above the terminus, lateral moraine benches terracing both granite valley walls at three distinct recession levels, milky glacial meltwater pooling across the ice-scoured proglacial flat"
   },
   {
-    "tags": ["desert", "alpine"],
-    "description": "Cliff-edge vantage looking straight down where cream-buff Navajo sandstone walls surrender abruptly to Precambrian schist at the inner gorge floor, compressed geological time stacked in iron-red, violet, and charcoal horizontal bands for two thousand feet, the towering sheer basement gorge a shadow-filled razor cut at the base"
+    "tags": [
+      "desert"
+    ],
+    "description": "Looking straight down the throat of a razor-edge Wingate sandstone monocline reef on the Colorado Plateau, water-polished cliff faces dropping cathedral-vertical in continuous Entrada and Navajo sandstone strata, Claron limestone cap remnants balanced on the tilted crest above the fractured Vishnu schist foundation exposed at the canyon floor"
   },
   {
-    "tags": ["coastal-temperate"],
+    "tags": [
+      "coastal-temperate"
+    ],
     "description": "Wide-angle from a Pacific Northwest headland surge channel looking up at a sixty-foot columnar basalt sea-arch, hexagonal jointing stacking the arch crown in towering sheer interlocking columns, iron-orange mineral seep lines bleeding down every exposed face, spray-soaked fractured block debris filling the tidal foreground floor below"
   },
   {
-    "tags": ["alpine", "temperate-forest"],
-    "description": "Low POV across a Northern Rockies glacial moraine lake toward a sheer seven-thousand-foot limestone and argillite headwall, alternating pale and iron-red sedimentary bands compressing geological sequence across the towering sheer face, subalpine larch colonizing the lateral moraine crest above spray-soaked foreground boulders at the waterline"
+    "tags": [
+      "desert"
+    ],
+    "description": "Low POV looking up at a mile-deep Colorado Plateau layer-cake canyon wall descending through lichen-crusted Navajo and Entrada sandstone, banded Wingate cliffs dropping sheer below buff Claron limestone benches, the innermost gorge cutting to black Vishnu schist two billion years old at the river-scoured base"
   },
   {
-    "tags": ["volcanic"],
+    "tags": [
+      "volcanic"
+    ],
     "description": "Aerial vantage over a Hawaiian volcanic shield's active rift zone, a chain of collapsed pit craters aligned in razor-cut succession across the lava-blackened summit plateau, each dropping three hundred feet of sheer basalt wall to hardened fractured floors, radial joint systems tiling every interior surface in geometric panels"
   },
   {
-    "tags": ["desert"],
-    "description": "Low POV across a Colorado Plateau slickrock platform of bare Navajo sandstone, undulating cross-bedded strata flowing in frozen cream and rust-orange surf-wave curves underfoot, razor-edge wind-eroded crests and polished concave troughs alternating in continent-scale rhythmic repetition toward a sheer canyon drop at the distant horizon"
+    "tags": [
+      "desert"
+    ],
+    "description": "Low POV looking up at a monumental fan-palm oasis erupting from a Mojave monzogranite fault-spring fracture, alkali-bleached badland clay walls pressing cathedral-vertical on three sides above the canopy crowns, cold-air-bitten east aspect exposing raw exfoliation sheets peeling the granite face in great curving slabs"
   },
   {
-    "tags": ["temperate-forest", "alpine"],
-    "description": "Low POV at the base of an Appalachian limestone waterfall gorge, solution-carved walls rising spray-soaked and moss-blanketed ninety feet vertical, a three-tiered stepped cascade pouring over fossil-grey ledges, dense hemlock root systems wedging into every horizontal crack above the churning plunge-pool floor below"
+    "tags": [
+      "alpine"
+    ],
+    "description": "Knee-level POV across a six-thousand-foot red-and-green argillite canyon of the Northern Rockies sliced razor-edge through banded Precambrian strata, spray-soaked limestone ledges terracing the walls above a succession of turquoise plunge pools, shale interbeds striping the vertical faces in alternating crimson and chlorite-green"
   },
   {
-    "tags": ["desert"],
+    "tags": [
+      "desert"
+    ],
     "description": "Aerial drone perspective over a Colorado Plateau badlands system of eroded Chinle mudstone, violet and ochre-red and pale-grey banded horizons undulating in fractured hummock topography across a continent-scale basin floor, wind-scoured clay pedestals and razor-cut bentonite fins rising ten to fifty feet in dense geometric fields"
   },
   {
-    "tags": ["alpine"],
-    "description": "Aerial drone perspective over a Sierra Nevada granite batholith high-country plateau, successive exfoliation-domed monoliths rising in razor-edge procession across the wind-scoured flat, glacier-polished pale grey slabs gleaming between dark joint-shadow corridors, a chain of cobalt tarns threaded through ice-scoured bedrock basins below each dome"
+    "tags": [
+      "alpine"
+    ],
+    "description": "Wide-angle wrapping the basin of an Alaskan braided glacial river plain hemmed by six-thousand-foot granite massifs shedding continuous outwash, water-polished gravel bars interlacing in continent-scale anastomosing channels across the tundra floor, glacier ice termini calving raw sediment-dark faces at every tributary mouth"
   },
   {
-    "tags": ["volcanic", "coastal-tropical"],
-    "description": "Low POV at surf-line on a Hawaiian volcanic shield coast, fresh pahoehoe lava toes advancing across a lava-blackened bench into the ocean, catastrophic white steam columns erupting where molten basalt contacts the surf, glassy obsidian crust fractured in razor-cut slabs across the hardened foreground flow apron"
+    "tags": [
+      "desert"
+    ],
+    "description": "Side-on across a Colorado Plateau vermilion Claron limestone hoodoo amphitheater of house-sized spires packed in razor-edge semicircular ranks, spray-soaked alcove walls striped cream and iron-oxide-red in horizontal dissolution bands, frost-shattered debris aprons mantling the basin floor between the clustered pinnacles"
   },
   {
-    "tags": ["temperate-forest"],
-    "description": "Looking straight up through a Pacific Northwest old-growth bigleaf maple gorge, twelve-foot moss curtains hanging vertical from every branch in unbroken emerald drapery, glacier-polished basalt bedrock gleaming between spray-soaked root systems, trunks rising towering-sheer and leaning inward above the fern-carpeted fractured understory floor"
+    "tags": [
+      "volcanic"
+    ],
+    "description": "Cliff-edge vantage looking down into a Yellowstone Plateau grey boiling mudpot field pocking rhyolite bedrock across a mile-deep thermal basin, iron-stained sinter crusts rimming every vent in concentric halos of ochre and rust, travertine aprons spreading in overlapping lobes across the fractured plateau surface"
   },
   {
-    "tags": ["desert", "volcanic"],
+    "tags": [
+      "desert",
+      "volcanic"
+    ],
     "description": "Side-on across a Mojave cinder cone's hardened lava apron, razor-cut pahoehoe pressure ridges and collapsed tube depressions fracturing the sun-baked black flow surface in continent-scale geometric patterns, the symmetrical ochre-grey cone rising seven hundred feet above the hardened basalt plain, wind-scoured summit crater breached to the north"
   }
 ]

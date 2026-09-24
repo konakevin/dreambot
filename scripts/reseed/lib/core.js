@@ -232,7 +232,8 @@ async function runReseed(cfg, argv) {
   const prior = flag('--resume')
     ? JSON.parse(fs.readFileSync(flag('--resume'), 'utf8')).changes
     : [];
-  const priorByIndex = new Map(prior.map((c) => [c.index - 1, c]));
+  // only ACCEPTED rewrites resume; a slot the prior run left unfilled gets fresh attempts
+  const priorByIndex = new Map(prior.filter((c) => c.new).map((c) => [c.index - 1, c]));
   for (const s of slots) {
     const c = priorByIndex.get(s.index);
     if (!c) continue;
