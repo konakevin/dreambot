@@ -287,10 +287,11 @@ const PROV_RULES = [
   ['atlantic', /Atlantic|pink granite/i],
   ['greatlakes', /freshwater|Great Lakes|Superior/i],
   ['greatbasin', /Great Basin|bristlecone/i],
-  ['plains', /Badlands|prairie|phonolite|igneous tower/i],
   ['appalachian', /Appalachian|rhododendron|tulip poplar|cove[- ]hardwood|\bbald\b/i],
+  // the named provinces come before "plains": a Mojave or Plateau entry may also say "badlands"
   ['sonoran', /Mojave|Sonoran|saguaro|Joshua|alkali|playa|sliding-stone|fan-palm|bajada|monzogranite/i],
   ['colorado', /Colorado Plateau|Navajo|Entrada|Wingate|Claron|Vishnu|hoodoo|slickrock|petrified|monocline|slot canyon|sandstone (?:arch|fin|mesa|bridge)/i],
+  ['plains', /Badlands|prairie|phonolite|igneous tower/i],
   ['pnw', /Pacific Northwest|Sitka|sea[- ]stack|tide pool|temperate rainforest|hemlock|moss-draped/i],
   ['cascades', /Cascade|stratovolcano|caldera|pumice|blast[- ]zone|Douglas-fir|red-cedar/i],
   ['rockies', /Rockies|Rocky Mountain|argillite|larch|moraine lake|headwall|arête|arete|sagebrush/i],
@@ -482,7 +483,7 @@ function mechanical(cand, slot) {
   if (!featRe(a.province, a.feature).test(cand)) p.push(`formation words missing (${a.feature})`);
   if (!cand.startsWith(a.pov.split(' ')[0])) p.push('pov changed');
   const words = cand.split(/\s+/).length;
-  if (words < 24 || words > 52) p.push(`${words} words`);
+  if (words < 24 || words > 60) p.push(`${words} words`); // originals run 40-56
   for (const [name, re] of BANS) {
     const m = cand.match(re);
     if (m) p.push(`${name}:"${m[0]}"`);
@@ -514,5 +515,5 @@ module.exports = {
   mechanical,
   measure,
   batchSize: 6,
-  lenBand: [180, 420],
+  lenBand: [180, 500],
 };

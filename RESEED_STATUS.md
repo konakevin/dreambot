@@ -65,9 +65,13 @@ commit + push, row + log here.
 - **asia-landscape:** pool WRITTEN (72 → 200 distinct, 45 → 115 places, 128 rewrites; backup
   `~/poolbackup-earthbot-asia_landscape-subject-*`); chain rendering slots 115,104,190,80,33,102,195,54
   to `as/` (`as/done`). Next = pairs, self-review, commit + push.
-- **epic-sunset:** pool WRITTEN (80 → 200 distinct; sky families 7 → 10, palm arrangements 8 → 9,
-  sands 3 → 7; 120 rewrites; backup `~/poolbackup-earthbot-epic_sunset-subject-*`); chain rendering
-  slots 57,135,39,116,170,63,150,81 to `es/` (`es/done`). Next = pairs, self-review, commit + push.
+- **epic-sunset: DONE** (8 + 8 pairs reviewed, 15/16 carried: one after-render's entry was dropped by
+  Sonnet and rendered a grey overcast beach; the harness flagged it); close-out commit next.
+- **national-parks:** full run (third start) running to `national_parks/full3` at ~60% acceptance
+  (remaining rejections are two formations named in one candidate; retries fill them).
+- **hidden-corner:** smoke passed after three parser fixes (type + host read from the opening clause,
+  cloud-forest lookbehind, moss/fern check only on forest habitats); full run running to
+  `hidden_corner/full`.
 - **national-parks:** config `scripts/reseed/pools/earthbot.national_parks.subject.js` (object entries,
   189; same = geological province + formation + POV; 75 kept / 114 to rewrite; no park / landmark /
   vantage names, no weather / light / sky / wildlife). Smoke exposed brittle ordered-keyword feature
@@ -117,7 +121,7 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | earthbot | european-wilderness  | `european_wilderness_subject` (string entries)   | 200     | 77 → 200 distinct (same = place + light moment); 53 → 127 places, 9 → 10 light moments; 77 originals kept | none needed | 8 + 8 paired, shadow; 16/16 carried; self-reviewed | **DONE** | 7dc553bd | 2026-09-23 |
 | earthbot | african-landscape    | `african_landscape_subject` (string entries)     | 200     | 69 → 200 distinct (same = habitat + light moment); 52 → 111 habitats, 10 → 12 light moments; 69 originals kept | none needed | 8 + 8 paired, shadow; 16/16 carried; self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | earthbot | asia-landscape       | `asia_landscape_subject` (string entries)        | 200     | 72 → 200 distinct (same = habitat + light moment); 45 → 115 places, 12 light moments; 72 originals kept | none needed | 8 + 8 rendering | `pool written` | | 2026-09-23 |
-| earthbot | epic-sunset          | `epic_sunset_subject` (object entries)           | 200     | 80 → 200 distinct (same = sky family + palm arrangement + sand); skies 7 → 10, palms 8 → 9, sands 3 → 7; 80 originals kept | none needed (EPIC_VISTA archetype hands the entry through) | 8 + 8 rendering | `pool written` | | 2026-09-23 |
+| earthbot | epic-sunset          | `epic_sunset_subject` (object entries)           | 200     | 80 → 200 distinct (same = sky family + palm arrangement + sand); skies 7 → 10, palms 8 → 9, sands 3 → 7; 80 originals kept | none needed (EPIC_VISTA archetype hands the entry through) | 8 + 8 paired, shadow; 15/16 carried (one Sonnet drop, flagged); self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 33 → 120 line-ups (same = 4+ shared species, 3 when only 3); 26 → 70 species; red 35 → 20 | same fix                                                              | same batch                                         | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
 
 Status values: `queued` · `analysing` · `proposal ready` (dry run done, waiting on Kevin's OK) ·
@@ -208,6 +212,18 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-23 · earthbot/epic-sunset `epic_sunset_subject` · DONE (self-reviewed).** Object entries;
+  the recipe (R4) makes every entry a flat tropical beach sunset on purpose, so the varying element is
+  the sunset PICTURE: sky family + palm arrangement + sand. 80 → 200 distinct; sky families 7 → 10
+  (mackerel sky, crepuscular rays and an indigo-to-orange band added from the recipe's own vocabulary),
+  palm arrangements 8 → 9, sands 3 → 7 (golden, ivory, pink, grey added where real), 60 real tropical
+  places each paired only with sands that exist there; 80 originals kept. Pairs (8 + 8, 15/16 carried):
+  before had the same "translucent shorebreak wave-face glowing molten amber" barrel three times of
+  eight and two lenticular clouds; after is a mackerel sky over golden sand, an indigo band over dark
+  St Lucian sand, crepuscular rays, a rainbow gradient, a pastel pre-sunset, a saturated peak sunset,
+  cotton-candy pink over ivory sand, and one miss: Sonnet dropped the "lavender afterglow over grey
+  volcanic sand" entry and wrote a grey overcast beach (the harness flagged it; not a pool defect).
+  Pairs https://claude.ai/artifact/7GjGrVff4bdnqhqk1EX2Vy.
 - **2026-09-23 · earthbot/african-landscape `african_landscape_subject` · DONE (self-reviewed).**
   Landmark factory with the recipe's rules baked in (Africa is FLAT or CANOPY: every mountain trigger
   banned; wildlife tiny; Africa-coded materials). 69 → 200 distinct (same = habitat + light moment),

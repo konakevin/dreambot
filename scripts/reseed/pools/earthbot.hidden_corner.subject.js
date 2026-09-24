@@ -152,10 +152,10 @@ const WATER = [
 // spring entry often mentions a creek in passing.
 const TYPE_RULES = [
   ['tide pool', /tide[- ]pool/i],
-  ['canyon alcove', /canyon alcove|damp alcove|sandstone alcove|alcove/i],
   ['root pocket', /root pocket|root plate|root cluster|root hollow/i],
   ['log nook', /log nook|log clearing/i],
   ['fern grotto', /grotto|fern hollow/i],
+  ['canyon alcove', /canyon alcove|damp alcove|sandstone alcove|alcove/i],
   ['waterfall pool', /waterfall|cascade|plunge pool/i],
   ['pond edge', /pond edge|pond\b|still-water edge/i],
   ['spring source', /spring source|seep(?:age)? (?:source|hollow|wall)|spring (?:welling|emerging|pushing|seeping|rising)/i],
@@ -170,7 +170,7 @@ const HABITAT_RULES = [
   ['lava field', /lava|pāhoehoe|pahoehoe|ohia|ʻōhiʻa|cinder|volcanic tube/i],
   ['mediterranean scrub', /holm oak|myrtle|rockrose|thyme|maquis|karst|travertine|olive|mediterranean/i],
   ['desert canyon', /sandstone|slickrock|desert|slot|Navajo|chert|seep wall/i],
-  ['cloud forest', /cloud forest|tree fern|epiphyt|bromeliad|tropical|jungle|rainforest(?! temperate)/i],
+  ['cloud forest', /cloud forest|tree fern|epiphyt|bromeliad|tropical|jungle|(?<!temperate )rainforest/i],
   ['wetland', /cypress|swamp|sphagnum bog|pitcher plant|sundew|marsh|fen\b|bog\b|lily pad|cattail/i],
   ['subalpine', /subalpine|alpine|tarn|heather|glacier lily|paintbrush|talus|cirque/i],
   ['boreal', /boreal|taiga|black spruce|cloudberry|reindeer lichen|Labrador tea/i],
@@ -185,22 +185,26 @@ const HOST_RULES = [
   ['canyon wall', /canyon wall|alcove wall|undercut|slot/i],
   ['cliff notch', /cliff notch|sea-carved|notch|sea cliff/i],
   ['sinkhole rim', /sinkhole|doline/i],
-  ['tree cluster', /three ancient|between two ancient|trunk cluster|between .* trunks/i],
+  ['tree cluster', /three ancient|between two ancient|trunk cluster|between .* trunks|bases of/i],
+  ['thicket', /thicket|dense .* hides|screen of|screened by/i],
   ['boulder', /boulder/i],
   ['outcrop', /outcrop|gneiss|bedrock knob/i],
   ['ledge', /ledge|overhang|shelf/i],
   ['ridge', /ridge|knoll|fold/i],
   ['stream bank', /cut bank|stream bank|creek bank|banks?\b/i],
-  ['thicket', /thicket|dense .* hides|screen of/i],
 ];
 const pick = (rules, text, fallback) => {
   for (const [k, re] of rules) if (re.test(text)) return k;
   return fallback;
 };
+// The opening clause (before the em dash) names the pocket type and where it hides; the details after
+// it mention every kind of stone and plant, so type and host are read from the head only.
+const headOf = (text) => text.split(/ — |—/)[0];
 function parse(text) {
-  const type = pick(TYPE_RULES, text, 'pocket');
+  const head = headOf(text);
+  const type = pick(TYPE_RULES, head, 'pocket');
   const habitat = pick(HABITAT_RULES, text, 'forest');
-  const host = pick(HOST_RULES, text, 'ground');
+  const host = pick(HOST_RULES, head, 'ground');
   return { keys: [`type:${type}`, `habitat:${habitat}`, `host:${host}`], type, habitat, host };
 }
 function sameGroup(a, b) {
@@ -299,7 +303,10 @@ function mechanical(cand, slot) {
     p.push(`habitat words missing (${a.habitat})`);
   const words = cand.split(/\s+/).length;
   if (words < 40 || words > 95) p.push(`${words} words`);
-  if (!/moss|fern|lichen|algae|sphagnum|liverwort/i.test(cand)) p.push('no moss or fern');
+  // the LUSH mandate's moss + fern check applies to the forest habitats (a desert seep says "maidenhair",
+  // a bog says "sphagnum", a tide pool says "kelp")
+  const FOREST = ['temperate rainforest', 'old-growth conifer', 'deciduous hardwood', 'cloud forest', 'boreal'];
+  if (FOREST.includes(a.habitat) && !/moss|fern|lichen/i.test(cand)) p.push('no moss or fern');
   for (const [name, re] of BANS) {
     const m = cand.match(re);
     if (m) p.push(`${name}:"${m[0]}"`);
