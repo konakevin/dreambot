@@ -16,18 +16,31 @@ const argv = process.argv.slice(2);
 const [dir, out] = argv;
 const flag = (n) => (argv.includes(n) ? argv[argv.indexOf(n) + 1] : null);
 if (!dir || !out) {
-  console.error('usage: node scripts/reseed/sheet-page.js <renderDir> <out.html> [--title T] [--originals 25]');
+  console.error('usage: node scripts/reseed/sheet-page.js <renderDir> <out.html> [--title T] [--originals 25] [--max-px 1100]');
   process.exit(1);
 }
 const title = flag('--title') || 'Render sheet';
 const originals = Number(flag('--originals') || 25);
+// --max-px N downsizes the inlined images (macOS `sips`) so a 12-render sheet stays under the
+// artifact's 16MB ceiling; the originals on disk are untouched.
+const maxPx = Number(flag('--max-px') || 0);
 const results = JSON.parse(fs.readFileSync(path.join(dir, 'render-results.json'), 'utf8'));
-const imgs = fs.existsSync(path.join(dir, 'img')) ? fs.readdirSync(path.join(dir, 'img')).sort() : [];
+let imgDir = path.join(dir, 'img');
+if (maxPx && fs.existsSync(imgDir)) {
+  const small = path.join(dir, `img_${maxPx}`);
+  if (!fs.existsSync(small)) fs.mkdirSync(small);
+  for (const f of fs.readdirSync(imgDir)) {
+    const out = path.join(small, f);
+    if (!fs.existsSync(out)) require('child_process').execFileSync('sips', ['-Z', String(maxPx), path.join(imgDir, f), '--out', out], { stdio: 'ignore' });
+  }
+  imgDir = small;
+}
+const imgs = fs.existsSync(imgDir) ? fs.readdirSync(imgDir).sort() : [];
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const dataUri = (file) => {
   const ext = path.extname(file).slice(1).toLowerCase();
   const mime = ext === 'png' ? 'image/png' : ext === 'webp' ? 'image/webp' : 'image/jpeg';
-  return `data:${mime};base64,${fs.readFileSync(path.join(dir, 'img', file)).toString('base64')}`;
+  return `data:${mime};base64,${fs.readFileSync(path.join(imgDir, file)).toString('base64')}`;
 };
 
 const cards = results
