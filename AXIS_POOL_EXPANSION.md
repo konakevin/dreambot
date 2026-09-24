@@ -79,7 +79,7 @@ this file in the same commit.
 - [x] **dinobot/den-and-burrow** — 2/2 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:25 UTC
 - [x] **dinobot/desert-dunes** — 0/0 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:26 UTC
 - [x] **dinobot/snowline-forest** — 1/1 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:31 UTC
-- [ ] **dinobot/undergrowth-scale** — 1 pools
+- [x] **dinobot/undergrowth-scale** — 1/1 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:34 UTC
 <!-- CHECKLIST:END -->
 
 ### Per-pool table (before → after, gate result, originals intact)
@@ -168,7 +168,7 @@ this file in the same commit.
 | dinobot/den-and-burrow | dinobot_den_life | 25 | 100 | 2 | clean | yes | ✅ |
 | dinobot/den-and-burrow | dinobot_den_surface | 25 | 100 | 1 | clean | yes | ✅ |
 | dinobot/snowline-forest | dinobot_snowline_forest_flora | 25 | 100 | 1 | clean | yes | ✅ |
-| dinobot/undergrowth-scale | dinobot_undergrowth_giant | 25 |  |  |  |  | ⬜ |
+| dinobot/undergrowth-scale | dinobot_undergrowth_giant | 25 | 100 | 1 | clean | yes | ✅ |
 <!-- POOLS:END -->
 
 ## Phase B — historical activation of shadow posts, all bots
