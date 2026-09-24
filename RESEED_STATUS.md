@@ -95,9 +95,14 @@ commit + push, row + log here.
   rewrites, 30 originals kept; pairs 14/16 carried, two Sonnet drops flagged by the harness; the
   carpet is a supporting axis under a giant surreal hero bloom, so what shows is the carpet's colour
   family, blues least, and never the species: modest visible gain by design, pool text unique; pairs
-  https://claude.ai/artifact/89gNTLrzJdJnFg7tAFsKWk). **desert-bloom bloom_explosion: pool WRITTEN**
-  (51 → 196 distinct, 19 → 103 species, 145 rewrites, 2 unfilled kept as originals; backup
-  `~/poolbackup-bloombot-desert_bloom-bloom_explosion-*`); renders queued (`db/`) behind the fleet.
+  https://claude.ai/artifact/89gNTLrzJdJnFg7tAFsKWk). **desert-bloom bloom_explosion: DONE (text-unique;
+  visible gain nil)** (51 → 196 distinct, 19 → 103 species, 145 rewrites, 2 unfilled kept as originals;
+  backup `~/poolbackup-bloombot-desert_bloom-bloom_explosion-*`). Pairs 12/16 carried (two Sonnet drops
+  on each side, flagged by the harness): the path paints pink whatever the entry names (a "blazing red
+  crevice carpet" rendered a pink rose tree, a "yellow superbloom carpet" a pink canyon wall); one
+  fiery-orange entry tilted its render orange. The before set was just as pink, so the pool's hue words
+  never reached the picture either way; the species-set text is unique and of the same kind. Pairs
+  https://claude.ai/artifact/RvUZxeKESPPm43GPWWPrCu.
 - **yumbot festival: FIRST PAIRS WEAK ON MY REVIEW, second pass in progress.** Pool written (97 → 200
   distinct on perch family + arrangement), 8 + 8 rendered, 16/16 carried, but the perch is a weak
   lever on this path: the five foods dominate the frame, obscure perches (a kendama pile, a kokeshi
@@ -123,10 +128,16 @@ commit + push, row + log here.
   bracket fungi, an owl feather never read at the frame edge). Pairs
   https://claude.ai/artifact/6biQPY43Bk1ED4G9p2P31q. All three anchor pools: **DONE as text-unique;
   the axis is invisible on both paths.**
-- **FaeBot queen-of-the-forest biome:** pool WRITTEN (26 → 197 distinct on forest type + first
-  texture; 11 → 35 forest types; 171 rewrites, 3 unfilled = kept originals; backup
-  `~/poolbackup-faebot-queen_of_forest-biome-*`); renders queued (`qb/`) behind the YumBot re-render.
-  **posed_setting** full run in flight.
+- **FaeBot queen-of-the-forest biome: DONE (real visible gain)** (26 → 197 distinct on forest type +
+  first texture; 11 → 35 forest types; 171 rewrites, 3 unfilled = kept originals; backup
+  `~/poolbackup-faebot-queen_of_forest-biome-*`). Pairs on the same eight slots, 15/16 carried (one
+  Sonnet drop): before, two of eight were the same cherry-blossom scene and a "fern grotto" and a
+  "wildflower meadow" both rendered as ponds; after, the entries show as an autumn maple grove, a
+  waterfall glade with mossy boulders, a golden larch glade, a violet bluebell wood and an oak-trunk
+  throne. Streams and meadows still lose to the path's tree-throne prior about half the time (Flux,
+  accepted). Pairs https://claude.ai/artifact/8Lm2f2DbqWvGGxiSKRtJRp. **posed_setting:** pool WRITTEN
+  (backup `~/poolbackup-faebot-queen_of_forest-posed_setting-*`), 8 + 8 rendered (`qp/`, 16/16
+  carried), review next.
 - **YumBot festival: DONE on the second pass** (pool 97 → 199 distinct; 45 rewrites regenerated onto
   strong-prior perches; backup `~/poolbackup-yumbot-japanese_festival-scene_type-1790231416555.json`).
   Same eight slots re-rendered, 16/16 carried: six of eight show the named candy-apple tray, mikoshi
@@ -220,6 +231,8 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | faebot   | forest-fairy-scene / dryad-portrait / enchanted-vista | `faebot_*_foreground_anchor` (string entries) | 260 / 200 / 200 | 71 → 260, 52 → 200, 59 → 200 distinct (same = anchor kind + position); kinds 25 → 68, 17 → 66, 20 → 69 | none | 8 + 8 on two paths: the anchor axis is invisible in all 32 renders | **DONE (text-unique; visible gain nil)** | (close-out) | 2026-09-24 |
 | yumbot   | japanese-festival    | `festival_scene_type` (string entries)           | 200     | 97 → 199 distinct (same = perch family + arrangement); 82 → 100 perch families; 97 originals kept | none | first 8 + 8 weak (obscure perches), second 8 + 8 pass; 16/16 carried | **DONE** (flag 3) | (close-out) | 2026-09-24 |
 | bloombot | flower-fantasy       | `bloombot_flower_fantasy_floor_carpet` (string) | 134     | 30 → 131 line-ups (same = 4+ shared species); 27 → 78 species; 30 originals kept | none | 8 + 8 paired, shadow; 14/16 carried; carpet colour shows, species never (supporting axis) | **DONE (modest visible gain by design)** | (close-out) | 2026-09-24 |
+| bloombot | desert-bloom         | `bloombot_desert_bloom_bloom_explosion` (string) | 198    | 51 → 196 line-ups (same = 4+ shared species); 19 → 103 desert species; 51 originals kept | none | 8 + 8 paired, shadow; 12/16 carried (Sonnet drops flagged); the path paints pink whatever the entry names, before and after | **DONE (text-unique; visible gain nil)** | (close-out) | 2026-09-24 |
+| faebot   | queen-of-the-forest  | `faebot_queen_of_forest_biome` (string)          | 200     | 26 → 197 distinct (same = forest type + first texture); 11 → 35 forest types; 26 originals kept | none | 8 + 8 paired, shadow; 15/16 carried; autumn maples, waterfall glade, golden larch, bluebell wood now show where two cherry-blossom scenes did | **DONE (real visible gain)** | (close-out) | 2026-09-24 |
 | earthbot | epic-sunset          | `epic_sunset_subject` (object entries)           | 200     | 80 → 200 distinct (same = sky family + palm arrangement + sand); skies 7 → 10, palms 8 → 9, sands 3 → 7; 80 originals kept | none needed (EPIC_VISTA archetype hands the entry through) | 8 + 8 paired, shadow; 15/16 carried (one Sonnet drop, flagged); self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 33 → 120 line-ups (same = 4+ shared species, 3 when only 3); 26 → 70 species; red 35 → 20 | same fix                                                              | same batch                                         | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
 
@@ -311,6 +324,24 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-24 · faebot/queen-of-the-forest `forest_biome` · DONE (real visible gain, self-reviewed).**
+  String entries "<forest type> with <signature texture>, <mid-tier>, <floor>, <light>". 26 → 197
+  distinct (same = forest type + first texture), 11 → 35 forest types, 26 originals kept, 3 unfilled
+  slots left as originals. Pairs on the same eight slots, 15/16 carried: before, two renders were the
+  same cherry-blossom tree and a fern grotto and a wildflower meadow both came out as lily ponds;
+  after, an autumn maple grove, a waterfall glade, a golden larch glade in autumn, a violet bluebell
+  wood and an oak-trunk throne each read as written. Streams and meadows still lose to the path's
+  tree-throne prior about half the time (accepted Flux behaviour). Pairs
+  https://claude.ai/artifact/8Lm2f2DbqWvGGxiSKRtJRp.
+- **2026-09-24 · bloombot/desert-bloom `bloom_explosion` · DONE (text-unique; visible gain nil).** Carpet
+  factory: 51 → 196 distinct line-ups, 19 → 103 real desert species (cactus and agave blooms
+  included), 51 originals kept, 2 unfilled kept as originals. Pairs 12/16 carried (two Sonnet drops on
+  each side, flagged by the harness): the path paints pink whatever the entry names, before and after
+  (a "blazing red crevice carpet" rendered a pink rose tree, a "yellow superbloom carpet" a pink
+  canyon wall; one fiery-orange entry tilted orange). The hue and species words of this pool were not
+  reaching the picture before this work either, so nothing regressed; the text is unique and of the
+  same kind. Not chased (accepted Flux limit, and the carpet is an axis under the path's hero bloom).
+  Pairs https://claude.ai/artifact/RvUZxeKESPPm43GPWWPrCu.
 - **2026-09-24 · yumbot/japanese-festival `festival_scene_type` · DONE on the second pass (self-reviewed).**
   "Five kawaii foods <verb> <arrangement> <perch> — five poses". ~55 real perch families cannot make
   200 distinct entries, so "same" = perch family + how the cluster sits on it (Flag 3). 97 → 199
