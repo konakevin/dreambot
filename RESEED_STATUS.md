@@ -268,6 +268,13 @@ commit + push, row + log here.
    others defer to, as the pilot did for flower-friends). I did not touch a public bot's path
    without your word. Pairs https://claude.ai/artifact/2vVJ8ED3EfKYAXnMNKxAMA.
 
+5. **MangaBot `game-center-arcade` trips Replicate's safety filter on flux-2-pro** (E005 "flagged
+   as sensitive", two retries each, 5 of 12 forced renders in the Track B harness, originals and new
+   entries alike). The path is locked to flux-2-pro; the prompts are soft toys behind glass. The pool
+   is not the cause (the failures hit original entries too). If the path goes live, expect ~40% of
+   its posts to fail at render until the model lock or the prompt's fur-and-glass wording is looked
+   at. Not touched by me.
+
 **Accepted Flux limits (Kevin 2026-09-23, do not chase):** species render in their own prior colour
 (a green-titled flower line-up renders pink/white); a rich register only reads on strong-colour
 families. "You can't force Flux out of its trained data, the existing behaviours are fine."
@@ -366,9 +373,9 @@ slot name. Tool: the same core with `--grow N` (append N new entries; the pool o
 | - | -------- | ----------------------- | ----- | ---------------------------------------- | ------ | ------- | ---- |
 | 0 | brickbot | balloon-festival        | 9     | `brickbot_balloon_fleet` (verified: the path header calls the fleet the subject) | **subject DONE**: 25 → 106 entries, 106 distinct (situation + nearest pattern + shaped balloon), originals byte-identical; 8 new + 4 originals shadow-rendered (12/12 carried) and reviewed; 8 axis pools untouched pending Kevin (doc §9 q1); still shadow (Flags #1) | (close-out) | 2026-09-24 |
 | 1 | tinybot  | snow-globe-world        | 4     | `tinybot_snow_globe_worlds` (verified: the path calls the WORLD the hero, it opens the prompt) | **subject DONE**: 25 → 104 entries, 104 distinct world types (roster of 93 real places with their own drifting particle), originals byte-identical; 8 new + 4 originals shadow-rendered (12/12 carried) and reviewed: a subway platform, an oil platform in a storm sea, a sluice camp, an abbey on a tidal causeway, a clock-tower square, houseboats on a canal, an aqueduct and a bee yard in wildflowers each read as their own world; still shadow | (close-out) | 2026-09-24 |
-| 2 | mangabot | game-center-arcade      | 7     | `game_center_arcade_room` (verified: "the room is the hero subject") | pool WRITTEN: 25 → 104, 103 distinct room features (the composition lock is prepended by the config; Sonnet writes only the tail), originals byte-identical; 8 new + 4 originals rendering (`ar/`) | | 2026-09-24 |
+| 2 | mangabot | game-center-arcade      | 7     | `game_center_arcade_room` (verified: "the room is the hero subject") | **subject DONE**: 25 → 104 entries, 103 distinct room features (the composition lock is prepended by the config; Sonnet writes only the tail), originals byte-identical; 12 forced shadow renders, 7 rendered (5 failed on Replicate's safety filter, flux-2-pro E005, originals and new alike, see Flag 5); of the 7, the room feature reads in the originals' way (a stair rail, a prize shelf, a capsule landing; a stool with a coat, a glass door, a capsule pile) and the machines and glass wall carry every frame; still shadow | (close-out) | 2026-09-24 |
 | 3 | steambot | brass-glasshouse        | 8     | `steambot_brass_glasshouse_house` (verified: "HERO, first in order") | grow run in flight (`steambot_glasshouse_house/grow`, same = the house FORM, roster 80); the thin `_keeper` 14 / `_wet_air` 16 are axis pools, left for Kevin's call | | 2026-09-24 |
-| 4 | brickbot | airfield-biplanes       | 9     | `brickbot_airfield_aircraft` (verified: "THE HERO") | smoke 4/4 clean; grow run in flight (same = the civil ROLE + its signature gadget, roster 81) | | 2026-09-24 |
+| 4 | brickbot | airfield-biplanes       | 9     | `brickbot_airfield_aircraft` (verified: "THE HERO") | **subject DONE**: 25 → 105 entries, 105 distinct civil roles (each with its own LEGO gadget; silhouette, colour, engine, marking and emblem spread as flavour), originals byte-identical; 8 new + 4 originals shadow-rendered (12/12 carried): every new aircraft is a brick biplane in its written colour (a scarlet floatplane, an olive island-hopper with crates, a sand crop-sprayer mid-spray, a hot-pink biplane over a tropical town, a cream-and-crimson estate plane with a kite); one ORIGINAL (the single-wing racer) rendered as a car, the path's own known drift; still shadow | (close-out) | 2026-09-24 |
 | 6 | pixelbot | castle-town-gate        | 10    | ? (seeds load lazily via `scenePaths.js`) | queued |         |      |
 | 7 | pixelbot | floating-market-canal   | 9     | ?                                        | queued |         |      |
 | 8 | pixelbot | volcano-forge           | 10    | ?                                        | queued |         |      |
@@ -391,6 +398,23 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-24 · Track B · brickbot/airfield-biplanes `aircraft` · subject DONE (25 → 105).** The hero
+  biplane: silhouette + colour + civil ROLE + engine + cockpits + "smooth unmarked flanks with one
+  painted <shape> and a round emblem of <pictorial>" + one LEGO gadget + stacked-plate wings. Same =
+  the role; roster of 81 civil roles each with its signature gadget (air ambulance stretcher tray,
+  skywriter smoke canister, bee-keeper hive crates, lamp-lighter lantern rack …); 80 appended in one
+  run with 0 rejections, originals byte-identical. 12 forced shadow renders (12/12 carried): eleven
+  brick biplanes in their written colours doing their written jobs; the one miss is an original
+  (the single-wing racer rendered as a car). Sheet https://claude.ai/artifact/271hKR38p4mn3166Bw2Lxu.
+- **2026-09-24 · Track B · mangabot/game-center-arcade `room` · subject DONE (25 → 104).** The arcade
+  floor as its own place: a fixed composition LOCK ("Two or three tall machines stand SO CLOSE …")
+  that the config prepends, then Sonnet's tail: the machine dressing, ONE spatial feature with a
+  low-ceiling clause, the dark polished floor doubling it, one placed detail. Same = the room feature;
+  roster of 87 (escalator, photo-booth row, medal pushers, mirror ceiling, sprinkler pipes, shoe
+  lockers, DJ booth, four-sided crane island …); 79 appended, one unfilled, originals byte-identical.
+  12 forced shadow renders: 5 failed on Replicate's safety filter (Flag 5, the path's own issue, hits
+  originals too); the 7 that rendered carry the machines and glass in every frame and the room
+  feature in the originals' partial way. Sheet https://claude.ai/artifact/5o2LDwbqRnrvLYDTUfjQKr.
 - **2026-09-24 · Track B · tinybot/snow-globe-world `worlds` · subject DONE (25 → 104).** The world
   inside the globe, "A/An <place> <verb> …; …; … <one thing caught mid-act>", 50-80 words, the place's
   own drifting particle where it is not snow. Same = the world TYPE; roster of 93 real places
