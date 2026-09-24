@@ -136,6 +136,15 @@ entry's subject, colour and composition, and do the renders differ from each oth
 renders are in the app (shadow posts) and give the pairs link. Never hand Kevin renders that a known
 upstream defect makes unjudgeable. 3 renders per arm is a coin flip; 8 paired is the minimum.
 
+**A paired render proves nothing until the final prompt is shown to carry the forced entry.** The
+harness records `carried` per slot in `render-results.json`, warns per render and in the batch summary
+("forced entry reached the prompt in N/M"); if N < M, stop and find out why before judging anything.
+(2026-09-23: tagged pools' entries reached the template as "[object Object]" for a whole day; the
+hawaii and coastal pairs were all invalid and a loose word-overlap check gave false positives because
+the template itself names the beach.) On every NEW path, open one `finalPrompt` and find the forced
+entry in it by eye before rendering the other seven. "Before" renders of a written pool come from the
+backup: `--pool <slot>=~/poolbackup-<bot>-<pool>-<ts>.json`.
+
 ### 7. Record and commit
 
 Update `RESEED_STATUS.md` (row + log entry, numbers with basis, commits), the playbook (every new
