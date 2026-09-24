@@ -77,7 +77,7 @@ this file in the same commit.
 - [ ] **dinobot/amber-forest** — 4/5 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:13 UTC
 - [x] **dinobot/courtship-display** — 3/3 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:21 UTC
 - [x] **dinobot/den-and-burrow** — 2/2 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:25 UTC
-- [ ] **dinobot/desert-dunes** — 0 pools
+- [x] **dinobot/desert-dunes** — 0/0 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:26 UTC
 - [ ] **dinobot/snowline-forest** — 1 pools
 - [ ] **dinobot/undergrowth-scale** — 1 pools
 <!-- CHECKLIST:END -->
