@@ -261,11 +261,20 @@ function growPool(p, pool) {
       note: 'already at target',
     };
   }
-  const { cmd, env } = cmdFor(p, pool);
+  const own = cmdFor(p, pool);
+  // Rounds 1-2: the path's own recipe (the xerox rule). Rounds 3-5: the register-derived grower,
+  // which shows Sonnet the whole current pool and forbids rephrasing it — the path generators
+  // carry no anti-list, so when a recipe keeps paraphrasing its own entries the gate drops them
+  // and the pool would never fill.
+  const generic = {
+    cmd: `node scripts/reseed/grow-axis-pool.js ${p.bot} ${pool} --target ${TARGET}`,
+    env: {},
+  };
   let rounds = 0,
     g = null;
-  while (rounds < 3) {
+  while (rounds < 5) {
     rounds++;
+    const { cmd, env } = rounds <= 2 ? own : generic;
     const r = run(cmd, env, 30 * 60 * 1000);
     if (r.code !== 0)
       log(`  ⚠️ generator exit ${r.code}${r.timedOut ? ' (timeout)' : ''} on ${pool}`);

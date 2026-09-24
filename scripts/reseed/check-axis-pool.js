@@ -69,11 +69,26 @@ const jaccard = (a, b) => {
   return uni ? inter / uni : 0;
 };
 
-function analyse(list) {
+// REGISTER WORDS: vocabulary the pool's own originals repeat in ≥ 40% of entries (a mandated
+// opener like "hot-air balloon", a material law like "brick" / "minifigure", the axis noun
+// itself). Two entries that share only those words are not duplicates of each other, so both
+// the overlap test and the opening test run on the words that VARY, after these are removed.
+function registerWords(list, origCount) {
+  const orig = list.slice(0, Math.max(1, Math.min(origCount, list.length)));
+  const df = new Map();
+  for (const e of orig) for (const w of new Set(words(e))) df.set(w, (df.get(w) || 0) + 1);
+  const reg = new Set();
+  for (const [w, n] of df) if (n / orig.length >= 0.4) reg.add(w);
+  return reg;
+}
+
+function analyse(list, origCount) {
   const problems = [];
   const seenExact = new Map();
   const seenSig = new Map();
+  const reg = registerWords(list, origCount);
   const wl = list.map((e) => words(e));
+  const vl = wl.map((w) => w.filter((x) => !reg.has(x))); // the varying words only
   list.forEach((e, i) => {
     const k = norm(e);
     if (seenExact.has(k)) problems.push({ kind: 'exact', a: seenExact.get(k), b: i });
@@ -84,23 +99,32 @@ function analyse(list) {
   });
   for (let i = 0; i < list.length; i++)
     for (let j = i + 1; j < list.length; j++) {
-      const jac = jaccard(wl[i], wl[j]);
+      if (vl[i].length < 4 || vl[j].length < 4) continue;
+      const jac = jaccard(vl[i], vl[j]);
       if (jac >= 0.6) problems.push({ kind: 'near ' + jac.toFixed(2), a: i, b: j });
     }
   const open = new Map();
-  wl.forEach((w, i) => {
+  vl.forEach((w, i) => {
+    if (w.length < 3) return;
     const k = w.slice(0, 3).join(' ');
     if (!open.has(k)) open.set(k, []);
     open.get(k).push(i);
   });
-  // 4+ entries opening with the same three content words is a template echo; up to 3 is variety
+  // 4+ entries opening with the same three VARYING words is a template echo; up to 3 is variety
   // ("late afternoon light …" can legitimately open a few light entries).
-  const clusters = [...open.entries()].filter(([, idx]) => idx.length >= 4);
-  return { problems, clusters, wl };
+  // The ORIGINALS are Kevin-approved and never edited here: a pair or cluster made only of
+  // originals is reported for information but does not fail the gate, because --fix could not
+  // resolve it without touching them. Anything involving a NEW entry counts.
+  const clusters = [...open.entries()].filter(
+    ([, idx]) => idx.length >= 4 && idx.some((i) => i >= origCount)
+  );
+  const blocking = problems.filter((p) => p.a >= origCount || p.b >= origCount);
+  return { problems: blocking, clusters, wl, reg };
 }
 
 let list = entries.slice();
-let { problems, clusters, wl } = analyse(list);
+let { problems, clusters, wl, reg } = analyse(list, ORIG);
+console.log(`  register words ignored (in ≥40% of originals): ${[...reg].join(', ') || '(none)'}`);
 
 const range = (idx) => {
   const lens = idx.map((i) => wl[i].length);
@@ -134,7 +158,7 @@ if (FIX && (problems.length || clusters.length)) {
     `  --fix: dropped ${drop.size} entries (${[...drop].sort((a, b) => a - b).join(',')}) → ${kept.length} remain; re-checking`
   );
   list = kept;
-  ({ problems, clusters, wl } = analyse(list));
+  ({ problems, clusters, wl } = analyse(list, ORIG));
   console.log(
     `  after fix: exact ${problems.filter((p) => p.kind === 'exact').length} · signature ${problems.filter((p) => p.kind === 'signature').length} · near ${problems.filter((p) => p.kind.startsWith('near')).length} · clusters ${clusters.length}`
   );
