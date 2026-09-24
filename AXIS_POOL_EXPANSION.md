@@ -60,7 +60,7 @@ this file in the same commit.
 <!-- CHECKLIST:START -->
 - [x] **brickbot/balloon-festival** — 8/8 pools at ≥100 and clean; smoke 1/3 delivered, 2 failed; 2026-09-24 19:56 UTC
 - [x] **brickbot/airfield-biplanes** — 8/8 pools at ≥100 and clean; smoke 0/3 delivered, 3 failed; 2026-09-24 20:19 UTC
-- [ ] **tinybot/snow-globe-world** — 3 pools
+- [x] **tinybot/snow-globe-world** — 3/3 pools at ≥100 and clean; smoke 1/3 delivered, 2 failed; 2026-09-24 20:30 UTC
 - [ ] **mangabot/game-center-arcade** — 6 pools
 - [ ] **steambot/brass-glasshouse** — 7 pools
 - [ ] **pixelbot/floating-market-canal** — 8 pools
@@ -97,9 +97,9 @@ this file in the same commit.
 | brickbot/airfield-biplanes | brickbot_airfield_lighting | 25 | 100 | 3 | clean | yes | ✅ |
 | brickbot/airfield-biplanes | brickbot_airfield_palette | 25 | 100 | 3 | clean | yes | ✅ |
 | brickbot/airfield-biplanes | brickbot_airfield_setting | 25 | 100 | 3 | clean | yes | ✅ |
-| tinybot/snow-globe-world | tinybot_snow_globe_moments | 25 |  |  |  |  | ⬜ |
-| tinybot/snow-globe-world | tinybot_snow_globe_vessel | 25 |  |  |  |  | ⬜ |
-| tinybot/snow-globe-world | tinybot_snow_globe_weather | 25 |  |  |  |  | ⬜ |
+| tinybot/snow-globe-world | tinybot_snow_globe_moments | 25 | 100 | 1 | clean | yes | ✅ |
+| tinybot/snow-globe-world | tinybot_snow_globe_vessel | 100 | 100 | 0 | clean | yes | ✅ |
+| tinybot/snow-globe-world | tinybot_snow_globe_weather | 100 | 100 | 0 | clean | yes | ✅ |
 | mangabot/game-center-arcade | game_center_arcade_camera | 25 |  |  |  |  | ⬜ |
 | mangabot/game-center-arcade | game_center_arcade_extra_life | 25 |  |  |  |  | ⬜ |
 | mangabot/game-center-arcade | game_center_arcade_machine | 25 |  |  |  |  | ⬜ |
@@ -232,3 +232,9 @@ shadow, so they cannot be selected twice.
 - 2026-09-24 19:56 UTC — brickbot/balloon-festival: 8/8 pools at 100, clean, originals intact. Smoke
   1/3: the two failures were `Replicate timed out after 90s` at the flux stage (an upstream stall,
   not the pools); the delivered render composed normally on the grown pools.
+- 2026-09-24 20:19 UTC — brickbot/airfield-biplanes: 8/8 pools at 100, clean. Smoke 0/3, all
+  Replicate timeouts. Confirmed upstream: our predictions on flux-1.1-pro and ultra have sat in
+  `starting` since ~19:50 UTC (a 19:51 prediction waited 5 min to start; 20:15 and 20:19 ones never
+  started) while Replicate's status page reads operational. Pool growth is unaffected (Sonnet), so
+  the driver continues; **every path whose smoke line is under 3/3 gets a re-smoke pass once
+  Replicate recovers**, and those lines are updated then.
