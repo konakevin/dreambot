@@ -397,7 +397,7 @@ slot name. Tool: the same core with `--grow N` (append N new entries; the pool o
 | 11 | faebot  | mushroom-apothecary     | 8     | `faebot_mushroom_apothecary_room` (verified: "The ROOM is the hero") | pool WRITTEN 25 → 96 (same = room shape + the one odd feature; 16 new shapes, 30 new features), originals byte-identical; a `--grow 10` top-up and 12 renders (`fa/`) chained | | 2026-09-24 |
 | 12 | faebot  | star-charting           | 8     | `faebot_starchart_astronomer` (verified: "THE FAE (painted large and near — the hero)") | pool WRITTEN 25 → 104 (same = wing kind + outer garment + build; 4 new wing kinds, 10 new garments, 6 new builds), originals byte-identical; 12 renders in flight (`fs/`), slow: the path's flux-2-pro lock trips Replicate's safety filter on fae skin-and-clothing prompts (Flag 5) | | 2026-09-24 |
 | 13 | dinobot | amber-forest            | 6     | `dinobot_amber_grove` (verified: the path's hero is "a MATERIAL and its OPTICS", the resident is gated) | pool WRITTEN 25 → 95 (same = grove form + the resin feature; 20 new forms, 21 new features), originals byte-identical; a `--grow 12` top-up and 12 renders (`da/`) chained | | 2026-09-24 |
-| 14 | dinobot | courtship-display       | 5     | `dinobot_courtship_act` (verified: "the hero behaviour") | pool WRITTEN 25 → 100 (same = body plan + the act; 12 new body plans, 31 new acts), originals byte-identical; 12 renders chained (`dc2/`) | | 2026-09-24 |
+| 14 | dinobot | courtship-display       | 5     | `dinobot_courtship_act` (verified: "the hero behaviour") | **subject DONE (real visible gain)**: 25 → 100 entries, 100 distinct (same = body plan + the act; 12 new body plans, 31 new acts), originals byte-identical; 12 forced shadow renders, 12/12 carried: every new act reads as its own documentary moment (a spinosaur slapping the shallows, a pachycephalosaur stacking pebbles, an iguanodont nudging an egg-shaped stone with a partner watching, a protoceratops dragging a flowering branch inside its scraped ring under storm light, a raptor with one arm-fan raised like a flag) and the new body plans render as dinosaurs; two anatomy misses (a protoceratops given a raptor's tail club; a therizinosaur with a theropod head) are Flux, the originals' sail-backs do the same; still shadow | (close-out) | 2026-09-24 |
 | 15 | dinobot | den-and-burrow          | 4     | `dinobot_den_chamber` (verified: "the hero") | pool WRITTEN 25 → 105 in two grows (same = chamber type + the light source; 15 new types, 15 new lights), originals byte-identical; 12 renders chained (`dd/`) | | 2026-09-24 |
 | 16 | dinobot | desert-dunes            | 5     | `dinobot_desert_dunes_biome` (the path's own pool; the other four are the SHARED paleo pools, untouched) | pool WRITTEN 25 → 101 in three grows (same = landform + the paleo marker; 20 new landforms, 15 new markers), originals byte-identical; 12 renders chained (`dds/`) | | 2026-09-24 |
 | 17 | dinobot | snowline-forest         | 5     | `dinobot_snowline_forest_biome` (the path's own pool; `_flora` is its second bespoke pool, the other three are SHARED, untouched) | pool WRITTEN 25 → 108 in two grows (same = landform + the one detail, the five skyline refrains kept; 19 new landforms, 15 new details), originals byte-identical; 12 renders chained (`dsn/`) | | 2026-09-24 |
@@ -411,6 +411,15 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-24 · Track B · dinobot/courtship-display `display_act` · subject DONE (25 → 100; real
+  visible gain).** The hero behaviour: "<body plan> <verb-ing the act>, <what the anatomy does>,
+  <one physical trace>", lower-case, no full stop. Same = body plan + act; 12 new body plans named so
+  Flux renders a dinosaur (pachycephalosaur, stegosaur, ankylosaur, ornithomimid, raptor, spinosaur,
+  iguanodont, compsognathid, protoceratops, oviraptorid, therizinosaur, ouranosaur) and 31 new acts
+  (plate flush, tail-club drum, hop and spin, frill flare, pebble stack, water splash, branch gift,
+  feather-flag wave …); 75 appended, five unfilled, originals byte-identical. 12 forced shadow renders,
+  12/12 carried, every new act reads as its own moment. Sheet
+  https://claude.ai/artifact/GAfZCdLmXhCmsj4aKLfWr7.
 - **2026-09-24 · Track B · faebot/acorn-boat-regatta `boat_fleet` · subject DONE (25 → 103;
   text-unique, visible gain modest).** Five or six hulls abreast, each a found thing, then a dash and
   one odd thing. Same = odd thing + lead hull; 61 new odd things (a frog on the poling stone, a
