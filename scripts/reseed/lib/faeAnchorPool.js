@@ -103,14 +103,28 @@ const DETAILS = [
   'sun-warmed',
 ];
 
+// Named things first (a flower, an insect), the generic families (fern, vine, branch) last; details
+// like "lichen-flecked" or "dew-beaded" must never decide the kind.
 const KIND_RULES = [
   ['dragonfly wing', /dragonfly/i],
   ['butterfly wing', /butterfly/i],
   ['moth', /\bmoth\b/i],
-  ['feather', /feather/i],
+  ['feather', /owl feather|single feather|feather caught|feather resting|a feather/i],
   ['snail shell', /snail/i],
   ['spider web', /spider|web\b|cobweb/i],
   ['pollen', /pollen/i],
+  ['foxglove', /foxglove/i],
+  ['bluebells', /bluebell/i],
+  ['primrose', /primrose/i],
+  ['wild garlic', /wild-garlic|wild garlic|ramson/i],
+  ['meadowsweet', /meadowsweet/i],
+  ['thistle', /thistle(?![- ]down)/i],
+  ['cow parsley', /cow-parsley|cow parsley/i],
+  ['heather', /heather/i],
+  ['lupine', /lupine/i],
+  ['columbine', /columbine/i],
+  ['harebells', /harebell/i],
+  ['forget-me-nots', /forget-me-not/i],
   ['dandelion clocks', /dandelion/i],
   ['thistle down', /thistle[- ]down|thistledown/i],
   ['drifting petals', /drifting (?:cherry-blossom )?petal|petal-cluster|petal cluster|pink-snow/i],
@@ -123,8 +137,8 @@ const KIND_RULES = [
   ['willow', /willow/i],
   ['ivy', /\bivy/i],
   ['vine curtain', /vine/i],
-  ['birch catkins', /birch|catkin/i],
   ['hazel catkins', /hazel/i],
+  ['birch catkins', /birch/i],
   ['maple bough', /maple/i],
   ['beech bough', /beech/i],
   ['oak bough', /oak (?:bough|branch|leaf|leaves)|acorn-laden/i],
@@ -140,23 +154,11 @@ const KIND_RULES = [
   ['bracken', /bracken/i],
   ['sword fern', /fern/i],
   ['moss curtain', /hanging[- ]moss|moss-curtain|moss curtain|moss-cascade|spanish-moss/i],
-  ['lichen branch', /lichen/i],
+  ['lichen branch', /lichen-crusted (?:dead )?branch|lichen branch|dead branch/i],
   ['fly agaric', /spotted|fly agaric|red-cap|red-and-white/i],
   ['fairy ring', /fairy-ring|mushroom-ring|mushroom-circle|mushroom ring/i],
   ['puffballs', /puffball/i],
   ['bracket fungi', /bracket/i],
-  ['foxglove', /foxglove/i],
-  ['bluebells', /bluebell/i],
-  ['primrose', /primrose/i],
-  ['wild garlic', /wild-garlic|wild garlic|ramson/i],
-  ['meadowsweet', /meadowsweet/i],
-  ['thistle', /thistle/i],
-  ['cow parsley', /cow-parsley|cow parsley|umbel/i],
-  ['heather', /heather/i],
-  ['lupine', /lupine/i],
-  ['columbine', /columbine/i],
-  ['harebells', /harebell/i],
-  ['forget-me-nots', /forget-me-not/i],
   ['acorns', /acorn/i],
   ['pinecones', /pinecone|pine cone|fir bough/i],
   ['cattails', /cattail|reed/i],
@@ -258,7 +260,7 @@ ${examples.map((e) => '- ' + e).join('\n')}
 
 Rules:
 - Use EXACTLY the element, the position and the tactile detail given for the slot, in your own natural wording; the element's own noun must appear.
-- The anchor frames ${subject} and never blocks ${subject === 'her' ? 'her face' : 'the scene'}. Real forest things only, storybook-painted.
+- The anchor frames ${subject} and leaves ${subject === 'her' ? 'her face' : 'the scene'} fully clear (say it that way, as a positive). Real forest things only, storybook-painted.
 - Name no creature, no biome or setting, no weather, no light source, nothing modern, nothing glowing. Describe only what is present; write no negative words.
 
 Slots:
@@ -274,7 +276,8 @@ Reply with a JSON array of ${batch.length} strings only.`;
   const formatRe = /^[A-Z].{60,}$/; // the originals end with a period
   const BANS = [
     ['glow', /\b(glow|glowing|bioluminescent|phosphorescent|luminous|firefly|fireflies|sparkle|sparkling|shimmer|shimmering|light-catching)\b/i],
-    ['other-axis', /\b(her (?:face|hair|eyes|gown|skin)|creature|fairy|dryad|queen|sunlight|god-rays|mist|fog|rain|snow|dusk|dawn|moonlight)\b/i],
+    // "framing her face" is the pool's own phrase; her features, the creature and the weather are not
+    ['other-axis', /\b(her (?:hair|eyes|gown|skin|wings)|creature|fairy|dryad|queen|sunlight|god-rays|mist|fog|rain|snow|dusk|dawn|moonlight)\b/i],
     ['modern', /\b(plastic|wire|fence|lamp|glass|ribbon|string lights)\b/i],
     ['negation', /\b(no|not|never|without|nothing)\b/i],
     ...extraBans,
@@ -285,8 +288,9 @@ Reply with a JSON array of ${batch.length} strings only.`;
     const parsed = parse(cand);
     if (parsed.kind !== a.kind) p.push(`kind ${parsed.kind}≠${a.kind}`);
     if (parsed.position !== a.position) p.push(`position ${parsed.position}≠${a.position}`);
+    // a marked slot must open "Painted"; on a mixed pool an unmarked one may (the examples do)
     if (slot.painted && !/^Painted\b/.test(cand)) p.push('not painted-prefixed');
-    if (!slot.painted && painted !== 'none' && /^Painted\b/.test(cand)) p.push('painted-prefixed');
+    if (painted === 'none' && /^Painted\b/.test(cand)) p.push('painted-prefixed');
     const words = cand.split(/\s+/).length;
     if (words < wordRange[0] || words > wordRange[1]) p.push(`${words} words`);
     for (const [n, re] of BANS) {

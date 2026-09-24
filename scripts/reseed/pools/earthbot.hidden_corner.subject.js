@@ -151,6 +151,8 @@ const TYPE_HOSTS = {
   'log nook': ['fallen log', 'nurse log', 'hollow log', 'log jam'],
   'boulder hollow': ['boulder', 'glacial erratic', 'split boulder'],
 };
+// A water note ONLY for the pockets that are water (first render pass 2026-09-24: giving every
+// pocket a seep or a pool made Flux paint the same mossy waterfall gorge eight times).
 const WATER = [
   'a slow jade pool',
   'a thin cold seep beading on every surface',
@@ -160,6 +162,18 @@ const WATER = [
   'droplets falling from the lip into a basin',
   'a spring welling up through sand',
   'wet stone shining under a film of water',
+];
+const WATER_TYPES = ['creek bend', 'waterfall pool', 'tide pool', 'pond edge', 'spring source', 'fern grotto', 'canyon alcove'];
+// the dry pockets get a floor note instead
+const FLOOR = [
+  'a packed moss floor',
+  'leaf litter deep and soft underfoot',
+  'a carpet of dry duff and needles',
+  'a mushroom cluster at the base',
+  'dappled light on the floor',
+  'a cushion of moss over every stone',
+  'bare humus between the roots',
+  'a scatter of fallen petals on the moss',
 ];
 
 // ── Parsing ─────────────────────────────────────────────────────────────────────────────────────
@@ -198,17 +212,18 @@ const HABITAT_RULES = [
 const HOST_RULES = [
   // "root pocket" is the TYPE; the host is the lifted root plate only when the head says so
   ['root plate', /root plate|upturned root|lifted root|root mass|root wall/i],
-  ['fallen log', /fallen|toppled|log nook|nurse log|downed/i],
-  ['canyon wall', /canyon wall|alcove wall|undercut|slot/i],
+  // the specific logs, roots and walls before the generic ones
+  ['nurse log', /nurse log/i],
+  ['hollow log', /hollow log/i],
+  ['log jam', /log jam|storm-felled|tangle of .* logs/i],
+  ['bank roots', /undercut bank|bank roots|roots of an undercut/i],
+  ['fallen log', /fallen|toppled|log nook|downed/i],
+  ['canyon wall', /canyon wall|alcove wall|slot/i],
   ['cliff notch', /cliff notch|sea-carved|notch|sea cliff/i],
   ['sinkhole rim', /sinkhole|doline/i],
   ['stump hollow', /stump/i],
   ['buttress roots', /buttress/i],
-  ['bank roots', /undercut bank|bank roots|roots of an undercut/i],
   ['tree cluster', /three ancient|between two ancient|trunk cluster|between .* trunks|bases of/i],
-  ['nurse log', /nurse log/i],
-  ['hollow log', /hollow log/i],
-  ['log jam', /log jam|storm-felled|tangle of .* logs/i],
   ['sea cave mouth', /sea cave|cave mouth/i],
   ['sea-stack base', /sea stack|sea-stack/i],
   ['wave-cut shelf', /wave-cut shelf|rock shelf|wave-cut/i],
@@ -269,7 +284,9 @@ function assign(slot, ctx) {
       ),
       3
     );
-    const hosts = TYPE_HOSTS[type] || Object.keys(HOST).filter((h) => !['cliff notch', 'canyon wall', 'root plate', 'fallen log'].includes(h) || (h === 'canyon wall' && habitat === 'desert canyon') || (h === 'cliff notch' && habitat === 'rocky coast'));
+    // hosts that belong to one pocket type (logs, roots, sea rock, canyon lips) never shelter another
+    const OWNED = ['cliff notch', 'canyon wall', 'root plate', 'fallen log', 'nurse log', 'hollow log', 'log jam', 'sea cave mouth', 'sea-stack base', 'wave-cut shelf', 'pour-off', 'seep wall', 'stump hollow', 'buttress roots', 'glacial erratic', 'split boulder'];
+    const hosts = TYPE_HOSTS[type] || Object.keys(HOST).filter((h) => !OWNED.includes(h) || (h === 'canyon wall' && habitat === 'desert canyon') || (h === 'cliff notch' && habitat === 'rocky coast') || (h === 'seep wall' && /desert canyon|mediterranean/.test(habitat)));
     const host = among(
       byUsage(hosts, usage, (k) => 'host:' + k),
       3
@@ -281,7 +298,7 @@ function assign(slot, ctx) {
       type,
       habitat,
       host,
-      water: spread(WATER),
+      water: WATER_TYPES.includes(type) ? spread(WATER) : spread(FLOOR),
       tags: [type, habitat, host],
     };
   }
@@ -296,7 +313,7 @@ Examples already in the pool (match their voice, density and length):
 ${examples.map((e) => '- ' + e).join('\n')}
 
 Rules:
-- Use EXACTLY the pocket type, habitat, host feature and water note given for the slot, in your own natural wording; name at least four plants or animals that are REAL in that habitat (use the habitat's own list) and the habitat's own stone. Every element must belong to that one ecology.
+- Use EXACTLY the pocket type, habitat, host feature and the water or floor note given for the slot, in your own natural wording; name at least four plants or animals that are REAL in that habitat (use the habitat's own list) and the habitat's own stone. Every element must belong to that one ecology. A dry pocket (a glade, a cove, a log nook, a root pocket, a boulder hollow) stays dry: name no seep, pool, stream, drip or waterfall in it.
 - Intimate mid-tight framing: the pocket fills the frame; no vistas, no ridgelines, no sky as subject.
 - Real Earth, nothing named (no park, region or place names), nothing built (no cabin, bridge, fence, steps, path, sign), no people or footprints, no glow of any kind, no "fire". Describe only what is present; write no negative words.
 
@@ -305,7 +322,7 @@ ${batch
   .map((s, i) => {
     const a = s.assignment;
     const h = HABITAT[a.habitat];
-    return `${i + 1}. pocket type "${TYPE[a.type]}"; habitat "${a.habitat}" (plants: ${h.plants}; stone: ${h.stone}); host feature "${HOST[a.host]}"; water "${a.water}"`;
+    return `${i + 1}. pocket type "${TYPE[a.type]}"; habitat "${a.habitat}" (plants: ${h.plants}; stone: ${h.stone}); host feature "${HOST[a.host]}"; ${WATER_TYPES.includes(a.type) ? 'water' : 'floor'} "${a.water}"`;
   })
   .join('\n')}
 
@@ -333,7 +350,9 @@ function mechanical(cand, slot) {
   if (!HABITAT_RULES.find(([k]) => k === a.habitat)[1].test(cand))
     p.push(`habitat words missing (${a.habitat})`);
   const words = cand.split(/\s+/).length;
-  if (words < 40 || words > 95) p.push(`${words} words`);
+  if (words < 40 || words > 85) p.push(`${words} words`);
+  if (!WATER_TYPES.includes(a.type) && /\b(seep|seeps|pool|pools|stream|creek|brook|drip|dripping|droplets|waterfall|cascade|spring welling|water)\b/i.test(cand))
+    p.push('water in a dry pocket');
   // the LUSH mandate's moss + fern check applies to the forest habitats (a desert seep says "maidenhair",
   // a bog says "sphagnum", a tide pool says "kelp")
   const FOREST = ['temperate rainforest', 'old-growth conifer', 'deciduous hardwood', 'cloud forest', 'boreal'];

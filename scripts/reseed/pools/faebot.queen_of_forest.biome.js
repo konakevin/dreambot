@@ -132,14 +132,37 @@ const BIOME_RULES = [
   ['larch glade', /larch/i],
   ['oak grove', /oak/i],
 ];
-const TEXTURE_RULES = TEXTURES.map((t) => [t, new RegExp(t.replace(/-/g, '[- ]').replace(/s$/, 's?'), 'i')]);
+// hyphen or space between the words ("cow-parsley" / "cow parsley"), optional plural
+const TEXTURE_RULES = TEXTURES.map((t) => [t, new RegExp(t.replace(/[- ]/g, '[- ]').replace(/s$/, 's?'), 'i')]);
 const pick = (rules, text, fallback) => {
   for (const [k, re] of rules) if (re.test(text)) return k;
   return fallback;
 };
+// a texture that is part of the biome's own name (bluebell wood → bluebells, moss canyon → moss carpet)
+// is the biome, not a signature texture
+const stem = (w) => w.toLowerCase().replace(/s$/, '');
+const overlaps = (biome, texture) => {
+  const bw = biome.split(/[- ]/).filter((w) => w.length >= 4).map(stem);
+  const tw = texture.split(/[- ]/).filter((w) => w.length >= 4).map(stem);
+  return bw.some((b) => tw.some((t) => t.startsWith(b) || b.startsWith(t)));
+};
+// the texture named EARLIEST in the entry (outside the biome's own name) is its first signature texture
+function firstTexture(text, biome) {
+  let best = null;
+  let at = Infinity;
+  for (const [t, re] of TEXTURE_RULES) {
+    if (overlaps(biome, t)) continue;
+    const m = text.match(re);
+    if (m && m.index < at) {
+      at = m.index;
+      best = t;
+    }
+  }
+  return best || 'texture';
+}
 function parse(text) {
   const biome = pick(BIOME_RULES, text, 'forest');
-  const texture = pick(TEXTURE_RULES, text, 'texture');
+  const texture = firstTexture(text, biome);
   return { keys: [`biome:${biome}`, `texture:${texture}`], biome, texture };
 }
 const sameGroup = (a, b) => a.biome === b.biome && a.texture === b.texture;
@@ -170,11 +193,12 @@ function assign(slot, ctx) {
       byUsage(TEXTURES, usage, (k) => 'texture:' + k),
       5
     );
-    // water textures only where there is water
+    // water textures only where there is water; a texture that names the biome is not a texture
     if (/water lilies|river stones/.test(texture) && !/stream|waterfall|lake|bog|willow carr|alder/.test(biome)) continue;
+    if (overlaps(biome, texture)) continue;
     const cand = { biome, texture };
     if (groups.some((g) => sameGroup(g.assignment ? g.assignment : g, cand))) continue;
-    const second = spread(TEXTURES.filter((t) => t !== texture));
+    const second = spread(TEXTURES.filter((t) => t !== texture && !overlaps(biome, t)));
     return {
       keys: [`biome:${biome}`, `texture:${texture}`],
       biome,
@@ -194,7 +218,7 @@ Examples already in the pool (match their voice and length):
 ${examples.map((e) => '- ' + e).join('\n')}
 
 Rules:
-- Use EXACTLY the biome, the two textures and the depth phrase given for the slot, in your own natural wording; name the biome's own trees or feature and both textures.
+- Use EXACTLY the biome, the two textures and the depth phrase given for the slot, in your own natural wording; name the biome's own trees or feature, then the FIRST texture, then the second (in that order, and name no other of these: moss carpet, bluebells, hanging vines, fairy-ring mushrooms, fern fronds, petal-strewn floor, river stones, water lilies, lichen, catkin veils, root buttresses, ivy sheets, leaf litter, wild roses, foxglove spires, dew-beaded grass, hanging-moss curtains, bracket fungi, fallen log, mossy boulders).
 - The forest wraps the scene without dominating it. Real forest things, storybook-painted.
 - Name no court chamber, throne or chandelier, no queen, critters or fae, no lighting or weather, no mushroom throne or mushroom pillars, nothing glowing. Describe only what is present; write no negative words.
 
@@ -209,11 +233,13 @@ ${batch
 Reply with a JSON array of ${batch.length} strings only.`;
 }
 const formatRe = /^[A-Z].{90,}$/; // the originals end with a period
+// The originals themselves say "luminous distance", "drifting mist", "foxglove-spires" and "soft warm
+// light" (the recipe's touchpoints do), so the bans stay to what the recipe truly forbids.
 const BANS = [
-  ['glow', /\b(glow|glowing|bioluminescent|phosphorescent|luminous|firefly|fireflies)\b/i],
-  ['court', /\b(throne|chandelier|chamber|court|hall|pillar|pillars|spire|spires)\b/i],
-  ['cast', /\b(queen|fae|fairy|fairies|critter|critters|fox|deer|bird|birds|butterfly|butterflies)\b/i],
-  ['light-weather', /\b(god-rays|sunbeam|sunbeams|sunlight|moonlight|mist|fog|rain|snow|dusk|dawn|sunset|golden hour|ethereal light|pearl-light|soft-amber light|warm light)\b/i],
+  ['glow', /\b(glowing|bioluminescent|phosphorescent|firefly|fireflies|glowing mushroom)\b/i],
+  ['court', /\b(throne|chandelier|chamber|court|hall|mushroom-spire|mushroom pillar)\b/i],
+  ['cast', /\b(queen|fae|fairy(?!-ring)|fairies|critter|critters|fox|deer|bird|birds|butterfly|butterflies)\b/i],
+  ['weather', /\b(rain|snow|storm|dusk|dawn|sunset|sunrise|moonlight|night)\b/i],
   ['negation', /\b(no|not|never|without|nothing)\b/i],
 ];
 function mechanical(cand, slot) {
@@ -256,4 +282,6 @@ module.exports = {
   measure,
   batchSize: 6,
   lenBand: [140, 380],
+  BIOMES,
+  TEXTURES,
 };

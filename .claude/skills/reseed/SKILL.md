@@ -150,6 +150,23 @@ Two more tool rules (each cost a batch on 2026-09-23): `report.changes[].index` 
 proposal by hand (a manual trailing-period pass touched kept originals and `--execute` refused): put
 mechanical housekeeping in the config's `normalize(text)`, which runs only on LLM candidates.
 
+**Flavour follows the entry's own kind.** A "flavour" element the config adds to EVERY rewrite becomes
+the render: hidden-corner gave each pocket a water note (a seep, droplets, a pool) and five of eight
+after-renders were the same mossy waterfall gorge, a visible regression against the originals. Give a
+flavour element only to the kinds that really carry it (water notes to water pockets, a floor note to
+dry ones), keep type-owned hosts to their types (no pond "inside a hollow log"), and re-read the
+after-set for SAMENESS before calling a pool done, not just for entry-fidelity.
+
+**Before any full run, prove the assignment space offline** (hidden-corner and the YumBot festival
+pool each wasted a whole run on this): load the config, parse the pool, keep the first of each group,
+then call `cfg.assign(slot, { usage, groups })` for every rewrite slot and count the nulls. If any slot
+is unassignable, the "same" definition has fewer distinct values than the pool has entries (a tide pool
+had 4 hosts for 17 originals; ~55 festival perch families for 200 entries): widen the roster of the
+varying element, or, when the real world has no more of that element, add the next thing the entries
+ALREADY state (how the cluster sits on its perch) and flag the judgment call for Kevin. Also test the
+format regex against three originals before the first call: the anchors' trailing period failed
+`[^.]{60,}$` on every candidate and burned 80 calls.
+
 ### 7. Record and commit
 
 Update `RESEED_STATUS.md` (row + log entry, numbers with basis, commits), the playbook (every new

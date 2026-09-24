@@ -71,14 +71,38 @@ commit + push, row + log here.
 - **epic-sunset: DONE** (8 + 8 pairs reviewed, 15/16 carried: one after-render's entry was dropped by
   Sonnet and rendered a grey overcast beach; the harness flagged it); close-out commit next.
 - **national-parks: DONE** (8 + 8 pairs reviewed, 16/16 carried); close-out commit next.
-- **hidden-corner:** two runs left slots unfilled (52 then 63 of 130) because the assignment space
-  was too small: a tide pool had 4 hosts × 1 habitat for 17 originals, a log nook 1 host. Widened the
-  host lists per type (offline check: 129/129 assignable), `--resume` running to `hidden_corner/full3`
-  (keeps the 63). Next = review, execute, renders.
-- **yumbot festival:** first full run stalled at 24 rewrites (94 unfilled): ~55 real perch families
-  cannot make 200 distinct entries. Judgment call, flagged below: "same" now = perch family + how the
-  cluster sits on it (ring / on top / base / rim / edge / behind / leaning / levels), which every entry
-  already states. Offline check 103/103 assignable; `--resume` running to `yumbot_festival/full2`.
+- **hidden-corner: FIRST PAIRS FAILED MY REVIEW (a regression in visible variety), fixing.** The
+  pool was written (70 → 199 distinct, 130 rewrites) and 16/16 prompts carried the entry, but five of
+  the eight "after" renders are the same mossy waterfall gorge while the "before" set had a mossy
+  oak, a sunset creek, two tide pools with sea stars and a flower cove. Cause found in the config, not
+  in Flux: I gave EVERY rewrite a water note (a seep, a pool, droplets) as flavour, so dry pockets
+  (glades, coves, log nooks, root pockets) all read as wet gorges, and twelve rewrites put a pond or a
+  grotto "inside a hollow log" because the log hosts were open to every type. Fixed (water note only
+  on water pockets, a floor note on dry ones, a "water in a dry pocket" check, owned hosts). Next =
+  restore the backup, regenerate the dry-type and mis-hosted rewrites via a filtered `--resume`,
+  re-execute, re-render the same slots, and only then judge. Pairs of the failed pass:
+  https://claude.ai/artifact/1TFknEsNuF5ZpNCMFgVhJS. Lesson for the skill: a flavour element added to
+  every entry becomes the render; flavour must follow the entry's own kind.
+- **BloomBot carpets:** shared factory `scripts/reseed/lib/carpetPool.js` (the pilot's species-set
+  method: same = 4+ shared species, per-species cap, ≤2 shared with any other entry) + configs
+  `bloombot.desert_bloom.bloom_explosion.js` (vivid; 51 kept / 147 to rewrite; cactus roster widened
+  so every slot assigns) and `bloombot.flower_fantasy.floor_carpet.js` (pastel; 26 kept / 108). Smoke
+  running on the pastel one.
+- **yumbot festival: FIRST PAIRS WEAK ON MY REVIEW, second pass in progress.** Pool written (97 → 200
+  distinct on perch family + arrangement), 8 + 8 rendered, 16/16 carried, but the perch is a weak
+  lever on this path: the five foods dominate the frame, obscure perches (a kendama pile, a kokeshi
+  row, a senbei tin) never rendered, and "half-hidden behind" hid the foods behind a snack bag. The
+  "before" renders read as clean matsuri scenes because a plain board / cloth / mat lets the market
+  backdrop carry the picture. Fix: roster trimmed to strong-prior perches (tubs, drums, lanterns,
+  steps, stalls, mats, fans, koi ponds …), arrangements trimmed to the six that sit the foods ON or AT
+  the perch; regenerating only the rewrites that used a dropped perch or arrangement, then re-render
+  the same slots. Pairs of the weak pass https://claude.ai/artifact/6Q5sCHkcapP6iTWxmPn1Rv.
+  If the second pass is still no better than the originals, the honest close is "pool text unique,
+  visible gain nil" and the flag stays for Kevin.
+- **FaeBot anchors:** all three pools WRITTEN (forest-fairy 71 → 260 distinct, 25 → 68 kinds;
+  dryad-portrait 52 → 200, 17 → 66 kinds; enchanted-vista 59 → 200, 20 → 69 kinds; backups
+  `~/poolbackup-faebot-*-foreground_anchor-*`). forest-fairy + enchanted-vista chains rendering
+  (`ffa/`, `eva/`); dryad's anchor is 40%-gated so its pairs come last.
 - **FaeBot (queen biome + three foreground-anchor pools):** shared factory
   `scripts/reseed/lib/faeAnchorPool.js` (same = anchor kind + position in frame; ~65 real forest
   anchors × 8 positions; nothing glowing per the playbook) + `faebot.queen_of_forest.biome.js` (same =

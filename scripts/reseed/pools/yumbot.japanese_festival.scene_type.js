@@ -85,22 +85,23 @@ const VERBS = ['clustered', 'gathered', 'huddled', 'nestled', 'arranged', 'perch
 // How the cluster sits on its perch (every entry already states it: "around a tank", "on a mat",
 // "at the foot of a torii"). Roughly 55 perch families cannot make 200 distinct entries on their own,
 // so the idea is perch family + arrangement.
+// prepositional phrases only (the opener verb is the slot's own: "huddled at the base of …")
+// First render pass (2026-09-24): "half-hidden behind" and "up the levels of" hid the foods or lost
+// the perch; the six that sit the foods ON or AT something render.
 const ARR = {
   ring: 'in a ring around',
   top: 'on top of',
-  edge: 'lined along the edge of',
-  rim: 'peeking over the rim of',
-  behind: 'half-hidden behind',
-  base: 'gathered at the base of',
-  leaning: 'leaning against',
-  levels: 'stacked up the levels of',
+  edge: 'along the edge of',
+  rim: 'at the rim of',
+  base: 'at the base of',
+  leaning: 'against the side of',
 };
 const ARR_RULES = [
-  ['rim', /over the rim|peeking over|over the edge of/i],
+  ['rim', /at the rim|over the rim|peeking over|over the edge of/i],
   ['levels', /up the (?:steps|levels|tiers)|stacked up|on the (?:steps|tiers)/i],
   ['edge', /along the edge|lined along|in a row along|along the rim|along the rail/i],
   ['behind', /behind/i],
-  ['leaning', /leaning against|propped against|against the side/i],
+  ['leaning', /against the side|leaning against|propped against/i],
   ['base', /at the base|at the foot|beneath|under|below/i],
   ['ring', /in a ring|circling|around|encircling/i],
   ['top', /\bon\b|atop|across/i],
@@ -215,8 +216,10 @@ function assign(slot, ctx) {
     );
     // a rim needs a tub, basin, well or box; levels need steps, a yagura or a shelf; you cannot sit
     // on top of a lantern rope, a curtain or a streamer
-    if (arr === 'rim' && !/goldfish|yo-yo|temizuya|well|omikuji|ramune|dango|senbei|koi pond/.test(family)) continue;
-    if (arr === 'levels' && !/shrine steps|yagura|daruma|kokeshi|maneki|mask stall|kakigori|stone garden/.test(family)) continue;
+    // small or obscure perches (a kendama pile, a senbei tin, a kokeshi row, an omikuji box, temari,
+    // daruma, maneki-neko, an ema rack, a bell rope, a deer-scarer) never rendered: skip them
+    if (/kendama|senbei|kokeshi|omikuji|temari|daruma|maneki-neko|ema rack|shrine bell|shishi-odoshi/.test(family)) continue;
+    if (arr === 'rim' && !/goldfish|yo-yo|temizuya|well|ramune|dango|koi pond/.test(family)) continue;
     if (arr === 'top' && /chochin|bunting|noren|koinobori|tanabata|fireworks|furin/.test(family)) continue;
     const cand = { family, arr };
     if (groups.some((g) => sameGroup(g.assignment ? g.assignment : g, cand))) continue;
