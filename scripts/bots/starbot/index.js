@@ -5,8 +5,9 @@
  * Arrival / Annihilation / Foundation / Moebius-Jodorowsky / Chesley-Bonestell.
  * Cosmic vistas + alien landscapes + epic space opera + sleek futurism.
  *
- * Cyborg / robot character paths split into MechBot 2026-05-05 — see
- * scripts/bots/mechbot/.
+ * Cyborg / robot character paths split into MechBot 2026-05-05, then moved back
+ * here when MechBot was decommissioned 2026-06-24 (its files were removed from the
+ * repo 2026-09-24; the "moved from MechBot" notes below are the provenance record).
  */
 
 const pools = require('./pools');

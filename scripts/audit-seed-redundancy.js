@@ -54,7 +54,7 @@ const path = require('path');
 const crypto = require('crypto');
 
 const BOTS_DIR = path.join(__dirname, 'bots');
-const DARK = new Set(['alphabot', 'mechbot', 'outlawbot', 'retrobot']);
+const DARK = new Set(['alphabot', 'outlawbot']);
 const AXIS =
   /(light|lighting|camera|framing|palette|colour|color|weather|mood|vibe|register|atmosphere|atmospheric|vantage|time_of_day|effect|presence|texture|finish|accent|style|medium|shading|expression|skin|hairstyle|hair_color|_age$|emotional_dna)/i;
 

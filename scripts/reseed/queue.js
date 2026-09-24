@@ -19,7 +19,7 @@ const flag = (n) => (argv.includes(n) ? argv[argv.indexOf(n) + 1] : null);
 const MIN_PCT = Number(flag('--min-pct') || 20);
 const MIN_N = Number(flag('--min-n') || 50);
 const TOP = Number(flag('--top') || 40);
-const DARK_BOTS = new Set(['alphabot', 'mechbot', 'outlawbot', 'retrobot']); // post to nobody
+const DARK_BOTS = new Set(['alphabot', 'outlawbot']); // post to nobody
 
 const tmp = path.join(os.tmpdir(), `bot-seed-dupes-${Date.now()}.json`);
 execFileSync('node', [path.join(ROOT, 'scripts/scan-bot-seed-dupes.js'), '--json', tmp], {

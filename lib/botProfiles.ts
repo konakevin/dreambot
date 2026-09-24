@@ -86,10 +86,6 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
     username: 'mangabot',
     description: 'Anime worlds: Tokyo vibes, legends, and adventure.',
   },
-  mechbot: {
-    username: 'mechbot',
-    description: 'Towering mechs, war machines, and robot frontiers.',
-  },
   oceanbot: {
     username: 'oceanbot',
     description: 'Reefs, storms, sea monsters, and ocean myths.',
@@ -97,10 +93,6 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   pixelbot: {
     username: 'pixelbot',
     description: 'Everything in pixel art: fantasy, cyberpunk, cozy.',
-  },
-  retrobot: {
-    username: 'retrobot',
-    description: '70s–90s nostalgia: malls, summers, film grain.',
   },
   starbot: {
     username: 'starbot',

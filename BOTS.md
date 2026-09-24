@@ -1326,8 +1326,8 @@ Change any bot's cadence via SQL — server-side, no code commit:
 -- Bump YumBot to 4×/day
 UPDATE bot_schedules SET posts_per_day = 4 WHERE bot_name = 'yumbot';
 
--- Pause MechBot
-UPDATE bot_schedules SET active = false WHERE bot_name = 'mechbot';
+-- Pause GothBot
+UPDATE bot_schedules SET active = false WHERE bot_name = 'gothbot';
 
 -- Audit fleet cadence
 SELECT bot_name, posts_per_day, active, next_due_at FROM bot_schedules ORDER BY next_due_at;
@@ -1640,7 +1640,6 @@ All 17 image bots below are scheduled by the DB-driven dispatcher (see [Producti
 | TinyBot | `tinybot/` | Miniatures / dioramas | 4+ | base |
 | SteamBot | `steambot/` | Steampunk | 4+ | base |
 | PixelBot | `pixelbot/` | Retro pixel art | 4+ | base |
-| RetroBot | `retrobot/` | Retro / vaporwave | 4+ | base |
 | DinoBot | `dinobot/` | Dinosaurs / prehistoric | 4+ | base |
 | BeachBot | `beachbot/` | Beach / coastal | 4+ | base |
 | BrickBot | `brickbot/` | LEGO / brick art | 4+ | base |

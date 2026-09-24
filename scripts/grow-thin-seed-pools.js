@@ -41,8 +41,8 @@ const ONLY_BOT = flag('--bot');
 const APPLY = argv.includes('--apply');
 const CENTS_PER_ENTRY = 0.012;
 
-// Bots whose user is public and actively scheduled. Retired (mechbot, retrobot), the private
-// proving ground (alphabot) and dark bots (outlawbot) are not worth spend.
+// Bots whose user is public and actively scheduled. The private proving ground (alphabot)
+// and dark bots (outlawbot) are not worth spend.
 const LIVE = new Set([
   'bloombot', 'brickbot', 'chibibot', 'dinobot', 'dragonbot', 'dreambot', 'earthbot', 'faebot',
   'farmbot', 'gothbot', 'mangabot', 'oceanbot', 'pixelbot', 'starbot', 'steambot', 'tinybot',

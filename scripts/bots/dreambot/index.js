@@ -27,10 +27,10 @@ const pathBuilders = {
   'bubble-bot-dreams-faebot': require('./paths/bubble-bot-dreams-faebot'),
   'bubble-bot-dreams-gothbot': require('./paths/bubble-bot-dreams-gothbot'),
   'bubble-bot-dreams-mangabot': require('./paths/bubble-bot-dreams-mangabot'),
-  'bubble-bot-dreams-mechbot': require('./paths/bubble-bot-dreams-mechbot'),
+  // bubble-bot-dreams-mechbot + -retrobot removed 2026-09-24 with those two retired bots
+  // (Kevin: "clean them up, all of their files"). Their posted renders stay on the feed.
   'bubble-bot-dreams-oceanbot': require('./paths/bubble-bot-dreams-oceanbot'),
   'bubble-bot-dreams-pixelbot': require('./paths/bubble-bot-dreams-pixelbot'),
-  'bubble-bot-dreams-retrobot': require('./paths/bubble-bot-dreams-retrobot'),
   'bubble-bot-dreams-starbot': require('./paths/bubble-bot-dreams-starbot'),
   'bubble-bot-dreams-steambot': require('./paths/bubble-bot-dreams-steambot'),
   'bubble-bot-dreams-tinybot': require('./paths/bubble-bot-dreams-tinybot'),
@@ -51,10 +51,8 @@ const CROSSOVER_PATHS = [
   'bubble-bot-dreams-faebot',
   'bubble-bot-dreams-gothbot',
   'bubble-bot-dreams-mangabot',
-  'bubble-bot-dreams-mechbot',
   'bubble-bot-dreams-oceanbot',
   'bubble-bot-dreams-pixelbot',
-  'bubble-bot-dreams-retrobot',
   'bubble-bot-dreams-starbot',
   'bubble-bot-dreams-steambot',
   'bubble-bot-dreams-tinybot',

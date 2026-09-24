@@ -31,7 +31,7 @@ const ONLY = flag('--bot');
 const JSON_OUT = flag('--json');
 
 // Bots that are dark or broken; audited but flagged, never expansion targets.
-const DARK = new Set(['mechbot', 'retrobot', 'outlawbot']);
+const DARK = new Set(['outlawbot']);
 const PRIVATE = new Set(['alphabot']);
 
 /** Strip // and /* *\/ comments without touching string/template contents. */

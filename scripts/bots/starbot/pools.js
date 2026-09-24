@@ -19,7 +19,8 @@ function load(name) {
 // 8 franchise paths it forced into.
 const FORCE_MAP = null;
 
-// Cyborg + robot pools moved to MechBot 2026-05-05 — see scripts/bots/mechbot/pools.js.
+// Cyborg + robot pools moved to MechBot 2026-05-05 and back here 2026-06-24 (MechBot
+// decommissioned; its files removed from the repo 2026-09-24).
 
 const VIBE_COLOR = {
   cinematic: 'teal-and-orange sci-fi cinematic grade, deep shadows, luminous highlights',

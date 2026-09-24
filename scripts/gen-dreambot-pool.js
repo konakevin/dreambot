@@ -1279,25 +1279,6 @@ Spread across: SKY-VESSELS (a drifting airship, a tiny flotilla of sky-ships, ho
     ],
   },
 
-  bubble_world_mechbot: {
-    label: 'mechbot world',
-    maxWords: 22,
-    theme: `Each entry is ONE sci-fi MECHA or deep-sea world in the spirit of MechBot — colossal FRIENDLY giant robots/sentinels, glowing deep-sea bot-cities, mech arenas, mossy dormant guardians — written as a DreamBot wallpaper WORLD in the glossy-dreamy register. Towering mecha scale so a small bubble-bot reads tiny. Describe ONLY the world. Mechs are GENTLE giants, never menacing/war-like.
-  ✅ "a colossal mossy dormant sentinel mech slumped in a jungle ruin, ferns sprouting from its shoulders, god-rays through the canopy"
-  ✅ "a glowing deep-sea bot-city of chrome domes and floodlit towers, bioluminescent fish threading the dark, soft blue glow everywhere"
-
-🚫 BANS: NO bubble-bot detail (separate axis). NO humans, NO weapons/war/menace — friendly + wondrous. ≤22 words.`,
-    instructions: `Generate NEW friendly-mecha + deep-sea worlds across families — terse 12-22 word fragments, gentle-giant mech or glowing tech-place + depth cue, glossy-dreamy. World ONLY.`,
-    subThemes: [
-      'FRIENDLY GIANT MECHS / SENTINELS — colossal gentle mechs at rest, a sleeping guardian-robot, soft glowing joints, towering chrome forms',
-      'DEEP-SEA BOT-CITIES — chrome-dome undersea cities, floodlit towers, glowing portholes, bioluminescent fish in the dark',
-      'HADAL TRENCH GLOW — abyssal plains pulsing soft blue light, marine snow drifting, a mech floodlight piercing the dark',
-      'MOSSY DORMANT GUARDIANS — ancient overgrown sentinel mechs in jungle-temple ruins, ferns + vines, green god-ray shafts',
-      'CHROME TECH-ARENAS — soft-lit futuristic arenas, glowing tiered seating, polished chrome floors reflecting pastel lights',
-      'UNDERSEA MEGASTRUCTURES — colossal sunken structures emerging from the murk, glowing dome-glass, slow drifting currents',
-      'ZERO-G ORBITAL — gentle mechs drifting in soft orbit, a pastel planet below, glowing station-rings, star-field haze',
-    ],
-  },
 
   bubble_world_oceanbot: {
     label: 'oceanbot world',
@@ -1339,24 +1320,6 @@ Spread across: SKY-VESSELS (a drifting airship, a tiny flotilla of sky-ships, ho
     ],
   },
 
-  bubble_world_retrobot: {
-    label: 'retrobot world',
-    maxWords: 22,
-    theme: `Each entry is ONE cozy 1980s/90s nostalgia scene in the spirit of RetroBot — and the IDENTITY is the SPECIFIC PERIOD OBJECTS, so every seed MUST be packed with nameable retro stuff: a wood-console CRT TV glowing cartoons, brown shag carpet, cereal bowls, a VCR with a blinking red 12:00, stacked VHS tapes, a boombox, cassette tapes, a rotary phone, arcade cabinets, a tube TV, an Atari joystick, roller skates, a lava lamp, wood-paneled walls, a tinsel Christmas tree. Written as a DreamBot wallpaper WORLD in the glossy-dreamy register, glowing with warm Kodachrome light, dusty sunbeams through blinds. Cozy nostalgia. Describe ONLY the scene (small everyday-object scale around the tiny bot).
-  ✅ "a sun-striped 80s living room, wood-console CRT glowing cartoons, cereal bowls on brown shag carpet, a VCR blinking red 12:00"
-  ✅ "a dim 80s arcade row, glowing cabinet screens, an Atari joystick, sticky patterned carpet lit electric-blue, a prize counter beyond"
-
-🚫 BANS: NO bubble-bot detail (separate axis). NO people. Pack in SPECIFIC retro objects every time. Keep warm + cozy + nostalgic. ≤22 words.`,
-    instructions: `Generate NEW retro-nostalgia INTERIORS — terse 12-22 word fragments. A GIANT GLOWING old TV (wood-console CRT) or ARCADE CABINET is the HERO of MOST seeds — it instantly reads "the 80s". Pack in more period objects (shag carpet / VCR / VHS / boombox / rotary phone / Atari). Warm Kodachrome light. INDOORS only. World ONLY.`,
-    subThemes: [
-      'LIVING ROOM + GIANT GLOWING CRT TV (hero) — a big wood-console CRT glowing Saturday cartoons, brown shag carpet, cereal bowls, afghan, golden blinds',
-      'BEDROOM — poster-covered wood-paneled walls, a boombox, a tube TV glowing, cassette tapes, scattered action figures, string-light glow',
-      'NEON ARCADE — a row of glowing arcade cabinets towering, an Atari joystick, dark room lit electric-blue by CRT screens, patterned carpet',
-      'DEN / TV ROOM — a big tube TV with rabbit-ears glowing static-blue, a VCR blinking red 12:00, stacked VHS tapes, a rotary phone, wood paneling',
-      'HOLIDAY LIVING ROOM — a tinsel Christmas tree blazing multicolor lights, a wood-console TV glowing, wrapped gifts, shag carpet, warm hearth',
-      'RUMPUS / GAME ROOM — a pinball machine + an arcade cabinet glowing, wood paneling, a tube TV, bean-bag chairs, a neon wall-clock',
-    ],
-  },
 
   bubble_world_starbot: {
     label: 'starbot world',

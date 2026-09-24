@@ -96,13 +96,6 @@ const CONCEPTS = {
     ['Kitsune spirit', 'a beautiful nine-tailed kitsune fox spirit with glowing markings, anime art, mystical blue flames'],
     ['Neo-Tokyo neon', 'an anime cyberpunk girl portrait lit by neon signs, reflective visor pushed up, Trigger-style bold anime art'],
   ],
-  mechbot: [
-    ['Mech visor', 'a futuristic mech robot head close-up, glowing violet visor, sleek armored panels, cinematic sci-fi concept art'],
-    ['Titan silhouette', 'a colossal titan war mech silhouetted against a burning orange sky, bold graphic scale, cinematic'],
-    ['Chrome shogun', 'a chrome samurai-mech mask close-up, ornate armored faceplate, glowing red eye slits, cinematic sci-fi'],
-    ['Scout drone', 'a small round scout drone robot with a single large friendly glowing blue eye, brushed metal, sci-fi concept art'],
-    ['Android profile', 'an android woman profile portrait, glowing circuit traces on synthetic skin, chrome cervical column, cinematic sci-fi'],
-  ],
   oceanbot: [
     ['Turtle glide', 'a green sea turtle close-up gliding over a sunlit coral reef, crisp underwater photography, turquoise light'],
     ['Deep-glow jelly', 'a bioluminescent jellyfish glowing electric blue and violet against pure black deep ocean, realistic render'],
@@ -116,13 +109,6 @@ const CONCEPTS = {
     ['Pixel sunset', 'a 16-bit pixel-art sunset over mountains and a lake, bold gradient dither sky, beautiful retro vista'],
     ['Pixel potion', 'a glowing pink pixel-art potion bottle with sparkles, crisp 16-bit item icon, game inventory style'],
     ['Pixel farmhouse', 'a cozy pixel-art farmhouse with smoking chimney at dusk, warm windows, 16-bit farming-game charm'],
-  ],
-  retrobot: [
-    ['CRT glow', 'a glowing retro 1980s CRT computer monitor on a desk, warm neon-lit room, nostalgic film grain'],
-    ['Boombox sunset', 'a chrome 1980s boombox radio against a neon-pink sunset grid, retro airbrush style, nostalgic'],
-    ['VHS tape', 'a black VHS tape with a colorful hand-written rental sticker, on rewind, warm 90s film photo'],
-    ['Arcade joystick', 'an arcade cabinet joystick and glowing buttons close-up, neon reflections, 80s arcade nostalgia'],
-    ['Roller skates', 'white roller skates with rainbow laces under roller-rink disco light, 80s film photography, fun'],
   ],
   starbot: [
     ['Cosmic visor', 'a sci-fi astronaut in a glossy reflective helmet, a nebula and stars mirrored in the visor, vibrant retro-futurist cover art'],
@@ -234,13 +220,6 @@ const FUN_CONCEPTS = {
     ['Onigiri laugh', 'an anime girl laughing with an onigiri in each hand, sparkles and joy, cel-shaded anime'],
     ['Sailor shiba', 'a shiba inu wearing a sailor school uniform collar, proud expression, cute anime style'],
   ],
-  mechbot: [
-    ['Tiny flex', 'a hulking battle mech flexing comically tiny arms, gym pose, cinematic sci-fi with a wink'],
-    ['Kitten cargo', 'a giant war mech gently cradling a tiny orange kitten in its massive armored hand, warm sci-fi'],
-    ['Low battery', 'a cute robot with droopy sleepy eyes and a low-battery icon on its chest, plugged in and dozing, sci-fi charm'],
-    ['Cone party hat', 'a battle mech wearing an orange traffic cone as a party hat, deadpan glowing visor, witty sci-fi'],
-    ['Wheelie bot', 'a small round robot popping a gleeful wheelie on one wheel, sparks and motion streaks, playful sci-fi'],
-  ],
   oceanbot: [
     ['Surprised puffer', 'a fully puffed pufferfish with huge surprised eyes, comically round, crisp underwater photography'],
     ['Pirate octopus', 'an octopus wearing a tiny pirate tricorn hat, one tentacle raised like a salute, painterly maritime fun'],
@@ -254,13 +233,6 @@ const FUN_CONCEPTS = {
     ['Pizza ghost', 'a 16-bit pixel-art ghost happily eating a slice of pizza, crumbs floating, cute sprite'],
     ['Mimic grin', 'a 16-bit pixel-art treasure chest mimic with a huge toothy grin and a gold coin on its tongue, playful sprite'],
     ['Sword frog', 'a 16-bit pixel-art frog adventurer with a tiny sword strapped to its back, determined, cute sprite'],
-  ],
-  retrobot: [
-    ['Cool cassette', 'a cassette tape wearing tiny sunglasses, neon-pink 80s glow, retro airbrush style, fun'],
-    ['Happy computer', 'a beige retro computer with a big pixel smiley face on its CRT screen, cheerful 80s product photo'],
-    ['Floppy duck', 'a rubber duck perched proudly on a stack of rainbow floppy disks, warm 90s film photo, playful'],
-    ['Rad pizza', 'a pizza slice riding a skateboard, motion blur, totally rad 90s airbrush cartoon style'],
-    ['Party controller', 'a retro game controller with a party popper bursting confetti, saturday-morning fun, bright'],
   ],
   starbot: [
     ['Zero-g taco', 'an astronaut in a helmet chasing a floating taco with drifting lettuce in zero gravity, playful sci-fi art'],

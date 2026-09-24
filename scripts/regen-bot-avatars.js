@@ -57,12 +57,8 @@ const SUBJECTS = {
     'a gothic vampire woman portrait, glowing magenta eyes, black lace veil, pale skin, dark romantic fantasy art',
   mangabot:
     'an anime girl close-up portrait, big expressive eyes, soft cherry blossom light, vibrant cel-shaded anime art',
-  mechbot:
-    'a single futuristic mech robot, head and torso, glowing energy core, sleek armored panels, cinematic sci-fi concept art, purple rim light',
   pixelbot:
     'a single 16-bit pixel-art hero character face, bold colorful chunky pixels, clean retro SNES sprite, crisp',
-  retrobot:
-    'a glowing retro 1980s CRT computer monitor on a desk, warm neon-lit room, nostalgic film grain, vaporwave',
   starbot:
     'a sci-fi astronaut in a glossy reflective helmet, close-up, vibrant retro-futurist sci-fi cover art, cosmic glow',
   steambot:

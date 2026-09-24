@@ -38,7 +38,7 @@ const path = require('path');
 const https = require('https');
 const { HAIKU } = require('./lib/models');
 
-const DARK = new Set(['alphabot', 'mechbot', 'outlawbot', 'retrobot']);
+const DARK = new Set(['alphabot', 'outlawbot']);
 const OUT = 'SUBJECT_POOL_MAP.json';
 
 function loadKey() {
