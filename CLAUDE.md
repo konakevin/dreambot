@@ -361,7 +361,9 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
 - **Procedures (read-when-relevant):** `ENGINEERING_NOTES.md` (after-change checklists, admin-config
   catalog, bot module internals, onboarding flow).
 - **Bots:** `BOT_SCENE_QUALITY_PLAYBOOK.md` (canonical brain), `BOTS.md`, `BOT_MODEL_TALLY.md`,
-  `BOT_AXIS_REFACTOR_PLAN.md`, `BOT_PREFIX_NEED_TO_REVIEW_AND_FIX.md`.
+  `BOT_AXIS_REFACTOR_PLAN.md`, `BOT_PREFIX_NEED_TO_REVIEW_AND_FIX.md`. **Seed-pool reseed program**
+  (repairing subject pools so scenes actually vary, one pool at a time): `/reseed` skill = the runbook,
+  `RESEED_STATUS.md` = status of record + queue (update it in the same commit as the work).
 - **Looks (nightly now, Create's real-face mediums later):** `REAL_FACE_LOOKS_REGISTRY.md` (LIVE registry of
   proven look × model × surface results; generated matrix), `NIGHTLY_LOOKS_REFACTOR_PLAN.md`, `NIGHTLY_LOOK_TALLY.md`.
 - **Couple swap reliability (1 in 5 couples loses the +1):** `COUPLE_SWAP_RELIABILITY_PLAN.md` — measured
