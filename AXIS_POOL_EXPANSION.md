@@ -73,7 +73,7 @@ this file in the same commit.
 - [x] **pixelbot/volcano-forge** — 9/9 pools at ≥100 and clean (camera originals restored from git 21:58 UTC); smoke 3/3 delivered; 2026-09-24 21:53 UTC
 - [x] **faebot/mushroom-apothecary** — 7/7 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 22:09 UTC
 - [x] **faebot/acorn-boat-regatta** — 7/7 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 22:27 UTC
-- [ ] **faebot/star-charting** — 7 pools
+- [x] **faebot/star-charting** — 7/7 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 22:42 UTC
 - [ ] **dinobot/amber-forest** — 5 pools
 - [ ] **dinobot/courtship-display** — 3 pools
 - [ ] **dinobot/den-and-burrow** — 2 pools
@@ -150,13 +150,13 @@ this file in the same commit.
 | faebot/acorn-boat-regatta | faebot_regatta_shore | 25 | 100 | 1 | clean | yes | ✅ |
 | faebot/acorn-boat-regatta | faebot_regatta_stream_course | 25 | 100 | 1 | clean | yes | ✅ |
 | faebot/acorn-boat-regatta | faebot_regatta_water_light | 25 | 100 | 2 | clean | yes | ✅ |
-| faebot/star-charting | faebot_starchart_air | 25 |  |  |  |  | ⬜ |
-| faebot/star-charting | faebot_starchart_company | 25 |  |  |  |  | ⬜ |
-| faebot/star-charting | faebot_starchart_reading_tool | 25 |  |  |  |  | ⬜ |
-| faebot/star-charting | faebot_starchart_sighting_pose | 25 |  |  |  |  | ⬜ |
-| faebot/star-charting | faebot_starchart_sky_event | 25 |  |  |  |  | ⬜ |
-| faebot/star-charting | faebot_starchart_vantage | 25 |  |  |  |  | ⬜ |
-| faebot/star-charting | faebot_starchart_warm_light | 25 |  |  |  |  | ⬜ |
+| faebot/star-charting | faebot_starchart_air | 25 | 100 | 3 | clean | yes | ✅ |
+| faebot/star-charting | faebot_starchart_company | 25 | 100 | 2 | clean | yes | ✅ |
+| faebot/star-charting | faebot_starchart_reading_tool | 25 | 100 | 1 | clean | yes | ✅ |
+| faebot/star-charting | faebot_starchart_sighting_pose | 25 | 100 | 2 | clean | yes | ✅ |
+| faebot/star-charting | faebot_starchart_sky_event | 25 | 100 | 1 | clean | yes | ✅ |
+| faebot/star-charting | faebot_starchart_vantage | 25 | 100 | 2 | clean | yes | ✅ |
+| faebot/star-charting | faebot_starchart_warm_light | 25 | 100 | 1 | clean | yes | ✅ |
 | dinobot/amber-forest | dinobot_amber_air | 25 |  |  |  |  | ⬜ |
 | dinobot/amber-forest | dinobot_amber_optics | 25 |  |  |  |  | ⬜ |
 | dinobot/amber-forest | dinobot_amber_resident | 24 |  |  |  |  | ⬜ |
