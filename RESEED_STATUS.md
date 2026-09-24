@@ -335,7 +335,12 @@ commit + push, row + log here.
    week's Track B pins (regatta, star-charting, brass-glasshouse, snow-globe-world), each with a
    measured reason. Recorded in CLAUDE.md, the playbook and ALPHABOT.md; locked by
    `__tests__/lib/proOnlyPinGuard.test.ts` (an undocumented pro-only pin fails CI). The four existing
-   pins are unchanged pending Kevin's read of the 12-render ultra probes (study page linked in chat).
+   pins were each probed with 12 hidden ultra renders the same evening: regatta ultra signed 1 of 12,
+   star-charting 8 of 12 (both stay pro-only); brass-glasshouse delivered 12/12 with the vault readable
+   but ultra tripped the safety filter on 8 attempts (pro: 0 in 30) so it stays pro-only;
+   snow-globe-world delivered 12/12 clean with the glass arc in ~10 of 12, so its ToyBot-era reason did
+   not reproduce and it is Kevin's call to flip to 50/50. Study page (renders + the 480-path inventory)
+   linked in chat 2026-09-24.
 
 **Accepted Flux limits (Kevin 2026-09-23, do not chase):** species render in their own prior colour
 (a green-titled flower line-up renders pink/white); a rich register only reads on strong-colour
