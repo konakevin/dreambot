@@ -173,6 +173,28 @@ ALREADY state (how the cluster sits on its perch) and flag the judgment call for
 format regex against three originals before the first call: the anchors' trailing period failed
 `[^.]{60,}$` on every candidate and burned 80 calls.
 
+**The parser must know what each value OWNS, and must read the element that is written first, first**
+(DragonBot castle_biome and StarBot phenomenon each lost half a full run to this on 2026-09-24). Two
+traps: (1) a second axis's roster shares words with the first axis's own description ("heather" is a
+hero AND the highland moor's own words; "terraced waterfalls" belong to the cascade valley; "between
+distant peaks" belong to the magnetic storm, not to the placement), so every moor entry parsed
+hero=heather and every storm parsed placement=mid-distance and was rejected as "differs from the
+assignment". Overlap checks must include each value's own descriptive words, and a second axis is
+parsed on the text with the first axis's own phrase removed. (2) Rule ORDER decides ties in a
+`pick(rules)` loop, but the entries write the varying element FIRST, so the EARLIEST match is the
+truth: "hidden mountain glade of ancient cedars" is the glade, "rogue planet transiting … a seam of
+light" is the rogue planet, not the transit silhouette or the rift. Use earliest-match for the leading
+axis, skip a match that sits inside another axis's phrase the value does not own ("mallorn" inside
+"golden mallorn leaves", "orchard" inside "fruit orchard"), and keep bare generic words (valley,
+prairie) as fallbacks only. Test the parser on ten hand-written candidates in the shapes Sonnet
+actually produces (assigned value first, other-axis words later) before the run, not just on originals.
+The tell in a log: dozens of "differs from the assignment (missing X; extra Y)" where Y is a word from
+the assigned value's own description.
+
+**A retry batch of look-alike slots comes back reordered.** Sonnet answers a JSON array by POSITION;
+a `--resume` batch of "3 rogue planets + 3 phosphorescent fogs" came back swapped eight times running
+and all six stayed unfilled. Run a resume with `RESEED_BATCH=1` (env override of `batchSize`).
+
 ### 7. Record and commit
 
 Update `RESEED_STATUS.md` (row + log entry, numbers with basis, commits), the playbook (every new

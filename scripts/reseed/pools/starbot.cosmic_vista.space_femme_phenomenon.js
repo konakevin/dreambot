@@ -57,7 +57,7 @@ const PHENOMENA = {
   'asteroid rain': 'asteroid rain tumbling in as glowing rock',
   'magnetar flash': 'magnetar flash pulsing in hard white bursts',
   'solar wind veil': 'solar-wind veil rippling as translucent sheets',
-  'giant storm': 'great storm spot churning on the gas giant overhead',
+  'giant storm': 'great storm spot churning on the gas giant',
   'transit silhouette': 'exoplanet transit crossing the star as a black disc',
   'dark nebula': 'dark nebula blotting the star field in a silhouette',
   'shooting arc': 'bolide fireball splitting the sky in one bright arc',
@@ -133,7 +133,7 @@ const PHEN_RULES = [
 const PLACE_RULES = [
   ['mirrored in the water below', /mirrored|reflected|reflection/i],
   ['behind her silhouette', /behind her|her silhouette|edges of her/i],
-  ['in the mid-distance', /mid-distance|middle distance|between distant peaks/i],
+  ['in the mid-distance', /mid-distance|middle distance/i],
   ['on the horizon', /on the horizon|at the horizon|horizon line|low on the horizon/i],
   ['overhead', /overhead|above|zenith|across the sky/i],
   ['across the deep distance', /deep distance|far distance|deep landscape|across the|horizon/i],
@@ -142,10 +142,30 @@ const pick = (rules, text, fallback) => {
   for (const [k, re] of rules) if (re.test(text)) return k;
   return fallback;
 };
+// The phenomenon opens every entry, so the EARLIEST match is the phenomenon, not the first rule in
+// table order: "rogue planet transiting … a razor seam of light" is the rogue planet, not the transit
+// silhouette or the dimensional rift (the 2026-09-24 resume rejected every rogue-planet slot that way).
+const earliest = (rules, text, fallback) => {
+  let best = null;
+  let at = Infinity;
+  for (const [k, re] of rules) {
+    const m = text.match(re);
+    if (m && m.index < at) {
+      at = m.index;
+      best = k;
+    }
+  }
+  return best || fallback;
+};
+const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
 function parse(text) {
   const head = text.split(',').slice(0, 2).join(',');
-  const phenomenon = pick(PHEN_RULES, head, pick(PHEN_RULES, text, 'event'));
-  const placement = pick(PLACE_RULES, head, pick(PLACE_RULES, text, 'across the deep distance'));
+  const phenomenon = earliest(PHEN_RULES, head, earliest(PHEN_RULES, text, 'event'));
+  // the placement is read with the phenomenon's OWN words removed: "between distant peaks" belongs
+  // to the magnetic storm, not to where the storm sits in the frame
+  const own = PHENOMENA[phenomenon] ? new RegExp(escapeRe(PHENOMENA[phenomenon]), 'i') : null;
+  const strip = (t) => (own ? t.replace(own, ' ') : t);
+  const placement = pick(PLACE_RULES, strip(head), pick(PLACE_RULES, strip(text), 'across the deep distance'));
   return { keys: [`phenomenon:${phenomenon}`, `placement:${placement}`], phenomenon, placement };
 }
 const sameGroup = (a, b) => a.phenomenon === b.phenomenon && a.placement === b.placement;

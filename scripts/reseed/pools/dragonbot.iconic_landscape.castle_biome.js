@@ -116,10 +116,10 @@ const BIOME_RULES = [
   ['fen valley', /\bfen\b|marsh|velen/i],
   ['willow bog', /\bbog\b/i],
   ['barrow prairie', /barrow|stone circle|stone-circle/i],
-  ['wildflower prairie', /prairie/i],
+  ['wildflower prairie', /wildflower prairie|endless prairie|prairie of wildflowers/i],
   ['summer meadow', /wildflower-meadow in|summer bloom|rolling wildflower meadow/i],
   ['mirror lake', /mirror-lake|mirror lake|still lake/i],
-  ['oak-island lake', /oaks on islands|island oaks|lake reflecting/i],
+  ['oak-island lake', /oaks? on (?:its )?islands|island oaks|oak-island|oak island|island-studded lake|lake of ancient oaks|lake reflecting/i],
   ['glacial cirque', /cirque|tarn/i],
   ['river gorge', /gorge|rapids/i],
   ['highland moor', /moor/i],
@@ -132,7 +132,7 @@ const BIOME_RULES = [
   ['hidden glade', /glade/i],
   ['high meadow', /high-meadow|high meadow/i],
   ['alpine meadow', /alpine/i],
-  ['mountain valley', /mountain valley|mountain-valley|valley/i],
+  ['mountain valley', /mountain valley|mountain-valley/i],
 ];
 const HERO_RULES = HEROES.map((h) => [h, new RegExp(h.replace(/[- ]/g, '[- ]').replace(/s$/, 's?'), 'i')]);
 const pick = (rules, text, fallback) => {
@@ -140,10 +140,55 @@ const pick = (rules, text, fallback) => {
   return fallback;
 };
 const stem = (w) => w.toLowerCase().replace(/s$/, '');
+const wordsOf = (s) => s.split(/[- ]/).filter((w) => w.length >= 4).map(stem);
+const shares = (a, b) => wordsOf(a).some((x) => wordsOf(b).some((y) => x.startsWith(y) || y.startsWith(x)));
+// A hero is OWNED by a biome when it is named in the biome's key OR in the biome's own words (heather on
+// the highland moor, terraced waterfalls in the cascade valley, frost-flowers on the tundra meadow): it is
+// never assigned there and never parsed as that entry's hero. The first full run (2026-09-24) used the key
+// only, so every moor entry parsed hero=heather and half the batch was rejected as "differs".
 const overlaps = (biome, hero) =>
-  biome.split(/[- ]/).filter((w) => w.length >= 4).map(stem).some((b) =>
-    hero.split(/[- ]/).filter((w) => w.length >= 4).map(stem).some((h) => h.startsWith(b) || b.startsWith(h))
-  );
+  shares(biome, hero) || (BIOMES[biome] ? shares(BIOMES[biome].words, hero) : false);
+// generic words: only when no specific rule matched anywhere
+const BIOME_FALLBACK = [
+  ['wildflower prairie', /prairie/i],
+  ['mountain valley', /valley/i],
+];
+function heroSpans(text) {
+  const spans = [];
+  for (const [h, re] of HERO_RULES) {
+    const m = text.match(re);
+    if (m) spans.push({ h, a: m.index, b: m.index + m[0].length });
+  }
+  return spans;
+}
+// The biome is written FIRST, so the earliest specific match wins (not rule order: "hidden mountain glade
+// of ancient cedars" is the glade, not the cedar forest). A match that sits inside a hero phrase the biome
+// does not own ("mallorn" in "golden mallorn leaves", "orchard" in "fruit orchard") is the hero, skipped.
+function pickBiome(text) {
+  const spans = heroSpans(text);
+  let best = null;
+  let at = Infinity;
+  for (const [k, re] of BIOME_RULES) {
+    const g = new RegExp(re.source, 'gi');
+    let m;
+    while ((m = g.exec(text))) {
+      if (!m[0]) {
+        g.lastIndex++;
+        continue;
+      }
+      const i = m.index;
+      if (spans.some((s) => i >= s.a && i < s.b && !shares(k, s.h))) continue;
+      if (i < at) {
+        at = i;
+        best = k;
+      }
+      break;
+    }
+  }
+  if (best) return best;
+  for (const [k, re] of BIOME_FALLBACK) if (re.test(text)) return k;
+  return 'landscape';
+}
 function firstHero(text, biome) {
   let best = null;
   let at = Infinity;
@@ -158,7 +203,7 @@ function firstHero(text, biome) {
   return best || 'feature';
 }
 function parse(text) {
-  const biome = pick(BIOME_RULES, text.split(',').slice(0, 2).join(','), pick(BIOME_RULES, text, 'landscape'));
+  const biome = pickBiome(text);
   const hero = firstHero(text, biome);
   return { keys: [`biome:${biome}`, `hero:${hero}`], biome, hero };
 }
@@ -243,6 +288,9 @@ function mechanical(cand, slot) {
   if (words < 26 || words > 62) p.push(`${words} words`);
   for (const [n, re] of BANS) {
     const m = cand.match(re);
+    // a banned word that the assigned biome's own description uses is the biome, not a castle
+    // ("rapids between mossy walls" is the river gorge; every gorge entry was rejected on "walls")
+    if (m && new RegExp(`\\b${m[0]}\\b`, 'i').test(BIOMES[a.biome] ? BIOMES[a.biome].words : '')) continue;
     if (m) p.push(`${n}:"${m[0]}"`);
   }
   return p;

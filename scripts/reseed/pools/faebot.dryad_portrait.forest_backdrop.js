@@ -105,7 +105,7 @@ const formatRe = /^[A-Z].{90,}$/;
 const BANS = [
   ['glow', /\b(glowing|bioluminescent|phosphorescent|firefly|fireflies|luminescent)\b/i],
   ['meadow', /\b(meadow|open field|grassland)\b/i],
-  ['cast', /\b(creature|fae|fairy|fairies|fox|deer|bird|birds|butterfly|butterflies|her (?:face|hair|eyes|gown|skin))\b/i],
+  ['cast', /\b(creature|fae|fairy(?![- ]ring)|fairies|fox|deer|bird|birds|butterfly|butterflies|her (?:face|hair|eyes|gown|skin))\b/i],
   ['weather', /\b(rain|snow|storm|dusk|dawn|sunset|sunrise|moonlight|night)\b/i],
   ['negation', /\b(no|not|never|without|nothing)\b/i],
 ];

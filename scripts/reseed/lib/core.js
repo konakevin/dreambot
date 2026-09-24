@@ -19,7 +19,8 @@
  *   judge(cand, ctx)          → async number[] (optional LLM same-idea reader; advisory with --judge-advisory)
  *   measure(pool, parsed)     → extra stats for the report (optional)
  *   examples(kept, pool)      → the example entries shown to the LLM (optional; default: first 6 kept)
- *   batchSize                 default 6; maxAttempts default 8; textAttemptsBeforeReassign default 3
+ *   batchSize                 default 6 (env RESEED_BATCH overrides); maxAttempts default 8;
+ *                             textAttemptsBeforeReassign default 3
  *   keyUsage(parsedEntry)     → keys to count in `usage` (default: parsed.keys)
  *
  * CLI (scripts/reseed/reseed.js <pool-config> …):
@@ -259,7 +260,9 @@ async function runReseed(cfg, argv) {
     rejections: [],
   }));
   const JUDGE_ADVISORY = argv.includes('--judge-advisory');
-  const BATCH = cfg.batchSize || 6;
+  // RESEED_BATCH=1 for a --resume of a few homogeneous slots: Sonnet answers a JSON array by POSITION,
+  // and a retry batch of "3 rogue planets + 3 fogs" came back reordered eight times running (StarBot).
+  const BATCH = Number(process.env.RESEED_BATCH) || cfg.batchSize || 6;
   const MAX_ATTEMPTS = cfg.maxAttempts || 8;
   const REASSIGN_AFTER = cfg.textAttemptsBeforeReassign || 3;
   const reserve = (s) => s.keys.forEach((k) => (usage[k] = (usage[k] || 0) + 1));

@@ -112,7 +112,7 @@ const BIOME_RULES = [
   ['wildflower meadow', /meadow/i],
   ['birch glade', /birch/i],
   ['beech cathedral', /beech/i],
-  ['pine cathedral', /pine/i],
+  ['pine cathedral', /\bpines?\b|pine[- ]cathedral|pine[- ]wood|pine[- ]forest|needle[- ]carpet/i],
   ['cedar grove', /cedar/i],
   ['redwood grove', /redwood|sequoia/i],
   ['hazel coppice', /hazel/i],
