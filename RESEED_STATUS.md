@@ -59,14 +59,18 @@ commit + push, row + log here.
 - **iceland-raw: DONE** (pool written, 8 + 8 pairs reviewed, 16/16 carried); close-out commit next.
 - **australian-outback: DONE** (8 valid pairs after 3 extra slots replaced the kept-original ones;
   16/16 carried; pairs https://claude.ai/artifact/9UN8W8kkn492WnDUEAU8Da); close-out commit next.
-- **european-wilderness:** pool WRITTEN (backup `~/poolbackup-earthbot-european_wilderness-subject-*`;
-  a first `--execute` was refused because my manual trailing-period pass had touched 4 kept originals,
-  restored). Chain rendering slots 102,29,40,133,156,181,194,155 to `eu2/` (`eu2/done` marker; a
-  stray first run writes into `eu/`, ignore it). Next = pairs, self-review, commit + push.
-- **african-landscape + asia-landscape:** configs written on the landmark factory (rosters of ~85 /
-  ~100 real habitats in the recipes' coverage groups; Africa bans every mountain trigger, Asia bans the
-  cultural set); 12-slot smoke tests in `<pool>/smoke`. Next = read smoke, full runs, review, execute,
-  renders, close-outs.
+- **european-wilderness: DONE** (8 + 8 pairs reviewed, 16/16 carried; pairs
+  https://claude.ai/artifact/Xc9F5zcFabvFXuPqhCAt6o); close-out commit next.
+- **african-landscape:** pool WRITTEN (69 → 200 distinct, 52 → 111 habitats, 131 rewrites; backup
+  `~/poolbackup-earthbot-african_landscape-subject-*`); chain rendering slots 94,58,121,52,120,122,189,157
+  to `af/` (`af/done` marker). Next = pairs, self-review, commit + push.
+- **asia-landscape:** full dry run running (`asia_landscape/full`). Next = review, execute, renders.
+- **epic-sunset:** config `scripts/reseed/pools/earthbot.epic_sunset.subject.js` (object entries; same =
+  sky family + palm arrangement + sand; 75 kept / 125 to rewrite); smoke passed 12/12 after fixing the
+  palm parser order. Next = full run to `epic_sunset/full`, review, execute, renders.
+- **national-parks:** config `scripts/reseed/pools/earthbot.national_parks.subject.js` (object entries,
+  189; same = geological province + formation + POV; 75 kept / 114 to rewrite; no park / landmark /
+  vantage names, no weather / light / sky / wildlife); 12-slot smoke running. Then hidden-corner.
 - **Sampler rule (learned the hard way):** `report.changes[].index` is 1-BASED; pass it to
   `--indices` as is. Trailing-period normalization now lives in the config (`normalize`), so never
   post-process a proposal by hand again.
@@ -105,7 +109,7 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | earthbot | andes-patagonia      | `andes_patagonia_subject` (string entries)       | 200     | 42 → 200 distinct (same = place + light moment); 22 → 91 places, 11 light moments; 42 originals kept | none needed | 8 + 8 paired, shadow; 16/16 prompts carried the entry; self-reviewed | **DONE** | 5e2590c1 (tool), db591a44 | 2026-09-23 |
 | earthbot | iceland-raw          | `iceland_raw_subject` (string entries)           | 200     | 38 → 200 distinct (same = place + light moment); 26 → 71 places, 8 → 9 light moments; 38 originals kept | none needed | 8 + 8 paired, shadow; 16/16 carried; self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | earthbot | australian-outback   | `australian_outback_subject` (string entries)    | 200     | 64 → 200 distinct (same = place + light moment); 40 → 91 places, 9 → 10 light moments; 64 originals kept | none needed | 8 valid pairs (5 + 3 extra), shadow; 16/16 carried; self-reviewed | **DONE** | (close-out) | 2026-09-23 |
-| earthbot | european-wilderness  | `european_wilderness_subject` (string entries)   | 200     | 77 → 200 distinct (same = place + light moment); 53 → 127 places, 9 → 10 light moments; 77 originals kept | none needed | 8 + 8 rendering | `pool written` | | 2026-09-23 |
+| earthbot | european-wilderness  | `european_wilderness_subject` (string entries)   | 200     | 77 → 200 distinct (same = place + light moment); 53 → 127 places, 9 → 10 light moments; 77 originals kept | none needed | 8 + 8 paired, shadow; 16/16 carried; self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 33 → 120 line-ups (same = 4+ shared species, 3 when only 3); 26 → 70 species; red 35 → 20 | same fix                                                              | same batch                                         | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
 
 Status values: `queued` · `analysing` · `proposal ready` (dry run done, waiting on Kevin's OK) ·
@@ -196,6 +200,16 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-23 · earthbot/european-wilderness `european_wilderness_subject` · DONE (self-reviewed).**
+  Landmark factory. 77 → 200 distinct (same = place + light moment), 53 → 127 real inland places
+  (alpine peaks, cirque tarns, gorges, waterfalls, old forests, sandstone towers, highland moor,
+  glaciers), 10 light moments, 77 originals kept. One tool slip: I normalized trailing periods on the
+  proposal by hand and touched 4 kept originals, so the first `--execute` refused (the check works);
+  restored and written. Pairs (8 + 8, 16/16 carried): before had Glen Coe ×2, Besseggen ×2 and heather
+  moor ×2 of eight; after is Cheddar Gorge in mist, the Rhône Glacier, the Pravčická brána arch,
+  Biogradska Gora's old beeches, the Burren (rendered as cliffs: a Flux prior on "limestone pavement",
+  accepted), Vøringsfossen, Durmitor's Black Lake and the Grossglockner in storm light. Pairs
+  https://claude.ai/artifact/Xc9F5zcFabvFXuPqhCAt6o.
 - **2026-09-23 · earthbot/australian-outback `australian_outback_subject` · DONE (self-reviewed).**
   Landmark factory. 64 → 200 distinct (same = place + light moment), 40 → 91 real places across the
   recipe's 11 regions (red centre, Kimberley, Flinders, salt lakes, deserts, tropical north, rainforest,
