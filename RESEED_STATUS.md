@@ -91,10 +91,13 @@ commit + push, row + log here.
   https://claude.ai/artifact/1TFknEsNuF5ZpNCMFgVhJS. Lesson for the skill: a flavour element added to
   every entry becomes the render; flavour must follow the entry's own kind.
 - **BloomBot carpets:** shared factory `scripts/reseed/lib/carpetPool.js` (the pilot's species-set
-  method: same = 4+ shared species, per-species cap, ≤2 shared with any other entry) + configs
-  `bloombot.desert_bloom.bloom_explosion.js` (vivid; 51 kept / 147 to rewrite; cactus roster widened
-  so every slot assigns) and `bloombot.flower_fantasy.floor_carpet.js` (pastel; 26 kept / 108). Smoke
-  running on the pastel one.
+  method). **flower-fantasy floor_carpet: DONE** (30 → 131 distinct line-ups, 27 → 78 species, 104
+  rewrites, 30 originals kept; pairs 14/16 carried, two Sonnet drops flagged by the harness; the
+  carpet is a supporting axis under a giant surreal hero bloom, so what shows is the carpet's colour
+  family, blues least, and never the species: modest visible gain by design, pool text unique; pairs
+  https://claude.ai/artifact/89gNTLrzJdJnFg7tAFsKWk). **desert-bloom bloom_explosion: pool WRITTEN**
+  (51 → 196 distinct, 19 → 103 species, 145 rewrites, 2 unfilled kept as originals; backup
+  `~/poolbackup-bloombot-desert_bloom-bloom_explosion-*`); renders queued (`db/`) behind the fleet.
 - **yumbot festival: FIRST PAIRS WEAK ON MY REVIEW, second pass in progress.** Pool written (97 → 200
   distinct on perch family + arrangement), 8 + 8 rendered, 16/16 carried, but the perch is a weak
   lever on this path: the five foods dominate the frame, obscure perches (a kendama pile, a kokeshi
@@ -124,15 +127,22 @@ commit + push, row + log here.
   texture; 11 → 35 forest types; 171 rewrites, 3 unfilled = kept originals; backup
   `~/poolbackup-faebot-queen_of_forest-biome-*`); renders queued (`qb/`) behind the YumBot re-render.
   **posed_setting** full run in flight.
-- **YumBot festival second pass:** pool WRITTEN (97 → 199 distinct; 45 rewrites regenerated onto
-  strong-prior perches; backup `~/poolbackup-yumbot-japanese_festival-scene_type-1790231416555.json`),
-  same eight slots re-rendering as `yf2/` once a lane frees.
+- **YumBot festival: DONE on the second pass** (pool 97 → 199 distinct; 45 rewrites regenerated onto
+  strong-prior perches; backup `~/poolbackup-yumbot-japanese_festival-scene_type-1790231416555.json`).
+  Same eight slots re-rendered, 16/16 carried: six of eight show the named candy-apple tray, mikoshi
+  beam, shaved-ice counter, cotton-candy cart, ramune ice tub or tea-house tatami in a lantern-lit
+  matsuri; the two misses are the bot-wide look register rolling a flat sticker sheet, not the pool.
+  Pairs https://claude.ai/artifact/Y9Jq6SRRThX3ZLxH1gtmLb. Flag 3 stays (the arrangement axis).
 - **Track B started: BrickBot balloon-festival `fleet` (the path's subject: the sky full of
   balloons).** Config `scripts/reseed/pools/brickbot.balloon_festival.fleet.js` (same = launch
   situation + nearest balloon's pattern + the shaped balloon; 30 situations × 12 patterns × 40 shaped
   balloons; LEGO-register checks: a stated count ≥ two dozen, a height spread, an element word, no
-  massing nouns). `--grow 75` dry run in flight to `brickbot_balloon_fleet/grow` (25 originals kept
-  byte-identical; the pool only grows). Next = review, execute, forced renders on NEW entries only.
+  massing nouns). Grow run done (72 of 75 filled; 25 originals byte-identical; new entries 60-84 words
+  in the originals' LEGO register), pool WRITTEN to 97 entries (backup
+  `~/poolbackup-brickbot-balloon_festival-fleet-*`). Forced shadow renders of 8 NEW entries + 4
+  originals rendering to `bf/` (the path is function-form, so the harness takes `--slot balloon_fleet
+  --pool balloon_fleet=<seeds json>`). Next = sheet, self-review, commit; then `hero` (the nearest
+  balloon) the same way if the fleet renders hold; path stays in `shadowPaths[]`.
 - **Last five Track A runs** (mangabot isekai, flower-fantasy carpet, desert bloom, starbot
   phenomenon, dragonbot castle biome) chained in `<pool>/full`; marker `last-five.done`.
 - **FaeBot (queen biome + three foreground-anchor pools):** shared factory
@@ -202,6 +212,8 @@ families. "You can't force Flux out of its trained data, the existing behaviours
 | earthbot | national-parks       | `national_parks_subject` (object entries)        | 189     | 76 → 189 distinct (same = geological province + formation + POV); 17 provinces, ~95 formations with explicit key regexes; 76 originals kept | none needed (EPIC_VISTA archetype hands the entry through) | 8 + 8 paired, shadow; 16/16 carried; self-reviewed (5 clear, 3 partial) | **DONE** | (close-out) | 2026-09-23 |
 | earthbot | hidden-corner        | `hidden_corner_subject` (string entries)         | 200     | 70 → 199 distinct (same = pocket type + habitat + host feature); 12 types × 12 habitats, hosts owned per type; 70 originals kept | none needed | first 8 + 8 failed review (one waterfall gorge), second 8 + 8 pass; 16/16 carried | **DONE** | (close-out) | 2026-09-24 |
 | faebot   | forest-fairy-scene / dryad-portrait / enchanted-vista | `faebot_*_foreground_anchor` (string entries) | 260 / 200 / 200 | 71 → 260, 52 → 200, 59 → 200 distinct (same = anchor kind + position); kinds 25 → 68, 17 → 66, 20 → 69 | none | 8 + 8 on two paths: the anchor axis is invisible in all 32 renders | **DONE (text-unique; visible gain nil)** | (close-out) | 2026-09-24 |
+| yumbot   | japanese-festival    | `festival_scene_type` (string entries)           | 200     | 97 → 199 distinct (same = perch family + arrangement); 82 → 100 perch families; 97 originals kept | none | first 8 + 8 weak (obscure perches), second 8 + 8 pass; 16/16 carried | **DONE** (flag 3) | (close-out) | 2026-09-24 |
+| bloombot | flower-fantasy       | `bloombot_flower_fantasy_floor_carpet` (string) | 134     | 30 → 131 line-ups (same = 4+ shared species); 27 → 78 species; 30 originals kept | none | 8 + 8 paired, shadow; 14/16 carried; carpet colour shows, species never (supporting axis) | **DONE (modest visible gain by design)** | (close-out) | 2026-09-24 |
 | earthbot | epic-sunset          | `epic_sunset_subject` (object entries)           | 200     | 80 → 200 distinct (same = sky family + palm arrangement + sand); skies 7 → 10, palms 8 → 9, sands 3 → 7; 80 originals kept | none needed (EPIC_VISTA archetype hands the entry through) | 8 + 8 paired, shadow; 15/16 carried (one Sonnet drop, flagged); self-reviewed | **DONE** | (close-out) | 2026-09-23 |
 | bloombot | flower-humming-birds | `bloombot_flower_humming_birds_flower_focal_cluster` | 120 | 33 → 120 line-ups (same = 4+ shared species, 3 when only 3); 26 → 70 species; red 35 → 20 | same fix                                                              | same batch                                         | **DONE** | 95bb465a, 0cbf3280 + the path-fix commit | 2026-09-23 |
 
@@ -293,6 +305,21 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-24 · yumbot/japanese-festival `festival_scene_type` · DONE on the second pass (self-reviewed).**
+  "Five kawaii foods <verb> <arrangement> <perch> — five poses". ~55 real perch families cannot make
+  200 distinct entries, so "same" = perch family + how the cluster sits on it (Flag 3). 97 → 199
+  distinct, 82 → 100 families, 97 originals kept. First pairs were weak: obscure perches (a kendama
+  pile, a kokeshi row, a senbei tin) never rendered and "half-hidden behind" hid the foods; second
+  pass regenerated 45 rewrites onto strong-prior perches with six ON/AT arrangements. Second pairs:
+  candy-apple tray, mikoshi beam, kakigori counter, cotton-candy cart, ramune ice tub, tea-house
+  tatami all read in lantern-lit matsuri scenes; two renders came out as flat sticker sheets, which
+  is the bot-wide look register, not this pool. Pairs: first
+  https://claude.ai/artifact/6Q5sCHkcapP6iTWxmPn1Rv, second https://claude.ai/artifact/Y9Jq6SRRThX3ZLxH1gtmLb.
+- **2026-09-24 · bloombot/flower-fantasy `floor_carpet` · DONE (modest visible gain by design).** Carpet
+  factory (species-set method): 30 → 131 distinct line-ups, 27 → 78 real pastel meadow species, 30
+  originals kept. Pairs 14/16 carried (two Sonnet drops flagged): the carpet lies under a giant surreal
+  hero bloom, so only its colour family shows (yellows and pinks clearly, blues faintly), never the
+  species. Pairs https://claude.ai/artifact/89gNTLrzJdJnFg7tAFsKWk.
 - **2026-09-24 · earthbot/hidden-corner `hidden_corner_subject` · DONE on the second pass (self-reviewed).**
   String entries "A <pocket> <where it hides> — <lush details>". 70 → 199 distinct (same = pocket type +
   habitat + host feature), 12 pocket types across 12 habitats with hosts owned per type, 70 originals
