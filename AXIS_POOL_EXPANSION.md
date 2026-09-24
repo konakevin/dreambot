@@ -58,7 +58,7 @@ this file in the same commit.
 ### Checklist (the driver ticks these)
 
 <!-- CHECKLIST:START -->
-- [ ] **brickbot/balloon-festival** — 8 pools
+- [x] **brickbot/balloon-festival** — 8/8 pools at ≥100 and clean; smoke 1/3 delivered, 2 failed; 2026-09-24 19:56 UTC
 - [ ] **brickbot/airfield-biplanes** — 8 pools
 - [ ] **tinybot/snow-globe-world** — 3 pools
 - [ ] **mangabot/game-center-arcade** — 6 pools
@@ -81,14 +81,14 @@ this file in the same commit.
 <!-- POOLS:START -->
 | path | pool | before | after | rounds | dedupe gate | originals intact | status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| brickbot/balloon-festival | brickbot_balloon_build | 25 |  |  |  |  | ⬜ |
-| brickbot/balloon-festival | brickbot_balloon_camera_framing | 25 |  |  |  |  | ⬜ |
-| brickbot/balloon-festival | brickbot_balloon_crowd | 25 |  |  |  |  | ⬜ |
-| brickbot/balloon-festival | brickbot_balloon_event | 25 |  |  |  |  | ⬜ |
-| brickbot/balloon-festival | brickbot_balloon_field | 25 |  |  |  |  | ⬜ |
-| brickbot/balloon-festival | brickbot_balloon_hero | 25 |  |  |  |  | ⬜ |
-| brickbot/balloon-festival | brickbot_balloon_light | 25 |  |  |  |  | ⬜ |
-| brickbot/balloon-festival | brickbot_balloon_moment | 25 |  |  |  |  | ⬜ |
+| brickbot/balloon-festival | brickbot_balloon_build | 71 | 100 | 3 | clean | yes | ✅ |
+| brickbot/balloon-festival | brickbot_balloon_camera_framing | 25 | 100 | 3 | clean | yes | ✅ |
+| brickbot/balloon-festival | brickbot_balloon_crowd | 25 | 100 | 3 | clean | yes | ✅ |
+| brickbot/balloon-festival | brickbot_balloon_event | 25 | 100 | 3 | clean | yes | ✅ |
+| brickbot/balloon-festival | brickbot_balloon_field | 25 | 100 | 3 | clean | yes | ✅ |
+| brickbot/balloon-festival | brickbot_balloon_hero | 25 | 100 | 3 | clean | yes | ✅ |
+| brickbot/balloon-festival | brickbot_balloon_light | 25 | 100 | 3 | clean | yes | ✅ |
+| brickbot/balloon-festival | brickbot_balloon_moment | 25 | 100 | 3 | clean | yes | ✅ |
 | brickbot/airfield-biplanes | brickbot_airfield_build_technique | 25 |  |  |  |  | ⬜ |
 | brickbot/airfield-biplanes | brickbot_airfield_camera_framing | 25 |  |  |  |  | ⬜ |
 | brickbot/airfield-biplanes | brickbot_airfield_field_event | 25 |  |  |  |  | ⬜ |
@@ -193,8 +193,39 @@ Runs per bot with `--dry-run` first; the plan and the result are recorded below.
 <!-- ACTIVATION:START -->
 | bot | paths | candidates | promoted | status |
 | --- | --- | --- | --- | --- |
+| bloombot | 5 (desert-bloom, flower-fantasy, flower-humming-birds, flower-friends, water-garden) | 38 | 38 | ✅ 2026-09-24 19:41 UTC |
+| brickbot | 2 (airfield-biplanes, balloon-festival) | 24 | 24 | ✅ |
+| chibibot | 7 (2 each: night-meadow, sunny-village, cottagecore-village, cozy-landscape, rainy-interior, aquatic-village, creature-adventures) | 14 | 14 | ✅ |
+| dinobot | 7 (snowline-forest 12, desert-dunes 6, den-and-burrow 9, amber-forest 12, undergrowth-scale 12, courtship-display 12, paleo-landscape 12) | 75 | 75 | ✅ |
+| dragonbot | 1 (castle) | 8 | 8 | ✅ |
+| earthbot | 11 (hidden-corner 12, hawaii-flowers 12, coastal-vista 12, the other eight 8 each) | 100 | 100 | ✅ |
+| faebot | 7 (star-charting, mushroom-apothecary, acorn-boat-regatta, queen-of-the-forest 12 each; dryad-portrait, forest-fairy-scene, enchanted-vista 8 each) | 72 | 72 | ✅ |
+| farmbot | 2 (artisan-workshop 4, barn-animal-shelter-interior 2) | 6 | 6 | ✅ |
+| gothbot | 3 (2 each: the-frost-garden, twilight-gothic, the-sanctum) | 6 | 6 | ✅ |
+| mangabot | 3 (game-center-arcade 12, isekai-fantasy 8, slice-of-life 2) | 22 | 22 | ✅ |
+| pixelbot | 2 (volcano-forge 12, floating-market-canal 12) | 24 | 24 | ✅ |
+| starbot | 1 (space-femme) | 8 | 8 | ✅ |
+| steambot | 4 (brass-glasshouse 12, skydock-harbor 2, steam-transport 2, cozy-steampunk 2) | 18 | 18 | ✅ |
+| tinybot | 5 (snow-globe-world 12, contained-worlds 6, tiny-cozy 6, miniature-industry 6, pastel-village 6) | 36 | 36 | ✅ |
+| yumbot | 3 (japanese-festival 12, meal-types 10, cuisine 6) | 28 | 28 | ✅ |
+| **total** | **63 paths on 15 bots** | **479** | **479** | verified in the DB: all 479 public + posted, posted_at inside the 8-week window |
+
+**Left hidden on purpose (688 renders):** 229 reseed "before" renders (replaced pool content), 118 renders on a
+model the path no longer rolls (the Ultra probes on regatta / star-charting / brass-glasshouse, star-charting's
+flux-2-pro batch, DinoBot's flux-dev matrix), 290 over the 12-per-path cap (older QA rounds), 51 on paths not live
+on that bot (castle-town-gate, pixel-cozy-farm, ToyBot's old snow-globe-world). Script:
+`scripts/activate-shadow-history.js --inventory <fleet inventory> --harness <scratchpad> [--dry-run]`; the exact
+id lists are in `scratch-activation-plan.json` (untracked). Re-running is safe: promoted renders are no longer
+shadow, so they cannot be selected twice.
 <!-- ACTIVATION:END -->
 
 ## Run log
 
 - 2026-09-24 evening — tracker created; Phase A driver started on all 16 paths.
+- 2026-09-24 19:35 UTC — the gate over-fired on the first pool (a recipe that mandates its opener and a
+  material law made every entry share most words: 49 good entries dropped). Fixed: register words
+  (≥40% of the originals) are ignored by the overlap and opening tests, originals are exempt from
+  failing the gate, and rounds 3-5 switch to the register-derived grower with the anti-list. Driver
+  restarted; the first pool then reached 100 clean in 3 rounds.
+- 2026-09-24 19:41 UTC — Phase B done, out of order on purpose (it has no dependency on Phase A):
+  479 renders activated, all verified public + backdated; see the table above.
