@@ -74,7 +74,7 @@ this file in the same commit.
 - [x] **faebot/mushroom-apothecary** — 7/7 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 22:09 UTC
 - [x] **faebot/acorn-boat-regatta** — 7/7 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 22:27 UTC
 - [x] **faebot/star-charting** — 7/7 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 22:42 UTC
-- [ ] **dinobot/amber-forest** — 5 pools
+- [ ] **dinobot/amber-forest** — 4/5 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:13 UTC
 - [ ] **dinobot/courtship-display** — 3 pools
 - [ ] **dinobot/den-and-burrow** — 2 pools
 - [ ] **dinobot/desert-dunes** — 0 pools
@@ -157,11 +157,11 @@ this file in the same commit.
 | faebot/star-charting | faebot_starchart_sky_event | 25 | 100 | 1 | clean | yes | ✅ |
 | faebot/star-charting | faebot_starchart_vantage | 25 | 100 | 2 | clean | yes | ✅ |
 | faebot/star-charting | faebot_starchart_warm_light | 25 | 100 | 1 | clean | yes | ✅ |
-| dinobot/amber-forest | dinobot_amber_air | 25 |  |  |  |  | ⬜ |
-| dinobot/amber-forest | dinobot_amber_optics | 25 |  |  |  |  | ⬜ |
-| dinobot/amber-forest | dinobot_amber_resident | 24 |  |  |  |  | ⬜ |
-| dinobot/amber-forest | dinobot_amber_resin_event | 25 |  |  |  |  | ⬜ |
-| dinobot/amber-forest | dinobot_amber_trapped | 25 |  |  |  |  | ⬜ |
+| dinobot/amber-forest | dinobot_amber_air | 25 | 100 | 1 | clean | yes | ✅ |
+| dinobot/amber-forest | dinobot_amber_optics | 25 | 100 | 1 | clean | yes | ✅ |
+| dinobot/amber-forest | dinobot_amber_resident | 24 | 96 | 5 | clean | yes | ⚠️ needs attention |
+| dinobot/amber-forest | dinobot_amber_resin_event | 25 | 100 | 2 | clean | yes | ✅ |
+| dinobot/amber-forest | dinobot_amber_trapped | 25 | 100 | 3 | clean | yes | ✅ |
 | dinobot/courtship-display | dinobot_courtship_arena | 25 |  |  |  |  | ⬜ |
 | dinobot/courtship-display | dinobot_courtship_audience | 25 |  |  |  |  | ⬜ |
 | dinobot/courtship-display | dinobot_courtship_feature | 25 |  |  |  |  | ⬜ |
