@@ -76,7 +76,7 @@ this file in the same commit.
 - [x] **faebot/star-charting** — 7/7 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 22:42 UTC
 - [ ] **dinobot/amber-forest** — 4/5 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:13 UTC
 - [x] **dinobot/courtship-display** — 3/3 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:21 UTC
-- [ ] **dinobot/den-and-burrow** — 2 pools
+- [x] **dinobot/den-and-burrow** — 2/2 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:25 UTC
 - [ ] **dinobot/desert-dunes** — 0 pools
 - [ ] **dinobot/snowline-forest** — 1 pools
 - [ ] **dinobot/undergrowth-scale** — 1 pools
@@ -165,8 +165,8 @@ this file in the same commit.
 | dinobot/courtship-display | dinobot_courtship_arena | 25 | 100 | 3 | clean | yes | ✅ |
 | dinobot/courtship-display | dinobot_courtship_audience | 25 | 100 | 2 | clean | yes | ✅ |
 | dinobot/courtship-display | dinobot_courtship_feature | 25 | 100 | 1 | clean | yes | ✅ |
-| dinobot/den-and-burrow | dinobot_den_life | 25 |  |  |  |  | ⬜ |
-| dinobot/den-and-burrow | dinobot_den_surface | 25 |  |  |  |  | ⬜ |
+| dinobot/den-and-burrow | dinobot_den_life | 25 | 100 | 2 | clean | yes | ✅ |
+| dinobot/den-and-burrow | dinobot_den_surface | 25 | 100 | 1 | clean | yes | ✅ |
 | dinobot/snowline-forest | dinobot_snowline_forest_flora | 25 |  |  |  |  | ⬜ |
 | dinobot/undergrowth-scale | dinobot_undergrowth_giant | 25 |  |  |  |  | ⬜ |
 <!-- POOLS:END -->
