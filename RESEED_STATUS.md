@@ -393,7 +393,7 @@ slot name. Tool: the same core with `--grow N` (append N new entries; the pool o
 | 7 | pixelbot | floating-market-canal   | 9     | `pixelbot_floating_market_canal_canal_town` (verified: "the hero is the CANAL MARKET ITSELF: the town's defining built mass") | **subject DONE (real visible gain)**: 25 → 104 entries, 102 distinct (same = built mass + the one thing; 14 new masses, 37 new things), originals byte-identical; 12 forced shadow renders, 12/12 carried: every new town reads as written (a balcony cliff with a reed boat, a boathouse row with a kite line, a sea-wall town with a bread boat, floating gardens with a bamboo pipe, temple steps with tea-drying mats, stacked bridges with painted shutters); the crosswise canal law held in all twelve; still shadow | (close-out) | 2026-09-24 |
 | 8 | pixelbot | volcano-forge           | 10    | `pixelbot_volcano_forge_forge` (verified: "the hero is the FORGE'S HEART") | **subject DONE (real visible gain)**: 25 → 105 entries, 105 distinct (same = hall type + the one magical charm; 12 new halls, 37 new charms), originals byte-identical; 12 forced shadow renders, 10/12 carried (two Sonnet drops flagged): the hall reads in every carried one (a waterfall forge behind falling water, a sunken forge with its lava channel, a root-hall gripped by vines, a dome forge under its light shaft, a stair-well forge) and the charm in about six (the stone tortoise carrying the trough, the ember hourglass, the coal garden, the hearth cat, floating coals); still shadow | (close-out) | 2026-09-24 |
 | 9 | pixelbot | cozy-farming-life-sim   | 4     | already at production depth: verify only | **verified by count** (195 / 200 / 200 / 200); not reseeded, it is a public-depth path already and was never MVP-25 | | 2026-09-24 |
-| 10 | faebot  | acorn-boat-regatta      | 8     | `faebot_regatta_boat_fleet` (verified: "HERO, leads") | grow run in flight (same = the odd thing + the lead hull; 61 new charms × 27 hull kinds) | | 2026-09-24 |
+| 10 | faebot  | acorn-boat-regatta      | 8     | `faebot_regatta_boat_fleet` (verified: "HERO, leads") | **subject DONE (text-unique; visible gain modest)**: 25 → 103 entries, 103 distinct (same = the odd thing + the lead hull; 61 new odd things, 14 new hull kinds), originals byte-identical; 12 forced shadow renders, 12/12 carried: the fleet of little boats on a woodland stream holds in every frame, but the hull KINDS (a thimble tub, a pine-cone galleon, a cherry-stone dinghy, a teasel barge) all render as generic round nutshell boats with a fae aboard, before and after (Flux prior; the originals' acorn caps and walnut shells do the same), and the odd thing reads in about three (a bridge over the course, a flower-laden hull, a lily-strewn finish); still shadow | (close-out) | 2026-09-24 |
 | 11 | faebot  | mushroom-apothecary     | 8     | `faebot_mushroom_apothecary_room` (verified: "The ROOM is the hero") | grow run in flight (same = room shape + the one odd feature; 26 shapes × 30 new features) | | 2026-09-24 |
 | 12 | faebot  | star-charting           | 8     | `faebot_starchart_astronomer` (verified: "THE FAE (painted large and near — the hero)") | grow run in flight (same = wing kind + outer garment + build; 10 × 16 × 12) | | 2026-09-24 |
 | 13 | dinobot | amber-forest            | 6     | `dinobot_amber_grove` (verified: the path's hero is "a MATERIAL and its OPTICS", the resident is gated) | grow run chained (same = grove form + the resin feature; 30 forms × 45 features) | | 2026-09-24 |
@@ -411,6 +411,14 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-24 · Track B · faebot/acorn-boat-regatta `boat_fleet` · subject DONE (25 → 103;
+  text-unique, visible gain modest).** Five or six hulls abreast, each a found thing, then a dash and
+  one odd thing. Same = odd thing + lead hull; 61 new odd things (a frog on the poling stone, a
+  water-boatman escort, a pollen cloud, tadpole traffic, a newt referee, a stag beetle tug …) and 14
+  new hull kinds; 78 appended, two unfilled, originals byte-identical. 12 forced shadow renders,
+  12/12 carried: the regatta holds in every frame, the hull kinds render as generic nutshell boats
+  before and after (Flux prior, accepted), the odd thing reads in about three. Sheet
+  https://claude.ai/artifact/HrsPKB2GHVkKhkZrfts2gV.
 - **2026-09-24 · Track B · pixelbot/volcano-forge `forge` · subject DONE (25 → 105; real visible
   gain).** The forge's heart in its hall: "<HALL> WITH THE <CHARM>: <the hall cut into the mountain>,
   <one arched furnace>, <a broad anvil on a stone dais off-centre>, <the hall's structure at uneven
