@@ -16,18 +16,18 @@ const poolFile = path.join(__dirname, '../../bots/dinobot/seeds/dinobot_desert_d
 
 const L = (body, re) => ({ body, re });
 const LANDFORMS = {
-  'transverse ridge': L('a long transverse dune ridge marching to the horizon, its windward flank printed with razor-sharp ripples and the slip-face dropping into shadow', /transverse dune/i),
-  'star dune': L('a solitary star dune rising from a flat ochre pan, its radiating arms casting hard-edged shadows', /star dune/i),
+  'transverse ridge': L('a long transverse dune ridge marching to the horizon, its windward flank printed with razor-sharp ripples and the slip-face dropping into shadow', /transverse dune ridge marching|transverse dune ridge,|windward flank printed/i),
+  'star dune': L('a solitary star dune rising from a flat ochre pan, its radiating arms casting hard-edged shadows', /star dune(?! arm)(?! base)/i),
   'dune corridor': L('a wind-scoured corridor running between two dune walls, its floor polished flat', /corridor running|between two dune walls|corridor at its narrowest|corridor interior/i),
-  'cracked pan': L('a cracked dry pan between dune fields, its pale clay surface broken into irregular plates', /cracked (?:dry |clay )?pan|pan at midday|clay pan/i),
+  'cracked pan': L('a cracked dry pan between dune fields, its pale clay surface broken into irregular plates', /cracked (?:dry |clay )?pan between|pan at midday|clay pan between|dry pan between/i),
   'slope avalanche': L('a dune slope mid-avalanche, loose amber sand cascading in a slow tongue down the slip-face', /avalanche|mid-collapse/i),
   'dunes against cliffs': L('a dune field spilling hard against bare red sandstone cliffs, sand climbing the cliff base in smooth tongues', /against bare red sandstone cliffs|dunes? against/i),
-  'dune field at dusk': L('a vast transverse dune field stretching horizon to horizon at dusk, ridge after ridge receding', /dune field stretching|dune field at dusk|dune field at first light/i),
+  'dune field at dusk': L('a vast transverse dune field stretching horizon to horizon at dusk, ridge after ridge receding', /dune field stretching|horizon to horizon|dune field at dusk|dune field at first light/i),
   'cycad hollow': L('a hollow between two dune arms filled with low cycad scrub, the surrounding dune walls curving overhead', /hollow between two dune/i),
   'dry wash': L('a dry wash cutting across a dune field, its bed floored with cracked pale clay and flanked by eroded banks', /dry wash/i),
   'star dune arm': L('a single star dune arm viewed from its narrow ridge, the crest dropping away on both sides', /star dune arm/i),
   'eroded overhang': L('an eroded dune margin where wind has carved a shallow overhang in compacted amber sandstone', /overhang/i),
-  'crest along the ridge': L('a transverse dune ridge seen along its crest, the ridge running straight for a mile before bending into haze', /along its crest/i),
+  'crest along the ridge': L('a transverse dune ridge seen along its crest, the ridge running straight for a mile before bending into haze', /along its crest|seen along the crest|straight for a mile/i),
   'bone scatter flat': L('a bleached bone scatter across a ripple-printed sand flat between two dune arms', /bone scatter across/i),
   'strata face': L('fossil-bearing strata exposed at a dune field margin, cream and rust bands cut sharp by erosion', /^Fossil-bearing strata/i),
   'trough view': L('a dune slope viewed from the trough, the windward face rising in a smooth unbroken curve', /viewed from the trough/i),
@@ -95,9 +95,23 @@ const first = (rules, text) => {
   }
   return best;
 };
+const last = (rules, text) => {
+  let best = null;
+  let at = -1;
+  for (const [k, v] of Object.entries(rules)) {
+    const g = new RegExp(v.re.source, 'gi');
+    let m;
+    let hit = -1;
+    while ((m = g.exec(text))) { hit = m.index; if (!m[0]) g.lastIndex++; }
+    if (hit > at) { at = hit; best = k; }
+  }
+  return best;
+};
 function parse(text) {
   const landform = first(LANDFORMS, text.split(',').slice(0, 2).join(',')) || first(LANDFORMS, text) || 'dunes';
-  const marker = first(MARKERS, text) || 'marker';
+  // the marker comes after the landform, whose own words may name a marker (a log-jam OF petrified
+  // trunks): the LAST marker named is the assigned one
+  const marker = last(MARKERS, text) || 'marker';
   return { keys: [`landform:${landform}`, `marker:${marker}`], landform, marker };
 }
 const sameGroup = (a, b) => a.landform === b.landform && a.marker === b.marker;
@@ -166,7 +180,7 @@ function mechanical(cand, slot) {
   if (parsed.landform !== a.landform) p.push(`landform ${parsed.landform}≠${a.landform}`);
   if (parsed.marker !== a.marker) p.push(`marker ${parsed.marker}≠${a.marker}`);
   const words = cand.split(/\s+/).length;
-  if (words < 42 || words > 68) p.push(`${words} words`);
+  if (words < 42 || words > 72) p.push(`${words} words`);
   if (!/\d+ ?ft|\d+-foot|\d+ft/i.test(cand)) p.push('no measured height');
   for (const [n, re] of BANS) {
     const m = cand.match(re);

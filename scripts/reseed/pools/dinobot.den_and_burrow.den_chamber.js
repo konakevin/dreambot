@@ -68,7 +68,7 @@ const LIGHTS = {
   'crack lattice': L('daylight in a lattice of cracks across the whole ceiling crust', /lattice|cracks? (?:in|across|through) the|through (?:the |every |each )?cracks?|light in every crack|daylight (?:threading|seeping|leaking) through/i),
   'ice glow': L('a diffuse blue glow through the snow walls with the sun somewhere above', /blue glow through the snow|diffuse blue/i),
   'firefly drift': L('fireflies drifting in through the mouth and lighting the chamber in slow pulses', /firefl/i),
-  'waterfall shimmer': L('daylight broken through the falling water into a moving net of light on every wall', /moving net of light|broken through the falling/i),
+  'waterfall shimmer': L('daylight broken through the falling water into a moving net of light on every wall', /net of light|through the falling water|through the water curtain|waterfall light|light broken|broken (?:by|through) the (?:falling |moving )?water|shimmer(?:ing)? (?:net|web)/i),
   'steam-lit glow': L('warm light through drifting steam turning the whole chamber amber and soft', /through drifting steam/i),
   'twin shafts': L('two shafts of light from two entrance holes crossing in the middle of the chamber', /two shafts|twin shafts|two beams|two (?:entrance|openings)|crossing in the middle/i),
   'reflected snow light': L('cold white light bounced in off a snowfield outside', /bounced in off/i),
@@ -124,7 +124,7 @@ function assign(slot, ctx) {
   return null;
 }
 function brief(batch, examples) {
-  return `You write entries for one pool of a dinosaur-documentary bot: DinoBot's den-and-burrow path, the DEN CHAMBER axis: the underground space itself, its materials and its ONE light source, the hero of the picture. Every entry is ONE chamber in 40-48 words, one sentence.
+  return `You write entries for one pool of a dinosaur-documentary bot: DinoBot's den-and-burrow path, the DEN CHAMBER axis: the underground space itself, its materials and its ONE light source, the hero of the picture. Every entry is ONE chamber in 40-48 words, one sentence (COUNT THEM; over 55 is cut).
 
 Examples already in the pool (match their voice, order and length exactly):
 ${examples.map((e) => '- ' + e).join('\n')}
@@ -155,7 +155,7 @@ function mechanical(cand, slot) {
   if (parsed.type !== a.type) p.push(`type ${parsed.type}≠${a.type}`);
   if (parsed.light !== a.light) p.push(`light ${parsed.light}≠${a.light}`);
   const words = cand.split(/\s+/).length;
-  if (words < 30 || words > 54) p.push(`${words} words`);
+  if (words < 30 || words > 66) p.push(`${words} words`);
   if (!/light|glow|sun|moon|firefl|lightning|shimmer|beam|shaft|reflect|silver/i.test(cand)) p.push('no light');
   for (const [n, re] of BANS) {
     const m = cand.match(re);

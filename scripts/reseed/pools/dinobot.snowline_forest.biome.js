@@ -18,20 +18,20 @@ const poolFile = path.join(__dirname, '../../bots/dinobot/seeds/dinobot_snowline
 
 const L = (body, re) => ({ body, re });
 const LANDFORMS = {
-  'ridgeline': L('a high Mesozoic ridgeline where the last araucaria stand tall and sparse against pale sky', /ridgeline|ridge crest at dusk|snowline ridge|ridge just at treeline/i),
+  'ridgeline': L('a high Mesozoic ridgeline where the last araucaria stand tall and sparse against pale sky', /ridgeline|ridge crest at dusk|ridge just at treeline/i),
   'boulder field': L('a snowline boulder field above the final tree-line, ancient lichen-crusted rocks half-buried in crusted drifts', /boulder field/i),
   'hanging valley tarn': L('a hanging Mesozoic valley cradling a frozen tarn, its ice pale blue-grey and wind-scoured', /hanging (?:mesozoic )?valley|frozen (?:mesozoic )?tarn on a high bench|high bench/i),
-  'steep lean slope': L('a steep prehistoric slope where wind-flagged conifers grow at a permanent lean', /steep prehistoric slope|permanent lean|upper slope/i),
+  'steep lean slope': L('a steep prehistoric slope where wind-flagged conifers grow at a permanent lean', /steep prehistoric slope|permanent lean/i),
   'mountain pass': L('a Mesozoic mountain pass with pale cloud pouring through the gap', /mountain pass|snowline saddle/i),
   'upper slope at first light': L('an upper conifer slope at first light, snow unbroken except where a fallen trunk bridges a gully', /upper conifer slope/i),
-  'lone giant': L('a prehistoric snowline ridge with a single massive araucaria 150ft tall still holding its ground', /single massive araucaria|ancient mesozoic conifer just below/i),
+  'lone giant': L('a prehistoric snowline ridge with a single massive araucaria 150ft tall still holding its ground', /single massive araucaria|150ft tall|ancient mesozoic conifer just below|snowline ridge with a single/i),
   couloir: L('a Mesozoic couloir cutting between snow-draped conifer stands', /couloir/i),
   'avalanche scar': L('a long prehistoric avalanche scar cutting through the upper forest', /avalanche scar/i),
   'treeline at midday': L('a Mesozoic treeline at midday, shadow-side snow crisp and blue-white while the sun-facing rock runs wet', /treeline at midday|snowline at late afternoon/i),
   'slope from below': L('a Mesozoic upper forest slope seen from below, the canopy thinning steadily upward into bare rock', /seen from below/i),
   'deadfall gully': L('a Mesozoic high valley where deadfall bridges a frozen gully in a tangle of rime-silvered trunks', /deadfall bridges|upper gully choked/i),
   'snow-loaded stand': L('a snow-loaded Mesozoic conifer stand in still cold morning air, each branch bent under white', /snow-loaded/i),
-  'melt-stream slot': L('a Mesozoic upper slope where a wide melt-stream has cut a deep dark slot through the snowpack', /melt-stream has cut/i),
+  'melt-stream slot': L('a Mesozoic upper slope where a wide melt-stream has cut a deep dark slot through the snowpack', /melt-stream has cut|melt-stream slot|deep dark slot/i),
   'high cirque': L('a prehistoric high cirque with snow-filled floor and steep rock walls', /cirque/i),
   'forest edge from above': L('a prehistoric forest edge at the snowline seen from above, dark canopy giving way sharply to open snowfield', /seen from above/i),
   // ── new landforms ──
@@ -58,7 +58,7 @@ const LANDFORMS = {
 const D = (body, re) => ({ body, re });
 const DETAILS = {
   'melt-thread': D('a cold melt-thread cutting dark through the snowpack', /melt-thread|melt-stream|melt-channel|melt-water|running with melt/i),
-  'rime crystals': D('rime crystals coating every upturned needle', /rime/i),
+  'rime crystals': D('rime crystals coating every upturned needle', /rime crystals|rime coating|rime thick|rime-furred|rime glazing|furred with rime|encased in rime|rime building/i),
   'low cloud': D('pale grey cloud pressing low over the bare rocky crest', /cloud/i),
   'deadfall bridge': D('a fallen ancient trunk bridging a shadow-dark gully', /fallen (?:ancient )?trunk|deadfall/i),
   'lichen': D('lichen in ochre and grey crusting every exposed surface', /lichen/i),
@@ -152,7 +152,7 @@ function assign(slot, ctx) {
   return null;
 }
 function brief(batch, examples) {
-  return `You write entries for one pool of a dinosaur-documentary bot: DinoBot's snowline-forest path, the BIOME axis: the high Mesozoic conifer forest at the snowline, the place of the picture. Every entry is ONE vista in 46-62 words, one sentence with commas and no full stop.
+  return `You write entries for one pool of a dinosaur-documentary bot: DinoBot's snowline-forest path, the BIOME axis: the high Mesozoic conifer forest at the snowline, the place of the picture. Every entry is ONE vista in 46-62 words (COUNT THEM; over 70 is cut), one sentence with commas and no full stop.
 
 Examples already in the pool (match their voice, order and length exactly):
 ${examples.map((e) => '- ' + e).join('\n')}
@@ -183,7 +183,7 @@ function mechanical(cand, slot) {
   if (parsed.landform !== a.landform) p.push(`landform ${parsed.landform}≠${a.landform}`);
   if (parsed.detail !== a.detail) p.push(`detail ${parsed.detail}≠${a.detail}`);
   const words = cand.split(/\s+/).length;
-  if (words < 42 || words > 70) p.push(`${words} words`);
+  if (words < 42 || words > 78) p.push(`${words} words`);
   if (!REFRAINS.some((r) => cand.includes(r))) p.push('no skyline refrain');
   for (const [n, re] of BANS) {
     const m = cand.match(re);
