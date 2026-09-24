@@ -70,7 +70,7 @@ this file in the same commit.
 - [ ] **mangabot/game-center-arcade** — 5/6 pools at ≥100 and clean; smoke 0/3 delivered, 3 failed; 2026-09-24 20:49 UTC
 - [x] **steambot/brass-glasshouse** — 7/7 pools at ≥100 and clean; smoke 0/3 delivered, 3 failed; 2026-09-24 21:06 UTC
 - [x] **pixelbot/floating-market-canal** — 8/8 pools at ≥100 and clean; smoke 1/3 delivered, 2 failed; 2026-09-24 21:31 UTC
-- [ ] **pixelbot/volcano-forge** — 8/9 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 21:53 UTC
+- [x] **pixelbot/volcano-forge** — 9/9 pools at ≥100 and clean (camera originals restored from git 21:58 UTC); smoke 3/3 delivered; 2026-09-24 21:53 UTC
 - [ ] **faebot/mushroom-apothecary** — 7 pools
 - [ ] **faebot/acorn-boat-regatta** — 7 pools
 - [ ] **faebot/star-charting** — 7 pools
@@ -128,7 +128,7 @@ this file in the same commit.
 | pixelbot/floating-market-canal | pixelbot_floating_market_canal_town_light | 25 | 100 | 2 | clean | yes | ✅ |
 | pixelbot/floating-market-canal | pixelbot_floating_market_canal_upper_town | 25 | 100 | 2 | clean | yes | ✅ |
 | pixelbot/volcano-forge | pixelbot_volcano_forge_air | 25 | 100 | 3 | clean | yes | ✅ |
-| pixelbot/volcano-forge | pixelbot_volcano_forge_camera | 25 | 100 | 3 | clean | NO | ⚠️ needs attention |
+| pixelbot/volcano-forge | pixelbot_volcano_forge_camera | 25 | 100 | 3 | clean | yes (restored from git 21:58 UTC, see the run log) | ✅ |
 | pixelbot/volcano-forge | pixelbot_volcano_forge_fire_event | 25 | 100 | 2 | clean | yes | ✅ |
 | pixelbot/volcano-forge | pixelbot_volcano_forge_life | 25 | 100 | 3 | clean | yes | ✅ |
 | pixelbot/volcano-forge | pixelbot_volcano_forge_light | 25 | 100 | 3 | clean | yes | ✅ |
@@ -249,3 +249,11 @@ shadow, so they cannot be selected twice.
   actor opening. Rule relaxed to 6 (see the gate). **Follow-up: re-run `--only
   mangabot/game-center-arcade` after the main driver finishes** to top that pool up; smoke 0/3 was
   Replicate again (two 90 s timeouts and a 503).
+- 2026-09-24 21:53 UTC — pixelbot/volcano-forge: 9 pools at 100, smoke 3/3 (Replicate is back). The
+  originals check caught a real problem on `pixelbot_volcano_forge_camera`: the generator keeps its
+  camera pool as an inline hand-authored list and `--only camera --scale` rewrote the file from that
+  copy, replacing six originals that had been hand-edited during the path's QA rounds ("FAR END" →
+  "COOL END" and the like). Repaired 21:58 UTC: the 25 originals restored byte for byte from git, the
+  75 new entries kept, gate clean at 100. The canal camera pool was checked the same way and was
+  untouched (its inline copy matched the disk). The driver now routes both camera pools through
+  the register-derived grower only.

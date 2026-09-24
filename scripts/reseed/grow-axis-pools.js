@@ -70,12 +70,17 @@ const PATHS = [
     prefix: 'steambot_brass_glasshouse_',
     gen: 'generic',
   },
+  // The PixelBot scene generators keep their `camera` pool as an inline HAND-AUTHORED list and
+  // `--only camera` REWRITES the file from that copy — on volcano-forge that silently replaced six
+  // originals that had been hand-edited during QA (caught by the originals check 2026-09-24, restored
+  // from git). Camera pools therefore never go through those generators.
   {
     bot: 'pixelbot',
     path: 'floating-market-canal',
     prefix: 'pixelbot_floating_market_canal_',
     gen: 'scale',
     script: 'scripts/gen-seeds/pixelbot/gen-floating-market-canal-pools.js',
+    genericPools: ['pixelbot_floating_market_canal_camera'],
   },
   {
     bot: 'pixelbot',
@@ -83,6 +88,7 @@ const PATHS = [
     prefix: 'pixelbot_volcano_forge_',
     gen: 'scale',
     script: 'scripts/gen-seeds/pixelbot/gen-volcano-forge-pools.js',
+    genericPools: ['pixelbot_volcano_forge_camera'],
   },
   {
     bot: 'faebot',

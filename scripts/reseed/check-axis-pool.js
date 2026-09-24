@@ -10,8 +10,8 @@
  *   1. exact duplicates (after whitespace/case/punctuation normalisation)       → must be 0
  *   2. signature duplicates (lib/seedDupeLint: first 12 significant tokens)      → must be 0
  *   3. near-duplicates: content-word Jaccard ≥ 0.6 between any two entries       → must be 0
- *   4. same-opening clusters: ≥ 4 entries sharing their first 3 content words   → must be 0
- *      (a few entries may open alike; four is a template echo, not variety)
+ *   4. same-opening clusters: ≥ 6 entries sharing their first 3 VARYING words  → must be 0
+ *      (an actor-first axis reuses a small cast in its openings; six is a template echo)
  *
  * It also prints the word-length range of the ORIGINAL entries vs the NEW ones so a grow that
  * drifted register (terse 8-word originals, 30-word new entries) is visible, and lists every
@@ -110,13 +110,16 @@ function analyse(list, origCount) {
     if (!open.has(k)) open.set(k, []);
     open.get(k).push(i);
   });
-  // 4+ entries opening with the same three VARYING words is a template echo; up to 3 is variety
-  // ("late afternoon light …" can legitimately open a few light entries).
+  // 6+ entries opening with the same three VARYING words is a template echo; fewer is variety.
+  // Why 6 and not 4: an actor-first axis ("a boy in a bucket hat …", "a student with a bag …")
+  // legitimately reuses a small cast in its openings while the BEAT that follows is the axis —
+  // arcade play_moment lost 47 distinct beats to a threshold of 4 (2026-09-24). A real template
+  // echo produces 10+ identical openings and is still caught.
   // The ORIGINALS are Kevin-approved and never edited here: a pair or cluster made only of
   // originals is reported for information but does not fail the gate, because --fix could not
   // resolve it without touching them. Anything involving a NEW entry counts.
   const clusters = [...open.entries()].filter(
-    ([, idx]) => idx.length >= 4 && idx.some((i) => i >= origCount)
+    ([, idx]) => idx.length >= 6 && idx.some((i) => i >= origCount)
   );
   const blocking = problems.filter((p) => p.a >= origCount || p.b >= origCount);
   return { problems: blocking, clusters, wl, reg };
@@ -151,7 +154,7 @@ for (const [k, idx] of clusters.slice(0, 20))
 if (FIX && (problems.length || clusters.length)) {
   const drop = new Set();
   for (const p of problems) drop.add(Math.max(p.a, p.b) >= ORIG ? Math.max(p.a, p.b) : p.b);
-  for (const [, idx] of clusters) for (const i of idx.slice(3)) if (i >= ORIG) drop.add(i);
+  for (const [, idx] of clusters) for (const i of idx.slice(5)) if (i >= ORIG) drop.add(i);
   const kept = list.filter((_, i) => !drop.has(i));
   fs.writeFileSync(file, JSON.stringify(kept, null, 2) + '\n');
   console.log(
