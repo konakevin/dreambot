@@ -69,7 +69,7 @@ this file in the same commit.
 - [x] **tinybot/snow-globe-world** — 3/3 pools at ≥100 and clean; smoke 1/3 delivered, 2 failed; 2026-09-24 20:30 UTC
 - [ ] **mangabot/game-center-arcade** — 5/6 pools at ≥100 and clean; smoke 0/3 delivered, 3 failed; 2026-09-24 20:49 UTC
 - [x] **steambot/brass-glasshouse** — 7/7 pools at ≥100 and clean; smoke 0/3 delivered, 3 failed; 2026-09-24 21:06 UTC
-- [ ] **pixelbot/floating-market-canal** — 8 pools
+- [x] **pixelbot/floating-market-canal** — 8/8 pools at ≥100 and clean; smoke 1/3 delivered, 2 failed; 2026-09-24 21:31 UTC
 - [ ] **pixelbot/volcano-forge** — 9 pools
 - [ ] **faebot/mushroom-apothecary** — 7 pools
 - [ ] **faebot/acorn-boat-regatta** — 7 pools
@@ -119,14 +119,14 @@ this file in the same commit.
 | steambot/brass-glasshouse | steambot_brass_glasshouse_planting | 25 | 100 | 1 | clean | yes | ✅ |
 | steambot/brass-glasshouse | steambot_brass_glasshouse_specimen | 25 | 100 | 1 | clean | yes | ✅ |
 | steambot/brass-glasshouse | steambot_brass_glasshouse_wet_air | 16 | 100 | 1 | clean | yes | ✅ |
-| pixelbot/floating-market-canal | pixelbot_floating_market_canal_air | 25 |  |  |  |  | ⬜ |
-| pixelbot/floating-market-canal | pixelbot_floating_market_canal_camera | 25 |  |  |  |  | ⬜ |
-| pixelbot/floating-market-canal | pixelbot_floating_market_canal_canal_life | 25 |  |  |  |  | ⬜ |
-| pixelbot/floating-market-canal | pixelbot_floating_market_canal_market_boats | 25 |  |  |  |  | ⬜ |
-| pixelbot/floating-market-canal | pixelbot_floating_market_canal_market_moment | 25 |  |  |  |  | ⬜ |
-| pixelbot/floating-market-canal | pixelbot_floating_market_canal_palette | 25 |  |  |  |  | ⬜ |
-| pixelbot/floating-market-canal | pixelbot_floating_market_canal_town_light | 25 |  |  |  |  | ⬜ |
-| pixelbot/floating-market-canal | pixelbot_floating_market_canal_upper_town | 25 |  |  |  |  | ⬜ |
+| pixelbot/floating-market-canal | pixelbot_floating_market_canal_air | 25 | 100 | 3 | clean | yes | ✅ |
+| pixelbot/floating-market-canal | pixelbot_floating_market_canal_camera | 25 | 100 | 3 | clean | yes | ✅ |
+| pixelbot/floating-market-canal | pixelbot_floating_market_canal_canal_life | 25 | 100 | 3 | clean | yes | ✅ |
+| pixelbot/floating-market-canal | pixelbot_floating_market_canal_market_boats | 25 | 100 | 1 | clean | yes | ✅ |
+| pixelbot/floating-market-canal | pixelbot_floating_market_canal_market_moment | 25 | 100 | 3 | clean | yes | ✅ |
+| pixelbot/floating-market-canal | pixelbot_floating_market_canal_palette | 25 | 100 | 3 | clean | yes | ✅ |
+| pixelbot/floating-market-canal | pixelbot_floating_market_canal_town_light | 25 | 100 | 2 | clean | yes | ✅ |
+| pixelbot/floating-market-canal | pixelbot_floating_market_canal_upper_town | 25 | 100 | 2 | clean | yes | ✅ |
 | pixelbot/volcano-forge | pixelbot_volcano_forge_air | 25 |  |  |  |  | ⬜ |
 | pixelbot/volcano-forge | pixelbot_volcano_forge_camera | 25 |  |  |  |  | ⬜ |
 | pixelbot/volcano-forge | pixelbot_volcano_forge_fire_event | 25 |  |  |  |  | ⬜ |
