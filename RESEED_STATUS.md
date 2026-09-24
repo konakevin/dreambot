@@ -299,12 +299,14 @@ commit + push, row + log here.
      lineage"): alone 3/3 flagged, full prompt without it 0/3. The flux-2 checker rejects named
      artists; 1.1 does not. **Pin rolled back to flux-1.1-pro** (the batch Kevin graded as very good:
      23/23 then, 47/47 since, zero flags) and the path is LIVE.
-   - **mangabot/game-center-arcade = a CONTENT fact.** Flagged on every Flux model, 1.1-pro included
-     (3 of 6 pipeline renders failed after the engine's full retry ladder). Culprit = one pool line,
-     "a schoolgirl in a navy blazer occupying half the picture's height"
-     (`seeds/game_center_arcade_play_moment.json`, 2 entries): alone 3/3, without 0/3. **DISABLED**
-     on Kevin's word (builder commented out, removed from shadowPaths; files and pools left in place;
-     re-enable = reword those two entries first).
+   - **mangabot/game-center-arcade = a CONTENT fact, FIXED and LIVE.** Flagged on every Flux model,
+     1.1-pro included (3 of 6 pipeline renders failed after the engine's full retry ladder). Culprit =
+     one pool line, "a schoolgirl in a navy blazer occupying half the picture's height"
+     (`seeds/game_center_arcade_play_moment.json`, 2 entries): alone 3/3, without 0/3. Disabled for a
+     few hours, then on Kevin's word "schoolgirl" → "student" (the role the pool already uses):
+     the reworded clauses pass 11/12 standalone (old wording 0/6), and a 12-render hidden pipeline
+     batch on the path's own pins (7 flux-2-max, 5 flux-2-pro) delivered 12/12 with zero safety
+     flags and zero retries. Promoted to `paths[]` the same evening.
    - **pixelbot/castle-town-gate = a CONTENT fact, combination trigger.** Flagged on every Flux model
      (5 of 5 pipeline renders on flux-1.1-pro failed). Removing "a small figure on the wall walkway
      hauling a heavy basket up on a rope hand over hand …" un-flags 3/3, but that clause alone does
@@ -324,7 +326,16 @@ commit + push, row + log here.
    its pinned models over the previous two days (bot_run_log). The persisted path shuffle-bag (mig 283)
    is roster-change-robust, so they enter each bot's rotation from the next dispatcher tick. Not run:
    `scripts/promote-shadow-path.js` (the historical blend of graded keepers into each bot's past feed)
-   — it needs Kevin's keeper IDs, and the cron will fill history at cadence anyway.
+   — it needs Kevin's keeper IDs, and the cron will fill history at cadence anyway. **Later the same
+   evening: mangabot game-center-arcade joined them (Flag 5), so 17 of the 18 Track B paths are live
+   and only pixelbot castle-town-gate stays disabled.**
+7. _(policy, Kevin 2026-09-24)_ **Model default for new paths: 50/50 flux-1.1-pro / ultra.** The
+   fleet inventory (480 live paths, 20 scheduled bots) found 197 paths already coin-flipping, 127
+   ultra-only, 95 rolling pro+ultra+a third model, 57 with no pro, and only 4 pro-only — all four this
+   week's Track B pins (regatta, star-charting, brass-glasshouse, snow-globe-world), each with a
+   measured reason. Recorded in CLAUDE.md, the playbook and ALPHABOT.md; locked by
+   `__tests__/lib/proOnlyPinGuard.test.ts` (an undocumented pro-only pin fails CI). The four existing
+   pins are unchanged pending Kevin's read of the 12-render ultra probes (study page linked in chat).
 
 **Accepted Flux limits (Kevin 2026-09-23, do not chase):** species render in their own prior colour
 (a green-titled flower line-up renders pink/white); a rich register only reads on strong-colour

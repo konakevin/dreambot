@@ -49,10 +49,11 @@ const pathBuilders = {
   'anime-halloween-cozy': require('./paths/anime-halloween-cozy'),
   'anime-haunted-school': require('./paths/anime-haunted-school'),
   'anime-witch-familiar': require('./paths/anime-witch-familiar'),
-  // 'game-center-arcade': require('./paths/game-center-arcade'), — DISABLED 2026-09-24 (Kevin):
-  // its prompts trip Replicate's safety checker on every Flux model (see the shadowPaths note
-  // below for the bisected trigger). Files + pools left in place; re-enable = reword the two
-  // "schoolgirl" play-moment entries, uncomment this line and put it back in shadowPaths.
+  // game-center-arcade (2026-09-23) — game centre at night. Disabled for a few hours on 2026-09-24
+  // when its prompts tripped Replicate's safety checker on every Flux model; a clause bisection
+  // pinned the trigger to the word "schoolgirl" in two play-moment entries, Kevin had them reworded
+  // to "student" and the path re-enabled the same day (see the shadowPaths note below).
+  'game-center-arcade': require('./paths/game-center-arcade'),
 };
 
 // Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
@@ -212,17 +213,21 @@ module.exports = {
     'anime-trains',
     'winter-anime',
     'night-touge',
+    // game-center-arcade — promoted to live rotation 2026-09-24 on Kevin's word after its room pool
+    // was grown 25 → 104 (RESEED_STATUS.md Track B row 2) and its safety-flag fix was confirmed.
+    // Earlier that day its prompts tripped Replicate's safety checker on EVERY Flux model (1.1-pro,
+    // ultra, flux-2-pro); a clause bisection pinned the trigger to one pool line, "a schoolgirl in a
+    // navy blazer occupying half the picture's height" (seeds/game_center_arcade_play_moment.json,
+    // 2 entries): that clause alone flagged 3/3, the full prompt without it 0/3. "schoolgirl" was
+    // reworded to "student" (the role the pool already uses elsewhere); the reworded clauses pass
+    // 11/12 standalone, and a 12-render hidden pipeline batch on the path's own pins (flux-2-pro +
+    // flux-2-max) then delivered with zero safety flags. Faithful xerox otherwise.
+    'game-center-arcade',
   ],
 
   // Stage I paths promoted to live rotation 2026-08-16 (shadowPaths emptied;
   // MANGA_SHADOW_PATHS const retained — still drives twoPassPolish.skipPaths).
-  // game-center-arcade was DISABLED 2026-09-24 (Kevin): its prompts trip Replicate's safety
-  // checker on EVERY Flux model (1.1-pro, ultra, flux-2-pro) — 3 of 6 pipeline renders on
-  // flux-1.1-pro failed after the engine's full retry ladder. A clause bisection pinned the
-  // trigger to one pool line: "a schoolgirl in a navy blazer occupying half the picture's
-  // height" (seeds/game_center_arcade_play_moment.json, 2 entries) — that clause alone flags 3/3,
-  // the full prompt without it flags 0/3. If the path ever comes back, reword those two entries
-  // first. Its builder line in pathBuilders is commented out so nothing can render it by accident.
+  // game-center-arcade left here for paths[] on 2026-09-24 after its confirmation batch.
   shadowPaths: [],
 
   // Seasonal-window paths (2026-09-07) — drawn ONLY when

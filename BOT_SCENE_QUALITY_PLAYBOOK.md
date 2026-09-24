@@ -1098,6 +1098,15 @@ volcano-forge = firelit interior. Both times ultra reverted to a GOLDEN-HOUR EXT
 inscription. Treat it as a standing model exclusion for any path whose identity is a lighting
 condition — it is a model trait, not a prompt defect.
 
+> **FLEET DEFAULT (Kevin 2026-09-24): a new path that would pin flux-1.1-pro rolls 50/50 with
+> flux-1.1-pro-ultra.** "Wherever 1.1pro performs well, so does ultra", and the coin flip buys a slight
+> variation in look for free. The 2026-09-24 inventory of 480 live paths found 197 already coin-flipping,
+> 127 ultra-only and only 4 pro-only, each a per-path pin an agent wrote with a measured reason (a
+> signature rate on a painted register; a framing loss like a cropped dome or glass arc; this lesson's
+> condition-identity trait). A pro-only pin is therefore an EXCEPTION: measure ultra on the path first,
+> write the numbers next to the pin, and add the path + reason to `DOCUMENTED_PRO_ONLY` in
+> `__tests__/lib/proOnlyPinGuard.test.ts`, which fails CI on an undocumented pro-only pin.
+
 **7. "THE ROOM IS EMPTY" ECHOES INTO THE PROMPT AS A LITERAL `no figures`.** It reached 4 of 6
 FaeBot prompts. CLIP cannot negate, so any "nobody home" branch must be written as a POSITIVE state
 of the room.

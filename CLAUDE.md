@@ -147,6 +147,12 @@ architecture, cadence mechanics, entry points (`run-bot.js`, `iter-bot.js`, `qa-
 proving-ground bot visible ONLY to Kevin (never flip its `is_public`, never add followers, never give it
 a `bot_schedules` row) — workflow + promotion checklist in `ALPHABOT.md`.**
 
+**Model default for a NEW path (Kevin 2026-09-24):** a path that would pin `flux-1.1-pro` rolls **50/50
+`flux-1.1-pro` / `flux-1.1-pro-ultra`** (`modelByPath: [pro, ultra]`, or no entry so the bot's pro+ultra
+picker pool rolls). Pin pro-only ONLY on a measured ultra probe of that path (a signature rate, a framing
+loss such as a cropped dome), write the numbers next to the pin, and add the path + reason to
+`DOCUMENTED_PRO_ONLY` in `__tests__/lib/proOnlyPinGuard.test.ts` (CI fails an undocumented pro-only pin).
+
 > **STOP — before ANY bot work** (config, paths, pools, seeds, archetypes, briefs, or even answering how a
 > bot works): re-read **`BOT_SCENE_QUALITY_PLAYBOOK.md` IN FULL** first — the canonical brain (the 10/10
 > bar, the 8 components of a memorable scene, per-bot iteration logs, the failure-mode catalog). Prior

@@ -78,7 +78,10 @@ Same playbook loop, private destination:
    `gen-seeds/alphabot/gen-*.js` → the destination module (rename dirs as needed).
 2. Wire the destination `index.js`: `pathBuilders`, `paths[]`, and every per-path map the
    candidate carried (they're already byte-identical by construction). Copy archetype/template
-   defs if the path is declarative.
+   defs if the path is declarative. **Model default (Kevin 2026-09-24):** a path that would pin
+   `flux-1.1-pro` ships as a 50/50 `[flux-1.1-pro, flux-1.1-pro-ultra]` roll; a pro-only pin needs
+   a measured reason written next to it AND an entry in `DOCUMENTED_PRO_ONLY`
+   (`__tests__/lib/proOnlyPinGuard.test.ts`), or CI fails.
 3. Remove the candidate from `alphabot/index.js` CANDIDATES + `alphabot/pools.js`.
 4. Load-check both modules: `node -e "require('./scripts/bots/<dest>'); require('./scripts/bots/alphabot')"`.
 5. Move the approved test renders to the destination profile:
