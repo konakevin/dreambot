@@ -140,9 +140,15 @@ commit + push, row + log here.
   massing nouns). Grow run done (72 of 75 filled; 25 originals byte-identical; new entries 60-84 words
   in the originals' LEGO register), pool WRITTEN to 97 entries (backup
   `~/poolbackup-brickbot-balloon_festival-fleet-*`). Forced shadow renders of 8 NEW entries + 4
-  originals rendering to `bf/` (the path is function-form, so the harness takes `--slot balloon_fleet
-  --pool balloon_fleet=<seeds json>`). Next = sheet, self-review, commit; then `hero` (the nearest
-  balloon) the same way if the fleet renders hold; path stays in `shadowPaths[]`.
+  originals (`bf/`, 12/12 carried; the path is function-form, so the harness takes `--slot
+  balloon_fleet --pool balloon_fleet=<seeds json>`): the new fleets render as distinct LEGO scenes in
+  the originals' register (an orchard-blossom launch, a canyon-rim rise, a clifftop fleet over the
+  sea, a giant striped balloon over hedgerows, a lantern-lit downs launch), shaped balloons and
+  minifigure crews present, nothing massed into one object. **Track B fleet: DONE** after a `--grow
+  10` top-up past 100 (in flight). The other eight balloon pools are axis pools (build, camera, crowd,
+  event, field, hero, light, moment); per the scaling doc's open question 1 (subject only, or axes
+  too?) they wait for Kevin. Path stays in `shadowPaths[]`; the shadow renders are on BrickBot's
+  profile for Kevin.
 - **Last five Track A runs** (mangabot isekai, flower-fantasy carpet, desert bloom, starbot
   phenomenon, dragonbot castle biome) chained in `<pool>/full`; marker `last-five.done`.
 - **FaeBot (queen biome + three foreground-anchor pools):** shared factory
@@ -278,7 +284,7 @@ slot name. Tool: the same core with `--grow N` (append N new entries; the pool o
 
 | # | bot      | path                    | pools | subject pool (verify)                    | status | commits | date |
 | - | -------- | ----------------------- | ----- | ---------------------------------------- | ------ | ------- | ---- |
-| 0 | brickbot | balloon-festival        | 9     | `…_fleet`? (verify)                      | queued, **FIRST** (Kevin 2026-09-23 wants it live; scale, then he says go: Flags #1) |         |      |
+| 0 | brickbot | balloon-festival        | 9     | `brickbot_balloon_fleet` (verified: the path header calls the fleet the subject) | **subject DONE**: 25 → 106 entries, 106 distinct (situation + nearest pattern + shaped balloon), originals byte-identical; 8 new + 4 originals shadow-rendered (12/12 carried) and reviewed; 8 axis pools untouched pending Kevin (doc §9 q1); still shadow (Flags #1) | (close-out) | 2026-09-24 |
 | 1 | tinybot  | snow-globe-world        | 4     | `…_worlds`                               | queued |         |      |
 | 2 | mangabot | game-center-arcade      | 7     | ?                                        | queued |         |      |
 | 3 | steambot | brass-glasshouse        | 8     | ? (thinnest: `_keeper` 14, `_wet_air` 16) | queued |         |      |
