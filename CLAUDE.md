@@ -33,7 +33,8 @@ Sparkle currency (RevenueCat IAP) + a Pro subscription, and 18 image-gen bots po
 Layout: `app/` (routes), `components/` (~116), `hooks/` (~60), `store/` (6 Zustand), `lib/` (~45 glue),
 `constants/`, `types/database.ts` (auto-gen) + `vibeProfile.ts`; `supabase/migrations/` (277 files,
 highest prefix 275) + `supabase/functions/` (15 edge fns + ~49 `_shared/`); `scripts/bots/<botname>/`
-(18 bots) + `scripts/lib/` (bot infra) + `scripts/*.js`; `__tests__/lib/,store/` (fast jest) +
+(18 public bots, plus `alphabot` the private proving ground and `outlawbot` a dark bot; RetroBot + MechBot
+removed 2026-09-24) + `scripts/lib/` (bot infra) + `scripts/*.js`; `__tests__/lib/,store/` (fast jest) +
 `__tests__/db/` (`*.dbspec.ts`).
 
 ---
