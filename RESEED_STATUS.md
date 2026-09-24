@@ -401,7 +401,7 @@ slot name. Tool: the same core with `--grow N` (append N new entries; the pool o
 | 15 | dinobot | den-and-burrow          | 4     | `dinobot_den_chamber` (verified: "the hero") | pool WRITTEN 25 → 105 in two grows (same = chamber type + the light source; 15 new types, 15 new lights), originals byte-identical; 12 renders chained (`dd/`) | | 2026-09-24 |
 | 16 | dinobot | desert-dunes            | 5     | `dinobot_desert_dunes_biome` (the path's own pool; the other four are the SHARED paleo pools, untouched) | pool WRITTEN 25 → 101 in three grows (same = landform + the paleo marker; 20 new landforms, 15 new markers), originals byte-identical; 12 renders chained (`dds/`) | | 2026-09-24 |
 | 17 | dinobot | snowline-forest         | 5     | `dinobot_snowline_forest_biome` (the path's own pool; `_flora` is its second bespoke pool, the other three are SHARED, untouched) | pool WRITTEN 25 → 108 in two grows (same = landform + the one detail, the five skyline refrains kept; 19 new landforms, 15 new details), originals byte-identical; 12 renders chained (`dsn/`) | | 2026-09-24 |
-| 18 | dinobot | undergrowth-scale       | 4     | `dinobot_undergrowth_floor` AND `dinobot_undergrowth_resident` (the floor-as-landscape is the path's identity, the resident is what the picture is of; both grown) | floor WRITTEN 25 → 98 (same = floor feature + the small detail; 24 new features, 20 new details) with a `--grow 8` top-up chained; resident WRITTEN 23 → 103 (same = body plan + the action; 12 new plans, 27 new actions) with a `--grow 6` top-up chained; originals byte-identical; 12 renders each chained (`df/`, `dr/`) | | 2026-09-24 |
+| 18 | dinobot | undergrowth-scale       | 4     | `dinobot_undergrowth_floor` AND `dinobot_undergrowth_resident` (the floor-as-landscape is the path's identity, the resident is what the picture is of; both grown) | **floor DONE (real visible gain where the feature is a strong noun)**: 25 → 104 in two grows, 103 distinct (same = floor feature + the small detail; 24 new features, 20 new details), originals byte-identical; 12 forced shadow renders, 10/12 carried (two Sonnet drops flagged): a split seed pod as a canyon, a hollow rotten log as an amber-fibred cave, and an undercut bank's root-hair veil (with a snail and the giant's legs above) read outright; a liverwort marsh reads partly; a flake of stone standing as a cliff did not read in either of its two renders (the resident takes the frame). **resident WRITTEN** 23 → 109 in two grows (same = body plan + the action; 12 new plans, 27 new actions), originals byte-identical; 12 renders in flight (`dr/`) | (close-out) | 2026-09-24 |
 
 Order is the doc's suggested order (bespoke and unambiguous first, DinoBot last because of the shared
 pools). Open questions for Kevin are in that doc §9 (axis pools too or subject only; is 100 the floor
@@ -411,6 +411,16 @@ for a shadow path; go live before or after scaling).
 
 ## Log
 
+- **2026-09-24 · Track B · dinobot/undergrowth-scale `undergrowth_floor` · subject DONE (25 → 104;
+  real visible gain where the feature is a strong noun).** The forest floor at ankle height as a
+  LANDSCAPE: "<floor feature scaled up>, <the light>, <one small crisp detail>". Same = feature +
+  detail; 24 new features (pebble desert, bark-chip scree, seed-pod canyon, spider-web bridge, lichen
+  plateau, ant highway, rotten-wood cave, sap-drip lake, footprint crater, snail-shell dome, stone-flake
+  cliff, leaf-vein delta, grass-stem forest, feather roof, eggshell ruin, root-hair veil …) and 20 new
+  details; 79 appended in two grows, originals byte-identical. 12 forced shadow renders, 10/12
+  carried: the seed-pod canyon, the rotten-log cave and the root-hair veil read outright, the
+  liverwort marsh partly, the stone flake twice lost to the resident. Sheet
+  https://claude.ai/artifact/WL8Qn1oCBV8SFUbZhebTaZ.
 - **2026-09-24 · Track B · faebot/star-charting `astronomer` · subject DONE (25 → 104; text-unique, 2
   of 12 rendered).** The hero fae: "A <build> grown fae, <face>, <skin>, <hair>, pointed ears, <wings>;
   wearing <outer garment> over <underlayer>, <hands or feet>, <one carried detail>." Same = wing kind
