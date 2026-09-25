@@ -12,7 +12,14 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { View, StyleSheet, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+  Platform,
+  Pressable,
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { KeyboardSwipeDismiss } from '@/components/KeyboardSwipeDismiss';
 import { Text, TextInput } from '@/components/AppText';
@@ -22,7 +29,7 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, horizontalScale } from '@/lib/responsive';
 import { useAuthStore } from '@/store/auth';
 import { useOnboardingStore } from '@/store/onboarding';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
@@ -37,6 +44,12 @@ import { photoSourceRows } from '@/lib/photoSourceRows';
 import { GradientTitle } from '@/components/GradientTitle';
 import { Toast } from '@/components/Toast';
 import { moderateText, isModerationError, MODERATION_BLOCKED_MESSAGE } from '@/lib/moderation';
+import { useProfileHeadersEnabled } from '@/hooks/useProfileHeaders';
+import { easedScrim, headerContentPosition } from '@/lib/profileHeaders';
+import { LinearGradient } from 'expo-linear-gradient';
+
+/** Bottom fade on the header panel, the same eased curve the profile header uses. */
+const PANEL_SCRIM = easedScrim(12, 0.85);
 
 const DISPLAY_NAME_MAX = 50;
 const BIO_MAX = 160;
@@ -67,6 +80,8 @@ export default function EditProfileScreen() {
   const queryClient = useQueryClient();
   const { data: profile, isLoading } = usePublicProfile(user?.id ?? '');
   const { mutate: uploadAvatar, isPending: avatarUploading } = useAvatarUpload();
+  // Dreamscape header (migration 554): the header's permanent home.
+  const headersEnabled = useProfileHeadersEnabled();
 
   // Onboarding-store editing mode + auto-save — mirrors
   // /settings/dream-cast.tsx so the embedded DreamCastStep persists
@@ -216,6 +231,69 @@ export default function EditProfileScreen() {
     setPhotoSheetOpen(true);
   }
 
+  // Profile photo + "Change Photo" (label under the photo). Three placements:
+  //   'plain'  — no header feature: the classic centered block.
+  //   'center' — header panel, no header yet: centered over the whole panel.
+  //   'corner' — header panel with a header: bottom-left, smaller, so the middle
+  //              of the picture stays clear to preview.
+  // On the panel the photo gets a white ring and the label a dark pill so both
+  // read over any picture.
+  const renderAvatarBlock = (placement: 'plain' | 'center' | 'corner') => {
+    const onPanel = placement !== 'plain';
+    return (
+      <View
+        style={
+          placement === 'corner'
+            ? styles.panelCorner
+            : placement === 'center'
+              ? styles.panelCenter
+              : styles.avatarBlock
+        }
+      >
+        <TouchableOpacity onPress={handleChangePhoto} activeOpacity={0.8}>
+          {profile?.avatar_url ? (
+            <Image
+              source={{ uri: profile.avatar_url }}
+              style={[
+                styles.avatar,
+                onPanel && styles.avatarOnPanel,
+                placement === 'corner' && styles.avatarCorner,
+              ]}
+              contentFit="cover"
+            />
+          ) : (
+            <View
+              style={[
+                styles.avatar,
+                styles.avatarFallback,
+                onPanel && styles.avatarOnPanel,
+                placement === 'corner' && styles.avatarCorner,
+              ]}
+            >
+              <Text style={styles.avatarInitial}>
+                {(profile?.username || '?')[0]?.toUpperCase() ?? '?'}
+              </Text>
+            </View>
+          )}
+          {avatarUploading && (
+            <View style={styles.avatarSpinner}>
+              <ActivityIndicator color="#FFF" />
+            </View>
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={handleChangePhoto}
+          hitSlop={8}
+          style={onPanel ? styles.changePhotoPill : undefined}
+        >
+          <Text style={[styles.changePhotoText, onPanel && styles.changePhotoTextOnPanel]}>
+            {profile?.avatar_url ? 'Change Photo' : 'Upload Photo'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.root}>
       {/* Top bar — back / title. Everything auto-saves (name + bio on blur,
@@ -241,34 +319,39 @@ export default function EditProfileScreen() {
         >
           <Text style={styles.sectionLabel}>PROFILE</Text>
 
-          {/* Avatar block */}
-          <View style={styles.avatarBlock}>
-            <TouchableOpacity onPress={handleChangePhoto} activeOpacity={0.8}>
-              {profile?.avatar_url ? (
-                <Image
-                  source={{ uri: profile.avatar_url }}
-                  style={styles.avatar}
-                  contentFit="cover"
-                />
-              ) : (
-                <View style={[styles.avatar, styles.avatarFallback]}>
-                  <Text style={styles.avatarInitial}>
-                    {(profile?.username || '?')[0]?.toUpperCase() ?? '?'}
-                  </Text>
-                </View>
-              )}
-              {avatarUploading && (
-                <View style={styles.avatarSpinner}>
-                  <ActivityIndicator color="#FFF" />
-                </View>
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleChangePhoto} hitSlop={8}>
-              <Text style={styles.changePhotoText}>
-                {profile?.avatar_url ? 'Change Photo' : 'Upload Photo'}
-              </Text>
-            </TouchableOpacity>
-          </View>
+          {headersEnabled ? (
+            // Header panel (migration 554): your header behind your photo. Tap the
+            // panel (or its pencil) to pick a header; the photo keeps its own tap.
+            <Pressable
+              onPress={() => router.push('/headerPicker')}
+              style={[styles.headerPanel, !profile?.header && styles.headerPanelEmpty]}
+              accessibilityRole="button"
+              accessibilityLabel={profile?.header ? 'Change header' : 'Add a header'}
+            >
+              {profile?.header ? (
+                <>
+                  <Image
+                    source={{ uri: profile.header.url }}
+                    style={StyleSheet.absoluteFill}
+                    contentFit="cover"
+                    contentPosition={headerContentPosition(profile.header.focalY)}
+                  />
+                  <LinearGradient
+                    pointerEvents="none"
+                    colors={PANEL_SCRIM.colors}
+                    locations={PANEL_SCRIM.locations}
+                    style={styles.headerPanelScrim}
+                  />
+                </>
+              ) : null}
+              <View style={styles.headerPanelEdit} pointerEvents="none">
+                <Ionicons name="pencil" size={15} color="#FFFFFF" />
+              </View>
+              {renderAvatarBlock(profile?.header ? 'corner' : 'center')}
+            </Pressable>
+          ) : (
+            renderAvatarBlock('plain')
+          )}
 
           {/* Display Name */}
           <View style={styles.field}>
@@ -349,6 +432,71 @@ export default function EditProfileScreen() {
 }
 
 const styles = StyleSheet.create({
+  // ── Header panel (migration 554) ──
+  headerPanel: {
+    height: verticalScale(190),
+    borderRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: colors.surface,
+    marginBottom: verticalScale(18),
+  },
+  headerPanelEmpty: {
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderColor: colors.accentBorder,
+    backgroundColor: colors.accentBg,
+  },
+  headerPanelScrim: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: '35%',
+    bottom: 0,
+  },
+  panelCenter: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  panelCorner: {
+    position: 'absolute',
+    left: horizontalScale(14),
+    bottom: verticalScale(12),
+    alignItems: 'center',
+    gap: verticalScale(6),
+  },
+  headerPanelEdit: {
+    position: 'absolute',
+    top: verticalScale(10),
+    right: horizontalScale(10),
+    width: horizontalScale(32),
+    height: horizontalScale(32),
+    borderRadius: horizontalScale(16),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(255,255,255,0.25)',
+  },
+  avatarOnPanel: {
+    borderWidth: 2,
+    borderColor: 'rgba(255,255,255,0.85)',
+  },
+  avatarCorner: {
+    width: horizontalScale(72),
+    height: horizontalScale(72),
+    borderRadius: horizontalScale(36),
+  },
+  changePhotoPill: {
+    paddingHorizontal: horizontalScale(12),
+    paddingVertical: verticalScale(4),
+    borderRadius: 999,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+  },
+  changePhotoTextOnPanel: {
+    color: colors.accentLight,
+  },
   root: { flex: 1, backgroundColor: colors.background },
   flex: { flex: 1 },
   topBar: {

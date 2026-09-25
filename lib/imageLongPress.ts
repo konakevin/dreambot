@@ -296,6 +296,9 @@ export interface PostActionSheetOpts extends LongPressOpts {
   /** Album-only: DISSOLVE (ungroup, keep the child dreams). Present ⇒ the row
    *  shows. onDelete is the DESTRUCTIVE path (deletes the children too). */
   onDissolve?: () => void;
+  /** "Use as profile header" (migration 554) — own dreams and bot posts, when
+   *  profile headers are enabled. Present ⇒ the row shows (never on albums). */
+  onUseAsHeader?: () => void;
   /** Album member image URLs (native res). Present ⇒ a "Save album to Photos"
    *  row that downloads ALL of them at once. Passed by BOTH the grid thumb and
    *  the dream card (Kevin 2026-07-11). */
@@ -434,6 +437,17 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
       icon: 'color-wand-outline',
       group: 'primary',
       onPress: opts.onDreamLikeThis,
+    });
+  }
+
+  // Use as profile header — opens the header picker with this picture tried on.
+  if (opts.onUseAsHeader && !opts.isGallery) {
+    rows.push({
+      key: 'use-as-header',
+      label: 'Use as profile header',
+      icon: 'image-outline',
+      group: 'primary',
+      onPress: opts.onUseAsHeader,
     });
   }
 

@@ -14,6 +14,8 @@ export interface BotUser {
    * empty for a private bot (it has zero is_public=true posts by definition).
    */
   is_public: boolean;
+  /** Dreamscape header copy (migrations 554/556), prefetched while idle. */
+  header_url: string | null;
 }
 
 /**

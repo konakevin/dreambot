@@ -48,6 +48,8 @@ import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useToggleBlock } from '@/hooks/useBlockUser';
 import { useBotUsers } from '@/hooks/useBotUsers';
+import { useProfileHeadersEnabled } from '@/hooks/useProfileHeaders';
+import { headerPickerHref } from '@/lib/profileHeaders';
 import { usePinPost } from '@/hooks/usePinPost';
 import { useDissolveAlbum } from '@/hooks/useDeletePost';
 import { useRepostIds } from '@/hooks/useRepostIds';
@@ -244,6 +246,9 @@ export const DreamCard = memo(function DreamCard({
   const toggleBlock = useToggleBlock();
   const { data: botUsers } = useBotUsers();
   const isBotAuthor = (botUsers ?? []).some((b) => b.id === item.user_id);
+  // "Use as profile header" (migration 554): own dreams and public bots' posts.
+  const headersEnabled = useProfileHeadersEnabled();
+  const headerBot = isBotAuthor ? (botUsers ?? []).find((b) => b.id === item.user_id) : undefined;
   // Long-press context menu (PostActionSheet).
   const [actionsOpen, setActionsOpen] = useState(false);
   // Profile pin toggle (migration 330) — own public posts only.
@@ -1020,6 +1025,20 @@ export const DreamCard = memo(function DreamCard({
             redreamSubtitle: dreamAgain.redreamSubtitle,
             authorName: item.username ?? undefined,
             isBot: isBotAuthor,
+            onUseAsHeader:
+              headersEnabled && !isGallery && (isOwnPost || !!headerBot?.is_public)
+                ? () =>
+                    nav.push(
+                      headerPickerHref({
+                        uploadId: item.id,
+                        imageUrl: item.image_url_display ?? item.image_url,
+                        own: isOwnPost,
+                        ownerId: item.user_id,
+                        ownerUsername: item.username ?? null,
+                        ownerAvatarUrl: headerBot?.avatar_url ?? null,
+                      })
+                    )
+                : undefined,
             onBlock: () => toggleBlock.mutate({ userId: item.user_id, currentlyBlocked: false }),
             onToggleVisibility: showVisibilityToggle ? onTogglePosted : undefined,
             isPublic: item.is_public,

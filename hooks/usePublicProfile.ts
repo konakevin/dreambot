@@ -16,6 +16,19 @@ export interface PublicProfile {
   followingCount: number;
   isFollowing: boolean;
   hasRequest: boolean;
+  /** Dreamscape header (migration 554). null = no header, compact layout. */
+  header: ProfileHeaderImage | null;
+}
+
+export interface ProfileHeaderImage {
+  url: string;
+  /** Crop position 0..100 (CSS object-position Y). */
+  focalY: number;
+  uploadId: string | null;
+  /** 'own' = one of the member's dreams; 'bot' = taken from a bot post. */
+  source: 'own' | 'bot';
+  /** The bot to credit when the header came from a bot post. */
+  credit: { userId: string; username: string; avatarUrl: string | null } | null;
 }
 
 export function usePublicProfile(userId: string) {
@@ -47,6 +60,22 @@ export function usePublicProfile(userId: string) {
         followingCount: Number(row.following_count),
         isFollowing: (row.is_following as boolean) ?? false,
         hasRequest: (row.has_request as boolean) ?? false,
+        header: row.header_url
+          ? {
+              url: row.header_url,
+              focalY: row.header_focal_y ?? 50,
+              uploadId: row.header_upload_id ?? null,
+              source: row.header_source === 'bot' ? 'bot' : 'own',
+              credit:
+                row.header_source === 'bot' && row.header_credit_user_id
+                  ? {
+                      userId: row.header_credit_user_id,
+                      username: row.header_credit_username ?? '',
+                      avatarUrl: row.header_credit_avatar_url ?? null,
+                    }
+                  : null,
+            }
+          : null,
       } as PublicProfile;
     },
     enabled: !!userId,

@@ -24,6 +24,12 @@
  * Display name falls back to `@username` when null; bio is omitted when
  * null/empty. Stats taps notify the parent — list overlays + tab switching stay
  * owned by the parent so this component is pure layout.
+ *
+ * Dreamscape header (migration 554): when `header` is set the layout switches to
+ * a full-bleed banner (ProfileBanner) that runs under the status bar, with the
+ * avatar + name in its bottom fade and stats / bio / actions below. The parent
+ * floats its top bar over the banner. No header → the compact layout above,
+ * unchanged, plus the optional "Add a header" strip on your own profile.
  */
 
 import type { ReactNode } from 'react';
@@ -32,11 +38,16 @@ import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, horizontalScale, useDeviceClass } from '@/lib/responsive';
 import { avatarUrl } from '@/lib/imageUrl';
 import type { StatsTab } from '@/components/ProfileStatsRow';
+import type { ProfileHeaderImage } from '@/hooks/usePublicProfile';
+import { ProfileBanner, HeaderCreditPill } from '@/components/ProfileBanner';
+import { headerHeight } from '@/lib/profileHeaders';
 
 const AVATAR_SIZE = 84;
+/** Avatar size on the Dreamscape banner (smaller: it shares the fade with the name). */
+const BANNER_AVATAR_SIZE = horizontalScale(68);
 
 interface BaseProps {
   avatar_url: string | null;
@@ -63,6 +74,14 @@ interface BaseProps {
   children?: ReactNode;
   /** Render `children` as a separate row below Edit/Share instead of inline. */
   stackChildren?: boolean;
+  /** Dreamscape header (migration 554). Present ⇒ the banner layout. */
+  header?: ProfileHeaderImage | null;
+  /** Tap on the credit pill of a header taken from a bot post. */
+  onHeaderCreditPress?: (userId: string) => void;
+  /** Own profile with no header yet: the dismissable "Add a header" strip. */
+  addHeaderStrip?: { onPress: () => void; onDismiss: () => void } | null;
+  /** Own profile: tapping the header opens the picker (avatar + credit keep their own taps). */
+  onHeaderPress?: () => void;
 }
 
 interface OwnVariant extends BaseProps {
@@ -104,31 +123,37 @@ function AvatarBlock({
   onPress,
   uploading,
   showCameraBadge,
+  size = AVATAR_SIZE,
+  ring,
 }: {
   avatar_url: string | null;
   username: string;
   onPress?: () => void;
   uploading?: boolean;
   showCameraBadge?: boolean;
+  size?: number;
+  /** White ring so the avatar separates from a picture behind it. */
+  ring?: boolean;
 }) {
   const initial = (username || '?')[0]?.toUpperCase() ?? '?';
+  const sized = { width: size, height: size, borderRadius: size / 2 };
   const image = avatar_url ? (
     <Image
       source={{ uri: avatarUrl(avatar_url) }}
-      style={styles.avatar}
+      style={[styles.avatar, sized, ring && styles.avatarRing]}
       contentFit="cover"
       cachePolicy="memory-disk"
     />
   ) : (
-    <View style={[styles.avatar, styles.avatarFallback]}>
-      <Text style={styles.avatarInitial}>{initial}</Text>
+    <View style={[styles.avatar, sized, styles.avatarFallback, ring && styles.avatarRing]}>
+      <Text style={[styles.avatarInitial, { fontSize: size * 0.4 }]}>{initial}</Text>
     </View>
   );
   const inner = (
     <View>
       {image}
       {uploading ? (
-        <View style={styles.avatarSpinner}>
+        <View style={[styles.avatarSpinner, sized]}>
           <ActivityIndicator color="#FFFFFF" />
         </View>
       ) : showCameraBadge ? (
@@ -182,7 +207,12 @@ export function ProfileHeader(props: Props) {
     onStatsPress,
     onAvatarPress,
     avatarUploading,
+    header,
+    onHeaderCreditPress,
+    addHeaderStrip,
+    onHeaderPress,
   } = props;
+  const { width, height } = useDeviceClass();
 
   const heroName = display_name?.trim() ? display_name : `@${username}`;
   const showHandleLine = !!display_name?.trim();
@@ -192,8 +222,208 @@ export function ProfileHeader(props: Props) {
   const avatarPress =
     props.variant === 'own' ? (props.onChangePhoto ?? onAvatarPress) : onAvatarPress;
 
+  const statsRow = (
+    <View style={[styles.statsRow, header && styles.statsRowBanner]}>
+      <Stat
+        count={postCount}
+        label={postCount === 1 ? 'Post' : 'Posts'}
+        active={props.activeStat === 'posts'}
+        onPress={() => onStatsPress('posts')}
+      />
+      <Stat
+        count={followerCount}
+        label={followerCount === 1 ? 'Follower' : 'Followers'}
+        active={props.activeStat === 'followers'}
+        onPress={() => onStatsPress('followers')}
+      />
+      <Stat
+        count={followingCount}
+        label="Following"
+        active={props.activeStat === 'following'}
+        onPress={() => onStatsPress('following')}
+      />
+    </View>
+  );
+
+  const bioText = hasBio ? (
+    <Text style={[styles.bio, header && styles.bioBanner]}>{bio}</Text>
+  ) : null;
+
+  const actions =
+    props.variant === 'own' ? (
+      <>
+        <View style={styles.actionRow}>
+          <TouchableOpacity
+            style={styles.actionPill}
+            onPress={props.onEditPress}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.actionText}>Edit Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.actionPill}
+            onPress={props.onSharePress}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.actionText}>Share</Text>
+          </TouchableOpacity>
+          {!props.stackChildren && props.children}
+        </View>
+        {props.stackChildren && <View style={styles.actionRowStacked}>{props.children}</View>}
+      </>
+    ) : (
+      <View style={styles.actionRow}>
+        {props.hasIncomingRequest ? (
+          // This user requested to follow ME → respond inline (the follow-
+          // request notification routes here, so Accept/Deny must live here).
+          <>
+            <TouchableOpacity
+              style={[styles.actionPill, styles.actionPillFollow]}
+              onPress={props.onAcceptRequest}
+              activeOpacity={0.7}
+            >
+              <Text style={[styles.actionText, styles.actionTextFollow]}>Accept</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.actionPill, styles.actionPillSecondary]}
+              onPress={props.onDenyRequest}
+              activeOpacity={0.7}
+            >
+              <Text style={[styles.actionText, styles.actionTextSecondary]}>Deny</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <TouchableOpacity
+            style={[
+              styles.actionPill,
+              styles.actionPillFollow,
+              (props.isFollowing || props.hasRequest) && styles.actionPillFollowing,
+            ]}
+            onPress={props.onFollowPress}
+            activeOpacity={0.7}
+          >
+            <Text
+              style={[
+                styles.actionText,
+                props.isFollowing || props.hasRequest
+                  ? styles.actionTextFollowing
+                  : styles.actionTextFollow,
+              ]}
+            >
+              {props.hasRequest ? 'Requested' : props.isFollowing ? 'Following' : 'Follow'}
+            </Text>
+          </TouchableOpacity>
+        )}
+        {!props.isBot && !props.isSelf && (
+          <>
+            {props.onMessagePress && (
+              <TouchableOpacity
+                style={[styles.actionPill, styles.actionPillSecondary]}
+                onPress={props.onMessagePress}
+                activeOpacity={0.7}
+              >
+                <Text style={[styles.actionText, styles.actionTextSecondary]}>Message</Text>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity
+              style={styles.iconPill}
+              onPress={props.onMorePress}
+              activeOpacity={0.7}
+              hitSlop={6}
+            >
+              <Ionicons name="ellipsis-horizontal" size={18} color={colors.textPrimary} />
+            </TouchableOpacity>
+          </>
+        )}
+      </View>
+    );
+
+  // ── Dreamscape layout: full-bleed banner, name in its fade, rest below ──
+  if (header) {
+    const credit = header.credit;
+    const banner = (
+      <ProfileBanner url={header.url} focalY={header.focalY} height={headerHeight(width, height)}>
+        <View style={styles.bannerIdRow}>
+          <AvatarBlock
+            avatar_url={avatar_url}
+            username={username}
+            onPress={avatarPress}
+            uploading={avatarUploading}
+            showCameraBadge={props.variant === 'own'}
+            size={BANNER_AVATAR_SIZE}
+            ring
+          />
+          <View style={styles.bannerIdentity}>
+            <Text style={[styles.heroName, styles.onImageShadow]} numberOfLines={1}>
+              {heroName}
+            </Text>
+            {showHandleLine && (
+              <Text style={[styles.handle, styles.handleOnImage]} numberOfLines={1}>
+                @{username}
+              </Text>
+            )}
+          </View>
+          {credit ? (
+            <HeaderCreditPill
+              username={credit.username}
+              avatarUrl={credit.avatarUrl}
+              onPress={onHeaderCreditPress ? () => onHeaderCreditPress(credit.userId) : undefined}
+            />
+          ) : null}
+        </View>
+      </ProfileBanner>
+    );
+    return (
+      <View>
+        {onHeaderPress ? (
+          <Pressable
+            onPress={onHeaderPress}
+            accessibilityRole="button"
+            accessibilityLabel="Change header"
+          >
+            {banner}
+          </Pressable>
+        ) : (
+          banner
+        )}
+        <View style={styles.bannerBody}>
+          {statsRow}
+          {bioText}
+          {actions}
+        </View>
+      </View>
+    );
+  }
+
+  // ── Compact layout (no header) ──
   return (
     <View style={styles.root}>
+      {addHeaderStrip ? (
+        <TouchableOpacity
+          style={styles.addHeaderStrip}
+          onPress={addHeaderStrip.onPress}
+          activeOpacity={0.8}
+          accessibilityRole="button"
+          accessibilityLabel="Add a header to your profile"
+        >
+          <Ionicons name="image-outline" size={18} color={colors.accent} />
+          <View style={styles.addHeaderText}>
+            <Text style={styles.addHeaderTitle}>Add a header</Text>
+            <Text style={styles.addHeaderSub}>
+              One of your dreams or a bot’s art. Only you see this.
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={addHeaderStrip.onDismiss}
+            hitSlop={10}
+            accessibilityRole="button"
+            accessibilityLabel="Dismiss"
+          >
+            <Ionicons name="close" size={18} color={colors.textSecondary} />
+          </TouchableOpacity>
+        </TouchableOpacity>
+      ) : null}
+
       {/* Row 1 — avatar LEFT, identity + stats stacked to its RIGHT */}
       <View style={styles.topRow}>
         <AvatarBlock
@@ -212,120 +442,15 @@ export function ProfileHeader(props: Props) {
               @{username}
             </Text>
           )}
-          <View style={styles.statsRow}>
-            <Stat
-              count={postCount}
-              label={postCount === 1 ? 'Post' : 'Posts'}
-              active={props.activeStat === 'posts'}
-              onPress={() => onStatsPress('posts')}
-            />
-            <Stat
-              count={followerCount}
-              label={followerCount === 1 ? 'Follower' : 'Followers'}
-              active={props.activeStat === 'followers'}
-              onPress={() => onStatsPress('followers')}
-            />
-            <Stat
-              count={followingCount}
-              label="Following"
-              active={props.activeStat === 'following'}
-              onPress={() => onStatsPress('following')}
-            />
-          </View>
+          {statsRow}
         </View>
       </View>
 
       {/* Row 2 — bio, full-width under the avatar row */}
-      {hasBio && <Text style={styles.bio}>{bio}</Text>}
+      {bioText}
 
       {/* Row 3 — action pills (+ sparkle chip via children on own) */}
-      {props.variant === 'own' ? (
-        <>
-          <View style={styles.actionRow}>
-            <TouchableOpacity
-              style={styles.actionPill}
-              onPress={props.onEditPress}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.actionText}>Edit Profile</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.actionPill}
-              onPress={props.onSharePress}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.actionText}>Share</Text>
-            </TouchableOpacity>
-            {!props.stackChildren && props.children}
-          </View>
-          {props.stackChildren && <View style={styles.actionRowStacked}>{props.children}</View>}
-        </>
-      ) : (
-        <View style={styles.actionRow}>
-          {props.hasIncomingRequest ? (
-            // This user requested to follow ME → respond inline (the follow-
-            // request notification routes here, so Accept/Deny must live here).
-            <>
-              <TouchableOpacity
-                style={[styles.actionPill, styles.actionPillFollow]}
-                onPress={props.onAcceptRequest}
-                activeOpacity={0.7}
-              >
-                <Text style={[styles.actionText, styles.actionTextFollow]}>Accept</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.actionPill, styles.actionPillSecondary]}
-                onPress={props.onDenyRequest}
-                activeOpacity={0.7}
-              >
-                <Text style={[styles.actionText, styles.actionTextSecondary]}>Deny</Text>
-              </TouchableOpacity>
-            </>
-          ) : (
-            <TouchableOpacity
-              style={[
-                styles.actionPill,
-                styles.actionPillFollow,
-                (props.isFollowing || props.hasRequest) && styles.actionPillFollowing,
-              ]}
-              onPress={props.onFollowPress}
-              activeOpacity={0.7}
-            >
-              <Text
-                style={[
-                  styles.actionText,
-                  props.isFollowing || props.hasRequest
-                    ? styles.actionTextFollowing
-                    : styles.actionTextFollow,
-                ]}
-              >
-                {props.hasRequest ? 'Requested' : props.isFollowing ? 'Following' : 'Follow'}
-              </Text>
-            </TouchableOpacity>
-          )}
-          {!props.isBot && !props.isSelf && (
-            <>
-              {props.onMessagePress && (
-                <TouchableOpacity
-                  style={[styles.actionPill, styles.actionPillSecondary]}
-                  onPress={props.onMessagePress}
-                  activeOpacity={0.7}
-                >
-                  <Text style={[styles.actionText, styles.actionTextSecondary]}>Message</Text>
-                </TouchableOpacity>
-              )}
-              <TouchableOpacity
-                style={styles.iconPill}
-                onPress={props.onMorePress}
-                activeOpacity={0.7}
-                hitSlop={6}
-              >
-                <Ionicons name="ellipsis-horizontal" size={18} color={colors.textPrimary} />
-              </TouchableOpacity>
-            </>
-          )}
-        </View>
-      )}
+      {actions}
     </View>
   );
 }
@@ -371,6 +496,10 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: AVATAR_SIZE * 0.4,
     fontWeight: '700',
+  },
+  avatarRing: {
+    borderWidth: 2,
+    borderColor: 'rgba(255,255,255,0.85)',
   },
   // Camera badge — bottom-right of the avatar, signals "tap to change photo"
   // (own profile). Punched out from the page bg with a dark ring.
@@ -481,6 +610,66 @@ const styles = StyleSheet.create({
   },
   actionTextSecondary: {
     color: colors.textPrimary,
+  },
+  // ── Dreamscape banner layout (migration 554) ──
+  bannerIdRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: horizontalScale(12),
+  },
+  bannerIdentity: {
+    flex: 1,
+    minWidth: 0,
+    gap: verticalScale(2),
+  },
+  onImageShadow: {
+    textShadowColor: 'rgba(0,0,0,0.45)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 6,
+  },
+  // Secondary text over a picture: white at 68%, not the app grey (#8E8E9E
+  // needs an 84% fade behind it to pass 4.5:1 on a white pixel; this needs 67%).
+  handleOnImage: {
+    color: colors.subtleOnDark,
+  },
+  bannerBody: {
+    paddingHorizontal: horizontalScale(16),
+    paddingTop: verticalScale(4),
+    paddingBottom: verticalScale(12),
+  },
+  statsRowBanner: {
+    marginTop: 0,
+  },
+  bioBanner: {
+    marginTop: verticalScale(10),
+  },
+  // ── "Add a header" strip (own profile, no header yet) ──
+  addHeaderStrip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: horizontalScale(10),
+    paddingVertical: verticalScale(10),
+    paddingHorizontal: horizontalScale(12),
+    marginBottom: verticalScale(12),
+    borderRadius: 12,
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderColor: colors.accentBorder,
+    backgroundColor: colors.accentBg,
+  },
+  addHeaderText: {
+    flex: 1,
+    minWidth: 0,
+  },
+  addHeaderTitle: {
+    color: colors.textPrimary,
+    fontSize: fontScale(14),
+    fontWeight: '700',
+  },
+  addHeaderSub: {
+    color: colors.textSecondary,
+    fontSize: fontScale(12),
+    marginTop: verticalScale(1),
   },
   iconPill: {
     width: 38,

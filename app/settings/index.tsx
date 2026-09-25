@@ -27,6 +27,7 @@ import { CreateIntroSheet } from '@/components/CreateIntroSheet';
 import { MediumsIntroSheet } from '@/components/MediumsIntroSheet';
 import { resetAllFirstRunFlags } from '@/lib/firstRunFlags';
 import { resetAiConsent } from '@/lib/aiConsent';
+import { resetHeaderStripDismissed } from '@/hooks/useProfileHeaders';
 import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -499,6 +500,21 @@ export default function SettingsScreen() {
                 showAlert(
                   'AI consent reset',
                   'The consent sheet will show again next time you add a photo in Dream Cast or Create.'
+                );
+              }}
+              trailing={null}
+            />
+            <SettingsRow
+              icon="image-outline"
+              label="Reset Header Prompt (test)"
+              onPress={async () => {
+                // Brings back the dismissable "Add a header" strip on your own
+                // profile (migration 554). It only shows while you have no header.
+                await resetHeaderStripDismissed().catch(() => {});
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                showAlert(
+                  'Header prompt reset',
+                  'The "Add a header" strip shows again on your profile while you have no header.'
                 );
               }}
               trailing={null}

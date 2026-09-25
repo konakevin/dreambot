@@ -14,7 +14,7 @@ import {
 import * as Clipboard from 'expo-clipboard';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets, type Edge } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
@@ -48,7 +48,9 @@ import { useBulkDeletePosts, useBulkMakePrivate } from '@/hooks/useDeletePost';
 import { useBulkUnsave, useBulkUnrepost } from '@/hooks/useBulkUnsaveUnrepost';
 import { AvatarPreviewModal } from '@/components/AvatarPreviewModal';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, useDeviceClass } from '@/lib/responsive';
+import { useProfileHeadersEnabled, useHeaderStripDismissed } from '@/hooks/useProfileHeaders';
+import { headerHeight } from '@/lib/profileHeaders';
 import { useRenderDockHeight, useRenderDockStore } from '@/store/renderDock';
 import { useFocusEffect } from '@react-navigation/native';
 import { trackProfileViewed } from '@/lib/analytics';
@@ -59,6 +61,12 @@ import type { FollowUser } from '@/hooks/useFollowersList';
 
 type Tab = 'posts' | 'saved' | 'dreams' | 'reposts' | 'followers' | 'following';
 type SavedFilter = 'bookmarked' | 'hearted';
+
+// Dreamscape header (migration 554): the banner runs under the status bar, so the
+// screen drops the TOP safe-area edge and floats its top bar over the picture.
+const SAFE_EDGES_WITH_BANNER: Edge[] = ['left', 'right', 'bottom'];
+/** Height of the top bar's content row (icons), below the status bar. */
+const TOP_BAR_CONTENT_H = verticalScale(44);
 
 export default function ProfileScreen() {
   const user = useAuthStore((s) => s.user);
@@ -447,6 +455,17 @@ export default function ProfileScreen() {
   // Only fetch what's needed for the active tab — avoids 6+ parallel queries on mount
   const isSocialTab = activeTab === 'followers' || activeTab === 'following';
   const { data: profile, refetch: refetchProfile } = usePublicProfile(user?.id ?? '');
+  // Dreamscape header (migration 554) — shown only while the feature is enabled.
+  const headersEnabled = useProfileHeadersEnabled();
+  const profileHeader = headersEnabled ? (profile?.header ?? null) : null;
+  const hasBanner = !!profileHeader;
+  const [headerStripDismissed, dismissHeaderStrip] = useHeaderStripDismissed();
+  const insets = useSafeAreaInsets();
+  const { width: winW, height: winH } = useDeviceClass();
+  // Scroll offset at which the banner's name row passes under the top bar.
+  const bannerCollapseAt = hasBanner
+    ? Math.max(0, headerHeight(winW, winH) - insets.top - TOP_BAR_CONTENT_H)
+    : 0;
   // Change-avatar action sheet (under the avatar) — moved here from Settings.
   const {
     chooseFromLibrary,
@@ -600,12 +619,12 @@ export default function ProfileScreen() {
   // past the big hero avatar (96px) + a little overshoot. Interpolations
   // share a single shared value so they stay in lockstep.
   const compactAvatarOpacity = scrollY.interpolate({
-    inputRange: [60, 130],
+    inputRange: hasBanner ? [bannerCollapseAt - 30, bannerCollapseAt + 20] : [60, 130],
     outputRange: [0, 1],
     extrapolate: 'clamp',
   });
   const compactAvatarWidth = scrollY.interpolate({
-    inputRange: [60, 130],
+    inputRange: hasBanner ? [bannerCollapseAt - 30, bannerCollapseAt + 20] : [60, 130],
     outputRange: [0, 36], // 28px avatar + 8px margin
     extrapolate: 'clamp',
   });
@@ -614,12 +633,19 @@ export default function ProfileScreen() {
   // @kevin in the top bar too would be redundant. Only reveals once the
   // hero has scrolled away.
   const compactHandleOpacity = scrollY.interpolate({
-    inputRange: [80, 150],
+    inputRange: hasBanner ? [bannerCollapseAt - 10, bannerCollapseAt + 40] : [80, 150],
     outputRange: [0, 1],
     extrapolate: 'clamp',
   });
   const topBarBorderOpacity = scrollY.interpolate({
-    inputRange: [20, 80],
+    inputRange: hasBanner ? [bannerCollapseAt - 10, bannerCollapseAt + 10] : [20, 80],
+    outputRange: [0, 1],
+    extrapolate: 'clamp',
+  });
+  // With a banner the bar starts see-through over the picture and turns solid
+  // black as the name row slides under it.
+  const topBarBackdropOpacity = scrollY.interpolate({
+    inputRange: [bannerCollapseAt - 60, bannerCollapseAt],
     outputRange: [0, 1],
     extrapolate: 'clamp',
   });
@@ -629,7 +655,18 @@ export default function ProfileScreen() {
   // beneath cleanly; the hairline bottom border fades in on scroll to
   // mark the boundary visually.
   const stickyTopBar = (
-    <Animated.View style={styles.topBar}>
+    <Animated.View
+      style={[
+        styles.topBar,
+        hasBanner && [styles.topBarOverlay, { paddingTop: insets.top + verticalScale(6) }],
+      ]}
+    >
+      {hasBanner && (
+        <Animated.View
+          pointerEvents="none"
+          style={[styles.topBarBackdrop, { opacity: gridSelecting ? 1 : topBarBackdropOpacity }]}
+        />
+      )}
       {/* While multi-selecting, the ALWAYS-VISIBLE top bar becomes the selection
           bar (count + Cancel) so you can always exit — the old count/Cancel lived
           in the grid's scrolling subheader and vanished once you scrolled the
@@ -744,6 +781,14 @@ export default function ProfileScreen() {
         onEditPress={handleEditProfile}
         onSharePress={handleShareProfile}
         onChangePhoto={() => setShowPicSheet(true)}
+        header={profileHeader}
+        onHeaderPress={() => nav.push('/headerPicker')}
+        onHeaderCreditPress={(creditUserId) => nav.push(`/user/${creditUserId}`)}
+        addHeaderStrip={
+          headersEnabled && !profile?.header && !headerStripDismissed
+            ? { onPress: () => nav.push('/headerPicker'), onDismiss: dismissHeaderStrip }
+            : null
+        }
       >
         {/* Sparkle balance + a doorway to the store (own profile only) */}
         <TouchableOpacity
@@ -920,7 +965,7 @@ export default function ProfileScreen() {
       reposts: 'Dreams you repost will show up here.',
     };
     return (
-      <SafeAreaView style={styles.root}>
+      <SafeAreaView style={styles.root} edges={hasBanner ? SAFE_EDGES_WITH_BANNER : undefined}>
         {avatarPreview}
         {stickyTopBar}
         <PostGrid
@@ -1090,7 +1135,7 @@ export default function ProfileScreen() {
   const emptyLabel = activeTab === 'followers' ? 'No followers yet' : 'Not following anyone yet';
 
   return (
-    <SafeAreaView style={styles.root}>
+    <SafeAreaView style={styles.root} edges={hasBanner ? SAFE_EDGES_WITH_BANNER : undefined}>
       {avatarPreview}
       {stickyTopBar}
       <FlatList<FollowUser>
@@ -1339,6 +1384,18 @@ const styles = StyleSheet.create({
     // Bumped 14 → 22 so the inbox badge's right-edge (sticking ~6px
     // past the icon) has clear breathing room from the gear next door.
     gap: 22,
+  },
+  // Dreamscape header: the bar floats over the banner (see-through at rest).
+  topBarOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'transparent',
+  },
+  topBarBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: colors.background,
   },
   topBarBottomBorder: {
     position: 'absolute',

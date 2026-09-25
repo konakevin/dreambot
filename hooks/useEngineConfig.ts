@@ -50,6 +50,9 @@ export interface EngineConfig {
   // Per-user in-flight cap (migration 425): most dreams queued/rendering at once.
   // Used to pre-empt the 6th create on the Create screen.
   maxInflightDreams: number;
+  // Dreamscape profile headers (migration 554). Ships dark: false hides the
+  // banner, the picker and every entry point (the supreme admin still sees them).
+  profileHeadersEnabled: boolean;
 }
 
 // Defaults = the values previously hardcoded in the client (behavior unchanged
@@ -77,6 +80,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   newScenePriceBest: 5,
   galleryMaxImages: 10,
   maxInflightDreams: 5,
+  profileHeadersEnabled: false,
 };
 
 function num(v: unknown, d: number): number {
@@ -151,6 +155,10 @@ export function useEngineConfig(): EngineConfig {
           c.max_inflight_dreams_per_user,
           DEFAULT_ENGINE_CONFIG.maxInflightDreams
         ),
+        profileHeadersEnabled:
+          typeof c.profile_headers_enabled === 'boolean'
+            ? c.profile_headers_enabled
+            : DEFAULT_ENGINE_CONFIG.profileHeadersEnabled,
       };
     },
     staleTime: 5 * 60_000,

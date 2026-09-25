@@ -1675,6 +1675,12 @@ export type Database = {
           create_activity_wardrobe: boolean;
           create_couple_approvals: boolean;
           create_couple_engine: string;
+          create_outfit_independent_pct: number;
+          create_outfit_pattern_pct: number;
+          create_outfit_preview_user_ids: string[];
+          create_outfit_rolls: boolean;
+          create_outfit_separate_cut_pct: number;
+          create_outfit_user_lock: boolean;
           create_prompt_scene_split: boolean;
           create_retry_changes_model: boolean;
           create_scene_axes: boolean;
@@ -1719,6 +1725,8 @@ export type Database = {
           female_hair_variation_pct: number;
           first_dream_ip_max: number;
           first_dream_ip_window_hours: number;
+          fly_dual_swap_interactive_reserve: number;
+          fly_dual_swap_slots: number;
           gallery_max_images: number;
           gift_max_per_day: number;
           gift_max_per_send: number;
@@ -1742,6 +1750,8 @@ export type Database = {
           nightly_couple_engine: string;
           nightly_couple_eye_lock: boolean;
           nightly_enabled: boolean;
+          nightly_enqueue_max_spread_min: number;
+          nightly_enqueue_spacing_s: number;
           nightly_flux_couple_honest_looks: boolean;
           nightly_legacy_look_pct: number;
           nightly_look_recency: number;
@@ -1751,12 +1761,14 @@ export type Database = {
           nightly_max_jobs: number;
           nightly_require_ai_enabled: boolean;
           nightly_require_onboarding: boolean;
+          nightly_swap_capacity_retries: number;
           pet_words: string;
           photo_preprocess_quality: number;
           photo_preprocess_width: number;
           pro_hd_downloads_per_month: number;
           pro_monthly_sparkle_bundle: number;
           pro_trial_days: number;
+          profile_headers_enabled: boolean;
           prompt_max_length: number;
           quality_gate_max_retries: number;
           quality_gate_mode: string;
@@ -1777,6 +1789,8 @@ export type Database = {
           single_scene_elegant_pct: number;
           single_scene_goofy_pct: number;
           solo_rebuild_model: string;
+          swap_gate_enabled: boolean;
+          swap_gate_max_wait_ms: number;
           updated_at: string;
           welcome_sparkle_bonus: number;
         };
@@ -1793,6 +1807,12 @@ export type Database = {
           create_activity_wardrobe?: boolean;
           create_couple_approvals?: boolean;
           create_couple_engine?: string;
+          create_outfit_independent_pct?: number;
+          create_outfit_pattern_pct?: number;
+          create_outfit_preview_user_ids?: string[];
+          create_outfit_rolls?: boolean;
+          create_outfit_separate_cut_pct?: number;
+          create_outfit_user_lock?: boolean;
           create_prompt_scene_split?: boolean;
           create_retry_changes_model?: boolean;
           create_scene_axes?: boolean;
@@ -1837,6 +1857,8 @@ export type Database = {
           female_hair_variation_pct?: number;
           first_dream_ip_max?: number;
           first_dream_ip_window_hours?: number;
+          fly_dual_swap_interactive_reserve?: number;
+          fly_dual_swap_slots?: number;
           gallery_max_images?: number;
           gift_max_per_day?: number;
           gift_max_per_send?: number;
@@ -1860,6 +1882,8 @@ export type Database = {
           nightly_couple_engine?: string;
           nightly_couple_eye_lock?: boolean;
           nightly_enabled?: boolean;
+          nightly_enqueue_max_spread_min?: number;
+          nightly_enqueue_spacing_s?: number;
           nightly_flux_couple_honest_looks?: boolean;
           nightly_legacy_look_pct?: number;
           nightly_look_recency?: number;
@@ -1869,12 +1893,14 @@ export type Database = {
           nightly_max_jobs?: number;
           nightly_require_ai_enabled?: boolean;
           nightly_require_onboarding?: boolean;
+          nightly_swap_capacity_retries?: number;
           pet_words?: string;
           photo_preprocess_quality?: number;
           photo_preprocess_width?: number;
           pro_hd_downloads_per_month?: number;
           pro_monthly_sparkle_bundle?: number;
           pro_trial_days?: number;
+          profile_headers_enabled?: boolean;
           prompt_max_length?: number;
           quality_gate_max_retries?: number;
           quality_gate_mode?: string;
@@ -1895,6 +1921,8 @@ export type Database = {
           single_scene_elegant_pct?: number;
           single_scene_goofy_pct?: number;
           solo_rebuild_model?: string;
+          swap_gate_enabled?: boolean;
+          swap_gate_max_wait_ms?: number;
           updated_at?: string;
           welcome_sparkle_bonus?: number;
         };
@@ -1911,6 +1939,12 @@ export type Database = {
           create_activity_wardrobe?: boolean;
           create_couple_approvals?: boolean;
           create_couple_engine?: string;
+          create_outfit_independent_pct?: number;
+          create_outfit_pattern_pct?: number;
+          create_outfit_preview_user_ids?: string[];
+          create_outfit_rolls?: boolean;
+          create_outfit_separate_cut_pct?: number;
+          create_outfit_user_lock?: boolean;
           create_prompt_scene_split?: boolean;
           create_retry_changes_model?: boolean;
           create_scene_axes?: boolean;
@@ -1955,6 +1989,8 @@ export type Database = {
           female_hair_variation_pct?: number;
           first_dream_ip_max?: number;
           first_dream_ip_window_hours?: number;
+          fly_dual_swap_interactive_reserve?: number;
+          fly_dual_swap_slots?: number;
           gallery_max_images?: number;
           gift_max_per_day?: number;
           gift_max_per_send?: number;
@@ -1978,6 +2014,8 @@ export type Database = {
           nightly_couple_engine?: string;
           nightly_couple_eye_lock?: boolean;
           nightly_enabled?: boolean;
+          nightly_enqueue_max_spread_min?: number;
+          nightly_enqueue_spacing_s?: number;
           nightly_flux_couple_honest_looks?: boolean;
           nightly_legacy_look_pct?: number;
           nightly_look_recency?: number;
@@ -1987,12 +2025,14 @@ export type Database = {
           nightly_max_jobs?: number;
           nightly_require_ai_enabled?: boolean;
           nightly_require_onboarding?: boolean;
+          nightly_swap_capacity_retries?: number;
           pet_words?: string;
           photo_preprocess_quality?: number;
           photo_preprocess_width?: number;
           pro_hd_downloads_per_month?: number;
           pro_monthly_sparkle_bundle?: number;
           pro_trial_days?: number;
+          profile_headers_enabled?: boolean;
           prompt_max_length?: number;
           quality_gate_max_retries?: number;
           quality_gate_mode?: string;
@@ -2013,6 +2053,8 @@ export type Database = {
           single_scene_elegant_pct?: number;
           single_scene_goofy_pct?: number;
           solo_rebuild_model?: string;
+          swap_gate_enabled?: boolean;
+          swap_gate_max_wait_ms?: number;
           updated_at?: string;
           welcome_sparkle_bonus?: number;
         };
@@ -3540,6 +3582,30 @@ export type Database = {
           },
         ];
       };
+      swap_slot_leases: {
+        Row: {
+          acquired_at: string;
+          expires_at: string;
+          holder: string | null;
+          id: string;
+          priority: string;
+        };
+        Insert: {
+          acquired_at?: string;
+          expires_at: string;
+          holder?: string | null;
+          id?: string;
+          priority: string;
+        };
+        Update: {
+          acquired_at?: string;
+          expires_at?: string;
+          holder?: string | null;
+          id?: string;
+          priority?: string;
+        };
+        Relationships: [];
+      };
       upload_media: {
         Row: {
           created_at: string;
@@ -3982,6 +4048,12 @@ export type Database = {
           email: string;
           first_dream_completed_at: string | null;
           has_ai_recipe: boolean;
+          header_credit_user_id: string | null;
+          header_focal_y: number;
+          header_set_at: string | null;
+          header_source: string | null;
+          header_upload_id: string | null;
+          header_url: string | null;
           id: string;
           is_admin: boolean | null;
           is_banned: boolean;
@@ -4020,6 +4092,12 @@ export type Database = {
           email: string;
           first_dream_completed_at?: string | null;
           has_ai_recipe?: boolean;
+          header_credit_user_id?: string | null;
+          header_focal_y?: number;
+          header_set_at?: string | null;
+          header_source?: string | null;
+          header_upload_id?: string | null;
+          header_url?: string | null;
           id: string;
           is_admin?: boolean | null;
           is_banned?: boolean;
@@ -4058,6 +4136,12 @@ export type Database = {
           email?: string;
           first_dream_completed_at?: string | null;
           has_ai_recipe?: boolean;
+          header_credit_user_id?: string | null;
+          header_focal_y?: number;
+          header_set_at?: string | null;
+          header_source?: string | null;
+          header_upload_id?: string | null;
+          header_url?: string | null;
           id?: string;
           is_admin?: boolean | null;
           is_banned?: boolean;
@@ -4085,6 +4169,13 @@ export type Database = {
             referencedRelation: 'users';
             referencedColumns: ['id'];
           },
+          {
+            foreignKeyName: 'users_header_credit_user_id_fkey';
+            columns: ['header_credit_user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
         ];
       };
     };
@@ -4101,6 +4192,10 @@ export type Database = {
     Functions: {
       accept_invite: { Args: { p_game_id: string }; Returns: Json };
       account_created_before: { Args: { ts: string }; Returns: boolean };
+      acquire_swap_slot: {
+        Args: { p_holder: string; p_priority: string; p_ttl_ms: number };
+        Returns: string;
+      };
       activate_announcement: { Args: { p_id: string }; Returns: undefined };
       admin_ban_user: { Args: { p_user_id: string }; Returns: undefined };
       admin_db_connections: {
@@ -4433,6 +4528,7 @@ export type Database = {
         Args: never;
         Returns: {
           avatar_url: string;
+          header_url: string;
           id: string;
           is_public: boolean;
           username: string;
@@ -4586,6 +4682,22 @@ export type Database = {
           username: string;
         }[];
       };
+      get_header_suggestions: {
+        Args: {
+          p_bot_id?: string;
+          p_exclude?: string[];
+          p_limit?: number;
+          p_source?: string;
+        };
+        Returns: {
+          image_url: string;
+          is_private: boolean;
+          owner_avatar_url: string;
+          owner_id: string;
+          owner_username: string;
+          upload_id: string;
+        }[];
+      };
       get_image_models: {
         Args: never;
         Returns: {
@@ -4676,6 +4788,13 @@ export type Database = {
           follower_count: number;
           following_count: number;
           has_request: boolean;
+          header_credit_avatar_url: string;
+          header_credit_user_id: string;
+          header_credit_username: string;
+          header_focal_y: number;
+          header_source: string;
+          header_upload_id: string;
+          header_url: string;
           id: string;
           is_following: boolean;
           is_public: boolean;
@@ -4824,6 +4943,10 @@ export type Database = {
         Args: { p_amount: number; p_reason: string; p_user_id: string };
         Returns: undefined;
       };
+      header_source_check: {
+        Args: { p_upload_id: string; p_user_id: string };
+        Returns: Json;
+      };
       invite_players: {
         Args: { p_game_id: string; p_user_ids: string[] };
         Returns: Json;
@@ -4881,6 +5004,10 @@ export type Database = {
           tx_count: number;
         }[];
       };
+      record_capacity_retry_pin: {
+        Args: { p_job_id: string; p_partner_id: string };
+        Returns: boolean;
+      };
       record_impression: {
         Args: { p_upload_id: string; p_user_id: string };
         Returns: undefined;
@@ -4894,6 +5021,7 @@ export type Database = {
         };
         Returns: boolean;
       };
+      release_swap_slot: { Args: { p_id: string }; Returns: undefined };
       request_dream_notification: {
         Args: { p_job_id: string };
         Returns: undefined;

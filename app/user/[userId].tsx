@@ -12,7 +12,7 @@ import {
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { GestureDetector } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets, type Edge } from 'react-native-safe-area-context';
 import { useAxisLockSwipeBack } from '@/hooks/gestures/useAxisLockSwipeBack';
 import { useLocalSearchParams, router, Redirect } from 'expo-router';
 import { safeBack } from '@/lib/navigate';
@@ -43,8 +43,11 @@ import { useAuthStore } from '@/store/auth';
 import { useAlbumStore } from '@/store/album';
 import { PostGrid } from '@/components/PostGrid';
 import { ProfileHeader } from '@/components/ProfileHeader';
+import { OVERLAY_PILL_ACTIVE_BG } from '@/components/OverlayPill';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, useDeviceClass } from '@/lib/responsive';
+import { useProfileHeadersEnabled } from '@/hooks/useProfileHeaders';
+import { headerHeight } from '@/lib/profileHeaders';
 import { FollowUserRow } from '@/components/FollowUserRow';
 import { useReport } from '@/hooks/useReport';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
@@ -57,6 +60,12 @@ import { trackProfileViewed } from '@/lib/analytics';
 import type { FollowUser } from '@/hooks/useFollowersList';
 
 type Tab = 'posts' | 'followers' | 'following';
+
+// Dreamscape header (migration 554): the banner runs under the status bar, so the
+// screen drops the TOP safe-area edge and floats its top bar over the picture.
+const SAFE_EDGES_WITH_BANNER: Edge[] = ['left', 'right', 'bottom'];
+/** Height of the top bar's content row (back chevron), below the status bar. */
+const TOP_BAR_CONTENT_H = verticalScale(44);
 
 export default function PublicProfileScreen() {
   const { userId, viewedPost, drawer } = useLocalSearchParams<{
@@ -153,22 +162,54 @@ export default function PublicProfileScreen() {
     transform: [{ translateY: 10 * (1 - avatarProgress.value) }],
   }));
 
+  // ── Dreamscape header (migration 554) ──
+  const headersEnabled = useProfileHeadersEnabled();
+  const profileHeader = headersEnabled ? (profile?.header ?? null) : null;
+  const hasBanner = !!profileHeader;
+  const insets = useSafeAreaInsets();
+  const { width: winW, height: winH } = useDeviceClass();
+  // Scroll offset at which the banner's name row passes under the top bar
+  // (0 = no banner; the classic thresholds apply).
+  const bannerCollapseAt = hasBanner
+    ? Math.max(1, headerHeight(winW, winH) - insets.top - TOP_BAR_CONTENT_H)
+    : 0;
+  const bannerCollapse = useSharedValue(0);
+  const bannerCollapseRef = useRef(0);
+  bannerCollapseRef.current = bannerCollapseAt;
+  useEffect(() => {
+    bannerCollapse.value = bannerCollapseAt;
+  }, [bannerCollapse, bannerCollapseAt]);
+
   // ── Collapsing-hero hooks — must live ABOVE the early-return guard
   // for `profileLoading || !profile` so hook order stays stable across
   // renders (rules-of-hooks). They read no profile-dependent data, just
   // a scroll y-position driven by both code paths (PostGrid via
   // onScrollProgress and the followers/following FlatList's onScroll).
   const scrollY = useSharedValue(0);
-  const compactAvatarStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(scrollY.value, [60, 130], [0, 1], Extrapolation.CLAMP),
-    width: interpolate(scrollY.value, [60, 130], [0, 36], Extrapolation.CLAMP),
-  }));
-  const compactNameStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(scrollY.value, [80, 150], [0, 1], Extrapolation.CLAMP),
-  }));
-  const topBarBorderStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(scrollY.value, [20, 80], [0, 1], Extrapolation.CLAMP),
-  }));
+  const compactAvatarStyle = useAnimatedStyle(() => {
+    const c = bannerCollapse.value;
+    const range = c > 0 ? [c - 30, c + 20] : [60, 130];
+    return {
+      opacity: interpolate(scrollY.value, range, [0, 1], Extrapolation.CLAMP),
+      width: interpolate(scrollY.value, range, [0, 36], Extrapolation.CLAMP),
+    };
+  });
+  const compactNameStyle = useAnimatedStyle(() => {
+    const c = bannerCollapse.value;
+    const range = c > 0 ? [c - 10, c + 40] : [80, 150];
+    return { opacity: interpolate(scrollY.value, range, [0, 1], Extrapolation.CLAMP) };
+  });
+  const topBarBorderStyle = useAnimatedStyle(() => {
+    const c = bannerCollapse.value;
+    const range = c > 0 ? [c - 10, c + 10] : [20, 80];
+    return { opacity: interpolate(scrollY.value, range, [0, 1], Extrapolation.CLAMP) };
+  });
+  // With a banner the bar starts see-through over the picture and turns solid
+  // black as the name row slides under it.
+  const topBarBackdropStyle = useAnimatedStyle(() => {
+    const c = bannerCollapse.value;
+    return { opacity: interpolate(scrollY.value, [c - 60, c], [0, 1], Extrapolation.CLAMP) };
+  });
   // Collapsed flag for the sticky bar's Follow pill: its OPACITY is animated
   // by compactNameStyle, but pointerEvents needs a JS boolean so the invisible
   // pill can't catch stray taps while the hero header is still on screen.
@@ -176,7 +217,7 @@ export default function PublicProfileScreen() {
   const barCollapsedRef = useRef(false);
   const handleScrollProgress = (y: number) => {
     scrollY.value = y;
-    const collapsed = y > 100;
+    const collapsed = y > (bannerCollapseRef.current > 0 ? bannerCollapseRef.current : 100);
     if (collapsed !== barCollapsedRef.current) {
       barCollapsedRef.current = collapsed;
       setBarCollapsed(collapsed);
@@ -330,8 +371,20 @@ export default function PublicProfileScreen() {
   const heroNameForBar = profile.display_name?.trim() || `@${profile.username}`;
 
   const stickyTopBar = (
-    <Animated.View style={styles.topBar}>
-      <TouchableOpacity onPress={() => safeBack()} style={styles.iconButton} hitSlop={12}>
+    <Animated.View
+      style={[
+        styles.topBar,
+        hasBanner && [styles.topBarOverlay, { paddingTop: insets.top + verticalScale(6) }],
+      ]}
+    >
+      {hasBanner && (
+        <Animated.View pointerEvents="none" style={[styles.topBarBackdrop, topBarBackdropStyle]} />
+      )}
+      <TouchableOpacity
+        onPress={() => safeBack()}
+        style={[styles.iconButton, hasBanner && styles.iconButtonOnImage]}
+        hitSlop={12}
+      >
         <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
       </TouchableOpacity>
       {/* Tap-to-top target — covers the collapsed avatar + name slot.
@@ -431,6 +484,8 @@ export default function PublicProfileScreen() {
         onAvatarPress={() => setShowAvatarPreview(true)}
         onFollowPress={handleFollow}
         onMorePress={() => setMoreOpen(true)}
+        header={profileHeader}
+        onHeaderCreditPress={(creditUserId) => router.push(`/user/${creditUserId}`)}
       />
       {/* Posts / Reposts icon toggle — shown on every profile (not blocked).
           Reposts are viewable even on private accounts we don't follow, so the
@@ -646,7 +701,7 @@ export default function PublicProfileScreen() {
     return (
       <GestureDetector gesture={backGesture}>
         <Animated.View style={[styles.root, backStyle]}>
-          <SafeAreaView style={styles.root}>
+          <SafeAreaView style={styles.root} edges={hasBanner ? SAFE_EDGES_WITH_BANNER : undefined}>
             {backButton}
             {avatarModal}
             {stickyTopBar}
@@ -723,7 +778,7 @@ export default function PublicProfileScreen() {
   // (fullScreenGestureEnabled: true in SCREEN_PRESETS.MODAL_SWIPEABLE).
   return (
     <View style={styles.root}>
-      <SafeAreaView style={styles.root}>
+      <SafeAreaView style={styles.root} edges={hasBanner ? SAFE_EDGES_WITH_BANNER : undefined}>
         {backButton}
         {avatarModal}
         {stickyTopBar}
@@ -841,6 +896,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     zIndex: 10,
   },
+  // Dreamscape header: the bar floats over the banner (see-through at rest).
+  topBarOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'transparent',
+  },
+  topBarBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: colors.background,
+  },
   // Wraps the collapsed avatar + name as a single tap-to-top target.
   // No flex:1 — the slot's width grows with the animated avatar/name so
   // the tap area mirrors the visible content (tiny at scrollY=0, fills
@@ -877,6 +944,8 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   iconButton: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
+  // Over a Dreamscape header: the same dark chip as the feed / bots overlay pills.
+  iconButtonOnImage: { borderRadius: 18, backgroundColor: OVERLAY_PILL_ACTIVE_BG },
   // followButton/followingButton/etc. kept for the private-account locked
   // state below (line ~378), where the page can't render the full
   // ProfileHeader.

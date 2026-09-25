@@ -987,6 +987,11 @@ function RootLayout() {
                           name="sparkleStore"
                           options={SCREEN_PRESETS.MODAL_SWIPEABLE}
                         />
+                        {/* Profile header picker (migration 554). */}
+                        <Stack.Screen
+                          name="headerPicker"
+                          options={SCREEN_PRESETS.MODAL_SWIPEABLE}
+                        />
                         {/* Fullscreen inbox: same gesture model as photo/[id] (axis-locked swipe-back, pager owns vertical). */}
                         <Stack.Screen
                           name="inboxFeed"

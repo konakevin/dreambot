@@ -19,6 +19,7 @@ import { verticalScale } from '@/lib/responsive';
 import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
 import { useUnseenDreamsCount } from '@/hooks/useUnseenDreamsCount';
 import { RenderDock } from '@/components/RenderDock';
+import { usePrefetchBotHeaders } from '@/hooks/useProfileHeaders';
 
 const ReanimatedView = Reanimated.View;
 
@@ -114,6 +115,8 @@ export default function TabLayout() {
   // notification count. OR the two so the dot means "something new in here."
   // Subscribed at layout level for the same tab-bar propagation reason.
   const { data: unseenDreams = 0 } = useUnseenDreamsCount();
+  // Warm the image cache with every bot's profile header while idle (migration 556).
+  usePrefetchBotHeaders();
   const insets = useSafeAreaInsets();
   // Tab-bar bottom padding: prefer the safe-area inset (home indicator on
   // newer phones), fall back to a sensible floor so icons don't sit flush

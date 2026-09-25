@@ -14,6 +14,8 @@ import { usePinPost } from '@/hooks/usePinPost';
 import { useAuthStore } from '@/store/auth';
 import * as nav from '@/lib/navigate';
 import { buildPostActionRows } from '@/lib/imageLongPress';
+import { useProfileHeadersEnabled } from '@/hooks/useProfileHeaders';
+import { headerPickerHref } from '@/lib/profileHeaders';
 import { useDreamAgain } from '@/hooks/useDreamAgain';
 import { PostActionSheet } from '@/components/PostActionSheet';
 import { EditDescriptionModal } from '@/components/EditDescriptionModal';
@@ -81,6 +83,8 @@ export const PostTile = memo(function PostTile({
   const isAdminUser = useAuthStore((s) => s.isAdmin);
   const isPinned = !!item.pinned_at;
   const isGallery = (item.media_count ?? 1) > 1;
+  // "Use as profile header" (migration 554) — your own single dreams.
+  const headersEnabled = useProfileHeadersEnabled();
   // Owner-only "Dream this again" reload + recipe labels (gated below on isOwn).
   const dreamAgain = useDreamAgain(item);
 
@@ -266,6 +270,17 @@ export const PostTile = memo(function PostTile({
               onSelect: onSelectEnter ? () => onSelectEnter(item.id) : undefined,
               onDelete: isOwn || isAdminUser ? () => deletePost(item.id) : undefined,
               onDissolve: isGallery && isOwn ? () => dissolveAlbum(item.id) : undefined,
+              onUseAsHeader:
+                headersEnabled && isOwn && !isGallery
+                  ? () =>
+                      nav.push(
+                        headerPickerHref({
+                          uploadId: item.id,
+                          imageUrl: item.image_url_display ?? item.image_url,
+                          own: true,
+                        })
+                      )
+                  : undefined,
               // Own tile visibility (single dreams + album hosts):
               //  • public          → "Make private" (off the feed → Dreams/top)
               //  • private + posted → "Make public"  (quick re-publish)
