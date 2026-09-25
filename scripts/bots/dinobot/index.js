@@ -209,7 +209,9 @@ module.exports = {
     // path's own subject pool 25 → 100+ (RESEED_STATUS.md Track B rows 13-18; the four SHARED
     // paleo pools were not touched). Every one rendered clean in the last two days of shadow
     // renders on its pinned models. Faithful xerox: nothing else about how they render changed.
-    'amber-forest',
+    // 'amber-forest' — DEACTIVATED 2026-09-25 on Kevin's word ("i don't like the amber forest
+    // path"); its posts were removed the same day (scripts/reconcile-shadow-renders.js). The path
+    // file, pools and per-path config stay on disk; iter-bot refuses it while it is out of paths[].
     'courtship-display',
     'den-and-burrow',
     'desert-dunes',

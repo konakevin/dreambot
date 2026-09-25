@@ -74,7 +74,7 @@ this file in the same commit.
 - [x] **faebot/mushroom-apothecary** — 7/7 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 22:09 UTC
 - [x] **faebot/acorn-boat-regatta** — 7/7 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 22:27 UTC
 - [x] **faebot/star-charting** — 7/7 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 22:42 UTC
-- [x] **dinobot/amber-forest** — 5/5 pools at ≥100 and clean (resident finished by hand 00:10 UTC); smoke 3/3 delivered; 2026-09-24 23:59 UTC
+- [x] **dinobot/amber-forest** — 5/5 pools at ≥100 and clean (resident finished by hand 00:10 UTC); smoke 3/3 delivered; 2026-09-24 23:59 UTC. **DEACTIVATED 2026-09-25 on Kevin's word** ("i don't like the amber forest path"): pulled from `paths[]`, all 49 of its uploads deleted (`scripts/reconcile-shadow-renders.js`); pools + path file stay on disk.
 - [x] **dinobot/courtship-display** — 3/3 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:21 UTC
 - [x] **dinobot/den-and-burrow** — 2/2 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:25 UTC
 - [x] **dinobot/desert-dunes** — 0/0 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:26 UTC
