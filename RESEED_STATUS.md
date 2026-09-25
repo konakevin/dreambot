@@ -328,7 +328,9 @@ commit + push, row + log here.
    `scripts/promote-shadow-path.js` (the historical blend of graded keepers into each bot's past feed)
    — it needs Kevin's keeper IDs, and the cron will fill history at cadence anyway. **Later the same
    evening: mangabot game-center-arcade joined them (Flag 5), so 17 of the 18 Track B paths are live
-   and only pixelbot castle-town-gate stays disabled.**
+   and only pixelbot castle-town-gate stays disabled.** _Superseded 2026-09-24 late: on Kevin's word
+   the axis pools of the 16 live paths were grown to 100+ AND the shadow history was activated fleet-wide
+   (479 renders on 63 live paths across 15 bots) — status of record `AXIS_POOL_EXPANSION.md`._
 7. _(policy, Kevin 2026-09-24)_ **Model default for new paths: 50/50 flux-1.1-pro / ultra.** The
    fleet inventory (480 live paths, 20 scheduled bots) found 197 paths already coin-flipping, 127
    ultra-only, 95 rolling pro+ultra+a third model, 57 with no pro, and only 4 pro-only — all four this

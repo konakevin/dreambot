@@ -64,17 +64,17 @@ this file in the same commit.
 ### Checklist (the driver ticks these)
 
 <!-- CHECKLIST:START -->
-- [x] **brickbot/balloon-festival** — 8/8 pools at ≥100 and clean; smoke 1/3 delivered, 2 failed; 2026-09-24 19:56 UTC
-- [x] **brickbot/airfield-biplanes** — 8/8 pools at ≥100 and clean; smoke 0/3 delivered, 3 failed; 2026-09-24 20:19 UTC
-- [x] **tinybot/snow-globe-world** — 3/3 pools at ≥100 and clean; smoke 1/3 delivered, 2 failed; 2026-09-24 20:30 UTC
+- [x] **brickbot/balloon-festival** — 8/8 pools at ≥100 and clean; smoke 1/3 during the Replicate stall, re-run 3/3 delivered at 2026-09-25 00:01 UTC; 2026-09-24 19:56 UTC
+- [x] **brickbot/airfield-biplanes** — 8/8 pools at ≥100 and clean; smoke 0/3 during the Replicate stall, re-run 3/3 delivered at 2026-09-25 00:02 UTC; 2026-09-24 20:19 UTC
+- [x] **tinybot/snow-globe-world** — 3/3 pools at ≥100 and clean; smoke 1/3 during the Replicate stall, re-run 3/3 delivered at 2026-09-25 00:03 UTC; 2026-09-24 20:30 UTC
 - [x] **mangabot/game-center-arcade** — 6/6 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:38 UTC
-- [x] **steambot/brass-glasshouse** — 7/7 pools at ≥100 and clean; smoke 0/3 delivered, 3 failed; 2026-09-24 21:06 UTC
-- [x] **pixelbot/floating-market-canal** — 8/8 pools at ≥100 and clean; smoke 1/3 delivered, 2 failed; 2026-09-24 21:31 UTC
+- [x] **steambot/brass-glasshouse** — 7/7 pools at ≥100 and clean; smoke 0/3 during the Replicate stall, re-run 3/3 delivered at 2026-09-25 00:04 UTC; 2026-09-24 21:06 UTC
+- [x] **pixelbot/floating-market-canal** — 8/8 pools at ≥100 and clean; smoke 1/3 during the Replicate stall, re-run 3/3 delivered at 2026-09-25 00:06 UTC; 2026-09-24 21:31 UTC
 - [x] **pixelbot/volcano-forge** — 9/9 pools at ≥100 and clean (camera originals restored from git 21:58 UTC); smoke 3/3 delivered; 2026-09-24 21:53 UTC
 - [x] **faebot/mushroom-apothecary** — 7/7 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 22:09 UTC
 - [x] **faebot/acorn-boat-regatta** — 7/7 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 22:27 UTC
 - [x] **faebot/star-charting** — 7/7 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 22:42 UTC
-- [ ] **dinobot/amber-forest** — 4/5 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:59 UTC
+- [x] **dinobot/amber-forest** — 5/5 pools at ≥100 and clean (resident finished by hand 00:10 UTC); smoke 3/3 delivered; 2026-09-24 23:59 UTC
 - [x] **dinobot/courtship-display** — 3/3 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:21 UTC
 - [x] **dinobot/den-and-burrow** — 2/2 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:25 UTC
 - [x] **dinobot/desert-dunes** — 0/0 pools at ≥100 and clean; smoke 3/3 delivered; 2026-09-24 23:26 UTC
@@ -159,7 +159,7 @@ this file in the same commit.
 | faebot/star-charting | faebot_starchart_warm_light | 25 | 100 | 1 | clean | yes | ✅ |
 | dinobot/amber-forest | dinobot_amber_air | 100 | 100 | 0 | clean | yes | ✅ |
 | dinobot/amber-forest | dinobot_amber_optics | 100 | 100 | 0 | clean | yes | ✅ |
-| dinobot/amber-forest | dinobot_amber_resident | 96 | 99 | 5 | clean | yes | ⚠️ needs attention |
+| dinobot/amber-forest | dinobot_amber_resident | 24 | 100 | 13 | clean | yes | ✅ (finished by hand 2026-09-25 00:10 UTC, see the run log) |
 | dinobot/amber-forest | dinobot_amber_resin_event | 100 | 100 | 0 | clean | yes | ✅ |
 | dinobot/amber-forest | dinobot_amber_trapped | 100 | 100 | 0 | clean | yes | ✅ |
 | dinobot/courtship-display | dinobot_courtship_arena | 25 | 100 | 3 | clean | yes | ✅ |
@@ -257,3 +257,14 @@ shadow, so they cannot be selected twice.
   75 new entries kept, gate clean at 100. The canal camera pool was checked the same way and was
   untouched (its inline copy matched the disk). The driver now routes both camera pools through
   the register-derived grower only.
+- 2026-09-24 23:35 UTC — main driver finished: 16 paths, 80 of 82 pools at 100 on the first pass.
+- 2026-09-24 23:38 → 2026-09-25 00:00 UTC — top-ups: arcade play_moment 83 → 100 under the relaxed
+  opening rule (6/6, smoke 3/3); amber-forest resident 96 → 99 after five more rounds (the pool is
+  species-first and "horned ceratopsian bony …" legitimately opens six entries, so each round
+  trimmed one), then finished by hand with the register-derived grower: 100, clean, originals intact.
+- 2026-09-25 00:01 → 00:06 UTC — re-smoke pass for the six paths whose smoke ran during the Replicate
+  stall: balloon-festival, airfield-biplanes, snow-globe-world, brass-glasshouse, floating-market-canal
+  all 3/3 delivered (arcade was covered by its top-up run). Every path now shows 3/3.
+- **DONE 2026-09-25 00:10 UTC. 82 of 82 axis pools at 100+, dedupe-clean, originals byte-identical,
+  every path smoke-rendered 3/3 on the grown pools; 479 shadow renders activated into history.**
+  Cost: about 6,200 new entries of Sonnet output plus 66 smoke renders.
