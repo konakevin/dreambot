@@ -69,3 +69,9 @@ build-*.ipa
 # cast-scanner tooling artifacts
 scripts/.cast-reprocess-backup/
 scripts/.eval-cast-results.json
+
+# scratch from agent sessions (probes, driver logs, plan buffers, un-adopted candidate pools)
+scratch-*
+scripts/_tmp-*.js
+scripts/.cast-hairv2-backup/
+scripts/bots/*/seeds/*.candidate.json

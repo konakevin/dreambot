@@ -85,6 +85,23 @@ RULES:
 INPUT (${entries.length} entries):
 ${JSON.stringify(entries, null, 2)}`;
 
+/**
+ * Did this rewrite actually fix the problem?
+ *
+ * For most families the fix is REMOVAL, so "the rule no longer matches" is the right test. For
+ * text_prior it is QUALIFICATION: the instruction says KEEP the lettered object and make its
+ * surface blank or pictorial, so the noun is SUPPOSED to survive and a match-based test rejects
+ * every correct fix. That contradiction threw away ~960 good rewrites on the first pass. Here the
+ * test is instead "does it now say the surface carries no words".
+ */
+const BLANK_QUALIFIER =
+  /\b(blank|unmarked|unlettered|plain|wordless|no lettering|no text|no words|pictorial|picture-only|symbol only|painted emblem|illegible)\b/i;
+
+function accepts(fam, bot, pool, text) {
+  if (fam.key === 'text_prior') return BLANK_QUALIFIER.test(text);
+  return !matches(fam, bot, pool, text);
+}
+
 async function callSonnet(body, key) {
   const delays = [2000, 6000, 15000, 30000];
   for (let i = 0; i <= delays.length; i++) {
@@ -143,7 +160,7 @@ async function rewriteBatch(fam, bot, pool, batch, key, takenIds) {
       const d = byIdx.get(b.i);
       // The rewrite must be substantial AND must no longer trip the rule that flagged it.
       if (typeof d !== 'string' || d.length <= 15) continue;
-      if (matches(fam, bot, pool, d)) continue; // still trips the rule it was flagged for
+      if (!accepts(fam, bot, pool, d)) continue; // rewrite did not actually fix it
       const id = identity(d);
       if (takenIds.has(id)) continue; // would duplicate another entry in this pool
       takenIds.add(id);

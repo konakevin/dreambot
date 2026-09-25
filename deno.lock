@@ -48,6 +48,7 @@
     "https://esm.sh/@jsquash/jpeg@1.5.0/denonext/encode.mjs": "3c36d6dd1c7366a19b90e1ad158e6beb94ea8c1578e771b41f79243385603b9f",
     "https://esm.sh/@jsquash/jpeg@1.5.0/encode": "bf56e60b352f6d6e85e40cc7472ffc3fbf2985dfbdcb4994e870df810f66125a",
     "https://esm.sh/@sentry/deno@8.55.0": "4223ed94ffde24466e43b77108a92c62c3bd9f9dfcfdc53c1c4b898f5e681a71",
+    "https://esm.sh/@sentry/deno@8.55.0/denonext/deno.mjs": "d6bb800c58cc300a4a8dfdfba81d2937fb67cd77d423202814de01aefd7cc971",
     "https://esm.sh/@supabase/auth-js@2.100.0/denonext/auth-js.mjs": "079e9054663a1cff760451b18bb363a0f12dda9da361d4541db9b28d30b3fbc2",
     "https://esm.sh/@supabase/functions-js@2.100.0/denonext/functions-js.mjs": "60daabe2eabdae4eb57cc4d0a463b3c556f6b0865974b32be874beb987387fdb",
     "https://esm.sh/@supabase/phoenix@0.4.2/denonext/phoenix.mjs": "8099a9b1277ec1776f0d0ae15e35be72b87b541a3f787b5477a11b546c8d62a9",
@@ -66,6 +67,7 @@
     "https://esm.sh/pako@1.0.11/denonext/pako.mjs": "4895feb3e2441ef725da4052a5dc93d219d065fef1decc4452bb9b7ee1477c0d",
     "https://esm.sh/pako@1.0.11?target=denonext": "bc43f66ed245d58d468bf9867b3e9080c5b0590b4c14038ea308954490e0b2ea",
     "https://esm.sh/thumbhash@0.1.1": "75a92fd44555ded2dac619cd561ec1f8ddd93dfa52190405dfa66b820a80dcea",
+    "https://esm.sh/thumbhash@0.1.1/denonext/thumbhash.mjs": "7a4745e543aabff891d953f080aeed93b7d4825cb28c8b8da7375ed5fb8c7d19",
     "https://esm.sh/tslib@2.8.1/denonext/tslib.mjs": "c38da5dd6da6281964435002ce204cd586634fe3bdfb24a0ee116f48cf3292e9",
     "https://esm.sh/upng-js@2.1.0": "ccef11620e8807089f89617a29aee9703ff2ab8feb7125e31e173db3c2abbeea",
     "https://esm.sh/upng-js@2.1.0/denonext/upng-js.mjs": "f412423f71a7c41f153b4657a0c867bd33088ade0e9731440849fb625482ffdb"
