@@ -18,7 +18,7 @@ export async function fetchPost(id: string): Promise<PostDetail> {
   const { data, error } = await supabase
     .from('uploads')
     .select(
-      'id, image_url, image_url_hq, width, height, caption, categories, created_at, user_id, comment_count, users(username, avatar_url)'
+      'id, image_url, image_url_hq, width, height, caption, categories, created_at, user_id, comment_count, users!uploads_user_id_fkey(username, avatar_url)'
     )
     .eq('id', id)
     // Quarantined bad renders 404 even on a direct open (migration 449).

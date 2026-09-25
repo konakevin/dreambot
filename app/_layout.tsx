@@ -651,7 +651,7 @@ function DataPrefetcher() {
         queryFn: async () => {
           const { data, error } = await supabase
             .from('uploads')
-            .select('*, users!inner(username, avatar_url)')
+            .select('*, users!uploads_user_id_fkey!inner(username, avatar_url)')
             .eq('is_public', true)
             .order('created_at', { ascending: false })
             .range(0, 19);

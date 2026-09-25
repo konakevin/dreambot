@@ -310,6 +310,15 @@ count(*) GROUP BY category` first. (The April 2026 incident wiped both with one 
   locked by `__tests__/lib/botCadence.test.ts` — which fails in CI if anyone reintroduces a fixed
   threshold. So changing bot cadence "magically" rescales the monitor.) Apply this pattern to any new
   config-coupled alarm.
+- **A SECOND foreign key between two tables breaks every un-hinted PostgREST embed of that pair —
+  on every device, instantly, with no build.** (2026-09-25: migration 554 added `users.header_upload_id
+  → uploads`; PostgREST then refused the bare `users!inner(...)` in `POST_SELECT` with PGRST201, so every
+  profile grid, Dreams album, likes and favourites list rendered EMPTY while the feed RPC kept working.
+  Fixed by migration 555 dropping the FK.) Rules: hint every embed to its FK (`users!uploads_user_id_fkey(…)`),
+  never add a second FK between two tables without hinting every client embed of that pair FIRST, and
+  smoke a real PostgREST select after any migration that adds a FK — the fast lane runs no PostgREST and
+  the db-tests lane runs Postgres without it. Locked by `__tests__/lib/postgrestEmbedAmbiguityGuard.test.ts`
+  (parses the migrations for doubly-related pairs and fails on an un-hinted embed).
 - **`users` + `uploads` use COLUMN-LEVEL grants (migration 278) — a NEW column is silently
   client-invisible/un-writable until you grant it.** Adding a column to `users` → also `GRANT SELECT
 (col) ON public.users TO anon, authenticated;`; to `uploads` → also `GRANT UPDATE (col) ON

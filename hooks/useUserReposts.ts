@@ -22,7 +22,7 @@ export function useUserReposts(userId: string, enabled = true) {
       const offset = pageParam as number;
       const { data, error } = await supabase
         .from('post_reposts')
-        .select('uploads(*, users!inner(username, avatar_url))')
+        .select('uploads(*, users!uploads_user_id_fkey!inner(username, avatar_url))')
         .eq('reposter_id', userId)
         .eq('active', true)
         .order('last_reposted_at', { ascending: false })

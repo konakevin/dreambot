@@ -58,7 +58,12 @@ export const POST_SELECT =
   // source_upload_id and (b) hide HD on cast slides (uncanny), per slide. RLS
   // only reveals the source row to its owner, so this resolves for the owner's
   // own album (the case that offers album HD) and is null otherwise — safe.
-  '*, users!inner(username, avatar_url, allow_reposts, allow_downloads), upload_media!upload_media_upload_id_fkey(position, image_url, image_url_display, image_url_hq, thumbhash, width, height, source_upload_id, source:uploads!upload_media_source_upload_id_fkey(face_swap_mode))' as const;
+  // `users!uploads_user_id_fkey` — the author embed is HINTED to its FK (2026-09-25 outage):
+  // migration 554 added users.header_upload_id → uploads, a SECOND users↔uploads relationship,
+  // and PostgREST refused the bare `users!inner(...)` with PGRST201 on every profile grid,
+  // album, likes and favourites list at once. A hinted embed is immune to any future FK.
+  // Locked by __tests__/lib/postgrestEmbedAmbiguityGuard.test.ts.
+  '*, users!uploads_user_id_fkey!inner(username, avatar_url, allow_reposts, allow_downloads), upload_media!upload_media_upload_id_fkey(position, image_url, image_url_display, image_url_hq, thumbhash, width, height, source_upload_id, source:uploads!upload_media_source_upload_id_fkey(face_swap_mode))' as const;
 
 /** Cast Supabase query result rows to untyped records for mapping */
 export function castRows(data: unknown): Record<string, unknown>[] {
