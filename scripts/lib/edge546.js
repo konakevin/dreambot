@@ -9,11 +9,18 @@
  * dashboard change can rescale, so the config-coupled-alarm rule (CLAUDE.md) does not apply.
  */
 
-/** Logflare SQL: requests + status per function over the query window. */
+/**
+ * Requests + status per function over the query window, for the Management API's unified logs
+ * endpoint (`GET /v1/projects/:ref/analytics/endpoints/logs`, ClickHouse SQL over one `logs` table
+ * with a `source` column and a `log_attributes` map). Supabase REMOVED the old `logs.all` endpoint
+ * on 2026-09-24 (HTTP 410, changelog 48235) — six monitor runs failed before anything measured —
+ * so the previous Logflare/BigQuery form (`function_edge_logs cross join unnest(metadata)`) is gone
+ * for good. Verified 2026-09-25: `function_id` here is the same id GET /functions returns.
+ */
 const SQL =
-  'select m.function_id as fid, response.status_code as status, count(*) as c ' +
-  'from function_edge_logs cross join unnest(metadata) as m cross join unnest(m.response) as response ' +
-  'group by fid, status';
+  "select log_attributes['function_id'] as fid, " +
+  "toInt32OrZero(log_attributes['response.status_code']) as status, count() as c " +
+  "from logs where source = 'function_edge_logs' group by fid, status";
 
 const MAX_546_RATE = 0.03;
 /** A function with fewer requests than this in the window is reported but never alarmed (1 of 5 = 20%). */

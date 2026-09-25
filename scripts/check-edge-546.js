@@ -8,6 +8,12 @@
  *
  * Auth: a Supabase personal access token — SUPABASE_ACCESS_TOKEN (CI secret) or the logged-in CLI's
  * keychain entry locally (scripts/lib/supabaseAccessToken.js). Reads logs only; writes nothing.
+ *
+ * Endpoint: `/analytics/endpoints/logs` (unified logs, ClickHouse SQL). The original
+ * `/analytics/endpoints/logs.all` was removed by Supabase on 2026-09-24 (HTTP 410) and every run
+ * from then to 2026-09-25 17:30 UTC failed with exit 2 before measuring — a monitor failing on its
+ * own plumbing reads exactly like the alarm it exists to raise, so a 410/5xx from the API is now
+ * reported as "monitor broken", distinct from "SLO breached".
  */
 const { resolveSupabaseAccessToken } = require('./lib/supabaseAccessToken');
 const { SQL, evaluate, formatTable, deployClampedStart } = require('./lib/edge546');
@@ -45,11 +51,13 @@ async function main() {
   const [functions, logs] = await Promise.all([
     api('/functions', {}, token),
     api(
-      '/analytics/endpoints/logs.all',
+      '/analytics/endpoints/logs',
       { sql: SQL, iso_timestamp_start: start.toISOString(), iso_timestamp_end: end.toISOString() },
       token
     ),
   ]);
+  // The unified endpoint answers 200 with {error} on a bad query; treat that as plumbing, not data.
+  if (logs && logs.error) throw new Error(`/analytics/endpoints/logs → ${logs.error}`);
   const rows = Array.isArray(logs && logs.result) ? logs.result : [];
   const first = evaluate(rows, functions);
   console.log(
@@ -68,10 +76,11 @@ async function main() {
       continue;
     }
     const again = await api(
-      '/analytics/endpoints/logs.all',
+      '/analytics/endpoints/logs',
       { sql: SQL, iso_timestamp_start: since.toISOString(), iso_timestamp_end: end.toISOString() },
       token
     );
+    if (again && again.error) throw new Error(`/analytics/endpoints/logs → ${again.error}`);
     const re = evaluate(
       (Array.isArray(again && again.result) ? again.result : []).filter((r) => r.fid === fn.id),
       functions
@@ -94,6 +103,9 @@ async function main() {
 }
 
 main().catch((e) => {
-  console.error(`check-edge-546 failed: ${e.message}`);
+  console.error(
+    `check-edge-546 MONITOR BROKEN (not an SLO breach): ${e.message}\n` +
+      "The check could not measure anything — fix the monitor's API call, then re-run it."
+  );
   process.exit(2);
 });
