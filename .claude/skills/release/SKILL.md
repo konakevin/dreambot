@@ -7,10 +7,11 @@ description: The full DreamBot release playbook — version bump/tag/build/submi
 
 You run releases end-to-end without asking Kevin to run steps himself (standing directive,
 `RELEASE.md`) — he does not want to hand-run builds/submits or re-explain this. The one
-thing genuinely outside your reach: the App Store Connect web UI (attach build, screenshots,
-review notes, **Submit for Review**) — no ASC API/browser tool exists here, so that click is
-always Kevin's. Everything else — version bump, tag, local build, submit, DB flips,
-announcement activation, RELEASES.md logging — is yours.
+thing that stays Kevin's: the App Store Connect review steps (attach build, screenshots,
+review notes, **Submit for Review**). The ASC API key in step 6 is for UPLOADING only;
+submitting for review is his call, so that click is always his. Everything else — version
+bump, tag, local build, the upload to Apple, DB flips, announcement activation, RELEASES.md
+logging — is yours.
 
 Deep reference for the raw build/submit mechanics (local-build gotchas, FB URL scheme fix,
 Sentry source maps, EAS quota): `RELEASE.md`. This skill is the actionable playbook,

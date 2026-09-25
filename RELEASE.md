@@ -47,21 +47,22 @@ do the bump + tag + push, then build:
 
 ```sh
 ./scripts/release.sh 1.0.2          # bumps app.config.js, runs checks, commits, tags v1.0.2, pushes
-eas build -p ios --profile production --auto-submit
+eas build --local -p ios --profile production --non-interactive --output ./build-1.0.2.ipa
+xcrun altool --upload-app -f ./build-1.0.2.ipa -t ios --apiKey 3QSTL45LMF --apiIssuer 198d21d6-4dce-47d3-9c83-ef14b0cc7c97
 ```
 
 **New build of the SAME version** (resubmit after a rejection / TestFlight iter) —
-no bump, no helper, just rebuild (EAS auto-increments the build number):
+no bump, no helper, just rebuild locally (EAS still auto-increments the build number)
+and upload the new IPA the same way.
 
-```sh
-eas build -p ios --profile production --auto-submit
-```
+The cloud one-shot `eas build -p ios --profile production --auto-submit` is a fallback
+only: it spends the Free plan's monthly cloud builds and uploads through Expo's queue.
 
 Then finish in ASC (attach build, screenshots, review notes, Submit), bump the
 `engine_config` update gate, and add a row to `RELEASES.md`. Full ordered
 checklist below.
 
-## Local build + submit (when the EAS cloud quota is exhausted)
+## Local build + upload (the DEFAULT since 2026-09; first used when the cloud quota ran out)
 
 The Expo account is on the **Free plan**, which caps **iOS CLOUD builds per
 month**. When it's used up, `eas build -p ios ...` fails at scheduling with:
@@ -158,13 +159,15 @@ Notes / gotchas for the local path:
 4. **Bump + tag + push:** `./scripts/release.sh <X.Y.Z>` (see §1). This is the ONE
    command that changes the version, commits `Release vX.Y.Z`, creates the
    annotated tag on that commit, and pushes both.
-5. **Build + submit:** `eas build -p ios --profile production --auto-submit`.
+5. **Build + upload:** local build (`eas build --local ...`), verify the IPA, then upload it
+   straight to Apple with `xcrun altool` (release skill steps 4-6).
 6. **In App Store Connect** (§4): attach the processed build, screenshots, review
    notes, Submit for Review.
 7. **Bump the update gate** in `engine_config` (§5) once the version is live —
    `latest_app_version` so older clients get the "update available" nudge.
-8. **Log it:** add a row to `RELEASES.md` with the build number
-   (`eas build:list --limit 1`) and ASC status.
+8. **Log it:** add a row to `RELEASES.md` with the build number (the IPA's
+   `CFBundleVersion`) and ASC status. `eas build:list` only lists CLOUD builds (its newest
+   is 1.2.0 build 50), so it never shows a local build.
 
 ## Git tags — the release demarcation points
 
@@ -178,8 +181,8 @@ gets an **annotated** git tag so the exact commit is a permanent, findable point
   ultimately **approved**. Tag a resubmission by hand:
   `git tag -a v1.0.2-build11 <commit> -m "resubmit: <what changed>" && git push origin v1.0.2-build11`.
 - **See what shipped:** `git tag -n1 -l 'v*'` (list + first message line), or
-  `git show v1.0.1` (the tagged commit + full message). The build↔commit map is
-  authoritative in `eas build:list` and mirrored in `RELEASES.md`.
+  `git show v1.0.1` (the tagged commit + full message). The build↔commit map lives
+  in `RELEASES.md`. (`eas build:list` covers cloud builds only, up to 1.2.0 build 50.)
 - **The tag is annotated, not lightweight** — it carries date, message, and the
   build/ASC context. Don't use `git tag v1.0.2` (lightweight); the helper uses
   `git tag -a`.
@@ -244,16 +247,18 @@ eas build -p ios --profile production
 - Watch progress in the terminal or at the EAS build URL it prints. `eas
 build:list` shows recent builds.
 
-## 3. Submit to App Store Connect
+## 3. Upload to App Store Connect
 
 ```sh
-eas submit -p ios --profile production
+xcrun altool --upload-app -f ./build-<X.Y.Z>.ipa -t ios --apiKey 3QSTL45LMF --apiIssuer 198d21d6-4dce-47d3-9c83-ef14b0cc7c97 --show-progress
 ```
 
-- Uses the stored ASC API key (APP_MANAGER role) plus the `submit.production`
-  block in `eas.json` (team + `ascAppId`). No Apple password prompts.
-- Or do build + submit in one shot: append `--auto-submit` to the build command
-  (step 2).
+- Our own Team API key (App Manager), `~/.appstoreconnect/private_keys/AuthKey_3QSTL45LMF.p8`,
+  outside the repo. About a minute end to end. Details: release skill step 6.
+- Fallback: `eas submit -p ios --profile production` uses the ASC key stored on Expo plus the
+  `submit.production` block in `eas.json` (team + `ascAppId`), but it waits in Expo's
+  Free-plan queue (1h52m for 1.8.0). `--auto-submit` on a cloud build goes through the same
+  queue.
 - After upload the build shows as "Processing" in ASC for ~5-30 min before it is
   attachable to a version.
 
@@ -312,7 +317,7 @@ bare `1.0.2`).
 ## 6. Resubmitting after a rejection
 
 1. Fix the flagged issues, commit to `main`, push.
-2. `eas build -p ios --profile production --auto-submit` (same `version`, new
+2. Local build + `xcrun altool` upload, as in §3 (same `version`; EAS gives it a new
    build number).
 3. In ASC, attach the new build to the existing (rejected) version, update
    screenshots / review notes, Submit for Review.

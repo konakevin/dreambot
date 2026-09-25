@@ -128,6 +128,10 @@ Sentry source-map upload (so production traces are symbolicated) — set as EAS 
 
 ## `eas submit` credentials (`eas.json` → `submit.production.ios`)
 
+> Since 2026-09-25 the primary upload is our own ASC Team key with `xcrun altool`
+> (`~/.appstoreconnect/private_keys/AuthKey_3QSTL45LMF.p8`, outside the repo; see
+> `RELEASE.md` §3). The EAS-stored key below is only used by the `eas submit` fallback.
+
 Scaffolded with the real `appleTeamId` (`43VMZ5KMW4`). To finish, EITHER:
 - **Option A (recommended):** run `eas submit -p ios --profile production` and let
   EAS prompt for + store your App Store Connect API key (no file in the repo), or

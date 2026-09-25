@@ -13,8 +13,8 @@
 #   ./scripts/release.sh 1.0.2 --dry-run       # show what it WOULD do, change nothing
 #
 # For a NEW BUILD of the SAME version (a resubmission — no marketing bump), you do
-# NOT run this. Just rebuild: `eas build -p ios --profile production --auto-submit`
-# (EAS auto-increments the build number). Tag the resubmission by hand if you want
+# NOT run this. Just rebuild locally and upload (EAS still auto-increments the build
+# number); see RELEASE.md §3. Tag the resubmission by hand if you want
 # per-build precision: `git tag -a v<version>-build<N> <commit> -m "..."`.
 #
 # Guardrails (all must pass, or it aborts before touching anything):
@@ -136,10 +136,11 @@ cat <<EOF
 
   1. Apply any new DB migrations (Supabase dashboard SQL editor).
   2. Deploy any changed edge functions (supabase functions deploy <name> --no-verify-jwt).
-  3. Build + submit:   eas build -p ios --profile production --auto-submit
+  3. Build locally:    eas build --local -p ios --profile production --non-interactive --output ./build-$NEW_VERSION.ipa
+     Upload to Apple:  xcrun altool --upload-app -f ./build-$NEW_VERSION.ipa -t ios --apiKey 3QSTL45LMF --apiIssuer 198d21d6-4dce-47d3-9c83-ef14b0cc7c97
   4. In App Store Connect: attach the processed build, screenshots, review notes, Submit.
   5. AFTER it's live, bump the update gate in engine_config:
         latest_app_version = '$NEW_VERSION'   (nudges older users to update)
         min_app_version     = only raise to force-update off a broken build.
-  6. Add a row to RELEASES.md (tag, build number from \`eas build:list\`, ASC status).
+  6. Add a row to RELEASES.md (tag, build number = the IPA's CFBundleVersion, ASC status).
 EOF
