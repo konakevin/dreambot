@@ -256,16 +256,24 @@ function growPool(p, pool) {
   const before = JSON.parse(fs.readFileSync(seedFile(p.bot, pool), 'utf8'));
   const start = before.length;
   if (start >= TARGET) {
+    // A pool another pool's generator already filled (the 'all' family grows every pool at once).
+    // Gate it, then RE-READ the count: --fix may have trimmed it under TARGET, in which case it
+    // falls through into the grow loop below instead of being reported as done at the old count
+    // (that blind spot left two TinyBot pools at 91 and 99 on 2026-09-24).
     const g = gate(p.bot, pool, Math.min(25, start));
-    return {
-      pool,
-      start,
-      end: start,
-      rounds: 0,
-      clean: g.clean,
-      originalsIntact: true,
-      note: 'already at target',
-    };
+    const now = count(p.bot, pool);
+    if (now >= TARGET && g.clean) {
+      return {
+        pool,
+        start,
+        end: now,
+        rounds: 0,
+        clean: g.clean,
+        originalsIntact: true,
+        note: 'already at target',
+      };
+    }
+    log(`  ${pool}: was ${start}, gate left ${now} (clean=${g.clean}) → growing`);
   }
   const own = cmdFor(p, pool);
   // Rounds 1-2: the path's own recipe (the xerox rule). Rounds 3-5: the register-derived grower,

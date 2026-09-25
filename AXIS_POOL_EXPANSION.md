@@ -104,8 +104,8 @@ this file in the same commit.
 | brickbot/airfield-biplanes | brickbot_airfield_palette | 25 | 100 | 3 | clean | yes | ✅ |
 | brickbot/airfield-biplanes | brickbot_airfield_setting | 25 | 100 | 3 | clean | yes | ✅ |
 | tinybot/snow-globe-world | tinybot_snow_globe_moments | 25 | 100 | 1 | clean | yes | ✅ |
-| tinybot/snow-globe-world | tinybot_snow_globe_vessel | 100 | 100 | 0 | clean | yes | ✅ |
-| tinybot/snow-globe-world | tinybot_snow_globe_weather | 100 | 100 | 0 | clean | yes | ✅ |
+| tinybot/snow-globe-world | tinybot_snow_globe_vessel | 25 | 100 | 2 | clean | yes | ✅ (gate trimmed it to 91 after the driver marked it done; topped up by hand 2026-09-25 00:40 UTC) |
+| tinybot/snow-globe-world | tinybot_snow_globe_weather | 25 | 100 | 2 | clean | yes | ✅ (trimmed to 99 the same way; topped up by hand 00:40 UTC) |
 | mangabot/game-center-arcade | game_center_arcade_camera | 100 | 100 | 0 | clean | yes | ✅ |
 | mangabot/game-center-arcade | game_center_arcade_extra_life | 100 | 100 | 0 | clean | yes | ✅ |
 | mangabot/game-center-arcade | game_center_arcade_machine | 100 | 100 | 0 | clean | yes | ✅ |
@@ -265,6 +265,12 @@ shadow, so they cannot be selected twice.
 - 2026-09-25 00:01 → 00:06 UTC — re-smoke pass for the six paths whose smoke ran during the Replicate
   stall: balloon-festival, airfield-biplanes, snow-globe-world, brass-glasshouse, floating-market-canal
   all 3/3 delivered (arcade was covered by its top-up run). Every path now shows 3/3.
-- **DONE 2026-09-25 00:10 UTC. 82 of 82 axis pools at 100+, dedupe-clean, originals byte-identical,
+- 2026-09-25 00:40 UTC — a final on-disk recount of all 82 pools found two TinyBot pools short:
+  vessel 91, weather 99. Cause: the 'all' generator grew all four snow-globe pools in the first
+  pool's round, so the driver hit vessel and weather in its "already at target" branch, which ran the
+  gate with `--fix` (dropping 9 and 1 entries) but reported the pre-gate count and never topped up.
+  Both topped up by hand with the register-derived grower (100, clean, originals intact); the driver
+  branch now re-reads the count after the gate and falls into the grow loop when short.
+- **DONE 2026-09-25 00:10 UTC (recount-verified 00:40). 82 of 82 axis pools at 100+, dedupe-clean, originals byte-identical,
   every path smoke-rendered 3/3 on the grown pools; 479 shadow renders activated into history.**
   Cost: about 6,200 new entries of Sonnet output plus 66 smoke renders.
