@@ -9,13 +9,13 @@ bots' profiles, which already show headers.
 
 ## What is already live, and what is not
 
-| piece                                                                                               | state                                                              |
-| --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| DB: header columns, `get_header_suggestions`, quarantine cleanup trigger (migs 554, 554a, 555, 556) | **LIVE**                                                           |
-| Edge fn `set-profile-header` (validates, COPIES the picture into the member's folder)               | **LIVE**, deployed `--no-verify-jwt`                               |
-| The 18 bot headers (copies) + bot taglines (`users.bio`)                                            | **LIVE** in the DB. The taglines already show on today's profiles. |
-| `engine_config.profile_headers_enabled`                                                             | **false**, so only the supreme admin sees headers (dev build)      |
-| The app code (banner, picker, Edit Profile panel, long-press rows, bot-header prefetch)             | in the working tree, **not in any shipped binary**                 |
+| piece                                                                                               | state                                                                    |
+| --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| DB: header columns, `get_header_suggestions`, quarantine cleanup trigger (migs 554, 554a, 555, 556) | **LIVE**                                                                 |
+| Edge fn `set-profile-header` (validates, COPIES the picture into the member's folder)               | **LIVE**, deployed `--no-verify-jwt`                                     |
+| The 18 bot headers (copies) + bot taglines (`users.bio`)                                            | **LIVE** in the DB. The taglines already show on today's profiles.       |
+| `engine_config.profile_headers_enabled`                                                             | **false**, so only the supreme admin sees headers (dev build)            |
+| The app code (banner, picker, Edit Profile panel, long-press rows, bot-header prefetch)             | committed `bf03fce7`; ships in **1.8.0 build 60** (submitted 2026-09-25) |
 
 Flipping the flag early changes nothing for users, because builds below 1.8.0 have no header code.
 

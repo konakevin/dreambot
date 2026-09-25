@@ -23,11 +23,16 @@ does NOT want to re-explain this. That means, in order:
    Then poll the log until the IPA lands. (A plain `run_in_background` Bash call
    may be permission-denied in this environment; the detached `nohup … &` form
    launches it and returns immediately — use that.)
-3. **Submit it yourself** once the IPA exists:
+3. **Upload it yourself** once the IPA exists, straight to Apple (about a minute; the key
+   lives at `~/.appstoreconnect/private_keys/`, outside the repo):
    ```sh
-   eas submit -p ios --profile production --path ./build-<X.Y.Z>.ipa --non-interactive
+   xcrun altool --upload-app -f ./build-<X.Y.Z>.ipa -t ios \
+     --apiKey 3QSTL45LMF --apiIssuer 198d21d6-4dce-47d3-9c83-ef14b0cc7c97 --show-progress
    ```
-4. Log the row in `RELEASES.md` (build number from `eas build:list --limit 1`).
+   `eas submit -p ios --profile production --path ./build-<X.Y.Z>.ipa --non-interactive` is
+   the fallback only: on the Free plan it waits in Expo's queue (1h52m for 1.8.0 on
+   2026-09-25). Details in the release skill, step 6.
+4. Log the row in `RELEASES.md` (build number = the IPA's `CFBundleVersion`).
 5. Remind Kevin of the two things only HE can do in the ASC web UI (attach build,
    screenshots/review notes, Submit for Review) and the post-live `engine_config`
    update-gate bump — but do everything up to that point yourself.
@@ -83,8 +88,12 @@ brew install fastlane
 # below) — no manual env export needed.
 eas build --local -p ios --profile production --non-interactive --output ./build-<X.Y.Z>.ipa
 
-# Upload that IPA to App Store Connect (stored ASC API key, no Apple prompts):
-eas submit -p ios --profile production --path ./build-<X.Y.Z>.ipa --non-interactive
+# Upload that IPA straight to App Store Connect (our own ASC API key in
+# ~/.appstoreconnect/private_keys/, about a minute, no Expo queue):
+xcrun altool --upload-app -f ./build-<X.Y.Z>.ipa -t ios \
+  --apiKey 3QSTL45LMF --apiIssuer 198d21d6-4dce-47d3-9c83-ef14b0cc7c97 --show-progress
+# Fallback only (Expo's stored key; can sit in Expo's Free-plan queue for hours):
+# eas submit -p ios --profile production --path ./build-<X.Y.Z>.ipa --non-interactive
 ```
 
 Make sure `.env.local` has real `FACEBOOK_APP_ID` + `FACEBOOK_CLIENT_TOKEN`

@@ -86,7 +86,8 @@ differently.
    # Bash tool, run_in_background: true — completion re-invokes you
    until ! ps -p <pid> >/dev/null 2>&1; do sleep 5; done; echo DONE; tail -20 /tmp/eas-build-<X.Y.Z>.log
    ```
-   Watch the SUBMIT the same way. The whole pipeline through step 7 runs without him prompting
+   The upload (step 6) runs in the foreground and takes about a minute; only the `eas submit`
+   fallback needs a watch. The whole pipeline through step 8 runs without him prompting
    between steps; the first thing he should have to do is the ASC web UI.
 5. **Verify the IPA before submitting** — `unzip` it and confirm `CFBundleShortVersionString`
    is the version you just tagged AND that the env vars actually baked in (a real `phc_…`
@@ -95,12 +96,37 @@ differently.
    clobber ships analytics dead to a release build with nothing in the log to say so
    (`project_eas_env_literal_clobber`). Takes seconds; catches a whole release.
 
-6. **Submit:**
+6. **Upload to App Store Connect DIRECTLY with Apple's `altool` (the primary path since
+   2026-09-25):**
    ```sh
-   eas submit -p ios --profile production --path ./build-<X.Y.Z>.ipa --non-interactive
+   xcrun altool --upload-app -f ./build-<X.Y.Z>.ipa -t ios \
+     --apiKey 3QSTL45LMF --apiIssuer 198d21d6-4dce-47d3-9c83-ef14b0cc7c97 --show-progress
    ```
-7. **Log the row in `RELEASES.md`** — build number from `eas build:list --limit 1`, status
-   "Submitted (processing at Apple)" for now.
+   - Run it in the FOREGROUND (Bash timeout 600000). A ~37 MB IPA takes about a minute end to
+     end. Success prints `UPLOAD SUCCEEDED with no errors` plus a Delivery UUID. Apple then
+     processes the build (usually 5-30 min) before Kevin can attach it in ASC.
+   - **The key:** `~/.appstoreconnect/private_keys/AuthKey_3QSTL45LMF.p8`, a Team key with the
+     App Manager role, created by Kevin 2026-09-25. It lives OUTSIDE the repo (`chmod 600`, folder
+     `700`), and altool finds it there by Key ID. Never copy the `.p8` into the repo, never print
+     it. The Issuer ID is per TEAM, not per key (team `43VMZ5KMW4`); if you ever need it again it
+     is also on Expo's stored key (`account.byName.appStoreConnectApiKeys.issuerIdentifier`).
+   - **Why not `eas submit`:** it is only a wrapper that uploads with Expo's stored key, and on
+     the Free plan the submission waits in Expo's queue. 2026-09-25: 1.8.0 sat `IN_QUEUE` for
+     1h52m with no error while altool uploaded the same IPA in about a minute (earlier EAS submits
+     took 2-3 min, one took 65 min). EAS STAYS for the build itself: it holds the signing
+     certificate + provisioning profiles, supplies the production env vars, and numbers builds.
+   - **Fallback** (key missing or revoked, altool auth error):
+     `eas submit -p ios --profile production --path ./build-<X.Y.Z>.ipa --non-interactive`,
+     launched with `run_in_background` and watched. If it seems stuck, read its real state
+     instead of guessing: Expo GraphQL `submissions { byId(submissionId: "<id>") { status
+     updatedAt error { message } } }` with the `expo-session` header from
+     `~/.expo/state.json` → `auth.sessionSecret`. `IN_QUEUE` with an unchanged `updatedAt` is
+     Expo's queue, not a failure. Switching to altool while an EAS submission is still queued is
+     safe: stop the local waiter, and if Expo runs it later Apple rejects it as a duplicate
+     build number (harmless).
+   - altool reporting a duplicate build number means this IPA is ALREADY uploaded. Don't rebuild.
+7. **Log the row in `RELEASES.md`**: the build number is the IPA's `CFBundleVersion` (read in
+   step 5), status "Submitted (processing at Apple)" for now.
 8. **Write the App Store release notes and hand them to Kevin — every submit, unasked**
    (Kevin, 2026-09-19). The moment the submit lands, produce the "What's New" text for this
    version and print it IN CHAT as a plain bulleted list he can paste straight into ASC. Do not
