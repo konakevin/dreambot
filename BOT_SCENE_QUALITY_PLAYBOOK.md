@@ -4022,6 +4022,114 @@ Added event-horizon (4.5), gas-giant-skies (4.4), first-contact (4.5). All self-
 
 **Cross-bot takeaway:** for any subject with a strong WRONG Flux prior, (1) positively name the RIGHT concept as the opening token, (2) name the specific literal-prone word and refuse it, (3) demand the physically-correct distinguishing feature (featureless-black / soft-cloud / enigmatic-not-saucer). This suppresses the prior on ~5/6; the last ~1/6 is a model-lottery break-through, not a recipe defect. Detailed sci-fi hulls also invite gibberish hull-text even under a no-text suffix.
 
+### `space-rogue` (2026-09-25, SHADOW) — a painted character-in-a-venue still, and the POSITION LAW measured on CLOTHING
+
+Kevin's brief: "a highly stylized version of characters in sci-fi settings — alien planets, bounty hunters, space
+pubs and bars/hangouts/clubs on alien planets, street scenes in cities on alien planets, inside space ships …
+somewhere a sleek, sexy looking space character would be … women characters to begin with … push boundaries on
+visuals … the scenes to look as sexy and cool as the main character", then "all sorts of cool alien races and
+humans for characters — all out killin it". Reference: DragonBot's painterly character frames (full-body figure
+integrated in a designed place, one light source + one colour story, a hero object, mid-beat). Built
+function-form and self-contained (11 own seed JSONs + a hand-authored 25-vantage camera array, zero shared-file
+edits), own code-only PAINTERLY medium (no artist names, no "photograph", no "poster"), fleet 50/50 pro/ultra,
+chaos + polish + sensory anchors all skipped. Axes: venue ★ (tagged [BAR]/[STREET]/[SHIP]/[PORT]/[WILD], light
+SOURCE named with no colour word, one charm detail) · set_dressing ×2 (filtered to the venue's family, the
+structural form of a compatibility clause) · light_story ★ (two committed hues on the LIGHT, owns the palette) ·
+air · lineage ★★ (species OR striking human, skin + 2-3 unmistakable features + eyes + hair in ONE pool so a
+crest never fights a separate hair roll) · role (title + demeanour, zero clothing) · costume ★ (cut, material,
+sheen, one accessory) · hero_object · beat (verb-led, grounded) · company 0.5 · event 0.4 (family-filtered).
+
+**R0 (6 shadow renders, 3 pro + 3 ultra) — the composition law held first try, and the position law bit on the
+costume.** 6/6 full-length figures inside deep, designed, sharp places; the lineage pool delivered exactly the
+"crazy looks" (violet skin + feather plumes, green scales + tail, white afro-halo human with a chrome nose
+bridge, crystalline lavender crest, obsidian skin + horn crown). **But 4 of 6 rendered her effectively NUDE and
+the safety filter fired on 4 attempts** (~40% per attempt against a fleet norm of ~4-5%). Diagnosed from the six
+stored prompts, not the images: Sonnet wrote **310-340 words against a 120-150 cap**, the wrapper (prefix +
+fragment) was 48 words, the lineage's SKIN description landed at **~33%** and the COSTUME at **44-58%** of the
+prompt. So Flux attended "bone-white skin traced in teal veins" and never reached "cropped lacquered carbon-weave
+jacket over a bodysuit" — a whole body painted as patterned skin. Three things this settles:
+- **A lineage/skin axis and a costume axis are in COMPETITION for the attended region, and skin wins whenever
+  the costume sits past ~30%.** On any character path whose subject pool describes skin (aliens, painted
+  bodies, scaled lineages), the costume must be the FIRST thing said about her, before her skin — "a Vessari
+  woman WEARING …, with violet skin …". R1's single variable.
+- **The safety filter can be a POSITION symptom, not a content symptom.** Every outfit in the pool was fully
+  authored; every prompt that flagged was one where the clothing sat outside the attended region. Bisecting
+  clauses would have found nothing to soften. Check where the costume LANDS before touching any pool.
+- **A word cap is a nudge (lesson 46/55 again, at 2.3× over).** R1 pays for the reorder with deletions: wrapper
+  48 → 26 words, output order 10 → 7 items, template prose 880 → 700 words.
+Also in R0: gibberish lettering on a lit ship-interior panel, a round porthole that rendered as a screen, and a
+stall sign (3/6) — the expected residual on ship/dock/market venues, deferred behind the costume fix.
+
+**R1 (6 renders, 5 ultra + 1 pro after one re-roll) — the reorder landed, and it exposed the second half of
+the mechanism.** Emitted prompts 251-299 words (from 310-340), "wearing" at **25-33%** (from 44-58%), skin at
+37-46%. Clothed 3 of 6 (plated armour over a suede bodysuit; a wrapped linen-and-gauze gown; ceramic plates
+over linen), and all three of those were STRUCTURED garments. The three that failed were each a body garment
+Flux MERGED WITH THE SKIN THAT FOLLOWS IT: "a fighter's open jacket … over bare arms and a wrapped linen chest
+band" → an open coat over a bare chest; "a cropped leather jacket over a brushed enamel-grey satin bodysuit" on
+a lineage of platinum-white scales → a jacket over a FISHNET of scales on skin; "a coat closed at the throat by
+one clasp, over a fitted underlayer of pearlescent shell fabric" → the clasp at the neck and a bare teal torso
+below. The safety filter fired 5 of 12 attempts (unchanged from R0's 4 of 10), and every flagged attempt was
+one of the bodysuit / open-over entries; the three structured ones never flagged. **So position was necessary
+and not sufficient: on a lineage that describes SKIN, a skin-adjacent garment noun (bodysuit, satin, sheer,
+"open over", "over a fitted underlayer") is read as that skin.** This is the MangaBot beach-episode law ("X
+cover-up over swimsuit" leaks the inner layer) with the lineage axis as the inner layer. R2's single variable:
+the costume pool regenerated so every body garment is a STRUCTURED, OPAQUE, VISIBLY CONSTRUCTED piece named
+first (a boned bodice, a buttoned coat, a plated breastplate over a sash top, a quilted vest), skin only
+through a stated CUT, with a costume-only generator guard that rejects bodysuit / satin / sheer / mesh / film
+/ open-over / underlayer / pearlescent. Also fixed by hand: the "transparent crest of crystal plates rising
+from her skull" lineage entry rendered as a HELMET over her face — reworded as a mane of crystal filaments
+growing from her scalp, face bare (a crest is a helmet prior). Ultra note: 1 signature in 8 ultra renders so
+far, no golden-hour reverts on night venues; still under the pin threshold, keep counting.
+
+**R2 (6 renders, 4 ultra + 2 pro) — the structured-garment pool worked.** Clothed **5 of 6** (from 3/6 and
+2/6): a riveted patchwork coat over shorts on a dock, a boned strapless bodice with a stepped ceramic hem on a
+ship's mess counter, a quilted grey tunic and wide trousers in a cockpit, the same tunic on a coral-crested
+alien in a city street, a copper quilted top in a hangar. "wearing" at 26-36%, prompts 239-368 words. The
+safety filter: **0 flags on 5 of 6 rolls** (from 5/12 attempts), and 6 flags concentrated on ONE roll that
+re-rolled twice — the flagged prompts are not stored, so that roll cannot be bisected (tooling gap worth
+closing: log the flagged Flux text). The one clothed failure was pro on *"a cropped quilted bomber zipped to the
+collar, high-waisted trousers, bare midriff"* → the bomber rendered UNZIPPED over a bare chest: **a "bare
+midriff" cut beside a closed jacket is an unzip instruction.** R3 lever: midriff cuts reworded to arm, shoulder
+and leg cuts (surgical, no regen). Second, separate lever with its own metric: ship venues grew numerals on
+"analog dials", an "instrument cluster" and "pressure gauges" (lesson 12, the dial IS a clock face) — nouns
+deleted from the venue pool. Per-model tally across R0-R2, worth carrying into the pin decision: **pro undressed
+her in 5 of 6 renders, ultra in 3 of 12** (most of both under the R0/R1 prompt defect), while **ultra signed 2
+of 12** and pro 0 of 6. Neither model is a clean pin on this path; measured again in R3 before deciding. The
+reworded crystal-crest lineage entry rendered as spiky crystal HAIR with her face bare (fix confirmed 1/1).
+Also noted: the same costume entry rolled twice in one 6-render round from a 25-entry pool — a recency-window
+artefact at MVP size, gone at 100+.
+
+**R3 (6 renders, 3 pro + 3 ultra) — clothed 6 of 6, composition 6 of 6, and the round cap.** A copper silk
+halter and black wide trousers on a terrace over a glowing sea under a red moon; a piped racing suit in a
+station atrium; a buttoned floor-length coat with fur cuffs on a bone-white antennaed alien in a snowy fuel
+yard; a quilted cropped jacket raising a glass to a fluffy alien pet in a lounge; a chrome corset and black
+skirt on a landing pad at sunset; an orange hooded cloak over a buttoned shirt in a booth. "wearing" at 27-37%,
+prompts 271-303 words. Text 1 of 6 (a small scrawl on a station wall). Filter: 2 of 7 rolls flagged (one 3×
+then re-rolled, one 1× then passed), 5 rolls clean. **Per-model across all four rounds** — nudity: pro 5/9
+(all but one under the R0/R1 defect), ultra 3/15; signatures: ultra 2/15, pro 1/9 (a "NETA" scrawl). Neither
+model is a clean pin; **kept at the fleet 50/50** with these numbers recorded, and the pin question re-asked
+after the first 30 live posts. Delivered: 5/6 → 6/6 clothed over the last two rounds, 24 shadow renders total,
+15 left in the admin shadow view (the 9 defective ones un-flagged, not deleted).
+
+**Three portable rules from this build**, in the order they were paid for:
+1. **On a character path with a skin-describing lineage axis, the costume is the FIRST thing said about her,
+   and every body garment is a STRUCTURED, OPAQUE, CONSTRUCTED piece.** Position got the costume into the
+   attended region; structure stopped Flux merging it with the skin that follows. Bodysuit, satin, sheer,
+   mesh, "open over", "over a fitted underlayer" and "bare midriff beside a closed jacket" each undressed her
+   at least once in 24 renders; a boned bodice, a buttoned coat, a plated breastplate over a sash top and a
+   quilted tunic never did.
+2. **The safety filter is a POSITION-AND-PHRASING symptom on this kind of path, not a pool-content symptom.**
+   Every flagged attempt across four rounds carried one of the garment phrasings above or sat outside the
+   attended region; the clean structured entries never flagged. And the engine discards the flagged Flux text,
+   so a flagged roll cannot be bisected after the fact — log it.
+3. **A crest is a helmet prior; a dial is a clock face; a "bare midriff" beside a zipped jacket is an unzip
+   instruction.** Three nouns, three renders, all fixed by rewording the entry rather than adding a rule.
+
+State of record: SHADOW on StarBot (`shadowPaths: ['space-rogue']`), 11 pools at MVP-25, camera hand-authored,
+own code-only medium, 50/50 pro/ultra. Next on Kevin's word: scale venue / costume / beat / lineage / set
+dressing to 100+ with the axis-expansion tooling (the same costume entry rolled twice in one round at 25),
+re-smoke 3, then move the string to `paths[]` and change nothing else.
+
 ### spacewalk — busywork-chore action register = the drift; hearted DNA is COMPOSED AWE + COMPOSED MOMENTUM (2026-07-01, Kevin heart calibration)
 
 Kevin hearted 16 spacewalk renders from the 2026-06-30 test batches, then flagged that the committed state "drifted" from them. Heart-calibration (all 16 `ai_prompt`s + images pulled from the DB) nailed the winning DNA and the drift mechanism:

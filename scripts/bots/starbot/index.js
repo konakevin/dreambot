@@ -49,6 +49,7 @@ const pathBuilders = {
   'event-horizon': require('./paths/event-horizon'), // Stage L1 SHADOW
   'gas-giant-skies': require('./paths/gas-giant-skies'), // Stage L2 SHADOW
   'first-contact': require('./paths/first-contact'), // Stage L3 SHADOW
+  'space-rogue': require('./paths/space-rogue'), // 2026-09-25 SHADOW — painted character-in-a-venue still
 };
 
 // Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
@@ -87,6 +88,10 @@ module.exports = {
     // NO artist names (Kevin 2026-05-23: artist refs read muted/serious + killed
     // the fun). Own medium so canvas (female/male-explorer) stays untouched.
     'space-femme': 'starbot_space_femme',
+    // space-rogue (2026-09-25 SHADOW): own PAINTERLY code-only medium (no DB row, no DLT) —
+    // painted character-in-a-venue still. Not canvas (Frazetta cheesecake prior), not
+    // space_femme (glossy poster), not hyperreal (portrait bias). Fragment in mediumStyles.
+    'space-rogue': 'starbot_space_rogue',
     // megastructure: reverted to default starbot_hyperreal medium
     // (Kevin 2026-05-14 — align with all other scene paths)
     // ─── Moved from MechBot 2026-06-24 — pin to the `render` medium so these
@@ -183,6 +188,10 @@ module.exports = {
     'female-explorer': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'male-explorer': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'space-femme': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    // space-rogue: the fleet 50/50 default (Kevin 2026-09-24). Ultra is MEASURED at round 0 —
+    // it signs painted registers and reverts night interiors to golden-hour exteriors; if it does
+    // either here, pin pro and add the path to DOCUMENTED_PRO_ONLY.
+    'space-rogue': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // cosmic-vista: Banana/Flux2 dropped. F1.1 Pro re-added alongside Ultra
     // 2026-06-21 (Kevin: 1.1-pro allowed anywhere ultra is, overrides the
     // prior "redundant with Ultra" exclusion).
@@ -270,6 +279,12 @@ module.exports = {
     // space-femme: minimal neutral prefix so the rolled render_style axis (not a
     // fixed style) sets the look. Overrides the heavier bot-wide PROMPT_PREFIX.
     starbot_space_femme: 'bold vivid imaginative science-fiction cover art',
+    // space-rogue: a short anchor that REPLACES the bot-wide prefix ("epic scale, awe-inspiring
+    // cosmic beauty" fights an intimate bar). Non-empty on purpose: '' is falsy and falls through.
+    // R0→R1 (2026-09-25): wrapper cut 48 → 25 words so the venue and her costume land inside the
+    // attended first third of the prompt (R0: costume at 44-58% → 4 of 6 rendered nude).
+    starbot_space_rogue:
+      'painted sci-fi character scene, full-length figure in a fully painted place',
     // ─── `render` medium = MechBot's bot-level prompt prefix (moved paths
     // 2026-06-24). Reproduces the exact wrapper those paths had on MechBot. ───
     render: 'cinematic sci-fi concept art, intricate mechanical surfaces',
@@ -302,6 +317,9 @@ module.exports = {
       'cinematic concept art precision, photoreal materials in vacuum, lens flare from distant stars, atmospheric haze from nebula clouds only, the kilometer-class capital spaceship is the MAIN SUBJECT filling the frame, surrounded by smaller craft and starfield, deep black void backdrop, no text, no words, no watermarks, photorealistic film still in deep space',
     // ─── `render` medium = MechBot's bot-level suffix (moved paths 2026-06-24). ───
     render: 'no text, no words, no watermarks, masterpiece quality',
+    // space-rogue: painterly close, deep focus so the venue stays sharp behind her.
+    starbot_space_rogue:
+      'painterly concept-art finish, deep readable focus, the whole place sharp behind her, no text, no words, no watermarks',
   },
 
   // Per-path prompt SUFFIX (replaces the medium suffix). spacewalk (2026-07-01,
@@ -354,6 +372,12 @@ module.exports = {
     // intensifiers carry the maxed-saturation register.
     starbot_space_femme:
       'vibrant glossy science-fiction cover illustration, bold saturated comic-cover color, slick chrome-and-neon rendering, eye-popping vivid electric palette, high-contrast dramatic neon-and-rim lighting, fun bold high-energy over-the-top sci-fi poster art, polished and crisp',
+    // space-rogue (2026-09-25 SHADOW): PAINTERLY character-in-a-venue register. Style words only
+    // (no composition mandate in the fragment — lesson 37), NO artist names (flux-2 rejects them
+    // and Kevin found artist refs read muted), no "photograph" (the look-prior trap), no "poster"
+    // (space-femme's lane). ≤250 chars so the venue starts inside the first tenth of the prompt.
+    starbot_space_rogue:
+      'painterly science-fiction concept art, richly painted cinematic still, one dramatic light source, saturated vivid colour',
     // Hyperreal sci-fi concept-art mediumStyle — formalized as the bot-only
     // medium `starbot_hyperreal` in migration 145. Mirrors the DB row's
     // flux_fragment so the override is explicit rather than implicit.
@@ -472,7 +496,10 @@ module.exports = {
   ],
 
   // Dark-launched (shadow) paths — renderable on demand, hidden from public + rotation.
-  shadowPaths: [], // Stage L paths promoted to live 2026-08-16 (STAR_SHADOW_PATHS const kept — drives chaos+polish OFF skip lists)
+  // space-rogue (2026-09-25): dark-launched — renders only via `iter-bot --mode space-rogue --post
+  // --shadow`, reviewed by Kevin in the app. Going live = move the string to paths[] and change
+  // NOTHING else about how it renders (the go-live xerox rule).
+  shadowPaths: ['space-rogue'],
 
   // Path weights.
   // Flattened to EQUAL distribution — all active paths weight 1 (Kevin 2026-05-23).
@@ -498,6 +525,7 @@ module.exports = {
       'ship-graveyard',
       'terraforming',
       ...STAR_SHADOW_PATHS, // event-horizon (SHADOW) — protect hero composition
+      'space-rogue', // 2026-09-25 SHADOW — the character-in-a-venue composition is the path; no chaos
     ],
     allowSubjectChaosPaths: [
       'cosmic-vista',
@@ -552,6 +580,7 @@ module.exports = {
       'post-apoc-rust-tech',
       'alien-biomechs',
       ...STAR_SHADOW_PATHS, // event-horizon (SHADOW) — self-lit scene, polish OFF
+      'space-rogue', // 2026-09-25 SHADOW — Haiku compression strips the lineage + costume language
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -643,6 +672,9 @@ module.exports = {
   sensoryAnchors: {
     enabled: true,
     requiredChannels: ['lightcolor'],
+    // space-rogue: its light_story axis owns the palette; the lightcolor channel is a second
+    // palette source on 100% of renders (tidal-flat-tracks lesson), so the whole layer is skipped.
+    skipPaths: ['space-rogue'],
     pathContext: {
       'event-horizon': 'spacewalk', // Stage L1 SHADOW — airless void (lightcolor-only)
       'gas-giant-skies': 'scene', // Stage L2 SHADOW
