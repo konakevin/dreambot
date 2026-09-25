@@ -4125,10 +4125,117 @@ after the first 30 live posts. Delivered: 5/6 → 6/6 clothed over the last two 
 3. **A crest is a helmet prior; a dial is a clock face; a "bare midriff" beside a zipped jacket is an unzip
    instruction.** Three nouns, three renders, all fixed by rewording the entry rather than adding a rule.
 
-State of record: SHADOW on StarBot (`shadowPaths: ['space-rogue']`), 11 pools at MVP-25, camera hand-authored,
-own code-only medium, 50/50 pro/ultra. Next on Kevin's word: scale venue / costume / beat / lineage / set
-dressing to 100+ with the axis-expansion tooling (the same costume entry rolled twice in one round at 25),
-re-smoke 3, then move the string to `paths[]` and change nothing else.
+**KEVIN'S VERDICT on the 15 R0-R3 renders (2026-09-25 evening) — settings pass, characters fail.** "these are
+too basic looking — the women look like they're just in leisure outfits mostly. i want these to be more 'boba
+fett' in the fact that she's a mystery, and she stands out from the crowd because of her 'out there' attire and
+dangerous looking 'edge'. the scenery and settings are really good, just the character looks and designs need to
+be fixed — more alien looking figures, or alien/human hybrids". Re-reading the 15 with that lens: 7 were plainly
+human (a woman in a green quilted jacket raising a cocktail, a woman in a copper halter on a terrace, a woman in a
+piped racing suit), and the 8 "aliens" were humans with horns or a crest — pale skin, a human face, contemporary
+make-up. **Two playbook laws had been broken, both by me, and both are already written above:**
+
+1. **The "[age] man/woman" law (DragonBot arcane_caster, line ~501).** Every lineage entry opened "A Sorvathi
+   WOMAN with …" and the template said "a {who} wearing …" — CLIP anchors on "woman" and paints the species as
+   makeup on a modern human. The recipe even MANDATED "ONE woman's physical identity". The law says the identity
+   noun is the SPECIES and gender rides on the role noun and pronouns; the fix is programmatic (a human-noun
+   gate in the generator), not prose.
+2. **The "canvas without sealed-armour pool entries" law (StarBot female-explorer, "What doesn't work").** The R2
+   structured-garment pool fixed nudity by going PLAIN — quilted bombers, tunics, linen trousers, sash tops —
+   which is precisely the "leisure outfit". Armour plate / equipment / helmet / visor is both the fleet's proven
+   anti-cheesecake register AND the bounty-hunter register Kevin asked for; the two goals are the same lever.
+
+**R4 — the character rebuild (one lever: "the character", across the four character pools + the template lines
+that describe her; the seven setting pools — venue, set_dressing, light_story, air, beat, company, event —
+untouched, because those are what he approved).**
+
+- lineage: ALIEN or ALIEN-HUMAN HYBRID only (~15/10), species as the noun ("A Sorvathi with …" / "A
+  Sorvathi-human hybrid with …"), HEAD AND FACE STRUCTURE first (ridged skull, chitin cheek plates, slit
+  nostrils, four eyes, a bony faceplate, head-tails), then skin, eyes, hair-or-what-grows-instead, at most one
+  below-the-jaw feature; `HUMAN_NOUN_GUARD` rejects woman/man/girl/age words; "crest" banned (helmet prior).
+- costume → THE KIT: torso armour piece first (plate over structured cloth), legs + boots, then the HEAD as the
+  mystery register (~8 full original helms open at the back so hair/tendrils show, ~9 partial covers —
+  respirator, visor band, hood, half-mask, scarf — ~8 bare faces with the helm carried and a painted stripe),
+  then one piece of hunter's gear (bandolier, thigh holsters, half-cape, jet-pack, trophies of teeth and
+  claws). Structured/opaque law KEPT; `COSTUME_GUARD` grows midriff + insignia/emblem/crest/sigil.
+- role: hunter/outlaw title (2-4 words) + dangerous-mystery demeanour; the title is spliced after the species
+  in the output order — "a Sorvathi bounty huntress wearing …" — so gender comes from the role noun.
+- hero_object: ~18 weapons and hunter's tools of original design, ~7 trophies.
+- wrapper prefix: "painted sci-fi scene of one alien character, full-length figure in a fully painted place"
+  (position 0 sets attributes; "alien" there is the cheapest lever against the human prior).
+- template: "a mysterious, dangerous-looking alien or alien-human hybrid, the one figure in the place nobody
+  can name, in a kit so out-there that the whole room notices"; RULE 2 = "armoured first, then described …
+  every feature her own anatomy"; "her eyes are visible, through the visor if the kit has one".
+  Metrics for the round: unmistakably NON-HUMAN read (the ask) / attire reads as hunter kit, not leisure / clothed
+  / composition / text. R3 pools archived in the session scratchpad.
+
+**R4 result (6 renders, 5 pro + 1 ultra; "wearing" at 29-31%, species features at 38-52%, prompts 271-313 words).**
+Non-human read **6 of 6** (from ~8 of 15 "humans with horns"): a blue-domed gold-plated figure at a mess-hall
+booth, a grey-alien-faced hunter in a fur mantle and pale cuirass at a lava spring, a crested Kethran in a trench
+coat in a cockpit, a crimson striped-crest alien at a crash camp, a white-haired amber-visored hybrid with a
+jet-pack in an engine room, a hooded blue hybrid in a gambling den. Mystery/edge 4 of 6. Hunter kit 3-4 of 6.
+Clothed 5 of 6. Text 2 of 6. **The cost of removing "woman": 3 of 6 read MALE or neutral** (the gold plate, the
+trench coat, the camp chair) — none of the six rolled roles carried a feminine noun, and "she/her" alone did not
+hold against armour plus an alien head. Three defects, each traced to a phrase: a "plated VEST" under a hood
+rendered as an open leather vest over a bare chest (a vest is open-front by prior — reworded to "chest plate" in
+4 entries); "slim gill-line SCARS along the jaw" rendered as a stitched skull mouth (scars on a jaw = a mouth
+prior — reworded to gill slits down the neck); the courier cockpit's "bank of brass levers and rows of toggle
+switches … lit crystal indicators" grew dial numerals (the instrument-bank prior, sibling of the R3 dial lesson
+— nouns reworded). Also seen, deferred: the venue's charm detail steals the POSTURE (a "folding chair with a cup
+balanced on its arm" sat her in it with the cup; a "walking staff driven into the ground" put the staff in her
+hand) — the beat at ~50% loses to a venue object at ~15% every time; and one lineage entry rolled twice in one
+round (recency at 25). R5's single lever for the female read: "shaped to her feminine figure" inside the KIT
+phrase of the output order (at the ~30% position the costume already owns), never a human noun.
+
+**R5 result (6 renders, 4 ultra + 2 pro; prompts 255-283 words).** Alien **6/6**, hunter kit **6/6**, mystery
+**6/6**, clothed **6/6** (the "chest plate" reword held; no vest opened), text 1/6 (a street-market stall sign —
+the [STREET] signage residual known since R0). Female read **~4 of 6**: a horned-helmed teal Sorvathi in cinched
+ceramic hard-shell in a cockpit, a sealed white hard-shell hybrid with a jet-pack and a long tail on a hull
+edge over a gas giant (the Boba Fett register exactly), a fur-mantled harness-and-cape Choressi striding a
+market, a black-plated Marrowen in an orange duster on a jungle platform (ambiguous). The two that read
+neutral — a purple bald duellist in a gunmetal cuirass, a hooded crystal-crowned Thyssen at a mess table —
+were the two prompts where **Sonnet dropped the "feminine figure" cue**: it lived in an output-order
+parenthetical, and Sonnet paraphrased "wearing" to "armoured in" / "in a" and lost the clause. Every prompt
+that carried the cue read female. Also: three R5 kits rendered a fully alien HEAD in place of a partial cover
+(a half-mask + horns fused into a horned alien face; a hood + crystal crown into a skull-faced crown) — the
+lineage's head structure and the head cover share one region and Flux merges them, which reads as MORE
+mystery, not less, so it is left alone. R6's single lever: the cue is BAKED into the kit string by the path
+(`shapeKit`: inserted right after the torso piece, ~31% of the prompt) so it is copied verbatim with the kit
+instead of living in an instruction Sonnet may paraphrase — the general form of "template mandates override
+pool variety" read backwards: a mandate you need copied goes IN the pool text, not around it.
+
+**R6 result (6 renders, 3 ultra + 3 pro; the cue landed in 6/6 prompts at 27-35%).** Alien **6/6** (one of them
+only by the shape of a full beaked helm), kit **6/6**, mystery **6/6**, clothed **6/6**. Female read: 3 clear (a
+fur-mantled horned Thylkai in a bone cuirass and split skirt with a sword at a dive bar; a green-skinned Sulvari in
+chrome-pink plate, high collar and cape in a zero-g cocktail lounge — the "sleek sexy bounty hunter" frame
+exactly; a caped Thesshari with a lantern under a green moon at a crash site), 3 ambiguous (a scavenged-plate
+assassin at a cargo ramp, a scarfed hybrid in wrapped cloth armour on a transit platform, a beaked-helm collector
+seen from behind on a chasm bridge), **0 male** (from 3 in R4). Text **3/6** — crate stencils in the cargo bay, a
+neon scrawl in the dive bar, panel lettering in the lounge: the [SHIP]/[BAR]/[PORT] signage residual known since
+R0, not a character defect. Round cap reached (3 rounds on Kevin's taste verdict).
+
+**R4-R6 delivered, 18 renders:** alien 17.5/18 · hunter kit ~16/18 · mystery 16/18 · clothed 17/18 · female
+read ~10 clear / 5 ambiguous / 3 male (all three in R4, before the cue) · text 6/18. Every one of the six
+"leisure" tells Kevin named (quilted jacket + cocktail, halter on a terrace, racing suit, plain human faces) is
+gone; every render carries plate, a head cover or a weapon.
+
+**Two more portable rules from the rebuild:** 4. **"Woman" as the identity noun is what makes an alien render as a human in makeup — and removing it costs
+the female read.** The trade is real: 3 of 6 R4 renders read male with "she/her" alone. The recovery that
+worked is a SILHOUETTE cue inside the costume text at ~30% ("shaped to her feminine figure"), never a human
+noun anywhere; helmets, hoods and robes still hide it on ~1 in 3, which on a mystery path is acceptable
+(a Boba Fett is not gendered at a glance either). If Kevin wants a clearer read, the next lever is the same
+cue written INTO the costume pool entries (cinched waist plate, breastplate shaped to her) — a pool lever,
+not a template one. 5. **A cue the render needs must be copied, so it goes IN the pool text, not in an instruction about the pool
+text.** Sonnet paraphrased "wearing (kit, shaped to her feminine figure)" to "armoured in …" and lost the
+clause in 2 of 6; `shapeKit` splicing it into the kit string got it into 6 of 6.
+
+State of record: SHADOW on StarBot (`shadowPaths: ['space-rogue']`), 11 pools at MVP-25 (lineage / costume /
+role / hero_object regenerated at R4 under the character-rebuild recipes; the seven setting pools untouched
+since R3 bar the cockpit instrument nouns), camera hand-authored, own code-only medium, 50/50 pro/ultra, 18 R4-R6
+shadow renders in the admin view (the 15 R0-R3 renders left as they were — hidden, not deleted). Next on Kevin's
+word: scale venue / costume / beat / lineage / set dressing to 100+ with the axis-expansion tooling (the same
+lineage entry rolled twice in one R4 round at 25), re-smoke 3, then move the string to `paths[]` and change
+nothing else. Open, his call: the female-read lever (rule 4) and the venue-family text residual (~1 in 3 on
+ship / bar / port venues; the [WILD] and [STREET]-market renders were clean except one stall sign).
 
 ### spacewalk — busywork-chore action register = the drift; hearted DNA is COMPOSED AWE + COMPOSED MOMENTUM (2026-07-01, Kevin heart calibration)
 

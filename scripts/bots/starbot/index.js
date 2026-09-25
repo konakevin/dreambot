@@ -283,8 +283,10 @@ module.exports = {
     // cosmic beauty" fights an intimate bar). Non-empty on purpose: '' is falsy and falls through.
     // R0→R1 (2026-09-25): wrapper cut 48 → 25 words so the venue and her costume land inside the
     // attended first third of the prompt (R0: costume at 44-58% → 4 of 6 rendered nude).
+    // R4 (2026-09-25, Kevin: "more alien looking figures"): position 0 names ONE ALIEN character —
+    // position-1 words set attributes, and "alien" here is the cheapest lever against the human prior.
     starbot_space_rogue:
-      'painted sci-fi character scene, full-length figure in a fully painted place',
+      'painted sci-fi scene of one alien character, full-length figure in a fully painted place',
     // ─── `render` medium = MechBot's bot-level prompt prefix (moved paths
     // 2026-06-24). Reproduces the exact wrapper those paths had on MechBot. ───
     render: 'cinematic sci-fi concept art, intricate mechanical surfaces',

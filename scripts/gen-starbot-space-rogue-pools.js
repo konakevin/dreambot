@@ -15,17 +15,33 @@
  * "i want to see some crazy looks out of it — all sorts of cool alien races and humans for
  * characters — all out killin it".
  *
+ * R4 CHARACTER REBUILD (Kevin's verdict on the 15 R0-R3 renders, 2026-09-25): "these are too basic
+ * looking — the women look like they're just in leisure outfits mostly. i want these to be more
+ * 'boba fett' in the fact that she's a mystery, and she stands out from the crowd because of her
+ * 'out there' attire and dangerous looking 'edge'. the scenery and settings are really good, just the
+ * character looks and designs need to be fixed — more alien looking figures, or alien/human hybrids".
+ * So the four CHARACTER pools (lineage, costume, role, hero_object) were regenerated under new
+ * recipes; the seven SETTING pools (venue, set_dressing, light_story, air, beat, company, event) are
+ * untouched. Two playbook laws drive the rewrite: (1) "[age] man/woman framing renders a fantasy
+ * RACE as a costumed modern human" — the identity noun is the SPECIES, gender rides on the role
+ * noun + pronouns, and LINEAGE_GUARD rejects woman/man/girl/age words programmatically; (2) "canvas
+ * without sealed-armor pool entries biases cheesecake — pool must emphasize armor plates / equipment
+ * / helmet / visor", which is also exactly the bounty-hunter register Kevin asked for.
+ *
  * AXES (each its own pool; the camera pool is HAND-AUTHORED in the path file, never generated):
  *   venue          the place, its light SOURCE (kind + position, no colour) and ONE charm detail;
  *                  tagged [BAR] [STREET] [SHIP] [PORT] [WILD] so set dressing + events can match it
  *   set_dressing   one venue object, tagged by family (+ [ANY]); two rolled per render
  *   light_story    two committed hues on the LIGHT, warm against cool; colour words only
  *   air            what the air is doing; no colour, no light
- *   lineage        THE HEADLINE POOL — who she is physically: species or human variant, skin,
- *                  2-3 unmistakable features, eyes, hair. Visual traits only.
- *   role           title + demeanour; zero clothing, zero props
- *   costume        the outfit — sleek and sexy through CUT, MATERIAL and SHEEN, never body words
- *   hero_object    the one thing in her hand or on her; nothing with a screen or a label
+ *   lineage        THE HEADLINE POOL — who she is physically: an ALIEN or an ALIEN-HUMAN HYBRID,
+ *                  species as the identity noun ("A Sorvathi with …"), head/face structure first,
+ *                  then skin, eyes, hair-or-what-grows-instead. Visual traits only. Never a human.
+ *   role           hunter/outlaw title + a dangerous-mystery demeanour; zero clothing, zero props
+ *   costume        THE KIT — bounty-hunter armour made couture: plate over structured cloth, a
+ *                  head cover register (full helm / partial / bare + carried), one piece of gear
+ *   hero_object    the one thing in her hand or on her — mostly weapons and hunter's tools, a few
+ *                  trophies; nothing with a screen or a label
  *   beat           verb-led, grounded, body-shaping — presence or momentum, never a chore
  *   company        ONE other presence, alien-cast or machine or creature; gated in the path
  *   event          something happening beyond her; tagged by family; gated in the path
@@ -95,6 +111,7 @@ const NO_TEXT_LAW = `NEVER write anything that carries writing: no sign, signboa
 const NO_CROWD_LAW = `Never a crowd, throng, mass, queue or "packed" room. If other figures exist they are two or three at most, far back, in silhouette.`;
 const NO_BODY_WORDS = `Never use: minimal coverage, bikini, cleavage, skin-tight, second-skin, form-fitting, sultry, seductive, sensual, provocative, alluring, curves, schoolgirl, naked, nude, bare-chested, lingerie.`;
 const ORIGINAL_WORLDS = `Original worlds only: never a named franchise, film, game, character, ship, planet or species from existing fiction.`;
+const NO_HUMAN_NOUNS = `Gender is carried only by "she" and "her" and by a feminine title where one exists; the identity noun is never a human noun. NEVER use the words woman, women, man, men, girl, lady, female, male, person, or any age word or number.`;
 const ONE_SENTENCE = `a single flowing sentence, no headline prefix, no dashes of any kind, no colons, no internal newlines. Output a NUMBERED list, one entry per line.`;
 const FAMILY_TAGS = `Every entry BEGINS with exactly one family tag in square brackets, then a space: [BAR] for bars, pubs, cantinas, lounges, clubs, gambling dens, backrooms and bounty offices; [STREET] for streets, alleys, markets, rooftops, bridges, transit platforms and plazas of a city on another world; [SHIP] for the inside of a spacecraft (cargo bay, cockpit, corridor, mess, engine room, airlock, boarding ramp); [PORT] for spaceports, hangars, landing pads, docks, fuel yards and orbital-station promenades; [WILD] for the open surface of an alien world where a traveller would stop (an overlook, a dune ridge, a crash site, a hot spring, a jungle platform, a frozen shore).`;
 
@@ -172,73 +189,79 @@ Axis discipline: no colour words, no light source, no objects, no people, no cam
 
   starbot_space_rogue_lineage: {
     format: 'simple',
-    theme: `THE LINEAGE — who she is physically, and this is the headline pool: cool alien races and striking humans, every one of them killing it. Each entry is ONE woman's physical identity, 30-44 words, in this order: her lineage as an invented species name or a human variant, her SKIN (colour, surface, pattern), TWO OR THREE UNMISTAKABLE FEATURES (horns, crest, tail, extra eyes, gills, antennae, bioluminescent markings, crystalline plating, mirror-chrome augmentation, tattoos of light, a mane, tentacle-locks), her EYES, and her HAIR or what she has instead of hair. She is always beautiful, confident and adult, with a full face and real eyes.
-VARIETY MANDATE across 25: about fifteen alien lineages spanning reptilian, amphibian, avian, feline, insectoid-elegant, crystalline, plant-like, aquatic, energy-veined, four-armed, and horned families in colours the wheel has never seen on a person (violet, teal, bronze-green, bone-white, deep blue, coral, obsidian); about ten humans and near-humans with striking looks (shaved head with circuit tattoos, waist-length silver braids, chrome-ringed irises, a mane of dyed hair, freckles that glow, a mirror-plated jaw, gold-leaf eyelids). Skin tones for humans span the full range from porcelain to deep ebony, described as colours, never as a nationality or region. Never repeat a lineage.
-Every feature is UNMISTAKABLE and concrete so it paints, never subtle. No age words. Never bald-round-white-headed, never faceless, never insect-mandibled, never a snout, never a body fused into a machine.
+    theme: `THE LINEAGE — who she is physically, and this is the headline pool: she is an ALIEN or an ALIEN-HUMAN HYBRID, never a human, and the first look at her says "not from here". Each entry is ONE being's physical identity, 26-40 words, in this order: her lineage as an invented species name used as the NOUN ("A Sorvathi with …" or "A Sorvathi-human hybrid with …"), then her HEAD AND FACE STRUCTURE first because it is the strongest signal (a tall backswept or ridged skull, bony brow plates, cheek plates of chitin, slit nostrils in a flat bridge, a wide lipless mouth, a fanned jaw frill, four eyes, eyes set wide, a bony faceplate, twin head-tails in place of hair), then her SKIN (colour, surface, pattern), then her EYES, then her HAIR or what grows instead (tendrils, quills, plumes, crystal filaments, a fin, a bare patterned scalp), plus at most ONE body feature that shows below the jaw (a tail, a second pair of arms, fins along the forearms, plates down the spine, clawed hands, digitigrade legs).
+She is beautiful, sleek and adult, with a full face and real eyes, and every feature is UNMISTAKABLE and concrete so it paints. ${NO_HUMAN_NOUNS}
+VARIETY MANDATE across 25: about fifteen full aliens spanning reptilian, amphibian, avian-feathered, feline-sleek, insect-elegant, crystalline, plant-grown, deep-sea, chitin-plated, horned, tentacle-haired and four-armed families, in skin colours never seen on a person (violet, teal, bronze-green, bone-white, deep blue, coral, obsidian, gold, slate, crimson); about ten HYBRIDS, each with a human face structure carrying two or three alien features from one parent (horns, tendrils, patterned skin of an alien colour, eyes with strange pupils, a tail, plated forearms). Never repeat a species, a skull shape or a hair substitute.
+Never faceless, never bald-round-white-headed, never a long animal snout, never a body fused into a machine, and never the word crest (it renders as a helmet).
 ${NO_BODY_WORDS}
 ${ORIGINAL_WORLDS}
-Axis discipline: no clothing, no props, no place, no pose, no camera. Her body, face, eyes and hair only.`,
+Axis discipline: no clothing, no armour, no props, no place, no pose, no camera. Her body, face, eyes and hair only.`,
     touchpoints: [
-      'a Vessari woman with skin of deep violet that shades to lilac at the throat, a pair of small backswept ivory horns, a faint constellation of bioluminescent freckles across her cheekbones, wide amber eyes with horizontal pupils, and a mane of white hair worn in a high tail',
-      'a Kethran woman with fine bronze-green scales that catch light like beaten metal, a low crest of translucent fins running from brow to nape in place of hair, gold slit-pupil eyes, and a long tail she carries curled behind her',
-      'a human woman with warm umber skin, a shaved head tattooed with fine circuitry that glows soft blue at the temples, mirror-chrome rings around dark brown irises, and a single long braid of copper hair from the crown',
-      'an Ilyari woman with bone-white skin veined faintly with teal light, four eyes stacked in two pairs all a deep sea-green, small pointed ears, and heavy tentacle-locks of ink-black that move slightly on their own',
-      'a human woman with porcelain skin dusted with real gold leaf across the eyelids, sharp grey eyes, freckles, and a waist-length rope of silver-white braids threaded with tiny metal rings',
-      'a Marrowen woman with skin like polished obsidian shot with veins of slow-moving orange light, a crown of short jet horns in a ring, pupil-less eyes of solid molten gold, and no hair at all, her scalp patterned like cooled lava',
+      'A Sorvathi with a tall backswept skull ridged in three bony lines, slit nostrils in a flat bridge and a wide dark mouth, skin of deep teal shading to aquamarine at the throat, pupil-less sea-glass eyes, and two thick head-tails hanging past her shoulders in place of hair',
+      'A Kethran with plates of bronze-green chitin over the cheekbones and brow, fine scales like beaten metal across the rest of her face and throat, gold slit-pupil eyes, a low fin of translucent membrane from brow to nape instead of hair, and a long tail carried curled behind her',
+      'A Vessari-human hybrid with a human face under a pair of small backswept ivory horns, deep violet skin that shades to lilac at the throat, a constellation of bioluminescent freckles across the cheekbones, wide amber eyes with horizontal pupils, and a mane of white hair in a high tail',
+      'An Ilyari with a bony faceplate of bone-white across the brow and cheeks, four sea-green eyes in two stacked pairs, skin veined faintly with teal light, small pointed ears, and heavy ink-black tentacle-locks that move slightly on their own',
+      'A Marrowen with a ring of short jet horns around a smooth patterned scalp, skin like polished obsidian shot with veins of slow orange light, a jaw frill of fine black spines, and pupil-less eyes of solid molten gold',
+      'A Quell-human hybrid with a human face and a scattering of small iridescent scales along the cheekbones and temples, skin of pale gold, eyes of faceted emerald with no white, and long quills of silver in place of hair swept back over her shoulders',
     ],
-    instructions: `Each entry is ONE woman's physical identity, 30-44 words, ${ONE_SENTENCE}`,
+    instructions: `Each entry is ONE being's physical identity, 26-40 words, opening "A <Species> with" or "A <Species>-human hybrid with", ${ONE_SENTENCE}`,
   },
 
   starbot_space_rogue_role: {
     format: 'simple',
-    theme: `THE ROLE — what she does and how she carries herself, in 10-18 words: a title plus a demeanour. The demeanour is the point: confident, amused, dangerous, playful, unbothered, hungry for trouble. She is always the coolest person in the room.
-VARIETY MANDATE across 25: bounty huntress, smuggler captain, courier, pilot, mercenary, cartel envoy, exiled heiress, augmented racer, xeno-diplomat, thief, arena champion, bartender who owns the place, salvage queen, cartographer of dead worlds, gunrunner, monster tamer, bodyguard, gambler, mechanic, relic hunter, assassin off duty, fleet deserter, holo-star on the run, prizefighter, and so on. Never repeat a title.
-Axis discipline: ZERO clothing, ZERO props, ZERO place, ZERO species. Title and demeanour only.`,
+    theme: `THE ROLE — what she is and how she carries herself, in 10-18 words: a TITLE of two to four words, then a comma, then a demeanour. Both say DANGEROUS MYSTERY: she is the figure nobody in the room can place, the one everybody watches without meaning to. Titles are hunter and outlaw trades (bounty huntress, headhunter, tracker, hired blade, enforcer, executioner for hire, warlord's daughter, syndicate assassin, ship-breaker, poacher of dangerous things, pirate captain, deserter, exiled war-priestess, pit-fighter, saboteur, relic thief, plague-ship survivor, hunter of hunters, smuggler queen, duellist, cartel collector, ghost of a dead fleet, prison-moon escapee, monster-hunter, debt collector). The demeanour is the point: still, unreadable, amused by danger, unhurried, patient, certain, watching, the room going quiet around her.
+Write the title with a feminine noun where one exists (huntress, priestess, queen, daughter) and gender the rest with "she" and "her". ${NO_HUMAN_NOUNS}
+VARIETY MANDATE across 25: never repeat a title; never repeat a demeanour word.
+Axis discipline: ZERO clothing, ZERO armour, ZERO weapons, ZERO place, ZERO species. Title and demeanour only.`,
     touchpoints: [
-      'bounty huntress, relaxed and amused, like the job is already finished',
-      'smuggler captain, all easy swagger, daring the room to say something',
-      'exiled heiress turned gunrunner, bored by danger, delighted by trouble',
-      'arena champion off duty, loose-limbed and laughing, still the most dangerous thing in the room',
+      'Bounty huntress, utterly still, the whole room pretending not to watch her',
+      'Headhunter, unhurried and certain, amused by everything that thinks it is dangerous',
+      "Warlord's daughter, patient as a held breath, a price on her head she finds funny",
+      'Hunter of hunters, unreadable, letting the silence do the talking for her',
     ],
-    instructions: `Each entry is ONE role, 10-18 words, ${ONE_SENTENCE}`,
+    instructions: `Each entry is ONE role, 10-18 words, a two-to-four-word title then a comma then the demeanour, ${ONE_SENTENCE}`,
   },
 
   starbot_space_rogue_costume: {
     format: 'simple',
-    theme: `THE COSTUME — what she wears, designed by a costume designer who wants her to be the sleekest, sexiest, coolest thing in the frame. Each entry is ONE outfit, 30-46 words, and it is built from STRUCTURED, OPAQUE, VISIBLY CONSTRUCTED garments: pieces with panels, seams, quilting, plates, buttons, lacing, buckles, pleats, a collar, a hem. Write the garment that covers her TORSO first, as a closed, solid piece (a laced corset over a shirt, a buttoned tunic, a quilted vest, a plated breastplate over a wrapped sash top, a high-necked sleeveless top, a cropped zipped jacket worn closed over a thick cloth band, a structured dress with a defined bodice). Then the garment that covers her LEGS (trousers, a skirt with its length stated, a wrap, greaves, boots to the thigh). Then ONE accessory.
-Skin shows only where a CUT leaves it: bare arms, bare shoulders, a bare midriff between a cropped top and a high waist, bare legs below a short skirt, one thigh through a slit. COVERAGE MIX across 25: about nine fully covered and ornate, about eight fitted and mid-coverage, about eight showing skin through one of those cuts.
-Garment materials are visibly CLOTH, LEATHER, METAL, CERAMIC, WOVEN or QUILTED and always thick enough to hold a shape: leather, suede, brushed steel, lacquer, thick silk, velvet, quilted nylon, bone plates, enamel, carbon weave, feathers, fine chainmail worn over cloth, ceramic plates, raw linen, heavy canvas, fur trim, hammered gold, frosted plastic plates, glass beads. Two entries may share at most one material word.
-NEVER write any of these: bodysuit, catsuit, leotard, unitard, jumpsuit, second-skin, skin-tight, satin, sheer, translucent, transparent, see-through, gauze, mesh, fishnet, net, lace, film, latex, rubber, clinging, thin, open over, worn open, unzipped, unbuttoned, revealing, backless, plunging, cut-out, over bare, underlayer, under-layer, undershirt, pearlescent, shell fabric. A garment is never described as covering skin or as being over skin; it simply IS the piece she wears.
-EVERY ENTRY IS A DIFFERENT DESIGN: spread the 25 across silhouette families and never repeat one (corset and trousers, tunic and thigh boots, plated breastplate and skirt, structured gown, cropped jacket and high-waisted trousers, cropped jacket and short skirt, long buttoned coat with a slit, wrapped and belted desert layers, quilted vest and greaves, a fitted racing jacket and tall boots, a pleated dress with a hard bodice, a sash-wrapped top and wide trousers, a hooded cloak over a buttoned tunic, a scavenger's patched leathers made elegant, a diplomat's tailored suit, a fighter's laced vest and wrapped hands, a courier's weatherproof shell with a bright collar).
-Push the visuals: fun, bold, boundary-pushing, never plain and never a uniform. Every outfit has one detail nobody has seen before, and it is a different KIND of detail each time (a collar, a hem, a fastening, a lining, a trim, a glove, a boot, a belt, a pattern).
+    theme: `THE KIT — what she wears, designed by a costume designer building a mysterious, dangerous hunter who stands out in any room: attire so out-there that the whole place notices, worn like she was born in it. The register is a BOUNTY HUNTER'S ARMOUR made couture: battered plate over structured cloth, gear that tells a history, one piece nobody has seen before. Each entry is ONE complete kit, 32-46 words, built from STRUCTURED, OPAQUE, VISIBLY CONSTRUCTED pieces, written in this order:
+1. Her TORSO first, always a closed solid armour piece with a named material (a scorched alloy chest plate over a padded canvas jacket, a lacquered breastplate over a high-collared tunic, a ribbed cuirass of ceramic plates over a wrapped cloth top, a heavy hooded poncho over a plated vest, a quilted flight jacket with armoured shoulders, a long armoured coat buttoned to the throat).
+2. Her LEGS and BOOTS (armoured trousers, greaves over trousers, a plated kilt of leather strips over a short skirt, thigh guards over tall boots).
+3. Her HEAD, where the mystery lives, split three ways across the 25: about eight wear a FULL HELMET of a striking original shape (a beaked helm, a smooth dome with one wide slit visor, a horned helm with a mirrored faceplate, a heavy hood-cowl with a lens visor), each open at the back or crown so her hair or what grows there shows behind it; about nine wear a PARTIAL cover (a respirator over the mouth and jaw with the eyes bare, a visor band across the eyes with the mouth bare, a hood pulled low with the face lit beneath, a half-mask over one side of the face, a scarf wrapped to the nose); about eight have the FACE BARE with the helmet carried or hung at the hip and a painted stripe or a scar-mark on the face.
+4. ONE piece of GEAR that says hunter (a bandolier of sealed cylinders, twin thigh holsters, a half-cape of scorched fabric over one shoulder, a compact jet-pack, a coil of cable at the hip, a string of trophies of teeth and claws, a blade sheathed along the boot, a chain wrapped around one forearm, mismatched pauldrons in two colours, a fur mantle over the plates, a cracked plate patched with a different metal).
+Skin shows only where a CUT leaves it: one bare arm under a single pauldron, bare shoulders above a breastplate, one thigh above a greave, bare legs below a plated kilt. COVERAGE MIX across 25: about eleven sealed head to toe, about eight mid-coverage, about six showing skin through one of those cuts. Sleek and sexy through SILHOUETTE only: a cinched armoured waist, long plated legs, a high collar, a cape that falls straight.
+Materials are visibly METAL, CERAMIC, LEATHER, CANVAS, QUILTED or BONE and thick enough to hold a shape: scorched alloy, gunmetal, brushed steel, hammered bronze, lacquered ceramic, enamel, carbon plate, bone plates, thick leather, waxed canvas, quilted nylon, boiled wool, fur, chain links, frosted resin plates, gold inlay. Plates can be dented, scorched, scratched, mismatched, painted with a stripe or a hand-print. Two entries may share at most one material word.
+NEVER write any of these: bodysuit, catsuit, leotard, unitard, jumpsuit, second-skin, skin-tight, satin, sheer, translucent, transparent, see-through, gauze, mesh, fishnet, net, lace, film, latex, rubber, clinging, thin, open over, worn open, unzipped, unbuttoned, revealing, backless, plunging, cut-out, over bare, underlayer, under-layer, undershirt, pearlescent, shell fabric, midriff. A garment is never described as covering skin or as being over skin; it simply IS the piece she wears.
+EVERY ENTRY IS A DIFFERENT DESIGN across silhouette families, never repeating one (chest plate and armoured coat, cuirass and plated kilt, poncho over plates, flight jacket and greaves, hooded cowl and long coat, mismatched scavenged plates, ceremonial lacquered armour, a duster over a breastplate, a fur mantle over plates, a long split armoured skirt, a tunic under a plated harness, a sealed hard-shell suit of panels with a full helm, a wrapped desert armour of cloth and bone plates).
+${NO_TEXT_LAW} No insignia, emblem, badge, sigil, rune or marking that could read as writing anywhere on the kit; a plate carries a stripe, a hand-print or scorch marks.
 ${NO_BODY_WORDS}
-${ORIGINAL_WORLDS}
-Her face is always visible: any helmet is carried or hung, never worn.
-Axis discipline: no skin colour, no hair, no species, no props in hand, no place, no pose, no camera. The clothes and one accessory only.`,
+${ORIGINAL_WORLDS} Nothing that names or copies a famous screen bounty hunter's armour.
+Axis discipline: no skin colour, no hair, no species, no weapon in hand, no place, no pose, no camera. The kit, the head cover and one piece of gear only.`,
     touchpoints: [
-      'a laced corset of enamelled ceramic plates over a long-sleeved shirt of thick white cotton, wide leather trousers tucked into buckled boots, and a belt of hammered gold links',
-      'a cropped bomber jacket of quilted midnight-blue nylon zipped to the collar, a short pleated skirt of stiff black leather with bare legs above tall lace-up boots, and one long glove of carbon weave',
-      'a floor-length coat of deep burgundy velvet buttoned closed from throat to hip with bone buttons, a high slit opening at one thigh above tall boots, and a collar of dark feathers',
-      'a high-necked sleeveless tunic of thick oil-slick iridescent silk that leaves her arms bare, wide trousers of raw linen belted with a sash of woven fibre-optic, and a cuff of raw crystal at one wrist',
-      'a plated breastplate of brushed steel worn over a wrapped sash top of heavy cloth, a wide belt of interlocking bone plates, a knee-length skirt of layered leather strips, and boots to the knee',
-      'a cropped jacket of stiff lacquered leather buttoned closed, a bare midriff between its hem and high-waisted armoured trousers of quilted grey canvas, and a chain of glass beads at the throat',
+      'A scorched alloy chest plate over a padded jacket of waxed olive canvas, armoured trousers of thick leather with steel knee guards above heavy buckled boots, a beaked helm of gunmetal open at the back so her hair falls behind it, and a half-cape of scorched fabric over one shoulder',
+      'A ribbed cuirass of lacquered crimson ceramic plates over a wrapped top of heavy cloth, a plated kilt of leather strips over a short skirt with bare legs above tall greaved boots, a respirator of brushed steel over the mouth and jaw with the eyes bare, and twin thigh holsters',
+      'A long armoured coat of boiled black wool buttoned to the throat with bone plates riveted across the shoulders and forearms, tall boots of dark leather, a visor band of smoked glass across the eyes with the mouth bare, and a bandolier of sealed brass cylinders',
+      'A heavy hooded poncho of undyed canvas over a plated vest of hammered bronze, straight trousers of thick suede tucked into flat boots, the hood pulled low with the face lit beneath it, and a string of trophies of teeth and claws hung across the chest',
+      'Mismatched scavenged plates of gunmetal and hammered copper strapped over a quilted flight jacket, one arm bare under a single pauldron, armoured trousers of grey canvas above steel-toed boots, the face bare with a painted white stripe across the eyes and a dented helmet hung at the hip, and a chain wrapped around one forearm',
+      'A sealed hard-shell suit of frosted resin panels with a cinched waist plate and shoulder guards, greaves of the same resin over tall boots, a smooth dome helmet with one wide slit visor open at the crown so her quills rise through it, and a compact jet-pack of scorched alloy',
     ],
-    instructions: `Each entry is ONE outfit, 30-46 words, ${ONE_SENTENCE}`,
+    instructions: `Each entry is ONE complete kit, 32-46 words, torso then legs then head then gear, ${ONE_SENTENCE}`,
   },
 
   starbot_space_rogue_hero_object: {
     format: 'simple',
-    theme: `THE HERO OBJECT — the one thing in her hand or on her that anchors who she is. Each entry is ONE object, 10-20 words, concrete and paintable, with its material or its glow. It is held, carried, slung, hung or resting under one arm.
-VARIETY MANDATE across 25: a bounty puck glowing red, a long-barrelled pistol holstered or held loose, her helmet under one arm, a drink that smokes, a coiled whip of light, a heavy sealed case chained to her wrist, a vapor stick trailing smoke, a glowing key the size of a hand, a caged tiny creature, a rifle slung across her back, a bundle of stolen fuel cells, a throwing blade, a jar of something alive, a grappling launcher, a chunk of raw crystal, a severed robot head, a lockbox, a folded map of cloth, a fighting staff, a chained crate handle, and so on. Never repeat an object.
+    theme: `THE HERO OBJECT — the one thing in her hand or on her that says she is dangerous and that this is her trade. Each entry is ONE object, 10-20 words, concrete and paintable, with its material or its glow and how it is held, carried, slung, hung or rested.
+VARIETY MANDATE across 25: about eighteen WEAPONS AND HUNTER'S TOOLS of original design (a long rifle with a scorched barrel, a heavy pistol with a bone grip, a hooked polearm, a wrist-mounted grapple, a serrated blade, a stun lance crackling at the tip, a net launcher, a coiled whip of light, a throwing disc, twin daggers, a harpoon gun, a shock baton, a tracking drone the size of a fist perched on her wrist, a thick chain ending in a hook, a heavy hammer, a bola of iron weights), and about seven TROPHIES AND PRIZES (a bounty puck glowing red, a severed robot head, a sealed case chained to her wrist, a caged creature, a jar of something alive, a bundle of stolen fuel cells, a drink that smokes). Never repeat an object.
 ${NO_TEXT_LAW} Nothing she holds has a screen, a display, a readout or a label.
-${ORIGINAL_WORLDS}
-Axis discipline: no clothing, no place, no pose beyond how it is held, no camera, no species.`,
+${ORIGINAL_WORLDS} No weapon named or shaped after a famous screen weapon.
+Axis discipline: no clothing, no armour, no place, no pose beyond how it is held, no camera, no species.`,
     touchpoints: [
+      'a long rifle with a scorched barrel resting across her shoulders, both wrists hooked over it',
+      'a heavy pistol with a bone grip held loose and low at her side',
+      'a hooked polearm of black alloy taller than she is, planted butt-down beside her boot',
       'a bounty puck the size of her palm glowing deep red between two fingers',
-      'her helmet, a smooth mirrored dome, tucked under one arm',
-      'a tall drink in a fluted glass that smokes slowly and changes colour as it settles',
-      'a long-barrelled pistol with a bone grip held loose and low at her side',
-      'a heavy sealed alloy case chained to her wrist, frost forming along its seams',
+      'a stun lance crackling faintly at the tip, carried point-down in one hand',
+      'a severed robot head held by its neck cables, one eye still flickering',
     ],
     instructions: `Each entry is ONE hero object, 10-20 words, ${ONE_SENTENCE}`,
   },
@@ -427,11 +450,29 @@ const GUARD = [
 // "open jacket over bare arms" as a bare chest, a coat "over a fitted underlayer" as a bare torso.
 // The fleet already knows the "X over swimsuit" form leaks the inner layer (MangaBot beach-episode).
 const COSTUME_GUARD =
-  /\b(bodysuit|catsuit|leotard|unitard|jumpsuit|second-?skin|skin-?tight|satin|sheer|translucent|transparent|see-?through|gauze|mesh|fishnet|\bnet\b|lace\b|film|latex|rubber|clinging|thin|open over|worn open|unzipped|unbuttoned|revealing|backless|plunging|cut-?out|over bare|under-?layer|undershirt|pearlescent|shell fabric)\b/i;
+  /\b(bodysuit|catsuit|leotard|unitard|jumpsuit|second-?skin|skin-?tight|satin|sheer|translucent|transparent|see-?through|gauze|mesh|fishnet|\bnet\b|lace\b|film|latex|rubber|clinging|thin|open over|worn open|unzipped|unbuttoned|revealing|backless|plunging|cut-?out|over bare|under-?layer|undershirt|pearlescent|shell fabric|midriff|insignia|emblem|badge|crest|sigil|rune|glyph|inscription|engraved|etched|stencil(?:led)?)\b/i;
+
+// Lineage + role guard (R4, 2026-09-25): the playbook's "[age] man/woman" law — a human age/gender
+// noun right after the species anchors CLIP on a modern human and the alien features become a
+// costume. The species is the identity noun; gender rides on "she/her" and feminine titles.
+const HUMAN_NOUN_GUARD =
+  /\b(woman|women|man|men|girl|girls|lady|ladies|female|male|person|people|twenties|thirties|forties|fifties|elderly|young|youthful|teen|teenage|aged|year-?old|years old)\b/i;
+
+// Kevin's reference for the R4 register is Boba Fett; the pools must stay original worlds.
+const FRANCHISE_GUARD =
+  /\b(mandalorian|beskar|jedi|sith|wookiee|twi'?lek|togruta|zabrak|tatooine|star wars|star trek|vulcan|klingon|asari|turian|quarian|krogan|mass effect|na'?vi|xenomorph|fremen|arrakis|blade runner|stormtrooper)\b/i;
 
 function violates(entry) {
   if (/costume/.test(POOL)) {
     const m = entry.match(COSTUME_GUARD);
+    if (m) return m[0];
+  }
+  if (/lineage|role/.test(POOL)) {
+    const m = entry.match(HUMAN_NOUN_GUARD);
+    if (m) return m[0];
+  }
+  {
+    const m = entry.match(FRANCHISE_GUARD);
     if (m) return m[0];
   }
   for (const re of GUARD) {
