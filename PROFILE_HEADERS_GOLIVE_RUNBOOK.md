@@ -25,9 +25,9 @@ Flipping the flag early changes nothing for users, because builds below 1.8.0 ha
 
 1. **Commit the header work to `main`.** Stage explicit paths only, and read `git diff --cached` first. The shared tree also holds other sessions' WIP. `release.sh` refuses a dirty tree, so that WIP has to be committed or cleared by its owners first.
 2. **Ship 1.8.0.** Run `./scripts/release.sh 1.8.0`, then the local build, then the direct `altool` upload (DONE: build 60, 2026-09-25). Kevin then attaches the build in ASC and taps Submit for Review.
-3. **Wait for Apple to approve and the build to be live** ("Ready for Sale"). Kevin reports this.
+3. **(DONE 2026-09-26: live on the App Store)** **Wait for Apple to approve and the build to be live** ("Ready for Sale"). Kevin reports this.
 4. **Log the row in `RELEASES.md`.**
-5. **App update gate** (`engine_config`). A soft nudge is the safe default:
+5. **App update gate** (`engine_config`). (DONE 2026-09-26: Kevin chose the HARD gate, `min_app_version = latest_app_version = 1.8.0`.) A soft nudge is the safe default:
    ```sql
    UPDATE public.engine_config SET latest_app_version = '1.8.0';
    -- and only on an explicit call for a hard block:
