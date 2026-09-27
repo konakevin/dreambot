@@ -280,7 +280,7 @@ export default function PublicProfileScreen() {
     ]);
   }
 
-  function sendReport(reason: 'spam' | 'harassment' | 'inappropriate') {
+  function sendReport(reason: 'spam' | 'harassment' | 'likeness_or_photo' | 'inappropriate') {
     report({ reason, reportedUserId: userId });
     showAlert('Reported', 'Thanks for letting us know.', [
       { text: 'OK', onPress: () => router.replace('/(tabs)') },
@@ -684,6 +684,13 @@ export default function PublicProfileScreen() {
             icon: 'hand-left-outline',
             group: 'primary',
             onPress: () => sendReport('harassment'),
+          },
+          {
+            key: 'likeness_or_photo',
+            label: 'Uses my face or photo',
+            icon: 'person-circle-outline',
+            group: 'primary',
+            onPress: () => sendReport('likeness_or_photo'),
           },
           {
             key: 'inappropriate',

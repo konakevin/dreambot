@@ -32,6 +32,9 @@ const REASONS: { label: string; reason: string }[] = [
   { label: 'Harassment or bullying', reason: 'harassment' },
   { label: 'Nudity or sexual content', reason: 'nudity_sexual' },
   { label: 'Violence or hate', reason: 'violence_hate' },
+  // Someone's face (a Dream Cast +1) or photo used without their permission. The Terms
+  // promise removal within 24 hours, same as every other report.
+  { label: 'Uses my face or photo', reason: 'likeness_or_photo' },
   { label: 'Something else', reason: 'inappropriate' },
 ];
 
