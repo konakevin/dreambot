@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { trackUserBlocked } from '@/lib/analytics';
+import { removePostsFromFeeds } from '@/lib/feedCache';
 
 export interface BlockedUser {
   user_id: string;
@@ -73,7 +74,7 @@ export function useToggleBlock() {
         trackUserBlocked();
       }
     },
-    onSuccess: () => {
+    onSuccess: async (_data, { userId, currentlyBlocked }) => {
       // Block severs follows + hides content both ways, so refresh the social graph.
       queryClient.invalidateQueries({ queryKey: ['blockedIds', user?.id] });
       queryClient.invalidateQueries({ queryKey: ['blockedUsers', user?.id] });
@@ -81,7 +82,14 @@ export function useToggleBlock() {
       // cached following set is now stale — without this the Follow/Following
       // pill keeps showing "Following" on a user you just blocked.
       queryClient.invalidateQueries({ queryKey: ['followingIds', user?.id] });
-      queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
+      // A newly blocked user's posts leave the loaded feeds IN PLACE. A feed
+      // refetch here re-sorted every loaded page and popped a different post into
+      // view (Kevin 2026-09-26); get_feed filters blocked users on the next fetch
+      // anyway. An unblocked user's posts come back on the next refresh (the feed
+      // never refreshes on its own).
+      if (!currentlyBlocked) {
+        await removePostsFromFeeds(queryClient, (post) => post.user_id === userId);
+      }
       queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
       queryClient.invalidateQueries({ queryKey: ['shareableVibers', user?.id] });
     },

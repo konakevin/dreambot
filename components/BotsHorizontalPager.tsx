@@ -277,7 +277,8 @@ function BotFeedPage({
     'bots',
     botId
   );
-  const setFeedSeed = useFeedStore((s) => s.setFeedSeed);
+  // Bots run on the browse seed, so a Bots pull-to-refresh never reshuffles Home.
+  const setBrowseSeed = useFeedStore((s) => s.setBrowseSeed);
   const user = useAuthStore((s) => s.user);
   const queryClient = useQueryClient();
 
@@ -299,8 +300,8 @@ function BotFeedPage({
     if (!user) return;
     const newSeed = Math.random();
     await prefetchDreamFeed(queryClient, 'bots', user.id, newSeed, botId);
-    setFeedSeed(newSeed);
-  }, [user, queryClient, botId, setFeedSeed]);
+    setBrowseSeed(newSeed);
+  }, [user, queryClient, botId, setBrowseSeed]);
 
   return (
     <FullScreenFeed

@@ -96,7 +96,9 @@ function ProfileTabIcon({
 export default function TabLayout() {
   const { session, initialized } = useAuthStore();
   const bumpProfileReset = useFeedStore((s) => s.bumpProfileReset);
-  const regenerateSeed = useFeedStore((s) => s.regenerateSeed);
+  // Bots + Explore re-taps rotate the BROWSE seed only. The Home feed has its own
+  // seed and never reshuffles because another tab refreshed (Kevin 2026-09-26).
+  const regenerateBrowseSeed = useFeedStore((s) => s.regenerateBrowseSeed);
   const activeTab = useFeedStore((s) => s.activeTab);
   const setActiveTab = useFeedStore((s) => s.setActiveTab);
   const hudVisible = useFeedStore((s) => s.hudVisible);
@@ -208,11 +210,11 @@ export default function TabLayout() {
         listeners={{
           tabPress: () => {
             // Re-tap active Bots tab → reset selection to "All" + refresh every
-            // bot feed. regenerateSeed bumps feedSeed (in every bots query key)
-            // so each bot refetches the latest; bumpBotsReset tells the screen
+            // bot feed. regenerateBrowseSeed bumps browseSeed (in every bots query
+            // key) so each bot refetches the latest; bumpBotsReset tells the screen
             // to snap back to the All page + clear per-bot scroll memory.
             if (activeTab === 'bots') {
-              regenerateSeed();
+              regenerateBrowseSeed();
               useFeedStore.getState().bumpBotsReset();
             }
             setActiveTab('bots');
@@ -266,7 +268,7 @@ export default function TabLayout() {
               setSearchActive(false);
             } else if (activeTab === 'top') {
               // Re-tap active Top tab → scroll-to-top + refetch
-              regenerateSeed();
+              regenerateBrowseSeed();
               useFeedStore.getState().bumpTopGridReset();
             }
             setActiveTab('top');

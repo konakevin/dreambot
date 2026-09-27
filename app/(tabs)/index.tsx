@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { PLAN_NAME_BASIC, PLAN_NAME_PRO } from '@/constants/proPlan';
-import { View, StyleSheet, TouchableOpacity, InteractionManager } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, InteractionManager, AppState } from 'react-native';
 import { Text } from '@/components/AppText';
 import type { VerticalPagerHandle } from '@/components/VerticalPager';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
@@ -18,6 +18,7 @@ import { useQueryClient } from '@tanstack/react-query';
 // live here; pull-to-refresh prefetched into the shared 5-element key that
 // this screen never read, so the "instant swap" never happened on home.)
 import { useDreamFeed, prefetchDreamFeed, pruneStaleFeedCaches } from '@/hooks/useDreamFeed';
+import { shouldRecoverStuckFeed } from '@/lib/feedRecovery';
 import { BrandSpinner } from '@/components/BrandSpinner';
 import { supabase } from '@/lib/supabase';
 import { asDbResult } from '@/lib/dbResult';
@@ -111,6 +112,7 @@ export default function HomeScreen() {
   const userId = user?.id;
   const queryClient = useQueryClient();
   const feedSeed = useFeedStore((s) => s.feedSeed);
+  const browseSeed = useFeedStore((s) => s.browseSeed);
   const setFeedSeed = useFeedStore((s) => s.setFeedSeed);
   const [activeTab, setActiveTab] = useState<FeedTab>('forYou');
   const { data: botUsers } = useBotUsers();
@@ -155,19 +157,23 @@ export default function HomeScreen() {
   // cache for tab-switch latency, then prefetches the first 5 image bytes
   // of each via expo-image so the cards render shimmer-free. Fire-and-
   // forget — best-effort, silent on failure.
+  // Keyed on the user ID, not the object: an avatar change or username claim
+  // (USER_UPDATED) hands out a new user object, and re-running this prefetch on
+  // the MOUNTED key refetched every loaded page once the feed was 15+ min old,
+  // re-sorting it under the user (Kevin 2026-09-26, the "feed pops" bug).
   useEffect(() => {
-    if (!user) return;
+    if (!userId) return;
     // Deferred until AFTER the first paint + interactions settle, so warming
     // both home feeds doesn't contend with the ACTIVE tab's own initial fetch on
     // cold start (a big contributor to "spinner for seconds"). The active tab is
     // already served by the mounted useDreamFeed below; this just pre-warms the
     // other tab for an instant switch.
     const handle = InteractionManager.runAfterInteractions(() => {
-      prefetchDreamFeed(queryClient, 'following', user.id, feedSeed);
-      prefetchDreamFeed(queryClient, 'forYou', user.id, feedSeed);
+      prefetchDreamFeed(queryClient, 'following', userId, feedSeed);
+      prefetchDreamFeed(queryClient, 'forYou', userId, feedSeed);
     });
     return () => handle.cancel();
-  }, [user, feedSeed, queryClient]);
+  }, [userId, feedSeed, queryClient]);
 
   // Also prebuffer the Bots tab on app load — both the "All bots" mixed
   // feed and each individual bot's first page (with first 5 image bytes
@@ -187,10 +193,11 @@ export default function HomeScreen() {
       // primary feed load — spiking the connection pool, jamming the JS thread,
       // and dragging the forYou fetch ~800ms slower — and it's redundant, because
       // bots.tsx already prewarms each bot when the Bots tab is actually open.
-      prefetchDreamFeed(queryClient, 'bots', userId, feedSeed, null);
+      // Bots feeds run on the browse seed (never Home's), so warm that key.
+      prefetchDreamFeed(queryClient, 'bots', userId, browseSeed, null);
     });
     return () => handle.cancel();
-  }, [userId, feedSeed, queryClient, botUsers]);
+  }, [userId, browseSeed, queryClient, botUsers]);
 
   // Read the feed for the ACTIVE tab (not a deferred copy). The feed is keyed
   // on activeTab, so it already remounts synchronously on tap — deferring only
@@ -199,8 +206,28 @@ export default function HomeScreen() {
   // key and data now switch together: cached → instant clean swap, uncached →
   // the loading state (never a wrong image). The inactive tab is prefetched on
   // mount below so the first switch is usually already cached.
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, isLoading, isFetching, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useDreamFeed(activeTab);
+
+  // Return-to-app: the Home feed NEVER refreshes on its own (memory
+  // feedback_home_feed_never_auto_refreshes); coming back keeps the exact post.
+  // The one exception is a feed stuck with NOTHING loaded (its first fetch was
+  // cancelled on background: "Your feed is warming up" until a restart, Kevin
+  // 2026-07-12). Reseeding then disturbs nothing, because nothing is on screen.
+  const feedStuckRef = useRef(false);
+  feedStuckRef.current = shouldRecoverStuckFeed({
+    hasUser: !!userId,
+    hasData: data !== undefined,
+    isFetching,
+  });
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (next) => {
+      if (next !== 'active' || !feedStuckRef.current) return;
+      if (useFeedStore.getState().homeFeedRefreshing) return;
+      setFeedSeed(Math.random());
+    });
+    return () => sub.remove();
+  }, [setFeedSeed]);
   // Hold any announcement until the feed has loaded + painted, so it never pops
   // over a blank/warming feed — it should land ON TOP of the visible app, not
   // replace the loading screen (Kevin 2026-08-25).
@@ -288,12 +315,16 @@ export default function HomeScreen() {
   // pops in mid-scroll" bug.
   const posts = pinnedPost && activeTab === 'forYou' ? [pinnedPost, ...feedPosts] : feedPosts;
 
-  // Scroll to top when a pinned post appears
+  // Scroll to top when a pinned post appears. Keyed on the pinned post's ID, not
+  // the object: a like / comment / count sync on the pinned post writes a NEW
+  // object with the same id, which used to yank the feed back to the top from
+  // wherever the user had scrolled (Kevin 2026-09-26).
+  const pinnedPostId = pinnedPost?.id ?? null;
   useEffect(() => {
-    if (pinnedPost) {
+    if (pinnedPostId) {
       setTimeout(() => listRef.current?.scrollToOffset(0, false), 100);
     }
-  }, [pinnedPost]);
+  }, [pinnedPostId]);
 
   function handleTabChange(tab: FeedTab) {
     setActiveTab(tab);

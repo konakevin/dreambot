@@ -17,7 +17,26 @@
  *     optimistic deletion as expected.
  */
 
-import { removeUploadFromPages, isRowPage } from '@/lib/feedHelpers';
+import { removeUploadFromPages, removePostsFromPages, isRowPage } from '@/lib/feedHelpers';
+
+describe('removePostsFromPages', () => {
+  const pages = [
+    { rows: [{ id: 'a' }, { id: 'b' }], nextCursor: { score: 1, id: 'b' } },
+    [{ id: 'c' }, { id: 'd' }],
+  ];
+
+  it('removes matching rows from both page shapes and keeps page metadata', () => {
+    const next = removePostsFromPages(pages, (r) => r.id === 'b' || r.id === 'c');
+    expect(next).toEqual([
+      { rows: [{ id: 'a' }], nextCursor: { score: 1, id: 'b' } },
+      [{ id: 'd' }],
+    ]);
+  });
+
+  it('returns the SAME array when nothing matches (no needless re-render)', () => {
+    expect(removePostsFromPages(pages, () => false)).toBe(pages);
+  });
+});
 
 interface TestRow {
   id: string;

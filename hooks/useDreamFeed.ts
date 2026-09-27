@@ -25,33 +25,10 @@ export interface FeedCursor {
 export type FeedRow = DreamPostItem & { feed_score?: number };
 export type FeedPage = { rows: FeedRow[]; nextCursor: FeedCursor | null };
 
-/**
- * Drop every cached feed entry from a PREVIOUS seed. Feed keys include
- * feedSeed, so each reshuffle mints a whole new key family and ORPHANS the old
- * one — and the bots prefetch re-warms ~17 more per seed. With a 24h gcTime
- * nothing ever left the cache: a heavy session accumulated ~1,600 feed entries,
- * and every optimistic sweep (likes, counts) walked ALL of them with full page
- * copies — 6+ seconds of blocked JS per double-tap, universal button lag
- * (Kevin 2026-07-21, [like-perf] logs). Call at every seed rotation; steady
- * state returns to ~20 live entries. 'explore' keys also carry the seed
- * (position 3) — same treatment.
- */
-export function pruneStaleFeedCaches(queryClient: QueryClient, activeSeed: number): void {
-  for (const root of ['dreamFeed', 'explore']) {
-    queryClient.removeQueries({
-      queryKey: [root],
-      // OBSERVER GUARD is load-bearing: the Bots re-tap rotates the seed FIRST
-      // and refetches after, so the pager keeps SHOWING the old seed's rows via
-      // keepPreviousData while the new fetch runs. Pruning those observer-backed
-      // entries orphaned the visible data — the like-count sweep couldn't find
-      // the entry to bump, so the badge froze (heart flipped via the separate
-      // likeIds cache) until the refetch landed (Kevin 2026-07-21). Entries
-      // still observed survive this prune and are collected on a LATER rotation
-      // once their observers have re-keyed — the ~20-entry steady state holds.
-      predicate: (q) => q.queryKey[3] !== activeSeed && q.getObserversCount() === 0,
-    });
-  }
-}
+// Lives in lib/feedCache (testable without Supabase); re-exported so the Home +
+// Bots screens keep importing it from here. It keeps BOTH live seeds (Home's
+// feedSeed and the Bots/Explore browseSeed) so neither side's warm cache is lost.
+export { pruneStaleFeedCaches } from '@/lib/feedCache';
 
 function buildQueryKey(
   tab: FeedTab,
@@ -111,7 +88,10 @@ async function fetchFeedPage(
 
 export function useDreamFeed(tab: FeedTab, botUserId?: string | null) {
   const user = useAuthStore((s) => s.user);
-  const feedSeed = useFeedStore((s) => s.feedSeed);
+  // Home (forYou / following) runs on feedSeed; every Bots feed on browseSeed, so
+  // a Bots or Explore refresh can never reshuffle Home underneath the user. The
+  // Home key is unchanged, so it still matches BootFeedPrewarm's prefetch exactly.
+  const feedSeed = useFeedStore((s) => (tab === 'bots' ? s.browseSeed : s.feedSeed));
   const feedShuffle = useFeedStore((s) => s.feedShuffle);
 
   return useInfiniteQuery({

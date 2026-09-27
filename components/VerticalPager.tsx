@@ -28,6 +28,7 @@ import {
 import { View, StyleSheet, ActivityIndicator, type StyleProp, type ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDeferredHydration } from '@/lib/deferredHydration';
+import { resolveAnchor } from '@/lib/pagerAnchor';
 import { Gesture, GestureDetector, type GestureType } from 'react-native-gesture-handler';
 import Animated, {
   cancelAnimation,
@@ -216,41 +217,43 @@ function VerticalPagerInner<T>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeIndex]);
 
-  // Data change: if the anchored item now lives at a different index, follow it.
+  // Data change: land where lib/pagerAnchor says (unit-tested there):
+  //   • stable  the card is still at the same index → nothing to do.
+  //   • follow  the card moved (an item above was added/removed) → follow it.
+  //   • slide   the card was REMOVED (delete / quarantine / report / block) → land
+  //             on the card that came right after it, as if it slid out.
+  //   • top     the list was REPLACED (new seed / re-sorted refetch) → the old
+  //             position means nothing in the new order → start at the top. This
+  //             used to "stay put" whenever the old index was still in range,
+  //             which dropped a random post ~10 away into the user's spot (Kevin
+  //             2026-09-26). Out-of-range replacement already went to the top
+  //             (2026-07-26, the "stuck feed" fix) and still does.
   const activeIndexRef = useRef(activeIndex);
   activeIndexRef.current = activeIndex;
+  // Keys of the data this effect last saw: telling a removal from a replacement
+  // needs the before AND after.
+  const prevKeysRef = useRef<string[] | null>(null);
   useEffect(() => {
+    const nextKeys = data.map((it, i) => keyExtractorRef.current(it, i));
+    const prevKeys = prevKeysRef.current ?? nextKeys;
+    prevKeysRef.current = nextKeys;
     // During a pull-to-refresh the data swap is INTENTIONAL — following the old
     // top post to its new index would visually undo the refresh (the user would
     // see the exact same post and conclude nothing happened). startRefresh
     // resets to the new top instead.
     if (refreshingRef.current) return;
-    const key = activeKeyRef.current;
-    if (key == null) return;
     const idx = activeIndexRef.current;
-    const cur = data[idx];
-    if (cur != null && keyExtractorRef.current(cur, idx) === key) return; // stable — nothing to do
-    const newIdx = data.findIndex((it, i) => keyExtractorRef.current(it, i) === key);
-    // Anchored item vanished. Two very different cases (root-caused 2026-07-26
-    // via [FEEDDBG] traces — the intermittent "stuck feed"):
-    //   • REPLACEMENT (home re-tap reshuffle): the whole list is new and our old
-    //     deep index is OUT OF BOUNDS → go to the TOP (0), matching "refresh =
-    //     fresh feed from the top". The old code clamped to data.length-1, which
-    //     stranded the user on the LAST post of the new short feed — where a
-    //     forward swipe can't advance and onEndReached never fires. This lands the
-    //     same place the atomic remount would, so the reshuffle race is harmless
-    //     whichever way React batches the two updates.
-    //   • DELETION (the single post we're viewing was removed): our index is still
-    //     in range → stay put so the next post slides into place.
-    const target = newIdx >= 0 ? newIdx : idx < data.length ? idx : 0;
+    const landing = resolveAnchor(prevKeys, nextKeys, activeKeyRef.current, idx);
+    if (landing.kind === 'stable') return;
+    const target = landing.kind === 'top' ? 0 : landing.index;
+    activeKeyRef.current = nextKeys[target] ?? null;
     if (target === idx) return;
     indexSV.value = target;
     setActiveIndex(target);
     cancelAnimation(translateY);
     translateY.value = -target * pageHeightSV.value;
-    if (newIdx >= 0) activeKeyRef.current = key;
-    // Keep the parent's index bookkeeping true (same item, new index) —
-    // without firing onEndReached side effects.
+    // Keep the parent's index bookkeeping true — without firing onEndReached
+    // side effects.
     onActiveIndexChangeRef.current?.(target);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);

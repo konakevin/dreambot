@@ -81,16 +81,81 @@ describe('cache key alignment', () => {
     }
   });
 
-  it('foreground-after-idle RESEEDS the feed (reliable reload, not a frozen-query invalidate)', () => {
-    const src = fs.readFileSync(layoutPath, 'utf-8');
-    // The >60s-foreground handler must trigger a feed RESEED. The feed is
-    // deliberately frozen (staleTime Infinity, refetchOnWindowFocus/Reconnect
-    // off), so invalidateQueries — which only refetches ACTIVE queries — left it
-    // stuck on "Your feed is warming up" when the query was inactive / GC'd /
-    // cancelled on background. A new seed re-keys every feed query (home + bots
-    // share feedSeed), forcing a clean fetch on the active observer. Locks the
-    // 2026-07-12 fix so a future edit can't silently drop back to invalidate.
-    const reseed = src.split('\n').filter((l) => l.includes('regenerateSeed'));
-    expect(reseed.length).toBeGreaterThan(0);
+  // ── The Home feed never changes on its own (Kevin's rule, 2026-09-26) ──
+  // Coming back to the app keeps the exact post; only the Home re-tap,
+  // pull-to-refresh or an app restart change it (memory
+  // feedback_home_feed_never_auto_refreshes). Each silent swap or re-sort under the
+  // index-positioned pager popped a random post ~10 away into view. The 2026-07-12
+  // reseed-on-return (for a feed stuck on "Your feed is warming up") is replaced by
+  // a Home-screen recovery that only fires when NOTHING is loaded
+  // (lib/feedRecovery.ts, unit-tested).
+  const root = path.join(__dirname, '..', '..');
+  const codeLines = (file: string) =>
+    fs
+      .readFileSync(file, 'utf-8')
+      .split('\n')
+      .filter((l) => {
+        const t = l.trim();
+        return !(
+          t.startsWith('//') ||
+          t.startsWith('*') ||
+          t.startsWith('/*') ||
+          t.startsWith('{/*')
+        );
+      });
+  const SEED_CHANGE = /\b(regenerateSeed|regenerateBrowseSeed|setFeedSeed|reshuffleFeed)\(/;
+
+  it('returning to the app never reshuffles or refetches a feed', () => {
+    const offenders = codeLines(layoutPath).filter(
+      (l) => SEED_CHANGE.test(l) || /queryKey:\s*\['dreamFeed'/.test(l)
+    );
+    expect(offenders).toEqual([]);
+  });
+
+  it('the Home screen only auto-reloads a feed that is stuck empty', () => {
+    const home = fs.readFileSync(path.join(root, 'app', '(tabs)', 'index.tsx'), 'utf-8');
+    expect(home).toContain('shouldRecoverStuckFeed(');
+  });
+
+  it('Bots / Explore refreshes never change the Home seed', () => {
+    const files = [
+      path.join(root, 'app', '(tabs)', '_layout.tsx'),
+      path.join(root, 'app', '(tabs)', 'top.tsx'),
+      path.join(root, 'app', '(tabs)', 'bots.tsx'),
+      path.join(root, 'components', 'BotsHorizontalPager.tsx'),
+    ];
+    for (const file of files) {
+      const offenders = codeLines(file).filter((l) =>
+        /\b(regenerateSeed|setFeedSeed|reshuffleFeed)\(/.test(l)
+      );
+      expect({ file: path.basename(file), offenders }).toEqual({
+        file: path.basename(file),
+        offenders: [],
+      });
+    }
+  });
+
+  it('nothing in the client live-refetches the feed (invalidate must be refetchType none)', () => {
+    const offenders: string[] = [];
+    const walk = (dir: string) => {
+      for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else if (/\.tsx?$/.test(entry.name)) {
+          for (const l of codeLines(full)) {
+            if (
+              /(invalidateQueries|refetchQueries|resetQueries)\(\{\s*queryKey:\s*\['dreamFeed'/.test(
+                l
+              ) &&
+              !l.includes("refetchType: 'none'")
+            ) {
+              offenders.push(`${path.relative(root, full)}: ${l.trim()}`);
+            }
+          }
+        }
+      }
+    };
+    for (const dir of ['app', 'components', 'hooks', 'lib', 'store']) walk(path.join(root, dir));
+    expect(offenders).toEqual([]);
   });
 });

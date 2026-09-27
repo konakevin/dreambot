@@ -11,12 +11,26 @@ export interface FeedStore {
   bumpReset: () => void;
   refreshToken: number;
   bumpRefresh: () => void;
-  // Session seed for feed shuffle
+  // Session seed for the HOME feed shuffle (forYou + following). Changed ONLY by a
+  // Home refresh (re-tap / pull), the stuck-empty recovery, or a full app refresh:
+  // the Home feed never reshuffles on its own (memory
+  // feedback_home_feed_never_auto_refreshes). Its query key must stay
+  // byte-identical to BootFeedPrewarm's (app/_layout.tsx) for the instant first paint.
   feedSeed: number;
   /** Seed jitter weight passed to get_feed (mig 352): 0.10 cold-load default,
    *  MANUAL_FEED_SHUFFLE after any manual refresh so reshuffles visibly reorder. */
   feedShuffle: number;
+  /** Fresh EVERYTHING: new Home seed AND new browse seed. Only for a full reset
+   *  (Settings "Refresh App", onboarding), never while the Home feed is on screen. */
   regenerateSeed: () => void;
+  /** Seed for the BROWSE surfaces: every Bots feed + the Explore grid. Separate
+   *  from feedSeed so refreshing Bots or Explore never reshuffles Home underneath
+   *  (the "feed pops to a different post" bug, Kevin 2026-09-26). */
+  browseSeed: number;
+  /** Bots / Explore re-tap: new browse seed; Home is untouched. */
+  regenerateBrowseSeed: () => void;
+  /** Bots / Explore pull-to-refresh: swap to a PREFETCHED browse seed. */
+  setBrowseSeed: (seed: number) => void;
   /** Raise shuffle strength to the manual-refresh level BEFORE prefetching —
    *  the prefetch and the mounted query must see the same value. */
   bumpShuffle: () => void;
@@ -107,7 +121,11 @@ export const useFeedStore = create<FeedStore>((set) => ({
   // keep the FIXED cold seed deterministic — moot with a random launch seed).
   // The server clamps to 0.15 regardless (mig 389).
   feedShuffle: MANUAL_FEED_SHUFFLE,
-  regenerateSeed: () => set({ feedSeed: Math.random(), feedShuffle: MANUAL_FEED_SHUFFLE }),
+  regenerateSeed: () =>
+    set({ feedSeed: Math.random(), browseSeed: Math.random(), feedShuffle: MANUAL_FEED_SHUFFLE }),
+  browseSeed: Math.random(),
+  regenerateBrowseSeed: () => set({ browseSeed: Math.random() }),
+  setBrowseSeed: (seed) => set({ browseSeed: seed }),
   bumpShuffle: () => set({ feedShuffle: MANUAL_FEED_SHUFFLE }),
   setFeedSeed: (seed) => set({ feedSeed: seed, feedShuffle: MANUAL_FEED_SHUFFLE }),
   feedReshuffleEpoch: 0,

@@ -104,7 +104,9 @@ function exploreQueryKey(
 
 function useExploreDreams(mediums: string[], vibes: string[]) {
   const user = useAuthStore((s) => s.user);
-  const feedSeed = useFeedStore((s) => s.feedSeed);
+  // The browse seed (shared with Bots), never Home's: refreshing Explore must not
+  // reshuffle the Home feed underneath (Kevin 2026-09-26).
+  const feedSeed = useFeedStore((s) => s.browseSeed);
   const feedShuffle = useFeedStore((s) => s.feedShuffle);
   const medium = mediums[0] ?? null;
   const vibe = vibes[0] ?? null;
@@ -462,14 +464,13 @@ export default function SearchExploreScreen() {
   }, []);
 
   // ── Browse feed (grid mode) ──
-  const feedSeed = useFeedStore((s) => s.feedSeed);
-  const regenerateSeed = useFeedStore((s) => s.regenerateSeed);
+  const browseSeed = useFeedStore((s) => s.browseSeed);
   const topGridResetToken = useFeedStore((s) => s.topGridResetToken);
   const gridRef = useRef<RNFlatList>(null);
 
   useEffect(() => {
     gridRef.current?.scrollToOffset({ offset: 0, animated: true });
-  }, [feedSeed]);
+  }, [browseSeed]);
 
   const activeMediums = selectedMedium ? [selectedMedium] : [];
   const activeVibes = selectedVibe ? [selectedVibe] : [];
@@ -491,8 +492,8 @@ export default function SearchExploreScreen() {
   }, [data]);
 
   // ── Tap-active-tab gesture (Instagram-style) ──
-  // Scroll-to-top is already handled by the feedSeed effect above (regenerateSeed
-  // fires on re-tap which bumps feedSeed). Here we add the refetch.
+  // Scroll-to-top is already handled by the browseSeed effect above
+  // (regenerateBrowseSeed fires on re-tap). Here we add the refetch.
   const skipFirstTopReset = useRef(true);
   useEffect(() => {
     if (skipFirstTopReset.current) {
@@ -537,7 +538,7 @@ export default function SearchExploreScreen() {
         }),
         minRefreshHold(),
       ]);
-      useFeedStore.getState().setFeedSeed(newSeed);
+      useFeedStore.getState().setBrowseSeed(newSeed);
     } finally {
       requestAnimationFrame(() => setIsPulling(false));
     }

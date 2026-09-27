@@ -6,6 +6,7 @@
  */
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { removePostsFromFeeds } from '@/lib/feedCache';
 
 export type AdminReport = {
   id: string;
@@ -46,11 +47,15 @@ export function useAdminReports() {
 export function useReportActions() {
   const qc = useQueryClient();
   const refresh = () => qc.invalidateQueries({ queryKey: REPORTS_KEY });
-  // After removing content / banning, refresh the feed + profile grids so the
-  // change is reflected in the admin's own view immediately (get_feed filters
-  // moderated/banned content at fetch time — migration 126).
-  const refreshFeeds = () => {
-    qc.invalidateQueries({ queryKey: ['dreamFeed'] });
+  // After removing content / banning, take it out of the admin's loaded feeds
+  // IN PLACE and refresh the profile grids (get_feed filters moderated/banned
+  // content at fetch time, migration 126, so the next fetch agrees). A feed
+  // refetch here re-sorted the Home feed sitting under the reports screen and
+  // popped a different post into view on return (Kevin 2026-09-26).
+  const removeFromFeeds = async (
+    shouldRemove: (post: { id: string; user_id?: string | null }) => boolean
+  ) => {
+    await removePostsFromFeeds(qc, shouldRemove);
     qc.invalidateQueries({ queryKey: ['publicProfile'] });
   };
 
@@ -68,13 +73,13 @@ export function useReportActions() {
     hideUpload: async (uploadId: string) => {
       const { error } = await supabase.rpc('admin_hide_upload', { p_upload_id: uploadId });
       if (error) throw error;
-      refreshFeeds();
+      await removeFromFeeds((post) => post.id === uploadId);
     },
     /** Permanently delete a post. */
     deleteUpload: async (uploadId: string) => {
       const { error } = await supabase.rpc('admin_delete_upload', { p_upload_id: uploadId });
       if (error) throw error;
-      refreshFeeds();
+      await removeFromFeeds((post) => post.id === uploadId);
     },
     /** Permanently delete a comment. */
     deleteComment: async (commentId: string) => {
@@ -86,7 +91,7 @@ export function useReportActions() {
       const { error } = await supabase.rpc('admin_ban_user', { p_user_id: userId });
       if (error) throw error;
       refresh();
-      refreshFeeds();
+      await removeFromFeeds((post) => post.user_id === userId);
     },
   };
 }

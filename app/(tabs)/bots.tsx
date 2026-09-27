@@ -48,7 +48,8 @@ export default function BotsScreen() {
   const user = useAuthStore((s) => s.user);
   const userId = user?.id;
   const queryClient = useQueryClient();
-  const feedSeed = useFeedStore((s) => s.feedSeed);
+  // Bots feeds run on the browse seed (shared with Explore), never Home's.
+  const feedSeed = useFeedStore((s) => s.browseSeed);
   const { data: botUsers } = useBotUsers();
 
   // Default: "All" view (null botId — mixed bot feed).
@@ -56,7 +57,7 @@ export default function BotsScreen() {
 
   // Re-tap active Bots tab → reset selection back to "All" + clear per-bot
   // scroll memory so every bot starts at its latest card. The actual feed
-  // refresh rides on feedSeed (regenerateSeed in the tab listener) — that
+  // refresh rides on browseSeed (regenerateBrowseSeed in the tab listener) — that
   // changes every bots query key, so the prefetch effect below re-warms each
   // bot feed and each page refetches the latest. Setting selectedBotId=null
   // makes the pager snap back to the "All" page (its external-sync effect).

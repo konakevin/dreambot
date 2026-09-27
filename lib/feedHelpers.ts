@@ -38,3 +38,23 @@ export function removeUploadFromPages<T extends { id: string }>(
     return page.filter((p) => p.id !== uploadId);
   });
 }
+
+/**
+ * Remove every row matching `shouldRemove` from every page, keeping page metadata
+ * (same shapes as removeUploadFromPages). Returns the SAME array when nothing
+ * matched, so a removal that touches nothing doesn't re-render a feed.
+ */
+export function removePostsFromPages<T>(
+  pages: AnyPage<T>[],
+  shouldRemove: (row: T) => boolean
+): AnyPage<T>[] {
+  let changed = false;
+  const next = pages.map((page) => {
+    const rows = isRowPage(page) ? page.rows : page;
+    const kept = rows.filter((row) => !shouldRemove(row));
+    if (kept.length === rows.length) return page;
+    changed = true;
+    return isRowPage(page) ? { ...page, rows: kept } : kept;
+  });
+  return changed ? next : pages;
+}

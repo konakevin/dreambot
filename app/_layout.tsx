@@ -710,7 +710,7 @@ function DataPrefetcher() {
       // while away is already there when they open their profile. refetchType
       // 'all' reaches them even when their tab isn't the active observer (same
       // rationale as lib/gridInvalidation.ts). Kept to just these two keys — NOT
-      // the full feed/explore set (the feed has its own >60s reseed below) — so
+      // the feed/explore set: the feeds never refresh on return (see below) — so
       // it stays cheap on every foreground.
       if (user) {
         queryClient.invalidateQueries({ queryKey: ['my-dreams'], refetchType: 'all' });
@@ -720,19 +720,15 @@ function DataPrefetcher() {
       if (backgroundedAt.current === 0) return;
       const elapsed = Date.now() - backgroundedAt.current;
       if (elapsed > 60 * 1000) {
-        // RESEED the feed instead of invalidating it. invalidateQueries only
-        // refetches ACTIVE queries, and the feed is deliberately frozen
-        // (staleTime Infinity, refetchOnWindowFocus/Reconnect false) — so when
-        // the query was inactive, GC'd, or its in-flight fetch was cancelled on
-        // background (queryClient.ts cancels on background), the invalidate did
-        // nothing and the feed sat empty ("Your feed is warming up") until an app
-        // restart (Kevin 2026-07-12). A fresh seed changes EVERY feed query key
-        // (home forYou/following + all bot feeds share feedSeed), so the active
-        // observer starts a clean fetch — the same reliable path pull-to-refresh
-        // uses. placeholderData:keepPreviousData keeps the old feed on screen
-        // while the new seed loads (no blank flash) in the normal case; in the
-        // stuck-empty case there's nothing to keep, so it fetches fresh.
-        useFeedStore.getState().regenerateSeed();
+        // The feeds are deliberately NOT refreshed here. Coming back to the app
+        // keeps the exact post the user was on; only the Home re-tap,
+        // pull-to-refresh or an app restart change the feed (Kevin's rule, memory
+        // feedback_home_feed_never_auto_refreshes). A reseed used to live here
+        // (2026-07-12, for a feed stuck on "Your feed is warming up"), and it
+        // swapped a new ordering in under the user a second after every return:
+        // a random post ~10 away popped into view (2026-09-26). The stuck-empty
+        // case is now recovered by the Home screen itself, and only when nothing
+        // is loaded (lib/feedRecovery.ts).
         if (user) {
           queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user.id] });
           queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
@@ -902,9 +898,11 @@ function RootLayout() {
           {/* No onSuccess feed-invalidate on restore: the persisted feed shows
               instantly and is NOT auto-refreshed on cold start (the TikTok/IG
               model — never yank the feed under the user). Fresh content arrives
-              as they scroll (fetchNextPage hits the network) and via the existing
-              refresh triggers: pull-to-refresh, Home re-tap, foreground-after-idle
-              (regenerateSeed). staleTime:Infinity keeps the restored page steady. */}
+              as they scroll (fetchNextPage hits the network) and via the only
+              refresh triggers: pull-to-refresh, Home re-tap, or an app restart.
+              Returning to the app never refreshes it (memory
+              feedback_home_feed_never_auto_refreshes). staleTime:Infinity keeps the
+              restored page steady. */}
           <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
             <AppErrorBoundary>
               <AlertProvider>

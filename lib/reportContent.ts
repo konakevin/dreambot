@@ -15,6 +15,7 @@ import { showAlert } from '@/components/CustomAlert';
 import { Toast } from '@/components/Toast';
 import { supabase } from '@/lib/supabase';
 import { queryClient } from '@/lib/queryClient';
+import { removePostsFromFeeds } from '@/lib/feedCache';
 import { useAuthStore } from '@/store/auth';
 import type { Database } from '@/types/database';
 
@@ -61,11 +62,13 @@ async function submitReport(target: ReportTarget, reason: string): Promise<void>
     return;
   }
   // get_feed already excludes a post the user reported (per-reporter filter,
-  // migrations 048/310), but that only applies on the NEXT fetch — refresh the
-  // feed + profile grids so a reported post disappears from the reporter's
-  // current view immediately (same as the block flow).
+  // migrations 048/310), but that only applies on the NEXT fetch — so remove it
+  // from the loaded feeds right now, IN PLACE. A feed refetch here re-sorted every
+  // loaded page under the reporter and popped a different post into view
+  // (Kevin 2026-09-26).
   if (target.uploadId) {
-    queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
+    const uploadId = target.uploadId;
+    await removePostsFromFeeds(queryClient, (post) => post.id === uploadId);
     queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
   }
   // A reported comment should vanish from the reporter's view right away (same
