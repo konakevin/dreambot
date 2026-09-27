@@ -179,6 +179,7 @@ import {
   type DualSlots,
   type CharacterSlots,
 } from '../_shared/characterSlotPrompt.ts';
+import { rollFashion } from '../_shared/outfitPlan.ts';
 import { holidayPoolOf, selectDayOfRows } from '../_shared/holidayPools.ts';
 import { steerDualModel } from '../_shared/dualModelSteer.ts';
 import {
@@ -442,6 +443,7 @@ Deno.serve(async (req) => {
     force_couple_engine,
     force_couple_variant,
     force_honest_looks,
+    force_garment_roll,
     qa_big_face_max_hfrac,
     qa_max_face_hfrac,
     force_costume_keys,
@@ -3198,7 +3200,50 @@ Deno.serve(async (req) => {
           looksVibePosition = null;
           if (activeStyle) activeStyle = { ...activeStyle, vibeFragment: null, vibePosition: null };
         }
+        // NIGHTLY GARMENT AXIS (phase 8, mig 563). Opt-in under the restore-point rule: force_garment_roll per
+        // request, engine_config.nightly_garment_roll globally. Rolls only where the scene does not already
+        // dress the cast: the register path, a holiday row (its attire is demoted to colour/texture
+        // inspiration) and a row whose attire is generic ("normal scene-appropriate everyday clothes"). Elegant
+        // and active attire, a fantasy world's own wardrobe and a day-of costume are kept. Off → nothing here
+        // touches the brief (golden: __tests__/fixtures/slot-golden.json).
+        const garmentRollOn = force_garment_roll ?? engineCfg0.nightlyGarmentRoll;
+        const genericAttire =
+          !!dualSpecialWardrobe &&
+          /\b(normal|everyday|casual|regular|ordinary|comfortable|scene[- ]appropriate)\b[^.]{0,40}\b(clothes|clothing|outfits?|attire|wear)\b/i.test(
+            dualSpecialWardrobe
+          );
+        const locationWardrobe =
+          imaginedLocation &&
+          !!bespokeBiome &&
+          Array.isArray(bespokeBiome.WARDROBE) &&
+          bespokeBiome.WARDROBE.length > 0;
+        const fashionRollable =
+          !costumePicks &&
+          (dualSpecialScene ? !!holidayCategory || genericAttire : !locationWardrobe);
+        const nightlyFashion =
+          garmentRollOn && fashionRollable
+            ? rollFashion(
+                resolvedCast.map((rc) => rc.role),
+                Object.fromEntries(
+                  resolvedCast.map((rc, i) => [
+                    rc.role,
+                    (selectedCast[i] as DreamCastMember).gender ?? null,
+                  ])
+                ),
+                engineCfg0.outfitGarmentWeights
+              )
+            : null;
+        if (nightlyFashion) {
+          nightlyFashion.forEach((f, i) => {
+            if (f) {
+              fallbackReasons.push(
+                `garment_roll:${resolvedCast[i].role}:${f.family ? f.family.key : 'none'}:${f.look.key}`
+              );
+            }
+          });
+        }
         const slotInput: CharacterSlotPipelineInput = {
+          ...(nightlyFashion ? { fashionLooks: nightlyFashion } : {}),
           cast: resolvedCast.map((rc, i) => ({
             role: rc.role,
             promptDesc: rc.promptDesc,
@@ -3236,7 +3281,9 @@ Deno.serve(async (req) => {
           // dream worlds (elf robes, spacesuits belong there). The special-scene
           // wardrobe (goofy/elegant register) is location-independent → unaffected.
           wardrobeAnchor: dualSpecialScene
-            ? dualSpecialWardrobe
+            ? nightlyFashion && genericAttire
+              ? null
+              : dualSpecialWardrobe
             : imaginedLocation &&
                 bespokeBiome &&
                 Array.isArray(bespokeBiome.WARDROBE) &&

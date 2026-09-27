@@ -111,6 +111,9 @@ export interface NightlyQaFlags {
   /** HONEST LOOKS (mig 529): true renders a flux couple's rolled look with its own fragment, false forces the album
    *  fragments; null = engine_config.nightly_flux_couple_honest_looks. */
   force_honest_looks: boolean | null;
+  /** GARMENT AXIS (mig 563): true rolls a garment family + fashion look per person on the wardrobe slot,
+   *  false forces it off; null = engine_config.nightly_garment_roll. */
+  force_garment_roll: boolean | null;
   /** FLUX COUPLE LAB: per-request big-face tier ceiling / composition gate overrides (numbers 0.2-1). */
   qa_big_face_max_hfrac: number | null;
   qa_max_face_hfrac: number | null;
@@ -285,6 +288,8 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
       typeof body.force_couple_variant === 'string' ? body.force_couple_variant : null,
     force_honest_looks:
       body.force_honest_looks === true ? true : body.force_honest_looks === false ? false : null,
+    force_garment_roll:
+      body.force_garment_roll === true ? true : body.force_garment_roll === false ? false : null,
     qa_big_face_max_hfrac: num01(body.qa_big_face_max_hfrac),
     qa_max_face_hfrac: num01(body.qa_max_face_hfrac),
     force_prompt_style:

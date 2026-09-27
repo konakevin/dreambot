@@ -67,7 +67,11 @@ ${c.physicalTraits ? `PHYSICAL TRAITS: ${c.physicalTraits}` : ''}`;
 This is what the user asked for. Their LOCATION wins. Their ACTION wins. Their APPEARANCE and HAIRSTYLE requests win. Their NAMED animals, pets, people, and objects win — EVERY ONE of them MUST appear in the image, in the same art style, clearly visible right beside or with the character. A named pet is a living animal IN the scene with them (never a picture, toy, or pattern of it). Never drop, shrink, replace, or demote any named element. Do not invent a different scene or contradict them.
 `
     : '';
-  const sceneExpansion = scene.sceneExpansion ? `\nSCENE DETAILS:\n${scene.sceneExpansion}\n` : '';
+  // Rolled flavour, not the user's words: labelled optional so a line that fights the prompt (rain on a
+  // "golden hour" request) is dropped rather than obeyed (2026-09-26, sceneExpander.ts conflict filters).
+  const sceneExpansion = scene.sceneExpansion
+    ? `\nSCENE DETAILS (optional flavour; drop any that contradict the user's prompt):\n${scene.sceneExpansion}\n`
+    : '';
 
   const styleReference = scene.styleReference
     ? `\nREFERENCE STYLE (apply ONLY these style descriptors — do NOT introduce any subjects, characters, places, or named entities from the reference):
@@ -133,7 +137,7 @@ Output ONLY the prompt.`;
     fallbackPrompt: fallback,
     // 300 — matches singleBriefBuilder: room for the sacred block + character
     // likeness to survive without truncation (generic 200 was too tight).
-    maxTokens: 300,
+    maxTokens: 450,
     postProcess: {
       appendFaceLock: false, // no swap pipeline downstream
       appendPortraitTags: true,

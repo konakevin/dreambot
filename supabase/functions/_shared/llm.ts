@@ -27,6 +27,9 @@ export interface SonnetResult {
   retries: number;
   /** True if we fell back from the primary model to the secondary. */
   fellBackToSecondary: boolean;
+  /** The API's stop_reason ('end_turn', 'max_tokens', ...). 'max_tokens' = the text was cut mid-phrase:
+   *  a solo Create prompt ended "..., quiet lethal tension, no" (2026-09-26). Callers decide what to do. */
+  stopReason?: string | null;
 }
 
 const PRIMARY_MODEL = SONNET;
@@ -50,7 +53,7 @@ async function callModelWithRetry(
   brief: string,
   anthropicKey: string,
   maxTokens: number
-): Promise<{ text: string; rawResponse: string; retries: number }> {
+): Promise<{ text: string; rawResponse: string; retries: number; stopReason: string | null }> {
   let lastErr = '';
   for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt++) {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -71,7 +74,9 @@ async function callModelWithRetry(
       const rawResponse = data.content?.[0]?.text ?? '';
       const text = rawResponse.trim();
       if (text.length < 10) throw new Error(`${model} response too short`);
-      return { text, rawResponse, retries: attempt };
+      const stopReason: string | null =
+        typeof data.stop_reason === 'string' ? data.stop_reason : null;
+      return { text, rawResponse, retries: attempt, stopReason };
     }
     lastErr = `${res.status}: ${(await res.text()).slice(0, 200)}`;
     // If this status isn't retryable, fail immediately — no point burning retries
@@ -115,6 +120,7 @@ export async function callSonnet(
       modelUsed: PRIMARY_MODEL,
       retries: r.retries,
       fellBackToSecondary: false,
+      stopReason: r.stopReason,
     };
   } catch (primaryErr) {
     console.warn(
@@ -131,5 +137,6 @@ export async function callSonnet(
     modelUsed: SECONDARY_MODEL,
     retries: r.retries,
     fellBackToSecondary: true,
+    stopReason: r.stopReason,
   };
 }

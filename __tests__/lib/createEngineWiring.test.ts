@@ -106,7 +106,10 @@ describe('generate-dream wires the outfit plan (mig 547) into both cast paths', 
   it('reads the user outfit request alongside the split and rolls one plan', () => {
     expect(SRC).toContain("from '../_shared/outfitPlan.ts'");
     expect(SRC).toContain("from '../_shared/outfitSpec.ts'");
-    expect(SRC).toContain('extractOutfitSpec(userSubject, outfitLegend, ANTHROPIC_KEY)');
+    expect(SRC).toContain('extractOutfitSpec(userSubject, outfitLegend, ANTHROPIC_KEY, {');
+    // Phase 8: the costume read and the garment roll ride the same preview list as the switches above.
+    expect(SRC).toContain('costumeRead: costumeReadOn');
+    expect(SRC).toContain('garmentRoll: true');
     expect(SRC).toContain('planOutfits(');
   });
 

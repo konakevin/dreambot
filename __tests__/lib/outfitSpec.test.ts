@@ -8,6 +8,7 @@ jest.mock('@engine/llm', () => ({ callSonnet: jest.fn() }));
 
 import {
   mentionsClothing,
+  mentionsCostume,
   stripOccluders,
   buildOutfitSpecBrief,
   parseOutfitSpecReply,
@@ -256,7 +257,13 @@ describe('extractOutfitSpec — fail-open', () => {
 
 describe('outfitSpecStamps', () => {
   it('stamps none / partial / full, occluders, unassigned and refused inventions', () => {
-    expect(outfitSpecStamps({ source: 'skipped', result: null }, 2)).toEqual(['outfit_spec:none']);
+    // Three different "none"s used to share one stamp (phase 8): prefilter (default), off, unavailable.
+    expect(outfitSpecStamps({ source: 'skipped', result: null }, 2)).toEqual([
+      'outfit_spec:none:prefilter',
+    ]);
+    expect(outfitSpecStamps({ source: 'skipped', result: null, reason: 'off' }, 2)).toEqual([
+      'outfit_spec:none:off',
+    ]);
     expect(outfitSpecStamps({ source: 'error', result: null, error: 'boom' }, 2)).toEqual([
       'outfit_spec:fallback:boom',
     ]);
@@ -270,5 +277,111 @@ describe('outfitSpecStamps', () => {
       'outfit_occluder_dropped:self:sunglasses',
       'outfit_spec_rejected:1',
     ]);
+  });
+});
+
+// ── Phase 8 (2026-09-26): costumes, style and armor ──────────────────────
+// Kevin's "Show Steph looking like a sexy Celtic bowhuntress ... sleek and deadly" never reached the reader
+// (no garment word), so a rolled "soft, fluid and draped" silhouette dressed her in a scarlet toga; "sleek and
+// revealing armor" took a rolled blush pink.
+const BOWHUNTRESS =
+  'Show Steph looking like a sexy Celtic bowhuntress deep in a fantasy forest in action looking very sleek and deadly.';
+
+describe('mentionsCostume — the phase-8 prefilter', () => {
+  it.each([
+    BOWHUNTRESS,
+    'Show me as a knight guarding a castle gate at dawn',
+    'Me and my wife as pirates on a ship',
+    'me dressed as a 1920s flapper',
+    'Show me looking sleek on a yacht',
+    'Steph as an astronaut on the moon',
+  ])('fires on: %s', (p) => expect(mentionsCostume(p)).toBe(true));
+
+  it.each(['Me and Steph snowboarding', 'Show me hiking in Yosemite at sunrise', ''])(
+    'stays quiet on: %s',
+    (p) => expect(mentionsCostume(p)).toBe(false)
+  );
+});
+
+describe('the costume read (create_outfit_costume_read)', () => {
+  it('off: the brief is the v1 read, byte for byte', () => {
+    expect(buildOutfitSpecBrief('Me in a red bikini', [ME_F], {})).toBe(
+      buildOutfitSpecBrief('Me in a red bikini', [ME_F])
+    );
+    expect(buildOutfitSpecBrief('Me in a red bikini', [ME_F])).not.toMatch(/_ROLE|_STYLE/);
+  });
+
+  it('on: asks for ROLE and STYLE per person', () => {
+    const b = buildOutfitSpecBrief(BOWHUNTRESS, [STEPH], { costumeRead: true });
+    expect(b).toContain('A_ROLE:');
+    expect(b).toContain('A_STYLE:');
+    expect(b).toMatch(/ROLE is a character, job or costume/);
+  });
+
+  it('off: a costume-only prompt is skipped by the prefilter, exactly as before', async () => {
+    const out = await extractOutfitSpec(BOWHUNTRESS, [STEPH], 'key');
+    expect(out).toEqual({ source: 'skipped', result: null, reason: 'prefilter' });
+    expect(mockSonnet).not.toHaveBeenCalled();
+  });
+
+  it('on: the bowhuntress is read as a costume + style; no garment, our colour becomes one accent', async () => {
+    reply(
+      'A_GARMENT: NONE\nA_ROLE: Celtic bowhuntress\nA_STYLE: sexy, sleek and deadly\nA_COLOUR: NONE\nA_PATTERN: NONE'
+    );
+    const out = await extractOutfitSpec(BOWHUNTRESS, [STEPH], 'key', { costumeRead: true });
+    expect(mockSonnet).toHaveBeenCalledWith(expect.any(String), 'key', 260);
+    expect(out.source).toBe('read');
+    if (out.source !== 'read') return;
+    expect(out.result.byRole.plus_one).toEqual({
+      garment: null,
+      colour: null,
+      colourImplied: false,
+      pattern: null,
+      costume: 'Celtic bowhuntress',
+      style: 'sexy, sleek and deadly',
+      materialColour: true,
+    });
+    expect(outfitSpecStamps(out, 1)).toEqual([
+      'outfit_spec:full',
+      'outfit_role:plus_one',
+      'outfit_style:plus_one',
+      'outfit_material:plus_one',
+    ]);
+  });
+
+  it('armor is material-coloured; a user colour or a named character is not', () => {
+    const people = [STEPH];
+    const armor = parseOutfitSpecReply(
+      'A_GARMENT: armor\nA_ROLE: NONE\nA_STYLE: sleek and revealing\nA_COLOUR: NONE\nA_PATTERN: NONE',
+      people,
+      'Put Steph in sleek and revealing armor',
+      { costumeRead: true }
+    );
+    expect(armor.byRole.plus_one.materialColour).toBe(true);
+    const redArmor = parseOutfitSpecReply(
+      'A_GARMENT: armor\nA_ROLE: NONE\nA_STYLE: NONE\nA_COLOUR: red\nA_PATTERN: NONE',
+      people,
+      'Put Steph in red armor',
+      { costumeRead: true }
+    );
+    expect(redArmor.byRole.plus_one.materialColour).toBe(false);
+    const ww = parseOutfitSpecReply(
+      'A_GARMENT: NONE\nA_ROLE: Wonder Woman\nA_STYLE: NONE\nA_COLOUR: IMPLIED\nA_PATTERN: NONE',
+      people,
+      'Steph dressed as Wonder Woman',
+      { costumeRead: true }
+    );
+    expect(ww.byRole.plus_one).toMatchObject({ colourImplied: true, materialColour: false });
+  });
+
+  it('a role or style the user never wrote is refused, like every other value', () => {
+    const r = parseOutfitSpecReply(
+      'A_GARMENT: NONE\nA_ROLE: valkyrie\nA_STYLE: ethereal\nA_COLOUR: NONE\nA_PATTERN: NONE',
+      [STEPH],
+      'Steph on a beach at sunset',
+      { costumeRead: true }
+    );
+    expect(r.byRole.plus_one).toBeUndefined();
+    expect(r.rejectedInventions).toEqual(['valkyrie', 'ethereal']);
   });
 });

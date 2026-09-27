@@ -135,7 +135,11 @@ ${cast2.physicalTraits ? `PHYSICAL TRAITS: ${cast2.physicalTraits}` : ''}`;
 This is what the user asked for. Their LOCATION wins. Their ACTION wins. Their APPEARANCE and HAIRSTYLE requests win (a hairstyle stated here OVERRIDES the CHARACTER descriptions' hair — write the requested hair beside that character's traits instead of their default hair). Their NAMED PEOPLE/PLACES/THINGS win. Build the prompt around these specifics. Do not invent a different scene or contradict them.
 `
     : '';
-  const sceneExpansion = scene.sceneExpansion ? `\nSCENE DETAILS:\n${scene.sceneExpansion}\n` : '';
+  // Rolled flavour, not the user's words: labelled optional so a line that fights the prompt (rain on a
+  // "golden hour" request) is dropped rather than obeyed (2026-09-26, sceneExpander.ts conflict filters).
+  const sceneExpansion = scene.sceneExpansion
+    ? `\nSCENE DETAILS (optional flavour; drop any that contradict the user's prompt):\n${scene.sceneExpansion}\n`
+    : '';
 
   // Style reference (DLT) — distilled, subject-stripped style descriptors
   // from the source post. Plan C: these come pre-cleaned by styleDistiller
@@ -271,7 +275,7 @@ Output ONLY the prompt.`;
   return {
     sonnetBrief,
     fallbackPrompt: fallback,
-    maxTokens: 350,
+    maxTokens: 500,
     postProcess: {
       appendFaceLock: true,
       appendPortraitTags: true,

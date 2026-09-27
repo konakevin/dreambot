@@ -43,10 +43,19 @@ import {
   type NewSceneTier,
 } from '../_shared/newSceneDirective.ts';
 import { detectSelfInsert } from '../_shared/selfInsertDetector.ts';
-import { mirrorPartnerIntoCast, type RosterPartner } from '../_shared/partnerRoll.ts';
+import {
+  mirrorPartnerIntoCast,
+  partnerForRelationship,
+  type RosterPartner,
+} from '../_shared/partnerRoll.ts';
 import { composeExperimentalCouple } from '../_shared/coupleComposerX.ts';
 import { splitPromptScene, type PromptSceneSplit } from '../_shared/promptSceneSplit.ts';
-import { planOutfits, type OutfitPlan } from '../_shared/outfitPlan.ts';
+import {
+  garmentRollStamps,
+  planOutfits,
+  slimWideLegs,
+  type OutfitPlan,
+} from '../_shared/outfitPlan.ts';
 import {
   extractOutfitSpec,
   outfitSpecStamps,
@@ -62,6 +71,7 @@ import { rollChaos, applyChaos } from '../_shared/chaosLayer.ts';
 import {
   compilePrompt,
   postProcessPrompt,
+  trimTruncatedPrompt,
   sanitizeUserPrompt,
   deriveFocalAnchor,
   applyVibeGenderModifier,
@@ -1360,8 +1370,25 @@ Output ONLY the prompt.`;
       const namedPartner = requestedPartnerId
         ? (vibeProfile?.partner_library ?? []).find((p) => p?.id === requestedPartnerId)
         : undefined;
-      const castForRender = namedPartner
-        ? (mirrorPartnerIntoCast(vibeProfile?.dream_cast ?? [], namedPartner) as DreamCastMember[])
+      // Nobody picked by chip or name: a gendered relationship word ("my husband") must not cast a
+      // starred +1 of the other gender (partnerRoll.ts partnerForRelationship).
+      let relationPartner: RosterPartner | undefined;
+      if (!namedPartner && userSubject.trim()) {
+        const defaultPlusOne = (vibeProfile?.dream_cast ?? []).find((m) => m?.role === 'plus_one');
+        const rel = partnerForRelationship(
+          userSubject,
+          defaultPlusOne?.gender ?? null,
+          (vibeProfile?.partner_library ?? []) as RosterPartner[],
+          vibeProfile?.active_partner_id ?? null
+        );
+        if (rel) {
+          fallbackReasons.push(rel.stamp);
+          if (rel.partner) relationPartner = rel.partner;
+        }
+      }
+      const castPartner = namedPartner ?? relationPartner;
+      const castForRender = castPartner
+        ? (mirrorPartnerIntoCast(vibeProfile?.dream_cast ?? [], castPartner) as DreamCastMember[])
         : (vibeProfile?.dream_cast ?? []);
       if (namedPartner) {
         console.log(
@@ -1449,6 +1476,21 @@ Output ONLY the prompt.`;
       if (hasCastInjection) {
         // ── CAST INJECTION: one or more cast members + scene expansion + chaos + compiler ──
         const cleanedPrompt = sanitizeUserPrompt(selfInsertResult.cleanedPrompt);
+        // EMPTY PROMPT + CAST (2026-09-26): the Create cast chip survives the post-dream reset, so an
+        // empty prompt with it set becomes a cast dream, and nothing picked a place for it: a couple's
+        // brief said `film shot at "the location"` (michele's three trouser-suit couples), a solo had no
+        // setting at all. Anchor it to the CHARACTER half of the surprise pool with the monumental-face
+        // veto, exactly as the photo surprise above does. Authored text, so no sanitizing.
+        let castSurprise: Awaited<ReturnType<typeof pickSurpriseScene>> = null;
+        if (!cleanedPrompt.trim() && !userSubject.trim() && !style_prompt && !isDLT && !isPhoto) {
+          castSurprise = await pickSurpriseScene(supabase, 'character', {
+            reject: isMonumentalFaceSpot,
+          });
+          fallbackReasons.push(
+            castSurprise ? `surprise_seed:cast:${castSurprise.place}` : 'surprise_seed:cast:none'
+          );
+        }
+        const scenePrompt = cleanedPrompt || (castSurprise ? castSurprise.prompt : '');
         const resolvedCast = resolveCastForPrompt(castMembers, {
           characterRenderMode: medium.characterRenderMode,
           key: medium.key,
@@ -1461,7 +1503,7 @@ Output ONLY the prompt.`;
 
         // Scene expansion + chaos
         const expanded = expandScene({
-          userPrompt: cleanedPrompt,
+          userPrompt: scenePrompt,
           userId,
           mediumKey: medium.key,
           vibeKey: vibe.key,
@@ -1525,6 +1567,10 @@ Output ONLY the prompt.`;
         const outfitPreview = castCfg.createOutfitPreviewUserIds.includes(userId);
         const outfitRollsOn = castCfg.createOutfitRolls || outfitPreview;
         const outfitLockOn = outfitRollsOn && (castCfg.createOutfitUserLock || outfitPreview);
+        // Phase 8 (mig 563): costumes / style / armor in the read, and a garment family for women
+        // nobody dressed. Preview accounts get both while they are globally off.
+        const costumeReadOn = outfitLockOn && (castCfg.createOutfitCostumeRead || outfitPreview);
+        const garmentRollOn = outfitRollsOn && (castCfg.createOutfitGarmentRoll || outfitPreview);
         const outfitRoles = resolvedCast.map((rc) => rc.role);
         const outfitEligible =
           outfitRollsOn &&
@@ -1548,21 +1594,32 @@ Output ONLY the prompt.`;
         // extractOutfitSpec never throws (fail-open → no spec → the rolls alone).
         const outfitSpecPromise: Promise<OutfitSpecOutcome> | null = outfitEligible
           ? outfitLockOn
-            ? extractOutfitSpec(userSubject, outfitLegend, ANTHROPIC_KEY)
-            : Promise.resolve<OutfitSpecOutcome>({ source: 'skipped', result: null })
+            ? extractOutfitSpec(userSubject, outfitLegend, ANTHROPIC_KEY, {
+                costumeRead: costumeReadOn,
+              })
+            : Promise.resolve<OutfitSpecOutcome>({ source: 'skipped', result: null, reason: 'off' })
           : null;
         const rollOutfitPlan = (spec: OutfitSpecOutcome): OutfitPlan => {
           fallbackReasons.push(...outfitSpecStamps(spec, outfitRoles.length));
           if (outfitPreview && !castCfg.createOutfitRolls) fallbackReasons.push('outfit_preview');
-          return planOutfits(
+          const plan = planOutfits(
             outfitRoles,
             {
               independentPct: castCfg.createOutfitIndependentPct,
               separateCutPct: castCfg.createOutfitSeparateCutPct,
               patternPct: castCfg.createOutfitPatternPct,
+              ...(garmentRollOn
+                ? {
+                    garmentRoll: true,
+                    garmentWeights: castCfg.outfitGarmentWeights,
+                    genders: Object.fromEntries(resolvedCast.map((rc) => [rc.role, rc.gender])),
+                  }
+                : {}),
             },
             spec.source === 'read' ? spec.result.byRole : {}
           );
+          if (garmentRollOn) fallbackReasons.push(...garmentRollStamps(plan));
+          return plan;
         };
         const soloOutfitPlan: OutfitPlan | null =
           outfitSpecPromise && outfitRoles.length === 1
@@ -1590,7 +1647,7 @@ Output ONLY the prompt.`;
             faceSwapDirective: vibe.faceSwapDirective ?? null,
           },
           scene: {
-            userPrompt: cleanedPrompt || undefined,
+            userPrompt: scenePrompt || undefined,
             sceneExpansion: isDLT ? undefined : finalExpansion || undefined,
             styleReference: style_prompt || undefined,
           },
@@ -1603,6 +1660,8 @@ Output ONLY the prompt.`;
           },
           profile: { avoid: vibeProfile?.avoid },
           ...(soloOutfitPlan ? { outfitPlan: soloOutfitPlan } : {}),
+          // Phase 8: the outfit goes before the scene (flux dropped it 3/3 when written after).
+          ...(soloOutfitPlan && (garmentRollOn || costumeReadOn) ? { outfitEarly: true } : {}),
         });
 
         try {
@@ -1664,7 +1723,7 @@ Output ONLY the prompt.`;
                 // in the Sonnet brief. With the split on, the setting rides setAtOverride
                 // (the dieted slot nightly uses for scenario seeds) and the verb becomes the
                 // ACTION instead of scenery. Off, this is exactly what it always was.
-                userPlace: cleanedPrompt || null,
+                userPlace: scenePrompt || null,
                 ...(sceneSplit && sceneSplit.source === 'split'
                   ? { setAtOverride: sceneSplit.setting }
                   : {}),
@@ -1785,7 +1844,12 @@ Output ONLY the prompt.`;
               );
               sonnetBrief = sonnet.brief;
               sonnetRawResponse = sonnet.rawResponse;
-              finalPrompt = postProcessPrompt(sonnet.text, compiled.postProcess);
+              let dualText = sonnet.text;
+              if (sonnet.stopReason === 'max_tokens') {
+                dualText = trimTruncatedPrompt(dualText);
+                fallbackReasons.push('sonnet_truncated');
+              }
+              finalPrompt = postProcessPrompt(dualText, compiled.postProcess);
             }
           } else {
             const sonnet = await callSonnet(
@@ -1797,12 +1861,25 @@ Output ONLY the prompt.`;
             sonnetRawResponse = sonnet.rawResponse;
             if (sonnet.text.length < 10) throw new Error('too short');
             let soloText = sonnet.text;
+            // Cut off mid-phrase at maxTokens: drop the unfinished clause rather than ship it.
+            if (sonnet.stopReason === 'max_tokens') {
+              soloText = trimTruncatedPrompt(soloText);
+              fallbackReasons.push('sonnet_truncated');
+            }
             // Solo outfit guarantees (mig 547): strip face occluders, and write the user's own
             // clothing words in if Sonnet dropped them. Unset plan = the text as Sonnet wrote it.
             const soloPerson = soloOutfitPlan ? (soloOutfitPlan.people[0] ?? null) : null;
             if (soloPerson) {
               const enforced = enforceSoloOutfit(soloText, soloPerson);
               soloText = enforced.prompt;
+              // Phase 8: a garment we rolled never ships as palazzos / wide-legs.
+              if (soloPerson.garmentFamily) {
+                const slim = slimWideLegs(soloText);
+                if (slim.changed) {
+                  soloText = slim.text;
+                  fallbackReasons.push('outfit_wide_leg_slimmed:THE PERSON');
+                }
+              }
               fallbackReasons.push(
                 'outfit_colour:solo',
                 'outfit_cut:solo',

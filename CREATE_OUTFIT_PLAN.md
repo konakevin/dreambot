@@ -344,6 +344,134 @@ Kevin reviewed the preview renders ("the test renders look good to me … go for
 the user's words in), `outfit_spec:fallback` rate (the read failed open), `outfit_occluder_*`, and the dual
 swap hold rate (`dual_attempts:1` vs `rerender_for_dual` / `dual_degrade_single`) against the week before.
 
+## Phase 8 (2026-09-26/27): costumes, armor, a garment axis and fashion looks (mig 563) — LIVE (mig 564)
+
+**LIVE 2026-09-27 ~07:00 UTC** (Kevin: "commit and push i guess, turn it all live"): migration 564 sets
+`create_outfit_costume_read`, `create_outfit_garment_roll` and `nightly_garment_roll` true. Known limit at the
+flip: nightly SOLO lands the look about half the time (wardrobe mid-prompt; see the graded batch below).
+
+**Why.** Kevin: "even when i prompt this, it still adds weird flowy clothing. i've also noticed there is a
+disposition to show women in pantsuits." His "Show Steph looking like a sexy Celtic bowhuntress … sleek and
+deadly" came back in a draped scarlet toga, and "…Put her in sleek and revealing armor" in pink plate armor.
+Then: "we should add some really fun fashion styles in these, people like seeing themselves in different
+oufits - especially girls."
+
+**Measured before** (delivered wardrobe text):
+- sunnysteph + michele + tiffany, last ~30 dreams each: 88 women's outfits, 40 trousers (45%), 25 wide-leg /
+  palazzo / flares (28%), 11 blazers, 11 silk blouses. Create 16/43 wide-leg (37%).
+- Platform, 14 days: 22% of nightly solo women in "wide-leg".
+- Text harness baseline (46 cases × 3): women in no-clothing prompts 29% trousers, **25% wide-leg**; two women
+  at a garden party dress-next-to-palazzo 3/3; the bowhuntress "draped tunic" 3/3; armor in rolled chartreuse,
+  gold, burnt orange.
+
+**Root causes.**
+1. The reader's prefilter (`CLOTHING_WORDS`) only knew garment words: "bowhuntress" / "sleek" never fired it,
+   so the rolled "soft, fluid and draped" silhouette + rolled colours + "colour-blocked panels" won.
+2. Armor counted as a garment "that comes in any colour" and took the rolled palette.
+3. Nothing picked the GARMENT. When the scene did not dictate one, Sonnet's women default was wide-leg
+   trousers + silk blouse + blazer; 4 of the 10 V1 cuts are volume and 2 are suiting, which pushed the same way.
+4. Nightly: the register pool (3 of 6 "casual" registers are tailoring) and trouser-based holiday anchors,
+   with the plain-clothes ban turning "jeans" into "tailored trousers".
+
+**What shipped** (`outfitPlan.ts`, `outfitSpec.ts`, `characterSlotPrompt.ts`, `generate-dream`, `nightly-dreams`):
+- `create_outfit_costume_read`: `COSTUME_CUES` prefilter + ROLE / STYLE fields in a separate v2 brief (the v1
+  brief is byte-identical while off). A ROLE keeps its own cut; a costume with no garment named, or armor
+  (`MATERIAL_COLOURED`), is colour source `material`: its own materials, our lead colour as ONE accent, no
+  pattern. A named character (Wonder Woman) stays IMPLIED. STYLE is printed; a fit word (sleek, revealing,
+  flowy) skips the rolled cut. The costume is lock-checked like a garment (any real word kept, else code writes
+  "<costume> costume"). Style is printed, never locked.
+- `create_outfit_garment_roll` + `outfit_garment_weights`: `WOMEN_GARMENT_FAMILIES` (dress 30, skirt 20,
+  jumpsuit 10, shorts 10, slim/straight trousers 15, coat over a dress 15), two women share one family; and
+  `WOMEN_FASHION_LOOKS` (28) / `MEN_FASHION_LOOKS` (20) — boho, 60s mod, 70s disco, Y2K, old money, Parisian
+  chic, cottagecore, dark academia, western glam, balletcore, resort, pin-up, rock-and-roll, gothic romance,
+  art deco, sporty-chic, fairycore, safari, nautical, glam rock, preppy, couture, coastal, K-pop stage, regency,
+  1950s, street style, mermaid shimmer (men: dapper 1920s, regency, …). A woman's look only rolls on families
+  it suits; a couple shares one theme ~40% of the time. `OUTFIT_SILHOUETTES_V2` drops the two widest cuts; a
+  trouser-legged family never gets a widening cut; a rolled look skips the cut. Skipped for the whole render
+  when anyone has a user garment or costume. Escape hatch in the brief: "If the activity has its own clothing
+  (hiking or sports kit, swimwear, snow gear, riding kit, a uniform, a ballgown at a ball), that wins."
+- Both Create switches also apply to `create_outfit_preview_user_ids` (Kevin) while globally off.
+- `nightly_garment_roll` (+ QA `force_garment_roll`): the same families + looks on nightly's wardrobe slot, one
+  line per person replacing the register. Rolls on the register path, holiday rows (anchor demoted to colour /
+  texture inspiration) and generic-attire rows; elegant / active attire, fantasy-world wardrobes and day-of
+  costumes are kept. Off → byte-identical (golden `slot-golden.json`). **Restore-point rule: off until Kevin.**
+- Plain fixes (no switch): scene details skip built surfaces in wild settings, wet lines on sunny prompts and
+  the rolled action when the prompt has one, and are labelled optional; a Sonnet prompt cut at max_tokens is
+  trimmed to its last whole clause (`sonnet_truncated`, solo maxTokens 300 → 450, dual 350 → 500); an
+  empty-prompt cast dream gets a character-eligible surprise spot (`surprise_seed:cast:*`) instead of "the
+  location"; a gendered relationship word no longer casts a +1 of the other gender
+  (`cast_relationship_gender:<word>:swapped|kept_mismatch`).
+
+**Stamps.** `outfit_spec:none:prefilter|off|unavailable|read`, `outfit_role:<role>`, `outfit_style:<role>`,
+`outfit_material:<role>`, `outfit_cuts:v2`, `outfit_garment:<role>:<family>`, `outfit_look:<role>:<look>`,
+`outfit_wide_leg_slimmed:<side>`; nightly `garment_roll:<role>:<family|none>:<look>`; plain fixes
+`sonnet_truncated`, `surprise_seed:cast:<place>`, `cast_relationship_gender:<word>:swapped|kept_mismatch`.
+
+**Reader after** (46 cases × 3, costume read on): garment 111/111, colour 63/63, pattern 12/12, costume 12/12,
+style 6/6, material 3/3, false locks 0, prefilter misses 12 → 0. "…and so is my granddaughter" needed a
+"so is / too / as well" rule (v2 missed it 2/13 before, 10/10 after).
+
+**Pipeline after** (costume + garment on, before looks): women in no-clothing prompts wide-leg 25% → 2%,
+trousers 29% → 14%, dress-next-to-suit 4/12 → 0/12. The first cut sent a hiking scene a "hiking dress"
+(escape widened to any activity with its own clothing) and a jumpsuit "wide-leg" (jumpsuit now counts as
+trouser-legged for the cut filter).
+
+**Pipeline after, with looks** (costume + garment + looks on): women in no-clothing prompts wide-leg 25% → 4%,
+trousers 29% → 12%, blazer 8% → 4%, suit 4% → 0%; user garment / colour / pattern still 100%; dress-next-to-
+suit 0/12. Looks read through in the text (western: fringed suede + belt buckle + cowboy boots; Y2K: shimmery
+satin shorts + butterfly clips; sporty: cropped varsity jacket over a pleated tennis skirt). Galas still get
+ballgowns and snow gets snow gear (the escape works). A user STYLE ("80's clothes") now also skips the look
+roll (a rolled K-pop look competed with the user's 80s).
+
+**The solo outfit was never rendering on flux (found 2026-09-27).** Sonnet's solo text had the planned outfit
+("tangerine cropped varsity jacket over a pleated tennis skirt"), but flux-1.1-pro rendered a generic blouse /
+cardigan. Same-seed probe on Replicate (seeds 11/22/33): the shipped order (scene → face/hair → outfit) 0/3;
+the same words with person + outfit before the scene 3/3. So `CompilerInput.outfitEarly` (set with either
+phase-8 switch) makes the solo brief ask for "the person, then IMMEDIATELY what they wear … BEFORE hair, face
+and scene". Harness: Sonnet writes "a woman in her late 30s wearing …" first on every solo case. This also
+means every rolled solo colour/pattern since mig 548 mostly never reached a flux render.
+
+**"Revealing" on Nano Banana Pro (phase 5 probe).** 3 renders of the shipped comma list + 3 of a natural-
+language rewrite that says "leaves her midriff bare": 0/6 bare midriff (natural language did draw the bow more
+often, 2/3 vs 1/3). One face-swap render of the same request did show it (1/2). Nano Banana Pro's own modesty
+prior, not our phrasing: no per-model rewrite shipped, and we do not override a model the user picked.
+
+**Real renders on Kevin's account** (lab-create-couple.js, preview switches): the bowhuntress in a leather
+bodice + tooled bracers + one cloak accent (no toga); the armor prompt as sleek knotwork leather armor, bare
+midriff 1/2; rooftop couples 2/2 dual-swap first try with dress + gothic / skirt + 1950s; pirates 2/2 in real
+pirate costume; empty-prompt couples now at St Ives lighthouse / Shark Fin Cove in dapper 1920s + 1950s and a
+matching glam-rock pair.
+
+**Nightly dry runs** (nightly-dreams `dry_run`, solo Steph, force_garment_roll, 18 each): off → trousers 8/18,
+wide-leg 5/18 (28%), dress/skirt 5/18; on → looks read through (Parisian beret + ballet flats, regency empire
+waist + gloves, 60s mod shift + go-go boots, western fringed suede), but rolled women still got wide-leg 4/25
+("cream wide-leg linen trousers", "wide-leg jumpsuit"), two via holiday anchors. Fixes: the demoted anchor now
+says "borrow only its colours, textures and accessories, never its garments", and `slimWideLegs` rewrites
+wide-leg / palazzo / culottes / flared trousers to "slim" on a person whose garment WE rolled (Create couples +
+solo, nightly; stamp `outfit_wide_leg_slimmed:<side>`). After: rolled women 0/11 wide-leg. Rows whose attire is
+kept (elegant / active) are untouched by design.
+
+**Graded batch 2 (2026-09-27, Kevin's account, 22 renders after every fix):**
+- Create 10/10 show the planned outfit or costume (jazz club couture + Y2K, Napa sporty + western and a Parisian
+  pair, two Viking shieldmaidens, two knight + princess couples, Rodeo mermaid + boho); couple swaps 4/4 first try.
+- Nightly couples 4/4 first try, both looks clearly rendered (pin-up + dark academia, deco + Parisian, a nautical
+  pair, fairycore + glam rock).
+- Nightly SOLO is weak: of 6 rolled solos with the outfit in frame, 2 clear, 2 partial, 2 ignored (balletcore →
+  olive utility jacket, old-money polo → utility jacket). Cause is the nightly solo assembly, not the roll: the
+  wardrobe sits at ~1,100-1,400 of ~2,500 chars, after medium + "set at" scene + framing + pose, the same
+  position that made Create solo drop outfits 0/3. Nightly couples (narrative_fg names the wardrobe right after
+  each person) render it. A fix is a change to the restore-point nightly engine: Kevin's call.
+- No wide-leg anywhere in the 22. Dream Art portrait renders (watercolor, expressive) crop the outfit out by design.
+
+**Watch after the flip.** Some looks carry a hat (dapper flat cap, Parisian beret, resort wide-brim, coastal
+straw hat, safari sun hat). One lab beach couple degraded to a solo (identity 0.16 / -0.04) with a flat cap on
+him, but its base render was a NIGHT scene with the heads nearly touching, both known swap killers; the St
+Ives flat-cap couple held. Compare the couple degrade rate for `outfit_look:*:(dapper|parisian|resort|coastal|safari)`
+against the other looks from `ai_generation_log.fallback_reasons` before calling hats safe.
+
+**Rollback** (no deploy):
+`UPDATE engine_config SET create_outfit_costume_read=false, create_outfit_garment_roll=false, nightly_garment_roll=false WHERE id=1;`
+
 ## Porting to nightly later
 
 `planOutfits`, the pools and the brief wiring live in `_shared`; nightly would pass the same flag with

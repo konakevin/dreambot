@@ -131,11 +131,17 @@ ${c.physicalTraits ? `PHYSICAL TRAITS: ${c.physicalTraits}` : ''}`;
 This is what the user asked for. Their LOCATION wins. Their ACTION wins. Their APPEARANCE and HAIRSTYLE requests win. Their NAMED PEOPLE/PLACES/THINGS win. Build the prompt around these specifics. Do not invent a different scene or contradict them.
 `
     : '';
-  const sceneExpansion = scene.sceneExpansion ? `\nSCENE DETAILS:\n${scene.sceneExpansion}\n` : '';
+  // Rolled flavour, not the user's words: labelled optional so a line that fights the prompt (rain on a
+  // "golden hour" request) is dropped rather than obeyed (2026-09-26, sceneExpander.ts conflict filters).
+  const sceneExpansion = scene.sceneExpansion
+    ? `\nSCENE DETAILS (optional flavour; drop any that contradict the user's prompt):\n${scene.sceneExpansion}\n`
+    : '';
 
   // OUTFIT PLAN (CREATE_OUTFIT_PLAN.md, phase 4). Solo had no colour of its own ("me in a bikini" came back
   // "a vibrant bikini" 3/3) and kept face occluders the user mentioned (sunglasses 6/6). Unset → '' → the
   // brief is byte-identical.
+  // Phase 8: person + outfit before the scene (see CompilerInput.outfitEarly). Only with a plan to put there.
+  const outfitEarly = !!input.outfitEarly && !!input.outfitPlan;
   const outfitLine = input.outfitPlan
     ? renderOutfitPlanLines(input.outfitPlan, [
         { role: c.role, label: 'THE PERSON', gender: castGender },
@@ -164,12 +170,21 @@ Name the real garments the scene calls for and make them beautiful; the user's o
   const sonnetBrief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-100 words, comma-separated).
 
 STRUCTURE:
-1. Start with: "${medium.fluxFragment}"
+${
+  outfitEarly
+    ? `1. Start with: "${medium.fluxFragment}"
+2. SUBJECT FRAMING (must be early in the prompt)
+3. THE PERSON AND THEIR OUTFIT (30% of words) — the person, then IMMEDIATELY what they wear from the OUTFIT section ("a woman in her late 30s wearing ..."), THEN brief physical traits. The outfit comes BEFORE hair, face and scene: the image model reads early words, and an outfit written after the scene is dropped.
+4. SCENE/ENVIRONMENT (40% of words) — built from the user prompt + scene details
+5. CAMERA + MOOD (20% of words)
+6. End with: no text, no words, no letters, no watermarks, ultra detailed`
+    : `1. Start with: "${medium.fluxFragment}"
 2. SCENE/ENVIRONMENT (40% of words) — built from the user prompt + scene details
 3. SUBJECT FRAMING (must be early in the prompt)
 4. CHARACTER (30% of words) — physical traits and clothing
 5. CAMERA + MOOD (20% of words)
-6. End with: no text, no words, no letters, no watermarks, ultra detailed
+6. End with: no text, no words, no letters, no watermarks, ultra detailed`
+}
 ${userPrompt}${outfitBlock}${sceneExpansion}${styleReference}
 MANDATORY — include this EXACT phrase unchanged somewhere in the prompt:
 "${faceLockPhrase}"
@@ -206,7 +221,7 @@ Do NOT over-describe the face. Push detail into clothing, pose, and environment.
 MOOD: ${vibeDirective}
 ${profile?.avoid?.length ? `\nNEVER INCLUDE: ${profile.avoid.join(', ')}\n` : ''}
 RULES:
-- Medium-shot framing FIRST, then the mandatory face phrase, then character details.
+- Medium-shot framing FIRST, then the mandatory face phrase, then ${outfitEarly ? 'the person WITH their outfit, then the scene' : 'character details'}.
 - Include "foreground midground background stacked top to bottom, layered depth" in the prompt.
 - Every word must be something a camera can see. No feelings, no metaphors.
 Output ONLY the prompt.`;
@@ -234,7 +249,7 @@ Output ONLY the prompt.`;
     // 300 — between dual's 350 and generic 200. Single cast doesn't need
     // the two-character description budget but DOES need room for the
     // CHARACTER block + face-detectability rules to survive.
-    maxTokens: 300,
+    maxTokens: 450,
     postProcess: {
       appendFaceLock: true,
       appendPortraitTags: true,

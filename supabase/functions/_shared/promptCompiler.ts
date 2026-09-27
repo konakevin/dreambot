@@ -79,6 +79,11 @@ export interface CompilerInput {
    *  an OUTFIT block from it — the user's own garment / colour / pattern, or our rolled colour, silhouette and
    *  pattern. Unset → every brief is byte-identical. */
   outfitPlan?: OutfitPlan | null;
+  /** OUTFIT EARLY (CREATE_OUTFIT_PLAN.md phase 8): the solo brief asks for the person AND their outfit before
+   *  the scene. Same-seed flux-1.1-pro probe (2026-09-27): the shipped order (scene → face/hair → outfit)
+   *  rendered the planned "tangerine varsity jacket over a pleated tennis skirt" 0/3 times — a generic blouse
+   *  every time; the same words with person + outfit first rendered it 3/3. Unset → byte-identical. */
+  outfitEarly?: boolean;
 }
 
 export interface CompilerOutput {
@@ -619,6 +624,19 @@ Output ONLY the prompt.`;
 }
 
 // ── Post-Processing (applied after Sonnet returns) ──
+
+/**
+ * A prompt Sonnet stopped writing mid-phrase (stop_reason 'max_tokens'): drop the unfinished last clause so
+ * the image model never sees "..., quiet lethal tension, no" (2026-09-26). A prompt with no comma is kept.
+ */
+export function trimTruncatedPrompt(text: string): string {
+  const cut = text.lastIndexOf(',');
+  if (cut <= 0) return text.trim();
+  return text
+    .slice(0, cut)
+    .replace(/[\s,;:]+$/, '')
+    .trim();
+}
 
 export function postProcessPrompt(prompt: string, rules: CompilerOutput['postProcess']): string {
   let result = prompt;

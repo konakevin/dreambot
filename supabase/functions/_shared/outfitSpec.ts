@@ -25,6 +25,7 @@
 import { callSonnet } from './llm.ts';
 import { sanitizeUserText } from './sanitizeUserText.ts';
 import {
+  MATERIAL_COLOURED,
   missingUserOutfit,
   userOutfitPhrase,
   type PersonOutfitPlan,
@@ -120,6 +121,88 @@ export function mentionsClothing(prompt: string | null | undefined): boolean {
   return !!prompt && CLOTHING_WORDS.test(prompt);
 }
 
+/**
+ * COSTUME CUES (phase 8, 2026-09-26). "Show Steph looking like a sexy Celtic bowhuntress … sleek and deadly"
+ * names no garment, so CLOTHING_WORDS never fired, the reader never ran, and a rolled "soft, fluid and
+ * draped" silhouette dressed her in a scarlet toga. These fire the reader on a character the user casts
+ * someone as, and on words about how the outfit should look or fit. Same trade as CLOTHING_WORDS: a false
+ * positive costs one cheap call that returns NONE.
+ */
+const COSTUME_CUES = new RegExp(
+  '\\b(' +
+    [
+      'dressed (up )?as',
+      'looking like',
+      'disguised as',
+      'cosplay(ing)?',
+      'costumed',
+      // archetypes (a trailing letter or plural is fine: \\w* soaks it up)
+      '\\w*huntress(es)?',
+      'hunters?',
+      'archers?',
+      'rangers?',
+      'warriors?',
+      'knights?',
+      'pirates?',
+      'vikings?',
+      'samurai',
+      'ninjas?',
+      'assassins?',
+      'rogues?',
+      'spies',
+      'spy',
+      'princess(es)?',
+      'princes?',
+      'queens?',
+      'kings?',
+      'goddess(es)?',
+      'elf',
+      'elves',
+      'elven',
+      'fair(y|ies)',
+      'faeries?',
+      'witch(es)?',
+      'wizards?',
+      'sorcere(ss|sses|r|rs)',
+      'mages?',
+      'mermaids?',
+      'mermen',
+      'merman',
+      'vampires?',
+      'gladiators?',
+      'spartans?',
+      'cowboys?',
+      'cowgirls?',
+      'astronauts?',
+      'superhero(es)?',
+      'superheroine',
+      'flappers?',
+      'gangsters?',
+      'jedi',
+      'pharaoh',
+      'amazon(ian)?',
+      'valkyries?',
+      'barbarians?',
+      'musketeers?',
+      // style / fit words
+      'sexy',
+      'sleek',
+      'revealing',
+      'skimpy',
+      'form[- ]?fitting',
+      'skin[- ]?tight',
+      'flowy',
+      'baggy',
+    ].join('|') +
+    ')\\b',
+  'i'
+);
+
+/** Phase 8: the prompt casts someone as a character or says how their outfit should look. */
+export function mentionsCostume(prompt: string | null | undefined): boolean {
+  return !!prompt && COSTUME_CUES.test(prompt);
+}
+
 // ── occluders ────────────────────────────────────────────────────────────
 
 const OCCLUDER =
@@ -160,7 +243,17 @@ export interface OutfitPerson {
 
 const KEYS = ['A', 'B'] as const;
 
-export function buildOutfitSpecBrief(prompt: string, people: readonly OutfitPerson[]): string {
+/** Phase 8 switch (engine_config.create_outfit_costume_read). Off = the reader exactly as before. */
+export interface OutfitSpecOptions {
+  costumeRead?: boolean;
+}
+
+export function buildOutfitSpecBrief(
+  prompt: string,
+  people: readonly OutfitPerson[],
+  opts: OutfitSpecOptions = {}
+): string {
+  if (opts.costumeRead) return buildCostumeReadBrief(prompt, people);
   const legend = people
     .map((p, i) => {
       const isSelf = p.role === 'self';
@@ -194,6 +287,56 @@ Rules:
     both
       ? `
 - Words about "us", "we", "our", "both", "matching" or "each" apply to A AND B.
+- If you cannot tell which person a clothing phrase belongs to, put it on UNASSIGNED and write NONE for both.`
+      : ''
+  }
+- Things in the scene that nobody is wearing (a hat shop, a suit of armour on display) are NONE.
+
+Reply with exactly these lines and nothing else:
+${fields}${both ? '\nUNASSIGNED: <the phrase, or NONE>' : ''}`;
+}
+
+/** Phase 8 brief: the v1 read plus ROLE (the character they are cast as) and STYLE (how it should look).
+ *  Kept as its own function so the v1 text stays byte-identical while the switch is off. */
+function buildCostumeReadBrief(prompt: string, people: readonly OutfitPerson[]): string {
+  const legend = people
+    .map((p, i) => {
+      const isSelf = p.role === 'self';
+      const who = isSelf
+        ? 'the user themself (they write about themselves as me / I / my / myself)'
+        : `${p.label} (the user may use this name, a relationship word, or a pronoun)`;
+      const g = p.gender === 'female' ? ' A woman.' : p.gender === 'male' ? ' A man.' : '';
+      return `PERSON ${KEYS[i]}: ${who}.${g}`;
+    })
+    .join('\n');
+  const both = people.length === 2;
+  const fields = people
+    .map(
+      (_, i) =>
+        `${KEYS[i]}_GARMENT: <what ${KEYS[i]} wears, in the user's own words, without colour or pattern words — or NONE>
+${KEYS[i]}_ROLE: <the character or costume the user casts ${KEYS[i]} as, in their words — or NONE>
+${KEYS[i]}_STYLE: <how the user wants ${KEYS[i]}'s outfit to look or fit, in their words — or NONE>
+${KEYS[i]}_COLOUR: <the colour words the user gave for ${KEYS[i]}'s clothes — or IMPLIED — or NONE>
+${KEYS[i]}_PATTERN: <the pattern words the user gave for ${KEYS[i]}'s clothes — or NONE>`
+    )
+    .join('\n');
+  return `A user typed a request for a picture. Read ONLY what they asked ${both ? 'each person' : 'the person'} to WEAR and to be dressed AS.
+
+REQUEST: "${prompt}"
+
+${legend}
+
+Rules:
+- Copy the user's own words. Never invent, improve or complete an outfit. If the user did not say what ${both ? 'a person' : 'the person'} wears or is dressed as, write NONE.
+- GARMENT is the clothing or accessory itself ("bikini", "tux", "space suits", "fancy hats", "Detroit Lions jersey", "regency gown", "80s clothes", "high heels", "armor"). Keep any team, brand or character name in it ("Lakers jerseys", "Chanel suit"). Leave colour and pattern words out of it. A character or a mood with no garment ("a pirate", "dressed up to the nines", "a sexy outfit") is NONE here: it goes in ROLE or STYLE.
+- ROLE is a character, job or costume the user casts that person as ("Celtic bowhuntress", "pirates", "a knight", "an astronaut", "Wonder Woman", "a 1920s flapper"). Copy their words, without colour or style words. Otherwise NONE.
+- STYLE is how the user wants that person's outfit to look or fit, in their words ("sexy", "sleek and deadly", "revealing", "flowy", "dressed up to the nines", "elegant"). Otherwise NONE.
+- COLOUR is only colours the user wrote for that person's clothes ("red", "pink", "navy"). Write IMPLIED only when the GARMENT or ROLE has SPECIFIC colours everyone knows and the user gave none: a real team's jersey (\"Lakers jerseys\"), a brand's signature look, an official uniform (a Starfleet uniform), a named character's costume (Superman, Wonder Woman). A garment TYPE or a ROLE that comes in any colour is NONE, even from another era or culture (a regency gown, a kimono, 80s clothes, a tux, a pirate, a knight). Otherwise NONE.
+- PATTERN is only a pattern the user wrote ("floral", "with flowers", "striped", "leopard"). Otherwise NONE.${
+    both
+      ? `
+- Words about "us", "we", "our", "both", "matching" or "each" apply to A AND B.
+- "so is <person>", "<person> too" and "<person> as well" give that person the same outfit.
 - If you cannot tell which person a clothing phrase belongs to, put it on UNASSIGNED and write NONE for both.`
       : ''
   }
@@ -259,7 +402,8 @@ function groundedIn(value: string, prompt: string): boolean {
 export function parseOutfitSpecReply(
   text: string,
   people: readonly OutfitPerson[],
-  prompt: string
+  prompt: string,
+  opts: OutfitSpecOptions = {}
 ): OutfitSpecResult {
   const line = (label: string): string | undefined => {
     const m = text.match(new RegExp(`^\\s*\\**${label}\\**\\s*:\\s*(.*)$`, 'im'));
@@ -285,10 +429,34 @@ export function parseOutfitSpecReply(
     if (occl.dropped.length) droppedOccluders[person.role] = occl.dropped;
     const garment = occl.garment;
     const pattern = honest(tidy(line(`${k}_PATTERN`)));
-    // IMPLIED only means something attached to a garment.
-    const colourImplied = implied && !!garment;
-    if (garment || colour || pattern || colourImplied) {
-      byRole[person.role] = { garment, colour, colourImplied, pattern };
+    if (!opts.costumeRead) {
+      // IMPLIED only means something attached to a garment.
+      const colourImplied = implied && !!garment;
+      if (garment || colour || pattern || colourImplied) {
+        byRole[person.role] = { garment, colour, colourImplied, pattern };
+      }
+      return;
+    }
+    // Phase 8: the character they are cast as, and how it should look. Grounded like every other value.
+    const costume = honest(tidy(line(`${k}_ROLE`)));
+    const style = honest(tidy(line(`${k}_STYLE`)));
+    // IMPLIED attaches to a garment or to a named character (Wonder Woman).
+    const colourImplied = implied && (!!garment || !!costume);
+    // Armor keeps its metal; a costume with no garment named keeps its own materials. Ours is one accent.
+    const materialColour =
+      !colour &&
+      !colourImplied &&
+      ((!!garment && MATERIAL_COLOURED.test(garment)) || (!!costume && !garment));
+    if (garment || colour || pattern || colourImplied || costume || style) {
+      byRole[person.role] = {
+        garment,
+        colour,
+        colourImplied,
+        pattern,
+        costume,
+        style,
+        materialColour,
+      };
     }
   });
   return { byRole, unassigned: tidy(line('UNASSIGNED')), droppedOccluders, rejectedInventions };
@@ -297,7 +465,13 @@ export function parseOutfitSpecReply(
 // ── the call ─────────────────────────────────────────────────────────────
 
 export type OutfitSpecOutcome =
-  | { source: 'skipped'; result: null }
+  | {
+      source: 'skipped';
+      result: null;
+      /** Why no read ran: nothing in the prompt to read (prefilter), the lock switch is off (off), or no
+       *  key / no people (unavailable). The three used to share one stamp. */
+      reason?: 'prefilter' | 'off' | 'unavailable';
+    }
   | { source: 'error'; result: null; error: string }
   | { source: 'read'; result: OutfitSpecResult };
 
@@ -306,14 +480,23 @@ export type OutfitSpecOutcome =
 export async function extractOutfitSpec(
   prompt: string,
   people: readonly OutfitPerson[],
-  anthropicKey: string | undefined
+  anthropicKey: string | undefined,
+  opts: OutfitSpecOptions = {}
 ): Promise<OutfitSpecOutcome> {
-  if (!anthropicKey || !people.length || people.length > 2 || !mentionsClothing(prompt)) {
-    return { source: 'skipped', result: null };
+  if (!anthropicKey || !people.length || people.length > 2) {
+    return { source: 'skipped', result: null, reason: 'unavailable' };
+  }
+  if (!mentionsClothing(prompt) && !(opts.costumeRead && mentionsCostume(prompt))) {
+    return { source: 'skipped', result: null, reason: 'prefilter' };
   }
   try {
-    const reply = await callSonnet(buildOutfitSpecBrief(prompt, people), anthropicKey, 160);
-    return { source: 'read', result: parseOutfitSpecReply(reply.text, people, prompt) };
+    // The phase-8 read has two more fields per person: 160 tokens clipped a couple's reply.
+    const reply = await callSonnet(
+      buildOutfitSpecBrief(prompt, people, opts),
+      anthropicKey,
+      opts.costumeRead ? 260 : 160
+    );
+    return { source: 'read', result: parseOutfitSpecReply(reply.text, people, prompt, opts) };
   } catch (e) {
     return { source: 'error', result: null, error: (e as Error).message };
   }
@@ -321,11 +504,16 @@ export async function extractOutfitSpec(
 
 /** One stamp for ai_generation_log: none | partial | full, plus what code stripped or refused. */
 export function outfitSpecStamps(outcome: OutfitSpecOutcome, castCount: number): string[] {
-  if (outcome.source === 'skipped') return ['outfit_spec:none'];
+  if (outcome.source === 'skipped') return [`outfit_spec:none:${outcome.reason ?? 'prefilter'}`];
   if (outcome.source === 'error') return [`outfit_spec:fallback:${outcome.error.slice(0, 60)}`];
   const r = outcome.result;
   const n = Object.keys(r.byRole).length;
-  const stamps = [`outfit_spec:${n === 0 ? 'none' : n >= castCount ? 'full' : 'partial'}`];
+  const stamps = [`outfit_spec:${n === 0 ? 'none:read' : n >= castCount ? 'full' : 'partial'}`];
+  for (const [role, s] of Object.entries(r.byRole)) {
+    if (s.costume) stamps.push(`outfit_role:${role}`);
+    if (s.style) stamps.push(`outfit_style:${role}`);
+    if (s.materialColour) stamps.push(`outfit_material:${role}`);
+  }
   for (const [role, d] of Object.entries(r.droppedOccluders)) {
     stamps.push(`outfit_occluder_dropped:${role}:${d.join('+')}`);
   }

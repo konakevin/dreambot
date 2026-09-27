@@ -102,6 +102,117 @@ function hasLighting(p: string): boolean {
   );
 }
 
+// ── Conflict filters (2026-09-26) ──
+// Kevin's "Celtic bowhuntress deep in a fantasy forest ... dramatic golden hour lighting" got "neon
+// reflections on wet surfaces, wet cobblestone street" and, on the run without golden hour, "heavy rain and
+// mist ... frosted glass with condensation drips ... stepping through shallow puddles" while she was drawing a
+// bow. The four gap checks above only ask "did the user already name a time / atmosphere / light / material";
+// nothing asked whether a rolled line CONTRADICTS what they did name. These do.
+
+/** A wild, outdoor or otherworldly setting: built-environment lines (streets, beams, marble, neon) never fit. */
+const NATURAL_SETTING =
+  /\b(forests?|woods|woodlands?|jungles?|rainforests?|beach(es)?|shores?|coasts?|coastline|ocean|seas?|islands?|lagoons?|mountains?|peaks?|alpine|desert|dunes?|meadows?|fields?|prairie|savann?ah?|rivers?|lakes?|waterfalls?|canyons?|caves?|glaciers?|tundra|sky|clouds|outer space|space|orbit|galaxy|countryside|vineyards?|farm|wilderness|swamp|marsh|reef|underwater)\b/i;
+/** The user asked for sun or clear light: no rain, puddles, snow or storm lines. */
+const SUN_ASKED =
+  /\b(sunny|sunlit|sunshine|sun-drenched|sun-soaked|golden hour|clear sk(y|ies)|blue sk(y|ies)|bright day|summer day|heat|tropical)\b/i;
+const WET = /\b(rain|raindrops|puddles?|wet|storm|snow|drizzle|condensation)\b/i;
+const BUILT =
+  /\b(neon|cobblestone|street|metal beams|marble floor|frosted glass|velvet|peeling paint|polished stone|tarnished copper|architecture)\b/i;
+/** The user already gave the person something to DO: no rolled motion detail on top ("stepping through
+ *  puddles" on someone drawing a bow). A curated verb list, not "-ing": morning, building and clothing are
+ *  not actions. */
+const ACTION_IN_PROMPT = new RegExp(
+  '\\b(in action|mid[- ]\\w+|' +
+    [
+      'drinking',
+      'eating',
+      'dancing',
+      'running',
+      'walking',
+      'strolling',
+      'riding',
+      'playing',
+      'swimming',
+      'surfing',
+      'skiing',
+      'snowboarding',
+      'hiking',
+      'climbing',
+      'fighting',
+      'shooting',
+      'drawing',
+      'aiming',
+      'wielding',
+      'reading',
+      'singing',
+      'cooking',
+      'jumping',
+      'leaping',
+      'flying',
+      'sailing',
+      'rowing',
+      'paddling',
+      'kissing',
+      'hugging',
+      'holding',
+      'laughing',
+      'sitting',
+      'lying',
+      'lounging',
+      'relaxing',
+      'floating',
+      'diving',
+      'skating',
+      'biking',
+      'cycling',
+      'driving',
+      'racing',
+      'golfing',
+      'fishing',
+      'hunting',
+      'exploring',
+      'shopping',
+      'waltzing',
+      'chasing',
+      'throwing',
+      'catching',
+      'kicking',
+      'boxing',
+      'fencing',
+      'writing',
+      'working',
+      'studying',
+      'sleeping',
+      'sunbathing',
+      'toasting',
+      'cheering',
+      'celebrating',
+      'marching',
+      'battling',
+      'casting',
+      'charging',
+      'galloping',
+      'sprinting',
+      'performing',
+      'drumming',
+      'strumming',
+    ].join('|') +
+    ')\\b',
+  'i'
+);
+
+export function hasActionInPrompt(p: string): boolean {
+  return ACTION_IN_PROMPT.test(p);
+}
+
+/** The pool minus lines that contradict the prompt. Never empty: if everything conflicts, the whole pool. */
+function fitting(pool: Entry[], ctx: { natural: boolean; sunny: boolean }): Entry[] {
+  const kept = pool.filter(
+    (e) => !(ctx.sunny && WET.test(e.text)) && !(ctx.natural && BUILT.test(e.text))
+  );
+  return kept.length ? kept : pool;
+}
+
 function hasMaterial(p: string): boolean {
   return /\b(cobblestone|marble|metal|velvet|wood|glass|copper|brick|concrete|leather|stone)\b/i.test(
     p
@@ -178,30 +289,38 @@ export function expandScene(input: {
   const rand = mulberry32(seed);
 
   const additions: string[] = [];
+  const ctx = { natural: NATURAL_SETTING.test(lower), sunny: SUN_ASKED.test(lower) };
 
   // Fill gaps only — don't override what user specified. TIME / ATMOSPHERE /
-  // LIGHTING are subject-AGNOSTIC mood + light seasoning, safe on any scene.
-  if (!hasTimeOfDay(lower)) additions.push(pickWithMemory(V2_TIME, rand, userId).text);
-  if (!hasAtmosphere(lower)) additions.push(pickWithMemory(V2_ATMOSPHERE, rand, userId).text);
-  if (!hasLighting(lower)) additions.push(pickWithMemory(V2_LIGHTING, rand, userId).text);
+  // LIGHTING are subject-AGNOSTIC mood + light seasoning, safe on any scene —
+  // minus any line that contradicts it (no rain on "golden hour", no neon in a forest).
+  if (!hasTimeOfDay(lower))
+    additions.push(pickWithMemory(fitting(V2_TIME, ctx), rand, userId).text);
+  if (!hasAtmosphere(lower))
+    additions.push(pickWithMemory(fitting(V2_ATMOSPHERE, ctx), rand, userId).text);
+  if (!hasLighting(lower))
+    additions.push(pickWithMemory(fitting(V2_LIGHTING, ctx), rand, userId).text);
 
   // MATERIAL injects competing surfaces / architecture (wet cobblestone street,
   // brick, marble floor) — appropriate when a person stands IN an environment,
   // but for a self-contained subject ("a cat holding a piña colada") it imports
-  // a whole generic village and crowds the subject out. Character scenes only.
-  if (hasCharacter && !hasMaterial(lower)) {
-    additions.push(pickWithMemory(V2_MATERIAL, rand, userId).text);
+  // a whole generic village and crowds the subject out. Character scenes only,
+  // and never in a wild setting (a forest has no cobblestone street).
+  if (hasCharacter && !hasMaterial(lower) && !ctx.natural) {
+    additions.push(pickWithMemory(fitting(V2_MATERIAL, ctx), rand, userId).text);
   }
 
   // Depth: full for character scenes (person-in-world wants layered depth);
   // lighter for subject-only scenes so the expansion stays atmospheric seasoning
   // rather than a competing multi-tier environment that buries the subject.
   if (rand() < (hasCharacter ? 0.8 : 0.4)) {
-    additions.push(pickWithMemory(V2_DEPTH, rand, userId).text);
+    additions.push(pickWithMemory(fitting(V2_DEPTH, ctx), rand, userId).text);
   }
 
-  // Action: only for character scenes
-  if (hasCharacter) additions.push(pickWithMemory(V2_ACTION, rand, userId).text);
+  // Action: only for character scenes, and only when the user gave them nothing to do.
+  if (hasCharacter && !hasActionInPrompt(lower)) {
+    additions.push(pickWithMemory(fitting(V2_ACTION, ctx), rand, userId).text);
+  }
 
   const suggestedCamera = pickWeighted(V2_CAMERA, rand).text;
 

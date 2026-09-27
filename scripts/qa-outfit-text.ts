@@ -73,7 +73,12 @@ const CONCURRENCY = Number(arg('concurrency', '4'));
 const MODE = arg('mode', 'pipeline');
 /** today = the live Create path; plan = phase 3: outfit reader + per-person plan in the slot brief. */
 const VARIANT = arg('variant', 'today');
+/** Phase 8 switches (engine_config.create_outfit_costume_read / create_outfit_garment_roll). */
+const COSTUME = arg('costume', 'off') === 'on';
+const GARMENT = arg('garment', 'off') === 'on';
 if (!OUT) throw new Error('--out=<dir> is required');
+const rollCfg = (genders: Record<string, Gender>) =>
+  GARMENT ? { ...DEFAULT_OUTFIT_ROLLS, garmentRoll: true, genders } : DEFAULT_OUTFIT_ROLLS;
 
 // ── corpus ─────────────────────────────────────────────────────────────
 type Gender = 'male' | 'female';
@@ -84,6 +89,12 @@ interface Expect {
   pattern?: string;
   /** The garment carries its own colours (team jersey, period costume): the extractor must say IMPLIED. */
   implied?: boolean;
+  /** Costume read (phase 8): the character/costume the user cast them as ("Celtic bowhuntress"). */
+  costume?: string;
+  /** Costume read (phase 8): how the user wants the outfit to look or fit ("sleek and deadly"). */
+  style?: string;
+  /** Costume read (phase 8): the garment's colour is its material (armor): our colour is one accent only. */
+  material?: boolean;
 }
 interface Case {
   id: string;
@@ -402,7 +413,134 @@ const CASES: Case[] = [
     expectSelf: { garment: 'shirt', pattern: 'hawaiian|tropical|flor|hibiscus|palm' },
     expectPartner: { garment: 'dress', colour: 'yellow|lemon|butter|canary|marigold' },
   },
+
+  // COSTUMES + WOMEN'S DEFAULT OUTFIT (phase 8, 2026-09-26). C1/C2 are Kevin's two real prompts: the
+  // bowhuntress came back in a draped scarlet toga (a rolled "soft, fluid and draped" silhouette), the armor
+  // in rolled blush pink. C6-C12 carry no clothing words: they measure what women get when nobody asked
+  // (today: wide-leg trousers, silk blouse, blazer).
+  {
+    id: 'C1',
+    shape: 'solo_partner',
+    self: 'male',
+    partner: { name: 'Steph', gender: 'female', relationship: REL.wife },
+    prompt:
+      'Show Steph looking like a sexy Celtic bowhuntress deep in a fantasy forest in action looking very sleek and deadly.',
+    expectPartner: { costume: 'huntress', style: 'sleek|sexy', implied: false },
+  },
+  {
+    id: 'C2',
+    shape: 'solo_partner',
+    self: 'male',
+    partner: { name: 'Steph', gender: 'female', relationship: REL.wife },
+    prompt:
+      'Show Steph looking like a sexy Celtic bowhuntress deep in a fantasy forest in action looking very sleek and deadly. Put her in sleek and revealing armor. Add dramatic golden hour lighting and make the background lush and beautiful',
+    expectPartner: { garment: 'armou?r', material: true, style: 'sleek|sexy|revealing' },
+  },
+  {
+    id: 'C3',
+    shape: 'solo_self',
+    self: 'male',
+    prompt: 'Show me as a knight guarding a castle gate at dawn',
+    expectSelf: { costume: 'knight', implied: false },
+  },
+  {
+    id: 'C4',
+    shape: 'couple',
+    self: 'male',
+    partner: { name: 'wife', gender: 'female', relationship: REL.wife },
+    prompt: 'Me and my wife as pirates on the deck of a ship in a storm',
+    expectSelf: { costume: 'pirate' },
+    expectPartner: { costume: 'pirate' },
+  },
+  {
+    id: 'C5',
+    shape: 'solo_self',
+    self: 'female',
+    prompt: 'Show me dressed as Wonder Woman on a New York rooftop at night',
+    expectSelf: { implied: true },
+  },
+  {
+    id: 'C6',
+    shape: 'couple',
+    self: 'female',
+    partner: { name: 'mom', gender: 'female', relationship: REL.family },
+    prompt: 'Show me and mom drinking margaritas on a Mexican beach',
+    tags: ['no_clothing'],
+  },
+  {
+    id: 'C7',
+    shape: 'couple',
+    self: 'female',
+    partner: { name: 'husband', gender: 'male', relationship: REL.husband },
+    prompt: 'Show us playing dueling pianos',
+    tags: ['no_clothing'],
+  },
+  {
+    id: 'C8',
+    shape: 'couple',
+    self: 'female',
+    partner: { name: 'husband', gender: 'male', relationship: REL.husband },
+    prompt: 'Show me and my husband by Niagara Falls',
+    tags: ['no_clothing'],
+  },
+  {
+    id: 'C9',
+    shape: 'solo_self',
+    self: 'female',
+    prompt: 'Show me in the courtyard of the Tokyo National Museum',
+    tags: ['no_clothing'],
+  },
+  {
+    id: 'C10',
+    shape: 'solo_self',
+    self: 'female',
+    prompt: 'Show me at a rooftop bar in New York at sunset',
+    tags: ['no_clothing'],
+  },
+  {
+    id: 'C11',
+    shape: 'solo_partner',
+    self: 'male',
+    partner: { name: 'Steph', gender: 'female', relationship: REL.wife },
+    prompt: 'Show Steph reading in a cozy bookshop cafe on a rainy afternoon',
+    tags: ['no_clothing'],
+  },
+  {
+    id: 'C12',
+    shape: 'couple',
+    self: 'female',
+    partner: { name: 'Brittany', gender: 'female', relationship: REL.friend },
+    prompt: 'Me and Brittany at a garden party in the Cotswolds',
+    tags: ['no_clothing', 'formal_same_gender'],
+  },
 ];
+
+// ── women's outfit scorer (phase 8) ────────────────────────────────────
+// What a woman ends up wearing, counted on the delivered text. Solo prompts are scored on the whole final
+// prompt (the outfit is not a separate field there), so "flowing hair" can inflate `draped`: compare runs
+// with each other, never against an absolute.
+const WOMEN_TERMS: ReadonlyArray<[string, RegExp]> = [
+  [
+    'trousers',
+    /\b(trousers|pants|slacks|jeans|denim|culottes|flares|palazzos?|chinos|leggings|joggers)\b/i,
+  ],
+  ['wide-leg/palazzo/flares', /(wide[- ]leg|palazzo|flared trousers|\bflares\b|culottes)/i],
+  ['blazer', /\bblazers?\b/i],
+  ['silk blouse', /\bsilk\b[^,]{0,24}\bblouse/i],
+  ['suit', /\b(pant-?suit|trouser suit|suit)\b/i],
+  ['dress/gown/skirt', /(dress|gown|skirt|sarong|kaftan)/i],
+  ['jumpsuit/playsuit', /(jumpsuit|playsuit|romper)/i],
+  ['shorts', /\bshorts\b/i],
+  ['draped/flowing', /(draped|flowing|flowy|billowing|voluminous)/i],
+];
+function scoreWomen(outfits: readonly string[]): string {
+  if (!outfits.length) return 'no women outfits';
+  const n = outfits.length;
+  return WOMEN_TERMS.map(([k, re]) => {
+    const hit = outfits.filter((o) => re.test(o)).length;
+    return `${k} ${hit}/${n} (${Math.round((100 * hit) / n)}%)`;
+  }).join('  |  ');
+}
 
 // ── synthetic cast ─────────────────────────────────────────────────────
 const DESC: Record<Gender, string> = {
@@ -482,6 +620,8 @@ interface Result {
     crossColour?: boolean | null;
   };
   plan?: OutfitPlan | null;
+  /** Every woman's outfit in this render (phase 8 scorer). */
+  womenOutfits?: string[];
   error?: string;
 }
 
@@ -548,13 +688,15 @@ async function renderOne(c: Case, run: number): Promise<Result> {
     ];
     const [split, specOut] = await Promise.all([
       splitPromptScene(cleaned, 2, KEY),
-      VARIANT === 'plan' ? extractOutfitSpec(raw, legend, KEY) : Promise.resolve(null),
+      VARIANT === 'plan'
+        ? extractOutfitSpec(raw, legend, KEY, { costumeRead: COSTUME })
+        : Promise.resolve(null),
     ]);
     const plan =
       VARIANT === 'plan'
         ? planOutfits(
             ['self', 'plus_one'],
-            DEFAULT_OUTFIT_ROLLS,
+            rollCfg({ self: c.self, plus_one: c.partner!.gender }),
             specOut && specOut.source === 'read' ? specOut.result.byRole : {}
           )
         : null;
@@ -623,6 +765,10 @@ async function renderOne(c: Case, run: number): Promise<Result> {
         ...res.fallbackReasons,
       ],
       plan,
+      womenOutfits: [
+        ...(c.self === 'female' ? [selfOutfit] : []),
+        ...(c.partner!.gender === 'female' ? [partnerOutfit] : []),
+      ],
       checks: {
         self: check(selfOutfit, c.expectSelf),
         partner: check(partnerOutfit, c.expectPartner),
@@ -659,11 +805,11 @@ async function renderOne(c: Case, run: number): Promise<Result> {
             gender: c.partner!.gender,
           },
     ];
-    const specOut = await extractOutfitSpec(raw, legend, KEY);
+    const specOut = await extractOutfitSpec(raw, legend, KEY, { costumeRead: COSTUME });
     soloStamps.push(...outfitSpecStamps(specOut, 1));
     soloPlan = planOutfits(
       [soloRole],
-      DEFAULT_OUTFIT_ROLLS,
+      rollCfg({ [soloRole]: c.shape === 'solo_self' ? c.self : c.partner!.gender }),
       specOut.source === 'read' ? specOut.result.byRole : {}
     );
   }
@@ -686,6 +832,7 @@ async function renderOne(c: Case, run: number): Promise<Result> {
       focalAnchor: 'the person',
     },
     ...(soloPlan ? { outfitPlan: soloPlan } : {}),
+    ...(soloPlan && (COSTUME || GARMENT) ? { outfitEarly: true } : {}),
   });
   const sonnet = await callSonnet(compiled.sonnetBrief, KEY, compiled.maxTokens);
   let soloText = sonnet.text;
@@ -706,6 +853,8 @@ async function renderOne(c: Case, run: number): Promise<Result> {
       ...(c.tags?.includes('occluder') && occluder.test(finalPrompt) ? ['OCCLUDER_IN_FINAL'] : []),
     ],
     plan: soloPlan,
+    womenOutfits:
+      (c.shape === 'solo_self' ? c.self : c.partner!.gender) === 'female' ? [finalPrompt] : [],
     checks: {
       self: c.shape === 'solo_self' ? check(finalPrompt, expect) : null,
       partner: c.shape === 'solo_partner' ? check(finalPrompt, expect) : null,
@@ -736,6 +885,9 @@ async function runExtract(): Promise<void> {
     garment: [0, 0],
     colour: [0, 0],
     pattern: [0, 0],
+    costume: [0, 0],
+    style: [0, 0],
+    material: [0, 0],
     falseLock: 0,
     missed: 0,
     errors: 0,
@@ -753,7 +905,7 @@ async function runExtract(): Promise<void> {
             ? ['self']
             : ['plus_one'];
       const people = roles.map((r) => personOf(c, r));
-      const outcome = await extractOutfitSpec(raw, people, KEY);
+      const outcome = await extractOutfitSpec(raw, people, KEY, { costumeRead: COSTUME });
       const m: string[] = [];
       if (outcome.source === 'error') tally.errors++;
       const byRole = outcome.source === 'read' ? outcome.result.byRole : {};
@@ -796,6 +948,21 @@ async function runExtract(): Promise<void> {
           if (new RegExp(e.pattern, 'i').test(hay)) tally.pattern[0]++;
           else m.push(`${who}.pattern✗(${g.pattern})`);
         }
+        if (e.costume) {
+          tally.costume[1]++;
+          if (g.costume && new RegExp(e.costume, 'i').test(g.costume)) tally.costume[0]++;
+          else m.push(`${who}.costume✗(${g.costume ?? null})`);
+        }
+        if (e.style) {
+          tally.style[1]++;
+          if (g.style && new RegExp(e.style, 'i').test(g.style)) tally.style[0]++;
+          else m.push(`${who}.style✗(${g.style ?? null})`);
+        }
+        if (e.material) {
+          tally.material[1]++;
+          if (g.materialColour) tally.material[0]++;
+          else m.push(`${who}.material✗`);
+        }
       }
       marks.set(c.id, [...(marks.get(c.id) ?? []), m.length ? m.join(' ') : 'ok']);
       out.push({
@@ -826,6 +993,9 @@ async function runExtract(): Promise<void> {
     `colour right  : ${f(tally.colour)}  (IMPLIED counted where the garment carries its own colours)`
   );
   console.log(`pattern right : ${f(tally.pattern)}`);
+  console.log(
+    `costume right : ${f(tally.costume)}   style right: ${f(tally.style)}   material: ${f(tally.material)}`
+  );
   console.log(
     `false locks (something locked on a person the user said nothing about): ${tally.falseLock}`
   );
@@ -966,4 +1136,10 @@ if (VARIANT === 'plan') {
 console.log(
   `plain-clothes violations: ${plainViolations}   wardrobe fallbacks: ${wardrobeFallbacks}`
 );
+const women = results.flatMap((r) => r.womenOutfits ?? []);
+const womenNoClothing = results
+  .filter((r) => CASES.find((c) => c.id === r.id)?.tags?.includes('no_clothing'))
+  .flatMap((r) => r.womenOutfits ?? []);
+console.log(`women (all)        : ${scoreWomen(women)}`);
+console.log(`women (no clothing): ${scoreWomen(womenNoClothing)}`);
 for (const [id, marks] of perCase) console.log(`  ${id.padEnd(4)} ${marks.join(' | ')}`);

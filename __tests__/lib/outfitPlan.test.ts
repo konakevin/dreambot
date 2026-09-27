@@ -9,7 +9,20 @@
 import {
   PAIRED_PALETTES,
   OUTFIT_SILHOUETTES,
+  OUTFIT_SILHOUETTES_V2,
   WARDROBE_PATTERNS,
+  WOMEN_GARMENT_FAMILIES,
+  WOMEN_FASHION_LOOKS,
+  MEN_FASHION_LOOKS,
+  DEFAULT_GARMENT_WEIGHTS,
+  normalizeGarmentWeights,
+  rollGarmentFamily,
+  rollFashion,
+  renderOutfitPlanLines,
+  garmentRollStamps,
+  missingUserOutfit,
+  userOutfitPhrase,
+  slimWideLegs,
   planOutfits,
   colourFamilyOf,
   colourFamiliesOf,
@@ -338,5 +351,282 @@ describe('colourFamilyOf', () => {
     for (const name of [plan.people[1].colour!.lead, plan.people[1].colour!.accent!]) {
       expect(['purple', 'yellow']).not.toContain(familyOfName(name));
     }
+  });
+});
+
+// ── Phase 8 (2026-09-26/27): costumes, material colour, the garment axis and fashion looks ──────────
+// Measured before: 28% of women's outfits on three accounts were wide-leg trousers / palazzos / flares (22% of
+// nightly solo women platform-wide); the bowhuntress got a rolled "soft, fluid and draped" toga; armor took a
+// rolled blush pink. Kevin, 2026-09-27: "we should add some really fun fashion styles in these".
+const WOMAN_SIDE = [{ role: 'plus_one', label: 'THE PERSON', gender: 'female' as const }];
+const GARMENT_ON = (genders: Record<string, 'male' | 'female'>): OutfitRollConfig => ({
+  ...ALL_ON,
+  garmentRoll: true,
+  genders,
+});
+
+describe('garment + look pools (locked)', () => {
+  it('garment families never say wide-leg, palazzo or suit, and carry no plain-clothes word', () => {
+    for (const f of WOMEN_GARMENT_FAMILIES) {
+      expect({ f: f.text, bad: /wide[- ]leg|palazzo|\bsuit\b/i.test(f.text) }).toEqual({
+        f: f.text,
+        bad: false,
+      });
+      expect({ f: f.text, plain: PLAIN_CLOTHES.test(f.text) }).toEqual({ f: f.text, plain: false });
+    }
+  });
+
+  it('looks are colour-free (the palette colours them), occluder-free and plain-clothes-free', () => {
+    for (const l of [...WOMEN_FASHION_LOOKS, ...MEN_FASHION_LOOKS]) {
+      expect({ l: l.text, colour: colourFamiliesOf(l.text) }).toEqual({ l: l.text, colour: [] });
+      expect({ l: l.text, occ: OCCLUSION.test(l.text) }).toEqual({ l: l.text, occ: false });
+      expect({ l: l.text, plain: PLAIN_CLOTHES.test(l.text) }).toEqual({ l: l.text, plain: false });
+    }
+    for (const l of WOMEN_FASHION_LOOKS) {
+      expect({ l: l.text, wide: /wide[- ]leg|palazzo/i.test(l.text) }).toEqual({
+        l: l.text,
+        wide: false,
+      });
+    }
+  });
+
+  it('every women family has looks, and every look names only real families', () => {
+    const keys = new Set(WOMEN_GARMENT_FAMILIES.map((f) => f.key));
+    for (const f of WOMEN_GARMENT_FAMILIES) {
+      expect(WOMEN_FASHION_LOOKS.filter((l) => l.families!.includes(f.key)).length).toBeGreaterThan(
+        3
+      );
+    }
+    for (const l of WOMEN_FASHION_LOOKS)
+      for (const k of l.families!) expect(keys.has(k)).toBe(true);
+  });
+
+  it('the V2 cuts drop the two widest and keep the V1 contract', () => {
+    expect(OUTFIT_SILHOUETTES_V2).not.toContain('oversized and relaxed, with generous volume');
+    expect(OUTFIT_SILHOUETTES_V2).not.toContain('retro 1970s proportions, wide and bold');
+    for (const t of OUTFIT_SILHOUETTES_V2) {
+      expect({ t, garment: GARMENT.test(t) }).toEqual({ t, garment: false });
+      expect({ t, material: MATERIAL.test(t) }).toEqual({ t, material: false });
+      expect({ t, plain: PLAIN_CLOTHES.test(t) }).toEqual({ t, plain: false });
+    }
+  });
+});
+
+describe('garment weights', () => {
+  it('unknown keys ignored, missing keys default, all-zero falls back to the defaults (never uniform)', () => {
+    expect(normalizeGarmentWeights({ dress: 50, nonsense: 99 })).toEqual({
+      ...DEFAULT_GARMENT_WEIGHTS,
+      dress: 50,
+    });
+    const zero = Object.fromEntries(Object.keys(DEFAULT_GARMENT_WEIGHTS).map((k) => [k, 0]));
+    expect(normalizeGarmentWeights(zero)).toEqual(DEFAULT_GARMENT_WEIGHTS);
+    expect(normalizeGarmentWeights('junk')).toEqual(DEFAULT_GARMENT_WEIGHTS);
+  });
+
+  it('delivers the weights (10,000 rolls, within 2 points)', () => {
+    const rng = seeded(7);
+    const n = 10000;
+    const got: Record<string, number> = {};
+    for (let i = 0; i < n; i++) {
+      const k = rollGarmentFamily(DEFAULT_GARMENT_WEIGHTS, rng).key;
+      got[k] = (got[k] ?? 0) + 1;
+    }
+    const total = Object.values(DEFAULT_GARMENT_WEIGHTS).reduce((a, b) => a + b, 0);
+    for (const [k, w] of Object.entries(DEFAULT_GARMENT_WEIGHTS)) {
+      expect(Math.abs((100 * (got[k] ?? 0)) / n - (100 * w) / total)).toBeLessThan(2);
+    }
+  });
+
+  it('a zero weight is never rolled', () => {
+    const rng = seeded(3);
+    for (let i = 0; i < 2000; i++) {
+      expect(rollGarmentFamily({ ...DEFAULT_GARMENT_WEIGHTS, trousers: 0 }, rng).key).not.toBe(
+        'trousers'
+      );
+    }
+  });
+});
+
+describe('rollFashion', () => {
+  it('two women share ONE garment family; each look suits it', () => {
+    const rng = seeded(11);
+    for (let i = 0; i < 500; i++) {
+      const [a, b] = rollFashion(COUPLE, { self: 'female', plus_one: 'female' }, undefined, rng);
+      expect(a!.family!.key).toBe(b!.family!.key);
+      expect(a!.look.families).toContain(a!.family!.key);
+      expect(b!.look.families).toContain(b!.family!.key);
+    }
+  });
+
+  it('a man gets a look and no family; unknown gender gets nothing', () => {
+    const [m, x] = rollFashion(COUPLE, { self: 'male' }, undefined, seeded(1));
+    expect(m!.family).toBeNull();
+    expect(MEN_FASHION_LOOKS).toContain(m!.look);
+    expect(x).toBeNull();
+  });
+
+  it('couples share a theme some of the time, not always', () => {
+    const rng = seeded(5);
+    let same = 0;
+    for (let i = 0; i < 2000; i++) {
+      const [a, b] = rollFashion(COUPLE, { self: 'female', plus_one: 'male' }, undefined, rng);
+      if (a!.look.key === b!.look.key) same++;
+    }
+    expect(same).toBeGreaterThan(400);
+    expect(same).toBeLessThan(1600);
+  });
+});
+
+describe('planOutfits with the garment axis', () => {
+  it('off: the plan is exactly what it was (same rng sequence, no new fields)', () => {
+    const before = planOutfits(COUPLE, ALL_ON, {}, seeded(42));
+    const off = planOutfits(COUPLE, { ...ALL_ON, garmentRoll: false }, {}, seeded(42));
+    expect(off).toEqual(before);
+    for (const p of before.people) {
+      expect(p).not.toHaveProperty('garmentFamily');
+      expect(p).not.toHaveProperty('look');
+      expect(OUTFIT_SILHOUETTES).toContain(p.silhouette);
+    }
+  });
+
+  it('on: a woman nobody dressed gets a family + a look, a man a look, cuts from V2', () => {
+    const plan = planOutfits(
+      COUPLE,
+      GARMENT_ON({ self: 'female', plus_one: 'male' }),
+      {},
+      seeded(9)
+    );
+    const [her, him] = plan.people;
+    expect(WOMEN_GARMENT_FAMILIES.map((f) => f.text)).toContain(her.garmentFamily);
+    expect(her.look).toBeTruthy();
+    expect(him.garmentFamily).toBeUndefined();
+    expect(him.look).toBeTruthy();
+    for (const p of plan.people) expect(OUTFIT_SILHOUETTES_V2).toContain(p.silhouette);
+    expect(garmentRollStamps(plan)).toEqual(
+      expect.arrayContaining(['outfit_cuts:v2', expect.stringMatching(/^outfit_look:self:/)])
+    );
+  });
+
+  it('a trousers or jumpsuit family never gets a widening cut', () => {
+    const rng = seeded(21);
+    const widen = [
+      'soft and fluid, moving with the body',
+      'full and flared, with volume below the waist',
+      'cropped and high-waisted, a short top half over a long lower half',
+    ];
+    let seen = 0;
+    for (let i = 0; i < 3000; i++) {
+      const plan = planOutfits(['self'], GARMENT_ON({ self: 'female' }), {}, rng);
+      const p = plan.people[0];
+      if (/trousers|jumpsuit/.test(p.garmentFamily ?? '')) {
+        seen++;
+        expect(widen).not.toContain(p.silhouette);
+      }
+    }
+    expect(seen).toBeGreaterThan(300);
+  });
+
+  it('anyone the user dressed (a garment, a costume or a style) turns the roll off for the whole render', () => {
+    for (const s of [
+      spec({ garment: 'tux' }),
+      spec({ costume: 'pirates' }),
+      spec({ style: "80's" }),
+    ]) {
+      const plan = planOutfits(
+        COUPLE,
+        GARMENT_ON({ self: 'male', plus_one: 'female' }),
+        { self: s },
+        seeded(4)
+      );
+      for (const p of plan.people) {
+        expect(p.garmentFamily).toBeUndefined();
+        expect(p.look).toBeUndefined();
+      }
+    }
+  });
+
+  it('prints Garment + Look + the gear escape, and no rolled cut over a look', () => {
+    const plan = planOutfits(['plus_one'], GARMENT_ON({ plus_one: 'female' }), {}, seeded(2));
+    const line = renderOutfitPlanLines(plan, WOMAN_SIDE);
+    expect(line).toMatch(/Garment: .*, layered for the weather\./);
+    expect(line).toMatch(/Look: .+\./);
+    expect(line).toContain('If the activity has its own clothing');
+    expect(line).not.toContain('Silhouette:');
+  });
+});
+
+describe('costume + material colour (the bowhuntress and the armor)', () => {
+  const BOW = spec({
+    costume: 'Celtic bowhuntress',
+    style: 'sexy, sleek and deadly',
+    materialColour: true,
+  });
+
+  it('the bowhuntress keeps her own cut and materials; our colour is one accent; no pattern', () => {
+    const plan = planOutfits(['plus_one'], INDEP, { plus_one: BOW }, seeded(8));
+    const p = plan.people[0];
+    expect(p.colourSource).toBe('material');
+    expect(p.colour!.accent).toBeNull();
+    expect(p.pattern).toBeNull();
+    const line = renderOutfitPlanLines(plan, WOMAN_SIDE);
+    expect(line).toContain('dressed as the user asked: "Celtic bowhuntress"');
+    expect(line).toContain('Style: "sexy, sleek and deadly", exactly as asked');
+    expect(line).toMatch(/costume's own materials and tones, with .+ as ONE accent piece/);
+    expect(line).not.toContain('Silhouette:');
+    expect(line).not.toMatch(/Pattern:/);
+  });
+
+  it('armor keeps its metal: material colour on a named garment', () => {
+    const plan = planOutfits(
+      ['plus_one'],
+      INDEP,
+      { plus_one: spec({ garment: 'sleek and revealing armor', materialColour: true }) },
+      seeded(8)
+    );
+    expect(renderOutfitPlanLines(plan, WOMAN_SIDE)).toMatch(
+      /garment's own materials and tones, with .+ as ONE accent piece/
+    );
+  });
+
+  it('a style that names the fit skips the rolled cut; one that does not keeps it', () => {
+    const fit = planOutfits(['self'], ALL_ON, { self: spec({ style: 'flowy' }) }, seeded(1));
+    expect(renderOutfitPlanLines(fit, [{ ...WOMAN_SIDE[0], role: 'self' }])).not.toContain(
+      'Silhouette:'
+    );
+    const mood = planOutfits(
+      ['self'],
+      ALL_ON,
+      { self: spec({ style: 'dressed up to the nines' }) },
+      seeded(1)
+    );
+    expect(renderOutfitPlanLines(mood, [{ ...WOMAN_SIDE[0], role: 'self' }])).toContain(
+      'Silhouette:'
+    );
+  });
+
+  it('the costume is locked: kept when any real word survives, written in when none does', () => {
+    const plan = planOutfits(['plus_one'], INDEP, { plus_one: BOW }, seeded(8));
+    const p = plan.people[0];
+    expect(missingUserOutfit('a huntress in forest leathers, a longbow drawn', p)).toEqual([]);
+    expect(missingUserOutfit('a Celtic warrior cloak', p)).toEqual([]);
+    expect(missingUserOutfit('a scarlet draped tunic', p)).toEqual(['"bowhuntress"']);
+    expect(userOutfitPhrase(p)).toBe('Celtic bowhuntress costume');
+  });
+});
+
+describe('slimWideLegs (a garment we rolled never ships as palazzos)', () => {
+  it.each([
+    ['Cream wide-leg linen trousers, rust top', 'Cream slim linen trousers, rust top'],
+    ['Deep burgundy wide-leg jumpsuit in fine wool', 'Deep burgundy slim jumpsuit in fine wool'],
+    ['beaded playsuit with wide-leg palazzo trousers', 'beaded playsuit with slim trousers'],
+    ['silk palazzos and a bustier', 'silk slim trousers and a bustier'],
+    ['teal flared trousers, cropped top', 'teal slim trousers, cropped top'],
+  ])('%s', (input, want) => {
+    expect(slimWideLegs(input)).toEqual({ text: want, changed: true });
+  });
+
+  it('leaves everything else alone', () => {
+    const t = 'a flared midi skirt, a wide-brim hat, slim trousers';
+    expect(slimWideLegs(t)).toEqual({ text: t, changed: false });
   });
 });

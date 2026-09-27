@@ -162,3 +162,36 @@ describe('enforceSoloOutfit — the guarantees on Sonnet’s freeform text', () 
     });
   });
 });
+
+// Phase 8 (2026-09-27): same-seed flux-1.1-pro probe — the planned outfit rendered 0/3 when written after the
+// scene and 3/3 with the person + outfit first. The flag moves the person + outfit ahead of the scene.
+describe('outfitEarly', () => {
+  const plan = planOutfits(
+    ['self'],
+    {
+      independentPct: 50,
+      separateCutPct: 50,
+      patternPct: 50,
+      garmentRoll: true,
+      genders: { self: 'female' },
+    },
+    {},
+    seeded(5)
+  );
+
+  it('asks for the person + outfit before the scene', () => {
+    const b = buildSingleBrief(input({ outfitPlan: plan, outfitEarly: true })).sonnetBrief;
+    expect(b).toContain('3. THE PERSON AND THEIR OUTFIT');
+    expect(b.indexOf('THE PERSON AND THEIR OUTFIT')).toBeLessThan(b.indexOf('SCENE/ENVIRONMENT'));
+    expect(b).toContain('then the person WITH their outfit, then the scene');
+  });
+
+  it('off, or with no plan, the brief is unchanged', () => {
+    expect(buildSingleBrief(input({ outfitPlan: plan, outfitEarly: false })).sonnetBrief).toBe(
+      buildSingleBrief(input({ outfitPlan: plan })).sonnetBrief
+    );
+    expect(buildSingleBrief(input({ outfitEarly: true })).sonnetBrief).toBe(
+      buildSingleBrief(input()).sonnetBrief
+    );
+  });
+});

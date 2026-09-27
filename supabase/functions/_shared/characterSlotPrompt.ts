@@ -30,12 +30,16 @@ import { varyFemaleHair, type HairSceneRegister } from './femaleHairVariation.ts
 import { buildSceneHook } from './sceneHook.ts';
 import { normalizeActionBeat, depronounActionBeat, validateActionBeat } from './actionSafety.ts';
 import {
+  GARMENT_GEAR_WINS,
+  renderFashionLine,
+  slimWideLegs,
   renderOutfitPlanLines,
   planHasUserGarment,
   missingUserOutfit,
   userOutfitPhrase,
   userOutfitAllowlist,
   allowedByUser,
+  type FashionPick,
   type OutfitPlan,
   type OutfitSide,
   type PersonOutfitPlan,
@@ -132,6 +136,12 @@ export interface CharacterSlotPipelineInput {
    *  violation and a retry, and a second miss has code write the user's words in.
    *  Unset → every path here is byte-identical. A holiday costumeLock wins over it. */
   outfitPlan?: OutfitPlan | null;
+  /** NIGHTLY GARMENT AXIS (phase 8, mig 563; outfitPlan.ts rollFashion): per person, in cast order, a garment
+   *  family (women) and a fashion look. Replaces the WARDROBE REGISTER line with one line per person, and a
+   *  wardrobe anchor still passed (a holiday row) is demoted to colour / texture / accessory inspiration.
+   *  Measured before: 22% of nightly solo women in wide-leg trousers. Unset → byte-identical. A holiday
+   *  costumeLock and a Create outfitPlan both win over it. */
+  fashionLooks?: ReadonlyArray<FashionPick | null> | null;
   /** Whether the location is a REAL-WORLD place (not a fantasy/imagined dream
    * world). Drives the TRAVELER wardrobe rule: on real places the cast are
    * VISITORS and must wear contemporary travel clothes, never the traditional/
@@ -891,6 +901,29 @@ function outfitSidesFor(input: CharacterSlotPipelineInput): OutfitSide[] {
   }));
 }
 
+/** WARDROBE section for the nightly garment axis (phase 8): the rolled garment + look per person, the anchor
+ *  (if any) demoted to inspiration, the gear escape, and the same never-basics rule as the register path. */
+function buildFashionGuidance(
+  input: CharacterSlotPipelineInput,
+  looks: ReadonlyArray<FashionPick | null>,
+  location: string,
+  travelerRule: string
+): string {
+  const dual = input.cast.length === 2;
+  const lines = outfitSidesFor(input)
+    .map((side, i) => (looks[i] ? renderFashionLine(side, looks[i]!) : ''))
+    .filter(Boolean)
+    .join('\n');
+  // A holiday row's attire is 63% trousers ("charcoal wool trousers", "She in … wool trousers"): the first cut
+  // said "inspiration for colours, textures and accessories only" and Sonnet still copied the trousers 2/18.
+  const anchor = input.wardrobeAnchor
+    ? ` On-location inspiration: "${input.wardrobeAnchor}". Borrow only its colours, textures and accessories, never its garments: each person's garment and look below decide what they wear.`
+    : '';
+  return `WARDROBE — you are the COSTUME DESIGNER dressing ${dual ? 'both people' : 'the person'} in a film shot at "${location}". Each look below was chosen for this render: build it for this exact place and its weather, make it flattering and eye-catching, and name real garments, colours and materials.${anchor}
+${lines}
+${GARMENT_GEAR_WINS} NEVER everyday basics: no hoodie, henley, t-shirt, fleece, cargo pants, joggers, sweatpants, puffer vest, generic sneakers, and never the words casual, comfortable, practical or everyday — this is a DREAM, the outfit is part of the story.${travelerRule}`;
+}
+
 /** The plan is live only when there is no holiday costume lock (the lock decides the whole outfit). */
 function activeOutfitPlan(input: CharacterSlotPipelineInput): OutfitPlan | null {
   const locked = !!input.costumeLock && input.costumeLock.length === input.cast.length;
@@ -955,33 +988,39 @@ export function buildSlotBrief(input: CharacterSlotPipelineInput): string {
   const costumeLock =
     input.costumeLock && input.costumeLock.length === input.cast.length ? input.costumeLock : null;
   const outfitPlan = activeOutfitPlan(input);
+  const fashionLooks =
+    !outfitPlan && !costumeLock && input.fashionLooks && input.fashionLooks.some((f) => !!f)
+      ? input.fashionLooks
+      : null;
   const climateGuidance = outfitPlan
     ? buildOutfitPlanGuidance(input, outfitPlan, location, travelerRule)
-    : costumeLock
-      ? `WARDROBE — HOLIDAY COSTUME LOCK: this is a costume party and each character's costume is already DECIDED. ${
-          costumeLock.length === 2
-            ? `LEFT wears EXACTLY: "${costumeLock[0]}". RIGHT wears EXACTLY: "${costumeLock[1]}".`
-            : `The character wears EXACTLY: "${costumeLock[0]}".`
-        } The exact costume text is applied by code, so write the wardrobe field(s) as a SHORT reference only (3-6 words, e.g. "the vampire countess costume") and spend your words on the scene and the action. Let the scene, mood, props and action play off the costumes — the cape catching the lantern light, the hat brim in the fog. The costume is clothing, headwear and props only; the face stays fully clear by code.`
-      : (input.wardrobeAnchor
-          ? `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: flattering, cool, and distinctive, in pieces true to the period / setting / cultural register of "${location}". One on-location inspiration to draw from: "${input.wardrobeAnchor}". Adapt it into something bold and attractive for each character — flattering silhouette, rich materials, standout details, styled hair — or invent something equally on-location and eye-catching. NEVER plain, dowdy, mundane, frumpy, drab, or merely "historically accurate" — this is a DREAM, so make the outfit sing while staying true to the setting. Avoid generic "linen shirt + chinos" defaults.`
-          : `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: tailored to this exact place, its climate and its register, and built to STAND OUT — a signature piece, a flattering silhouette, named colours and materials, styled hair. A tropical reef, an alpine village, a desert ruin, a modern city and an arctic glacier each call for a different costume. ${
-              input.activityWardrobe
-                ? // ACTIVITY-ANCHORED (Create). The sentence this replaces named an unrelated
-                  // aesthetic ("retro resort glamour") and Sonnet dutifully merged it with the
-                  // place, which is how a snowboarder ends up in a cravat. The activity is the
-                  // honest anchor, and Create already has it from the prompt splitter.
-                  //
-                  // The second half is NOT decoration: PLAIN_CLOTHES hard-bans fleece, puffer
-                  // vest, sweater, pullover, jeans, chinos and "practical" in a wardrobe field.
-                  // Asking for functional dress without naming the designed synonyms sends
-                  // Sonnet straight at those words, burns both retries and lands on the generic
-                  // couture fallback — strictly worse than the bug. So the ban list stays
-                  // untouched and the brief routes around it instead.
-                  `DRESS THEM FOR WHAT THEY ARE DOING${input.action ? `: "${input.action}"` : ''}. Name the real garment the activity demands — a snow shell and insulated trousers, a wetsuit, riding boots, chef's whites, a ballgown — and THEN make it beautiful: cut, materials, one signature detail. Reach for the elevated name, never the basic one (a brushed midlayer not a fleece, a quilted down gilet not a puffer vest, a cable-knit roll-neck not a sweater). PALETTE for this render: ${wardrobePalette} — SPLIT it between them, each leading with a DIFFERENT colour from that range so they coordinate without matching. They are a couple on the same outing, not a matching set: never the same colour head to toe on both. CUT for this render: ${wardrobeCut} — vary the SHAPE, not just the colour, and pick a different GARMENT for each of them; most activities have several correct answers (in snow: a shell, a one-piece suit, bib-and-brace, a parka, an anorak, a gilet over a midlayer), so do not default to the most obvious one twice.`
-                : `WARDROBE REGISTER for this render: ${wardrobeMood}.`
-            } NEVER everyday basics: no hoodie, henley, t-shirt, fleece, cargo pants, joggers, sweatpants, puffer vest, generic sneakers, and never the words casual, comfortable, practical or everyday — this is a DREAM, the outfit is part of the story.`) +
-        travelerRule;
+    : fashionLooks
+      ? buildFashionGuidance(input, fashionLooks, location, travelerRule)
+      : costumeLock
+        ? `WARDROBE — HOLIDAY COSTUME LOCK: this is a costume party and each character's costume is already DECIDED. ${
+            costumeLock.length === 2
+              ? `LEFT wears EXACTLY: "${costumeLock[0]}". RIGHT wears EXACTLY: "${costumeLock[1]}".`
+              : `The character wears EXACTLY: "${costumeLock[0]}".`
+          } The exact costume text is applied by code, so write the wardrobe field(s) as a SHORT reference only (3-6 words, e.g. "the vampire countess costume") and spend your words on the scene and the action. Let the scene, mood, props and action play off the costumes — the cape catching the lantern light, the hat brim in the fog. The costume is clothing, headwear and props only; the face stays fully clear by code.`
+        : (input.wardrobeAnchor
+            ? `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: flattering, cool, and distinctive, in pieces true to the period / setting / cultural register of "${location}". One on-location inspiration to draw from: "${input.wardrobeAnchor}". Adapt it into something bold and attractive for each character — flattering silhouette, rich materials, standout details, styled hair — or invent something equally on-location and eye-catching. NEVER plain, dowdy, mundane, frumpy, drab, or merely "historically accurate" — this is a DREAM, so make the outfit sing while staying true to the setting. Avoid generic "linen shirt + chinos" defaults.`
+            : `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: tailored to this exact place, its climate and its register, and built to STAND OUT — a signature piece, a flattering silhouette, named colours and materials, styled hair. A tropical reef, an alpine village, a desert ruin, a modern city and an arctic glacier each call for a different costume. ${
+                input.activityWardrobe
+                  ? // ACTIVITY-ANCHORED (Create). The sentence this replaces named an unrelated
+                    // aesthetic ("retro resort glamour") and Sonnet dutifully merged it with the
+                    // place, which is how a snowboarder ends up in a cravat. The activity is the
+                    // honest anchor, and Create already has it from the prompt splitter.
+                    //
+                    // The second half is NOT decoration: PLAIN_CLOTHES hard-bans fleece, puffer
+                    // vest, sweater, pullover, jeans, chinos and "practical" in a wardrobe field.
+                    // Asking for functional dress without naming the designed synonyms sends
+                    // Sonnet straight at those words, burns both retries and lands on the generic
+                    // couture fallback — strictly worse than the bug. So the ban list stays
+                    // untouched and the brief routes around it instead.
+                    `DRESS THEM FOR WHAT THEY ARE DOING${input.action ? `: "${input.action}"` : ''}. Name the real garment the activity demands — a snow shell and insulated trousers, a wetsuit, riding boots, chef's whites, a ballgown — and THEN make it beautiful: cut, materials, one signature detail. Reach for the elevated name, never the basic one (a brushed midlayer not a fleece, a quilted down gilet not a puffer vest, a cable-knit roll-neck not a sweater). PALETTE for this render: ${wardrobePalette} — SPLIT it between them, each leading with a DIFFERENT colour from that range so they coordinate without matching. They are a couple on the same outing, not a matching set: never the same colour head to toe on both. CUT for this render: ${wardrobeCut} — vary the SHAPE, not just the colour, and pick a different GARMENT for each of them; most activities have several correct answers (in snow: a shell, a one-piece suit, bib-and-brace, a parka, an anorak, a gilet over a midlayer), so do not default to the most obvious one twice.`
+                  : `WARDROBE REGISTER for this render: ${wardrobeMood}.`
+              } NEVER everyday basics: no hoodie, henley, t-shirt, fleece, cargo pants, joggers, sweatpants, puffer vest, generic sneakers, and never the words casual, comfortable, practical or everyday — this is a DREAM, the outfit is part of the story.`) +
+          travelerRule;
 
   const forbiddenList = `━━━ FORBIDDEN IN ANY FIELD — your output will be rejected if you violate ━━━
 - Camera / lens / framing: close-up, wide shot, medium shot, low angle, 85mm, depth of field, fisheye
@@ -2167,6 +2206,24 @@ export async function runCharacterSlotPipeline(
       }
     });
   }
+
+  // Phase 8: a garment WE rolled (Create plan or nightly fashion look) never ships as palazzos / wide-legs.
+  // Unset families → nothing here runs (golden-safe).
+  outfitSidesFor(input).forEach((side, i) => {
+    if (!slots) return;
+    const rolled = outfitPlan
+      ? !!personFor(side.role)?.garmentFamily
+      : !!(input.fashionLooks && input.fashionLooks[i] && input.fashionLooks[i]!.family);
+    if (!rolled) return;
+    const field = fieldOf(i);
+    const text = wardrobeOf(slots, field);
+    if (text === null) return;
+    const slim = slimWideLegs(text);
+    if (slim.changed) {
+      slots = withWardrobe(slots, field, slim.text);
+      fallbackReasons.push(`outfit_wide_leg_slimmed:${side.label}`);
+    }
+  });
 
   // Scene-first action (SCENE_FIRST_ACTION_PLAN.md): the authored beat ships ONLY if it passes
   // the swap-safe envelope; otherwise it is dropped and assembly falls back to `input.action`

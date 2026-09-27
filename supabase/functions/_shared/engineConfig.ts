@@ -17,6 +17,7 @@ import {
   DEFAULT_PET_WORDS,
   DEFAULT_NAME_STOP_WORDS,
 } from './selfInsertDetector.ts';
+import { DEFAULT_GARMENT_WEIGHTS, normalizeGarmentWeights } from './outfitPlan.ts';
 
 /** Nightly LOOKS path mode (mig 502): 'off' = legacy chain, 'shadow' = legacy + style_shadow stamps, 'on' = the contract decides. */
 export type NightlyLooksMode = 'off' | 'shadow' | 'on';
@@ -197,6 +198,17 @@ export interface EngineConfig {
   createOutfitPatternPct: number;
   /** Accounts that get both outfit switches while they are globally off (review before the flip). */
   createOutfitPreviewUserIds: string[];
+  /** COSTUMES (phase 8, mig 563): the outfit reader also reads the character someone is cast as and the
+   *  style asked for; armor keeps its own materials. Preview accounts get it too. */
+  createOutfitCostumeRead: boolean;
+  /** GARMENT AXIS (phase 8, mig 563): women nobody dressed get an authored garment family, and the calmer
+   *  V2 cut pool. Preview accounts get it too. */
+  createOutfitGarmentRoll: boolean;
+  /** Weights for the women's garment families (outfitPlan.ts WOMEN_GARMENT_FAMILIES), keyed by family. */
+  outfitGarmentWeights: Record<string, number>;
+  /** Nightly garment axis (phase 8, mig 563): the same families on nightly's wardrobe slot. LIVE since mig
+   *  564 on Kevin's word (restore-point rule); `force_garment_roll` overrides per request for QA. */
+  nightlyGarmentRoll: boolean;
   /** SWAP CAPACITY GATE (mig 549, NIGHTLY_ROBUSTNESS_PLAN.md): dual swaps wait for a free Fly slot. */
   swapGateEnabled: boolean;
   /** Longest a dual swap waits for a slot before `swap_capacity_busy` (ms). */
@@ -305,6 +317,10 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   createOutfitSeparateCutPct: 50,
   createOutfitPatternPct: 50,
   createOutfitPreviewUserIds: [],
+  createOutfitCostumeRead: false,
+  createOutfitGarmentRoll: false,
+  outfitGarmentWeights: { ...DEFAULT_GARMENT_WEIGHTS },
+  nightlyGarmentRoll: false,
   swapGateEnabled: false,
   swapGateMaxWaitMs: 45_000,
   nightlySwapCapacityRetries: 0,
@@ -484,6 +500,10 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
           (x: unknown): x is string => typeof x === 'string'
         )
       : [],
+    createOutfitCostumeRead: data.create_outfit_costume_read === true,
+    createOutfitGarmentRoll: data.create_outfit_garment_roll === true,
+    outfitGarmentWeights: normalizeGarmentWeights(data.outfit_garment_weights),
+    nightlyGarmentRoll: data.nightly_garment_roll === true,
     swapGateEnabled: data.swap_gate_enabled === true,
     swapGateMaxWaitMs: Number.isFinite(Number(data.swap_gate_max_wait_ms))
       ? Math.max(0, Math.min(120_000, Number(data.swap_gate_max_wait_ms)))
