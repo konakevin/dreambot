@@ -252,3 +252,34 @@ describe('saveHd — on-demand upscale (server resolve)', () => {
     expect(mockSaveUrlToPhotos).not.toHaveBeenCalled();
   });
 });
+
+describe('buildPostActionRows — "Use as profile picture"', () => {
+  const has = (rows: Row[], label: string) => rows.some((r) => r.label === label);
+
+  it('shows when offered and runs the handler', () => {
+    const onUseAsAvatar = jest.fn();
+    const rows = buildPostActionRows({ id: 'p1', imageUrl: 'https://img/orig.jpg', onUseAsAvatar });
+    pressRow(rows, 'Use as profile picture');
+    expect(onUseAsAvatar).toHaveBeenCalledTimes(1);
+  });
+
+  it('is absent when not offered, and never on an album', () => {
+    expect(
+      has(
+        buildPostActionRows({ id: 'p1', imageUrl: 'https://img/orig.jpg' }),
+        'Use as profile picture'
+      )
+    ).toBe(false);
+    expect(
+      has(
+        buildPostActionRows({
+          id: 'p1',
+          imageUrl: 'https://img/orig.jpg',
+          isGallery: true,
+          onUseAsAvatar: jest.fn(),
+        }),
+        'Use as profile picture'
+      )
+    ).toBe(false);
+  });
+});

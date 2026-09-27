@@ -50,6 +50,7 @@ import { useToggleBlock } from '@/hooks/useBlockUser';
 import { useBotUsers } from '@/hooks/useBotUsers';
 import { useProfileHeadersEnabled } from '@/hooks/useProfileHeaders';
 import { headerPickerHref } from '@/lib/profileHeaders';
+import { avatarFrameHref } from '@/lib/avatarPicture';
 import { usePinPost } from '@/hooks/usePinPost';
 import { useDissolveAlbum } from '@/hooks/useDeletePost';
 import { useRepostIds } from '@/hooks/useRepostIds';
@@ -1037,6 +1038,13 @@ export const DreamCard = memo(function DreamCard({
                         ownerUsername: item.username ?? null,
                         ownerAvatarUrl: headerBot?.avatar_url ?? null,
                       })
+                    )
+                : undefined,
+            onUseAsAvatar:
+              isOwnPost && !isGallery
+                ? () =>
+                    nav.push(
+                      avatarFrameHref({ uri: item.image_url_hq ?? item.image_url, source: 'dream' })
                     )
                 : undefined,
             onBlock: () => toggleBlock.mutate({ userId: item.user_id, currentlyBlocked: false }),

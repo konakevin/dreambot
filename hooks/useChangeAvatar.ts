@@ -1,48 +1,39 @@
 import { useCallback } from 'react';
 import * as ImagePicker from 'expo-image-picker';
+import { router } from 'expo-router';
 import { useQueryClient } from '@tanstack/react-query';
 import { showAlert } from '@/components/CustomAlert';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
-import { useAvatarUpload } from '@/hooks/useAvatarUpload';
-import { showAvatarConfirm } from '@/components/AvatarConfirm';
+import { avatarFrameHref } from '@/lib/avatarPicture';
 
 /**
- * Change-avatar flow — the three actions (pick from library / take photo /
- * delete) + upload. Extracted from the old Settings avatar hero so the Profile
- * screen owns it: changing your picture belongs with your profile.
+ * Change-avatar flow: the actions behind the profile-picture sheet (Profile tab and
+ * Edit Profile both render it via photoSourceRows). Choose from your dreams, choose
+ * from the library, take a photo, or delete.
  *
- * The action-picker UI is now a PostActionSheet rendered by the Profile screen
- * (matches the dream-card long-press sheet), so this hook exposes the raw
- * actions instead of showing an alert. `hasAvatar` lets the caller gate the
- * "Delete Photo" row (nothing to delete when there's no avatar). Returns
- * `uploading` so callers can show progress.
+ * Every picture goes through Move and Scale (app/avatarFrame.tsx), which frames it in
+ * the circle, crops it on the phone, and uploads it. This hook only opens the right
+ * screen; it never uploads itself. `hasAvatar` gates the "Delete photo" row.
  */
 export function useChangeAvatar(currentAvatarUrl: string | null | undefined) {
   const user = useAuthStore((s) => s.user);
   const queryClient = useQueryClient();
-  const { mutate: uploadAvatar, isPending: uploading } = useAvatarUpload();
+
+  const chooseFromDreams = useCallback(() => {
+    router.push('/avatarPicker');
+  }, []);
 
   const chooseFromLibrary = useCallback(async () => {
-    // No allowsEditing → iOS uses the modern PHPicker: faster to open and needs
-    // no library-permission prompt (the avatar renders cover-cropped in a
-    // circle, so a square crop step isn't needed). Loop so "Choose another" in
-    // the confirm re-opens the picker.
-    for (;;) {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        quality: 0.8,
-      });
-      if (result.canceled || !result.assets[0]) return;
-      const choice = await showAvatarConfirm(result.assets[0].uri);
-      if (choice === 'use') {
-        uploadAvatar(result.assets[0].uri);
-        return;
-      }
-      if (choice === 'cancel') return;
-      // 'retry' → loop, re-open the picker
-    }
-  }, [uploadAvatar]);
+    // No allowsEditing → iOS uses the modern PHPicker: faster to open and needs no
+    // library-permission prompt. Move and Scale does the framing.
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      quality: 0.9,
+    });
+    if (result.canceled || !result.assets[0]) return;
+    router.push(avatarFrameHref({ uri: result.assets[0].uri, source: 'library' }));
+  }, []);
 
   const takePhoto = useCallback(async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -50,19 +41,10 @@ export function useChangeAvatar(currentAvatarUrl: string | null | undefined) {
       showAlert('Permission needed', 'Allow camera access in Settings.');
       return;
     }
-    // Loop so "Choose another" in the confirm re-opens the camera.
-    for (;;) {
-      const result = await ImagePicker.launchCameraAsync({ quality: 0.8 });
-      if (result.canceled || !result.assets[0]) return;
-      const choice = await showAvatarConfirm(result.assets[0].uri);
-      if (choice === 'use') {
-        uploadAvatar(result.assets[0].uri);
-        return;
-      }
-      if (choice === 'cancel') return;
-      // 'retry' → loop, re-open the camera
-    }
-  }, [uploadAvatar]);
+    const result = await ImagePicker.launchCameraAsync({ quality: 0.9 });
+    if (result.canceled || !result.assets[0]) return;
+    router.push(avatarFrameHref({ uri: result.assets[0].uri, source: 'camera' }));
+  }, []);
 
   const deletePhoto = useCallback(() => {
     showAlert('Delete Photo', 'Are you sure you want to remove your profile picture?', [
@@ -89,10 +71,10 @@ export function useChangeAvatar(currentAvatarUrl: string | null | undefined) {
   }, [user, queryClient]);
 
   return {
+    chooseFromDreams,
     chooseFromLibrary,
     takePhoto,
     deletePhoto,
     hasAvatar: !!currentAvatarUrl,
-    uploading,
   };
 }

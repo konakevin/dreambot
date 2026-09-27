@@ -12,14 +12,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  ActivityIndicator,
-  Platform,
-  Pressable,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Platform, Pressable } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { KeyboardSwipeDismiss } from '@/components/KeyboardSwipeDismiss';
 import { Text, TextInput } from '@/components/AppText';
@@ -27,14 +20,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, horizontalScale } from '@/lib/responsive';
 import { useAuthStore } from '@/store/auth';
 import { useOnboardingStore } from '@/store/onboarding';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
-import { useAvatarUpload } from '@/hooks/useAvatarUpload';
-import { showAvatarConfirm } from '@/components/AvatarConfirm';
+import { useChangeAvatar } from '@/hooks/useChangeAvatar';
 import { useAutoSaveProfile } from '@/hooks/useAutoSaveProfile';
 import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
@@ -79,7 +70,7 @@ export default function EditProfileScreen() {
   const user = useAuthStore((s) => s.user);
   const queryClient = useQueryClient();
   const { data: profile, isLoading } = usePublicProfile(user?.id ?? '');
-  const { mutate: uploadAvatar, isPending: avatarUploading } = useAvatarUpload();
+  const { chooseFromDreams, chooseFromLibrary, takePhoto } = useChangeAvatar(profile?.avatar_url);
   // Dreamscape header (migration 554): the header's permanent home.
   const headersEnabled = useProfileHeadersEnabled();
 
@@ -184,49 +175,6 @@ export default function EditProfileScreen() {
   // profile tab uses for its avatar), replacing the old alert menu.
   const [photoSheetOpen, setPhotoSheetOpen] = useState(false);
 
-  async function chooseFromLibrary() {
-    // No allowsEditing → iOS uses the modern PHPicker: faster to open and
-    // needs no library-permission prompt (the avatar renders cover-cropped
-    // in a circle, so a square crop step isn't needed). Loop so "Choose
-    // another" in the confirm re-opens the picker.
-    for (;;) {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        quality: 0.8,
-      });
-      if (result.canceled || !result.assets[0]) return;
-      const choice = await showAvatarConfirm(result.assets[0].uri);
-      if (choice === 'use') {
-        uploadAvatar(result.assets[0].uri);
-        return;
-      }
-      if (choice === 'cancel') return;
-      // 'retry' → loop, re-open the picker
-    }
-  }
-
-  async function takePhoto() {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-      showAlert('Permission needed', 'Allow camera access in Settings.');
-      return;
-    }
-    // Loop so "Choose another" in the confirm re-opens the camera.
-    for (;;) {
-      const result = await ImagePicker.launchCameraAsync({
-        quality: 0.8,
-      });
-      if (result.canceled || !result.assets[0]) return;
-      const choice = await showAvatarConfirm(result.assets[0].uri);
-      if (choice === 'use') {
-        uploadAvatar(result.assets[0].uri);
-        return;
-      }
-      if (choice === 'cancel') return;
-      // 'retry' → loop, re-open the camera
-    }
-  }
-
   function handleChangePhoto() {
     setPhotoSheetOpen(true);
   }
@@ -273,11 +221,6 @@ export default function EditProfileScreen() {
               <Text style={styles.avatarInitial}>
                 {(profile?.username || '?')[0]?.toUpperCase() ?? '?'}
               </Text>
-            </View>
-          )}
-          {avatarUploading && (
-            <View style={styles.avatarSpinner}>
-              <ActivityIndicator color="#FFF" />
             </View>
           )}
         </TouchableOpacity>
@@ -423,6 +366,7 @@ export default function EditProfileScreen() {
         title="Profile picture"
         titleImageUrl={profile?.avatar_url ?? null}
         rows={photoSourceRows({
+          onDreams: chooseFromDreams,
           onLibrary: () => void chooseFromLibrary(),
           onCamera: () => void takePhoto(),
         })}
@@ -535,13 +479,6 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: fontScale(36),
     fontWeight: '700',
-  },
-  avatarSpinner: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    borderRadius: 48,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   changePhotoText: {
     color: colors.accent,

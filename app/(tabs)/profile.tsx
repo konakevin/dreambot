@@ -467,13 +467,8 @@ export default function ProfileScreen() {
     ? Math.max(0, headerHeight(winW, winH) - insets.top - TOP_BAR_CONTENT_H)
     : 0;
   // Change-avatar action sheet (under the avatar) — moved here from Settings.
-  const {
-    chooseFromLibrary,
-    takePhoto,
-    deletePhoto,
-    hasAvatar,
-    uploading: avatarUploading,
-  } = useChangeAvatar(profile?.avatar_url);
+  const { chooseFromDreams, chooseFromLibrary, takePhoto, deletePhoto, hasAvatar } =
+    useChangeAvatar(profile?.avatar_url);
   const tabBarHeight = useBottomTabBarHeight();
   // Render dock clearance — added to the grid / followers list / floating
   // selection bar so none sit under the dock. 0 at rest.
@@ -580,6 +575,7 @@ export default function ProfileScreen() {
       titleImageUrl={profile?.avatar_url ? avatarUrl(profile.avatar_url) : null}
       bottomInset={tabBarHeight}
       rows={photoSourceRows({
+        onDreams: chooseFromDreams,
         onLibrary: chooseFromLibrary,
         onCamera: takePhoto,
         onDelete: hasAvatar ? deletePhoto : undefined,
@@ -763,7 +759,6 @@ export default function ProfileScreen() {
       <ProfileHeader
         variant="own"
         avatar_url={profile?.avatar_url ?? null}
-        avatarUploading={avatarUploading}
         onAvatarPress={() => setShowAvatarPreview(true)}
         username={user?.user_metadata?.username ?? 'you'}
         display_name={profile?.display_name ?? null}

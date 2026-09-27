@@ -16,7 +16,6 @@ const DIALOG_FILES = [
   'components/ConfirmDialog.tsx',
   'app/dream/loading.tsx',
   'components/DreamFailureCard.tsx',
-  'components/AvatarConfirm.tsx',
   'components/UsernameNudge.tsx',
   'components/ForceUpdateGate.tsx',
   'components/PremiumGateSheet.tsx',

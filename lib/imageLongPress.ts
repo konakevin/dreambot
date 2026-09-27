@@ -299,6 +299,9 @@ export interface PostActionSheetOpts extends LongPressOpts {
   /** "Use as profile header" (migration 554) — own dreams and bot posts, when
    *  profile headers are enabled. Present ⇒ the row shows (never on albums). */
   onUseAsHeader?: () => void;
+  /** "Use as profile picture" — your own dreams only. Present ⇒ the row shows
+   *  (never on albums). Opens Move and Scale with this dream. */
+  onUseAsAvatar?: () => void;
   /** Album member image URLs (native res). Present ⇒ a "Save album to Photos"
    *  row that downloads ALL of them at once. Passed by BOTH the grid thumb and
    *  the dream card (Kevin 2026-07-11). */
@@ -448,6 +451,17 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
       icon: 'image-outline',
       group: 'primary',
       onPress: opts.onUseAsHeader,
+    });
+  }
+
+  // Use as profile picture — opens Move and Scale with this dream.
+  if (opts.onUseAsAvatar && !opts.isGallery) {
+    rows.push({
+      key: 'use-as-avatar',
+      label: 'Use as profile picture',
+      icon: 'person-circle-outline',
+      group: 'primary',
+      onPress: opts.onUseAsAvatar,
     });
   }
 

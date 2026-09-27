@@ -16,6 +16,7 @@ import * as nav from '@/lib/navigate';
 import { buildPostActionRows } from '@/lib/imageLongPress';
 import { useProfileHeadersEnabled } from '@/hooks/useProfileHeaders';
 import { headerPickerHref } from '@/lib/profileHeaders';
+import { avatarFrameHref } from '@/lib/avatarPicture';
 import { useDreamAgain } from '@/hooks/useDreamAgain';
 import { PostActionSheet } from '@/components/PostActionSheet';
 import { EditDescriptionModal } from '@/components/EditDescriptionModal';
@@ -278,6 +279,16 @@ export const PostTile = memo(function PostTile({
                           uploadId: item.id,
                           imageUrl: item.image_url_display ?? item.image_url,
                           own: true,
+                        })
+                      )
+                  : undefined,
+              onUseAsAvatar:
+                isOwn && !isGallery
+                  ? () =>
+                      nav.push(
+                        avatarFrameHref({
+                          uri: item.image_url_hq ?? item.image_url,
+                          source: 'dream',
                         })
                       )
                   : undefined,

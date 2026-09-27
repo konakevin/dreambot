@@ -42,14 +42,16 @@ export interface HeaderSuggestion {
   isPrivate: boolean;
 }
 
-/** One random draw. `exclude` keeps Shuffle from handing back the set on screen. */
+/** One random draw. `exclude` keeps Shuffle from handing back the set on screen.
+ *  `limit` defaults to the header picker's draw (the profile-picture picker draws 12). */
 export async function fetchHeaderDraw(
   source: HeaderSource,
-  exclude: string[] = []
+  exclude: string[] = [],
+  limit: number = HEADER_DRAW_SIZE
 ): Promise<HeaderSuggestion[]> {
   const { data, error } = await supabase.rpc('get_header_suggestions', {
     ...sourceRpcArgs(source),
-    p_limit: HEADER_DRAW_SIZE,
+    p_limit: limit,
     p_exclude: exclude,
   });
   if (error) throw error;

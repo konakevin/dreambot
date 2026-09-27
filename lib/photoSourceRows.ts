@@ -3,8 +3,9 @@
  * every photo-source sheet (Create dream photo, profile avatar, edit-profile
  * avatar) is identical by construction: same order, labels, and icons.
  *
- * Order: library first (most users pick an existing photo), then camera, then an
- * optional destructive Delete. Labels are sentence case + icons are outline, to
+ * Order: for a profile picture, "Choose from your dreams" first (onDreams); then
+ * library (most users pick an existing photo), then camera, then an optional
+ * destructive Delete. Labels are sentence case + icons are outline, to
  * match the house style shared by every other PostActionSheet.
  *
  * Feed the result straight to `<PostActionSheet rows={...} />`.
@@ -12,6 +13,8 @@
 import type { PostActionRow } from '@/lib/imageLongPress';
 
 export function photoSourceRows(opts: {
+  /** When provided, a leading "Choose from your dreams" row (profile pictures). */
+  onDreams?: () => void;
   /** Open the photo library / gallery. */
   onLibrary: () => void;
   /** Open the camera. */
@@ -19,7 +22,17 @@ export function photoSourceRows(opts: {
   /** When provided, appends a destructive "Delete photo" row (e.g. avatars). */
   onDelete?: () => void;
 }): PostActionRow[] {
-  const rows: PostActionRow[] = [
+  const rows: PostActionRow[] = [];
+  if (opts.onDreams) {
+    rows.push({
+      key: 'dreams',
+      label: 'Choose from your dreams',
+      icon: 'sparkles-outline',
+      group: 'primary',
+      onPress: opts.onDreams,
+    });
+  }
+  rows.push(
     {
       key: 'library',
       label: 'Choose from library',
@@ -33,8 +46,8 @@ export function photoSourceRows(opts: {
       icon: 'camera-outline',
       group: 'primary',
       onPress: opts.onCamera,
-    },
-  ];
+    }
+  );
   if (opts.onDelete) {
     rows.push({
       key: 'delete',
