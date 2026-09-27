@@ -12,8 +12,8 @@ import {
 } from '@/lib/profileHeaders';
 
 describe('headerHeight', () => {
-  it('is 336pt at the iPhone-14 base width', () => {
-    expect(headerHeight(390, 844)).toBe(336);
+  it('is 300pt at the iPhone-14 base width', () => {
+    expect(headerHeight(390, 844)).toBe(300);
   });
   it('caps on wide screens so the header never takes over an iPad', () => {
     const h = headerHeight(1024, 1366);

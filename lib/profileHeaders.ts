@@ -9,8 +9,11 @@
  * use these same functions, so what a member positions is what everyone sees.
  */
 
-/** Header height / width at the iPhone-14 base (390pt wide → 336pt tall). */
-export const HEADER_ASPECT = 336 / 390;
+/** Header height / width at the iPhone-14 base (390pt wide → 300pt tall). Was 336
+ *  (2026-09-25); trimmed 2026-09-26 so more of the grid shows above the fold while
+ *  keeping the art-first banner. Focal points are percentages, so every chosen
+ *  framing carries over. */
+export const HEADER_ASPECT = 300 / 390;
 /** Never taller than this share of the screen (iPad, landscape). */
 export const HEADER_MAX_SCREEN_FRACTION = 0.46;
 /** Pictures per random draw in the picker: 2 across × 5 down (the grid scrolls). */

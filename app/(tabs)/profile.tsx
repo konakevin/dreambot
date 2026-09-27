@@ -47,7 +47,7 @@ import { showAlert } from '@/components/CustomAlert';
 import { useBulkDeletePosts, useBulkMakePrivate } from '@/hooks/useDeletePost';
 import { useBulkUnsave, useBulkUnrepost } from '@/hooks/useBulkUnsaveUnrepost';
 import { AvatarPreviewModal } from '@/components/AvatarPreviewModal';
-import { colors } from '@/constants/theme';
+import { colors, ui } from '@/constants/theme';
 import { verticalScale, fontScale, useDeviceClass } from '@/lib/responsive';
 import { useProfileHeadersEnabled, useHeaderStripDismissed } from '@/hooks/useProfileHeaders';
 import { headerHeight } from '@/lib/profileHeaders';
@@ -646,6 +646,13 @@ export default function ProfileScreen() {
     extrapolate: 'clamp',
   });
 
+  // Over a banner image the top-right icons go WHITE with the feed side buttons'
+  // tight drop shadow (ui.sideIcon), so they read on light AND dark art (grey
+  // outlines vanished on bright banners, Kevin 2026-09-26). Still reads fine once
+  // the bar turns solid black on scroll. No banner: the plain grey icons.
+  const barIconColor = hasBanner ? '#FFFFFF' : colors.textSecondary;
+  const barIconShadow = hasBanner ? ui.sideIcon : undefined;
+
   // Sticky top bar — always pinned at the top of the screen, OUTSIDE the
   // FlatList. Background is solid so the scrolling grid content slides
   // beneath cleanly; the hairline bottom border fades in on scroll to
@@ -719,14 +726,20 @@ export default function ProfileScreen() {
             duplicate-outline (a + on stacked squares) — deliberately NOT the
             nav bar's add-circle ⊕, which creates a DREAM; this adds a POST. */}
             <TouchableOpacity onPress={() => nav.push('/post/new')} hitSlop={12}>
-              <Ionicons name="duplicate-outline" size={24} color={colors.textSecondary} />
+              <Ionicons
+                name="duplicate-outline"
+                size={24}
+                color={barIconColor}
+                style={barIconShadow}
+              />
             </TouchableOpacity>
             <TouchableOpacity onPress={handleInboxPress} hitSlop={12}>
               <View style={styles.inboxBubbleWrap}>
                 <Ionicons
                   name={unreadCount > 0 ? 'notifications' : 'notifications-outline'}
                   size={26}
-                  color={unreadCount > 0 ? colors.accent : colors.textSecondary}
+                  color={unreadCount > 0 ? colors.accent : barIconColor}
+                  style={barIconShadow}
                 />
                 {unreadCount > 0 && (
                   <View style={styles.inboxBadge} pointerEvents="none">
@@ -738,7 +751,12 @@ export default function ProfileScreen() {
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => nav.push('/settings')} hitSlop={12}>
-              <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
+              <Ionicons
+                name="settings-outline"
+                size={22}
+                color={barIconColor}
+                style={barIconShadow}
+              />
             </TouchableOpacity>
           </View>
         </>
