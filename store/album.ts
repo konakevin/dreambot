@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { DreamPostItem } from '@/components/DreamCard';
 import type { PostGridSource } from '@/components/PostGrid';
+import type { AlbumQueryOpts } from '@/lib/albumPaging';
 
 interface AlbumStore {
   ids: string[];
@@ -22,6 +23,12 @@ interface AlbumStore {
    */
   albumSource: PostGridSource | null;
   /**
+   * The grid's Newest/Oldest + month album at tap time, so the photo detail screen
+   * re-subscribes to the query in the SAME order (a different sort or month is a
+   * different cache entry, and paging the wrong one reshuffles what you swipe through).
+   */
+  albumOpts: AlbumQueryOpts;
+  /**
    * The post the user is currently focused on inside an album/detail view.
    * Updated when a tile is tapped (initial post) and as the user scrolls
    * through the FullScreenFeed (onIndexChange). Read by PostGrid on focus
@@ -32,7 +39,7 @@ interface AlbumStore {
   currentPostId: string | null;
   setAlbum: (ids: string[]) => void;
   setAlbumPosts: (posts: DreamPostItem[]) => void;
-  setAlbumSource: (source: PostGridSource | null) => void;
+  setAlbumSource: (source: PostGridSource | null, opts?: AlbumQueryOpts) => void;
   setCurrentPostId: (id: string | null) => void;
   clearAlbum: () => void;
 }
@@ -41,10 +48,12 @@ export const useAlbumStore = create<AlbumStore>((set) => ({
   ids: [],
   posts: [],
   albumSource: null,
+  albumOpts: {},
   currentPostId: null,
   setAlbum: (ids) => set({ ids }),
   setAlbumPosts: (posts) => set({ posts }),
-  setAlbumSource: (source) => set({ albumSource: source }),
+  setAlbumSource: (source, opts = {}) => set({ albumSource: source, albumOpts: opts }),
   setCurrentPostId: (id) => set({ currentPostId: id }),
-  clearAlbum: () => set({ ids: [], posts: [], albumSource: null, currentPostId: null }),
+  clearAlbum: () =>
+    set({ ids: [], posts: [], albumSource: null, albumOpts: {}, currentPostId: null }),
 }));

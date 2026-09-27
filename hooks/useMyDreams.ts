@@ -8,17 +8,21 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { POST_SELECT, mapToDreamPost, castRows } from '@/lib/mapPost';
-
-const PAGE_SIZE = 18;
+import { ALBUM_PAGE_SIZE as PAGE_SIZE, albumPaging, type AlbumQueryOpts } from '@/lib/albumPaging';
+import { monthRange } from '@/lib/albumNav';
 
 /** Dreams album filter: all dreams / only posted (live on feed) / only private. */
 export type DreamsFilter = 'all' | 'posted' | 'private';
 
-export function useMyDreams(filter: DreamsFilter = 'all') {
+/** `opts.sort` flips the order (oldest first); `opts.month` opens one month as its own album.
+ *  Both default to today's behaviour: newest first, the whole album. */
+export function useMyDreams(filter: DreamsFilter = 'all', opts: AlbumQueryOpts = {}) {
   const userId = useAuthStore((s) => s.user?.id);
+  const sort = opts.sort ?? 'newest';
+  const month = opts.month ?? null;
 
   return useInfiniteQuery({
-    queryKey: ['my-dreams', userId, filter],
+    queryKey: ['my-dreams', userId, filter, sort, month],
     queryFn: async ({ pageParam }) => {
       const offset = pageParam as number;
       if (!userId) return { rows: [], offset, hasMore: false };
@@ -47,12 +51,22 @@ export function useMyDreams(filter: DreamsFilter = 'all') {
       // "Posted" the same way it jumps to the top of the public album
       // (Kevin 2026-09-04). 'all' and 'private' keep created_at — most
       // private rows have no posted_at to sort by.
+      // A drilled-in month album: only that month (UTC, like get_album_months).
+      const dateCol = filter === 'posted' ? 'posted_at' : 'created_at';
+      if (month) {
+        const r = monthRange(month);
+        query = query.gte(dateCol, r.from).lt(dateCol, r.to);
+      }
+      // Oldest first, or inside a month: plain date order, pins don't float (pins are a
+      // newest-first idea for the whole album).
       query =
-        filter === 'posted'
-          ? query
-              .order('pinned_at', { ascending: false, nullsFirst: false })
-              .order('posted_at', { ascending: false, nullsFirst: false })
-          : query.order('created_at', { ascending: false });
+        sort === 'oldest' || month
+          ? query.order(dateCol, { ascending: sort === 'oldest', nullsFirst: false })
+          : filter === 'posted'
+            ? query
+                .order('pinned_at', { ascending: false, nullsFirst: false })
+                .order('posted_at', { ascending: false, nullsFirst: false })
+            : query.order('created_at', { ascending: false });
       const { data, error } = await query.range(offset, offset + PAGE_SIZE - 1);
       if (error) throw error;
       const rows = castRows(data).map((row) => ({
@@ -64,8 +78,7 @@ export function useMyDreams(filter: DreamsFilter = 'all') {
       // hasMore captured at fetch time — survives optimistic deletes.
       return { rows, offset, hasMore: rows.length === PAGE_SIZE };
     },
-    initialPageParam: 0,
-    getNextPageParam: (lastPage) => (lastPage?.hasMore ? lastPage.offset + PAGE_SIZE : undefined),
+    ...albumPaging(),
     enabled: !!userId,
     staleTime: 60_000,
   });

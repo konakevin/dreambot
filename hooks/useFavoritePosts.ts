@@ -3,20 +3,32 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { mapToDreamPost } from '@/lib/mapPost';
 import { asDbResult } from '@/lib/dbResult';
+import { monthRange } from '@/lib/albumNav';
+import type { AlbumQueryOpts } from '@/lib/albumPaging';
 
 const PAGE_SIZE = 18;
 
-export function useFavoritePosts(enabled = true) {
+/** Your bookmarked posts, ordered by when you saved them (`sort` flips that order;
+ *  `month` = only what you saved that month, the months view's month album). */
+export function useFavoritePosts(
+  enabled = true,
+  { sort = 'newest', month = null }: AlbumQueryOpts = {}
+) {
   const user = useAuthStore((s) => s.user);
   return useInfiniteQuery({
-    queryKey: ['favoritePosts', user?.id],
+    queryKey: ['favoritePosts', user?.id, sort, month],
     queryFn: async ({ pageParam }) => {
       const offset = pageParam as number;
-      const { data, error } = await supabase
+      let q = supabase
         .from('favorites')
         .select('uploads(*, users!uploads_user_id_fkey!inner(username, avatar_url, allow_reposts))')
-        .eq('user_id', user!.id)
-        .order('created_at', { ascending: false })
+        .eq('user_id', user!.id);
+      if (month) {
+        const { from, to } = monthRange(month);
+        q = q.gte('created_at', from).lt('created_at', to);
+      }
+      const { data, error } = await q
+        .order('created_at', { ascending: sort === 'oldest' })
         .range(offset, offset + PAGE_SIZE - 1);
       if (error) throw error;
       const rows = asDbResult<Record<string, unknown>[]>(data ?? [])

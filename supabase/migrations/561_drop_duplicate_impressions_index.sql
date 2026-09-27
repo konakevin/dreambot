@@ -1,0 +1,11 @@
+-- 561_drop_duplicate_impressions_index.sql — drop a duplicate index on post_impressions.
+-- 2026-09-26.
+--
+-- idx_post_impressions_user_upload (migration 388) is btree (user_id, upload_id), exactly the
+-- same as post_impressions_user_id_upload_id_key, the UNIQUE constraint's index. Queries that
+-- used it (feed seen-discounting, the bot Explorer / Haven't seen / new counts) use the unique
+-- index instead with identical plans. Saves ~3.7 MB and one index write per recorded view.
+--
+-- CONCURRENTLY (never blocks record_impression) can't run inside the migration runner's
+-- implicit transaction, so this file is applied alone with --no-record.
+DROP INDEX CONCURRENTLY IF EXISTS public.idx_post_impressions_user_upload;

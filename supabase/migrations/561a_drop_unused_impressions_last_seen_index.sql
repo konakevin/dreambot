@@ -1,0 +1,13 @@
+-- 561a_drop_unused_impressions_last_seen_index.sql — drop idx_post_impressions_user. 2026-09-26.
+--
+-- btree (user_id, last_seen DESC), migration 090. Nothing orders or ranges post_impressions by
+-- last_seen: get_feed only READS last_seen (days since seen), record_impression upserts on the
+-- unique (user_id, upload_id), and the bot Explorer / Haven't seen / new counts probe
+-- (user_id, upload_id). Its user_id prefix is already served by the unique index, and for the
+-- heaviest viewer the planner seq-scans anyway (10 ms for 32k rows). It was the table's largest
+-- index (9.6 MB) with 63 scans total, and every recorded view paid to maintain it.
+-- To restore: CREATE INDEX CONCURRENTLY idx_post_impressions_user
+--   ON public.post_impressions (user_id, last_seen DESC);
+--
+-- CONCURRENTLY can't run inside the migration runner's transaction: applied with --no-record.
+DROP INDEX CONCURRENTLY IF EXISTS public.idx_post_impressions_user;

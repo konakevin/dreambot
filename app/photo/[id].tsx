@@ -22,6 +22,10 @@ import { useBlockedIds } from '@/hooks/useBlockUser';
 import { useUserContextFeed } from '@/hooks/useUserContextFeed';
 import { useUserPosts } from '@/hooks/useUserPosts';
 import { useFavoritePosts } from '@/hooks/useFavoritePosts';
+import { useLikedPosts } from '@/hooks/useLikedPosts';
+import { useUserReposts } from '@/hooks/useUserReposts';
+import { useBotUnseenPosts } from '@/hooks/useAlbumDiscovery';
+import { viewerQuery } from '@/lib/albumSources';
 import { useMyDreams } from '@/hooks/useMyDreams';
 import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
 import { useHashtagPosts } from '@/hooks/useHashtagPosts';
@@ -139,29 +143,50 @@ export default function PhotoDetailScreen() {
 
   // Call all the source hooks (TanStack dedupes by queryKey; only the matching
   // one is enabled by source). Always-call is required for hook stability.
-  const ownPosts = useUserPosts(albumSource?.type === 'own');
-  const savedPosts = useFavoritePosts(albumSource?.type === 'saved');
-  const dreamsPosts = useMyDreams();
-  const userPosts = usePublicProfilePosts(
-    albumSource?.type === 'user' ? albumSource.userId : '',
-    albumSource?.type === 'user'
+  // Each gets the grid's sort + month album (albumOpts) and filter, so this is the SAME
+  // query the grid shows: another order or filter is another cache entry, and paging it
+  // would reshuffle the posts you're swiping through.
+  const albumOpts = useAlbumStore((s) => s.albumOpts);
+  // Which query to page: lib/albumSources.ts (tested). 🎲 shuffle is one fixed draw, so
+  // it pages nothing: the stashed posts are the whole album.
+  const vq = viewerQuery(albumSource);
+  const srcUserId =
+    albumSource?.type === 'user' || albumSource?.type === 'reposts' ? albumSource.userId : '';
+  const ownPosts = useUserPosts(vq === 'own', albumOpts);
+  const savedPosts = useFavoritePosts(vq === 'saved', albumOpts);
+  const likedPosts = useLikedPosts(vq === 'liked', albumOpts);
+  const repostPosts = useUserReposts(srcUserId, vq === 'reposts', albumOpts);
+  // useMyDreams is always enabled: another album's opts here would fetch a dreams query
+  // nobody shows, so it only gets them when the source IS the Dreams album.
+  const fromDreams = albumSource?.type === 'dreams';
+  const dreamsPosts = useMyDreams(
+    fromDreams ? (albumSource.dreamsFilter ?? 'all') : 'all',
+    fromDreams ? albumOpts : undefined
   );
+  const userPosts = usePublicProfilePosts(srcUserId, vq === 'user', albumOpts);
+  const unseenPosts = useBotUnseenPosts(srcUserId, albumOpts.sort ?? 'newest', vq === 'unseen');
   const hashtagPosts = useHashtagPosts(
     albumSource?.type === 'hashtag' ? albumSource.tag : '',
-    albumSource?.type === 'hashtag'
+    vq === 'hashtag'
   );
   const sourceQuery =
-    albumSource?.type === 'own'
+    vq === 'own'
       ? ownPosts
-      : albumSource?.type === 'saved'
+      : vq === 'saved'
         ? savedPosts
-        : albumSource?.type === 'dreams'
-          ? dreamsPosts
-          : albumSource?.type === 'user'
-            ? userPosts
-            : albumSource?.type === 'hashtag'
-              ? hashtagPosts
-              : null;
+        : vq === 'liked'
+          ? likedPosts
+          : vq === 'reposts'
+            ? repostPosts
+            : vq === 'dreams'
+              ? dreamsPosts
+              : vq === 'user'
+                ? userPosts
+                : vq === 'unseen'
+                  ? unseenPosts
+                  : vq === 'hashtag'
+                    ? hashtagPosts
+                    : null;
   const sourcePosts: DreamPostItem[] = useMemo(
     () => sourceQuery?.data?.pages.flatMap((p) => p.rows) ?? [],
     [sourceQuery?.data]

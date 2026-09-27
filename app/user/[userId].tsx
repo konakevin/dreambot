@@ -58,6 +58,8 @@ import { PostActionSheet } from '@/components/PostActionSheet';
 import { avatarUrl } from '@/lib/imageUrl';
 import { trackProfileViewed } from '@/lib/analytics';
 import type { FollowUser } from '@/hooks/useFollowersList';
+import { useBotVisit, markBotVisited } from '@/hooks/useAlbumDiscovery';
+import { BotBrowsePill, type BotBrowseMode } from '@/components/AlbumBrowse';
 
 type Tab = 'posts' | 'followers' | 'following';
 
@@ -128,6 +130,20 @@ export default function PublicProfileScreen() {
   // bots and don't need to block/report them (unfollow is enough).
   const { data: bots = [] } = useBotUsers();
   const isBot = bots.some((b) => b.id === userId);
+  // Bot browsing (ALBUM_DISCOVERY_PLAN.md): All · Haven't seen · 🎲, NEW marks + the
+  // caught-up line. The visit read happens on arrival (your previous visit), and the visit
+  // is recorded when you LEAVE, so the marks hold while you're here.
+  const [botMode, setBotMode] = useState<BotBrowseMode>('all');
+  const [botDraw, setBotDraw] = useState(0);
+  const { data: botVisit } = useBotVisit(userId, isBot);
+  const isBotRef = useRef(isBot);
+  isBotRef.current = isBot;
+  useEffect(
+    () => () => {
+      if (isBotRef.current) markBotVisited(userId);
+    },
+    [userId]
+  );
 
   // Avatar preview animation hooks — ALL must be before any early returns
   const SCREEN_W = Dimensions.get('window').width;
@@ -485,7 +501,6 @@ export default function PublicProfileScreen() {
         onFollowPress={handleFollow}
         onMorePress={() => setMoreOpen(true)}
         header={profileHeader}
-        onHeaderCreditPress={(creditUserId) => router.push(`/user/${creditUserId}`)}
       />
       {/* Posts / Reposts icon toggle — shown on every profile (not blocked).
           Reposts are viewable even on private accounts we don't follow, so the
@@ -714,7 +729,30 @@ export default function PublicProfileScreen() {
             {stickyTopBar}
             {canSeeCurrentGrid ? (
               <PostGrid
-                source={viewingReposts ? { type: 'reposts', userId } : { type: 'user', userId }}
+                source={
+                  viewingReposts
+                    ? { type: 'reposts', userId }
+                    : { type: 'user', userId, mode: isBot ? botMode : 'all', draw: botDraw }
+                }
+                // Album browsing on every profile: Newest/Oldest (Reposts: by repost date),
+                // Grid/Months on posts. Bots also get All · Haven't seen · 🎲.
+                albumControls={
+                  viewingReposts
+                    ? {}
+                    : {
+                        left: isBot ? (
+                          <BotBrowsePill
+                            mode={botMode}
+                            onMode={setBotMode}
+                            onShuffle={() => {
+                              setBotMode('shuffle');
+                              setBotDraw((d) => d + 1);
+                            }}
+                          />
+                        ) : undefined,
+                      }
+                }
+                botDiscovery={isBot ? (botVisit ?? null) : null}
                 emptyText={viewingReposts ? 'No reposts yet' : 'No posts yet'}
                 ListHeaderComponent={header}
                 highlightPostId={viewedPost}

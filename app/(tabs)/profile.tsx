@@ -41,6 +41,7 @@ import { minRefreshHold } from '@/lib/minRefresh';
 import { useRefreshGap } from '@/hooks/useRefreshGap';
 import { avatarUrl } from '@/lib/imageUrl';
 import { useChangeAvatar } from '@/hooks/useChangeAvatar';
+import { SegmentedPill } from '@/components/AlbumBrowse';
 import { useMyDreams, type DreamsFilter } from '@/hooks/useMyDreams';
 import { Toast } from '@/components/Toast';
 import { showAlert } from '@/components/CustomAlert';
@@ -67,6 +68,20 @@ type SavedFilter = 'bookmarked' | 'hearted';
 const SAFE_EDGES_WITH_BANNER: Edge[] = ['left', 'right', 'bottom'];
 /** Height of the top bar's content row (icons), below the status bar. */
 const TOP_BAR_CONTENT_H = verticalScale(44);
+
+/** The Dreams album filter (keys are useMyDreams' DreamsFilter). */
+const DREAMS_FILTERS = [
+  { key: 'all', label: 'All' },
+  { key: 'posted', label: 'Public' },
+  { key: 'private', label: 'Private' },
+] as const;
+
+/** The Saved album filter: icons instead of text, since Bookmarked / Hearted map onto
+ *  icons already on this screen (the tab row's bookmark, the post card's heart). */
+const SAVED_FILTERS = [
+  { key: 'bookmarked', label: 'Bookmarked', icon: 'bookmark-outline', activeIcon: 'bookmark' },
+  { key: 'hearted', label: 'Hearted', icon: 'heart-outline', activeIcon: 'heart' },
+] as const;
 
 export default function ProfileScreen() {
   const user = useAuthStore((s) => s.user);
@@ -420,11 +435,11 @@ export default function ProfileScreen() {
     }
   }, [bottomNavTab]);
 
-  // Switch the Dreams filter (in-memory only — see the reset effect above).
+  // Switch the Dreams filter (in-memory only — see the reset effect above). The pill
+  // gives the haptic tick.
   const applyDreamsFilter = useCallback(
     (next: DreamsFilter) => {
       if (next === dreamsFilter) return;
-      Haptics.selectionAsync();
       setDreamsFilter(next);
     },
     [dreamsFilter]
@@ -434,7 +449,6 @@ export default function ProfileScreen() {
   const applySavedFilter = useCallback(
     (next: SavedFilter) => {
       if (next === savedFilter) return;
-      Haptics.selectionAsync();
       setSavedFilter(next);
     },
     [savedFilter]
@@ -772,6 +786,25 @@ export default function ProfileScreen() {
 
   const { data: sparkleBalance = 0 } = useSparkleBalance();
 
+  // Dreams album filter (All · Public · Private). Lives in the grid's album controls row
+  // (PostGrid albumControls.left), beside Newest/Oldest and Grid/Months; the whole row is
+  // hidden while multi-selecting (you can't re-filter mid-selection).
+  const dreamsFilterPill = (
+    <SegmentedPill
+      options={DREAMS_FILTERS}
+      value={dreamsFilter}
+      onChange={(f) => applyDreamsFilter(f)}
+    />
+  );
+  // Saved album filter (Bookmarked · Hearted), in the same row beside Newest/Oldest.
+  const savedFilterPill = (
+    <SegmentedPill
+      options={SAVED_FILTERS}
+      value={savedFilter}
+      onChange={(f) => applySavedFilter(f)}
+    />
+  );
+
   const header = (
     <>
       <ProfileHeader
@@ -796,7 +829,6 @@ export default function ProfileScreen() {
         onChangePhoto={() => setShowPicSheet(true)}
         header={profileHeader}
         onHeaderPress={() => nav.push('/headerPicker')}
-        onHeaderCreditPress={(creditUserId) => nav.push(`/user/${creditUserId}`)}
         addHeaderStrip={
           headersEnabled && !profile?.header && !headerStripDismissed
             ? { onPress: () => nav.push('/headerPicker'), onDismiss: dismissHeaderStrip }
@@ -865,79 +897,6 @@ export default function ProfileScreen() {
         </View>
       )}
 
-      {/* Dreams album: a slim right-aligned All / Public / Private segmented
-          filter. The other albums show no subheader — the icons speak for
-          themselves. While MULTI-SELECTING, this row (the grid's own chrome,
-          sitting directly on the grid) BECOMES the selection bar — count on
-          the left, Done on the right — so it reads as the grid's edit mode,
-          not detached screen chrome (Kevin 2026-07-10: the top-left ✕ was
-          hard to associate with the grid). */}
-      {/* Dreams album filter — hidden while multi-selecting (the selection
-          count + Cancel now live in the always-visible top bar, and you can't
-          re-filter mid-selection anyway). */}
-      {activeTab === 'dreams' && !gridSelecting && (
-        <View style={styles.dreamsFilterRow}>
-          <View style={styles.segmented}>
-            {(['all', 'posted', 'private'] as const).map((f) => {
-              const active = dreamsFilter === f;
-              const label = f === 'all' ? 'All' : f === 'posted' ? 'Public' : 'Private';
-              return (
-                <TouchableOpacity
-                  key={f}
-                  style={[styles.segment, active && styles.segmentActive]}
-                  onPress={() => applyDreamsFilter(f)}
-                  activeOpacity={0.8}
-                >
-                  <Text style={[styles.segmentText, active && styles.segmentTextActive]}>
-                    {label}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </View>
-      )}
-
-      {/* Saved album: the same segmented PILL as Dreams, but icons instead of
-          text — Bookmarked/Hearted map onto icons already used elsewhere on
-          this exact screen (the tabRow's bookmark above, the post-card heart),
-          unlike Dreams' All/Public/Private which have no good icon equivalent
-          (Kevin 2026-09-04). */}
-      {activeTab === 'saved' && !gridSelecting && (
-        <View style={styles.dreamsFilterRow}>
-          <View style={styles.segmented}>
-            {(
-              [
-                {
-                  key: 'bookmarked',
-                  label: 'Bookmarked',
-                  icon: 'bookmark-outline',
-                  activeIcon: 'bookmark',
-                },
-                { key: 'hearted', label: 'Hearted', icon: 'heart-outline', activeIcon: 'heart' },
-              ] as const
-            ).map((f) => {
-              const active = savedFilter === f.key;
-              return (
-                <TouchableOpacity
-                  key={f.key}
-                  style={[styles.segment, styles.iconSegment, active && styles.segmentActive]}
-                  onPress={() => applySavedFilter(f.key)}
-                  activeOpacity={0.8}
-                  accessibilityLabel={f.label}
-                >
-                  <Ionicons
-                    name={active ? f.activeIcon : f.icon}
-                    size={20}
-                    color={active ? '#A78BFA' : colors.textSecondary}
-                  />
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </View>
-      )}
-
       {/* Section heading for the followers/following sub-views — repeats
           the active tab + count so you can tell which list you're looking
           at when the two sets are nearly identical. */}
@@ -999,6 +958,17 @@ export default function ProfileScreen() {
           // Saved + Reposts (bulk unsave / unrepost). Present-but-inactive adds
           // the "Select" row to tile long-press sheets.
           selection={gridSelection}
+          // Album browsing (ALBUM_DISCOVERY_PLAN.md): Newest/Oldest and Grid/Months on every
+          // album (which get what: lib/albumSources.ts). Hidden while multi-selecting.
+          albumControls={
+            gridSelecting
+              ? undefined
+              : activeTab === 'dreams'
+                ? { left: dreamsFilterPill }
+                : activeTab === 'saved'
+                  ? { left: savedFilterPill }
+                  : {}
+          }
         />
         {/* Selection chrome — the count + Done live in the grid's own filter
             row (the subheader above the grid); the ACTION ROW floats at the
@@ -1315,57 +1285,6 @@ const styles = StyleSheet.create({
     fontSize: fontScale(15),
     fontWeight: '700',
   },
-  // Dreams tab: slim row holding the right-aligned All / Private segmented
-  // filter. The other albums carry no subheader now.
-  dreamsFilterRow: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingHorizontal: 16,
-    paddingTop: verticalScale(8),
-    paddingBottom: verticalScale(8),
-  },
-  // Segmented All | Posted | Private control — a pill-shaped track;
-  // the active segment fills with the accent.
-  // Mirrors the Create-screen Mode tabs (DreamBot / Direct): a `surface`
-  // track with rounded-lg segments; the active one fills with tonal moon-
-  // purple + a purple border + purple text (not a solid accent pill).
-  segmented: {
-    flexDirection: 'row',
-    borderRadius: 12,
-    padding: 4,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  segment: {
-    minWidth: 64,
-    paddingHorizontal: 14,
-    paddingVertical: verticalScale(6),
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: 'transparent',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  segmentActive: {
-    backgroundColor: 'rgba(167,139,250,0.18)',
-    borderColor: 'rgba(167,139,250,0.55)',
-  },
-  // Icon-only segment (Saved's Bookmarked/Hearted) — no minWidth:64 text
-  // reservation, but sized for a real ~44pt tap target (Apple HIG minimum),
-  // not just shrunk to fit the icon (Kevin 2026-09-04: felt too narrow next
-  // to the tabRow's much taller icon buttons above it).
-  iconSegment: {
-    minWidth: 0,
-    paddingHorizontal: 14,
-    paddingVertical: verticalScale(11),
-  },
-  segmentText: {
-    color: colors.textSecondary,
-    fontSize: fontScale(13),
-    fontWeight: '600',
-  },
-  segmentTextActive: { color: '#A78BFA' },
   listSectionCount: {
     color: colors.textSecondary,
     fontSize: fontScale(14),

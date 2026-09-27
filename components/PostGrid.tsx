@@ -1,5 +1,13 @@
 import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
-import { View, ActivityIndicator, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import {
+  View,
+  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+  useWindowDimensions,
+} from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,6 +23,27 @@ import { usePublicProfilePosts, loadPublicProfilePostsUntil } from '@/hooks/useP
 import { useHashtagPosts } from '@/hooks/useHashtagPosts';
 import { useShadowPosts } from '@/hooks/useShadowPosts';
 import { useMyDreams } from '@/hooks/useMyDreams';
+import {
+  useAlbumMonths,
+  useBotUnseenPosts,
+  useRandomProfilePosts,
+  type AlbumMonthsScope,
+} from '@/hooks/useAlbumDiscovery';
+import {
+  monthsInOrder,
+  weaveGridRows,
+  type AlbumMonth,
+  type AlbumSort,
+  type GridRow,
+} from '@/lib/albumNav';
+import {
+  ALBUM_CONTROL_H,
+  CaughtUpRow,
+  MonthAlbumBar,
+  MonthTile,
+  MonthsToggle,
+  SortToggle,
+} from '@/components/AlbumBrowse';
 import { useAuthStore } from '@/store/auth';
 import { PostTile } from '@/components/PostTile';
 import { PendingDreamTile } from '@/components/PendingDreamTile';
@@ -25,12 +54,13 @@ import { useDreamsSeenStore } from '@/store/dreamsSeen';
 import { isStaleInFlight } from '@/lib/dockItems';
 import { GridSkeleton } from '@/components/Skeleton';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, horizontalScale } from '@/lib/responsive';
 import { NUM_COLUMNS, TILE_GAP, ROW_HEIGHT } from '@/constants/grid';
 import { minRefreshHold } from '@/lib/minRefresh';
 import { useRefreshGap } from '@/hooks/useRefreshGap';
 import type { DreamPostItem } from '@/components/DreamCard';
 import type { DreamsFilter } from '@/hooks/useMyDreams';
+import { albumBrowse } from '@/lib/albumSources';
 
 export type PostGridSource =
   | { type: 'own' }
@@ -38,7 +68,9 @@ export type PostGridSource =
   | { type: 'liked' }
   | { type: 'dreams'; dreamsFilter?: DreamsFilter }
   | { type: 'reposts'; userId: string }
-  | { type: 'user'; userId: string }
+  // mode (bot profiles): 'all' = the album, 'unseen' = Haven't seen, 'shuffle' = 🎲 a
+  // random 12 (a new `draw` number draws again).
+  | { type: 'user'; userId: string; mode?: 'all' | 'unseen' | 'shuffle'; draw?: number }
   | { type: 'hashtag'; tag: string };
 
 /** A grid cell is either a finished post or a "cooking" pending-dream slot woven
@@ -46,8 +78,10 @@ export type PostGridSource =
  *  `finished` is set for the brief completion beat — the same tile flips from an
  *  active ring to one that fills to 100% + a check before the real image reveals. */
 type PendingSlot = { pending: InFlightDream; finished?: 'ready' | 'failed' };
-type GridItem = DreamPostItem | PendingSlot;
+/** Full-width rows between posts: month headers and the bot profile's caught-up line. */
+type GridItem = DreamPostItem | PendingSlot | GridRow;
 const isPending = (item: GridItem): item is PendingSlot => 'pending' in item;
+const isRow = (item: GridItem): item is GridRow => 'row' in item;
 
 /**
  * Does the stored album's source match THIS grid's source? The "return to your
@@ -109,6 +143,13 @@ interface PostGridProps {
    *  renders are prepended to the grid (SHADOW-badged, admin-only). The pushed
    *  user-profile screen passes the bot's profile here. See BOT_DARK_LAUNCH_PLAN.md. */
   shadowAuthor?: { username: string; avatar_url: string | null };
+  /** Opt-in album browsing (ALBUM_DISCOVERY_PLAN.md): a controls row under the header
+   *  (the caller's `left` control, Newest/Oldest, Grid/Months), month headers, the timeline
+   *  months view. Omitted = the grid behaves exactly as before. */
+  albumControls?: { left?: React.ReactElement };
+  /** Bot profile: NEW marks on these ids, and the "You're caught up" line after the posts
+   *  newer than your last visit (newest-first, All only). */
+  botDiscovery?: { lastVisitedAt: string | null; newIds: ReadonlySet<string> } | null;
 }
 
 export function PostGrid({
@@ -125,6 +166,8 @@ export function PostGrid({
   extraBottomInset = 0,
   pendingDreams = [],
   shadowAuthor,
+  albumControls,
+  botDiscovery,
 }: PostGridProps) {
   const listRef = useRef<FlashListRef<GridItem>>(null);
   // Selection order (1-based) from the selected-ids Set's insertion order —
@@ -144,8 +187,10 @@ export function PostGrid({
   const headerHeightRef = useRef(0);
   const [containerHeight, setContainerHeight] = useState(0);
 
+  const lastScrollYRef = useRef(0);
   const handleScroll = useCallback(
     (e: { nativeEvent: { contentOffset: { y: number } } }) => {
+      lastScrollYRef.current = e.nativeEvent.contentOffset.y;
       onScrollProgress?.(e.nativeEvent.contentOffset.y);
     },
     [onScrollProgress]
@@ -168,6 +213,35 @@ export function PostGrid({
   const hashtag = source.type === 'hashtag' ? source.tag : '';
 
   const dreamsFilter = source.type === 'dreams' ? (source.dreamsFilter ?? 'all') : 'all';
+  const userMode = source.type === 'user' ? (source.mode ?? 'all') : 'all';
+  const userDraw = source.type === 'user' ? (source.draw ?? 0) : 0;
+
+  // ── Album browsing (opt-in via albumControls) ──
+  const browsing = !!albumControls;
+  const [sort, setSort] = useState<AlbumSort>('newest');
+  const [view, setView] = useState<'grid' | 'months'>('grid');
+  // A month tile opens THAT month as its own album ('YYYY-MM-01'); "‹ Months" goes back
+  // to the tiles (Kevin 2026-09-26: drill down, one month at a time).
+  const [drillMonth, setDrillMonth] = useState<string | null>(null);
+  // A different album (profile / filter / mode) always opens at the top.
+  // Only the drilled-in month resets. `view` (grid / months) and `sort` deliberately
+  // CARRY ACROSS albums: switch tabs in months mode and the next album opens in months
+  // too (Kevin 2026-09-26: "i love how the months mode persists across tabs").
+  const albumKey = `${source.type}|${userId}|${hashtag}|${dreamsFilter}|${userMode}`;
+  useEffect(() => {
+    setDrillMonth(null);
+  }, [albumKey]);
+  // Which albums sort / have months: lib/albumSources.ts (tested).
+  const browseRules = browsing ? albumBrowse(source) : null;
+  const sortable = browseRules?.sortable ?? false;
+  const effSort: AlbumSort = sortable ? sort : 'newest';
+  const monthsScope: AlbumMonthsScope | null = browseRules?.monthsScope ?? null;
+  // Month albums follow each grid's own date: created_at for
+  // Dreams (All / Private), posted_at for anything published.
+  const dateKey: 'created_at' | 'posted_at' =
+    isDreams && dreamsFilter !== 'posted' ? 'created_at' : 'posted_at';
+  const pinsFloat = isOwn_ || isUser || (isDreams && dreamsFilter === 'posted');
+  const noun = isDreams ? 'dreams' : 'posts';
   // Keep the owner's Posts + Saved grids ENABLED across ALL of their own-profile
   // tabs, not only when that tab is the active one. A disabled (`enabled:false`)
   // query cannot be refetched by invalidateQueries — not even refetchType:'all'
@@ -178,12 +252,40 @@ export function PostGrid({
   // DOES refresh. Still disabled on other users' profiles + hashtag views (no
   // waste there); `my-dreams` is already always-enabled for the same reason.
   const isOwnProfile = isOwn_ || isSaved || isLiked || isDreams || isReposts;
-  const ownQuery = useUserPosts(isOwnProfile);
-  const savedQuery = useFavoritePosts(isOwnProfile);
-  const likedQuery = useLikedPosts(isOwnProfile);
-  const userQuery = usePublicProfilePosts(userId, isUser);
-  const dreamsQuery = useMyDreams(dreamsFilter);
-  const repostsQuery = useUserReposts(userId, isReposts);
+  const ownQuery = useUserPosts(isOwnProfile, {
+    sort: isOwn_ ? effSort : 'newest',
+    month: isOwn_ ? drillMonth : null,
+  });
+  const savedQuery = useFavoritePosts(isOwnProfile, {
+    sort: isSaved ? effSort : 'newest',
+    month: isSaved ? drillMonth : null,
+  });
+  const likedQuery = useLikedPosts(isOwnProfile, {
+    sort: isLiked ? effSort : 'newest',
+    month: isLiked ? drillMonth : null,
+  });
+  const userQuery = usePublicProfilePosts(userId, isUser && userMode === 'all', {
+    sort: isUser ? effSort : 'newest',
+    month: isUser ? drillMonth : null,
+  });
+  const dreamsQuery = useMyDreams(dreamsFilter, {
+    sort: isDreams ? effSort : 'newest',
+    month: isDreams ? drillMonth : null,
+  });
+  const unseenQuery = useBotUnseenPosts(userId, effSort, isUser && userMode === 'unseen');
+  // 🎲: each new draw skips the set that was on screen.
+  const randomExcludeRef = useRef<string[]>([]);
+  const randomQuery = useRandomProfilePosts(
+    userId,
+    userDraw,
+    randomExcludeRef.current,
+    isUser && userMode === 'shuffle'
+  );
+  useEffect(() => {
+    const rows = randomQuery.data?.pages[0]?.rows;
+    if (rows) randomExcludeRef.current = rows.map((r) => r.id);
+  }, [randomQuery.data]);
+  const repostsQuery = useUserReposts(userId, isReposts, { sort: effSort, month: drillMonth });
   const hashtagQuery = useHashtagPosts(hashtag, isHashtag);
 
   const activeQuery = isOwn_
@@ -198,7 +300,11 @@ export function PostGrid({
             ? repostsQuery
             : isHashtag
               ? hashtagQuery
-              : userQuery;
+              : userMode === 'unseen'
+                ? unseenQuery
+                : userMode === 'shuffle'
+                  ? randomQuery
+                  : userQuery;
 
   // Pull-to-refresh on an infinite query refetches EVERY loaded page in
   // sequence (TanStack Query v5 removed the per-page `refetchPage` opt).
@@ -217,19 +323,27 @@ export function PostGrid({
   // Dark-launch: on a bot's `user` grid, the supreme admin sees this bot's hidden
   // shadow renders prepended (admin-only; the RPC returns [] to everyone else).
   const shadowQuery = useShadowPosts(userId, authUserId, shadowAuthor, isUser);
+  const monthsQuery = useAlbumMonths(
+    isUser || isReposts ? userId : (authUserId ?? ''),
+    monthsScope
+  );
+  const months = useMemo(() => monthsQuery.data ?? [], [monthsQuery.data]);
+  const displayMonths = useMemo(() => monthsInOrder(months, effSort), [months, effSort]);
   const activeQueryKey = useMemo(() => {
-    if (isOwn_) return ['userPosts', authUserId];
-    if (isSaved) return ['favoritePosts', authUserId];
-    if (isLiked) return ['likedPosts', authUserId];
+    if (isOwn_) return ['userPosts', authUserId, effSort, drillMonth];
+    if (isSaved) return ['favoritePosts', authUserId, effSort, drillMonth];
+    if (isLiked) return ['likedPosts', authUserId, effSort, drillMonth];
     // Dreams key MUST include the filter — useMyDreams keys on
     // ['my-dreams', userId, filter]. A 2-segment key here still prefix-matches
     // for invalidateQueries, but the setQueryData page-1 trim below is an EXACT
     // write, so a short key silently no-ops the trim and pull-to-refresh refetches
     // every loaded page instead of just page 1 (Kevin 2026-07-19).
-    if (isDreams) return ['my-dreams', authUserId, dreamsFilter];
-    if (isReposts) return ['userReposts', userId];
+    if (isDreams) return ['my-dreams', authUserId, dreamsFilter, effSort, drillMonth];
+    if (isReposts) return ['userReposts', userId, effSort, drillMonth];
     if (isHashtag) return ['hashtagPosts', hashtag];
-    return ['publicProfilePosts', userId];
+    if (userMode === 'unseen') return ['botUnseenPosts', authUserId, userId, effSort];
+    if (userMode === 'shuffle') return ['randomProfilePosts', authUserId, userId, userDraw];
+    return ['publicProfilePosts', userId, effSort, drillMonth];
   }, [
     isOwn_,
     isSaved,
@@ -241,6 +355,10 @@ export function PostGrid({
     userId,
     authUserId,
     dreamsFilter,
+    effSort,
+    userMode,
+    userDraw,
+    drillMonth,
   ]);
   // Spinner state owned LOCALLY so the RefreshControl reflects ONLY a
   // user-initiated pull — never a programmatic refetch. Binding `refreshing` to
@@ -302,7 +420,7 @@ export function PostGrid({
   );
 
   // Weave "cooking" tiles into the top cells (Dreams tab only). They shift the
-  // finished posts down by `pendingCount`, so highlight-scroll offsets by it.
+  // finished posts down, which is why highlight scrolls use highlightGridIndex.
   // Ordering: newest-first (created_at DESC) so the grid reads newest → oldest
   // consistently with `posts` (also newest-first).
   //
@@ -350,14 +468,35 @@ export function PostGrid({
     return { pendingSlots: combined.map((c) => c.slot), suppressedUploadIds: suppressed };
   }, [trackFinish, pendingDreams, finishedRings]);
 
+  const caughtUpAfter = isUser && userMode === 'all' ? (botDiscovery?.lastVisitedAt ?? null) : null;
+  // "Cooking" tiles belong at the very top of a newest-first album.
+  const showPending = pendingSlots.length > 0 && !drillMonth && effSort === 'newest';
   const gridData: GridItem[] = useMemo(() => {
     const visiblePosts =
       suppressedUploadIds.size > 0 ? posts.filter((p) => !suppressedUploadIds.has(p.id)) : posts;
-    return pendingSlots.length > 0 ? [...pendingSlots, ...visiblePosts] : visiblePosts;
-  }, [pendingSlots, posts, suppressedUploadIds]);
-  const pendingCount = pendingSlots.length;
-  const pendingCountRef = useRef(0);
-  pendingCountRef.current = pendingCount;
+    // One continuous grid: no month headers in the main albums (Kevin 2026-09-26: months
+    // live behind the calendar button). The only row woven in is a bot profile's
+    // "You're caught up" line.
+    const woven: GridItem[] = caughtUpAfter
+      ? weaveGridRows(visiblePosts, {
+          dateKey,
+          sort: effSort,
+          pinsFloat,
+          monthHeaders: false,
+          caughtUpAfter,
+        })
+      : visiblePosts;
+    return showPending ? [...pendingSlots, ...woven] : woven;
+  }, [
+    pendingSlots,
+    posts,
+    suppressedUploadIds,
+    caughtUpAfter,
+    dateKey,
+    effSort,
+    pinsFloat,
+    showPending,
+  ]);
 
   // Drop each finished entry after its completion beat → the completing tile
   // leaves and its (previously suppressed) image takes the cell. Scheduled off
@@ -400,6 +539,15 @@ export function PostGrid({
     if (!effectiveHighlightId) return -1;
     return posts.findIndex((p) => p.id === effectiveHighlightId);
   }, [posts, effectiveHighlightId]);
+  // The highlighted post's index in the GRID (cooking tiles + month rows shift it).
+  const highlightGridIndex = useMemo(() => {
+    if (!effectiveHighlightId) return -1;
+    return gridData.findIndex(
+      (it) => !isPending(it) && !isRow(it) && it.id === effectiveHighlightId
+    );
+  }, [gridData, effectiveHighlightId]);
+  const highlightGridIndexRef = useRef(-1);
+  highlightGridIndexRef.current = highlightGridIndex;
 
   const navigation = useNavigation();
   const [highlightDismissed, setHighlightDismissed] = useState(false);
@@ -462,7 +610,7 @@ export function PostGrid({
     ({ viewableItems }: { viewableItems: { item?: GridItem }[] }) => {
       const toPrefetch: string[] = [];
       for (const v of viewableItems) {
-        if (!v.item || isPending(v.item)) continue;
+        if (!v.item || isPending(v.item) || isRow(v.item)) continue;
         if (prefetchedRef.current.has(v.item.id)) continue;
         prefetchedRef.current.add(v.item.id);
         // Prefetch the small JPEG display variant (~150 KB), not the full
@@ -477,7 +625,8 @@ export function PostGrid({
     }
   );
 
-  // `gridIndex` is the index into `gridData` (i.e. highlightIndex + pendingCount).
+  // `gridIndex` is the index into `gridData` (highlightGridIndex: cooking tiles and
+  // month rows included).
   // FlashList's scrollToIndex lands the tile precisely — viewPosition 0.5 centers
   // it in the viewport, and the sticky header offset is handled internally — so
   // the old ROW_HEIGHT / headerHeight / containerHeight offset math (which
@@ -530,7 +679,7 @@ export function PostGrid({
     // 2026-09-04: "Just viewed" jump reported flaky on cold profile landings).
     if (!jumpPending || highlightIndex < 0 || containerHeight === 0) return;
     setJumpPending(false);
-    const gridIndex = highlightIndex + pendingCountRef.current;
+    const gridIndex = highlightGridIndexRef.current;
     void scrollToHighlightRowReliable(gridIndex).then((landed) => {
       if (landed) setBadgeTapped(true);
       // Not landed (deeper than the retry window) → leave the badge so the user
@@ -588,7 +737,7 @@ export function PostGrid({
     setPendingAutoAnchor(false);
     didAutoScrollForFocus.current = true;
     requestAnimationFrame(() =>
-      scrollToHighlightRow(highlightIndex + pendingCountRef.current, { silent: true })
+      scrollToHighlightRow(highlightGridIndexRef.current, { silent: true })
     );
   }, [pendingAutoAnchor, highlightIndex, containerHeight, scrollToHighlightRow]);
 
@@ -603,12 +752,12 @@ export function PostGrid({
     !scrolledAway &&
     (highlightIndex === -1
       ? !activeQuery.isLoading && containerHeight > 0
-      : containerHeight > 0 && highlightIndex + pendingCount > maxVisibleIndex);
+      : containerHeight > 0 && highlightGridIndex > maxVisibleIndex);
 
   const scrollToHighlight = useCallback(() => {
     if (highlightIndex >= 0) {
       // Already loaded (near) → smooth-scroll to it in the grid.
-      scrollToHighlightRow(highlightIndex + pendingCountRef.current);
+      scrollToHighlightRow(highlightGridIndexRef.current);
     } else if (effectiveHighlightId && isUser && userId) {
       // Deep in the album (not in the loaded pages). One-shot bulk-load the
       // profile down to it (one round-trip vs ~30s of page-by-page), then the
@@ -623,59 +772,116 @@ export function PostGrid({
     }
   }, [highlightIndex, effectiveHighlightId, isUser, userId, queryClient, scrollToHighlightRow]);
 
-  return (
-    <View
-      style={styles.container}
-      onLayout={(e) => setContainerHeight(e.nativeEvent.layout.height)}
-    >
-      <FlashList<GridItem>
-        ref={listRef}
-        data={gridData}
-        keyExtractor={(item) => (isPending(item) ? `pending-${item.pending.id}` : item.id)}
-        numColumns={NUM_COLUMNS}
-        // Recycle the two cell kinds separately (image tiles vs "cooking" rings).
-        getItemType={(item) => (isPending(item) ? 'pending' : 'post')}
-        // Keep FlatList's behavior: DON'T auto-anchor scroll on top-insertion
-        // (pending "cooking" tiles insert at index 0) — behavior-neutral migration.
+  // ── Album browsing handlers ──
+  const changeSort = useCallback((next: AlbumSort) => {
+    setSort(next);
+    // Start the new order at the top of the grid, not mid-way down the old one.
+    if (lastScrollYRef.current > headerHeightRef.current) {
+      listRef.current?.scrollToOffset({ offset: headerHeightRef.current, animated: false });
+    }
+  }, []);
+
+  // Pinch the grid in for months, out for the grid again.
+  const pinch = useMemo(
+    () =>
+      Gesture.Pinch()
+        .runOnJS(true)
+        .enabled(!!monthsScope)
+        .onEnd((e) => {
+          if (e.scale < 0.75) {
+            setDrillMonth(null);
+            setView('months');
+          } else if (e.scale > 1.35) setView('grid');
+        }),
+    [monthsScope]
+  );
+
+  const openMonthAlbum = useCallback((month: string) => {
+    setDrillMonth(month);
+    setView('grid');
+  }, []);
+  const backToMonths = useCallback(() => {
+    setDrillMonth(null);
+    setView('months');
+  }, []);
+  const drillCount = drillMonth
+    ? (months.find((m) => m.month === drillMonth)?.count ?? null)
+    : null;
+
+  const { width: winW } = useWindowDimensions();
+  const monthTileSize = winW / 2 - horizontalScale(12);
+
+  const listHeader = (
+    <>
+      {/* Self-held refresh gap — expands while pulling so the spinner has a
+          clean space above the content (mirrors the native refresh gap). */}
+      <Animated.View style={{ height: gapHeight }} />
+      {ListHeaderComponent ? (
+        <View
+          onLayout={(e) => {
+            const h = e.nativeEvent.layout.height;
+            setHeaderHeight(h);
+            headerHeightRef.current = h;
+          }}
+        >
+          {ListHeaderComponent}
+        </View>
+      ) : null}
+      {browsing && drillMonth ? (
+        <View style={styles.controlsRow}>
+          <View style={styles.controlsLeft}>
+            <MonthAlbumBar
+              month={drillMonth}
+              count={drillCount}
+              noun={noun}
+              onBack={backToMonths}
+            />
+          </View>
+          <View style={styles.controlsSpacer} />
+          {sortable ? (
+            <View style={styles.controlsFixed}>
+              <SortToggle sort={effSort} onChange={changeSort} />
+            </View>
+          ) : null}
+        </View>
+      ) : browsing ? (
+        <View style={styles.controlsRow}>
+          {albumControls?.left ? (
+            <View style={styles.controlsLeft}>{albumControls.left}</View>
+          ) : null}
+          <View style={styles.controlsSpacer} />
+          {sortable ? (
+            <View style={styles.controlsFixed}>
+              <SortToggle sort={effSort} onChange={changeSort} />
+            </View>
+          ) : null}
+          {monthsScope ? (
+            <View style={styles.controlsFixed}>
+              <MonthsToggle view={view} onChange={setView} />
+            </View>
+          ) : null}
+        </View>
+      ) : null}
+    </>
+  );
+
+  const monthsList =
+    view === 'months' && monthsScope ? (
+      <FlashList<AlbumMonth>
+        key="months"
+        data={displayMonths}
+        numColumns={2}
+        keyExtractor={(m) => m.month}
+        // FlashList v2 keeps the first visible item in place by default. Flipping the sort
+        // reverses the months, so it chased that tile to the far end and dropped you at
+        // the bottom (Kevin 2026-09-26). Stay where you are; the new order starts at the top.
         maintainVisibleContentPosition={{ disabled: true }}
+        ListHeaderComponent={listHeader}
         contentContainerStyle={{ paddingBottom: verticalScale(90) + extraBottomInset }}
-        // Lock scrolling to one axis (iOS): a vertical flick won't pan
-        // diagonally and leak horizontal movement into the parent swipe-back.
-        directionalLockEnabled
-        // `refreshing` pinned FALSE: the native spinner is unreliable on Fabric
-        // (react-native#56343) — FlashList still adds a RefreshControl for the
-        // pull GESTURE; we render our own spinner in the self-held gap below.
-        onRefresh={handleRefresh}
-        refreshing={false}
-        ListHeaderComponent={
-          <>
-            {/* Self-held refresh gap — expands while pulling so the spinner has a
-                clean space above the content (mirrors the native refresh gap). */}
-            <Animated.View style={{ height: gapHeight }} />
-            {ListHeaderComponent ? (
-              <View
-                onLayout={(e) => {
-                  const h = e.nativeEvent.layout.height;
-                  setHeaderHeight(h);
-                  headerHeightRef.current = h;
-                }}
-              >
-                {ListHeaderComponent}
-              </View>
-            ) : null}
-          </>
-        }
         onScroll={handleScroll}
-        onScrollBeginDrag={handleScrollBeginDrag}
         scrollEventThrottle={16}
-        // Fetch the next page ~3 screens BEFORE the end so a fast fling rarely
-        // outruns pagination and slams into the loaded-data boundary (the bounce).
-        onEndReachedThreshold={3}
-        onEndReached={handleEndReached}
-        viewabilityConfig={viewabilityConfigRef.current}
-        onViewableItemsChanged={onGridViewableChanged.current}
         ListEmptyComponent={
-          isLoading ? (
+          monthsQuery.isLoading ? (
             <GridSkeleton />
           ) : (
             <View style={styles.center}>
@@ -683,56 +889,132 @@ export function PostGrid({
             </View>
           )
         }
-        ListFooterComponent={
-          isFetchingNextPage ? (
-            <View style={styles.footer}>
-              <ActivityIndicator color={colors.textSecondary} />
-            </View>
-          ) : null
-        }
-        // Selection state lives outside the items — extraData makes the FlatList
-        // re-render rows when the selected set changes. The Set is a fresh
-        // reference on every toggle / enter / exit (profile.tsx rebuilds it), so
-        // this one primitive-ish ref covers all selection transitions without the
-        // old fresh-array-every-render that forced a full re-render each frame.
-        extraData={gridExtraData}
         renderItem={({ item }) => (
-          // FlashList has no columnWrapperStyle; the column gap survives as the
-          // fixed-tile-vs-column-width slack, but the ROW gap (old
-          // columnWrapperStyle marginBottom) needs restoring here. Isolated to the
-          // grid — doesn't touch the shared tile component.
-          <View style={styles.cell}>
-            {isPending(item) ? (
-              <PendingDreamTile dream={item.pending} finished={item.finished} />
-            ) : (
-              <PostTile
-                item={item}
-                isOwn={isOwn}
-                albumSource={source}
-                isHighlighted={!highlightDismissed && item.id === effectiveHighlightId}
-                showPrivateBadge={showPrivateBadge}
-                isNew={
-                  markNew &&
-                  !!dreamsViewBaseline &&
-                  item.created_at > dreamsViewBaseline &&
-                  !item.owner_seen_at
-                }
-                allPosts={posts}
-                // Flat PRIMITIVE selection props (not a per-tile object) so PostTile's
-                // React.memo holds — the old object literal here defeated memo and
-                // re-rendered every mounted tile on each toggle/scroll (Kevin
-                // 2026-07-18). selOrder = 1-based insertion order (JS Sets iterate in
-                // insertion order) = the album order bulk-Post hands to post/new.
-                selActive={selection?.active ?? false}
-                selSelected={selection ? selection.selectedIds.has(item.id) : false}
-                selOrder={selectionOrder.get(item.id) ?? null}
-                onSelectToggle={selection?.onToggle}
-                onSelectEnter={selection?.onEnter}
-              />
-            )}
+          <View style={styles.monthCell}>
+            <MonthTile
+              month={item}
+              noun={noun}
+              size={monthTileSize}
+              onPress={() => openMonthAlbum(item.month)}
+            />
           </View>
         )}
       />
+    ) : null;
+
+  return (
+    <View
+      style={styles.container}
+      onLayout={(e) => setContainerHeight(e.nativeEvent.layout.height)}
+    >
+      <GestureDetector gesture={pinch}>
+        <View style={styles.container}>
+          {monthsList ?? (
+            <FlashList<GridItem>
+              ref={listRef}
+              data={gridData}
+              keyExtractor={(item) =>
+                isRow(item) ? item.key : isPending(item) ? `pending-${item.pending.id}` : item.id
+              }
+              numColumns={NUM_COLUMNS}
+              // Recycle the cell kinds separately (image tiles, "cooking" rings, full-width rows).
+              getItemType={(item) => (isRow(item) ? 'row' : isPending(item) ? 'pending' : 'post')}
+              // Month headers and the caught-up line span the whole row.
+              overrideItemLayout={(layout, item) => {
+                if (isRow(item)) layout.span = NUM_COLUMNS;
+              }}
+              // Keep FlatList's behavior: DON'T auto-anchor scroll on top-insertion
+              // (pending "cooking" tiles insert at index 0), and don't chase a tile when the
+              // order flips (Newest / Oldest).
+              maintainVisibleContentPosition={{ disabled: true }}
+              contentContainerStyle={{ paddingBottom: verticalScale(90) + extraBottomInset }}
+              // Lock scrolling to one axis (iOS): a vertical flick won't pan
+              // diagonally and leak horizontal movement into the parent swipe-back.
+              directionalLockEnabled
+              // `refreshing` pinned FALSE: the native spinner is unreliable on Fabric
+              // (react-native#56343) — FlashList still adds a RefreshControl for the
+              // pull GESTURE; we render our own spinner in the self-held gap below.
+              onRefresh={handleRefresh}
+              refreshing={false}
+              ListHeaderComponent={listHeader}
+              onScroll={handleScroll}
+              onScrollBeginDrag={handleScrollBeginDrag}
+              scrollEventThrottle={16}
+              // Fetch the next page ~3 screens BEFORE the end so a fast fling rarely
+              // outruns pagination and slams into the loaded-data boundary (the bounce).
+              onEndReachedThreshold={3}
+              onEndReached={handleEndReached}
+              viewabilityConfig={viewabilityConfigRef.current}
+              onViewableItemsChanged={onGridViewableChanged.current}
+              ListEmptyComponent={
+                isLoading ? (
+                  <GridSkeleton />
+                ) : (
+                  <View style={styles.center}>
+                    <Text style={styles.emptyText}>{emptyText}</Text>
+                  </View>
+                )
+              }
+              ListFooterComponent={
+                isFetchingNextPage ? (
+                  <View style={styles.footer}>
+                    <ActivityIndicator color={colors.textSecondary} />
+                  </View>
+                ) : null
+              }
+              // Selection state lives outside the items — extraData makes the FlatList
+              // re-render rows when the selected set changes. The Set is a fresh
+              // reference on every toggle / enter / exit (profile.tsx rebuilds it), so
+              // this one primitive-ish ref covers all selection transitions without the
+              // old fresh-array-every-render that forced a full re-render each frame.
+              extraData={gridExtraData}
+              renderItem={({ item }) =>
+                isRow(item) ? (
+                  <CaughtUpRow />
+                ) : (
+                  // FlashList has no columnWrapperStyle; the column gap survives as the
+                  // fixed-tile-vs-column-width slack, but the ROW gap (old
+                  // columnWrapperStyle marginBottom) needs restoring here. Isolated to the
+                  // grid — doesn't touch the shared tile component.
+                  <View style={styles.cell}>
+                    {isPending(item) ? (
+                      <PendingDreamTile dream={item.pending} finished={item.finished} />
+                    ) : (
+                      <PostTile
+                        item={item}
+                        isOwn={isOwn}
+                        albumSource={source}
+                        albumSort={effSort}
+                        albumMonth={drillMonth}
+                        isHighlighted={!highlightDismissed && item.id === effectiveHighlightId}
+                        showPrivateBadge={showPrivateBadge}
+                        isNew={
+                          (markNew &&
+                            !!dreamsViewBaseline &&
+                            item.created_at > dreamsViewBaseline &&
+                            !item.owner_seen_at) ||
+                          (botDiscovery?.newIds.has(item.id) ?? false)
+                        }
+                        allPosts={posts}
+                        // Flat PRIMITIVE selection props (not a per-tile object) so PostTile's
+                        // React.memo holds — the old object literal here defeated memo and
+                        // re-rendered every mounted tile on each toggle/scroll (Kevin
+                        // 2026-07-18). selOrder = 1-based insertion order (JS Sets iterate in
+                        // insertion order) = the album order bulk-Post hands to post/new.
+                        selActive={selection?.active ?? false}
+                        selSelected={selection ? selection.selectedIds.has(item.id) : false}
+                        selOrder={selectionOrder.get(item.id) ?? null}
+                        onSelectToggle={selection?.onToggle}
+                        onSelectEnter={selection?.onEnter}
+                      />
+                    )}
+                  </View>
+                )
+              }
+            />
+          )}
+        </View>
+      </GestureDetector>
       {/* Our own gray spinner, resting in the self-held gap (top ≈ gap center).
           Reliable where the native RefreshControl spinner is not (Fabric). */}
       {isPulling && (
@@ -771,6 +1053,19 @@ const styles = StyleSheet.create({
   emptyText: { color: colors.textSecondary, fontSize: fontScale(15) },
   footer: { paddingVertical: verticalScale(20), alignItems: 'center' },
   container: { flex: 1 },
+  // Fixed height + chips that never shrink: Newest / Months sit in exactly the same spot on
+  // every tab, whether or not there's a filter pill on the left (Kevin 2026-09-26).
+  controlsRow: {
+    height: ALBUM_CONTROL_H + verticalScale(16),
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: horizontalScale(8),
+    paddingHorizontal: horizontalScale(16),
+  },
+  controlsLeft: { flexShrink: 1 },
+  controlsFixed: { flexShrink: 0 },
+  controlsSpacer: { flex: 1 },
+  monthCell: { alignItems: 'center', marginBottom: verticalScale(8) },
   justViewedWrap: {
     position: 'absolute',
     bottom: 24,

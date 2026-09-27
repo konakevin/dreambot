@@ -487,6 +487,32 @@ export type Database = {
         };
         Relationships: [];
       };
+      bot_visits: {
+        Row: {
+          bot_id: string;
+          last_visited_at: string;
+          user_id: string;
+        };
+        Insert: {
+          bot_id: string;
+          last_visited_at?: string;
+          user_id?: string;
+        };
+        Update: {
+          bot_id?: string;
+          last_visited_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'bot_visits_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       comment_likes: {
         Row: {
           comment_id: string;
@@ -4508,6 +4534,15 @@ export type Database = {
         Args: { p_bot_message?: string; p_upload_id: string };
         Returns: undefined;
       };
+      get_album_months: {
+        Args: { p_scope: string; p_user_id: string };
+        Returns: {
+          cover_url: string;
+          month: string;
+          pinned_count: number;
+          post_count: number;
+        }[];
+      };
       get_blocked_users: {
         Args: never;
         Returns: {
@@ -4517,12 +4552,83 @@ export type Database = {
           username: string;
         }[];
       };
+      get_bot_new_counts: {
+        Args: never;
+        Returns: {
+          bot_id: string;
+          new_count: number;
+        }[];
+      };
       get_bot_thumbnails: {
         Args: { p_per_bot?: number };
         Returns: {
           bot_user_id: string;
           thumbnail_urls: string[];
         }[];
+      };
+      get_bot_unseen_posts: {
+        Args: { p_bot_id: string };
+        Returns: {
+          ai_concept: Json | null;
+          ai_prompt: string | null;
+          album_ref_count: number;
+          bot_message: string | null;
+          caption: string | null;
+          categories: string[];
+          comment_count: number;
+          created_at: string;
+          description: string | null;
+          dream_medium: string | null;
+          dream_vibe: string | null;
+          face_swap_mode: string | null;
+          flux_seed: number | null;
+          height: number | null;
+          holiday: string | null;
+          id: string;
+          image_url: string;
+          image_url_display: string | null;
+          image_url_hq: string | null;
+          image_url_hq_generated_at: string | null;
+          image_url_thumb: string | null;
+          is_active: boolean;
+          is_ai_generated: boolean;
+          is_approved: boolean | null;
+          is_moderated: boolean;
+          is_posted: boolean;
+          is_public: boolean;
+          like_count: number;
+          media_count: number;
+          media_type: string;
+          model: string | null;
+          output_hash: string | null;
+          output_phash: string | null;
+          owner_seen_at: string | null;
+          pinned_at: string | null;
+          postcard_pending: string | null;
+          posted_at: string | null;
+          quarantine_reason: string | null;
+          quarantined_at: string | null;
+          recipe: Json | null;
+          recipe_id: string | null;
+          repost_count: number;
+          save_count: number;
+          search_tsv: unknown;
+          seed_source: Json | null;
+          shadow: boolean;
+          share_count: number;
+          style_summary: string | null;
+          thumbhash: string | null;
+          thumbnail_url: string | null;
+          user_id: string;
+          view_count: number;
+          width: number | null;
+        }[];
+        SetofOptions: {
+          from: '*';
+          to: 'uploads';
+          isOneToOne: false;
+          isSetofReturn: true;
+        };
       };
       get_bot_users: {
         Args: never;
@@ -4532,6 +4638,13 @@ export type Database = {
           id: string;
           is_public: boolean;
           username: string;
+        }[];
+      };
+      get_bot_visit: {
+        Args: { p_bot_id: string };
+        Returns: {
+          last_visited_at: string;
+          new_ids: string[];
         }[];
       };
       get_client_flags: { Args: never; Returns: Json };
@@ -4802,6 +4915,70 @@ export type Database = {
           username: string;
         }[];
       };
+      get_random_posts: {
+        Args: { p_exclude?: string[]; p_limit?: number; p_user_id: string };
+        Returns: {
+          ai_concept: Json | null;
+          ai_prompt: string | null;
+          album_ref_count: number;
+          bot_message: string | null;
+          caption: string | null;
+          categories: string[];
+          comment_count: number;
+          created_at: string;
+          description: string | null;
+          dream_medium: string | null;
+          dream_vibe: string | null;
+          face_swap_mode: string | null;
+          flux_seed: number | null;
+          height: number | null;
+          holiday: string | null;
+          id: string;
+          image_url: string;
+          image_url_display: string | null;
+          image_url_hq: string | null;
+          image_url_hq_generated_at: string | null;
+          image_url_thumb: string | null;
+          is_active: boolean;
+          is_ai_generated: boolean;
+          is_approved: boolean | null;
+          is_moderated: boolean;
+          is_posted: boolean;
+          is_public: boolean;
+          like_count: number;
+          media_count: number;
+          media_type: string;
+          model: string | null;
+          output_hash: string | null;
+          output_phash: string | null;
+          owner_seen_at: string | null;
+          pinned_at: string | null;
+          postcard_pending: string | null;
+          posted_at: string | null;
+          quarantine_reason: string | null;
+          quarantined_at: string | null;
+          recipe: Json | null;
+          recipe_id: string | null;
+          repost_count: number;
+          save_count: number;
+          search_tsv: unknown;
+          seed_source: Json | null;
+          shadow: boolean;
+          share_count: number;
+          style_summary: string | null;
+          thumbhash: string | null;
+          thumbnail_url: string | null;
+          user_id: string;
+          view_count: number;
+          width: number | null;
+        }[];
+        SetofOptions: {
+          from: '*';
+          to: 'uploads';
+          isOneToOne: false;
+          isSetofReturn: true;
+        };
+      };
       get_replies: {
         Args: { p_comment_id: string; p_limit?: number };
         Returns: {
@@ -4957,6 +5134,7 @@ export type Database = {
       join_game_by_code: { Args: { p_code: string }; Returns: Json };
       leave_game: { Args: { p_game_id: string }; Returns: undefined };
       list_my_upload_paths: { Args: never; Returns: string[] };
+      mark_bot_visited: { Args: { p_bot_id: string }; Returns: undefined };
       mark_dream_seen: { Args: { p_upload_id: string }; Returns: undefined };
       mark_dreams_viewed: { Args: { p_user_id: string }; Returns: string };
       mark_group_seen: {
@@ -4967,6 +5145,10 @@ export type Database = {
       maybe_advance_dream_off: {
         Args: { p_force: boolean; p_game_id: string; p_reason: string };
         Returns: string;
+      };
+      member_search_tsv: {
+        Args: { p_description: string; p_medium: string; p_vibe: string };
+        Returns: unknown;
       };
       notification_category: { Args: { p_type: string }; Returns: string };
       notification_group_key: {
@@ -5033,6 +5215,75 @@ export type Database = {
         Returns: string;
       };
       sanitize_user_text: { Args: { p_text: string }; Returns: string };
+      search_dreams: {
+        Args: {
+          p_medium?: string;
+          p_query: string;
+          p_scope?: string;
+          p_vibe?: string;
+        };
+        Returns: {
+          ai_concept: Json | null;
+          ai_prompt: string | null;
+          album_ref_count: number;
+          bot_message: string | null;
+          caption: string | null;
+          categories: string[];
+          comment_count: number;
+          created_at: string;
+          description: string | null;
+          dream_medium: string | null;
+          dream_vibe: string | null;
+          face_swap_mode: string | null;
+          flux_seed: number | null;
+          height: number | null;
+          holiday: string | null;
+          id: string;
+          image_url: string;
+          image_url_display: string | null;
+          image_url_hq: string | null;
+          image_url_hq_generated_at: string | null;
+          image_url_thumb: string | null;
+          is_active: boolean;
+          is_ai_generated: boolean;
+          is_approved: boolean | null;
+          is_moderated: boolean;
+          is_posted: boolean;
+          is_public: boolean;
+          like_count: number;
+          media_count: number;
+          media_type: string;
+          model: string | null;
+          output_hash: string | null;
+          output_phash: string | null;
+          owner_seen_at: string | null;
+          pinned_at: string | null;
+          postcard_pending: string | null;
+          posted_at: string | null;
+          quarantine_reason: string | null;
+          quarantined_at: string | null;
+          recipe: Json | null;
+          recipe_id: string | null;
+          repost_count: number;
+          save_count: number;
+          search_tsv: unknown;
+          seed_source: Json | null;
+          shadow: boolean;
+          share_count: number;
+          style_summary: string | null;
+          thumbhash: string | null;
+          thumbnail_url: string | null;
+          user_id: string;
+          view_count: number;
+          width: number | null;
+        }[];
+        SetofOptions: {
+          from: '*';
+          to: 'uploads';
+          isOneToOne: false;
+          isSetofReturn: true;
+        };
+      };
       search_hashtags: {
         Args: { p_limit?: number; p_prefix: string };
         Returns: {

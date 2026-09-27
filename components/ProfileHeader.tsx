@@ -42,8 +42,9 @@ import { verticalScale, fontScale, horizontalScale, useDeviceClass } from '@/lib
 import { avatarUrl } from '@/lib/imageUrl';
 import type { StatsTab } from '@/components/ProfileStatsRow';
 import type { ProfileHeaderImage } from '@/hooks/usePublicProfile';
-import { ProfileBanner, HeaderCreditPill } from '@/components/ProfileBanner';
+import { ProfileBanner } from '@/components/ProfileBanner';
 import { headerHeight } from '@/lib/profileHeaders';
+import { showAlert } from '@/components/CustomAlert';
 
 const AVATAR_SIZE = 84;
 /** Avatar size on the Dreamscape banner (smaller: it shares the fade with the name). */
@@ -76,8 +77,6 @@ interface BaseProps {
   stackChildren?: boolean;
   /** Dreamscape header (migration 554). Present ⇒ the banner layout. */
   header?: ProfileHeaderImage | null;
-  /** Tap on the credit pill of a header taken from a bot post. */
-  onHeaderCreditPress?: (userId: string) => void;
   /** Own profile with no header yet: the dismissable "Add a header" strip. */
   addHeaderStrip?: { onPress: () => void; onDismiss: () => void } | null;
   /** Own profile: tapping the header opens the picker (avatar + credit keep their own taps). */
@@ -208,7 +207,6 @@ export function ProfileHeader(props: Props) {
     onAvatarPress,
     avatarUploading,
     header,
-    onHeaderCreditPress,
     addHeaderStrip,
     onHeaderPress,
   } = props;
@@ -271,7 +269,9 @@ export function ProfileHeader(props: Props) {
         </View>
         {props.stackChildren && <View style={styles.actionRowStacked}>{props.children}</View>}
       </>
-    ) : (
+    ) : props.hasIncomingRequest || (props.onMessagePress && !props.isBot && !props.isSelf) ? (
+      // Follow and ⋯ live beside the name now (idBadges). A row only when there's more to do:
+      // answering a follow request, or Message.
       <View style={styles.actionRow}>
         {props.hasIncomingRequest ? (
           // This user requested to follow ME → respond inline (the follow-
@@ -292,55 +292,96 @@ export function ProfileHeader(props: Props) {
               <Text style={[styles.actionText, styles.actionTextSecondary]}>Deny</Text>
             </TouchableOpacity>
           </>
-        ) : (
+        ) : null}
+        {props.onMessagePress && !props.isBot && !props.isSelf ? (
           <TouchableOpacity
-            style={[
-              styles.actionPill,
-              styles.actionPillFollow,
-              (props.isFollowing || props.hasRequest) && styles.actionPillFollowing,
-            ]}
-            onPress={props.onFollowPress}
+            style={[styles.actionPill, styles.actionPillSecondary]}
+            onPress={props.onMessagePress}
             activeOpacity={0.7}
           >
-            <Text
-              style={[
-                styles.actionText,
-                props.isFollowing || props.hasRequest
-                  ? styles.actionTextFollowing
-                  : styles.actionTextFollow,
-              ]}
-            >
-              {props.hasRequest ? 'Requested' : props.isFollowing ? 'Following' : 'Follow'}
-            </Text>
+            <Text style={[styles.actionText, styles.actionTextSecondary]}>Message</Text>
           </TouchableOpacity>
-        )}
-        {!props.isBot && !props.isSelf && (
-          <>
-            {props.onMessagePress && (
-              <TouchableOpacity
-                style={[styles.actionPill, styles.actionPillSecondary]}
-                onPress={props.onMessagePress}
-                activeOpacity={0.7}
-              >
-                <Text style={[styles.actionText, styles.actionTextSecondary]}>Message</Text>
-              </TouchableOpacity>
-            )}
-            <TouchableOpacity
-              style={styles.iconPill}
-              onPress={props.onMorePress}
-              activeOpacity={0.7}
-              hitSlop={6}
-            >
-              <Ionicons name="ellipsis-horizontal" size={18} color={colors.textPrimary} />
-            </TouchableOpacity>
-          </>
-        )}
+        ) : null}
+      </View>
+    ) : null;
+
+  // Round badges beside the name (another person's profile): Follow (+ / ✓ / clock for a
+  // pending request) and, for members, ⋯ more. Replaces the full-width Follow row
+  // (Kevin 2026-09-26: a whole row for one button was wasted space). A tiny ✓ is easy to hit
+  // by accident, so undoing a follow or a request asks first.
+  const idBadges = (onImage: boolean) => {
+    if (props.variant !== 'other' || props.isSelf) return null;
+    const following = props.isFollowing;
+    const requested = props.hasRequest && !following;
+    const handleFollowBadge = () => {
+      if (following || requested) {
+        showAlert(
+          requested ? 'Cancel follow request?' : `Unfollow @${username}?`,
+          requested
+            ? 'They haven’t accepted it yet.'
+            : 'Their posts will stop showing in Following.',
+          [
+            { text: requested ? 'Keep it' : 'Cancel', style: 'cancel' },
+            {
+              text: requested ? 'Cancel request' : 'Unfollow',
+              style: 'destructive',
+              onPress: props.onFollowPress,
+            },
+          ]
+        );
+        return;
+      }
+      props.onFollowPress();
+    };
+    return (
+      <View style={styles.idBadges}>
+        {!props.hasIncomingRequest ? (
+          <TouchableOpacity
+            style={[
+              styles.badge,
+              following || requested
+                ? onImage
+                  ? styles.badgeDoneOnImage
+                  : styles.badgeDone
+                : styles.badgeFollow,
+            ]}
+            onPress={handleFollowBadge}
+            activeOpacity={0.75}
+            hitSlop={6}
+            accessibilityRole="button"
+            accessibilityLabel={
+              requested
+                ? 'Follow request sent. Tap to cancel'
+                : following
+                  ? `Following @${username}. Tap to unfollow`
+                  : `Follow @${username}`
+            }
+          >
+            <Ionicons
+              name={requested ? 'time-outline' : following ? 'checkmark' : 'add'}
+              size={horizontalScale(following || requested ? 18 : 22)}
+              color="#FFFFFF"
+            />
+          </TouchableOpacity>
+        ) : null}
+        {!props.isBot ? (
+          <TouchableOpacity
+            style={[styles.badge, onImage ? styles.badgeDoneOnImage : styles.badgeDone]}
+            onPress={props.onMorePress}
+            activeOpacity={0.75}
+            hitSlop={6}
+            accessibilityRole="button"
+            accessibilityLabel="More options"
+          >
+            <Ionicons name="ellipsis-horizontal" size={horizontalScale(18)} color="#FFFFFF" />
+          </TouchableOpacity>
+        ) : null}
       </View>
     );
+  };
 
   // ── Dreamscape layout: full-bleed banner, name in its fade, rest below ──
   if (header) {
-    const credit = header.credit;
     const banner = (
       <ProfileBanner url={header.url} focalY={header.focalY} height={headerHeight(width, height)}>
         <View style={styles.bannerIdRow}>
@@ -363,13 +404,7 @@ export function ProfileHeader(props: Props) {
               </Text>
             )}
           </View>
-          {credit ? (
-            <HeaderCreditPill
-              username={credit.username}
-              avatarUrl={credit.avatarUrl}
-              onPress={onHeaderCreditPress ? () => onHeaderCreditPress(credit.userId) : undefined}
-            />
-          ) : null}
+          {idBadges(true)}
         </View>
       </ProfileBanner>
     );
@@ -444,6 +479,7 @@ export function ProfileHeader(props: Props) {
           )}
           {statsRow}
         </View>
+        {idBadges(false)}
       </View>
 
       {/* Row 2 — bio, full-width under the avatar row */}
@@ -612,6 +648,27 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
   },
   // ── Dreamscape banner layout (migration 554) ──
+  idBadges: { flexDirection: 'row', alignItems: 'center', gap: horizontalScale(8) },
+  badge: {
+    width: horizontalScale(36),
+    height: horizontalScale(36),
+    borderRadius: horizontalScale(18),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  // Not following yet: the brand accent, the one call to action on the profile.
+  badgeFollow: { backgroundColor: colors.accent },
+  // Following / Requested / ⋯: quiet.
+  badgeDone: {
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  badgeDoneOnImage: {
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.35)',
+  },
   bannerIdRow: {
     flexDirection: 'row',
     alignItems: 'center',

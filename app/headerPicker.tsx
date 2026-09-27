@@ -30,7 +30,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Text } from '@/components/AppText';
-import { ProfileBanner, HeaderCreditPill } from '@/components/ProfileBanner';
+import { ProfileBanner } from '@/components/ProfileBanner';
 import { GradientButton } from '@/components/GradientButton';
 import { GradientTitle } from '@/components/GradientTitle';
 import { Toast } from '@/components/Toast';
@@ -313,12 +313,6 @@ export default function HeaderPickerScreen() {
                     </Text>
                   ) : null}
                 </View>
-                {!tried.own && tried.ownerUsername ? (
-                  <HeaderCreditPill
-                    username={tried.ownerUsername}
-                    avatarUrl={tried.ownerAvatarUrl}
-                  />
-                ) : null}
               </View>
             </ProfileBanner>
           ) : (

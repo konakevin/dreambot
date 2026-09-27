@@ -5,26 +5,35 @@ import { POST_SELECT, mapToDreamPost, castRows } from '@/lib/mapPost';
 
 const PAGE_SIZE = 18;
 
-export function useSearchPosts(query: string, medium?: string | null, vibe?: string | null) {
+/** Where to look (ALBUM_DISCOVERY_PLAN.md): everything you can see, your own dreams
+ *  (private included), the bots, or other members' public posts. */
+export type SearchScope = 'all' | 'mine' | 'bots' | 'people';
+
+/**
+ * Dream search by words (search_dreams, migration 558). Never matches people's physical
+ * characteristics: members' dreams are matched on their own description + medium + vibe
+ * only; bots (fictional) on their full prompts.
+ */
+export function useSearchPosts(
+  query: string,
+  medium?: string | null,
+  vibe?: string | null,
+  scope: SearchScope = 'all'
+) {
   const user = useAuthStore((s) => s.user);
 
   return useInfiniteQuery({
-    queryKey: ['searchPosts', query, medium ?? '', vibe ?? ''],
+    queryKey: ['searchPosts', query, medium ?? '', vibe ?? '', scope],
     queryFn: async ({ pageParam }) => {
       const offset = pageParam as number;
-      const tokens = query.trim().split(/\s+/).filter(Boolean);
-      const tsQuery = tokens.map((t, i) => (i === tokens.length - 1 ? `${t}:*` : t)).join(' & ');
-
-      let q = supabase
-        .from('uploads')
+      const { data, error } = await supabase
+        .rpc('search_dreams', {
+          p_query: query,
+          p_scope: scope,
+          p_medium: medium ?? undefined,
+          p_vibe: vibe ?? undefined,
+        })
         .select(POST_SELECT)
-        .textSearch('search_tsv', tsQuery)
-        .eq('is_public', true);
-
-      if (medium) q = q.eq('dream_medium', medium);
-      if (vibe) q = q.eq('dream_vibe', vibe);
-
-      const { data, error } = await q
         .order('created_at', { ascending: false })
         .range(offset, offset + PAGE_SIZE - 1);
 

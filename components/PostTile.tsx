@@ -23,6 +23,7 @@ import { EditDescriptionModal } from '@/components/EditDescriptionModal';
 import { useAlbumStore } from '@/store/album';
 import type { DreamPostItem } from '@/components/DreamCard';
 import type { PostGridSource } from '@/components/PostGrid';
+import type { AlbumSort } from '@/lib/albumNav';
 import { tileImageUrl } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -32,6 +33,10 @@ interface PostTileProps {
   item: DreamPostItem;
   isOwn?: boolean;
   albumSource?: PostGridSource;
+  /** The grid's order + month album, handed to the photo detail screen with the source
+   *  (flat primitives, like the selection props, so memo holds). */
+  albumSort?: AlbumSort;
+  albumMonth?: string | null;
   isHighlighted?: boolean;
   showPrivateBadge?: boolean;
   /** Dreams album only: this render finished since the user last viewed the
@@ -65,6 +70,8 @@ export const PostTile = memo(function PostTile({
   item,
   isOwn = false,
   albumSource,
+  albumSort = 'newest',
+  albumMonth = null,
   isHighlighted = false,
   showPrivateBadge = false,
   isNew = false,
@@ -110,7 +117,7 @@ export const PostTile = memo(function PostTile({
     // of the last notification album (Kevin 2026-07-10).
     store.setAlbum([]);
     store.setAlbumPosts(allPosts && allPosts.length > 0 ? allPosts : []);
-    store.setAlbumSource(albumSource ?? null);
+    store.setAlbumSource(albumSource ?? null, { sort: albumSort, month: albumMonth });
     // Track currentPostId so PostGrid can auto-scroll back to this row on
     // swipe-back. FullScreenFeed updates this as the user scrolls in detail.
     store.setCurrentPostId(item.id);
