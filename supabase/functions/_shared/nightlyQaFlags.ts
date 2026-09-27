@@ -114,6 +114,9 @@ export interface NightlyQaFlags {
   /** GARMENT AXIS (mig 563): true rolls a garment family + fashion look per person on the wardrobe slot,
    *  false forces it off; null = engine_config.nightly_garment_roll. */
   force_garment_roll: boolean | null;
+  /** SOLO OUTFIT EARLY (mig 565): true names a solo's wardrobe right after the medium, false the old order;
+   *  null = engine_config.nightly_solo_outfit_early. */
+  force_solo_outfit_early: boolean | null;
   /** FLUX COUPLE LAB: per-request big-face tier ceiling / composition gate overrides (numbers 0.2-1). */
   qa_big_face_max_hfrac: number | null;
   qa_max_face_hfrac: number | null;
@@ -290,6 +293,12 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
       body.force_honest_looks === true ? true : body.force_honest_looks === false ? false : null,
     force_garment_roll:
       body.force_garment_roll === true ? true : body.force_garment_roll === false ? false : null,
+    force_solo_outfit_early:
+      body.force_solo_outfit_early === true
+        ? true
+        : body.force_solo_outfit_early === false
+          ? false
+          : null,
     qa_big_face_max_hfrac: num01(body.qa_big_face_max_hfrac),
     qa_max_face_hfrac: num01(body.qa_max_face_hfrac),
     force_prompt_style:

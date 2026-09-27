@@ -16,7 +16,11 @@ import {
   type RosterPartner,
 } from '@engine/partnerRoll';
 import { parseQaFlags } from '@engine/nightlyQaFlags';
-import { buildSlotBrief, type CharacterSlotPipelineInput } from '@engine/characterSlotPrompt';
+import {
+  assembleCharacterPrompt,
+  buildSlotBrief,
+  type CharacterSlotPipelineInput,
+} from '@engine/characterSlotPrompt';
 import { rollFashion } from '@engine/outfitPlan';
 
 describe('scene details respect the prompt', () => {
@@ -182,5 +186,49 @@ describe('nightly garment axis', () => {
     });
     expect(brief).toContain('HOLIDAY COSTUME LOCK');
     expect(brief).not.toMatch(/Look: /);
+  });
+});
+
+describe('nightly solo outfit early (mig 565)', () => {
+  const solo = (): CharacterSlotPipelineInput => ({
+    cast: [{ role: 'plus_one', promptDesc: 'a woman, 38', gender: 'female' }],
+    iconicAnchor: 'Sag Harbor Cove waterfront',
+    userPlace: null,
+    timeAxis: '',
+    weatherAxis: '',
+    phenomenaAxis: '',
+    wardrobeAnchor: null,
+    realWorldLocation: true,
+    mediumFluxFragment: 'grounded semi-realistic comic-book illustration',
+    vibeDirective: 'hushed',
+    avoidList: '',
+  });
+  const slots = {
+    scene_description: 'mooring field in dense silver fog',
+    wardrobe: 'ivory wrap-top ballet dress, soft layered blush tulle skirt.',
+    mood: 'hushed',
+    props: '',
+  };
+
+  it('puts the wardrobe right after the medium, before the scene, and only once', () => {
+    const p = assembleCharacterPrompt(slots, { ...solo(), soloOutfitEarly: true });
+    const med = p.indexOf('comic-book illustration');
+    const wear = p.indexOf('wearing ivory wrap-top ballet dress');
+    expect(wear).toBeGreaterThan(med);
+    expect(wear).toBeLessThan(p.indexOf('set at Sag Harbor'));
+    expect(p.split('ballet dress').length - 1).toBe(1);
+    expect(p).not.toContain('tulle skirt.,');
+  });
+
+  it('off: the prompt is exactly the old one', () => {
+    expect(assembleCharacterPrompt(slots, { ...solo(), soloOutfitEarly: false })).toBe(
+      assembleCharacterPrompt(slots, solo())
+    );
+  });
+
+  it('force_solo_outfit_early is tri-state', () => {
+    expect(parseQaFlags({}).force_solo_outfit_early).toBeNull();
+    expect(parseQaFlags({ force_solo_outfit_early: true }).force_solo_outfit_early).toBe(true);
+    expect(parseQaFlags({ force_solo_outfit_early: false }).force_solo_outfit_early).toBe(false);
   });
 });

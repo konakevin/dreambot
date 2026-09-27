@@ -444,6 +444,7 @@ Deno.serve(async (req) => {
     force_couple_variant,
     force_honest_looks,
     force_garment_roll,
+    force_solo_outfit_early,
     qa_big_face_max_hfrac,
     qa_max_face_hfrac,
     force_costume_keys,
@@ -3242,8 +3243,14 @@ Deno.serve(async (req) => {
             }
           });
         }
+        // SOLO OUTFIT EARLY (mig 565): single-cast prompts name the wardrobe right after the medium.
+        const soloOutfitEarly =
+          resolvedCast.length === 1 &&
+          (force_solo_outfit_early ?? engineCfg0.nightlySoloOutfitEarly);
+        if (soloOutfitEarly) fallbackReasons.push('solo_outfit_early');
         const slotInput: CharacterSlotPipelineInput = {
           ...(nightlyFashion ? { fashionLooks: nightlyFashion } : {}),
+          ...(soloOutfitEarly ? { soloOutfitEarly: true } : {}),
           cast: resolvedCast.map((rc, i) => ({
             role: rc.role,
             promptDesc: rc.promptDesc,

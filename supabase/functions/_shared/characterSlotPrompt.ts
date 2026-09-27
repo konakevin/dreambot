@@ -142,6 +142,11 @@ export interface CharacterSlotPipelineInput {
    *  Measured before: 22% of nightly solo women in wide-leg trousers. Unset → byte-identical. A holiday
    *  costumeLock and a Create outfitPlan both win over it. */
   fashionLooks?: ReadonlyArray<FashionPick | null> | null;
+  /** SOLO OUTFIT EARLY (mig 565, nightly): the single-cast prompt names the wardrobe right after the medium
+   *  fragment, before "set at". Same-seed flux-1.1-pro probe (2026-09-27, 4 missed nightly solos x 3 seeds): the
+   *  shipped order (wardrobe at the end of the CHARACTER block, ~char 1,100-1,400) rendered the outfit 0/12; right
+   *  after the medium 12/12 (ballet dress, old-money polo, two regency dresses). Unset → byte-identical. */
+  soloOutfitEarly?: boolean;
   /** Whether the location is a REAL-WORLD place (not a fantasy/imagined dream
    * world). Drives the TRAVELER wardrobe rule: on real places the cast are
    * VISITORS and must wear contemporary travel clothes, never the traditional/
@@ -1715,14 +1720,20 @@ export function assembleCharacterPrompt(
     // shrank); singles are backstopped by the identity gate + restore + post-swap
     // verify. Dual ordering is untouched. Verify identity_sim in
     // ai_generation_log when touching this.
+    // SOLO OUTFIT EARLY (mig 565): the wardrobe moves from the end of the CHARACTER block to right after the
+    // medium, where flux-1.1-pro actually reads it (0/12 → 12/12 in the same-seed probe).
+    const wardrobeTail = `, wearing ${wardrobe}`;
+    const outfitEarly =
+      !!input.soloOutfitEarly && !!wardrobe && identityBlock.endsWith(wardrobeTail);
     const parts = [
       genderLock,
       mediumSignal,
+      outfitEarly ? `wearing ${wardrobe.replace(/[\s.]+$/, '')}` : '',
       setAt,
       vibeEarly,
       singleAnchor,
       slots.action || input.action || '',
-      identityBlock,
+      outfitEarly ? identityBlock.slice(0, -wardrobeTail.length) : identityBlock,
       slots.scene_description,
       vibeAfterScene,
       framingBlock,

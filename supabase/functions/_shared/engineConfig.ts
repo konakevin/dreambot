@@ -209,6 +209,8 @@ export interface EngineConfig {
   /** Nightly garment axis (phase 8, mig 563): the same families on nightly's wardrobe slot. LIVE since mig
    *  564 on Kevin's word (restore-point rule); `force_garment_roll` overrides per request for QA. */
   nightlyGarmentRoll: boolean;
+  /** Nightly SOLO outfit early (mig 565): the wardrobe right after the medium fragment in single-cast prompts. */
+  nightlySoloOutfitEarly: boolean;
   /** SWAP CAPACITY GATE (mig 549, NIGHTLY_ROBUSTNESS_PLAN.md): dual swaps wait for a free Fly slot. */
   swapGateEnabled: boolean;
   /** Longest a dual swap waits for a slot before `swap_capacity_busy` (ms). */
@@ -321,6 +323,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   createOutfitGarmentRoll: false,
   outfitGarmentWeights: { ...DEFAULT_GARMENT_WEIGHTS },
   nightlyGarmentRoll: false,
+  nightlySoloOutfitEarly: false,
   swapGateEnabled: false,
   swapGateMaxWaitMs: 45_000,
   nightlySwapCapacityRetries: 0,
@@ -504,6 +507,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     createOutfitGarmentRoll: data.create_outfit_garment_roll === true,
     outfitGarmentWeights: normalizeGarmentWeights(data.outfit_garment_weights),
     nightlyGarmentRoll: data.nightly_garment_roll === true,
+    nightlySoloOutfitEarly: data.nightly_solo_outfit_early === true,
     swapGateEnabled: data.swap_gate_enabled === true,
     swapGateMaxWaitMs: Number.isFinite(Number(data.swap_gate_max_wait_ms))
       ? Math.max(0, Math.min(120_000, Number(data.swap_gate_max_wait_ms)))

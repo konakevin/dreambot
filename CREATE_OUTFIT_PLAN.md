@@ -463,6 +463,15 @@ kept (elegant / active) are untouched by design.
   each person) render it. A fix is a change to the restore-point nightly engine: Kevin's call.
 - No wide-leg anywhere in the 22. Dream Art portrait renders (watercolor, expressive) crop the outfit out by design.
 
+**Nightly solo fixed (migs 565/566, LIVE 2026-09-27 ~07:05 UTC).** Same-seed flux-1.1-pro probe on the 4 solos
+that missed, 3 seeds each: shipped order 0/12 outfits; wardrobe folded into the position-1 lock 12/12; wardrobe
+right after the medium fragment 12/12. Shipped the second (keeps the tuned gender/eye/hair lock at position 1
+and the medium second): `nightly_solo_outfit_early` (+ QA `force_solo_outfit_early`) moves "wearing <wardrobe>"
+from the end of the CHARACTER block to right after the medium (char ~1,100-1,400 → ~390-470). Real renders on
+Kevin's account: 8/8 solos wore exactly the prompted outfit (was ~2/6); every swap passed, identity 0.51-0.74
+(mean 0.64 vs 0.67). Trade-off: the knees-up framing line is honoured more, so some shots are wider. Rollback:
+`nightly_solo_outfit_early = false`. Stamp `solo_outfit_early`.
+
 **Watch after the flip.** Some looks carry a hat (dapper flat cap, Parisian beret, resort wide-brim, coastal
 straw hat, safari sun hat). One lab beach couple degraded to a solo (identity 0.16 / -0.04) with a flat cap on
 him, but its base render was a NIGHT scene with the heads nearly touching, both known swap killers; the St
