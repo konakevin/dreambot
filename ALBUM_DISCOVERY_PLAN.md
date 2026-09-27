@@ -1,7 +1,8 @@
 # Album navigation & discovery plan
 
-Status: **BUILT, awaiting device testing + commit** (2026-09-26). Decisions are Kevin's, from the 2026-09-26
-brainstorm. Server pieces (migrations 557-560 + 558a) are LIVE; the app pieces ship in the next build.
+Status: **SHIPPED in 1.9.0 (build 61), live on the App Store 2026-09-27** with a hard update gate at 1.9.0, so
+every user has it. Decisions are Kevin's, from the 2026-09-26 brainstorm. Server pieces (migrations 557-562 +
+558a, 561a) went live before the build; the app pieces are commit 0a522252.
 Concept renders: the "DreamBot Browsing Concepts" artifact (interactive phone mockups of every piece below).
 
 ## The problem, measured (2026-09-26)
