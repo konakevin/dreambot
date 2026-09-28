@@ -10,6 +10,10 @@
  * weight→face and neutralize fontWeight to avoid faux-bold). Anything that sets
  * its own fontFamily (e.g. GradientTitle's Quicksand, monospace) is left alone.
  *
+ * Text size: both default to `maxFontSizeMultiplier = MAX_FONT_SCALE` so the largest system text
+ * sizes (iOS Dynamic Type accessibility sizes, Android's 200%) grow text but don't break fixed-height
+ * pills, chips and single-line rows. A caller can pass its own `maxFontSizeMultiplier` to override.
+ *
  * Flip the whole body font in constants/fonts.ts (BODY_FONT). Each name is
  * exported as BOTH a value (the component) and a type (the native instance), so
  * `useRef<TextInput>()` and `<TextInput>` both keep working after the swap.
@@ -29,6 +33,9 @@ import { bodyFontFamily } from '@/constants/fonts';
 
 const RESET_WEIGHT: TextStyle = { fontWeight: 'normal' };
 
+/** Cap on how far the system text-size setting can enlarge app text (1 = no growth). */
+export const MAX_FONT_SCALE = 1.3;
+
 function withBodyFont(style: StyleProp<TextStyle>): StyleProp<TextStyle> {
   const flat = StyleSheet.flatten(style) ?? {};
   if (flat.fontFamily) return style; // explicit font wins (Quicksand titles, monospace)
@@ -36,13 +43,20 @@ function withBodyFont(style: StyleProp<TextStyle>): StyleProp<TextStyle> {
 }
 
 export const Text = forwardRef<ElementRef<typeof RNText>, TextProps>(({ style, ...props }, ref) => (
-  <RNText ref={ref} style={withBodyFont(style)} {...props} />
+  <RNText ref={ref} maxFontSizeMultiplier={MAX_FONT_SCALE} style={withBodyFont(style)} {...props} />
 ));
 Text.displayName = 'Text';
 export type Text = ElementRef<typeof RNText>;
 
 export const TextInput = forwardRef<ElementRef<typeof RNTextInput>, TextInputProps>(
-  ({ style, ...props }, ref) => <RNTextInput ref={ref} style={withBodyFont(style)} {...props} />
+  ({ style, ...props }, ref) => (
+    <RNTextInput
+      ref={ref}
+      maxFontSizeMultiplier={MAX_FONT_SCALE}
+      style={withBodyFont(style)}
+      {...props}
+    />
+  )
 );
 TextInput.displayName = 'TextInput';
 export type TextInput = ElementRef<typeof RNTextInput>;

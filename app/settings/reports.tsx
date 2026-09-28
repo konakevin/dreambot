@@ -30,6 +30,8 @@ const REASON_LABELS: Record<string, string> = {
   harassment: 'Harassment or bullying',
   nudity_sexual: 'Nudity or sexual content',
   violence_hate: 'Violence or hate',
+  likeness_or_photo: 'Uses my face or photo',
+  harmful_output: 'Offensive or harmful result (own dream)',
   inappropriate: 'Something else',
 };
 const reasonLabel = (r: string) => REASON_LABELS[r] ?? r;

@@ -90,6 +90,7 @@ function partnerToPlusOne(p: DreamPartner, prev?: DreamCastMember): DreamCastMem
     ...(p.physical_summary ? { physical_summary: p.physical_summary } : {}),
     ...(p.ethnicity ? { ethnicity: p.ethnicity } : {}),
     ...(keepUnset ? {} : { relationship: p.relationship }),
+    ...(p.consent_confirmed_at ? { consent_confirmed_at: p.consent_confirmed_at } : {}),
   };
 }
 
@@ -207,6 +208,7 @@ export function migrateLegacyPlusOne(profile: VibeProfile): VibeProfile {
     ...(typeof plusOne.age === 'number' ? { age: plusOne.age } : {}),
     ...(plusOne.physical_summary ? { physical_summary: plusOne.physical_summary } : {}),
     ...(plusOne.ethnicity ? { ethnicity: plusOne.ethnicity } : {}),
+    ...(plusOne.consent_confirmed_at ? { consent_confirmed_at: plusOne.consent_confirmed_at } : {}),
     relationship: plusOne.relationship === 'partner' ? 'partner' : 'friend',
     // Explicitly eligible: this IS the +1 they dream with today.
     enabled: true,

@@ -36,6 +36,7 @@ import {
   type FirstDreamProgress,
 } from '@/lib/firstDreamLoadingCopy';
 import { pickEarlyLabel, pickRenderLabel, pickFaceSwapLabel } from '@/lib/dreamStageLabels';
+import { usePushPromptAfterDream } from '@/hooks/usePushPromptAfterDream';
 
 const MASCOT = require('@/assets/images/onboarding/mascot-welcome.png');
 
@@ -337,6 +338,9 @@ export function RevealStep({ onBack, isActive = false }: Props) {
   // Now it re-checks on a short interval, so a missed start heals itself in one tick.
   // awaitDream is idempotent (it no-ops while a poll is in flight), so the retry can
   // never stack pollers.
+  // The first dream on screen is when we ask for push permission (lib/pushPrompt.ts), not at launch.
+  usePushPromptAfterDream(isActive && !isEditing && phase === 'reveal' && dreams.length > 0);
+
   useEffect(() => {
     if (isEditing || !isActive) return;
     if (!firstDreamJobId || phase !== 'generating' || dreams.length > 0) return;

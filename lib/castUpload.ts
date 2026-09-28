@@ -15,6 +15,7 @@ import { fetchEdge } from '@/lib/edgeFunction';
 import { castSignedUrl } from '@/lib/castPhoto';
 import { hasAiConsent } from '@/lib/aiConsent';
 import { showAiConsent } from '@/components/AiConsentSheet';
+import { castRoleNeedsPermission, confirmCastPermission } from '@/lib/castPermission';
 
 const CAST_BUCKET = 'cast-photos';
 
@@ -25,6 +26,8 @@ export interface CastPhotoResult {
   age?: number;
   physical_summary?: string;
   ethnicity?: string;
+  /** Set for a +1 photo: when the user confirmed they have the person's permission. */
+  consent_confirmed_at?: string;
 }
 
 /** A distinct error type so callers can show the friendly "not recognized" copy.
@@ -87,6 +90,12 @@ export async function pickUploadDescribeCast(
   if (!(await hasAiConsent())) {
     const agreed = await showAiConsent();
     if (!agreed) return null;
+  }
+  // Someone else's face: confirm their permission first (lib/castPermission.ts).
+  let consentConfirmedAt: string | null = null;
+  if (castRoleNeedsPermission(role)) {
+    consentConfirmedAt = await confirmCastPermission();
+    if (!consentConfirmedAt) return null;
   }
   const result = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ['images'],
@@ -175,5 +184,6 @@ export async function pickUploadDescribeCast(
     ...(typeof d.age === 'number' ? { age: d.age } : {}),
     ...(d.physical_summary ? { physical_summary: d.physical_summary } : {}),
     ...(d.ethnicity ? { ethnicity: d.ethnicity } : {}),
+    ...(consentConfirmedAt ? { consent_confirmed_at: consentConfirmedAt } : {}),
   };
 }

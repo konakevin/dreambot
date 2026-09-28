@@ -26,6 +26,7 @@ import { fetchEdge } from '@/lib/edgeFunction';
 import { castSignedUrl, castHasPhoto } from '@/lib/castPhoto';
 import { hasAiConsent } from '@/lib/aiConsent';
 import { showAiConsent } from '@/components/AiConsentSheet';
+import { castRoleNeedsPermission, confirmCastPermission } from '@/lib/castPermission';
 import { useAuthStore } from '@/store/auth';
 import { showAlert } from '@/components/CustomAlert';
 import { Toast } from '@/components/Toast';
@@ -493,6 +494,13 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
       const agreed = await showAiConsent();
       if (!agreed) return;
     }
+    // Someone else's face: confirm their permission first (lib/castPermission.ts).
+    let consentConfirmedAt: string | null = null;
+    if (castRoleNeedsPermission(role)) {
+      consentConfirmedAt = await confirmCastPermission();
+      if (!consentConfirmedAt) return;
+    }
+    const consentField = consentConfirmedAt ? { consent_confirmed_at: consentConfirmedAt } : {};
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       allowsEditing: false,
@@ -575,6 +583,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
         storage_path: path,
         description: '',
         ...(plusOneRel ? { relationship: plusOneRel } : {}),
+        ...consentField,
       });
       fdlog(`castUpload setCastMember(storage_path) role=${role} (describe next)`);
 
@@ -651,6 +660,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
         ...(descData.physical_summary ? { physical_summary: descData.physical_summary } : {}),
         ...(descData.ethnicity ? { ethnicity: descData.ethnicity } : {}),
         ...(plusOneRelFinal ? { relationship: plusOneRelFinal } : {}),
+        ...consentField,
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       // Flush the save NOW in edit mode so "Ready for dreams" means PERSISTED,

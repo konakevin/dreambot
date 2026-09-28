@@ -8,7 +8,7 @@ import { useAuthStore } from '@/store/auth';
 import { invokeEdge } from '@/lib/edgeFunction';
 import { supabase } from '@/lib/supabase';
 import { saveUrlToPhotos, saveAlbumToPhotos } from '@/lib/savePhoto';
-import { reportContent } from '@/lib/reportContent';
+import { reportContent, reportOwnDream } from '@/lib/reportContent';
 import { trackHdDownloadTapped } from '@/lib/analytics';
 
 interface UpscaleBody {
@@ -515,7 +515,9 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
     });
   }
 
-  // Report — required flag path; only on posts you don't own.
+  // Report — required flag path. Someone else's post: the full reason list. Your OWN single
+  // dream: flag a harmful AI result (Google Play AI-content policy, App Store 1.2); not on your
+  // own albums, whose dreams each carry their own row.
   if (!opts.isOwn) {
     rows.push({
       key: 'report',
@@ -523,6 +525,14 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
       icon: 'flag-outline',
       group: 'danger',
       onPress: () => reportContent({ uploadId: opts.id }),
+    });
+  } else if (!opts.isGallery) {
+    rows.push({
+      key: 'report',
+      label: 'Report this dream',
+      icon: 'flag-outline',
+      group: 'danger',
+      onPress: () => reportOwnDream(opts.id),
     });
   }
 

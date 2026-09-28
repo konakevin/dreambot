@@ -41,7 +41,12 @@ jest.mock('@/components/Toast', () => ({
   Toast: { show: (...a: unknown[]) => mockToastShow(...a) },
 }));
 // reportContent pulls in queryClient (native) — stub it; reporting isn't under test here.
-jest.mock('@/lib/reportContent', () => ({ reportContent: jest.fn() }));
+const mockReportContent = jest.fn();
+const mockReportOwnDream = jest.fn();
+jest.mock('@/lib/reportContent', () => ({
+  reportContent: (...a: unknown[]) => mockReportContent(...a),
+  reportOwnDream: (...a: unknown[]) => mockReportOwnDream(...a),
+}));
 jest.mock('@/components/UpscaleOverlay', () => ({
   UpscaleModal: {
     show: (...a: unknown[]) => mockModalShow(...a),
@@ -281,5 +286,39 @@ describe('buildPostActionRows — "Use as profile picture"', () => {
         'Use as profile picture'
       )
     ).toBe(false);
+  });
+});
+
+describe('buildPostActionRows — Report (AI-content policy: own dreams too)', () => {
+  it("someone else's post: 'Report' opens the full report flow", () => {
+    const rows = buildPostActionRows({ id: 'p1', imageUrl: 'https://img/orig.jpg' });
+    pressRow(rows, 'Report');
+    expect(mockReportContent).toHaveBeenCalledWith({ uploadId: 'p1' });
+    expect(rows.some((r) => r.label === 'Report this dream')).toBe(false);
+  });
+
+  it("your OWN single dream: 'Report this dream' opens the own-dream report", () => {
+    const rows = buildPostActionRows({
+      id: 'mine',
+      imageUrl: 'https://img/orig.jpg',
+      isOwn: true,
+      onDelete: jest.fn(),
+    });
+    expect(rows.some((r) => r.label === 'Report')).toBe(false);
+    pressRow(rows, 'Report this dream');
+    expect(mockReportOwnDream).toHaveBeenCalledWith('mine');
+    expect(mockReportContent).not.toHaveBeenCalled();
+  });
+
+  it('your own ALBUM gets no report row (each dream inside has its own)', () => {
+    const rows = buildPostActionRows({
+      id: 'album',
+      imageUrl: 'https://img/orig.jpg',
+      isOwn: true,
+      isGallery: true,
+      mediaCount: 3,
+      onDelete: jest.fn(),
+    });
+    expect(rows.some((r) => r.label === 'Report' || r.label === 'Report this dream')).toBe(false);
   });
 });

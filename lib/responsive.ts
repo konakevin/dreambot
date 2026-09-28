@@ -93,18 +93,32 @@ export function horizontalScale(size: number): number {
   return Math.round((size / BASE_WIDTH) * initial.width);
 }
 
+/** How much narrower than an iPhone (width ratio vs height ratio) a screen must be before width limits
+ *  the font scale. Every iPhone's two ratios are within 0.5% of each other; 1% keeps them all on the
+ *  height ratio. */
+const NARROW_TOLERANCE = 1.01;
+
+/**
+ * The ratio `fontScale()` multiplies by: the height ratio to the iPhone 14 base, capped by the width
+ * ratio (plus a 1% tolerance) on screens that are narrow for their height (20:9 Android phones, a
+ * foldable's cover screen), clamped to 85%–110%. Every iPhone and iPad size is unchanged from the
+ * height-only formula (locked by __tests__/lib/responsiveFontScale.test.ts). Pure, for the tests.
+ */
+export function fontScaleRatio(width: number, height: number): number {
+  const ratio = Math.min(height / BASE_HEIGHT, (width / BASE_WIDTH) * NARROW_TOLERANCE);
+  return Math.max(0.85, Math.min(1.1, ratio));
+}
+
 /**
  * Font scale — proportional like verticalScale but with a tighter curve so
  * headlines don't shrink to unreadable sizes on small screens or balloon
- * on tall screens. Clamped to 85%–110% of the base size.
+ * on tall screens. Clamped to 85%–110% of the base size (fontScaleRatio).
  *
  * Use `fontScale()` for `fontSize` and `lineHeight` values.
  * Use `verticalScale()` for paddings/margins around them.
  */
 export function fontScale(size: number): number {
-  const ratio = initial.height / BASE_HEIGHT;
-  const clampedRatio = Math.max(0.85, Math.min(1.1, ratio));
-  return Math.round(size * clampedRatio);
+  return Math.round(size * fontScaleRatio(initial.width, initial.height));
 }
 
 /** Clamp a value between min and max. */

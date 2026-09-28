@@ -39,13 +39,26 @@ const REASONS: { label: string; reason: string }[] = [
   { label: 'Something else', reason: 'inappropriate' },
 ];
 
+// Your OWN dream (Create / nightly result): flag a harmful AI output (Google Play's AI-content
+// policy + App Store 1.2). Safety reasons only; spam/harassment/likeness don't apply to a result you made.
+const OWN_DREAM_REASONS: { label: string; reason: string }[] = [
+  { label: 'Nudity or sexual content', reason: 'nudity_sexual' },
+  { label: 'Violence or hate', reason: 'violence_hate' },
+  { label: 'Offensive or harmful result', reason: 'harmful_output' },
+  { label: 'Something else', reason: 'inappropriate' },
+];
+
 function targetNoun(target: ReportTarget): string {
   if (target.commentId) return 'comment';
   if (target.reportedUserId) return 'user';
   return 'post';
 }
 
-async function submitReport(target: ReportTarget, reason: string): Promise<void> {
+async function submitReport(
+  target: ReportTarget,
+  reason: string,
+  opts: { hideFromFeeds?: boolean } = {}
+): Promise<void> {
   const user = useAuthStore.getState().user;
   if (!user) return;
   const row: Database['public']['Tables']['reports']['Insert'] = {
@@ -66,7 +79,7 @@ async function submitReport(target: ReportTarget, reason: string): Promise<void>
   // from the loaded feeds right now, IN PLACE. A feed refetch here re-sorted every
   // loaded page under the reporter and popped a different post into view
   // (Kevin 2026-09-26).
-  if (target.uploadId) {
+  if (target.uploadId && opts.hideFromFeeds !== false) {
     const uploadId = target.uploadId;
     await removePostsFromFeeds(queryClient, (post) => post.id === uploadId);
     queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
@@ -119,6 +132,28 @@ export function reportContent(target: ReportTarget): void {
       style: 'destructive' as const,
       onPress: () => {
         submitReport(target, r.reason);
+      },
+    })),
+    { text: 'Cancel', style: 'cancel' as const },
+  ]);
+}
+
+/** Reason options for reporting your own dream (exported for tests). */
+export const ownDreamReportReasons = OWN_DREAM_REASONS;
+
+/**
+ * Report your OWN dream: the AI produced something harmful or offensive. Same `reports` row
+ * and admin review as any post report (the RLS insert policy only requires reporter_id =
+ * you); the dream stays in your feeds and albums, since you may still want to delete it.
+ */
+export function reportOwnDream(uploadId: string): void {
+  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  showAlert('Report this dream', "What's wrong with this result? Our team reviews every report.", [
+    ...OWN_DREAM_REASONS.map((r) => ({
+      text: r.label,
+      style: 'destructive' as const,
+      onPress: () => {
+        submitReport({ uploadId }, r.reason, { hideFromFeeds: false });
       },
     })),
     { text: 'Cancel', style: 'cancel' as const },

@@ -5,6 +5,7 @@ import Constants from 'expo-constants';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { routeFromNotification, type NotificationRouteData } from '@/lib/notificationRouting';
+import { pushPermissionAction, type PushMoment } from '@/lib/pushPrompt';
 
 // handleNotification runs ONLY for pushes that arrive while the app is in the
 // FOREGROUND. Suppress the OS banner/alert/sound/badge here: the in-app
@@ -25,20 +26,27 @@ Notifications.setNotificationHandler({
   }),
 });
 
-async function registerForPushNotifications(): Promise<string | null> {
-  // Check existing permission
-  const { status: existingStatus } = await Notifications.getPermissionsAsync();
-  let finalStatus = existingStatus;
-
-  // Request if not granted
-  if (existingStatus !== 'granted') {
-    const { status } = await Notifications.requestPermissionsAsync();
-    finalStatus = status;
-  }
-
-  if (finalStatus !== 'granted') {
-    if (__DEV__) console.log('[Push] Permission not granted');
+/**
+ * Fetch the Expo push token, asking for permission first only when `moment` allows it
+ * (lib/pushPrompt.ts): launch registers an already-granted permission and never prompts; the prompt
+ * comes after the first dream reveal (promptForPushAfterDream).
+ */
+async function registerForPushNotifications(moment: PushMoment): Promise<string | null> {
+  const existing = await Notifications.getPermissionsAsync();
+  const action = pushPermissionAction(
+    { status: existing.status, canAskAgain: existing.canAskAgain },
+    moment
+  );
+  if (action === 'skip') {
+    if (__DEV__) console.log(`[Push] ${moment}: permission ${existing.status}, not asking`);
     return null;
+  }
+  if (action === 'prompt') {
+    const { status } = await Notifications.requestPermissionsAsync();
+    if (status !== 'granted') {
+      if (__DEV__) console.log('[Push] Permission not granted');
+      return null;
+    }
   }
 
   // Read projectId from runtime config (app.config.js → extra.eas.projectId)
@@ -77,6 +85,20 @@ async function savePushToken(userId: string, token: string) {
   if (error && __DEV__) console.warn('[Push] Failed to save token:', error.message);
 }
 
+/**
+ * Ask for push permission right after a dream reveal (onboarding's first dream, Create), then save the
+ * token. A no-op once the user has answered (granted → just refreshes the token; denied → nothing), so
+ * every reveal can call it. Never throws.
+ */
+export async function promptForPushAfterDream(userId: string): Promise<void> {
+  try {
+    const token = await registerForPushNotifications('after_dream');
+    if (token) await savePushToken(userId, token);
+  } catch (err) {
+    if (__DEV__) console.warn('[Push] after-dream prompt failed:', err);
+  }
+}
+
 /** Module-level guard so the cold-start tap is handled exactly once per
  *  process. Without this, every remount of `usePushNotifications` (which
  *  happens on auth-state changes, fast refresh, etc.) would re-fire the
@@ -99,8 +121,9 @@ let coldStartHandled = false;
  *     expo-router's navigator to mount before pushing.
  *
  * Effect 2 (user-gated): registers + persists the Expo push token for the
- *   signed-in user. This is the part that needs auth — token registration
- *   alone doesn't route notifications.
+ *   signed-in user when permission is ALREADY granted. It never shows the
+ *   system prompt; that happens after the first dream reveal
+ *   (promptForPushAfterDream, lib/pushPrompt.ts).
  *
  * Routing for all three paths uses the shared `routeFromNotification`
  * helper in lib/notificationRouting.ts so the push tap and the inbox row
@@ -155,10 +178,11 @@ export function usePushNotifications() {
     };
   }, []);
 
-  // Effect 2: register + persist push token (user-gated).
+  // Effect 2: register + persist the push token for an ALREADY-GRANTED permission (user-gated). Never
+  // prompts: the first ask happens after the first dream reveal (promptForPushAfterDream).
   useEffect(() => {
     if (!user) return;
-    registerForPushNotifications()
+    registerForPushNotifications('launch')
       .then((token) => {
         if (token) savePushToken(user.id, token);
       })

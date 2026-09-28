@@ -9,6 +9,7 @@
  * EXPO_PUBLIC_SENTRY_DSN, and rebuild the native app (Sentry is a native module
  * — it ships with the next EAS build, not an OTA/Expo Go).
  */
+import { Platform } from 'react-native';
 import * as Sentry from '@sentry/react-native';
 
 const DSN = process.env.EXPO_PUBLIC_SENTRY_DSN;
@@ -21,7 +22,16 @@ const DSN = process.env.EXPO_PUBLIC_SENTRY_DSN;
 // false in any release build).
 const APP_ENV = process.env.EXPO_PUBLIC_APP_ENV ?? 'local';
 
-/** Initialize Sentry. No-op without a DSN; never sends in __DEV__. */
+/**
+ * Initialize Sentry. No-op without a DSN; never sends in __DEV__.
+ *
+ * release / dist are left to the SDK defaults on purpose: it reads them from the native app
+ * (`<bundleId>@<version>+<build>`, dist = the build number), which is exactly what the Xcode build
+ * phase uses when it uploads source maps, so overriding them here would break symbolication. The iOS
+ * bundle id and the Android package are the same string, so the `platform` tag keeps the two apart in
+ * Sentry's filters; PORT_TO_ANDROID.md D10 starts Android's versionCode at 1000 so release names never
+ * collide either.
+ */
 export function initSentry(): void {
   if (!DSN) return;
   Sentry.init({
@@ -29,6 +39,7 @@ export function initSentry(): void {
     environment: APP_ENV,
     enabled: !__DEV__, // don't ship dev noise to the project
     tracesSampleRate: 0.1, // crashes are the priority; sample perf lightly
+    initialScope: { tags: { platform: Platform.OS } },
   });
 }
 

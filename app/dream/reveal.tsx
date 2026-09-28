@@ -19,7 +19,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCardGestures } from '@/hooks/gestures/useCardGestures';
 import { colors, ui } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, horizontalScale } from '@/lib/responsive';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
@@ -27,7 +27,9 @@ import { saveDream } from '@/lib/dreamSave';
 import { markDreamSeen } from '@/lib/markDreamSeen';
 import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 import { syncDreamWidget } from '@/lib/widgetSync';
+import { usePushPromptAfterDream } from '@/hooks/usePushPromptAfterDream';
 import { Toast } from '@/components/Toast';
+import { reportOwnDream } from '@/lib/reportContent';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -88,6 +90,9 @@ export default function DreamRevealScreen() {
     void clearDreamInFlight();
     void syncDreamWidget();
   }, []);
+
+  // A finished dream on screen is the moment to ask for push permission (lib/pushPrompt.ts).
+  usePushPromptAfterDream(!!result);
 
   if (!result) {
     return (
@@ -234,6 +239,26 @@ export default function DreamRevealScreen() {
           <Ionicons name="scan-outline" size={28} color="#FFFFFF" style={ui.sideIcon} />
         </TouchableOpacity>
       )}
+
+      {/* Report (top-left, mirrors the expand icon): flag a harmful AI result right here
+          (Google Play AI-content policy, App Store 1.2). Only once the dream is saved. */}
+      {!preview && result.uploadId ? (
+        <TouchableOpacity
+          style={[ui.sideButton, s.reportBtn, { top: insets.top + verticalScale(8) }]}
+          onPress={() => reportOwnDream(result.uploadId as string)}
+          hitSlop={12}
+          activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel="Report this dream"
+        >
+          <Ionicons
+            name="flag-outline"
+            size={horizontalScale(22)}
+            color="#FFFFFF"
+            style={ui.sideIcon}
+          />
+        </TouchableOpacity>
+      ) : null}
 
       {/* HUD — bottom gradient + actions. Tap the image to hide / show. */}
       {hudVisible && (
@@ -418,6 +443,11 @@ const s = StyleSheet.create({
   expandBtn: {
     position: 'absolute',
     right: 16,
+    zIndex: 30,
+  },
+  reportBtn: {
+    position: 'absolute',
+    left: horizontalScale(16),
     zIndex: 30,
   },
 });

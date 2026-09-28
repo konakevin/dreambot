@@ -71,6 +71,10 @@ export interface DreamPartner {
    *  reach an LLM or Flux prompt. Blank/absent → the card falls back to the
    *  relationship word. Locked by __tests__/lib/dreamCastRoster.test.ts. */
   name?: string;
+  /** When the user confirmed they have this person's permission to add their photo (ISO time,
+   *  lib/castPermission.ts). Set on each new +1 photo; absent on members added before the confirm
+   *  existed (2026-09-27). Evidence only: never shown, never sent to a prompt. */
+  consent_confirmed_at?: string;
   /** Eligible to be rolled as the +1 in a dream (Settings checkbox). Several can
    *  be enabled at once — the engine picks one per render. Absent on recipes that
    *  predate multi-cast, where the ONE `active_partner_id` member is the only
@@ -104,6 +108,10 @@ export interface DreamCastMember {
   ethnicity?: string;
   /** Relationship to the user — only for plus_one role. Affects dream context (romantic vs platonic). */
   relationship?: CastRelationship;
+  /** When the user confirmed they have this person's permission to add their photo (ISO time,
+   *  lib/castPermission.ts). Set on each new +1 photo; absent on members added before the confirm
+   *  existed (2026-09-27). Evidence only: never shown, never sent to a prompt. */
+  consent_confirmed_at?: string;
 }
 
 /**
