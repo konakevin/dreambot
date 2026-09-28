@@ -55,8 +55,12 @@ import {
   garmentRollStamps,
   planOutfits,
   slimWideLegs,
+  sceneFitFrom,
+  SCENE_FIT_ALL,
   type OutfitPlan,
+  type SceneFit,
 } from '../_shared/outfitPlan.ts';
+import { settingFromText } from '../_shared/sceneSetting.ts';
 import {
   extractOutfitSpec,
   outfitSpecStamps,
@@ -198,6 +202,9 @@ interface RequestBody {
    *  render exactly the model they picked. Absent/true → DreamSmart on (default).
    *  See SMART_DREAM_PLAN.md §7b. */
   dream_smart?: boolean;
+  /** QA (lab renders, CREATE_OUTFIT_PLAN.md phase 9): force outfit scene fit on/off, or one fix alone
+   *  ('looks' | 'trim' | 'brief'). Absent → engine_config.create_outfit_scene_fit / the preview list. */
+  qa_outfit_scene_fit?: boolean | 'looks' | 'trim' | 'brief';
   /** When false, render + return WITHOUT inserting an uploads row — the caller
    *  persists its own (onboarding RevealStep). Defaults to true. Fixes the
    *  duplicate-first-dream (gen + "Post my Dream" both inserting a row). */
@@ -1595,6 +1602,19 @@ Output ONLY the prompt.`;
         // nobody dressed. Preview accounts get both while they are globally off.
         const costumeReadOn = outfitLockOn && (castCfg.createOutfitCostumeRead || outfitPreview);
         const garmentRollOn = outfitRollsOn && (castCfg.createOutfitGarmentRoll || outfitPreview);
+        // Phase 9 (mig 572): outfits fit the place. The lab's qa_outfit_scene_fit forces it on/off or
+        // one fix alone (the one-variable QA); otherwise the switch, with preview accounts always on.
+        const qaSceneFit = body.qa_outfit_scene_fit;
+        const sceneFit: SceneFit | null =
+          qaSceneFit === true ||
+          qaSceneFit === false ||
+          qaSceneFit === 'looks' ||
+          qaSceneFit === 'trim' ||
+          qaSceneFit === 'brief'
+            ? sceneFitFrom(qaSceneFit)
+            : castCfg.createOutfitSceneFit || outfitPreview
+              ? SCENE_FIT_ALL
+              : null;
         const outfitRoles = resolvedCast.map((rc) => rc.role);
         const outfitEligible =
           outfitRollsOn &&
@@ -1623,9 +1643,22 @@ Output ONLY the prompt.`;
               })
             : Promise.resolve<OutfitSpecOutcome>({ source: 'skipped', result: null, reason: 'off' })
           : null;
-        const rollOutfitPlan = (spec: OutfitSpecOutcome): OutfitPlan => {
+        // `sceneTexts`: the user's own words for where they are (the prompt, the couple split's setting and
+        // action, the surprise place). Phase 9 reads the setting from them; unused when scene fit is off.
+        const rollOutfitPlan = (
+          spec: OutfitSpecOutcome,
+          sceneTexts: (string | null | undefined)[],
+          settingSource: 'keywords' | 'split'
+        ): OutfitPlan => {
           fallbackReasons.push(...outfitSpecStamps(spec, outfitRoles.length));
           if (outfitPreview && !castCfg.createOutfitRolls) fallbackReasons.push('outfit_preview');
+          const setting = sceneFit ? settingFromText(...sceneTexts) : null;
+          if (sceneFit && setting) {
+            fallbackReasons.push(
+              `outfit_scene_fit:${sceneFit.looks && sceneFit.trim && sceneFit.brief ? 'all' : sceneFit.looks ? 'looks' : sceneFit.trim ? 'trim' : 'brief'}`,
+              `outfit_setting:${setting}:${settingSource}`
+            );
+          }
           const plan = planOutfits(
             outfitRoles,
             {
@@ -1639,6 +1672,9 @@ Output ONLY the prompt.`;
                     genders: Object.fromEntries(resolvedCast.map((rc) => [rc.role, rc.gender])),
                   }
                 : {}),
+              ...(sceneFit && setting
+                ? { sceneFit, setting, sceneText: sceneTexts.filter(Boolean).join(' ') }
+                : {}),
             },
             spec.source === 'read' ? spec.result.byRole : {}
           );
@@ -1647,7 +1683,11 @@ Output ONLY the prompt.`;
         };
         const soloOutfitPlan: OutfitPlan | null =
           outfitSpecPromise && outfitRoles.length === 1
-            ? rollOutfitPlan(await outfitSpecPromise)
+            ? rollOutfitPlan(
+                await outfitSpecPromise,
+                [userSubject, castSurprise ? castSurprise.prompt : null],
+                'keywords'
+              )
             : null;
 
         const compiled = compilePrompt({
@@ -1721,7 +1761,17 @@ Output ONLY the prompt.`;
               }
               const coupleOutfitPlan: OutfitPlan | null =
                 outfitSpecPromise && outfitRoles.length === 2
-                  ? rollOutfitPlan(await outfitSpecPromise)
+                  ? sceneSplit && sceneSplit.source === 'split'
+                    ? rollOutfitPlan(
+                        await outfitSpecPromise,
+                        [sceneSplit.setting, sceneSplit.action, userSubject],
+                        'split'
+                      )
+                    : rollOutfitPlan(
+                        await outfitSpecPromise,
+                        [userSubject, castSurprise ? castSurprise.prompt : null],
+                        'keywords'
+                      )
                   : null;
               // Named var (not inline) so a later dual-swap failure can rebuild a
               // SOLO prompt for self from the same input.

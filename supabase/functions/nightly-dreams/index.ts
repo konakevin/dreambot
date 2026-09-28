@@ -179,7 +179,13 @@ import {
   type DualSlots,
   type CharacterSlots,
 } from '../_shared/characterSlotPrompt.ts';
-import { rollFashion } from '../_shared/outfitPlan.ts';
+import { rollFashion, sceneFitFrom } from '../_shared/outfitPlan.ts';
+import {
+  settingFromCategory,
+  settingFromLocation,
+  settingFromText,
+  type Setting,
+} from '../_shared/sceneSetting.ts';
 import { holidayPoolOf, selectDayOfRows } from '../_shared/holidayPools.ts';
 import { steerDualModel } from '../_shared/dualModelSteer.ts';
 import {
@@ -461,6 +467,7 @@ Deno.serve(async (req) => {
     force_honest_looks,
     force_garment_roll,
     force_solo_outfit_early,
+    force_outfit_scene_fit,
     qa_big_face_max_hfrac,
     qa_max_face_hfrac,
     force_costume_keys,
@@ -3237,6 +3244,42 @@ Deno.serve(async (req) => {
         const fashionRollable =
           !costumePicks &&
           (dualSpecialScene ? !!holidayCategory || genericAttire : !locationWardrobe);
+        // SCENE FIT (mig 572, CREATE_OUTFIT_PLAN.md phase 9): the roll picks only looks that fit the place
+        // and the brief dresses for the place first. The setting comes from the scenario row when there is one
+        // (its category, else its own scene text), otherwise from the location card (biome, tags, imagined).
+        // Nightly has no colour roll, so only the looks and brief halves apply. Off → nothing changes.
+        const nightlySceneFit =
+          force_outfit_scene_fit !== null
+            ? sceneFitFrom(force_outfit_scene_fit)
+            : engineCfg0.nightlyOutfitSceneFit
+              ? sceneFitFrom(true)
+              : null;
+        let nightlySetting: Setting | null = null;
+        if (nightlySceneFit && garmentRollOn && fashionRollable) {
+          const fromRow = dualSpecialScene
+            ? (settingFromCategory(dualSceneCategory) ??
+              settingFromText(dualSpecialScene, dualScenarioAction))
+            : null;
+          // The place's own words win when they say snow (a ski resort filed under a mountain biome dresses for
+          // the snow). Not on a `luxury` card: Kevin (2026-09-28) is happy with luxury outfits there even in the
+          // snow ("if biome says luxury, i have no problem with luxury outfits in different scenarios").
+          const snowByName =
+            !fromRow && biomeKey !== 'luxury' && settingFromText(userPlace, iconicAnchor) === 'snow'
+              ? 'snow'
+              : null;
+          nightlySetting =
+            fromRow ??
+            snowByName ??
+            settingFromLocation({
+              biome: biomeKey,
+              tags: locationCard ? locationCard.tags : null,
+              imagined: imaginedLocation,
+            });
+          fallbackReasons.push(
+            `outfit_scene_fit:${nightlySceneFit.looks && nightlySceneFit.brief ? 'all' : nightlySceneFit.looks ? 'looks' : nightlySceneFit.brief ? 'brief' : 'trim'}`,
+            `outfit_setting:${nightlySetting}:${fromRow ? 'row' : snowByName ? 'place_name' : 'location'}`
+          );
+        }
         const nightlyFashion =
           garmentRollOn && fashionRollable
             ? rollFashion(
@@ -3247,7 +3290,14 @@ Deno.serve(async (req) => {
                     (selectedCast[i] as DreamCastMember).gender ?? null,
                   ])
                 ),
-                engineCfg0.outfitGarmentWeights
+                engineCfg0.outfitGarmentWeights,
+                Math.random,
+                nightlySceneFit && nightlySceneFit.looks && nightlySetting
+                  ? {
+                      setting: nightlySetting,
+                      text: [userPlace, iconicAnchor, dualSpecialScene].filter(Boolean).join(' '),
+                    }
+                  : undefined
               )
             : null;
         if (nightlyFashion) {
@@ -3266,6 +3316,9 @@ Deno.serve(async (req) => {
         if (soloOutfitEarly) fallbackReasons.push('solo_outfit_early');
         const slotInput: CharacterSlotPipelineInput = {
           ...(nightlyFashion ? { fashionLooks: nightlyFashion } : {}),
+          ...(nightlyFashion && nightlySceneFit && nightlySceneFit.brief && nightlySetting
+            ? { wardrobeSceneFit: { setting: nightlySetting } }
+            : {}),
           ...(soloOutfitEarly ? { soloOutfitEarly: true } : {}),
           cast: resolvedCast.map((rc, i) => ({
             role: rc.role,

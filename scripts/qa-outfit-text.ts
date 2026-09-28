@@ -38,8 +38,10 @@ import { callSonnet } from '../supabase/functions/_shared/llm.ts';
 import {
   planOutfits,
   DEFAULT_OUTFIT_ROLLS,
+  sceneFitFrom,
   type OutfitPlan,
 } from '../supabase/functions/_shared/outfitPlan.ts';
+import { settingFromText, type Setting } from '../supabase/functions/_shared/sceneSetting.ts';
 import {
   extractOutfitSpec,
   outfitSpecStamps,
@@ -77,8 +79,19 @@ const VARIANT = arg('variant', 'today');
 const COSTUME = arg('costume', 'off') === 'on';
 const GARMENT = arg('garment', 'off') === 'on';
 if (!OUT) throw new Error('--out=<dir> is required');
-const rollCfg = (genders: Record<string, Gender>) =>
-  GARMENT ? { ...DEFAULT_OUTFIT_ROLLS, garmentRoll: true, genders } : DEFAULT_OUTFIT_ROLLS;
+/** Phase 9 (scene fit): off | all | looks | trim | brief. Plan variant only. */
+const SCENE_FIT_ARG = arg('scene-fit', 'off');
+const SCENE_FIT = sceneFitFrom(
+  SCENE_FIT_ARG === 'all'
+    ? true
+    : SCENE_FIT_ARG === 'looks' || SCENE_FIT_ARG === 'trim' || SCENE_FIT_ARG === 'brief'
+      ? SCENE_FIT_ARG
+      : null
+);
+const rollCfg = (genders: Record<string, Gender>, setting: Setting, sceneText: string) => ({
+  ...(GARMENT ? { ...DEFAULT_OUTFIT_ROLLS, garmentRoll: true, genders } : DEFAULT_OUTFIT_ROLLS),
+  ...(SCENE_FIT ? { sceneFit: SCENE_FIT, setting, sceneText } : {}),
+});
 
 // ── corpus ─────────────────────────────────────────────────────────────
 type Gender = 'male' | 'female';
@@ -513,7 +526,105 @@ const CASES: Case[] = [
     prompt: 'Me and Brittany at a garden party in the Cotswolds',
     tags: ['no_clothing', 'formal_same_gender'],
   },
+  // ── Phase 9 scene fit: michele's feed (2026-09-28) + coverage. Scored by the scene-fit scorer. ──
+  {
+    id: 'M1',
+    shape: 'couple',
+    self: 'female',
+    partner: { name: 'Nicole', gender: 'female', relationship: REL.friend },
+    prompt: 'Nicole and I are in San Francisco Shopping in China Town!',
+    tags: ['no_clothing', 'scene_fit'],
+  },
+  {
+    id: 'M2',
+    shape: 'couple',
+    self: 'female',
+    partner: { name: 'Brittany', gender: 'female', relationship: REL.friend },
+    prompt: 'Brittany and I are at the movie Theater.',
+    tags: ['no_clothing', 'scene_fit'],
+  },
+  {
+    id: 'M3',
+    shape: 'couple',
+    self: 'female',
+    partner: { name: 'Tiffany', gender: 'female', relationship: REL.friend },
+    prompt: 'Tiffany and I are at a golf Tournament in Carmel Ca',
+    tags: ['no_clothing', 'scene_fit'],
+  },
+  {
+    id: 'M4',
+    shape: 'couple',
+    self: 'female',
+    partner: { name: 'Stephanie', gender: 'female', relationship: REL.friend },
+    prompt: 'Stephanie and I are on the Beach in Hawaii watching Whales',
+    tags: ['no_clothing', 'scene_fit'],
+  },
+  {
+    id: 'M5',
+    shape: 'couple',
+    self: 'female',
+    partner: { name: 'husband', gender: 'male', relationship: REL.husband },
+    prompt: 'At the Beach!',
+    tags: ['no_clothing', 'scene_fit'],
+  },
+  {
+    id: 'M6',
+    shape: 'solo_self',
+    self: 'female',
+    prompt: 'Me at the beach',
+    tags: ['no_clothing', 'scene_fit'],
+  },
+  {
+    id: 'M7',
+    shape: 'solo_self',
+    self: 'male',
+    prompt: 'Me playing golf at Pebble Beach',
+    tags: ['no_clothing', 'scene_fit'],
+  },
+  {
+    id: 'M8',
+    shape: 'couple',
+    self: 'female',
+    partner: { name: 'husband', gender: 'male', relationship: REL.husband },
+    prompt: 'Me and my husband exploring a cave with a flashlight',
+    tags: ['no_clothing', 'scene_fit'],
+  },
+  {
+    id: 'M9',
+    shape: 'couple',
+    self: 'female',
+    partner: { name: 'husband', gender: 'male', relationship: REL.husband },
+    prompt: 'Me and my husband at dinner in a fancy restaurant in Paris',
+    tags: ['no_clothing', 'scene_fit'],
+  },
+  {
+    id: 'M10',
+    shape: 'solo_partner',
+    self: 'male',
+    partner: { name: 'Steph', gender: 'female', relationship: REL.wife },
+    prompt: 'Steph hiking in Yosemite',
+    tags: ['no_clothing', 'scene_fit'],
+  },
 ];
+
+// ── scene-fit scorer (phase 9) ──────────────────────────────────────────
+// What reads out of place for each setting, and our trim vocabulary, counted per person on the delivered
+// wardrobe (couples) or the whole final prompt (solos: noisy, compare runs with each other).
+const MISFIT: Partial<Record<Setting, RegExp>> = {
+  beach:
+    /\b(tux(edo)?s?|gowns?|blazers?|suits?|wool|velvet|sequin\w*|cravats?|gloves|boots|brocade|corset\w*|trench|coats?|tweed|berets?|platforms?|turtlenecks?)\b/i,
+  sport:
+    /\b(gowns?|sequin\w*|velvet|cravats?|tux(edo)?s?|brocade|corset\w*|gloves|platforms?|stilettos?|heels?|berets?)\b/i,
+  outdoors:
+    /\b(gowns?|sequin\w*|velvet|cravats?|tux(edo)?s?|brocade|corset\w*|heels?|stilettos?|platforms?|berets?)\b/i,
+  indoor:
+    /\b(gowns?|sequin\w*|cravats?|tux(edo)?s?|tailcoats?|corset\w*|brocade|capes?|berets?)\b/i,
+  city: /\b(gowns?|cravats?|tailcoats?|corset\w*|brocade|capes?|sequin\w*)\b/i,
+  evening: /\b(shorts|sneakers|trainers|hiking|swimsuits?|bikinis?|board shorts)\b/i,
+  snow: /\b(sandals|shorts|sundress\w*|bikinis?|heels?)\b/i,
+};
+const TRIM_TERMS =
+  /\b(trim(s|med)?|piping|piped|cuffs?|cuffed|contrast(ing)?|panels?|edging|edged|binding|ribbon)\b/i;
 
 // ── women's outfit scorer (phase 8) ────────────────────────────────────
 // What a woman ends up wearing, counted on the delivered text. Solo prompts are scored on the whole final
@@ -622,6 +733,9 @@ interface Result {
   plan?: OutfitPlan | null;
   /** Every woman's outfit in this render (phase 8 scorer). */
   womenOutfits?: string[];
+  /** Phase 9: the setting read from the user's words, and every person's outfit (scene-fit scorer). */
+  setting?: Setting;
+  outfits?: string[];
   error?: string;
 }
 
@@ -692,11 +806,19 @@ async function renderOne(c: Case, run: number): Promise<Result> {
         ? extractOutfitSpec(raw, legend, KEY, { costumeRead: COSTUME })
         : Promise.resolve(null),
     ]);
+    const setting =
+      split.source === 'split'
+        ? settingFromText(split.setting, split.action, raw)
+        : settingFromText(raw);
     const plan =
       VARIANT === 'plan'
         ? planOutfits(
             ['self', 'plus_one'],
-            rollCfg({ self: c.self, plus_one: c.partner!.gender }),
+            rollCfg(
+              { self: c.self, plus_one: c.partner!.gender },
+              setting,
+              split.source === 'split' ? `${split.setting} ${split.action ?? ''} ${raw}` : raw
+            ),
             specOut && specOut.source === 'read' ? specOut.result.byRole : {}
           )
         : null;
@@ -765,6 +887,8 @@ async function renderOne(c: Case, run: number): Promise<Result> {
         ...res.fallbackReasons,
       ],
       plan,
+      setting,
+      outfits: [selfOutfit, partnerOutfit],
       womenOutfits: [
         ...(c.self === 'female' ? [selfOutfit] : []),
         ...(c.partner!.gender === 'female' ? [partnerOutfit] : []),
@@ -809,7 +933,11 @@ async function renderOne(c: Case, run: number): Promise<Result> {
     soloStamps.push(...outfitSpecStamps(specOut, 1));
     soloPlan = planOutfits(
       [soloRole],
-      rollCfg({ [soloRole]: c.shape === 'solo_self' ? c.self : c.partner!.gender }),
+      rollCfg(
+        { [soloRole]: c.shape === 'solo_self' ? c.self : c.partner!.gender },
+        settingFromText(raw),
+        raw
+      ),
       specOut.source === 'read' ? specOut.result.byRole : {}
     );
   }
@@ -853,6 +981,8 @@ async function renderOne(c: Case, run: number): Promise<Result> {
       ...(c.tags?.includes('occluder') && occluder.test(finalPrompt) ? ['OCCLUDER_IN_FINAL'] : []),
     ],
     plan: soloPlan,
+    setting: settingFromText(raw),
+    outfits: [finalPrompt],
     womenOutfits:
       (c.shape === 'solo_self' ? c.self : c.partner!.gender) === 'female' ? [finalPrompt] : [],
     checks: {
@@ -1141,5 +1271,49 @@ const womenNoClothing = results
   .filter((r) => CASES.find((c) => c.id === r.id)?.tags?.includes('no_clothing'))
   .flatMap((r) => r.womenOutfits ?? []);
 console.log(`women (all)        : ${scoreWomen(women)}`);
+// Phase 9: scene fit, per setting, on the cases tagged scene_fit.
+{
+  const sf = results.filter(
+    (r) => !r.error && CASES.find((c) => c.id === r.id)?.tags?.includes('scene_fit')
+  );
+  const bySetting = new Map<
+    string,
+    { people: number; misfit: number; trim: number; words: string[] }
+  >();
+  for (const r of sf) {
+    const key = r.setting ?? 'unknown';
+    const row = bySetting.get(key) ?? { people: 0, misfit: 0, trim: 0, words: [] };
+    for (const o of r.outfits ?? []) {
+      row.people++;
+      const re = MISFIT[r.setting ?? 'unknown'];
+      const m = re ? o.match(re) : null;
+      if (m) {
+        row.misfit++;
+        row.words.push(m[0].toLowerCase());
+      }
+      if (TRIM_TERMS.test(o)) row.trim++;
+    }
+    bySetting.set(key, row);
+  }
+  let P = 0,
+    M = 0,
+    T = 0;
+  console.log(`\nscene fit (${SCENE_FIT_ARG}), cases tagged scene_fit:`);
+  for (const [k, v] of [...bySetting.entries()].sort()) {
+    P += v.people;
+    M += v.misfit;
+    T += v.trim;
+    console.log(
+      `  ${k.padEnd(9)} people ${String(v.people).padStart(3)}  misfit ${v.misfit}/${v.people}  trim ${v.trim}/${v.people}  ${v.words.length ? '[' + v.words.join(', ') + ']' : ''}`
+    );
+  }
+  const plain = sf.filter((r) => r.fallbackReasons.some((x) => x.includes('plain_clothes'))).length;
+  const fallback = sf.filter((r) =>
+    r.fallbackReasons.some((x) => x.startsWith('character_slot_fallback_used'))
+  ).length;
+  console.log(
+    `  ALL       people ${P}  misfit ${M}/${P} (${P ? Math.round((100 * M) / P) : 0}%)  trim ${T}/${P} (${P ? Math.round((100 * T) / P) : 0}%)  renders with plain-clothes retries ${plain}/${sf.length}  slot fallbacks ${fallback}/${sf.length}`
+  );
+}
 console.log(`women (no clothing): ${scoreWomen(womenNoClothing)}`);
 for (const [id, marks] of perCase) console.log(`  ${id.padEnd(4)} ${marks.join(' | ')}`);

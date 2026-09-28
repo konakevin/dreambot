@@ -30,6 +30,9 @@
  * Flags: --n (default 10) --medium (canvas) --vibe (arcane) --model (flux-1.1-pro)
  *        --hint (the snowboarding prompt) --concurrency (3, the CLAUDE.md ceiling)
  *        --role (dual) force_cast_role; `none` lets the prompt's own words decide (solo prompts)
+ *        --scene-fit (on|off|looks|trim|brief) forces outfit scene fit per render (CREATE_OUTFIT_PLAN.md phase 9)
+ *        --batch=<file.json> [{hint, role, sceneFit, n}, ...] seeds a mixed batch in one drain
+ *        --out=<file.json> writes every render's image, outfit stamps and wardrobe text (render-picker input)
  */
 
 require('dotenv').config({ path: require('path').join(__dirname, '..', '.env.local') });
@@ -58,9 +61,15 @@ const MODEL = arg('model', 'black-forest-labs/flux-1.1-pro');
 const HINT = arg('hint', 'Show me and Steph snowboarding');
 const CONCURRENCY = Number(arg('concurrency', '3'));
 const ROLE = arg('role', 'dual');
+const SCENE_FIT = arg('scene-fit', '');
+const BATCH = arg('batch', '');
+const OUT = arg('out', '');
+const fitValue = (v) =>
+  v === 'on' ? true : v === 'off' ? false : ['looks', 'trim', 'brief'].includes(v) ? v : undefined;
 
-async function seedJob(recipe, i) {
+async function seedJob(recipe, i, spec = { hint: HINT, role: ROLE, sceneFit: SCENE_FIT }) {
   const jobId = randomUUID();
+  const fit = fitValue(spec.sceneFit);
   const payload = {
     job_id: jobId,
     mode: 'flux-dev',
@@ -69,10 +78,12 @@ async function seedJob(recipe, i) {
     force_model: MODEL,
     // 'dual' forces self + plus_one regardless of what the prompt parses to, so a round
     // measures the COMPOSER rather than the cast detector.
-    ...(ROLE === 'none' ? {} : { force_cast_role: ROLE }),
+    ...(spec.role === 'none' ? {} : { force_cast_role: spec.role }),
+    ...(fit !== undefined ? { qa_outfit_scene_fit: fit } : {}),
     vibe_profile: recipe,
-    hint: HINT,
+    hint: spec.hint,
   };
+  seeded.set(jobId, spec);
   await sb
     .from('dream_jobs')
     .upsert(
@@ -109,6 +120,8 @@ async function kickWorker() {
     return 'ERR:' + e.message;
   }
 }
+
+const seeded = new Map();
 
 /** Classify one render purely from its stamps. */
 function grade(reasons) {
@@ -151,17 +164,26 @@ function grade(reasons) {
 
   const { data: rec } = await sb.from('user_recipes').select('recipe').eq('user_id', KEV).single();
 
+  const specs = BATCH
+    ? JSON.parse(require('fs').readFileSync(BATCH, 'utf8')).flatMap((b) =>
+        Array.from({ length: b.n || 1 }, () => ({
+          hint: b.hint,
+          role: b.role || 'dual',
+          sceneFit: b.sceneFit || '',
+        }))
+      )
+    : Array.from({ length: N }, () => ({ hint: HINT, role: ROLE, sceneFit: SCENE_FIT }));
   const jobIds = [];
-  for (let i = 0; i < N; i++) {
+  for (let i = 0; i < specs.length; i++) {
     // Seed in waves of CONCURRENCY so the heavy cap is never the thing under test.
     if (i > 0 && i % CONCURRENCY === 0) {
       await waitForHeadroom({ min: 25, label: `lab-create-${ROUND}-wave` });
     }
-    jobIds.push(await seedJob(rec.recipe, i));
+    jobIds.push(await seedJob(rec.recipe, i, specs[i]));
   }
   console.log(`  seeded ${jobIds.length} jobs, draining...`);
 
-  const deadline = Date.now() + 40 * 60 * 1000;
+  const deadline = Date.now() + Math.max(40, specs.length * 3) * 60 * 1000;
   const done = new Set();
   let kickBusy = null;
   while (done.size < jobIds.length && Date.now() < deadline) {
@@ -219,4 +241,51 @@ function grade(reasons) {
     );
   }
   console.log('');
+
+  // Phase 9: what each render wore, from the stamps and the brief's wardrobe fields.
+  const { data: full } = await sb
+    .from('ai_generation_log')
+    .select('job_id,upload_id,fallback_reasons,sonnet_raw_response,enhanced_prompt,created_at')
+    .in('job_id', jobIds)
+    .order('created_at', { ascending: true });
+  const uploadIds = [...new Set((full || []).map((l) => l.upload_id).filter(Boolean))];
+  const { data: ups } = uploadIds.length
+    ? await sb.from('uploads').select('id,image_url_display,image_url').in('id', uploadIds)
+    : { data: [] };
+  const img = new Map((ups || []).map((u) => [u.id, u.image_url_display || u.image_url]));
+  const rows = [];
+  for (const id of jobIds) {
+    const logsFor = (full || []).filter((l) => l.job_id === id);
+    const last = logsFor[logsFor.length - 1];
+    const reasons = logsFor.flatMap((l) => l.fallback_reasons || []);
+    let wardrobe = null;
+    try {
+      const raw = (last && last.sonnet_raw_response) || '';
+      const j = JSON.parse(raw.slice(raw.indexOf('{'), raw.lastIndexOf('}') + 1));
+      wardrobe = Object.fromEntries(Object.entries(j).filter(([k]) => /wardrobe/.test(k)));
+    } catch {
+      wardrobe = null;
+    }
+    const spec = seeded.get(id) || {};
+    const outfitStamps = reasons.filter((r) => /^(outfit_|garment_|look_filtered)/.test(String(r)));
+    rows.push({
+      job: id,
+      hint: spec.hint,
+      role: spec.role,
+      sceneFit: spec.sceneFit || 'default',
+      image: last && last.upload_id ? img.get(last.upload_id) || null : null,
+      uploadId: last ? last.upload_id : null,
+      wardrobe,
+      prompt: last ? last.enhanced_prompt : null,
+      outfitStamps,
+      ...grade(reasons),
+    });
+    console.log(`  [${spec.sceneFit || 'default'}] ${spec.hint}`);
+    console.log(`     ${outfitStamps.join(' ')}`);
+    if (wardrobe) for (const [k, v] of Object.entries(wardrobe)) console.log(`     ${k}: ${v}`);
+  }
+  if (OUT) {
+    require('fs').writeFileSync(OUT, JSON.stringify(rows, null, 1));
+    console.log(`\n  wrote ${rows.length} rows to ${OUT}`);
+  }
 })();

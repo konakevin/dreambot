@@ -117,6 +117,9 @@ export interface NightlyQaFlags {
   /** SOLO OUTFIT EARLY (mig 565): true names a solo's wardrobe right after the medium, false the old order;
    *  null = engine_config.nightly_solo_outfit_early. */
   force_solo_outfit_early: boolean | null;
+  /** SCENE FIT (mig 572): true = all fixes (looks + brief on nightly), 'looks' / 'brief' = one fix alone (the
+   *  one-variable QA), false = off; null = engine_config.nightly_outfit_scene_fit. */
+  force_outfit_scene_fit: boolean | 'looks' | 'trim' | 'brief' | null;
   /** FLUX COUPLE LAB: per-request big-face tier ceiling / composition gate overrides (numbers 0.2-1). */
   qa_big_face_max_hfrac: number | null;
   qa_max_face_hfrac: number | null;
@@ -299,6 +302,14 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
         : body.force_solo_outfit_early === false
           ? false
           : null,
+    force_outfit_scene_fit:
+      body.force_outfit_scene_fit === true ||
+      body.force_outfit_scene_fit === false ||
+      body.force_outfit_scene_fit === 'looks' ||
+      body.force_outfit_scene_fit === 'trim' ||
+      body.force_outfit_scene_fit === 'brief'
+        ? body.force_outfit_scene_fit
+        : null,
     qa_big_face_max_hfrac: num01(body.qa_big_face_max_hfrac),
     qa_max_face_hfrac: num01(body.qa_max_face_hfrac),
     force_prompt_style:

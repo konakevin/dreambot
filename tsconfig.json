@@ -18,6 +18,8 @@
     "__tests__/lib/outfitPlanBrief.test.ts",
     "__tests__/lib/outfitSolo.test.ts",
     "__tests__/lib/outfitPhase8Engine.test.ts",
+    "__tests__/lib/outfitSceneFit.test.ts",
+    "__tests__/lib/sceneSetting.test.ts",
     "__tests__/lib/swapCapacityGate.test.ts",
     "__tests__/lib/swapDispatchGate.test.ts",
     "__tests__/lib/nightlySwapHealth.test.ts",

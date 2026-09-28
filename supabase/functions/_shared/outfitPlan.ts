@@ -28,6 +28,8 @@
  * default OFF, so shipping this file changes no live render.
  */
 
+import { SETTING_DRESS, type Setting } from './sceneSetting.ts';
+
 // ── Colour families ──────────────────────────────────────────────────────
 
 export type ColourFamily =
@@ -135,6 +137,15 @@ export const OUTFIT_SILHOUETTES_V2: readonly string[] = [
   'layered, with one contrasting piece over another',
 ];
 
+/**
+ * SILHOUETTES V3 (phase 9, 2026-09-28) — V2 with the one cut that invited a colour trim. "Layered, with one
+ * CONTRASTING piece over another" read to Sonnet as a contrast panel, cuff or collar. Used only while scene fit
+ * (trim) is on.
+ */
+export const OUTFIT_SILHOUETTES_V3: readonly string[] = OUTFIT_SILHOUETTES_V2.map((c) =>
+  c === 'layered, with one contrasting piece over another' ? 'layered, one piece over another' : c
+);
+
 /** Cuts that turn trousers into palazzos or flares: never paired with a trousers family. */
 const NOT_FOR_TROUSERS: ReadonlySet<string> = new Set([
   'soft and fluid, moving with the body',
@@ -228,176 +239,341 @@ export interface FashionLook {
   text: string;
   /** Women only: the garment families this look suits (WOMEN_GARMENT_FAMILIES keys). */
   families?: readonly string[];
+  /** Phase 9: the settings this look reads right in (sceneSetting.ts). Authored per look: disco and deco are
+   *  evening, safari is outdoors, resort and coastal are beach and city. Read only when scene fit is on. */
+  settings: readonly Setting[];
+  /** Phase 9: a REGIONAL look only fits when the scene names its kind of place (Kevin: matching Parisian berets
+   *  at a Chinatown shopping trip and a movie theater). Tested against the scene's own words. */
+  requires?: RegExp;
+  /** Phase 9: a THEMED look (1920s, disco, regency) the scene can call for by name: when the scene's words
+   *  match, the look is allowed even outside its settings and is favoured (Kevin 2026-09-28: a 1920s speakeasy
+   *  rolled a studded rocker jacket, a saloon an old-money polo and go-go boots). */
+  affinity?: RegExp;
+  /** Phase 9: rolled only when scene fit is on (so the phase 8 pool, and its rng sequence, is unchanged). */
+  sceneFitOnly?: boolean;
 }
+// Phase 9 theme words: a scene that names one of these calls for the look (see FashionLook.affinity). Dress
+// themes only: "Art Deco" names buildings (Miami's Ocean Drive rolled 1920s braces into a 1950s dream).
+const TWENTIES =
+  /\b(1920s|twenties|roaring (20s|twenties)|speakeas(y|ies)|gatsby|jazz age|prohibition|flappers?|peaky blinders)\b/i;
+const SEVENTIES = /\b(disco|1970s|seventies|70s|studio 54|roller disco|funk)\b/i;
+const SIXTIES = /\b(1960s|sixties|60s|swinging london|carnaby|go-go)\b/i;
+const FIFTIES = /\b(1950s|fifties|50s|diner|sock hop|drive-in|rockabilly|soda fountain)\b/i;
+const REGENCY = /\b(regency|bridgerton|jane austen|austen|georgian)\b/i;
+const GOTHIC = /\b(gothic|vampires?|haunted|dracula|victorian (mansion|manor))\b/i;
+const SAFARI = /\b(safari|serengeti|savann?ah?|kenya|tanzania|botswana|african bush)\b/i;
+
 export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
   {
     key: 'boho',
     text: 'boho: embroidery, a little fringe or crochet, layered bangles and rings',
     families: ['dress', 'skirt', 'shorts'],
+    settings: ['beach', 'city', 'outdoors', 'indoor'],
   },
   {
     key: 'mod',
     text: '1960s mod: bold graphic lines, a short hemline, go-go boots',
     families: ['dress', 'skirt', 'coat_over_dress'],
+    settings: ['city', 'indoor', 'evening'],
+    affinity: SIXTIES,
   },
   {
     key: 'disco',
     text: '1970s disco: shimmer and sequins, a dramatic collar, platform heels',
     families: ['jumpsuit', 'dress'],
+    settings: ['evening'],
+    affinity: SEVENTIES,
   },
   {
     key: 'y2k',
     text: 'Y2K: shimmery fabric, a tiny shoulder bag, butterfly hair clips',
     families: ['skirt', 'dress', 'shorts'],
+    settings: ['city', 'indoor', 'beach'],
   },
   {
     key: 'old_money',
     text: 'old-money elegance: a fine-knit twinset, a pearl necklace, polished loafers',
     families: ['skirt', 'trousers', 'coat_over_dress'],
+    settings: ['city', 'evening', 'indoor'],
   },
   {
     key: 'parisian',
     text: 'Parisian chic: a beret, a neat silk neck scarf, ballet flats',
     families: ['dress', 'skirt', 'trousers', 'coat_over_dress'],
+    settings: ['city', 'indoor'],
+    requires: /\b(paris|parisian|france|french)\b/i,
   },
   {
     key: 'cottagecore',
     text: 'cottagecore: puff sleeves, lace trim, a woven basket bag',
     families: ['dress', 'skirt'],
+    settings: ['outdoors', 'indoor', 'fantasy'],
   },
   {
     key: 'dark_academia',
     text: 'dark academia: tweed textures, a pleated skirt, loafers and knee socks',
     families: ['skirt'],
+    settings: ['city', 'indoor'],
   },
   {
     key: 'western',
     text: 'western glam: fringed suede, a statement belt buckle, cowboy boots',
     families: ['dress', 'skirt', 'shorts', 'jumpsuit'],
+    settings: ['outdoors', 'city', 'indoor'],
+    requires:
+      /\b(texas|nashville|ranch|rodeo|wild west|cowboys?|cowgirls?|country music|austin|montana|wyoming|dallas|honky[- ]tonk|saloon)\b/i,
   },
   {
     key: 'balletcore',
     text: 'balletcore: a wrap top, soft tulle, satin ribbon ties',
     families: ['skirt', 'dress'],
+    settings: ['city', 'indoor', 'evening'],
   },
   {
     key: 'resort',
     text: 'resort glamour: a wide-brim hat, statement earrings, strappy sandals',
     families: ['dress', 'jumpsuit', 'shorts', 'skirt'],
+    settings: ['beach', 'city'],
   },
   {
     key: 'pinup',
     text: 'retro pin-up: a sweetheart neckline, a cinched waist, a silk scarf tied in the hair',
     families: ['dress', 'skirt', 'shorts'],
+    settings: ['beach', 'city', 'indoor'],
+    affinity: FIFTIES,
   },
   {
     key: 'rocker',
     text: 'rock-and-roll: a cropped leather jacket, studded details, ankle boots',
     families: ['dress', 'skirt', 'shorts', 'trousers'],
+    settings: ['city', 'indoor', 'evening'],
   },
   {
     key: 'gothic',
     text: 'gothic romance: lace, velvet, a corset bodice',
     families: ['dress', 'skirt'],
+    settings: ['fantasy'],
+    affinity: GOTHIC,
   },
   {
     key: 'deco',
     text: 'art-deco glamour: beading, fringe, a long strand of pearls',
     families: ['dress', 'jumpsuit'],
+    settings: ['evening', 'fantasy'],
+    affinity: TWENTIES,
   },
   {
     key: 'sporty',
     text: 'sporty-chic: a cropped varsity jacket, a pleated tennis skirt, crisp trainers',
     families: ['skirt'],
+    settings: ['city', 'indoor'],
   },
   {
     key: 'fairycore',
     text: 'fairycore: sheer layered fabric, delicate floral embroidery, a touch of glitter',
     families: ['dress', 'skirt'],
+    settings: ['fantasy', 'outdoors'],
   },
   {
     key: 'safari',
     text: 'safari chic: a belted waist, utility pockets, a woven sun hat',
     families: ['dress', 'shorts', 'jumpsuit', 'trousers'],
+    settings: ['outdoors'],
+    affinity: SAFARI,
   },
   {
     key: 'nautical',
     text: 'nautical: brass buttons, a sailor collar, rope-braided details',
     families: ['dress', 'shorts', 'trousers', 'skirt'],
+    settings: ['beach', 'city'],
+    requires:
+      /\b(harbou?rs?|marinas?|yachts?|sail(ing|boat|boats)?|boats?|port|lighthouses?|piers?|docks?|cruise|nautical|ship)\b/i,
   },
   {
     key: 'glam_rock',
     text: 'glam rock: metallic fabric, bold jewellery, platform boots',
     families: ['jumpsuit', 'trousers', 'dress'],
+    settings: ['evening', 'city'],
   },
   {
     key: 'preppy',
     text: 'preppy: a cable knit over the shoulders, a headband, loafers',
     families: ['skirt', 'shorts', 'dress'],
+    settings: ['city', 'indoor'],
   },
   {
     key: 'couture',
     text: 'haute couture: one sculptural statement piece, dramatic volume in one place',
     families: ['dress', 'jumpsuit', 'coat_over_dress'],
+    settings: ['evening', 'fantasy'],
   },
   {
     key: 'coastal',
     text: 'coastal elegance: soft linen layers, a straw hat, espadrilles',
     families: ['dress', 'trousers', 'skirt'],
+    settings: ['beach', 'city', 'outdoors'],
   },
   {
     key: 'kpop',
     text: 'K-pop stage style: a cropped jacket, layered chains, platform boots',
     families: ['skirt', 'shorts', 'trousers'],
+    settings: ['city', 'indoor', 'evening'],
+    requires: /\b(seoul|korea|korean|k-?pop|concert|on stage|idol)\b/i,
   },
   {
     key: 'regency',
     text: 'regency romance: an empire waist, puff sleeves, long gloves',
     families: ['dress', 'coat_over_dress'],
+    settings: ['fantasy'],
+    affinity: REGENCY,
   },
   {
     key: 'fifties',
     text: '1950s: a full circle skirt, a fitted bodice, a neat neck scarf',
     families: ['skirt', 'dress'],
+    settings: ['city', 'indoor', 'beach'],
+    affinity: FIFTIES,
   },
   {
     key: 'street',
     text: 'street style: a cropped statement jacket, chunky boots, layered necklaces',
     families: ['shorts', 'skirt', 'trousers'],
+    settings: ['city', 'indoor'],
   },
   {
     key: 'mermaid',
     text: 'mermaid shimmer: iridescent scale-like sequins, a fishtail hem',
     families: ['dress', 'skirt'],
+    settings: ['fantasy'],
   },
 ];
 export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
-  { key: 'old_money', text: 'old-money: a fine-knit polo, tailored trousers, polished loafers' },
-  { key: 'disco', text: '1970s: a wide-collared shirt, flared trousers, a chunky belt' },
-  { key: 'western', text: 'western: a pearl-snap shirt, a statement belt buckle, cowboy boots' },
-  { key: 'rocker', text: 'rock-and-roll: a leather jacket, studded details, boots' },
+  {
+    key: 'old_money',
+    text: 'old-money: a fine-knit polo, tailored trousers, polished loafers',
+    settings: ['city', 'evening', 'indoor'],
+  },
+  {
+    key: 'disco',
+    text: '1970s: a wide-collared shirt, flared trousers, a chunky belt',
+    settings: ['evening'],
+    affinity: SEVENTIES,
+  },
+  {
+    key: 'western',
+    text: 'western: a pearl-snap shirt, a statement belt buckle, cowboy boots',
+    settings: ['outdoors', 'city', 'indoor'],
+    requires:
+      /\b(texas|nashville|ranch|rodeo|wild west|cowboys?|cowgirls?|country music|austin|montana|wyoming|dallas|honky[- ]tonk|saloon)\b/i,
+  },
+  {
+    key: 'rocker',
+    text: 'rock-and-roll: a leather jacket, studded details, boots',
+    settings: ['city', 'indoor', 'evening'],
+    affinity: FIFTIES,
+  },
   {
     key: 'safari',
     text: 'safari explorer: a utility shirt with pockets, a canvas hat, a belted waist',
+    settings: ['outdoors'],
+    affinity: SAFARI,
   },
-  { key: 'dapper', text: 'dapper 1920s: braces, a flat cap, rolled shirtsleeves' },
-  { key: 'resort', text: 'resort style: a camp-collar shirt, tailored shorts, loafers' },
-  { key: 'dark_academia', text: 'dark academia: tweed textures, a roll-neck, brogues' },
+  {
+    key: 'dapper',
+    text: 'dapper 1920s: braces, a flat cap, rolled shirtsleeves',
+    settings: ['city', 'indoor', 'evening'],
+    requires: TWENTIES,
+  },
+  {
+    key: 'resort',
+    text: 'resort style: a camp-collar shirt, tailored shorts, loafers',
+    settings: ['beach', 'city'],
+  },
+  {
+    key: 'dark_academia',
+    text: 'dark academia: tweed textures, a roll-neck, brogues',
+    settings: ['city', 'indoor'],
+  },
   {
     key: 'nautical',
     text: 'nautical: a double-breasted jacket with brass buttons, rope-braided details',
+    settings: ['beach', 'city'],
+    requires:
+      /\b(harbou?rs?|marinas?|yachts?|sail(ing|boat|boats)?|boats?|port|lighthouses?|piers?|docks?|cruise|nautical|ship)\b/i,
   },
-  { key: 'mod', text: '1960s mod: a slim suit, a skinny tie, polished boots' },
-  { key: 'street', text: 'street style: a bomber jacket, layered chains, chunky boots' },
-  { key: 'glam_rock', text: 'glam rock: a metallic jacket, bold rings, platform boots' },
-  { key: 'preppy', text: 'preppy: a crested blazer, a knit tied over the shoulders, loafers' },
-  { key: 'gothic', text: 'gothic romance: a velvet frock coat, lace cuffs' },
-  { key: 'deco', text: 'art-deco glamour: a sharp dinner jacket, a silk pocket square' },
-  { key: 'kpop', text: 'K-pop stage style: a cropped jacket, layered chains, sleek boots' },
-  { key: 'coastal', text: 'coastal: soft linen layers, a straw hat, espadrilles' },
-  { key: 'parisian', text: 'Parisian chic: a beret, a neat neck scarf, a belted trench coat' },
-  { key: 'regency', text: 'regency romance: a tailcoat, a cravat, tall boots' },
-  { key: 'sporty', text: 'sporty-chic: a varsity jacket, a crisp polo, clean trainers' },
+  {
+    key: 'mod',
+    text: '1960s mod: a slim suit, a skinny tie, polished boots',
+    settings: ['city', 'evening', 'indoor'],
+    affinity: SIXTIES,
+  },
+  {
+    key: 'street',
+    text: 'street style: a bomber jacket, layered chains, chunky boots',
+    settings: ['city', 'indoor'],
+  },
+  {
+    key: 'glam_rock',
+    text: 'glam rock: a metallic jacket, bold rings, platform boots',
+    settings: ['evening', 'city'],
+  },
+  {
+    key: 'preppy',
+    text: 'preppy: a crested blazer, a knit tied over the shoulders, loafers',
+    settings: ['city', 'indoor'],
+  },
+  {
+    key: 'gothic',
+    text: 'gothic romance: a velvet frock coat, lace cuffs',
+    settings: ['fantasy'],
+    affinity: GOTHIC,
+  },
+  {
+    key: 'deco',
+    text: 'art-deco glamour: a sharp dinner jacket, a silk pocket square',
+    settings: ['evening', 'fantasy'],
+    affinity: TWENTIES,
+  },
+  {
+    key: 'kpop',
+    text: 'K-pop stage style: a cropped jacket, layered chains, sleek boots',
+    settings: ['city', 'indoor', 'evening'],
+    requires: /\b(seoul|korea|korean|k-?pop|concert|on stage|idol)\b/i,
+  },
+  {
+    key: 'coastal',
+    text: 'coastal: soft linen layers, a straw hat, espadrilles',
+    settings: ['beach', 'city', 'outdoors'],
+  },
+  {
+    key: 'parisian',
+    text: 'Parisian chic: a beret, a neat neck scarf, a belted trench coat',
+    settings: ['city', 'indoor'],
+    requires: /\b(paris|parisian|france|french)\b/i,
+  },
+  {
+    key: 'regency',
+    text: 'regency romance: a tailcoat, a cravat, tall boots',
+    settings: ['fantasy'],
+    affinity: REGENCY,
+  },
+  {
+    key: 'sporty',
+    text: 'sporty-chic: a varsity jacket, a crisp polo, clean trainers',
+    settings: ['city', 'indoor'],
+  },
+  {
+    key: 'surf',
+    text: 'surf-shack cool: an open camp-collar shirt, tailored board shorts, leather sandals',
+    settings: ['beach'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'explorer',
+    text: 'rugged explorer: a waxed-canvas field jacket, a fine-knit roll-neck, leather hiking boots',
+    settings: ['outdoors'],
+    sceneFitOnly: true,
+  },
 ];
 
 /** What the fashion roll gives one person: a woman gets a garment family AND a look; a man, a look. */
@@ -406,20 +582,110 @@ export interface FashionPick {
   look: FashionLook;
 }
 
+/** Phase 9 (scene fit): the place the render is set in. Absent = the phase 8 roll exactly. */
+export interface FashionRollOptions {
+  setting: Setting;
+  /** The scene's own words (the prompt, the place): a regional look (Parisian, western) needs its place named. */
+  text?: string | null;
+}
+
+/** Settings whose dress code is the activity's own kit: nobody gets a rolled look there (a golf course dresses
+ *  golfers, the slopes dress skiers). */
+const KIT_SETTINGS: ReadonlySet<Setting> = new Set<Setting>(['sport', 'snow']);
+
+/** A look fits a setting when it is tagged for it. An unclassified scene takes the city looks: the broad,
+ *  wear-anywhere set, never an occasion costume. */
+export function lookFits(look: FashionLook, setting: Setting, text?: string | null): boolean {
+  if (look.requires && !(text && look.requires.test(text))) return false;
+  if (look.affinity && text && look.affinity.test(text)) return true;
+  return look.settings.includes(setting === 'unknown' ? 'city' : setting);
+}
+
+/** The scene names this look's own place or theme (a saloon for western, a speakeasy for dapper or deco). */
+export function lookFavoured(look: FashionLook, text?: string | null): boolean {
+  if (!text) return false;
+  return (
+    (!!look.requires && look.requires.test(text)) || (!!look.affinity && look.affinity.test(text))
+  );
+}
+
+/** How often a favoured look is taken when the scene names one (the rest keep the place's variety). */
+const AFFINITY_PCT = 0.85;
+
+/** Per-setting nudges on the garment weights (multiplied into engine_config.outfit_garment_weights). */
+const SETTING_GARMENT_FACTORS: Partial<Record<Setting, Readonly<Record<string, number>>>> = {
+  beach: { coat_over_dress: 0, shorts: 2, dress: 1.2, trousers: 0.6 },
+  evening: { shorts: 0, trousers: 0.4, dress: 1.6, jumpsuit: 1.5, coat_over_dress: 0.5 },
+  outdoors: { coat_over_dress: 0, shorts: 2, trousers: 1.6, dress: 0.6 },
+};
+
+/** A family is only rolled in a setting when at least this many of its looks fit there (so the look pick
+ *  after it still has a choice). */
+const MIN_LOOKS_PER_FAMILY = 2;
+
+/** The garment weights for one setting: config weights x setting factor, zero for a family with too few
+ *  fitting looks. Exported for the pool-coverage test. */
+export function garmentWeightsFor(
+  setting: Setting,
+  weights: Readonly<Record<string, number>> = DEFAULT_GARMENT_WEIGHTS,
+  text?: string | null
+): Record<string, number> {
+  const base = normalizeGarmentWeights(weights);
+  const factors = SETTING_GARMENT_FACTORS[setting] ?? {};
+  const out: Record<string, number> = {};
+  for (const f of WOMEN_GARMENT_FAMILIES) {
+    const fitting = WOMEN_FASHION_LOOKS.filter(
+      (l) => (!l.families || l.families.includes(f.key)) && lookFits(l, setting, text)
+    ).length;
+    const factor = factors[f.key] ?? 1;
+    out[f.key] = fitting >= MIN_LOOKS_PER_FAMILY ? (base[f.key] ?? 0) * factor : 0;
+  }
+  return out;
+}
+
+/** One weighted family pick from already-adjusted weights; falls back to the plain roll if all are zero. */
+function rollGarmentFamilyIn(
+  setting: Setting,
+  weights: Readonly<Record<string, number>>,
+  rng: () => number,
+  text?: string | null
+): GarmentFamily {
+  const w = garmentWeightsFor(setting, weights, text);
+  const total = WOMEN_GARMENT_FAMILIES.reduce((sum, f) => sum + (w[f.key] ?? 0), 0);
+  if (total <= 0) return rollGarmentFamily(weights, rng);
+  let at = rng() * total;
+  for (const f of WOMEN_GARMENT_FAMILIES) {
+    at -= w[f.key] ?? 0;
+    if (at < 0) return f;
+  }
+  return WOMEN_GARMENT_FAMILIES[0];
+}
+
 /**
  * The fashion roll for one render (phase 8). `genders` by role; a person with no known gender gets nothing.
  * Two women share ONE garment family (Kevin: the scene sets one garment type for the pair); a couple shares
  * one THEME half the time when both pools have that look. Pure and rng-injected.
+ *
+ * Phase 9: with `opts.setting` the looks and families are the ones that fit that place, and a kit setting
+ * (sport, snow) rolls no look at all. Without `opts` the roll (and its rng sequence) is phase 8 exactly.
  */
 export function rollFashion(
   roles: readonly string[],
   genders: Readonly<Record<string, 'male' | 'female' | null | undefined>>,
   weights: Readonly<Record<string, number>> = DEFAULT_GARMENT_WEIGHTS,
-  rng: () => number = Math.random
+  rng: () => number = Math.random,
+  opts?: FashionRollOptions
 ): (FashionPick | null)[] {
   const out: (FashionPick | null)[] = roles.map(() => null);
+  if (opts && KIT_SETTINGS.has(opts.setting)) return out;
+  // Off (no opts): the phase 8 pools exactly, scene-fit-only looks excluded.
+  const fits = (l: FashionLook): boolean =>
+    opts ? lookFits(l, opts.setting, opts.text) : !l.sceneFitOnly;
+  const favoured = (l: FashionLook): boolean => !!opts && lookFavoured(l, opts.text);
   let family: GarmentFamily | null = null;
   let firstKey: string | null = null;
+  // A woman's favoured look is chosen BEFORE her garment family, so the family can be one the look wears.
+  let forcedWomanLook: FashionLook | null = null;
   const themed = roles.length === 2 && rng() < 0.5;
   roles.forEach((role, i) => {
     const g = genders[role];
@@ -427,14 +693,53 @@ export function rollFashion(
     let pool: readonly FashionLook[];
     let fam: GarmentFamily | null = null;
     if (g === 'female') {
-      family = family ?? rollGarmentFamily(weights, rng);
+      if (!family && opts) {
+        const fav = WOMEN_FASHION_LOOKS.filter((l) => fits(l) && favoured(l));
+        if (fav.length && rng() < AFFINITY_PCT) {
+          forcedWomanLook = pick(fav, rng);
+          const w = garmentWeightsFor(opts.setting, weights, opts.text);
+          const keys = (
+            forcedWomanLook.families ?? WOMEN_GARMENT_FAMILIES.map((f) => f.key)
+          ).filter((k) => (w[k] ?? 0) > 0);
+          const famKey = keys.length ? pick(keys, rng) : (forcedWomanLook.families ?? ['dress'])[0];
+          family =
+            WOMEN_GARMENT_FAMILIES.find((f) => f.key === famKey) ?? WOMEN_GARMENT_FAMILIES[0];
+        }
+      }
+      family =
+        family ??
+        (opts
+          ? rollGarmentFamilyIn(opts.setting, weights, rng, opts.text)
+          : rollGarmentFamily(weights, rng));
       fam = family;
-      pool = WOMEN_FASHION_LOOKS.filter((l) => !l.families || l.families.includes(fam!.key));
+      pool = WOMEN_FASHION_LOOKS.filter(
+        (l) => (!l.families || l.families.includes(fam!.key)) && fits(l)
+      );
+      // A family with no look for this place (the fallback roll above) keeps its unfiltered looks.
+      if (!pool.length)
+        pool = WOMEN_FASHION_LOOKS.filter(
+          (l) => (!l.families || l.families.includes(fam!.key)) && !l.sceneFitOnly
+        );
     } else {
-      pool = MEN_FASHION_LOOKS;
+      pool = MEN_FASHION_LOOKS.filter(fits);
+      if (!pool.length) pool = MEN_FASHION_LOOKS.filter((l) => !l.sceneFitOnly);
     }
-    const match = themed && firstKey ? pool.find((l) => l.key === firstKey) : undefined;
-    const look = match ?? pick(pool, rng);
+    // A matching couple theme never overrides the place's own theme (a 1950s diner rolled resort for both).
+    const placeTheme = !!opts && pool.some(favoured);
+    const match =
+      themed && firstKey
+        ? pool.find((l) => l.key === firstKey && (!placeTheme || favoured(l)))
+        : undefined;
+    let look: FashionLook;
+    if (match) look = match;
+    else if (g === 'female' && forcedWomanLook && pool.includes(forcedWomanLook)) {
+      look = forcedWomanLook;
+      forcedWomanLook = null;
+    } else {
+      // The scene names a look's place or theme: favour it (only with scene fit on).
+      const fav = opts ? pool.filter(favoured) : [];
+      look = fav.length && rng() < AFFINITY_PCT ? pick(fav, rng) : pick(pool, rng);
+    }
     if (firstKey === null) firstKey = look.key;
     out[i] = { family: fam, look };
   });
@@ -529,6 +834,37 @@ export interface OutfitRollConfig {
   garmentWeights?: Readonly<Record<string, number>>;
   /** Cast gender by role; read only by the garment roll. */
   genders?: Readonly<Record<string, 'male' | 'female' | null | undefined>>;
+  /** Phase 9: the render's setting (sceneSetting.ts) and which scene-fit fixes are on. Absent = phase 8. */
+  setting?: Setting;
+  sceneFit?: SceneFit;
+  /** Phase 9: the scene's own words, for regional looks (sceneSetting's input, joined). */
+  sceneText?: string | null;
+}
+
+/**
+ * SCENE FIT (phase 9, 2026-09-28) — three independent fixes so each can be measured alone (Kevin's one-variable
+ * rule), all on together in production:
+ *   looks — the fashion roll picks only looks that fit the setting; sport and snow roll none.
+ *   trim  — our colours never land as a trim or cuff: the second colour goes on ONE accessory, a pattern is a
+ *           print on a whole garment or nothing, no rolled pattern over a user's colour, the V3 cuts.
+ *   brief — the wardrobe brief dresses for the place first (SETTING_DRESS), then elevates.
+ */
+export interface SceneFit {
+  looks: boolean;
+  trim: boolean;
+  brief: boolean;
+}
+
+export const SCENE_FIT_ALL: SceneFit = { looks: true, trim: true, brief: true };
+
+/** The QA/engine form of the switch: true = all three, false/null = none, or one fix by name. */
+export function sceneFitFrom(
+  v: boolean | 'looks' | 'trim' | 'brief' | null | undefined
+): SceneFit | null {
+  if (v === true) return SCENE_FIT_ALL;
+  if (v === 'looks' || v === 'trim' || v === 'brief')
+    return { looks: v === 'looks', trim: v === 'trim', brief: v === 'brief' };
+  return null;
 }
 
 export const DEFAULT_OUTFIT_ROLLS: OutfitRollConfig = {
@@ -571,6 +907,9 @@ export interface OutfitPlan {
   colourMode: 'coordinated' | 'independent' | 'solo';
   cutMode: 'shared' | 'separate' | 'solo';
   people: PersonOutfitPlan[];
+  /** Phase 9: present only when scene fit is on; the brief builders read it. */
+  sceneFit?: SceneFit;
+  setting?: Setting;
 }
 
 const pct = (n: number): number => Math.max(0, Math.min(100, Number.isFinite(n) ? n : 0)) / 100;
@@ -669,7 +1008,15 @@ export function planOutfits(
       return !!s && ((!!s.garment && !isGenericGarment(s.garment)) || !!s.costume || !!s.style);
     });
     if (!userDressed && cfg.genders) {
-      fashion = rollFashion(roles, cfg.genders, cfg.garmentWeights ?? DEFAULT_GARMENT_WEIGHTS, rng);
+      fashion = rollFashion(
+        roles,
+        cfg.genders,
+        cfg.garmentWeights ?? DEFAULT_GARMENT_WEIGHTS,
+        rng,
+        cfg.sceneFit && cfg.sceneFit.looks
+          ? { setting: cfg.setting ?? 'unknown', text: cfg.sceneText ?? null }
+          : undefined
+      );
     }
   }
   const families: (GarmentFamily | null)[] = fashion.map((f) => (f ? f.family : null));
@@ -680,7 +1027,12 @@ export function planOutfits(
     : rng() < pct(cfg.separateCutPct)
       ? 'separate'
       : 'shared';
-  const cutPool = cfg.garmentRoll ? OUTFIT_SILHOUETTES_V2 : OUTFIT_SILHOUETTES;
+  const trimFix = !!cfg.sceneFit && cfg.sceneFit.trim;
+  const cutPool = cfg.garmentRoll
+    ? trimFix
+      ? OUTFIT_SILHOUETTES_V3
+      : OUTFIT_SILHOUETTES_V2
+    : OUTFIT_SILHOUETTES;
   const safeFor = (fam: GarmentFamily | null): readonly string[] =>
     fam && fam.trousers ? cutPool.filter((c) => !NOT_FOR_TROUSERS.has(c)) : cutPool;
   // A shared cut must suit both people; a separate second cut only its own wearer.
@@ -710,7 +1062,8 @@ export function planOutfits(
     if (s && s.pattern) {
       pattern = s.pattern;
       patternSource = 'user';
-    } else if (!implied && !material && rng() < pct(cfg.patternPct)) {
+    } else if (!implied && !material && !(trimFix && userColour) && rng() < pct(cfg.patternPct)) {
+      // Phase 9 (trim): a rolled pattern over the user's own colour could only land as a trim, so none.
       pattern = firstPattern
         ? pickOther(WARDROBE_PATTERNS, firstPattern, rng)
         : pick(WARDROBE_PATTERNS, rng);
@@ -754,7 +1107,12 @@ export function planOutfits(
       }
     }
   }
-  return { colourMode, cutMode, people };
+  return {
+    colourMode,
+    cutMode,
+    people,
+    ...(cfg.sceneFit ? { sceneFit: cfg.sceneFit, setting: cfg.setting ?? 'unknown' } : {}),
+  };
 }
 
 // ── Writing the plan into the brief (phase 3) ───────────────────────────
@@ -781,7 +1139,7 @@ const PATTERN_HOW =
 const wornNoun = (p: PersonOutfitPlan): string =>
   p.garment && !isGenericGarment(p.garment) ? 'garment' : p.costume ? 'costume' : 'garment';
 
-function colourLine(p: PersonOutfitPlan, partnerLabel: string | null): string {
+function colourLine(p: PersonOutfitPlan, partnerLabel: string | null, trim = false): string {
   if (p.colourSource === 'implied')
     return `Colour: the ${wornNoun(p)}'s own known colours. Do not recolour it.`;
   if (!p.colour) return '';
@@ -793,15 +1151,21 @@ function colourLine(p: PersonOutfitPlan, partnerLabel: string | null): string {
     p.avoidColours.length && partnerLabel
       ? ` NEVER wear ${p.avoidColours.join(' or ')} (${partnerLabel}'s colour${p.avoidColours.length > 1 ? 's' : ''}).`
       : '';
+  if (trim && p.colour.accent)
+    return `Colour: build the outfit in ${p.colour.lead} and its tones; ${p.colour.accent} may appear only in ONE accessory (a bag, shoes, jewellery or a hat), never as a trim, cuff, collar, piping or panel.${avoid}`;
   return p.colour.accent
     ? `Colour: lead with ${p.colour.lead}, accent with ${p.colour.accent}.${avoid}`
     : `Colour: ${p.colour.lead} is their colour; build the outfit in it and its tones, with at most small neutral basics.${avoid}`;
 }
 
-function patternLine(p: PersonOutfitPlan): string {
+/** Phase 9 (trim): a rolled pattern is a print on one whole garment, or nothing. */
+const PATTERN_HOW_PRINT =
+  'as a print on one whole garment (a dress, a shirt or a skirt); if nothing here can carry a print, stay solid';
+
+function patternLine(p: PersonOutfitPlan, trim = false): string {
   if (p.patternSource === 'user' && p.pattern) return `Pattern: "${p.pattern}", exactly as asked.`;
   if (p.pattern && p.patternAsTrim) return `Trim: ${p.pattern}, as a trim or accent only.`;
-  if (p.pattern) return `Pattern: ${p.pattern}, ${PATTERN_HOW}.`;
+  if (p.pattern) return `Pattern: ${p.pattern}, ${trim ? PATTERN_HOW_PRINT : PATTERN_HOW}.`;
   if (p.colourSource === 'implied' || p.colourSource === 'material') return '';
   return 'Pattern: none, solid colour.';
 }
@@ -809,6 +1173,17 @@ function patternLine(p: PersonOutfitPlan): string {
 /** The gear escape hatch for a rolled garment family: the activity's real kit always wins. */
 export const GARMENT_GEAR_WINS =
   'If the activity has its own clothing (hiking or sports kit, swimwear in the water, snow gear on the slopes, riding kit on a horse, a uniform, a ballgown at a ball), that wins and this line is ignored.';
+
+/**
+ * DRESS FOR THE PLACE FIRST (phase 9, fix 3). July's engine said "wardrobe MUST be what real people actually wear
+ * at <place>" and its outfits read natural; phase 8 said "follow the plan exactly" and a beach got sequins. This
+ * puts the place back in charge: the setting's own clothes (SETTING_DRESS), elevated, with the rolled look as
+ * style inside that. Kevin's no-plain-clothes rule is unchanged (the never-basics line still follows).
+ */
+export function sceneTrueWardrobe(setting: Setting | null | undefined): string {
+  const dress = SETTING_DRESS[setting ?? 'unknown'];
+  return `DRESS FOR THE PLACE FIRST: dress them the way stylish people really dress for this place, this activity and this weather${dress ? ` (${dress})` : ''}. Then make it look its best: a great fit, named colours and fabrics, one standout piece. Any look below adds style within that; leave out any part of it that would look out of place here.`;
+}
 
 /** One line per person for the WARDROBE section. `sides` is the cast in slot order (LEFT, RIGHT). */
 export function renderOutfitPlanLines(plan: OutfitPlan, sides: readonly OutfitSide[]): string {
@@ -833,7 +1208,8 @@ export function renderOutfitPlanLines(plan: OutfitPlan, sides: readonly OutfitSi
       if (p.garmentFamily || p.look) parts.push(GARMENT_GEAR_WINS);
       if (p.style)
         parts.push(`Style: "${p.style}", exactly as asked; the cut and fit must show it.`);
-      parts.push(colourLine(p, partner));
+      const trim = !!plan.sceneFit && plan.sceneFit.trim;
+      parts.push(colourLine(p, partner, trim));
       // A garment the user named keeps its own shape: our silhouette turned "a pink bikini" into bikini-top-
       // and-shorts on a real render (2026-09-23). Colour and pattern are ours to add; the cut is theirs.
       // Phase 8: so does a costume ("a Celtic bowhuntress" came back as a rolled "fluid and draped" toga), and
@@ -842,7 +1218,7 @@ export function renderOutfitPlanLines(plan: OutfitPlan, sides: readonly OutfitSi
       const ownCut =
         namedGarment || !!p.costume || !!p.look || (!!p.style && FIT_WORDS.test(p.style));
       if (!ownCut) parts.push(`Silhouette: ${p.silhouette}.`);
-      parts.push(patternLine(p));
+      parts.push(patternLine(p, trim));
       return `- ${side.label} (${noun(side.gender)}): ${parts.filter(Boolean).join(' ')}`;
     })
     .filter(Boolean)

@@ -31,6 +31,7 @@ import { buildSceneHook } from './sceneHook.ts';
 import { normalizeActionBeat, depronounActionBeat, validateActionBeat } from './actionSafety.ts';
 import {
   GARMENT_GEAR_WINS,
+  sceneTrueWardrobe,
   renderFashionLine,
   slimWideLegs,
   renderOutfitPlanLines,
@@ -44,6 +45,7 @@ import {
   type OutfitSide,
   type PersonOutfitPlan,
 } from './outfitPlan.ts';
+import type { Setting } from './sceneSetting.ts';
 
 // ── Public types ─────────────────────────────────────────────────────────
 
@@ -142,6 +144,10 @@ export interface CharacterSlotPipelineInput {
    *  Measured before: 22% of nightly solo women in wide-leg trousers. Unset → byte-identical. A holiday
    *  costumeLock and a Create outfitPlan both win over it. */
   fashionLooks?: ReadonlyArray<FashionPick | null> | null;
+  /** SCENE FIT, brief half (phase 9, nightly): with `fashionLooks`, the wardrobe section dresses for the place
+   *  first (the setting's own clothes, SETTING_DRESS) and the look adds style within that, instead of "each look
+   *  below was chosen for this render". Create carries the same switch on its OutfitPlan. Unset → byte-identical. */
+  wardrobeSceneFit?: { setting: Setting } | null;
   /** SOLO OUTFIT EARLY (mig 565, nightly): the single-cast prompt names the wardrobe right after the medium
    *  fragment, before "set at". Same-seed flux-1.1-pro probe (2026-09-27, 4 missed nightly solos x 3 seeds): the
    *  shipped order (wardrobe at the end of the CHARACTER block, ~char 1,100-1,400) rendered the outfit 0/12; right
@@ -924,7 +930,10 @@ function buildFashionGuidance(
   const anchor = input.wardrobeAnchor
     ? ` On-location inspiration: "${input.wardrobeAnchor}". Borrow only its colours, textures and accessories, never its garments: each person's garment and look below decide what they wear.`
     : '';
-  return `WARDROBE — you are the COSTUME DESIGNER dressing ${dual ? 'both people' : 'the person'} in a film shot at "${location}". Each look below was chosen for this render: build it for this exact place and its weather, make it flattering and eye-catching, and name real garments, colours and materials.${anchor}
+  const lead = input.wardrobeSceneFit
+    ? `WARDROBE — you are the COSTUME DESIGNER for a dream shoot at "${location}". ${sceneTrueWardrobe(input.wardrobeSceneFit.setting)}${anchor}`
+    : `WARDROBE — you are the COSTUME DESIGNER dressing ${dual ? 'both people' : 'the person'} in a film shot at "${location}". Each look below was chosen for this render: build it for this exact place and its weather, make it flattering and eye-catching, and name real garments, colours and materials.${anchor}`;
+  return `${lead}
 ${lines}
 ${GARMENT_GEAR_WINS} NEVER everyday basics: no hoodie, henley, t-shirt, fleece, cargo pants, joggers, sweatpants, puffer vest, generic sneakers, and never the words casual, comfortable, practical or everyday — this is a DREAM, the outfit is part of the story.${travelerRule}`;
 }
@@ -958,6 +967,15 @@ function buildOutfitPlanGuidance(
   const traveler = travelerRule
     ? `${travelerRule}${userDressed ? ' Clothing the user asked for in the plan always wins over this rule.' : ''}`
     : '';
+  // Phase 9 (scene fit, brief): the place decides what they wear and the plan styles it, instead of "follow it
+  // exactly" (a rolled disco look at "At the Beach!" came back in sequins and platform heels). The activity
+  // line (activityWardrobe) is already place-true and stays.
+  if (plan.sceneFit && plan.sceneFit.brief) {
+    const place = input.activityWardrobe ? `${dress} ` : '';
+    return `WARDROBE — you are the COSTUME DESIGNER for a dream shoot at "${location}". ${place}${sceneTrueWardrobe(plan.setting)}${level}
+The plan for each person. Use it within what this place calls for; the user's own clothing words always win:
+${renderOutfitPlanLines(plan, outfitSidesFor(input))}${basics}${traveler}`;
+  }
   return `WARDROBE — you are the COSTUME DESIGNER dressing ${dual ? 'both people' : 'the person'} in a film shot at "${location}". ${dress}${level}
 The plan for each person. Follow it exactly:
 ${renderOutfitPlanLines(plan, outfitSidesFor(input))}${basics}${traveler}`;
@@ -993,8 +1011,13 @@ export function buildSlotBrief(input: CharacterSlotPipelineInput): string {
   const costumeLock =
     input.costumeLock && input.costumeLock.length === input.cast.length ? input.costumeLock : null;
   const outfitPlan = activeOutfitPlan(input);
+  // Phase 9: with scene fit on, a sport or snow place rolls no look (the activity's kit dresses them), and the
+  // place-first wardrobe section still applies rather than dropping to the register moods.
   const fashionLooks =
-    !outfitPlan && !costumeLock && input.fashionLooks && input.fashionLooks.some((f) => !!f)
+    !outfitPlan &&
+    !costumeLock &&
+    input.fashionLooks &&
+    (input.fashionLooks.some((f) => !!f) || !!input.wardrobeSceneFit)
       ? input.fashionLooks
       : null;
   const climateGuidance = outfitPlan

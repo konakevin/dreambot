@@ -28,7 +28,7 @@
 import type { CompilerInput, CompilerOutput } from './promptCompiler.ts';
 import { applyVibeGenderModifier } from './promptCompiler.ts';
 import { applyFaceSwapOverride } from './faceSwapFluxOverrides.ts';
-import { renderOutfitPlanLines } from './outfitPlan.ts';
+import { renderOutfitPlanLines, sceneTrueWardrobe } from './outfitPlan.ts';
 
 // ── Single-cast composition presets ────────────────────────────────────
 // Mirrors `pools/dual_composition.ts` for the single case. Every preset
@@ -147,8 +147,17 @@ This is what the user asked for. Their LOCATION wins. Their ACTION wins. Their A
         { role: c.role, label: 'THE PERSON', gender: castGender },
       ])
     : '';
+  // Phase 9 (scene fit, brief): dress for the place first, the plan styles it (see sceneTrueWardrobe).
+  const sceneFitBrief =
+    !!input.outfitPlan && !!input.outfitPlan.sceneFit && input.outfitPlan.sceneFit.brief;
   const outfitBlock = outfitLine
-    ? `
+    ? sceneFitBrief
+      ? `
+OUTFIT — write it into the CHARACTER part of the prompt. ${sceneTrueWardrobe(input.outfitPlan!.setting)}
+${outfitLine}
+Use the plan within what this place calls for; the user's own clothing words always win. The face stays fully visible: no sunglasses, helmet, mask, goggles, visor or veil on the face, even if the request mentions them.
+`
+      : `
 OUTFIT — write it into the CHARACTER part of the prompt, following it exactly:
 ${outfitLine}
 Name the real garments the scene calls for and make them beautiful; the user's own clothing words always win. The face stays fully visible: no sunglasses, helmet, mask, goggles, visor or veil on the face, even if the request mentions them.

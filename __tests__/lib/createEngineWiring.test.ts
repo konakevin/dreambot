@@ -122,4 +122,14 @@ describe('generate-dream wires the outfit plan (mig 547) into both cast paths', 
     expect(SRC).toContain('enforceSoloOutfit(soloText, soloPerson)');
     expect(SRC).toContain('finalPrompt = postProcessPrompt(soloText, compiled.postProcess)');
   });
+
+  it("phase 9 scene fit: the user's own place words set the setting, and the plan carries it", () => {
+    expect(SRC).toContain("from '../_shared/sceneSetting.ts'");
+    expect(SRC).toContain('settingFromText(...sceneTexts)');
+    expect(SRC).toContain('{ sceneFit, setting, sceneText: sceneTexts.filter(Boolean).join');
+    // Couples read the split's setting + action; solos and a failed split read the prompt + surprise place.
+    expect(SRC).toContain('[sceneSplit.setting, sceneSplit.action, userSubject]');
+    expect(SRC).toContain('[userSubject, castSurprise ? castSurprise.prompt : null]');
+    expect(SRC).toContain('castCfg.createOutfitSceneFit || outfitPreview');
+  });
 });

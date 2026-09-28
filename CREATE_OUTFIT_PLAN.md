@@ -481,6 +481,137 @@ against the other looks from `ai_generation_log.fallback_reasons` before calling
 **Rollback** (no deploy):
 `UPDATE engine_config SET create_outfit_costume_read=false, create_outfit_garment_roll=false, nightly_garment_roll=false WHERE id=1;`
 
+## Phase 9 (2026-09-28): outfits that fit the place (mig 572, scene fit) — built, switches OFF
+
+**Complaint** (Kevin): "the nightly/create engines like to add weird clothes to people in renders - it will add a
+colored cuff to their pants, overly formal outfits at the beach". michele's last 12:
+- "At the Beach!" came back in a black sequin jumpsuit with platforms, and a suit with "burnt orange-trimmed trousers".
+- Whale-watching on a Hawaii beach got a regency dress with long gloves.
+- A golf tournament got a rolled mermaid look and a "cobalt geometric print trim" collar.
+- Chinatown and a movie theater both got matching Parisian berets.
+- A nightly cave got a varsity jacket and a tennis skirt.
+
+**Root cause, all ours:**
+1. `rollFashion` picked a look from genders alone, never the place.
+2. The accent colour ("lead with X, accent with Y") and the pattern ("a print ... otherwise a trim") landed as
+   cuffs, collars and gloves. Trim words appeared in 43% of Create wardrobes, against 16% in nightly, which has
+   no colour roll.
+3. The brief asked for spectacle: "Follow it exactly", "STAND OUT", "costume designer ... film".
+4. The user's own place words ("beach", "golf") never counted.
+
+**July reference** (Kevin: natural but nice back then). The `40389e60` nightly said "wardrobe MUST be what real
+people actually wear at <place>", with a light mood and no colour, pattern or look rolls. Its beaches got aloha
+shirts, linen, board shorts, sundresses and sarongs. Its failure was plainness (surf tees, cargo shorts), which
+is why the no-plain-clothes rule came in on 09-18. That rule stays.
+
+**What shipped** (three fixes, one switch; each fix can be tested alone):
+- **Shared:** `_shared/sceneSetting.ts` sorts each render into a setting: beach, city, evening, indoor,
+  outdoors, snow, sport, fantasy or unknown.
+  - Create reads the user's own words: the prompt, the couple split's setting and action, the surprise place.
+  - Nightly reads the location card (biome, tags, imagined), or the scenario row (its category, else its text).
+  - `SETTING_DRESS` holds one authored line per setting on what stylish people really wear there. A test locks
+    out plain-clothes and occluder words.
+- **looks** (`outfitPlan.ts`):
+  - Every one of the 48 looks is tagged with the settings it suits. `rollFashion(..., opts.setting)` rolls only
+    those, and garment weights shift per setting (a beach has no coat over a dress; an evening has no shorts).
+  - Sport and snow roll no look, because the activity's kit dresses them.
+  - Gothic, regency and mermaid are imagined worlds only; a real restaurant got a velvet corset gown and a frock
+    coat in the harness.
+  - Regional looks need their place named in the scene: Parisian needs paris or france, western needs texas,
+    ranch or saloon, K-pop needs seoul or a concert, nautical needs a harbour, yacht or boat.
+  - Two looks exist only when scene fit is on, so the off pool is untouched: men's `surf` (beach) and `explorer`
+    (outdoors).
+  - An unclassified scene takes the city looks.
+- **trim:**
+  - A second colour goes on ONE accessory (a bag, shoes, jewellery or a hat), "never as a trim, cuff, collar,
+    piping or panel".
+  - A pattern is a print on one whole garment or nothing.
+  - There is no rolled pattern over the user's own colour.
+  - `OUTFIT_SILHOUETTES_V3` drops "one contrasting piece".
+- **brief** (`sceneTrueWardrobe`):
+  - "DRESS FOR THE PLACE FIRST", then the setting's line, then "make it look its best", and the look adds style
+    within that.
+  - "Follow it exactly" becomes "Use it within what this place calls for".
+  - The never-basics line and the PLAIN_CLOTHES validator are unchanged.
+  - It covers the Create couple and solo briefs and the nightly fashion brief. A sport or snow place with no look
+    still gets this brief instead of the register moods.
+- **Switches** (mig 572): `create_outfit_scene_fit` (also on for `create_outfit_preview_user_ids`) and
+  `nightly_outfit_scene_fit`. Both default false.
+- **QA overrides:** `qa_outfit_scene_fit` on the Create payload, `force_outfit_scene_fit` on nightly (true,
+  false, or `looks` / `trim` / `brief` alone).
+- **Stamps:** `outfit_scene_fit:<all|looks|trim|brief>`, `outfit_setting:<setting>:<keywords|split|location|row>`.
+- **Off is byte-identical:** the golden fixture, the phase 8 null-looks test and the rng-sequence tests pass
+  unchanged.
+
+**Text harness, Create** (`scripts/qa-outfit-text.ts --scene-fit=<x>`). 10 scene cases (M1-M10), 3 runs each,
+51 people:
+
+| scene fit | out of place | trim/cuff words | plain-clothes retries |
+|---|---|---|---|
+| off (today) | 15/51 (29%), beach 11/15 | 22/51 (43%) | 2/30 |
+| looks only | 0/51 | 16/51 (31%) | 1/30 |
+| trim only | 6/51 (12%) | 10/51 (20%) | 0/30 |
+| brief only | 1/51 (2%) | 17/51 (33%) | 0/30 |
+| **all** | **1/51 (2%)** | **9/51 (18%)** | **0/30** |
+
+The trim words left are the looks' own authored details ("crochet trim", "satin ribbon ties", "lace cuffs"), not
+our colour rolls.
+
+**Nightly text** (`scripts/qa-nightly-wardrobe.mjs`, dry runs on plain places, garment roll forced on, 51 people):
+- **Off:** 7/51 (14%) out of place (wool and a turtleneck at the beach, velvet and a corset outdoors, shorts in
+  the snow), with looks like disco and couture at outdoor places and K-pop and Parisian at the beach.
+- **On:** 0/51 out of place, and every rolled look was tagged for its setting. Snow rolled no look and got real
+  shells and snow trousers.
+
+**Renders on Kevin's account:** pending. There are 40 Create renders (6 couple and 4 solo prompts, 2 off plus
+2 on each) and 12 paired nightly renders, going on a render-picker page for his vote.
+
+**Renders, round 1** (2026-09-28, render-picker https://claude.ai/artifact/9q3pFRyk6CJcvX5gNjeMSz). Kevin: "i think
+overall, the fix looks a lot better". Examples:
+
+| Place | Off (today) | On |
+|---|---|---|
+| Everest | a regency gown with satin gloves; a naval jacket with a cravat | mountaineering shells |
+| Chinatown | a frock coat and a corset gown | city clothes |
+| "At the beach!" | velvet and gloves | an aloha shirt and a sundress |
+
+The couple swap looked worse in round 1: held first try 8/12 on vs 12/12 off. The misses were a Fly timeout, the
+hard "watching whales" prompt, and a panama hat. Hats were then removed from `SETTING_DRESS` (test-locked). Round 2
+on the beach prompts held 8/11 first try both ways, with 0 solo fallbacks on against 2 off.
+
+**Themed places (round 2 of the nightly fix, same day).** Kevin asked for the problem scenes to be fixed and
+re-rendered. On-render misses:
+- a 1920s speakeasy got a studded rocker jacket;
+- the saloon got an old-money polo and go-go boots;
+- dapper braces and a flat cap landed in China.
+
+Added:
+- **`FashionLook.affinity`:** a theme regex (1920s, 70s, 60s, 50s, regency, gothic, safari). A scene naming the theme
+  makes the look eligible outside its settings and favoured.
+- **Favoured looks:** `requires`-matched regional looks (western at a saloon or ranch, Parisian in Paris) are favoured
+  too. A favoured look is taken 85% of the time (`AFFINITY_PCT`). A woman's favoured look is picked before her
+  garment family, so the family is one the look wears.
+- **Dapper** now requires a 1920s, speakeasy or Gatsby scene.
+- **Nightly snow by name:** the place's own words win when they say snow (`chalet` added to the snow words). This
+  does not apply on `luxury` cards: Kevin said "if biome says luxury, i have no problem with luxury outfits in
+  different scenarios like snow".
+
+Dry run over 10 themed places:
+- saloon, saloon interior and cattle ranch: western 9/9;
+- safari: safari or explorer;
+- haunted mansion: gothic, regency or deco;
+- no dapper in China.
+
+**Rollback** (no deploy): `UPDATE engine_config SET create_outfit_scene_fit=false, nightly_outfit_scene_fit=false WHERE id=1;`
+Kevin's own Create account stays on through the preview list until it is emptied.
+
+**Follow-ups found:**
+- A themed interior such as a Wild West saloon sorts as "indoor", so it can still roll a sporty varsity jacket.
+  `picker_category` would sort it better, but nightly doesn't load it for the place.
+- A sport or snow Create render has no rolled garment family, so `slimWideLegs` never runs. One golf run came
+  back in "wide-leg golf trousers".
+- Create SOLO wardrobes still never run the PLAIN_CLOTHES validator.
+
 ## Porting to nightly later
 
 `planOutfits`, the pools and the brief wiring live in `_shared`; nightly would pass the same flag with

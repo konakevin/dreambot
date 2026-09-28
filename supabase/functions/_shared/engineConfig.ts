@@ -211,6 +211,11 @@ export interface EngineConfig {
   nightlyGarmentRoll: boolean;
   /** Nightly SOLO outfit early (mig 565): the wardrobe right after the medium fragment in single-cast prompts. */
   nightlySoloOutfitEarly: boolean;
+  /** SCENE FIT (mig 572, CREATE_OUTFIT_PLAN.md phase 9): outfits fit the place. Looks filtered by setting, no
+   *  colour trims or cuffs, the brief dresses for the place first. Create also applies it to preview users. */
+  createOutfitSceneFit: boolean;
+  /** SCENE FIT on nightly (looks + brief; nightly has no colour roll). Flip only on Kevin's word. */
+  nightlyOutfitSceneFit: boolean;
   /** SWAP CAPACITY GATE (mig 549, NIGHTLY_ROBUSTNESS_PLAN.md): dual swaps wait for a free Fly slot. */
   swapGateEnabled: boolean;
   /** Longest a dual swap waits for a slot before `swap_capacity_busy` (ms). */
@@ -324,6 +329,8 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   outfitGarmentWeights: { ...DEFAULT_GARMENT_WEIGHTS },
   nightlyGarmentRoll: false,
   nightlySoloOutfitEarly: false,
+  createOutfitSceneFit: false,
+  nightlyOutfitSceneFit: false,
   swapGateEnabled: false,
   swapGateMaxWaitMs: 45_000,
   nightlySwapCapacityRetries: 0,
@@ -508,6 +515,8 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     outfitGarmentWeights: normalizeGarmentWeights(data.outfit_garment_weights),
     nightlyGarmentRoll: data.nightly_garment_roll === true,
     nightlySoloOutfitEarly: data.nightly_solo_outfit_early === true,
+    createOutfitSceneFit: data.create_outfit_scene_fit === true,
+    nightlyOutfitSceneFit: data.nightly_outfit_scene_fit === true,
     swapGateEnabled: data.swap_gate_enabled === true,
     swapGateMaxWaitMs: Number.isFinite(Number(data.swap_gate_max_wait_ms))
       ? Math.max(0, Math.min(120_000, Number(data.swap_gate_max_wait_ms)))
