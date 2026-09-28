@@ -39,9 +39,9 @@ export function albumBrowse(source: PostGridSource): AlbumBrowse {
     case 'reposts':
       return { sortable: true, monthsScope: 'reposts' };
     case 'user': {
-      // Bot modes: Haven't seen sorts but has no months; 🎲 is one random draw, neither.
+      // Bot modes: Haven't seen sorts but has no months.
       const m = source.mode ?? 'all';
-      return { sortable: m !== 'shuffle', monthsScope: m === 'all' ? 'posts' : null };
+      return { sortable: true, monthsScope: m === 'all' ? 'posts' : null };
     }
     case 'hashtag':
       return { sortable: false, monthsScope: null };
@@ -58,13 +58,12 @@ export type ViewerQuery =
   | 'unseen'
   | 'hashtag';
 
-/** The query the photo detail screen pages for a grid source; null = page nothing (the
- *  stashed posts are the whole list: no source, or a 🎲 draw). */
+/** The query the photo detail screen pages for a grid source; null = page nothing (no
+ *  source: the stashed posts are the whole list). */
 export function viewerQuery(source: PostGridSource | null): ViewerQuery | null {
   if (!source) return null;
   if (source.type === 'user') {
-    const m = source.mode ?? 'all';
-    return m === 'all' ? 'user' : m === 'unseen' ? 'unseen' : null;
+    return source.mode === 'unseen' ? 'unseen' : 'user';
   }
   return source.type;
 }

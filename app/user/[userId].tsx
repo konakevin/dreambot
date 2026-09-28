@@ -58,7 +58,7 @@ import { PostActionSheet } from '@/components/PostActionSheet';
 import { avatarUrl } from '@/lib/imageUrl';
 import { trackProfileViewed } from '@/lib/analytics';
 import type { FollowUser } from '@/hooks/useFollowersList';
-import { useBotVisit, markBotVisited } from '@/hooks/useAlbumDiscovery';
+import { markBotVisited } from '@/hooks/useAlbumDiscovery';
 import { BotBrowsePill, type BotBrowseMode } from '@/components/AlbumBrowse';
 
 type Tab = 'posts' | 'followers' | 'following';
@@ -130,12 +130,10 @@ export default function PublicProfileScreen() {
   // bots and don't need to block/report them (unfollow is enough).
   const { data: bots = [] } = useBotUsers();
   const isBot = bots.some((b) => b.id === userId);
-  // Bot browsing (ALBUM_DISCOVERY_PLAN.md): All · Haven't seen · 🎲, NEW marks + the
-  // caught-up line. The visit read happens on arrival (your previous visit), and the visit
-  // is recorded when you LEAVE, so the marks hold while you're here.
+  // Bot browsing (ALBUM_DISCOVERY_PLAN.md): All · Haven't seen. The visit is recorded
+  // when you LEAVE, which resets that bot's "new" count on the Bots tab. No NEW marks or
+  // "You're caught up" line on the grid (Kevin 2026-09-27: "just show their album grid").
   const [botMode, setBotMode] = useState<BotBrowseMode>('all');
-  const [botDraw, setBotDraw] = useState(0);
-  const { data: botVisit } = useBotVisit(userId, isBot);
   const isBotRef = useRef(isBot);
   isBotRef.current = isBot;
   useEffect(
@@ -732,27 +730,19 @@ export default function PublicProfileScreen() {
                 source={
                   viewingReposts
                     ? { type: 'reposts', userId }
-                    : { type: 'user', userId, mode: isBot ? botMode : 'all', draw: botDraw }
+                    : { type: 'user', userId, mode: isBot ? botMode : 'all' }
                 }
                 // Album browsing on every profile: Newest/Oldest (Reposts: by repost date),
-                // Grid/Months on posts. Bots also get All · Haven't seen · 🎲.
+                // Grid/Months on posts. Bots also get All · Haven't seen.
                 albumControls={
                   viewingReposts
                     ? {}
                     : {
                         left: isBot ? (
-                          <BotBrowsePill
-                            mode={botMode}
-                            onMode={setBotMode}
-                            onShuffle={() => {
-                              setBotMode('shuffle');
-                              setBotDraw((d) => d + 1);
-                            }}
-                          />
+                          <BotBrowsePill mode={botMode} onMode={setBotMode} />
                         ) : undefined,
                       }
                 }
-                botDiscovery={isBot ? (botVisit ?? null) : null}
                 emptyText={viewingReposts ? 'No reposts yet' : 'No posts yet'}
                 ListHeaderComponent={header}
                 highlightPostId={viewedPost}

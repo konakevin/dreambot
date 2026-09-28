@@ -1,21 +1,14 @@
 /**
  * Album browsing controls (ALBUM_DISCOVERY_PLAN.md; concept renders "DreamBot Browsing
- * Concepts"): the Newest/Oldest toggle, the Grid/Months toggle, the full-width rows the
- * grid draws between posts (the "You're caught up" line), and the bot profile's
- * All · Haven't seen · 🎲 pill.
+ * Concepts"): the Newest/Oldest toggle, the Grid/Months toggle, and the bot profile's
+ * All · Haven't seen pill.
  *
  * The segmented pill matches the profile's Dreams album filter (All · Public · Private).
  */
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { Text } from '@/components/AppText';
 import { colors } from '@/constants/theme';
@@ -133,17 +126,6 @@ export function MonthAlbumBar({
   );
 }
 
-/** The line under the posts that are new since your last visit. */
-export function CaughtUpRow() {
-  return (
-    <View style={styles.caughtRow}>
-      <View style={styles.caughtLine} />
-      <Text style={styles.caughtText}>You’re caught up</Text>
-      <View style={styles.caughtLine} />
-    </View>
-  );
-}
-
 /** One month in the months view: its newest image, the month, the year and the count. */
 export function MonthTile({
   month,
@@ -229,22 +211,17 @@ export function SegmentedPill<T extends string>({
   );
 }
 
-export type BotBrowseMode = 'all' | 'unseen' | 'shuffle';
+export type BotBrowseMode = 'all' | 'unseen';
 
-/** All · Haven't seen · 🎲. Tapping the dice again draws a new set. */
+/** All · Haven't seen (the 🎲 shuffle segment was removed 2026-09-27). */
 export function BotBrowsePill({
   mode,
   onMode,
-  onShuffle,
 }: {
   mode: BotBrowseMode;
   onMode: (m: BotBrowseMode) => void;
-  /** Called on every dice tap (first tap switches to shuffle, later taps redraw). */
-  onShuffle: () => void;
 }) {
-  const spin = useSharedValue(0);
-  const diceStyle = useAnimatedStyle(() => ({ transform: [{ rotate: `${spin.value}deg` }] }));
-  const seg = (m: 'all' | 'unseen', label: string) => {
+  const seg = (m: BotBrowseMode, label: string) => {
     const on = mode === m;
     return (
       <TouchableOpacity
@@ -260,32 +237,10 @@ export function BotBrowsePill({
       </TouchableOpacity>
     );
   };
-  const shuffling = mode === 'shuffle';
   return (
     <View style={styles.segmented}>
       {seg('all', 'All')}
       {seg('unseen', 'Haven’t seen')}
-      <TouchableOpacity
-        style={[styles.segment, shuffling && styles.segmentOn]}
-        onPress={() => {
-          Haptics.selectionAsync();
-          spin.value = withTiming(spin.value + 360, {
-            duration: 450,
-            easing: Easing.out(Easing.cubic),
-          });
-          onShuffle();
-        }}
-        activeOpacity={0.8}
-        accessibilityLabel={shuffling ? 'Shuffle again' : 'Shuffle'}
-      >
-        <Animated.View style={diceStyle}>
-          <MaterialCommunityIcons
-            name="dice-multiple"
-            size={horizontalScale(16)}
-            color={shuffling ? ACTIVE_TEXT : colors.accentLight}
-          />
-        </Animated.View>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -309,19 +264,6 @@ const styles = StyleSheet.create({
   crumb: { flexShrink: 1 },
   crumbMonth: { color: colors.textPrimary, fontSize: fontScale(12), fontWeight: '600' },
   crumbCount: { color: colors.textSecondary, fontSize: fontScale(12), fontWeight: '600' },
-  caughtRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: horizontalScale(8),
-    paddingHorizontal: horizontalScale(12),
-    paddingVertical: verticalScale(10),
-  },
-  caughtLine: {
-    flex: 1,
-    height: StyleSheet.hairlineWidth * 2,
-    backgroundColor: 'rgba(196,181,253,0.35)',
-  },
-  caughtText: { color: colors.accentLight, fontSize: fontScale(12), fontWeight: '600' },
   monthTile: {
     borderRadius: horizontalScale(12),
     overflow: 'hidden',

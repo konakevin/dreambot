@@ -3,23 +3,19 @@
  *
  * Shared identity-block at the top of both the own-profile screen
  * (`app/(tabs)/profile.tsx`) and the public-profile screen
- * (`app/user/[userId].tsx`). Compact IG/X-style layout (2026-06-30 squash —
- * was a tall fully-centered stack):
+ * (`app/user/[userId].tsx`). One flow, with or without a header picture:
  *
- *   ╭──────╮  Display name
- *   │ 84px │  @username
- *   │  📷  │  <posts> Posts · <followers> Followers · <following> Following
- *   ╰──────╯
- *   Bio (optional)  ·  Joined March 2026
+ *   ╭────╮  Display name                    (+) (⋯)   ← someone else's profile
+ *   │ 📷 │  @username
+ *   ╰────╯
+ *   <posts> Posts   <followers> Followers   <following> Following
+ *   Bio (optional)
  *   [ Edit Profile ]  [ Share ]  [ ✦ 23k ]   (own)
- *   [ Follow ]  [ Message ]  [ ⋯ ]           (other — human)
- *   [ Follow ]                                (other — bot)
+ *   [ Accept ]  [ Deny ]                       (other, when they asked to follow you)
  *
- * Avatar sits LEFT with name/handle/stats stacked to its right (reclaims the
- * vertical height the old centered stack wasted). Bio + "Joined" collapse into
- * one full-width line. "Change photo" is gone — tapping the avatar (own) opens
- * the change-photo flow, signalled by a camera badge. Sparkles ride in the
- * action row (passed as `children` by the own-profile screen).
+ * "Change photo" is gone — tapping the avatar (own) opens the change-photo flow,
+ * signalled by a camera badge. Sparkles ride in the action row (passed as
+ * `children` by the own-profile screen).
  *
  * Display name falls back to `@username` when null; bio is omitted when
  * null/empty. Stats taps notify the parent — list overlays + tab switching stay
@@ -28,8 +24,10 @@
  * Dreamscape header (migration 554): when `header` is set the layout switches to
  * a full-bleed banner (ProfileBanner) that runs under the status bar, with the
  * avatar + name in its bottom fade and stats / bio / actions below. The parent
- * floats its top bar over the banner. No header → the compact layout above,
- * unchanged, plus the optional "Add a header" strip on your own profile.
+ * floats its top bar over the banner. No header → the same rows without the picture
+ * (Kevin 2026-09-27: laid out like a profile with a header; the old stats-beside-the-
+ * avatar layout ran "Following" under the Follow badge), plus the optional "Add a
+ * header" strip on your own profile.
  */
 
 import type { ReactNode } from 'react';
@@ -45,6 +43,7 @@ import type { ProfileHeaderImage } from '@/hooks/usePublicProfile';
 import { ProfileBanner } from '@/components/ProfileBanner';
 import { headerHeight } from '@/lib/profileHeaders';
 import { showAlert } from '@/components/CustomAlert';
+import { Toast } from '@/components/Toast';
 
 const AVATAR_SIZE = 84;
 /** Avatar size on the Dreamscape banner (smaller: it shares the fade with the name). */
@@ -243,9 +242,7 @@ export function ProfileHeader(props: Props) {
     </View>
   );
 
-  const bioText = hasBio ? (
-    <Text style={[styles.bio, header && styles.bioBanner]}>{bio}</Text>
-  ) : null;
+  const bioText = hasBio ? <Text style={styles.bio}>{bio}</Text> : null;
 
   const actions =
     props.variant === 'own' ? (
@@ -332,6 +329,12 @@ export function ProfileHeader(props: Props) {
         return;
       }
       props.onFollowPress();
+      // The badge is just + → ✓, easy to miss, so say it in words (Kevin 2026-09-27).
+      // A failed follow replaces this with the error toast from useToggleFollow.
+      Toast.show(
+        props.isPrivate ? 'Follow request sent' : `Following ${heroName}`,
+        'checkmark-circle'
+      );
     };
     return (
       <View style={styles.idBadges}>
@@ -384,7 +387,7 @@ export function ProfileHeader(props: Props) {
   if (header) {
     const banner = (
       <ProfileBanner url={header.url} focalY={header.focalY} height={headerHeight(width, height)}>
-        <View style={styles.bannerIdRow}>
+        <View style={styles.idRow}>
           <AvatarBlock
             avatar_url={avatar_url}
             username={username}
@@ -394,7 +397,7 @@ export function ProfileHeader(props: Props) {
             size={BANNER_AVATAR_SIZE}
             ring
           />
-          <View style={styles.bannerIdentity}>
+          <View style={styles.identity}>
             <Text style={[styles.heroName, styles.onImageShadow]} numberOfLines={1}>
               {heroName}
             </Text>
@@ -459,16 +462,17 @@ export function ProfileHeader(props: Props) {
         </TouchableOpacity>
       ) : null}
 
-      {/* Row 1 — avatar LEFT, identity + stats stacked to its RIGHT */}
-      <View style={styles.topRow}>
+      {/* The header layout's rows, minus the picture. */}
+      <View style={styles.idRow}>
         <AvatarBlock
           avatar_url={avatar_url}
           username={username}
           onPress={avatarPress}
           uploading={avatarUploading}
           showCameraBadge={props.variant === 'own'}
+          size={BANNER_AVATAR_SIZE}
         />
-        <View style={styles.identityCol}>
+        <View style={styles.identity}>
           <Text style={styles.heroName} numberOfLines={1}>
             {heroName}
           </Text>
@@ -477,15 +481,11 @@ export function ProfileHeader(props: Props) {
               @{username}
             </Text>
           )}
-          {statsRow}
         </View>
         {idBadges(false)}
       </View>
-
-      {/* Row 2 — bio, full-width under the avatar row */}
+      {statsRow}
       {bioText}
-
-      {/* Row 3 — action pills (+ sparkle chip via children on own) */}
       {actions}
     </View>
   );
@@ -496,16 +496,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: verticalScale(8),
     paddingBottom: verticalScale(12),
-  },
-  topRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-  },
-  identityCol: {
-    flex: 1,
-    justifyContent: 'center',
-    gap: 2,
   },
   avatar: {
     width: AVATAR_SIZE,
@@ -565,11 +555,12 @@ const styles = StyleSheet.create({
   // Stats — number-over-label boxes, left-aligned, spaced apart (no outline).
   // Label rides at 14 (close to the 15 number) so the pair reads as one unit
   // (Kevin 2026-07-01 — the old 12 label read detached from its number).
+  // Under the avatar row: 16pt like the header layout (banner overlay 12 + body 4).
   statsRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 28,
-    marginTop: verticalScale(6),
+    marginTop: verticalScale(16),
   },
   statBox: {
     alignItems: 'flex-start',
@@ -593,7 +584,7 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: fontScale(14),
     lineHeight: fontScale(19),
-    marginTop: verticalScale(12),
+    marginTop: verticalScale(10),
   },
   actionRow: {
     flexDirection: 'row',
@@ -669,12 +660,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.35)',
   },
-  bannerIdRow: {
+  idRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: horizontalScale(12),
   },
-  bannerIdentity: {
+  identity: {
     flex: 1,
     minWidth: 0,
     gap: verticalScale(2),
@@ -696,9 +687,6 @@ const styles = StyleSheet.create({
   },
   statsRowBanner: {
     marginTop: 0,
-  },
-  bioBanner: {
-    marginTop: verticalScale(10),
   },
   // ── "Add a header" strip (own profile, no header yet) ──
   addHeaderStrip: {

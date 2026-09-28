@@ -1,6 +1,6 @@
 /**
  * Album navigation (ALBUM_DISCOVERY_PLAN.md): sort order, months, and the extra rows the
- * grid draws between posts (month headers, the bot profile's "You're caught up" line).
+ * grid draws between posts (month headers).
  *
  * Pure functions, shared by PostGrid, the timeline scrubber, and the months view.
  *
@@ -62,9 +62,7 @@ export function monthsInOrder(months: AlbumMonth[], sort: AlbumSort): AlbumMonth
 }
 
 /** A full-width row the grid draws between posts. */
-export type GridRow =
-  | { row: 'month'; key: string; label: string }
-  | { row: 'caughtUp'; key: 'caught-up' };
+export type GridRow = { row: 'month'; key: string; label: string };
 
 export interface DatedPost {
   id: string;
@@ -74,12 +72,9 @@ export interface DatedPost {
 }
 
 /**
- * Weave month headers (and optionally the "You're caught up" line) between posts.
- *
- * - A month header goes before the first post of each month. Pinned posts at the top of a
- *   newest-first posts grid are not dated rows, so they get no header.
- * - `caughtUpAfter` (a bot profile's last visit, newest-first only): the line goes right
- *   after the posts newer than your last visit, and only if at least one is.
+ * Weave month headers between posts: a header goes before the first post of each month.
+ * Pinned posts at the top of a newest-first posts grid are not dated rows, so they get no
+ * header.
  */
 export function weaveGridRows<T extends DatedPost>(
   posts: T[],
@@ -88,24 +83,13 @@ export function weaveGridRows<T extends DatedPost>(
     sort: AlbumSort;
     pinsFloat: boolean;
     monthHeaders: boolean;
-    caughtUpAfter?: string | null;
   }
 ): (T | GridRow)[] {
   const out: (T | GridRow)[] = [];
   let lastMonth: string | null = null;
-  let sawNew = false;
-  let placedCaughtUp = false;
-  const caughtUpAt = opts.sort === 'newest' ? (opts.caughtUpAfter ?? null) : null;
   for (const p of posts) {
     const floating = opts.pinsFloat && opts.sort === 'newest' && !!p.pinned_at;
     const date = (opts.dateKey === 'posted_at' ? p.posted_at : p.created_at) ?? p.created_at;
-    if (!floating && caughtUpAt && !placedCaughtUp) {
-      if (date > caughtUpAt) sawNew = true;
-      else if (sawNew) {
-        out.push({ row: 'caughtUp', key: 'caught-up' });
-        placedCaughtUp = true;
-      }
-    }
     if (opts.monthHeaders && !floating) {
       const m = monthKey(date);
       if (m !== lastMonth) {

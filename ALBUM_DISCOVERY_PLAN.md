@@ -23,7 +23,7 @@ Concept renders: the "DreamBot Browsing Concepts" artifact (interactive phone mo
 | 4   | **"12 new" badges** on the Bots tab bot pills + a "You're caught up" line    | Bots tab, bot profiles                                                    | YES                                                                                         |
 | 5   | **Haven't seen** filter                                                      | bot profiles                                                              | YES                                                                                         |
 | 6   | ~~Explorer progress~~                                                        |                                                                           | built, then REMOVED (Kevin: the progress bar is overwhelming)                               |
-| 7   | **🎲 Shuffle** (random 12 from the whole history)                            | bot profiles                                                              | YES                                                                                         |
+| 7   | ~~🎲 Shuffle~~ (random 12 from the whole history)                            |                                                                           | built, then REMOVED 2026-09-27 (Kevin)                                                      |
 | 8   | **Search**: your own dreams (incl. private), bots, and members' public posts | Search tab                                                                | YES                                                                                         |
 | –   | Remember my place in an album                                                |                                                                           | skipped for now                                                                             |
 | –   | Hall of Fame / Deep Cuts                                                     |                                                                           | skipped                                                                                     |
@@ -139,6 +139,9 @@ Server pieces (migrations, RPCs, backfills) can land ahead of each app build; UI
 
 1. **Scene summaries: scrapped for now.** Members' dreams are searchable only by what's person-free: their own
    written description, the medium and the vibe. "My dreams" search is therefore thin until summaries return.
+   **The search scope chips were removed 2026-09-27** (Kevin: "beach" found one of his dreams under My dreams,
+   "feels broken"; then "remove all those sub filter buttons and just force search to search ALL"). Search always
+   runs the `all` scope, which includes your own dreams; `search_dreams` keeps `p_scope` for 1.9.0 clients.
 2. **Privacy fix: done.** Migration 557 (members' search text never includes the engine prompt or caption; the
    trigger also fires on `is_public`, so going public always rewrites it). The 950 public member posts were
    recomputed at once. The private rows were NOT all rewritten: the throttled backfill caused an incident (below),
@@ -171,13 +174,21 @@ Follow-up still open: make that realtime handler coalesce bursts (one refetch pe
   a continuous grid (no month headers), and the months view (calendar button or pinch). **A month tile opens THAT
   month as its own album** (hooks' `month` option: a UTC range matching the tile's bucket; counts verified equal),
   with the "‹ August 2026 · 77 posts" breadcrumb (or pinch in) back to the tiles.
+- **Removed on Kevin's call (2026-09-27):** the bot profile's NEW marks and "You're caught up" line ("it's
+  really confusing what that's even showing … just show their album grid"). Bot profiles show the plain grid.
+  Kept: the All · Haven't seen pill, the Bots-tab new-count badges, and `mark_bot_visited` on leave (it
+  resets those badges). `get_bot_visit` (mig 559) is no longer called by the app.
+- **Removed on Kevin's call (2026-09-27):** the 🎲 shuffle segment (and `useRandomProfilePosts`, the `user`
+  source's `shuffle` mode and `draw`). `get_random_posts` (mig 558) stays in the DB because 1.9.0 calls it; drop
+  it once the min-version gate is past the first build without the dice. Same day: the tappable "Just viewed"
+  jump pill (the tile's "Just viewed" overlay stays).
 - **Removed on Kevin's call (2026-09-26):** the Explorer progress card (seen views are still recorded and still
   drive Haven't seen, NEW marks, the caught-up line and the Bots-tab badges), the timeline scrubber (right-edge drag), month headers in the main grid,
   and the jump-to-month / load-newer-above paging they needed. "The calendar picker screen is sufficient and easier." and `botDiscovery` (NEW marks + "You're caught up"); `user` source
   modes `all | unseen | shuffle`.
 - Wired: your Posts + Dreams (the All/Public/Private pill moved into the controls row), every bot/member profile
-  (bots: All · Haven't seen · 🎲, visit recorded on leave), Bots tab pill badges (visits recorded
-  when you move off a bot or leave the tab), Search tab scope chips (All · My dreams · Bots · People).
+  (bots: All · Haven't seen, visit recorded on leave), Bots tab pill badges (visits recorded
+  when you move off a bot or leave the tab), Search tab (one search over everything; the scope chips were removed 2026-09-27).
 - Newest/Oldest AND the calendar on Saved (Bookmarked · Hearted) and Reposts too, yours and anyone's (Kevin
   2026-09-26). These sort, open a month and count month tiles by when YOU saved, hearted or reposted, not the
   post's date (migration 562 adds the `saved` / `hearted` / `reposts` scopes; Saved and Hearted refuse anyone

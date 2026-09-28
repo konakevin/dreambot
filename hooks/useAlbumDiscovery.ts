@@ -2,14 +2,12 @@
  * Data for album navigation + bot discovery (ALBUM_DISCOVERY_PLAN.md).
  *
  * - useAlbumMonths        months of an album (timeline scrubber, months view) — migration 560
- * - useBotVisit           your last visit + new posts you haven't seen (NEW marks) — migration 559
  * - useBotNewCounts       the "12 new" badge per bot (Bots tab) — migration 559
  * - markBotVisited        call when you LEAVE a bot, so its count resets — migration 559
  * - useBotUnseenPosts     a bot's posts you haven't seen (Haven't seen) — migration 559
- * - useRandomProfilePosts 🎲 a random 12 of a profile's posts — migration 558
  *
- * The last two page like the album grids ({ rows, offset, hasMore }) so PostGrid can use
- * them as its active query unchanged.
+ * useBotUnseenPosts pages like the album grids ({ rows, offset, hasMore }) so PostGrid can
+ * use it as its active query unchanged.
  */
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
@@ -49,31 +47,6 @@ export function useAlbumMonths(userId: string, scope: AlbumMonthsScope | null) {
     },
     enabled: !!uid && !!userId && !!scope,
     staleTime: 120_000,
-  });
-}
-
-export interface BotVisit {
-  /** Your last visit to this bot before this one (null = never). */
-  lastVisitedAt: string | null;
-  /** Posts newer than that visit that you haven't seen: the NEW marks. */
-  newIds: ReadonlySet<string>;
-}
-
-export function useBotVisit(botId: string, enabled = true) {
-  const uid = useAuthStore((s) => s.user?.id);
-  return useQuery({
-    queryKey: ['botVisit', uid, botId],
-    queryFn: async (): Promise<BotVisit | null> => {
-      const { data, error } = await supabase.rpc('get_bot_visit', { p_bot_id: botId });
-      if (error) throw error;
-      const r = data?.[0];
-      if (!r) return null;
-      return { lastVisitedAt: r.last_visited_at ?? null, newIds: new Set(r.new_ids ?? []) };
-    },
-    enabled: !!uid && !!botId && enabled,
-    // Read once per visit: the last visit and the NEW marks must not move while you're here.
-    staleTime: Infinity,
-    gcTime: 0,
   });
 }
 
@@ -125,29 +98,5 @@ export function useBotUnseenPosts(botId: string, sort: AlbumSort, enabled = true
     ...albumPaging(),
     enabled: !!uid && !!botId && enabled,
     staleTime: 60_000,
-  });
-}
-
-/** 🎲 One draw of 12, as a single page. A new `draw` number draws again, skipping `exclude`. */
-export function useRandomProfilePosts(
-  userId: string,
-  draw: number,
-  exclude: readonly string[],
-  enabled = true
-) {
-  const uid = useAuthStore((s) => s.user?.id);
-  return useInfiniteQuery({
-    queryKey: ['randomProfilePosts', uid, userId, draw],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .rpc('get_random_posts', { p_user_id: userId, p_limit: 12, p_exclude: [...exclude] })
-        .select(POST_SELECT);
-      if (error) throw error;
-      const rows = castRows(data).map(mapToDreamPost);
-      return { rows, offset: 0, hasMore: false };
-    },
-    ...albumPaging(),
-    enabled: !!uid && !!userId && enabled,
-    staleTime: Infinity,
   });
 }

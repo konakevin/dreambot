@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useBotUsers } from '@/hooks/useBotUsers';
 import { trackFollowAdded, trackFollowRemoved } from '@/lib/analytics';
+import { Toast } from '@/components/Toast';
 
 interface ToggleArgs {
   userId: string;
@@ -91,9 +92,18 @@ export function useToggleFollow() {
       }
       return {};
     },
-    onError: (_err, _vars, ctx) => {
+    onError: (_err, { currentlyFollowing, hasRequest }, ctx) => {
       if (ctx?.previous) qc.setQueryData(followKey, ctx.previous);
       if (ctx?.previousReqs) qc.setQueryData(requestKey, ctx.previousReqs);
+      // The button just flips back on a failure, so say why (Kevin 2026-09-27).
+      Toast.show(
+        currentlyFollowing
+          ? 'Couldn’t unfollow. Try again.'
+          : hasRequest
+            ? 'Couldn’t cancel the request. Try again.'
+            : 'Couldn’t follow. Try again.',
+        'close-circle'
+      );
     },
     onSuccess: (_data, { userId }) => {
       qc.invalidateQueries({ queryKey: ['publicProfile', userId] });

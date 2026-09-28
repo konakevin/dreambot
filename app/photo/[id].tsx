@@ -147,8 +147,7 @@ export default function PhotoDetailScreen() {
   // query the grid shows: another order or filter is another cache entry, and paging it
   // would reshuffle the posts you're swiping through.
   const albumOpts = useAlbumStore((s) => s.albumOpts);
-  // Which query to page: lib/albumSources.ts (tested). 🎲 shuffle is one fixed draw, so
-  // it pages nothing: the stashed posts are the whole album.
+  // Which query to page: lib/albumSources.ts (tested).
   const vq = viewerQuery(albumSource);
   const srcUserId =
     albumSource?.type === 'user' || albumSource?.type === 'reposts' ? albumSource.userId : '';

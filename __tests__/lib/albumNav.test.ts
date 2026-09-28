@@ -76,36 +76,6 @@ describe('weaveGridRows', () => {
     });
     expect(keys(rows).slice(0, 3)).toEqual(['p', '[month-2026-09-01]', 'a']);
   });
-
-  it('draws the caught-up line after the posts newer than the last visit', () => {
-    const rows = weaveGridRows(posts, {
-      dateKey: 'posted_at',
-      sort: 'newest',
-      pinsFloat: true,
-      monthHeaders: false,
-      caughtUpAfter: '2026-09-01T00:00:00Z',
-    });
-    expect(keys(rows)).toEqual(['a', 'b', '[caught-up]', 'c', 'd']);
-  });
-
-  it('draws no caught-up line when nothing is new, or when sorted oldest-first', () => {
-    const none = weaveGridRows(posts, {
-      dateKey: 'posted_at',
-      sort: 'newest',
-      pinsFloat: true,
-      monthHeaders: false,
-      caughtUpAfter: '2026-10-01T00:00:00Z',
-    });
-    expect(keys(none)).toEqual(['a', 'b', 'c', 'd']);
-    const oldest = weaveGridRows([...posts].reverse(), {
-      dateKey: 'posted_at',
-      sort: 'oldest',
-      pinsFloat: true,
-      monthHeaders: false,
-      caughtUpAfter: '2026-09-01T00:00:00Z',
-    });
-    expect(keys(oldest)).toEqual(['d', 'c', 'b', 'a']);
-  });
 });
 
 describe('monthRange', () => {

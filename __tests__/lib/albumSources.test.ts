@@ -33,13 +33,6 @@ describe('albumBrowse: sort + calendar per album', () => {
     });
   });
 
-  it('a 🎲 shuffle draw neither sorts nor has the calendar', () => {
-    expect(albumBrowse({ type: 'user', userId: 'b1', mode: 'shuffle', draw: 2 })).toEqual({
-      sortable: false,
-      monthsScope: null,
-    });
-  });
-
   it('a hashtag grid has neither', () => {
     expect(albumBrowse({ type: 'hashtag', tag: 'dragons' })).toEqual({
       sortable: false,
@@ -61,10 +54,6 @@ describe('viewerQuery: the photo detail screen pages the grid it came from', () 
     [{ type: 'hashtag' as const, tag: 'dragons' }, 'hashtag'],
   ])('%o → %s', (source, query) => {
     expect(viewerQuery(source)).toBe(query);
-  });
-
-  it("a 🎲 draw pages nothing (never the bot's whole album)", () => {
-    expect(viewerQuery({ type: 'user', userId: 'b1', mode: 'shuffle', draw: 1 })).toBeNull();
   });
 
   it('no source (a notification or deep link) pages nothing', () => {

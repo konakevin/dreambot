@@ -37,7 +37,7 @@ import { minRefreshHold } from '@/lib/minRefresh';
 import { useRefreshGap } from '@/hooks/useRefreshGap';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useSearchUsers, type SearchUser } from '@/hooks/useSearchUsers';
-import { useSearchPosts, type SearchScope } from '@/hooks/useSearchPosts';
+import { useSearchPosts } from '@/hooks/useSearchPosts';
 
 import { useSearchHashtags } from '@/hooks/useHashtagPosts';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
@@ -53,21 +53,9 @@ import { FilterPickerSheet } from '@/components/FilterPickerSheet';
 import { PostTile } from '@/components/PostTile';
 import { GridSkeleton } from '@/components/Skeleton';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
-import { verticalScale, fontScale, horizontalScale } from '@/lib/responsive';
+import { verticalScale, fontScale } from '@/lib/responsive';
 
 import type { DreamPostItem } from '@/components/DreamCard';
-
-// Where to search (ALBUM_DISCOVERY_PLAN.md). "People" = other members' public posts;
-// dreamers (usernames) and hashtags show on All. Never matches people's looks.
-const SEARCH_SCOPES: { key: SearchScope; label: string }[] = [
-  { key: 'all', label: 'All' },
-  { key: 'mine', label: 'My dreams' },
-  { key: 'bots', label: 'Bots' },
-  { key: 'people', label: 'People' },
-];
-
-/** Height of the search-scope chip row (also counted in the overlay height). */
-const SCOPE_ROW_H = verticalScale(40);
 
 // ── Browse mode feed query ───────────────────────────────────────────────────
 
@@ -347,7 +335,6 @@ export default function SearchExploreScreen() {
 
   // ── Search state ──
   const [searchActive, setSearchActiveLocal] = useState(false);
-  const [searchScope, setSearchScope] = useState<SearchScope>('all');
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebouncedValue(query, 300);
   const setSearchActiveStore = useExploreStore((s) => s.setSearchActive);
@@ -392,7 +379,7 @@ export default function SearchExploreScreen() {
     fetchNextPage: fetchMorePosts,
     hasNextPage: hasMorePosts,
     isFetchingNextPage: fetchingMorePosts,
-  } = useSearchPosts(searchActive ? debouncedQuery : '', selectedMedium, selectedVibe, searchScope);
+  } = useSearchPosts(searchActive ? debouncedQuery : '', selectedMedium, selectedVibe);
 
   // Tag prefix search (migration 331) — works with or without a leading '#'
   // in the query; the hook/RPC normalize it.
@@ -409,22 +396,18 @@ export default function SearchExploreScreen() {
     });
   }, [postPages]);
   const searchLoading = usersLoading || postsLoading;
-  // Dreamers and hashtags only on All; the other scopes are one slice of dreams.
-  const showPeopleAndTags = searchScope === 'all';
-  const hasResults =
-    (showPeopleAndTags && (userResults.length > 0 || tagResults.length > 0)) ||
-    searchPosts.length > 0;
+  const hasResults = userResults.length > 0 || tagResults.length > 0 || searchPosts.length > 0;
 
   const searchListData = useMemo(() => {
     if (!hasQuery || !searchActive) return [];
     const items: SearchItem[] = [];
-    if (showPeopleAndTags && userResults.length > 0) {
+    if (userResults.length > 0) {
       items.push({ type: 'userHeader' });
       for (const user of userResults.slice(0, 3)) {
         items.push({ type: 'user', user });
       }
     }
-    if (showPeopleAndTags && tagResults.length > 0) {
+    if (tagResults.length > 0) {
       items.push({ type: 'tagHeader' });
       for (const t of tagResults) {
         items.push({ type: 'tag', tag: t.tag, count: t.post_count });
@@ -442,7 +425,7 @@ export default function SearchExploreScreen() {
       }
     }
     return items;
-  }, [hasQuery, searchActive, userResults, tagResults, searchPosts, showPeopleAndTags]);
+  }, [hasQuery, searchActive, userResults, tagResults, searchPosts]);
 
   const renderSearchItem = useCallback(({ item }: { item: SearchItem }) => {
     switch (item.type) {
@@ -563,8 +546,7 @@ export default function SearchExploreScreen() {
     }
   }, [queryClient, activeMediums, activeVibes]);
 
-  const overlayHeight =
-    insets.top + 4 + 40 + 8 + (hasFilters ? 36 : 0) + (searchActive ? SCOPE_ROW_H : 0);
+  const overlayHeight = insets.top + 4 + 40 + 8 + (hasFilters ? 36 : 0);
 
   // Self-held pull gap for the browse grid (native RefreshControl spinner is
   // unreliable on Fabric — see useRefreshGap). Gated with the same condition the
@@ -719,25 +701,6 @@ export default function SearchExploreScreen() {
             )}
           </View>
 
-          {/* Search scope: All · My dreams · Bots · People */}
-          {searchActive && (
-            <View style={s.scopeRow}>
-              {SEARCH_SCOPES.map((sc) => {
-                const on = searchScope === sc.key;
-                return (
-                  <TouchableOpacity
-                    key={sc.key}
-                    style={[s.scopeChip, on && s.scopeChipOn]}
-                    onPress={() => setSearchScope(sc.key)}
-                    activeOpacity={0.8}
-                  >
-                    <Text style={[s.scopeChipText, on && s.scopeChipTextOn]}>{sc.label}</Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          )}
-
           {/* Filter chips — only visible when filters are active */}
           {hasFilters && (
             <View style={s.chipRow}>
@@ -855,24 +818,6 @@ const s = StyleSheet.create({
   cancelText: { color: colors.accent, fontSize: fontScale(15), fontWeight: '600' },
 
   // Filter chips
-  scopeRow: {
-    height: SCOPE_ROW_H,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: horizontalScale(6),
-    paddingHorizontal: horizontalScale(16),
-  },
-  scopeChip: {
-    paddingHorizontal: horizontalScale(12),
-    paddingVertical: verticalScale(5),
-    borderRadius: horizontalScale(999),
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-  },
-  scopeChipOn: { backgroundColor: colors.accentLight, borderColor: colors.accentLight },
-  scopeChipText: { color: colors.textSecondary, fontSize: fontScale(12), fontWeight: '600' },
-  scopeChipTextOn: { color: '#0F0F14' },
   chipRow: {
     flexDirection: 'row',
     paddingHorizontal: 16,

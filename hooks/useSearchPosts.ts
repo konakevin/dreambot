@@ -5,31 +5,25 @@ import { POST_SELECT, mapToDreamPost, castRows } from '@/lib/mapPost';
 
 const PAGE_SIZE = 18;
 
-/** Where to look (ALBUM_DISCOVERY_PLAN.md): everything you can see, your own dreams
- *  (private included), the bots, or other members' public posts. */
-export type SearchScope = 'all' | 'mine' | 'bots' | 'people';
-
 /**
  * Dream search by words (search_dreams, migration 558). Never matches people's physical
  * characteristics: members' dreams are matched on their own description + medium + vibe
  * only; bots (fictional) on their full prompts.
+ *
+ * Always searches everything you can see (bots, members' public posts, and your own dreams,
+ * private included). The All / My dreams / Bots / People chips were removed 2026-09-27
+ * (Kevin); search_dreams keeps its p_scope argument for 1.9.0 clients.
  */
-export function useSearchPosts(
-  query: string,
-  medium?: string | null,
-  vibe?: string | null,
-  scope: SearchScope = 'all'
-) {
+export function useSearchPosts(query: string, medium?: string | null, vibe?: string | null) {
   const user = useAuthStore((s) => s.user);
 
   return useInfiniteQuery({
-    queryKey: ['searchPosts', query, medium ?? '', vibe ?? '', scope],
+    queryKey: ['searchPosts', query, medium ?? '', vibe ?? ''],
     queryFn: async ({ pageParam }) => {
       const offset = pageParam as number;
       const { data, error } = await supabase
         .rpc('search_dreams', {
           p_query: query,
-          p_scope: scope,
           p_medium: medium ?? undefined,
           p_vibe: vibe ?? undefined,
         })
