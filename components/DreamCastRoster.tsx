@@ -349,7 +349,6 @@ export function DreamCastRoster({ onEditingChange }: DreamCastRosterProps) {
         ...(typeof r.age === 'number' ? { age: r.age } : {}),
         ...(r.physical_summary ? { physical_summary: r.physical_summary } : {}),
         ...(r.ethnicity ? { ethnicity: r.ethnicity } : {}),
-        ...(r.consent_confirmed_at ? { consent_confirmed_at: r.consent_confirmed_at } : {}),
         relationship: 'friend',
         // Normally a new member goes straight into your dreams. With no self photo
         // that would be the broken state, so they land BACKSTAGE instead of the upload
@@ -375,8 +374,6 @@ export function DreamCastRoster({ onEditingChange }: DreamCastRosterProps) {
         age: r.age,
         physical_summary: r.physical_summary,
         ethnicity: r.ethnicity,
-        // A new photo of this person: record the fresh permission confirm.
-        ...(r.consent_confirmed_at ? { consent_confirmed_at: r.consent_confirmed_at } : {}),
       });
       removeCastFile(old).catch(() => {}); // clean up the replaced file
     });

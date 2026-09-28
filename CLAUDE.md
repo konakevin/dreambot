@@ -191,14 +191,14 @@ website.
   `npm audit fix --force` (tries to downgrade Next catastrophically).
 - **Domain / email** — registrar + DNS/nameservers at **Porkbun** (moved off Wix; nameservers
   `*.ns.porkbun.com`; add/edit records in Porkbun → dreambotapp.com → DNS Records). Apex `A 76.76.21.21`
-  + `www CNAME cname.vercel-dns.com` point at Vercel. `support@dreambotapp.com` = **ImprovMX** free
-  forwarding → Gmail (`MX mx1/mx2.improvmx.com` + `SPF include:spf.improvmx.com`). **DKIM + DMARC not yet
-  set** (SPF only) — outbound-from-domain auth is partial. ImprovMX DKIM value is per-account (grab from
-  the ImprovMX dashboard, not a static target). App signup/verification emails are sent by **Supabase
-  Auth** (sender/SMTP configured in the Supabase dashboard, NOT this repo) — to send those *from*
-  dreambotapp.com you configure custom SMTP in Supabase + that provider's DKIM; ImprovMX DKIM does not
-  cover them. (⚠️ A stale Cloudflare "domain removed" email refers to an abandoned onboarding — nameservers
-  point at Porkbun, so it's a no-op; ignore.)
+  - `www CNAME cname.vercel-dns.com` point at Vercel. `support@dreambotapp.com` = **ImprovMX** free
+    forwarding → Gmail (`MX mx1/mx2.improvmx.com` + `SPF include:spf.improvmx.com`). **DKIM + DMARC not yet
+    set** (SPF only) — outbound-from-domain auth is partial. ImprovMX DKIM value is per-account (grab from
+    the ImprovMX dashboard, not a static target). App signup/verification emails are sent by **Supabase
+    Auth** (sender/SMTP configured in the Supabase dashboard, NOT this repo) — to send those _from_
+    dreambotapp.com you configure custom SMTP in Supabase + that provider's DKIM; ImprovMX DKIM does not
+    cover them. (⚠️ A stale Cloudflare "domain removed" email refers to an abandoned onboarding — nameservers
+    point at Porkbun, so it's a no-op; ignore.)
 
 Tie-together: **App (RN/Expo, distributed via App Store Connect) ↔ Supabase (all data/auth/storage/edge) ;
 payments App → RevenueCat → Apple → RC webhook → Supabase edge ; Website (Vercel) reads the same Supabase
@@ -212,6 +212,10 @@ for the public feed + serves deep-link share targets.**
   `main` (no feature branches). Concurrent agents share the working tree — **edit only your task's files;
   never touch another agent's WIP; never `git add -A`/`git add .` (explicit paths only).** Commit/push
   only when asked.
+- **Less friction, never more (product rule).** No in-app consent/permission prompts, confirms or repeated
+  warnings for cast photos, +1s, face swap or likeness: the Terms users accept at signup cover consent, plus the
+  report/takedown paths. If an audit or store checklist suggests one, cover it in the Terms/Privacy text instead.
+  (Kevin 2026-09-26, reaffirmed 2026-09-27 after a +1 permission check was added and removed.)
 - **Before committing, READ the staged diff (`git diff --cached <paths>`) — explicit paths is NOT enough.**
   In the long-lived shared tree a single file accumulates hunks from MULTIPLE efforts; staging it by
   ownership ("it's my file") can sweep in an unrelated change you didn't mean to land. Specifically watch
@@ -312,7 +316,7 @@ count(*) GROUP BY category` first. (The April 2026 incident wiped both with one 
   config-coupled alarm.
 - **A SECOND foreign key between two tables breaks every un-hinted PostgREST embed of that pair —
   on every device, instantly, with no build.** (2026-09-25: migration 554 added `users.header_upload_id
-  → uploads`; PostgREST then refused the bare `users!inner(...)` in `POST_SELECT` with PGRST201, so every
+→ uploads`; PostgREST then refused the bare `users!inner(...)` in `POST_SELECT` with PGRST201, so every
   profile grid, Dreams album, likes and favourites list rendered EMPTY while the feed RPC kept working.
   Fixed by migration 555 dropping the FK.) Rules: hint every embed to its FK (`users!uploads_user_id_fkey(…)`),
   never add a second FK between two tables without hinting every client embed of that pair FIRST, and
