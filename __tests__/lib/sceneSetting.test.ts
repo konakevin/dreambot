@@ -8,6 +8,7 @@ import {
   SETTING_DRESS,
   settingFromCategory,
   settingFromLocation,
+  settingFromPlaceName,
   settingFromText,
 } from '@engine/sceneSetting';
 import { PLAIN_CLOTHES } from '@engine/characterSlotPrompt';
@@ -83,6 +84,23 @@ describe('settingFromLocation (nightly)', () => {
     );
     expect(settingFromLocation({ biome: null, tags: ['urban'] })).toBe('city');
     expect(settingFromLocation({ biome: null, tags: [] })).toBe('unknown');
+  });
+});
+
+describe('settingFromPlaceName (nightly: the landmark says snow or beach)', () => {
+  it.each([
+    ['1950s americana', 'Miami Beach Ocean Drive Art Deco hotel row', 'beach'],
+    ['1950s americana', 'Cannon Beach Haystack Rock at low tide', 'beach'],
+    ['new york city', 'Ellis Island ferry dock', null],
+    ['new york city', 'Coney Island boardwalk', 'beach'],
+    ['aspen', 'a ski lodge at dusk', 'snow'],
+    ['paris', 'the Eiffel Tower lawn', null],
+    ['1950s americana', 'Zion Canyon Narrows red sandstone walls Utah', 'outdoors'],
+    ['1950s americana', 'Carlsbad Caverns Natural Entrance mouth New Mexico', 'outdoors'],
+    ['1950s americana', 'Santa Fe Plaza central square New Mexico', null],
+    ['1950s americana', 'Multnomah Falls twin-tiered basalt cascade Oregon', 'outdoors'],
+  ])('%s + %s → %s', (place, anchor, setting) => {
+    expect(settingFromPlaceName(place, anchor)).toBe(setting);
   });
 });
 

@@ -93,6 +93,28 @@ export function settingFromText(...texts: (string | null | undefined)[]): Settin
 }
 
 /**
+ * PLACE NAME (nightly): the rolled place or landmark says snow or beach outright, whatever the card's biome
+ * (a "1950s americana" card is `urban_city`, but its Miami Beach and Cannon Beach landmarks are beaches). The
+ * beach words here are stricter than the Create table (no "island", "cove", "tiki") so a city card's "Ellis
+ * Island" or "Coney Island" landmark never reads as a beach.
+ */
+const BEACH_BY_NAME =
+  /\b(beach(es)?|seaside|shoreline|boardwalk|surf(ing)?|oceanfront|sand dunes)\b/i;
+/** Wild landmarks a city-filed card can roll (1950s Americana's Zion Canyon, Carlsbad Caverns, Havasu Falls). */
+const WILDS_BY_NAME =
+  /\b(national park|canyons?|caverns?|caves?|waterfalls?|falls|cascades?|geysers?|narrows|travertine|sandstone|hot springs?|volcano(es)?|sinkholes?)\b/i;
+export function settingFromPlaceName(
+  ...texts: (string | null | undefined)[]
+): 'snow' | 'beach' | 'outdoors' | null {
+  const joined = texts.filter((t): t is string => typeof t === 'string' && t.length > 0).join(' ');
+  if (!joined) return null;
+  if (settingFromText(joined) === 'snow') return 'snow';
+  if (BEACH_BY_NAME.test(joined)) return 'beach';
+  if (WILDS_BY_NAME.test(joined)) return 'outdoors';
+  return null;
+}
+
+/**
  * Nightly locations: `location_cards.biome` (or `resolveBiomeFromTags`) → setting. Authored over the LIVE biome
  * values (2026-09-28), including the bespoke ones BIOME_AXES does not key (luxury, wild_west, tropical_island...).
  */

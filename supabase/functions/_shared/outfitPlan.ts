@@ -253,15 +253,26 @@ export interface FashionLook {
   sceneFitOnly?: boolean;
 }
 // Phase 9 theme words: a scene that names one of these calls for the look (see FashionLook.affinity). Dress
-// themes only: "Art Deco" names buildings (Miami's Ocean Drive rolled 1920s braces into a 1950s dream).
+// themes only, never architecture: "Art Deco" (Miami's Ocean Drive rolled 1920s braces into a 1950s dream)
+// and "Gothic" (a medieval city gate rolled a corset gown) name buildings.
 const TWENTIES =
   /\b(1920s|twenties|roaring (20s|twenties)|speakeas(y|ies)|gatsby|jazz age|prohibition|flappers?|peaky blinders)\b/i;
 const SEVENTIES = /\b(disco|1970s|seventies|70s|studio 54|roller disco|funk)\b/i;
 const SIXTIES = /\b(1960s|sixties|60s|swinging london|carnaby|go-go)\b/i;
 const FIFTIES = /\b(1950s|fifties|50s|diner|sock hop|drive-in|rockabilly|soda fountain)\b/i;
 const REGENCY = /\b(regency|bridgerton|jane austen|austen|georgian)\b/i;
-const GOTHIC = /\b(gothic|vampires?|haunted|dracula|victorian (mansion|manor))\b/i;
+// Not the word "gothic" itself: it names architecture (a "late-Gothic city gate" rolled a corset gown).
+const GOTHIC = /\b(vampires?|haunted|dracula|victorian (mansion|manor))\b/i;
 const SAFARI = /\b(safari|serengeti|savann?ah?|kenya|tanzania|botswana|african bush)\b/i;
+/** The rocker look's own world. Kevin (2026-09-28): "i see leather jackets in all the recent test renders -
+ *  even on a beach". Leather jackets were 1% of production outfits before the phase 8 looks and 8% after,
+ *  because rocker was allowed in every city, indoor and evening place. Now: city only, favoured where the
+ *  scene names rock, a club, a biker or the 1950s greaser era. */
+const ROCK =
+  /\b(rock (concert|show|club|band)|rock and roll|rock'n'roll|concerts?|gigs?|night ?clubs?|dive bars?|biker|motorcycles?|harley|punk|grunge|music festival)\b/i;
+/** Men's rocker also answers the 1950s: the leather jacket and boots are the greaser look. Women's 1950s is the
+ *  circle skirt and the pin-up dress, so her rocker look keeps ROCK only. */
+const ROCK_OR_FIFTIES = new RegExp(`${ROCK.source}|${FIFTIES.source}`, 'i');
 
 export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
   {
@@ -346,7 +357,8 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     key: 'rocker',
     text: 'rock-and-roll: a cropped leather jacket, studded details, ankle boots',
     families: ['dress', 'skirt', 'shorts', 'trousers'],
-    settings: ['city', 'indoor', 'evening'],
+    settings: ['city'],
+    affinity: ROCK,
   },
   {
     key: 'gothic',
@@ -418,7 +430,7 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     text: 'K-pop stage style: a cropped jacket, layered chains, platform boots',
     families: ['skirt', 'shorts', 'trousers'],
     settings: ['city', 'indoor', 'evening'],
-    requires: /\b(seoul|korea|korean|k-?pop|concert|on stage|idol)\b/i,
+    requires: /\b(seoul|korea|korean|k-?pop|idols?)\b/i,
   },
   {
     key: 'regency',
@@ -469,8 +481,8 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
   {
     key: 'rocker',
     text: 'rock-and-roll: a leather jacket, studded details, boots',
-    settings: ['city', 'indoor', 'evening'],
-    affinity: FIFTIES,
+    settings: ['city'],
+    affinity: ROCK_OR_FIFTIES,
   },
   {
     key: 'safari',
@@ -538,7 +550,7 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
     key: 'kpop',
     text: 'K-pop stage style: a cropped jacket, layered chains, sleek boots',
     settings: ['city', 'indoor', 'evening'],
-    requires: /\b(seoul|korea|korean|k-?pop|concert|on stage|idol)\b/i,
+    requires: /\b(seoul|korea|korean|k-?pop|idols?)\b/i,
   },
   {
     key: 'coastal',
@@ -566,6 +578,14 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
     key: 'surf',
     text: 'surf-shack cool: an open camp-collar shirt, tailored board shorts, leather sandals',
     settings: ['beach'],
+    sceneFitOnly: true,
+  },
+  {
+    // The 1950s had two men's looks, not one: a greaser jacket alone put leather on 11 of 15 1950s dreams.
+    key: 'fifties',
+    text: '1950s: a short-sleeve bowling shirt, pleated high-waisted trousers, two-tone saddle shoes',
+    settings: ['city', 'indoor'],
+    affinity: FIFTIES,
     sceneFitOnly: true,
   },
   {
@@ -597,9 +617,20 @@ const KIT_SETTINGS: ReadonlySet<Setting> = new Set<Setting>(['sport', 'snow']);
  *  wear-anywhere set, never an occasion costume. */
 export function lookFits(look: FashionLook, setting: Setting, text?: string | null): boolean {
   if (look.requires && !(text && look.requires.test(text))) return false;
-  if (look.affinity && text && look.affinity.test(text)) return true;
+  // A theme stretches a look only into built places (city, indoor, evening, imagined): never a beach or the
+  // wilds. A 1950s card's landmarks put a greaser's leather jacket on Ocean Drive's sand and in Zion Canyon.
+  if (look.affinity && text && look.affinity.test(text) && THEME_STRETCH.has(setting)) return true;
   return look.settings.includes(setting === 'unknown' ? 'city' : setting);
 }
+
+/** Settings a theme may stretch a look into (see lookFits). */
+const THEME_STRETCH: ReadonlySet<Setting> = new Set<Setting>([
+  'city',
+  'indoor',
+  'evening',
+  'fantasy',
+  'unknown',
+]);
 
 /** The scene names this look's own place or theme (a saloon for western, a speakeasy for dapper or deco). */
 export function lookFavoured(look: FashionLook, text?: string | null): boolean {

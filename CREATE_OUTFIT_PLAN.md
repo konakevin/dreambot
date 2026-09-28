@@ -602,6 +602,41 @@ Dry run over 10 themed places:
 - haunted mansion: gothic, regency or deco;
 - no dapper in China.
 
+**Leather jackets (same day).** Kevin: "i see leather jackets in all the recent test renders - even on a beach".
+
+Measured leather jacket share of outfits:
+
+| When | Share |
+|---|---|
+| Production before the phase 8 looks | 1% (4/389) |
+| After the phase 8 looks | 8% (5/56) |
+| Nightly with scene fit | still 7-16% |
+| 1950s Americana | 40% |
+
+There were two causes:
+- The `rocker` look was allowed in every city, indoor and evening place.
+- My 1950s tweak made rocker that card's theme, and the card's landmarks include beaches, canyons and waterfalls,
+  while the setting came from its `urban_city` biome.
+
+The fix:
+- **Rocker** (both genders) is city only. Its `affinity` is `ROCK` (rock, clubs, bikers, punk); the men's version
+  also accepts the 1950s (greaser).
+- **Theme stretching:** a theme can stretch a look only into city, indoor, evening or fantasy places
+  (`THEME_STRETCH`), never a beach or the wilds.
+- **Nightly `settingFromPlaceName`:** it reads the landmark for snow, beach (strict words) and the wilds (canyon,
+  cave, falls, geyser, national park). The wilds override only a card filed as a city, and luxury cards stay
+  exempt.
+- **A second 1950s men's look** (bowling shirt, pleated trousers, saddle shoes), scene-fit only.
+- **"Gothic"** was dropped from the gothic theme words (architecture, like "Art Deco").
+- **K-pop** needs Korea or K-pop words, not a generic "concert".
+
+Results:
+- Nightly dry runs: leather 8% → 3.5%, all in city places.
+- 1950s dry runs: leather 11/15 → 2/15 (city spots only). Beach landmarks got pin-up and coastal; canyons, caves and
+  falls got outdoor gear.
+- 6 fresh 1950s renders: 0 leather.
+- Sheet: https://claude.ai/artifact/QpztNfvqDtxmksLAABvCMH
+
 **Rollback** (no deploy): `UPDATE engine_config SET create_outfit_scene_fit=false, nightly_outfit_scene_fit=false WHERE id=1;`
 Kevin's own Create account stays on through the preview list until it is emptied.
 

@@ -139,6 +139,17 @@ describe('fix 1: looks fit the place', () => {
     expect(share('indoor', 'a 1920s speakeasy', ['deco'], 0)).toBeGreaterThan(0.45);
   });
 
+  it('"Gothic" architecture is not a dress theme (a late-Gothic city gate)', () => {
+    for (let i = 0; i < 1000; i++) {
+      for (const p of rollFashion(COUPLE, GENDERS, undefined, seeded(i), {
+        setting: 'outdoors',
+        text: 'medieval village late-Gothic city gate',
+      })) {
+        expect(p!.look.key).not.toBe('gothic');
+      }
+    }
+  });
+
   it('"Art Deco" architecture is not a 1920s dress theme (Miami Ocean Drive in a 1950s dream)', () => {
     for (let i = 0; i < 1500; i++) {
       const [, him] = rollFashion(COUPLE, GENDERS, undefined, seeded(i), {
@@ -159,6 +170,63 @@ describe('fix 1: looks fit the place', () => {
       if (['fifties', 'pinup'].includes(her!.look.key)) onTheme++;
     }
     expect(onTheme / 1000).toBeGreaterThan(0.75);
+  });
+
+  it('leather rocker jackets stay in the city unless the scene names rock, a club, a biker or the 1950s', () => {
+    for (const setting of ['evening', 'indoor', 'beach', 'outdoors'] as Setting[]) {
+      for (let i = 0; i < 800; i++) {
+        for (const p of rollFashion(COUPLE, GENDERS, undefined, seeded(i), {
+          setting,
+          text: 'a quiet place',
+        })) {
+          expect(p!.look.key).not.toBe('rocker');
+        }
+      }
+    }
+    let hit = 0;
+    for (let i = 0; i < 1000; i++) {
+      const [, him] = rollFashion(COUPLE, GENDERS, undefined, seeded(i), {
+        setting: 'indoor',
+        text: 'front row at a rock concert',
+      });
+      if (him!.look.key === 'rocker') hit++;
+    }
+    expect(hit / 1000).toBeGreaterThan(0.6);
+  });
+
+  it('a 1950s city scene splits the men between the greaser jacket and the bowling shirt', () => {
+    const c: Record<string, number> = {};
+    for (let i = 0; i < 1000; i++) {
+      const [, him] = rollFashion(COUPLE, GENDERS, undefined, seeded(i), {
+        setting: 'city',
+        text: '1950s americana Bourbon Street balconies',
+      });
+      c[him!.look.key] = (c[him!.look.key] ?? 0) + 1;
+    }
+    expect((c.rocker ?? 0) / 1000).toBeLessThan(0.6);
+    expect((c.fifties ?? 0) / 1000).toBeGreaterThan(0.3);
+  });
+
+  it('a theme never stretches into the wilds: no leather in a canyon at a 1950s landmark', () => {
+    for (let i = 0; i < 1500; i++) {
+      for (const p of rollFashion(COUPLE, GENDERS, undefined, seeded(i), {
+        setting: 'outdoors',
+        text: '1950s americana Zion Canyon Narrows',
+      })) {
+        expect(p!.look.settings).toContain('outdoors');
+      }
+    }
+  });
+
+  it('a theme never overrides a beach: no leather on the sand at a 1950s beach landmark', () => {
+    for (let i = 0; i < 1500; i++) {
+      const [her, him] = rollFashion(COUPLE, GENDERS, undefined, seeded(i), {
+        setting: 'beach',
+        text: '1950s americana Miami Beach Ocean Drive',
+      });
+      expect(him!.look.settings).toContain('beach');
+      expect(her!.look.settings).toContain('beach');
+    }
   });
 
   it('braces and a flat cap (dapper) never roll in a city that is not the 1920s', () => {

@@ -183,6 +183,7 @@ import { rollFashion, sceneFitFrom } from '../_shared/outfitPlan.ts';
 import {
   settingFromCategory,
   settingFromLocation,
+  settingFromPlaceName,
   settingFromText,
   type Setting,
 } from '../_shared/sceneSetting.ts';
@@ -3260,24 +3261,27 @@ Deno.serve(async (req) => {
             ? (settingFromCategory(dualSceneCategory) ??
               settingFromText(dualSpecialScene, dualScenarioAction))
             : null;
-          // The place's own words win when they say snow (a ski resort filed under a mountain biome dresses for
-          // the snow). Not on a `luxury` card: Kevin (2026-09-28) is happy with luxury outfits there even in the
-          // snow ("if biome says luxury, i have no problem with luxury outfits in different scenarios").
-          const snowByName =
-            !fromRow && biomeKey !== 'luxury' && settingFromText(userPlace, iconicAnchor) === 'snow'
-              ? 'snow'
+          // The place's own words win when they say snow or beach: a ski resort filed under a mountain biome
+          // dresses for the snow, a city card's beach landmark (Miami Beach, Cannon Beach) for the beach. Not on
+          // a `luxury` card: Kevin (2026-09-28) is happy with luxury outfits there even in the snow ("if biome
+          // says luxury, i have no problem with luxury outfits in different scenarios").
+          // A wild landmark (a canyon, a cave, a waterfall) only overrides a card filed as a city: a themed
+          // "1950s americana" card rolls Zion and Carlsbad Caverns, and got a leather jacket in the canyon.
+          const locSetting = settingFromLocation({
+            biome: biomeKey,
+            tags: locationCard ? locationCard.tags : null,
+            imagined: imaginedLocation,
+          });
+          const nameSetting =
+            !fromRow && biomeKey !== 'luxury'
+              ? settingFromPlaceName(userPlace, iconicAnchor)
               : null;
-          nightlySetting =
-            fromRow ??
-            snowByName ??
-            settingFromLocation({
-              biome: biomeKey,
-              tags: locationCard ? locationCard.tags : null,
-              imagined: imaginedLocation,
-            });
+          const byName =
+            nameSetting === 'outdoors' ? (locSetting === 'city' ? 'outdoors' : null) : nameSetting;
+          nightlySetting = fromRow ?? byName ?? locSetting;
           fallbackReasons.push(
             `outfit_scene_fit:${nightlySceneFit.looks && nightlySceneFit.brief ? 'all' : nightlySceneFit.looks ? 'looks' : nightlySceneFit.brief ? 'brief' : 'trim'}`,
-            `outfit_setting:${nightlySetting}:${fromRow ? 'row' : snowByName ? 'place_name' : 'location'}`
+            `outfit_setting:${nightlySetting}:${fromRow ? 'row' : byName ? 'place_name' : 'location'}`
           );
         }
         const nightlyFashion =
