@@ -58,7 +58,6 @@ import { PostActionSheet } from '@/components/PostActionSheet';
 import { avatarUrl } from '@/lib/imageUrl';
 import { trackProfileViewed } from '@/lib/analytics';
 import type { FollowUser } from '@/hooks/useFollowersList';
-import { markBotVisited } from '@/hooks/useAlbumDiscovery';
 import { BotBrowsePill, type BotBrowseMode } from '@/components/AlbumBrowse';
 
 type Tab = 'posts' | 'followers' | 'following';
@@ -130,18 +129,9 @@ export default function PublicProfileScreen() {
   // bots and don't need to block/report them (unfollow is enough).
   const { data: bots = [] } = useBotUsers();
   const isBot = bots.some((b) => b.id === userId);
-  // Bot browsing (ALBUM_DISCOVERY_PLAN.md): All · Haven't seen. The visit is recorded
-  // when you LEAVE, which resets that bot's "new" count on the Bots tab. No NEW marks or
+  // Bot browsing (ALBUM_DISCOVERY_PLAN.md): All · Haven't seen. No NEW marks or
   // "You're caught up" line on the grid (Kevin 2026-09-27: "just show their album grid").
   const [botMode, setBotMode] = useState<BotBrowseMode>('all');
-  const isBotRef = useRef(isBot);
-  isBotRef.current = isBot;
-  useEffect(
-    () => () => {
-      if (isBotRef.current) markBotVisited(userId);
-    },
-    [userId]
-  );
 
   // Avatar preview animation hooks — ALL must be before any early returns
   const SCREEN_W = Dimensions.get('window').width;

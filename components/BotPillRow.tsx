@@ -1,6 +1,5 @@
 import { useRef, useCallback, useEffect } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
-import { fontScale, horizontalScale, verticalScale } from '@/lib/responsive';
+import { verticalScale } from '@/lib/responsive';
 import {
   ScrollView,
   View,
@@ -10,8 +9,6 @@ import {
   NativeScrollEvent,
 } from 'react-native';
 import { OverlayPill } from '@/components/OverlayPill';
-import { Text } from '@/components/AppText';
-import { useBotNewCounts, markBotVisited } from '@/hooks/useAlbumDiscovery';
 import type { BotUser } from '@/hooks/useBotUsers';
 
 interface Props {
@@ -33,25 +30,8 @@ export function BotPillRow({ bots, selectedBotId, onSelect }: Props) {
   const viewportWRef = useRef(0);
   const contentWRef = useRef(0);
 
-  // "12 new" badges (ALBUM_DISCOVERY_PLAN.md): posts since your last visit to each bot
-  // that you haven't already seen. Refreshed whenever the Bots tab comes into focus.
-  // A bot counts as visited when you move off it (another pill / a swipe) or leave the
-  // tab, which resets its count.
-  const { data: newCounts, refetch: refetchNewCounts } = useBotNewCounts();
-  const selectedRef = useRef(selectedBotId);
-  useEffect(() => {
-    const prev = selectedRef.current;
-    if (prev && prev !== selectedBotId) markBotVisited(prev);
-    selectedRef.current = selectedBotId;
-  }, [selectedBotId]);
-  useFocusEffect(
-    useCallback(() => {
-      void refetchNewCounts();
-      return () => {
-        if (selectedRef.current) markBotVisited(selectedRef.current);
-      };
-    }, [refetchNewCounts])
-  );
+  // (The red "12 new" count badges on the pills were removed 2026-09-27, Kevin: "it's
+  // doing too much". ALBUM_DISCOVERY_PLAN.md.)
 
   const handleLayout = useCallback(
     (key: string) => (e: LayoutChangeEvent) => {
@@ -123,23 +103,15 @@ export function BotPillRow({ bots, selectedBotId, onSelect }: Props) {
       <View onLayout={handleLayout('__all__')}>
         <OverlayPill label="All" active={selectedBotId === null} onPress={() => onSelect(null)} />
       </View>
-      {bots.map((bot) => {
-        const n = selectedBotId === bot.id ? 0 : (newCounts?.get(bot.id) ?? 0);
-        return (
-          <View key={bot.id} onLayout={handleLayout(bot.id)}>
-            <OverlayPill
-              label={formatBotName(bot.username)}
-              active={selectedBotId === bot.id}
-              onPress={() => onSelect(bot.id)}
-            />
-            {n > 0 ? (
-              <View style={s.badge} pointerEvents="none">
-                <Text style={s.badgeText}>{n > 99 ? '99+' : n}</Text>
-              </View>
-            ) : null}
-          </View>
-        );
-      })}
+      {bots.map((bot) => (
+        <View key={bot.id} onLayout={handleLayout(bot.id)}>
+          <OverlayPill
+            label={formatBotName(bot.username)}
+            active={selectedBotId === bot.id}
+            onPress={() => onSelect(bot.id)}
+          />
+        </View>
+      ))}
     </ScrollView>
   );
 }
@@ -151,19 +123,4 @@ function formatBotName(username: string): string {
 const s = StyleSheet.create({
   scroll: { flexGrow: 0 },
   row: { flexDirection: 'row', gap: 6, paddingHorizontal: 16, paddingTop: verticalScale(6) },
-  badge: {
-    position: 'absolute',
-    top: -verticalScale(5),
-    right: -horizontalScale(4),
-    minWidth: horizontalScale(18),
-    height: horizontalScale(18),
-    paddingHorizontal: horizontalScale(5),
-    borderRadius: horizontalScale(9),
-    backgroundColor: '#FF5C8A',
-    borderWidth: 2,
-    borderColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  badgeText: { color: '#FFFFFF', fontSize: fontScale(10), fontWeight: '700' },
 });
