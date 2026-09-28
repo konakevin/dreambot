@@ -178,13 +178,44 @@ describe('revenuecat-webhook: subscription (Pro + Basic) state machine + sparkle
     expect(list).not.toContain('EXPIRATION');
   });
 
-  it('SUB_GRANT_EVENTS includes upgrade/downgrade + uncancel paths', () => {
+  it('SUB_GRANT_EVENTS grants on purchase, renewal and uncancel', () => {
     const block = fn.match(/SUB_GRANT_EVENTS\s*=\s*new Set\(\[([^\]]+)\]/);
     expect(block).not.toBeNull();
     const list = block![1];
-    for (const ev of ['INITIAL_PURCHASE', 'RENEWAL', 'PRODUCT_CHANGE', 'UNCANCELLATION']) {
+    for (const ev of ['INITIAL_PURCHASE', 'RENEWAL', 'UNCANCELLATION']) {
       expect(list).toContain(`'${ev}'`);
     }
+  });
+
+  it('PRODUCT_CHANGE is informational, never a grant (2026-09-27)', () => {
+    // RevenueCat: PRODUCT_CHANGE "doesn't mean the new subscription is in effect"; its
+    // product_id is the OLD product, and the switch arrives as a RENEWAL (App Store) /
+    // INITIAL_PURCHASE (Play) for the NEW product. Granting on it set the old tier.
+    const grant = fn.match(/SUB_GRANT_EVENTS\s*=\s*new Set\(\[([^\]]+)\]/)![1];
+    expect(grant).not.toMatch(/'PRODUCT_CHANGE'/);
+    const info = fn.match(/SUB_INFO_EVENTS\s*=\s*new Set\(\[([^\]]+)\]/)![1];
+    expect(info).toContain("'PRODUCT_CHANGE'");
+  });
+
+  it('BILLING_ISSUE extends access to the grace-period end, only ever raising the expiry', () => {
+    expect(fn).toContain('grace_period_expiration_at_ms');
+    expect(fn).toMatch(/\[tier\.expiresColumn\]:\s*graceIso/);
+    expect(fn).toMatch(/\.lt\(tier\.expiresColumn,\s*graceIso\)/);
+  });
+
+  it('store refunds claw back through the atomic RPC and retry on any DB error', () => {
+    expect(fn).toContain("supabase.rpc(\n          'revenuecat_refund_clawback'");
+    expect(fn).toMatch(/if \(clawbackErr\) \{[\s\S]{0,200}status: 500/);
+    expect(fn).toMatch(/if \(flipErr\) \{[\s\S]{0,200}status: 500/);
+    // the old non-atomic path (lookup without error check, then grant_sparkles(-amount)) is gone
+    expect(fn).not.toMatch(/p_amount:\s*-clawbackAmount/);
+  });
+
+  it('every server-side purchase event carries store + environment', () => {
+    expect(fn).toMatch(/const storeProps = \{ store, environment \}/);
+    const captures = fn.match(/await captureServer\([\s\S]*?\n\s*\);/g) ?? [];
+    expect(captures.length).toBeGreaterThanOrEqual(6);
+    for (const c of captures) expect(c).toContain('...storeProps');
   });
 
   it('SUB_REVOKE_EVENTS only fires on EXPIRATION (not on user CANCELLATION)', () => {

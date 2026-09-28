@@ -4,13 +4,13 @@
 //   - Sparkle pack consumables → grant sparkles (NON_RENEWING_PURCHASE)
 //   - Subscription tiers (Pro / Basic) → flip users.<tier>_subscription +
 //     expires_at + grant the tier's sparkle bundle
-//     (INITIAL_PURCHASE / RENEWAL / PRODUCT_CHANGE / CANCELLATION /
-//      UNCANCELLATION / EXPIRATION / BILLING_ISSUE)
+//     (INITIAL_PURCHASE / RENEWAL / UNCANCELLATION grant; EXPIRATION revokes;
+//      CANCELLATION / BILLING_ISSUE / PRODUCT_CHANGE are informational)
 //
 // Pro and Basic share ONE App Store subscription group, so a user can hold at
-// most one at a time. A PRODUCT_CHANGE between tiers (upgrade Basic→Pro or
-// downgrade Pro→Basic) sets the new tier's flag AND clears the other tier's —
-// see the SUBSCRIPTION_TIERS handling below.
+// most one at a time. When a change between tiers (upgrade Basic→Pro or
+// downgrade Pro→Basic) takes effect, the RENEWAL for the new product sets the
+// new tier's flag AND clears the other tier's — see SUB_GRANT_EVENTS below.
 
 import { createClient, type SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 // Constant-time comparison for the webhook bearer secret. Was a byte-identical
@@ -153,11 +153,16 @@ const SUB_SPARKLE_GRANT_EVENTS = new Set(['INITIAL_PURCHASE', 'RENEWAL']);
 // Sparkle-pack purchase events (one-time consumables)
 const SPARKLE_PURCHASE_EVENTS = new Set(['NON_RENEWING_PURCHASE']);
 
-// Subscription lifecycle events that grant or extend tier access
+// Subscription lifecycle events that grant or extend tier access.
+// PRODUCT_CHANGE is deliberately NOT here: RevenueCat documents it as "the subscriber changed
+// the product… this doesn't mean the new subscription is in effect", its product_id is the OLD
+// product, and the switch itself arrives later as a RENEWAL (App Store) / INITIAL_PURCHASE
+// (Google Play) carrying the NEW product. Granting on it set the OLD tier (and could undo an
+// upgrade whose RENEWAL landed first); granting on new_product_id would end a downgrading
+// subscriber's paid period early. So it is informational (SUB_INFO_EVENTS). 2026-09-27.
 const SUB_GRANT_EVENTS = new Set([
-  'INITIAL_PURCHASE', // first subscribe
-  'RENEWAL', // auto-renew charged successfully
-  'PRODUCT_CHANGE', // upgrade/downgrade (monthly↔yearly OR Basic↔Pro crossgrade)
+  'INITIAL_PURCHASE', // first subscribe (also a Google Play product change taking effect)
+  'RENEWAL', // auto-renew charged successfully (also an App Store product change taking effect)
   'UNCANCELLATION', // user changed mind before period ended
 ]);
 
@@ -166,10 +171,12 @@ const SUB_REVOKE_EVENTS = new Set([
   'EXPIRATION', // grace period ended; access removed
 ]);
 
-// Subscription lifecycle events that are informational only (log + ack)
+// Subscription lifecycle events that are informational only (log + ack). BILLING_ISSUE also
+// extends access to the store's grace-period end (see below).
 const SUB_INFO_EVENTS = new Set([
   'CANCELLATION', // user intent to cancel; access remains until EXPIRATION
-  'BILLING_ISSUE', // card failed; Apple retries during grace
+  'BILLING_ISSUE', // card failed; the store retries during the grace period
+  'PRODUCT_CHANGE', // change requested; takes effect on a later RENEWAL / INITIAL_PURCHASE
 ]);
 
 Deno.serve(async (req) => {
@@ -201,6 +208,16 @@ Deno.serve(async (req) => {
     const productId: string = event.product_id;
     const transactionId: string = event.transaction_id ?? event.id;
     const environment: string = event.environment ?? 'PRODUCTION';
+    // APP_STORE / PLAY_STORE / … — recorded on every analytics event so revenue can be split by
+    // store, and SANDBOX (TestFlight, App Review, license testers) excluded from it. Sandbox
+    // purchases still GRANT: App Review buys in the sandbox and must receive the product.
+    const store: string = event.store ?? 'UNKNOWN';
+    const storeProps = { store, environment };
+    // PRODUCT_CHANGE only: the product the subscriber switched TO (product_id is the old one).
+    const newProductId: string | undefined = event.new_product_id ?? undefined;
+    // BILLING_ISSUE only (always present there): when the store stops retrying the charge.
+    const gracePeriodExpirationAtMs: number | undefined =
+      event.grace_period_expiration_at_ms ?? undefined;
     // RevenueCat puts the entitlement expiration timestamp in expiration_at_ms
     // for subscription events. Used to set users.<tier>_subscription_expires_at.
     const expirationAtMs: number | undefined = event.expiration_at_ms;
@@ -272,66 +289,44 @@ Deno.serve(async (req) => {
       }
 
       if (originalReason) {
-        const refundReason = `refund:${originalReason}`;
-
-        // Idempotency check — has this refund already been processed?
-        const { data: alreadyRefunded } = await supabase
-          .from('sparkle_transactions')
-          .select('id')
-          .eq('reason', refundReason)
-          .limit(1);
-        if (alreadyRefunded && alreadyRefunded.length > 0) {
-          console.log(`[RevenueCat] Duplicate refund event, skipping: ${refundReason}`);
-          return new Response(JSON.stringify({ message: 'Already refunded' }), { status: 200 });
+        // ONE atomic, idempotent step (migration 571): under the user's row lock it skips an
+        // already-processed refund, finds the original grant, deducts exactly that amount and
+        // writes the refund:<reason> row (a unique index makes a double clawback impossible).
+        // Any DB error → 500 so RevenueCat retries; never a silent 0.
+        const { data: clawback, error: clawbackErr } = await supabase.rpc(
+          'revenuecat_refund_clawback',
+          { p_user_id: appUserId, p_original_reason: originalReason }
+        );
+        if (clawbackErr) {
+          console.error(`[RevenueCat] Refund clawback failed for ${originalReason}:`, clawbackErr);
+          return new Response(JSON.stringify({ error: clawbackErr.message }), { status: 500 });
         }
-
-        // Find the original grant amount. If no grant row exists, it
-        // means we never credited this transaction in the first place
-        // (could happen if the webhook fix landed AFTER the purchase).
-        // Skip with a warning rather than fail.
-        const { data: grantRow } = await supabase
-          .from('sparkle_transactions')
-          .select('amount')
-          .eq('user_id', appUserId)
-          .eq('reason', originalReason)
-          .maybeSingle();
-        const clawbackAmount = grantRow?.amount ?? 0;
-
-        if (clawbackAmount > 0) {
-          // grant_sparkles accepts negative amounts — passing -75/-20 etc
-          // subtracts from sparkle_balance and records a negative row in
-          // sparkle_transactions for the audit trail. Users with positive
-          // balance go down to (potentially) negative; spend_sparkles
-          // already rejects spends when balance < amount so they can't
-          // dig deeper into the hole.
-          const { error: clawbackErr } = await supabase.rpc('grant_sparkles', {
-            p_user_id: appUserId,
-            p_amount: -clawbackAmount,
-            p_reason: refundReason,
-          });
-          if (clawbackErr) {
-            console.error(`[RevenueCat] Sparkle clawback failed:`, clawbackErr);
-            // Don't fail the webhook — Apple's already refunded the user.
-            // We'll have a stale credit but it's better than blocking RC's retries.
-          } else {
-            console.log(
-              `[RevenueCat] Refund clawback: revoked ${clawbackAmount} sparkles from ${appUserId} (${refundReason})`
-            );
-          }
-        } else {
-          console.warn(
-            `[RevenueCat] Refund event with no matching grant row for ${originalReason} — skipping clawback`
+        const clawbackRow = (Array.isArray(clawback) ? clawback[0] : clawback) as
+          | { outcome?: string; amount?: number }
+          | null
+          | undefined;
+        const outcome = clawbackRow?.outcome ?? 'unknown';
+        const clawbackAmount = Number(clawbackRow?.amount ?? 0);
+        if (outcome === 'clawed_back') {
+          console.log(
+            `[RevenueCat] Refund clawback: revoked ${clawbackAmount} sparkles from ${appUserId} (refund:${originalReason})`
           );
+        } else {
+          console.warn(`[RevenueCat] Refund clawback ${outcome} for ${originalReason}`);
         }
 
-        // For subscription refunds, also flip the tier flag off immediately.
-        // (Normal CANCELLATION leaves access until EXPIRATION; refunds
-        // should be instant since the user got their money back.)
+        // For subscription refunds, also flip the tier flag off immediately (a normal
+        // CANCELLATION keeps access until EXPIRATION; a refund should not). Runs on a retried
+        // delivery too (outcome already_refunded) so a failed flip here is healed by the retry.
         if (isSubscription) {
-          await supabase
+          const { error: flipErr } = await supabase
             .from('users')
             .update({ [tier.flagColumn]: false })
             .eq('id', appUserId);
+          if (flipErr) {
+            console.error(`[RevenueCat] ${tier.name} refund flag flip failed:`, flipErr);
+            return new Response(JSON.stringify({ error: flipErr.message }), { status: 500 });
+          }
         }
 
         // Refund/clawback completed (Apple Support) — revenue accuracy + churn.
@@ -341,6 +336,8 @@ Deno.serve(async (req) => {
           {
             kind: isSubscription ? 'subscription' : 'sparkle_pack',
             sparkles_revoked: clawbackAmount,
+            clawback_outcome: outcome,
+            ...storeProps,
           },
           { dedupKey: `refund:${transactionId}` }
         );
@@ -389,7 +386,7 @@ Deno.serve(async (req) => {
       await captureServer(
         appUserId,
         'sparkles_purchased',
-        { pack: productId, amount: sparkleAmount },
+        { pack: productId, amount: sparkleAmount, ...storeProps },
         { dedupKey: `sparkles_purchased:${transactionId}` }
       );
       return new Response(JSON.stringify({ granted: sparkleAmount }), { status: 200 });
@@ -505,6 +502,7 @@ Deno.serve(async (req) => {
             period: productId === tier.yearlyProduct ? 'yearly' : 'monthly',
             event: eventType,
             sparkles_granted: sparklesGranted,
+            ...storeProps,
           },
           { dedupKey: `sub_grant:${eventType}:${transactionId}` }
         );
@@ -536,15 +534,18 @@ Deno.serve(async (req) => {
         await captureServer(
           appUserId,
           'subscription_expired',
-          { tier: tier.name, event: eventType },
+          { tier: tier.name, event: eventType, ...storeProps },
           { dedupKey: `sub_expired:${transactionId}` }
         );
         return new Response(JSON.stringify({ tier: tier.name, active: false }), { status: 200 });
       }
 
-      // Informational only — access state unchanged. CANCELLATION = user
+      // Informational: the tier flag is unchanged. CANCELLATION = user
       // tapped cancel but keeps access until EXPIRATION fires.
-      // BILLING_ISSUE = card failed; Apple is retrying within grace period.
+      // BILLING_ISSUE = card failed; the store is retrying within the grace
+      // period (the expiry is extended to the grace end below).
+      // PRODUCT_CHANGE = change requested; it takes effect on a later RENEWAL /
+      // INITIAL_PURCHASE for the new product.
       //
       // Migration 215: for Pro, CANCELLATION flips pro_subscription_will_renew
       // to false so nightly-dreams.js knows to send the "your Pro ends in 3
@@ -569,6 +570,43 @@ Deno.serve(async (req) => {
             // next cron, which is recoverable.
           }
         }
+        // BILLING_ISSUE: the store keeps the subscriber entitled while it retries the card
+        // (grace period); RevenueCat does too. Extend the expiry to the grace end so
+        // lib/proStatus.ts + is_pro_active() agree instead of dropping access at the old
+        // expiry. Conditional (only raises a LATER value; a null "no expiry" is untouched) so a
+        // concurrent RENEWAL's later expiry is never overwritten. EXPIRATION still revokes.
+        if (eventType === 'BILLING_ISSUE' && gracePeriodExpirationAtMs) {
+          const graceIso = new Date(gracePeriodExpirationAtMs).toISOString();
+          const { error: graceErr } = await supabase
+            .from('users')
+            .update({ [tier.expiresColumn]: graceIso })
+            .eq('id', appUserId)
+            .eq(tier.flagColumn, true)
+            .lt(tier.expiresColumn, graceIso);
+          if (graceErr) {
+            console.error(`[RevenueCat] ${tier.name} grace extension failed:`, graceErr);
+            return new Response(JSON.stringify({ error: graceErr.message }), { status: 500 });
+          }
+          console.log(
+            `[RevenueCat] ${tier.name} grace period: access extended to ${graceIso} for ${appUserId}`
+          );
+        }
+        if (eventType === 'PRODUCT_CHANGE') {
+          console.log(
+            `[RevenueCat] ${tier.name} change requested for ${appUserId}: ${productId} -> ${newProductId ?? '?'} (applies on the next RENEWAL / INITIAL_PURCHASE)`
+          );
+          await captureServer(
+            appUserId,
+            'subscription_change_requested',
+            {
+              tier: tier.name,
+              from_product: productId,
+              to_product: newProductId ?? null,
+              ...storeProps,
+            },
+            { dedupKey: `sub_change:${transactionId}:${newProductId ?? ''}` }
+          );
+        }
         console.log(`[RevenueCat] ${tier.name} info event for ${appUserId}: ${eventType}`);
         // Cancel INTENT (access remains until EXPIRATION) — the leading churn
         // indicator. Only CANCELLATION, not BILLING_ISSUE (a recoverable retry).
@@ -576,7 +614,7 @@ Deno.serve(async (req) => {
           await captureServer(
             appUserId,
             'subscription_cancelled',
-            { tier: tier.name },
+            { tier: tier.name, ...storeProps },
             { dedupKey: `sub_cancelled:${transactionId}` }
           );
         }
