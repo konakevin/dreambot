@@ -160,13 +160,7 @@ module.exports = {
           },
         },
       ],
-      // faceIDPermission:false omits NSFaceIDUsageDescription — SecureStore
-      // stores tokens in the Keychain without biometric prompts, so the
-      // Face ID usage string is unused and only invites reviewer questions.
-      ['expo-secure-store', { faceIDPermission: false }],
       'expo-web-browser',
-      'expo-video',
-      'react-native-compressor',
       '@react-native-google-signin/google-signin',
       [
         'react-native-fbsdk-next',

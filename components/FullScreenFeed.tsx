@@ -89,6 +89,12 @@ interface Props {
    * to jump to top" gesture.
    */
   scrollToTopToken?: number;
+  /**
+   * Cards mounted on each side of the active one (VerticalPager's windowSize; default 2).
+   * The Bots tab passes 0 for bot pages that aren't the settled one, so an off-screen
+   * bot keeps only its current card mounted.
+   */
+  windowSize?: number;
 }
 
 /**
@@ -228,6 +234,7 @@ export function FullScreenFeed({
   onHudToggle,
   scrollToTopToken,
   showBottomScrim,
+  windowSize,
 }: Props) {
   const insets = useSafeAreaInsets();
   // Render dock lifts the feed HUD metadata (username/caption) so it clears the
@@ -637,6 +644,7 @@ export function FullScreenFeed({
           keyExtractor={(item) => item.id}
           pageHeight={pageHeight}
           initialIndex={initialIndex}
+          windowSize={windowSize}
           renderItem={renderItem}
           onActiveIndexChange={handleActiveIndex}
           onEndReached={onEndReached}

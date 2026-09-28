@@ -26,7 +26,11 @@
  *   that happens. 2026-06-22.
  *
  * Page virtualization: only the active page ± WINDOW is mounted, so memory is
- * bounded regardless of how many bots exist.
+ * bounded regardless of how many bots exist. Inside those pages, only the SETTLED
+ * bot keeps its full vertical window (current card ± 2); the neighbours mount just
+ * their current card, which is all a horizontal swipe shows. Up to 15 full-screen
+ * cards → up to 7 (2026-09-27). The switch waits for the slide to finish so no card
+ * mounts or unmounts mid-animation.
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -114,6 +118,14 @@ export function BotsHorizontalPager({
   const countSV = useSharedValue(pages.length);
 
   const [activeIndex, setActiveIndex] = useState(initialIndex);
+  // The page whose vertical feed keeps its full card window. Trails activeIndex by
+  // one slide so the neighbour's cards mount after the animation, not during it.
+  const [settledIndex, setSettledIndex] = useState(initialIndex);
+  useEffect(() => {
+    if (settledIndex === activeIndex) return;
+    const t = setTimeout(() => setSettledIndex(activeIndex), SNAP_MS + 50);
+    return () => clearTimeout(t);
+  }, [activeIndex, settledIndex]);
   // Tracks the committed page so the external-sync effect below can tell a
   // pill-tap (animate to it) from the pager's own commit (already there).
   const currentIndexRef = useRef(initialIndex);
@@ -235,6 +247,8 @@ export function BotsHorizontalPager({
                   onHudToggle={onHudToggle}
                   emptyComponent={emptyComponent}
                   privateBot={bot && bot.is_public === false ? bot : null}
+                  // Off-screen bots mount only their current card (see header).
+                  windowSize={i === settledIndex ? undefined : 0}
                 />
               </View>
             );
@@ -257,12 +271,15 @@ function BotFeedPage({
   onHudToggle,
   emptyComponent,
   privateBot,
+  windowSize,
 }: {
   botId: string | null;
   initialIndex: number;
   onIndexChange: (index: number) => void;
   onHudToggle?: (visible: boolean) => void;
   emptyComponent?: React.ReactElement;
+  /** Vertical card window for this page (undefined = the feed's default ±2). */
+  windowSize?: number;
   /**
    * Set when this page's bot is fully private (AlphaBot, FarmBot) — such a
    * bot always has an empty live feed (zero is_public=true posts by
@@ -319,6 +336,7 @@ function BotFeedPage({
       }}
       ListEmptyComponent={privateBot ? <PrivateBotEmptyState bot={privateBot} /> : emptyComponent}
       onHudToggle={onHudToggle}
+      windowSize={windowSize}
       // CRITICAL: disable swipe-to-profile inside the bots pager. The
       // horizontal pan is owned by the outer pager here, and the card
       // gesture would otherwise compete and feel broken.
