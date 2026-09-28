@@ -81,6 +81,8 @@ const FALL = {
   startDay: 15,
   rampStartPct: 0,
   peakPct: 40,
+  // mig 570: a different level while another season (Halloween, Thanksgiving) is active the same day.
+  stackedPct: 15,
   peakLeadDays: 0,
   finalPct: 40,
   finalDays: 0,
@@ -179,8 +181,11 @@ describe('holidayWindow.js — Node mirror parity vs the Deno original (2026-09-
       final_pct: 100,
       final_days: 3,
       sort_order: 1,
+      stacked_pct: 50,
     };
     expect(mirror.mapHolidayCatalogRow(dbRow)).toEqual(engine.mapHolidayCatalogRow(dbRow));
+    expect(engine.mapHolidayCatalogRow(dbRow).stackedPct).toBe(50);
+    expect(engine.mapHolidayCatalogRow({ ...dbRow, stacked_pct: null }).stackedPct).toBeNull();
   });
 
   it('localDateInTz matches for a UTC instant across a few timezones', () => {

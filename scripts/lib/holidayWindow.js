@@ -138,6 +138,7 @@ function resolveActiveHolidays(today, rows) {
           dayOfMediumBan: row.dayOfMediumBan || null,
           dayOfModelBan: row.dayOfModelBan || [], // mig 480
           sortOrder: row.sortOrder,
+          stackedPct: row.stackedPct == null ? null : row.stackedPct, // mig 570
         });
         break; // found this row's active window; don't double-count year+1
       }
@@ -145,7 +146,11 @@ function resolveActiveHolidays(today, rows) {
   }
 
   active.sort((a, b) => a.daysUntilPeak - b.daysUntilPeak || a.sortOrder - b.sortOrder);
-  return active.map(({ sortOrder, ...h }) => h);
+  // Overlapping seasons: a season with a stacked pct uses it instead of its own level (mig 570).
+  const stacked = active.length > 1;
+  return active.map(({ sortOrder, stackedPct, ...h }) =>
+    stacked && stackedPct != null ? Object.assign({}, h, { holidayPct: clampPct(stackedPct) }) : h
+  );
 }
 
 /** Map a `holidays` DB row (snake_case) to the catalog shape. */
@@ -165,14 +170,19 @@ function mapHolidayCatalogRow(r) {
     startDay: r.start_day == null ? null : Number(r.start_day),
     rampStartPct: Number(r.ramp_start_pct ?? 0),
     peakPct: Number(r.peak_pct ?? 0),
+    stackedPct: r.stacked_pct == null ? null : Number(r.stacked_pct),
     peakLeadDays: Number(r.peak_lead_days ?? 0),
     finalPct: Number(r.final_pct ?? 0),
     finalDays: Number(r.final_days ?? 0),
     sortOrder: Number(r.sort_order ?? 0),
     dayOfEnabled: r.day_of_enabled !== false,
-    dayOfLookKeys: Array.isArray(r.day_of_look_keys) ? r.day_of_look_keys.filter((k) => typeof k === 'string') : [],
+    dayOfLookKeys: Array.isArray(r.day_of_look_keys)
+      ? r.day_of_look_keys.filter((k) => typeof k === 'string')
+      : [],
     dayOfMediumBan: typeof r.day_of_medium_ban === 'string' ? r.day_of_medium_ban : null,
-    dayOfModelBan: Array.isArray(r.day_of_model_ban) ? r.day_of_model_ban.filter((k) => typeof k === 'string') : [],
+    dayOfModelBan: Array.isArray(r.day_of_model_ban)
+      ? r.day_of_model_ban.filter((k) => typeof k === 'string')
+      : [],
   };
 }
 

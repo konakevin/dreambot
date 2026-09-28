@@ -14,7 +14,8 @@ import {
   type CalendarDate,
 } from '@engine/holidayWindow';
 
-// verbatim production rows (2026-09-13; pcts from migration 569, 2026-09-27: Fall 50% alone, 30/30 in October)
+// verbatim production rows (2026-09-13; pcts from migration 570, 2026-09-27: Fall 50% alone,
+// October 50% Halloween + 20% Fall via stacked_pct, no cap)
 const HALLOWEEN = mapHolidayCatalogRow({
   key: 'halloween',
   display_name: 'Halloween',
@@ -25,6 +26,7 @@ const HALLOWEEN = mapHolidayCatalogRow({
   window_days: 30,
   ramp_start_pct: 6,
   peak_pct: 50,
+  stacked_pct: 50,
   peak_lead_days: 7,
   final_pct: 35,
   final_days: 1,
@@ -56,6 +58,7 @@ const FALL = mapHolidayCatalogRow({
   window_days: 72,
   ramp_start_pct: 10,
   peak_pct: 50,
+  stacked_pct: 20,
   peak_lead_days: 0,
   final_pct: 10,
   final_days: 0,
@@ -74,8 +77,8 @@ const keysOn = (c: CalendarDate) =>
   resolveActiveHolidays(c, CATALOG)
     .map((h) => h.key)
     .sort();
-/** engine_config.holiday_stack_cap_pct (migration 569). */
-const STACK_CAP = 60;
+/** engine_config.holiday_stack_cap_pct (migration 570: 100 = no cap; stacked_pct sets October directly). */
+const STACK_CAP = 100;
 const pctOn = (c: CalendarDate) => combineHolidayPct(resolveActiveHolidays(c, CATALOG), STACK_CAP);
 /** One season's share of nights: the capped total split by pct weight (pickWeightedHoliday). */
 const shareOn = (c: CalendarDate, key: string) => {
@@ -97,9 +100,12 @@ describe('Fall 2026', () => {
     expect(keysOn(d(11, 27))).toEqual([]);
   });
 
-  it('runs flat at 50% for all 73 nights — no ramp, no surge', () => {
-    for (const c of [d(9, 15), d(10, 15), d(11, 1), d(11, 26)]) {
+  it('runs flat at 50% on its own, 20% while Halloween runs (Oct 1-31)', () => {
+    for (const c of [d(9, 15), d(9, 30), d(11, 1), d(11, 26)]) {
       expect(resolveActiveHolidays(c, CATALOG).find((h) => h.key === 'fall')!.holidayPct).toBe(50);
+    }
+    for (const c of [d(10, 1), d(10, 15), d(10, 31)]) {
+      expect(resolveActiveHolidays(c, CATALOG).find((h) => h.key === 'fall')!.holidayPct).toBe(20);
     }
   });
 
@@ -137,12 +143,12 @@ describe('Halloween 2026', () => {
 });
 
 describe('the two seasons overlap rather than compete', () => {
-  it('October splits 30% Fall + 30% Halloween (50 + 50 capped at 60)', () => {
+  it('October: 50% Halloween + 20% Fall = 70% holiday dreams', () => {
     for (const c of [d(10, 1), d(10, 15), d(10, 30)]) {
       expect(keysOn(c)).toEqual(['fall', 'halloween']);
-      expect(pctOn(c)).toBe(60);
-      expect(shareOn(c, 'fall')).toBe(30);
-      expect(shareOn(c, 'halloween')).toBe(30);
+      expect(pctOn(c)).toBe(70);
+      expect(shareOn(c, 'halloween')).toBe(50);
+      expect(shareOn(c, 'fall')).toBe(20);
     }
   });
 

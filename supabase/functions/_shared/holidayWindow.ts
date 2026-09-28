@@ -36,6 +36,10 @@ export interface HolidayCatalogRow {
   startDay?: number | null;
   rampStartPct: number;
   peakPct: number;
+  /** Optional pct used INSTEAD of the ramp/flat level while another season is active the same day
+   *  (migration 570, Kevin 2026-09-27: Fall 50% alone, but 20% beside Halloween's 50% in October).
+   *  null = the season keeps its own level when stacked. */
+  stackedPct?: number | null;
   peakLeadDays: number;
   finalPct: number;
   finalDays: number;
@@ -189,7 +193,7 @@ export function resolveActiveHolidays(
   rows: HolidayCatalogRow[]
 ): ActiveHoliday[] {
   const todaySerial = toSerial(today);
-  const active: Array<ActiveHoliday & { sortOrder: number }> = [];
+  const active: Array<ActiveHoliday & { sortOrder: number; stackedPct: number | null }> = [];
 
   for (const row of rows) {
     for (const year of [today.year, today.year + 1]) {
@@ -210,6 +214,7 @@ export function resolveActiveHolidays(
           dayOfMediumBan: row.dayOfMediumBan ?? null,
           dayOfModelBan: row.dayOfModelBan ?? [],
           sortOrder: row.sortOrder,
+          stackedPct: row.stackedPct ?? null,
         });
         break; // found this row's active window; don't double-count year+1
       }
@@ -218,7 +223,11 @@ export function resolveActiveHolidays(
 
   // Deterministic order (sooner peak first, tie-break sortOrder) for stable mixing.
   active.sort((a, b) => a.daysUntilPeak - b.daysUntilPeak || a.sortOrder - b.sortOrder);
-  return active.map(({ sortOrder: _sortOrder, ...h }) => h);
+  // Overlapping seasons: a season with a stacked pct uses it instead of its own level.
+  const stacked = active.length > 1;
+  return active.map(({ sortOrder: _sortOrder, stackedPct, ...h }) =>
+    stacked && stackedPct != null ? { ...h, holidayPct: clampPct(stackedPct) } : h
+  );
 }
 
 /** Map a `holidays` DB row (snake_case) to the catalog shape. */
@@ -238,6 +247,7 @@ export function mapHolidayCatalogRow(r: Record<string, unknown>): HolidayCatalog
     startDay: r.start_day == null ? null : Number(r.start_day),
     rampStartPct: Number(r.ramp_start_pct ?? 0),
     peakPct: Number(r.peak_pct ?? 0),
+    stackedPct: r.stacked_pct == null ? null : Number(r.stacked_pct),
     peakLeadDays: Number(r.peak_lead_days ?? 0),
     finalPct: Number(r.final_pct ?? 0),
     finalDays: Number(r.final_days ?? 0),

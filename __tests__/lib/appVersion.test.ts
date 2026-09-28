@@ -30,6 +30,15 @@ describe('compareVersions', () => {
     expect(compareVersions('2.0.0', '1.9.9')).toBe(1);
     expect(compareVersions('1.0.0', '1.0.0')).toBe(0);
   });
+
+  it('compares each part as a number, not as text (1.10.0 is newer than 1.9.0)', () => {
+    // 1.10.0 (2026-09-27) is the first two-digit minor. As text '1.10.0' < '1.9.0', which
+    // would hard-wall 1.10.0 users behind a 1.9.0 floor and never nudge 1.9.0 users.
+    expect(compareVersions('1.10.0', '1.9.0')).toBe(1);
+    expect(compareVersions('1.9.0', '1.10.0')).toBe(-1);
+    expect(isUpdateRequired('1.10.0', '1.9.0')).toBe(false);
+    expect(isUpdateAvailable('1.9.0', '1.10.0')).toBe(true);
+  });
   it('treats missing trailing parts as zero', () => {
     expect(compareVersions('1.2', '1.2.0')).toBe(0);
     expect(compareVersions('1.2.1', '1.2')).toBe(1);
