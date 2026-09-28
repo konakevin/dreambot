@@ -8,6 +8,12 @@
  * Lives at the TOP level (not inside `(auth)/`) on purpose: the `(auth)` group
  * redirects any active session straight to `/(tabs)`, and a recovery session IS
  * a session — so a reset screen nested there would never render.
+ *
+ * The form opens ONLY for a really-redeemed recovery link (`recoveryPending`, set on
+ * auth-js's PASSWORD_RECOVERY event), never for just any session: before 2026-09-27 a
+ * plain `dreambot://reset-password` link showed a signed-in user a new-password form with
+ * no current-password check. It also names the account being reset, so a link sent for
+ * someone else's account is obvious.
  */
 
 import { showAlert } from '@/components/CustomAlert';
@@ -26,14 +32,22 @@ const MIN_LEN = 8;
 
 export default function ResetPasswordScreen() {
   const session = useAuthStore((s) => s.session);
+  const recoveryPending = useAuthStore((s) => s.recoveryPending);
+  const setRecoveryPending = useAuthStore((s) => s.setRecoveryPending);
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // The recovery session is set by the deep-link handler before we navigate
-  // here. If it's missing the link was already used or expired.
-  const hasRecoverySession = !!session;
+  // The deep-link handler redeems the recovery link, then navigates here. No redeemed
+  // link (expired, used, or no link at all) → the "expired" state below.
+  const hasRecoverySession = !!session && recoveryPending;
+  const accountEmail = session?.user?.email ?? null;
+
+  function leave() {
+    setRecoveryPending(false);
+    router.replace('/(tabs)');
+  }
 
   async function handleSubmit() {
     if (password.length < MIN_LEN) {
@@ -54,6 +68,7 @@ export default function ResetPasswordScreen() {
       return;
     }
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    setRecoveryPending(false);
     showAlert('Password updated', 'You’re all set — your new password is ready to use.', [
       { text: 'Done', onPress: () => router.replace('/(tabs)') },
     ]);
@@ -68,10 +83,7 @@ export default function ResetPasswordScreen() {
         bottomOffset={24}
       >
         <View className="px-4 pt-4 pb-8">
-          <TouchableOpacity
-            onPress={() => router.replace('/(tabs)')}
-            className="w-11 h-11 items-center justify-center"
-          >
+          <TouchableOpacity onPress={leave} className="w-11 h-11 items-center justify-center">
             <Ionicons name="close" size={26} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
@@ -83,7 +95,9 @@ export default function ResetPasswordScreen() {
           {hasRecoverySession ? (
             <>
               <Text className="text-text-secondary mb-8">
-                Choose a new password for your account.
+                {accountEmail
+                  ? `Choose a new password for ${accountEmail}.`
+                  : 'Choose a new password for your account.'}
               </Text>
 
               <Text className="text-text-secondary text-xs mb-2 ml-1">NEW PASSWORD</Text>
@@ -141,7 +155,7 @@ export default function ResetPasswordScreen() {
               </Text>
               <TouchableOpacity
                 className="bg-[#A78BFA] rounded-full py-4 items-center"
-                onPress={() => router.replace('/(tabs)')}
+                onPress={leave}
                 activeOpacity={0.8}
               >
                 <Text className="text-white font-bold text-base">Back to app</Text>

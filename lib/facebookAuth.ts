@@ -28,3 +28,12 @@ export async function signInWithFacebook() {
   if (error) throw error;
   return data;
 }
+
+/** Forget the Facebook login on this device (called on app sign-out). Never throws. */
+export function signOutFacebook(): void {
+  try {
+    LoginManager.logOut();
+  } catch (e) {
+    if (__DEV__) console.warn('[facebookAuth] logOut failed', e);
+  }
+}

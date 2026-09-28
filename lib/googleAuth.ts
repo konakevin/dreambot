@@ -30,3 +30,16 @@ export async function signInWithGoogle() {
   if (error) throw error;
   return data;
 }
+
+/**
+ * Forget the Google account on this device (called on app sign-out). Without it the SDK
+ * silently returns the same account on the next sign-in, so switching accounts was
+ * impossible. Never throws.
+ */
+export async function signOutGoogle(): Promise<void> {
+  try {
+    if (GoogleSignin.hasPreviousSignIn()) await GoogleSignin.signOut();
+  } catch (e) {
+    if (__DEV__) console.warn('[googleAuth] signOut failed', e);
+  }
+}

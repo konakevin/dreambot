@@ -85,7 +85,8 @@ export default function WelcomeScreen() {
         !msg.includes('cancelled') &&
         !msg.includes('ERR_CANCELED')
       ) {
-        const label = provider === 'google' ? 'Google' : 'Apple';
+        const label =
+          provider === 'google' ? 'Google' : provider === 'apple' ? 'Apple' : 'Facebook';
         showAlert(`${label} Sign-In failed`, msg);
       }
     } finally {

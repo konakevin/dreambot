@@ -41,7 +41,8 @@ import { isFirstJsLoad } from '@/modules/dreambot-widget';
 import { useFeedStore } from '@/store/feed';
 import { useRenderDockStore } from '@/store/renderDock';
 import { configureRevenueCat } from '@/lib/revenuecat';
-import { AlertProvider } from '@/components/CustomAlert';
+import { AlertProvider, showAlert } from '@/components/CustomAlert';
+import { classifyIncomingLink } from '@/lib/incomingLink';
 import { AiConsentProvider } from '@/components/AiConsentSheet';
 import { PremiumGateProvider } from '@/components/PremiumGateSheet';
 import { Toast, ToastHost } from '@/components/Toast';
@@ -78,85 +79,73 @@ function AuthInitializer() {
 
   // Handle deep links — auth callbacks + post/user navigation
   useEffect(() => {
+    // A redeemed recovery link opens the set-new-password screen. Never swap an existing
+    // session silently: the link resets the password of the account it was SENT to, which
+    // may not be the one signed in here. So with a session present, confirm first, then
+    // run the full sign-out sweep (nothing of the current account carries over) before
+    // redeeming. An expired/used link still lands on the reset screen, which then shows
+    // its "expired" state (no recovery flag set).
+    async function redeemRecoveryLink(tokenHash: string) {
+      const { router } = await import('expo-router');
+      const redeem = async () => {
+        const { error } = await supabase.auth.verifyOtp({
+          token_hash: tokenHash,
+          type: 'recovery',
+        });
+        if (error) {
+          if (__DEV__) console.warn('[deeplink] recovery link rejected:', error.message);
+        } else {
+          // auth-js also emits PASSWORD_RECOVERY (store/auth.ts sets the flag there);
+          // set it here too so the screen never races the event.
+          useAuthStore.getState().setRecoveryPending(true);
+        }
+        router.replace('/reset-password');
+      };
+      if (useAuthStore.getState().session) {
+        showAlert(
+          'Reset password?',
+          'This link resets the password for the account it was sent to. You’ll be signed out on this device first.',
+          [
+            { text: 'Cancel', style: 'cancel' },
+            {
+              text: 'Continue',
+              onPress: () => {
+                void (async () => {
+                  await useAuthStore.getState().signOut();
+                  await redeem();
+                })();
+              },
+            },
+          ]
+        );
+        return;
+      }
+      await redeem();
+    }
+
     // `warm` = the app was ALREADY running when the link was tapped (url event),
     // vs a cold start (initial URL). They route posts differently — see below.
     async function handleUrl(url: string, warm: boolean) {
-      const parsed = Linking.parse(url);
-      const path = parsed.path ?? '';
-      const fragment = url.split('#')[1];
-      const fragParams = fragment ? new URLSearchParams(fragment) : null;
-
-      // Password-recovery deep link (redirectTo: dreambot://reset-password).
-      // The recovery email carries a credential — a `token_hash` (the recovery
-      // email template, preferred), a `?code=` (PKCE), or `#access_token`
-      // (implicit) — just like an OAuth callback. We establish the session, then
-      // route to the set-new-password screen instead of the feed. Detect it by
-      // the redirect path or an explicit type=recovery.
-      //
-      // KNOWN GAP, INTENTIONALLY NOT FIXED (Architect audit S7, 2026-09-10 —
-      // Kevin's explicit call: leave it for now). The `isRecovery` check below
-      // only decides whether to NAVIGATE to the reset-password screen
-      // afterward — it does NOT gate whether the token below gets CONSUMED.
-      // Every branch (token_hash / code / access_token+refresh_token) runs
-      // unconditionally for ANY incoming dreambot:// link, silently signing
-      // this device into whatever account that token belongs to, with no
-      // confirmation screen. Since the custom URL scheme `dreambot://` (unlike
-      // the domain-verified Universal Link) isn't iOS-verified, a malicious
-      // link (phishing message, QR code, malicious ad) carrying a valid token
-      // pair could switch the victim's session. Impact is session-fixation /
-      // account-confusion, not credential theft — this is a face-swap app, so
-      // the real risk is a subsequent upload landing in the wrong account.
-      // Fix direction, when picked back up: gate token consumption to
-      // `isRecovery` (or a dedicated callback path), and/or show a
-      // "Signed in as X" confirmation before finalizing a deep-link session.
-      const isRecovery =
-        path === 'reset-password' ||
-        parsed.queryParams?.type === 'recovery' ||
-        fragParams?.get('type') === 'recovery';
-
-      async function goToResetIfRecovery() {
-        if (!isRecovery) return false;
-        const { router } = await import('expo-router');
-        router.replace('/reset-password');
-        return true;
+      // lib/incomingLink.ts decides what a link may do (tested in
+      // __tests__/lib/incomingLink.test.ts). Only the recovery email's exact shape
+      // (reset-password + token_hash + type=recovery) can carry a session; a `?code=`
+      // or `#access_token` on ANY link is ignored. Audit 2026-09-27 S7 finding 1: the old
+      // handler redeemed tokens from every incoming link, so a crafted
+      // https://dreambotapp.com/post/<id>#access_token=… signed the device into the
+      // attacker's account with no prompt.
+      const link = classifyIncomingLink(url);
+      if (link.kind !== 'recovery' && link.ignoredAuthTokens && __DEV__) {
+        console.warn('[deeplink] ignored auth tokens on a non-recovery link');
       }
 
-      // token_hash flow (recovery email template): a one-time hash verifyOtp
-      // exchanges for a session with NO PKCE verifier — works regardless of which
-      // device/build started the reset. Same mechanism the web fallback uses.
-      const rawTokenHash = parsed.queryParams?.token_hash ?? fragParams?.get('token_hash');
-      if (typeof rawTokenHash === 'string' && rawTokenHash.length > 0) {
-        await supabase.auth.verifyOtp({ token_hash: rawTokenHash, type: 'recovery' });
-        await goToResetIfRecovery();
+      if (link.kind === 'recovery') {
+        await redeemRecoveryLink(link.tokenHash);
         return;
       }
 
-      // PKCE flow: Supabase redirects with ?code=xxx in the query string
-      const code = parsed.queryParams?.code;
-      if (typeof code === 'string') {
-        await supabase.auth.exchangeCodeForSession(code);
-        await goToResetIfRecovery();
-        return;
-      }
-
-      // Implicit flow fallback: tokens in URL fragment #access_token=xxx
-      if (fragParams) {
-        const accessToken = fragParams.get('access_token');
-        const refreshToken = fragParams.get('refresh_token');
-        if (accessToken && refreshToken) {
-          await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken,
-          });
-          await goToResetIfRecovery();
-          return;
-        }
-      }
-
-      // Deep link routing: dreambot://photo/{id} or https://dreambotapp.com/post/{id}
-      const postMatch = path.match(/^(?:post|photo)\/([a-f0-9-]+)$/i);
-      if (postMatch) {
-        const postId = postMatch[1];
+      // Deep link routing: https://dreambotapp.com/post/{id} (or /photo/{id}).
+      if (link.kind === 'post') {
+        const postId = link.postId;
         if (warm) {
           // App already open: navigate STRAIGHT to the post screen. The old
           // path stashed a pendingPostId for the home feed to "pick up", but on
@@ -174,10 +163,9 @@ function AuthInitializer() {
         }
         return;
       }
-      const userMatch = path.match(/^user\/([a-f0-9-]+)$/i);
-      if (userMatch) {
+      if (link.kind === 'user') {
         const { router } = await import('expo-router');
-        router.push(`/user/${userMatch[1]}`);
+        router.push(`/user/${link.userId}`);
         return;
       }
     }

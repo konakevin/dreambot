@@ -70,10 +70,35 @@ export async function syncDreamWidget(): Promise<void> {
       /* pruning is best-effort */
     }
 
+    // Signed out (or switched account) while downloading: never write this user's dreams
+    // back onto the widget after clearDreamWidget ran.
+    if (useAuthStore.getState().user?.id !== userId) return;
     setWidgetState(refs);
   } catch (err) {
     if (__DEV__) console.warn('[widgetSync] failed', err);
   } finally {
     inFlight = false;
   }
+}
+
+/**
+ * Empty the widget (called on sign-out, which account deletion also runs): delete the
+ * cached dream images from the App Group and commit an empty state, which reloads the
+ * widget into its "no dreams yet" view. Otherwise the previous user's latest dreams,
+ * private ones included, stay on the home screen. No-op on Android / older binaries.
+ */
+export function clearDreamWidget(): void {
+  if (!isWidgetSupported()) return;
+  try {
+    const dirPath = getAppGroupWidgetDir();
+    if (dirPath) {
+      const dir = new Directory(`file://${dirPath}`);
+      for (const entry of dir.list()) {
+        if (entry instanceof File) entry.delete();
+      }
+    }
+  } catch (err) {
+    if (__DEV__) console.warn('[widgetSync] clearing widget images failed', err);
+  }
+  setWidgetState([]);
 }

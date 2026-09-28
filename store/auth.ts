@@ -53,6 +53,12 @@ interface AuthState {
    *  dreams" in UI; keep Pro-EXCLUSIVE perks on isPro. */
   isDreamEligible: boolean;
   initialized: boolean;
+  /** True only after a password-recovery link was really redeemed on this device
+   *  (auth-js emits PASSWORD_RECOVERY from verifyOtp({ type: 'recovery' })). Gates the
+   *  set-new-password form, which used to accept ANY session as a recovery session.
+   *  Cleared when the password is updated, the reset screen is left, or on sign-out. */
+  recoveryPending: boolean;
+  setRecoveryPending: (pending: boolean) => void;
   setSession: (session: Session | null) => void;
   signOut: () => Promise<void>;
   /** Re-read entitlement columns from the DB. Call after a Pro purchase
@@ -105,6 +111,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isBasic: false,
   isDreamEligible: false,
   initialized: false,
+  recoveryPending: false,
+
+  setRecoveryPending: (pending) => set({ recoveryPending: pending }),
 
   setSession: (session) => {
     set({
@@ -135,7 +144,35 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   signOut: async () => {
     await supabase.auth.signOut();
-    set({ session: null, user: null, isSuperAdmin: false, ...CLEARED_ENTITLEMENTS });
+    set({
+      session: null,
+      user: null,
+      isSuperAdmin: false,
+      recoveryPending: false,
+      ...CLEARED_ENTITLEMENTS,
+    });
+    // Sign out of the social SDKs too, or Google silently hands back the SAME account on
+    // the next "Continue with Google" (no account picker), so switching accounts on a
+    // device was impossible. Fire-and-forget: a provider failure never blocks sign-out.
+    // Dynamic imports keep the native SDKs off this module's import graph.
+    void import('@/lib/googleAuth')
+      .then((m) => m.signOutGoogle())
+      .catch((e: unknown) => {
+        if (__DEV__) console.warn('[auth] Google sign-out failed', e);
+      });
+    void import('@/lib/facebookAuth')
+      .then((m) => m.signOutFacebook())
+      .catch((e: unknown) => {
+        if (__DEV__) console.warn('[auth] Facebook sign-out failed', e);
+      });
+    // The iOS Home Screen widget shows this user's latest dreams (private ones included)
+    // from the App Group; wipe it so they don't stay on the home screen for the next
+    // person. Dynamic import: lib/widgetSync imports this store.
+    void import('@/lib/widgetSync')
+      .then((m) => m.clearDreamWidget())
+      .catch((e: unknown) => {
+        if (__DEV__) console.warn('[auth] widget clear failed', e);
+      });
     // Clear ALL per-session in-memory state so the next user on a shared device
     // can't inherit the previous user's feed / onboarding draft / dream-composer
     // selections / album / explore filters.
@@ -252,6 +289,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         user,
         initialized: true,
         isSuperAdmin: isSupremeAdmin(session?.user?.id),
+        // A redeemed recovery link (verifyOtp type 'recovery') is the ONLY thing that
+        // opens the set-new-password form; losing the session closes it.
+        ...(event === 'PASSWORD_RECOVERY' ? { recoveryPending: true } : {}),
+        ...(session ? {} : { recoveryPending: false }),
       });
       if (session?.user) checkEntitlements();
       else
