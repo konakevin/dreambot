@@ -35,8 +35,8 @@
   6. **Keyboard + safe areas under edge-to-edge** (inputs under the keyboard, sheet buttons under the nav bar).
   7. **Google Play policy gaps** that are likely rejections: no way to report your OWN AI output, broad media /
      audio permissions, privacy policy mismatches, no child-safety standards page.
-  8. **Performance on mid/low-end Android:** feed "display" images are full-resolution (verified) and prefetched
-     aggressively; the Bots tab mounts up to 15 full-screen cards.
+  8. **Performance on mid/low-end Android:** images are prefetched aggressively (J-2). The Bots tab's 15 mounted
+     cards were cut to 7 on 2026-09-27 (J-3, shipped for iOS in 1.10.0 build 63).
 - **Deferred by default (v2):** home-screen widget (needs a Kotlin Glance widget), full reactive layout for
   foldables (stopgap first), Play Integrity trial-abuse (stopgap first).
 
@@ -233,9 +233,11 @@ reach (Play Console, Firebase, Google Cloud, Meta, RevenueCat, Supabase dashboar
   exact `Set.has`) and the yearly checks (~431, ~505) won't match, so the event falls to "Unhandled" 200: Android
   subscribers silently get no Pro and no sparkles. Fix: normalize every incoming product id with
   `id.split(':')[0]` in one helper used everywhere. **S.**
-- **C-4 Webhook `PRODUCT_CHANGE`:** reads only `product_id`; RevenueCat puts the new product in
-  `new_product_id` (confirm against current RevenueCat docs). Matters more on Play (upgrades are product changes).
-  **S.**
+- **C-4 Webhook `PRODUCT_CHANGE`: DONE 2026-09-27 (for both stores).** Per RevenueCat's docs `PRODUCT_CHANGE`
+  does not mean the new plan is in effect: its `product_id` is the OLD product, and the switch arrives later as
+  `RENEWAL` (App Store) or `INITIAL_PURCHASE` (Play) for the new product. The webhook now treats
+  `PRODUCT_CHANGE` as informational (logs + a `subscription_change_requested` event); the later event grants.
+  On Play, confirm in the sandbox that the crossgrade's `INITIAL_PURCHASE` arrives as expected (with E-3).
 - **C-5 Webhook refund clawback:** only `CANCELLATION` + `cancel_reason = 'CUSTOMER_SUPPORT'` (~266) claws back
   sparkles, an Apple-specific reason. Determine in the RevenueCat sandbox what Play refunds and voided
   consumables send, add that branch mirroring `refund:purchase:<txId>`, and make the clawback atomic and
@@ -398,15 +400,17 @@ does nothing on Android. The old plan's "Android uses adjustResize, correct" is 
 
 ### WS-J · Performance (agent; J-1 is server-side and helps iOS too)
 
-- **J-1 Real display variant (verified):** `image_url_display` is the full-resolution render re-encoded as JPEG
-  q80, never downscaled (`services/image-ops/src/persist.ts` ~317-330). Add a real ~1080px-long-edge display
-  variant in image-ops (backfill optional; new renders first). expo-image's Android prefetch decodes at original
-  size, so this is the single biggest memory lever. **M.**
+- **J-1 Display image size: DROPPED 2026-09-27.** The display variant is the native render re-encoded (no
+  downscale), but renders are **768px wide** (768x1344 / 768x1664 across the last 1,000 uploads), already smaller
+  than a phone screen. A 1080px long-edge cap would soften the fullscreen feed and permanently degrade new profile
+  headers (`header_source_check`, migration 554a, copies the display image). Optional future guard: cap the long
+  edge at 2048 in `services/image-ops/src/persist.ts` if a larger model is added. Android memory work is J-2/J-3.
 - **J-2 Prefetch on Android:** ~95 images prefetched at launch and on Bots (`useDreamFeed.ts` ~131, 171,
   `bots.tsx` ~126-131) plus `PostGrid.tsx` (~526), `PostTile.tsx` (~130), `FullScreenFeed.tsx` (~510). On
-  Android cut to 1-2 per feed and no grid prefetch until J-1 lands. **S.**
-- **J-3 Bots tab mounts:** 3 pagers x 5 cards = up to 15 full-screen cards with gestures, gradients and masked
-  views; mount only the active card for off-screen pagers. **M.**
+  Android cut to 1-2 per feed and no grid prefetch. **S.**
+- **J-3 Bots tab mounts: DONE 2026-09-27** (1.10.0 build 63). Only the settled bot keeps its current card +/-2;
+  its neighbours mount only their current card (15 → 7 cards). `FullScreenFeed` `windowSize` prop +
+  `BotsHorizontalPager` `settledIndex` (250ms after the slide). Verify on Android devices in QA.
 - **J-4 MaskedView cost:** per-instance offscreen layers in every feed card and comment row
   (`GradientUsername`, `GradientTitle`, `AnimatedGradientTitle`); verify rendering under the New Architecture
   and consider SVG gradient text. **M.**
@@ -561,24 +565,30 @@ Set `latest_app_version_android` (soft) on launch; only hard-gate Android per th
 
 ## 8. Findings that also help iOS (do these regardless of Android)
 
-| Item                                                                                       | Benefit on iOS                                                                                   | Where                                         | Needs an app build?                                                                                        |
-| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| J-1 real ~1080px display image                                                             | Less memory and bandwidth, faster feed/grid loads (the "display" image is full-resolution today) | `services/image-ops` (server)                 | **No** (the app already loads `image_url_display`; new renders get the smaller file, old ones on backfill) |
-| C-4 webhook `PRODUCT_CHANGE` uses `new_product_id`                                         | Correct tier/sparkles after monthly↔yearly or Basic↔Pro changes on iOS too                       | `revenuecat-webhook`                          | **No**                                                                                                     |
-| C-6 grace period extends `expires_at`                                                      | iOS billing-retry users keep Pro while Apple retries the card, matching RevenueCat               | `revenuecat-webhook`                          | **No**                                                                                                     |
-| C-5 clawback atomic + error-checked                                                        | A failed refund clawback can no longer double-deduct or silently skip                            | `revenuecat-webhook`                          | **No**                                                                                                     |
-| C-7 sandbox purchases gated to testers                                                     | TestFlight / App Review purchases stop minting real sparkles/Pro                                 | `revenuecat-webhook`                          | **No**                                                                                                     |
-| C-8 store/platform on server analytics                                                     | Revenue split by store once Android exists                                                       | edge functions                                | **No**                                                                                                     |
-| L-3 / M-4 privacy policy + terms accuracy (xAI, embeddings, inferred traits, GeoIP)        | Same disclosures are owed to Apple's review and users                                            | website                                       | **No** (consent-sheet wording is in-app: yes)                                                              |
-| L-8 reword the `sanitizePrompt` child-terms comment                                        | Reads badly to any reviewer                                                                      | server comment                                | **No**                                                                                                     |
-| L-1 "Report this dream" on your own dreams                                                 | App Store guideline 1.2 (UGC) expects the same                                                   | app                                           | Yes                                                                                                        |
-| L-7 "I have their permission" when adding a +1                                             | Consent evidence for face swap of friends                                                        | app                                           | Yes                                                                                                        |
-| D-4 sign out of Google/Facebook SDKs                                                       | Account switching (the Google SDK silently reuses the last account)                              | `store/auth.ts`                               | Yes                                                                                                        |
-| D-5 "Apple Sign-In failed" shown for Facebook failures                                     | Wrong error text on iOS today                                                                    | `app/(auth)/index.tsx`                        | Yes                                                                                                        |
-| D-6 auth callbacks only via verified links, recovery token accepted only on reset-password | Closes the session-injection path the 2026-09-27 security audit found on iOS                     | `app/_layout.tsx`                             | Yes                                                                                                        |
-| N (part) clear the home-screen widget on sign-out                                          | The previous user's private dreams stay on the iOS widget today                                  | `lib/widgetSync.ts`                           | Yes                                                                                                        |
-| I-4 font-scale cap + width-aware `fontScale()`                                             | Layouts at the largest Dynamic Type sizes and on narrow iPhones (SE/mini)                        | `components/AppText.tsx`, `lib/responsive.ts` | Yes                                                                                                        |
-| F-2 ask for push permission after the first dream                                          | Fewer permanent denials (iOS asks once)                                                          | `hooks/usePushNotifications.ts`               | Yes                                                                                                        |
-| J-3 mount only the active card on off-screen Bots pagers                                   | Smoother Bots tab and less memory on older iPhones                                               | `app/(tabs)/bots.tsx`                         | Yes                                                                                                        |
-| B-8 remove unused native deps                                                              | Smaller binary, faster builds                                                                    | `package.json`                                | Yes                                                                                                        |
-| B-7 platform in the Sentry release                                                         | Cleaner crash grouping                                                                           | `lib/sentry.ts`                               | Yes                                                                                                        |
+**Status 2026-09-27:** all done except where noted; server/website items are live, app items ship in 1.10.0
+build 63. Dropped: the display-image cap (J-1, premise was wrong). Changed: sandbox purchases are TAGGED (store +
+environment on analytics events), not blocked, because App Review buys in the sandbox and must receive the
+product. `PRODUCT_CHANGE` is informational (C-4). The App Store Connect "Sensitive Info: racial or ethnic data"
+label is Kevin's click (steps in APP_STORE_LISTING.md).
+
+| Item                                                                                       | Benefit on iOS                                                                     | Where                                         | Needs an app build?                           |
+| ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- | --------------------------------------------- | --------------------------------------------- |
+| ~~J-1 smaller display image~~                                                              | Dropped: renders are 768px wide, already phone-sized                               | none                                          | none                                          |
+| C-4 `PRODUCT_CHANGE` is informational; the later RENEWAL grants                            | Upgrades/downgrades never undone or cut short by an early event                    | `revenuecat-webhook`                          | **No**                                        |
+| C-6 grace period extends `expires_at`                                                      | iOS billing-retry users keep Pro while Apple retries the card, matching RevenueCat | `revenuecat-webhook`                          | **No**                                        |
+| C-5 clawback atomic + error-checked                                                        | A failed refund clawback can no longer double-deduct or silently skip              | `revenuecat-webhook`                          | **No**                                        |
+| C-7 sandbox purchases tagged (store + environment on analytics)                            | Test purchases distinguishable; App Review still receives products                 | `revenuecat-webhook`                          | **No**                                        |
+| C-8 store/platform on server analytics                                                     | Revenue split by store once Android exists                                         | edge functions                                | **No**                                        |
+| L-3 / M-4 privacy policy + terms accuracy (xAI, embeddings, inferred traits, GeoIP)        | Same disclosures are owed to Apple's review and users                              | website                                       | **No** (consent-sheet wording is in-app: yes) |
+| L-8 reword the `sanitizePrompt` child-terms comment                                        | Reads badly to any reviewer                                                        | server comment                                | **No**                                        |
+| L-1 "Report this dream" on your own dreams                                                 | App Store guideline 1.2 (UGC) expects the same                                     | app                                           | Yes                                           |
+| L-7 "I have their permission" when adding a +1                                             | Consent evidence for face swap of friends                                          | app                                           | Yes                                           |
+| D-4 sign out of Google/Facebook SDKs                                                       | Account switching (the Google SDK silently reuses the last account)                | `store/auth.ts`                               | Yes                                           |
+| D-5 "Apple Sign-In failed" shown for Facebook failures                                     | Wrong error text on iOS today                                                      | `app/(auth)/index.tsx`                        | Yes                                           |
+| D-6 auth callbacks only via verified links, recovery token accepted only on reset-password | Closes the session-injection path the 2026-09-27 security audit found on iOS       | `app/_layout.tsx`                             | Yes                                           |
+| N (part) clear the home-screen widget on sign-out                                          | The previous user's private dreams stay on the iOS widget today                    | `lib/widgetSync.ts`                           | Yes                                           |
+| I-4 font-scale cap + width-aware `fontScale()`                                             | Layouts at the largest Dynamic Type sizes and on narrow iPhones (SE/mini)          | `components/AppText.tsx`, `lib/responsive.ts` | Yes                                           |
+| F-2 ask for push permission after the first dream                                          | Fewer permanent denials (iOS asks once)                                            | `hooks/usePushNotifications.ts`               | Yes                                           |
+| J-3 mount only the active card on off-screen Bots pagers                                   | Smoother Bots tab and less memory on older iPhones                                 | `app/(tabs)/bots.tsx`                         | Yes                                           |
+| B-8 remove unused native deps                                                              | Smaller binary, faster builds                                                      | `package.json`                                | Yes                                           |
+| B-7 platform in the Sentry release                                                         | Cleaner crash grouping                                                             | `lib/sentry.ts`                               | Yes                                           |

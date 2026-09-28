@@ -1,7 +1,15 @@
 /**
  * Prompt sanitization — last line of defense before a user-facing prompt
- * goes to Flux/Kontext. Strips/softens terms that commonly trip NSFW or
- * minor-safety filters so the generation doesn't get rejected.
+ * goes to Flux/Kontext. Two jobs:
+ *   1. Nudity words ("nude", "naked") are removed outright, so no prompt can
+ *      ask for nudity whatever the user typed.
+ *   2. Explicit age words for young children (baby, infant, toddler, child,
+ *      kid, minor, newborn, "N months old", and nursery props like crib or
+ *      diaper) are reworded into neutral "young/small character" phrasing.
+ *      This steers generated imagery away from realistic depictions of real
+ *      infants and children, toward stylized characters. It is a child-safety
+ *      measure that works together with the providers' own safety filters,
+ *      never a way around them.
  *
  * Applied after the compiler writes the Sonnet brief / Sonnet produces the
  * final prompt. All three pipelines (V4, nightly, restyle-photo) call this.

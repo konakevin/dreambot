@@ -9,26 +9,31 @@ counts exactly. Companion to `LAUNCH.md` (the master checklist).
 ## Listing fields
 
 **App Name** (30 chars)
+
 ```
 DreamBot
 ```
 
 **Subtitle** (30 chars) — final
+
 ```
 Dream it. Make it. Explore it.
 ```
 
 **Promotional text** (170 chars — editable anytime without review) — final
+
 ```
 Your personal AI dream machine 🌙 turn any idea into stunning art, wake to a new dream starring you each night, and explore a gallery of bots dreaming nonstop. ✨
 ```
 
 **Keywords** (100 chars, comma-separated, NO spaces — single words; Apple auto-combines; don't repeat the app name/subtitle) — final
+
 ```
 ai,art,image,generator,photo,avatar,selfie,wallpaper,anime,portrait,aesthetic,fantasy,maker,creator
 ```
 
 **Description** (817 chars; limit 4,000 — first ~3 lines show above the "more" fold) — final
+
 ```
 DreamBot is a little dream machine — three ways to play.
 
@@ -92,17 +97,23 @@ CONTENT MODERATION
 Data collected (all **linked to the user's identity**; **NOT used for tracking**
 across other apps/companies — DreamBot shows no ATT prompt):
 
-| Category | Data | Purpose |
-|----------|------|---------|
-| Contact Info | Email | Account, auth |
-| User Content | Photos uploaded (Dream Cast + reimagine), generated images, captions, comments | App functionality |
-| Identifiers | User ID | App functionality |
-| Usage Data | Product interactions (screens, taps, features) | Analytics (PostHog) |
-| Diagnostics | Crash + error data | App functionality (Sentry) |
-| Purchases | Purchase history | App functionality (via Apple/RevenueCat) |
-| Other | Push notification token | Notifications |
+| Category       | Data                                                                                                                       | Purpose                                  |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| Contact Info   | Email                                                                                                                      | Account, auth                            |
+| User Content   | Photos uploaded (Dream Cast + reimagine), generated images, captions, comments                                             | App functionality                        |
+| Identifiers    | User ID                                                                                                                    | App functionality                        |
+| Usage Data     | Product interactions (screens, taps, features)                                                                             | Analytics (PostHog)                      |
+| Diagnostics    | Crash + error data                                                                                                         | App functionality (Sentry)               |
+| Purchases      | Purchase history                                                                                                           | App functionality (via Apple/RevenueCat) |
+| Other          | Push notification token                                                                                                    | Notifications                            |
+| Sensitive Info | Racial or ethnic data (a broad ethnicity category an AI estimates from each Dream Cast photo, stored with the cast member) | App functionality                        |
 
 - **Tracking:** No. Data is first-party, not shared with data brokers/advertisers.
+- **2026-09-27:** added **Sensitive Info → Racial or ethnic data**. `describe-photo` stores a broad
+  ethnicity bucket with each cast member (`lib/castUpload.ts`), read at render time as the race anchor
+  for the cast's likeness. The face-swap's face embeddings are NOT listed: they are computed during a
+  swap to verify the placed face and discarded (never stored), which is not "collection" under Apple's
+  definition. App Privacy answers are app-level in App Store Connect: edit + Publish any time, no build.
 - Mirror this with `https://dreambotapp.com/privacy` (already live + consistent).
 
 ---
@@ -111,17 +122,20 @@ across other apps/companies — DreamBot shows no ATT prompt):
 
 ⚠️ **REQUIRED — the app breaks without these** (read with `!` in `lib/supabase.ts`,
 and NOT present in `eas.json` env blocks, so they must be set in the dashboard):
+
 - `EXPO_PUBLIC_SUPABASE_URL`
 - `EXPO_PUBLIC_SUPABASE_ANON_KEY`
 - `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID`
 
 Already referenced in `eas.json` (set the values in EAS):
+
 - `FACEBOOK_APP_ID`, `FACEBOOK_CLIENT_TOKEN`
 - `EXPO_PUBLIC_SENTRY_DSN` — without it, crash reporting is a no-op
 - `EXPO_PUBLIC_POSTHOG_KEY` — without it, analytics is a no-op
 - `EXPO_PUBLIC_APP_ENV` — already hard-set to `production` in the production profile
 
 Sentry source-map upload (so production traces are symbolicated) — set as EAS secrets:
+
 - `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN`
 
 ---
@@ -133,13 +147,15 @@ Sentry source-map upload (so production traces are symbolicated) — set as EAS 
 > `RELEASE.md` §3). The EAS-stored key below is only used by the `eas submit` fallback.
 
 Scaffolded with the real `appleTeamId` (`43VMZ5KMW4`). To finish, EITHER:
+
 - **Option A (recommended):** run `eas submit -p ios --profile production` and let
   EAS prompt for + store your App Store Connect API key (no file in the repo), or
 - **Option B:** download the ASC API key (App Store Connect → Users and Access →
   Integrations → App Store Connect API → generate a key), drop the `.p8` at
   `secrets/asc-api-key.p8` (gitignored via `*.p8`), and replace `REPLACE_ASC_API_KEY_ID`
-  + `REPLACE_ASC_API_KEY_ISSUER_ID` in `eas.json`.
+  - `REPLACE_ASC_API_KEY_ISSUER_ID` in `eas.json`.
 - `ascAppId` (the numeric App Store app ID) can also go here once the app record exists.
+
 ```
 
 ---
@@ -162,7 +178,7 @@ visually final; everything else can be filled anytime.
 ### 2. App Privacy (left sidebar → "App Privacy" → Get Started)
 - Use the **nutrition-label table above**. For each data type mark it Collected,
   **Linked to the user**, and **NOT used for tracking**.
-- Types: Email; Photos/User Content; User ID; Usage Data (analytics); Diagnostics
+- Types: Email; Photos/User Content; User ID; Usage Data (analytics); Diagnostics; Sensitive Info (racial or ethnic data)
   (crash); Purchases; Push token. Tracking = **No** (no ATT prompt).
 - Must match the live privacy policy (it does).
 
@@ -198,3 +214,4 @@ visually final; everything else can be filled anytime.
 - **Export compliance:** auto-handled (`ITSAppUsesNonExemptEncryption: false`) — no prompt.
 - Verify every section shows a green check, then **Add for Review → Submit for Review**.
 - ⏳ Review is typically 24–48h. ⚠️ Only do this when the app is actually code-complete.
+```
