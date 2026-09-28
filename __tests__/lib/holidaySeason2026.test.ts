@@ -14,7 +14,7 @@ import {
   type CalendarDate,
 } from '@engine/holidayWindow';
 
-// verbatim production rows (2026-09-13)
+// verbatim production rows (2026-09-13; pcts from migration 569, 2026-09-27: Fall 50% alone, 30/30 in October)
 const HALLOWEEN = mapHolidayCatalogRow({
   key: 'halloween',
   display_name: 'Halloween',
@@ -24,7 +24,7 @@ const HALLOWEEN = mapHolidayCatalogRow({
   peak_day: 31,
   window_days: 30,
   ramp_start_pct: 6,
-  peak_pct: 10,
+  peak_pct: 50,
   peak_lead_days: 7,
   final_pct: 35,
   final_days: 1,
@@ -55,7 +55,7 @@ const FALL = mapHolidayCatalogRow({
   peak_weekday: 4,
   window_days: 72,
   ramp_start_pct: 10,
-  peak_pct: 10,
+  peak_pct: 50,
   peak_lead_days: 0,
   final_pct: 10,
   final_days: 0,
@@ -74,7 +74,16 @@ const keysOn = (c: CalendarDate) =>
   resolveActiveHolidays(c, CATALOG)
     .map((h) => h.key)
     .sort();
-const pctOn = (c: CalendarDate) => combineHolidayPct(resolveActiveHolidays(c, CATALOG));
+/** engine_config.holiday_stack_cap_pct (migration 569). */
+const STACK_CAP = 60;
+const pctOn = (c: CalendarDate) => combineHolidayPct(resolveActiveHolidays(c, CATALOG), STACK_CAP);
+/** One season's share of nights: the capped total split by pct weight (pickWeightedHoliday). */
+const shareOn = (c: CalendarDate, key: string) => {
+  const active = resolveActiveHolidays(c, CATALOG);
+  const sum = active.reduce((n, h) => n + h.holidayPct, 0);
+  const mine = active.find((h) => h.key === key)?.holidayPct ?? 0;
+  return sum > 0 ? (pctOn(c) * mine) / sum : 0;
+};
 
 describe('Fall 2026', () => {
   it('opens Sept 15 and is dark the day before', () => {
@@ -88,9 +97,9 @@ describe('Fall 2026', () => {
     expect(keysOn(d(11, 27))).toEqual([]);
   });
 
-  it('runs flat at 10% for all 73 nights — no ramp, no surge', () => {
+  it('runs flat at 50% for all 73 nights — no ramp, no surge', () => {
     for (const c of [d(9, 15), d(10, 15), d(11, 1), d(11, 26)]) {
-      expect(resolveActiveHolidays(c, CATALOG).find((h) => h.key === 'fall')!.holidayPct).toBe(10);
+      expect(resolveActiveHolidays(c, CATALOG).find((h) => h.key === 'fall')!.holidayPct).toBe(50);
     }
   });
 
@@ -122,20 +131,26 @@ describe('Halloween 2026', () => {
   it('KNOWN GAP: the configured 35% final-day surge never runs, because the row is flat', () => {
     // rampPct returns peak_pct immediately for a flat season, before the final-day maths. The 31st still works —
     // through the day-of takeover, not the surge — so this is a dead knob rather than a broken night.
-    expect(rampPct(HALLOWEEN, 0)).toBe(10);
+    expect(rampPct(HALLOWEEN, 0)).toBe(50);
     expect(rampPct(HALLOWEEN, 0)).not.toBe(35);
   });
 });
 
 describe('the two seasons overlap rather than compete', () => {
-  it('October stacks them: each stays at 10%, the chance of A holiday doubles to 20%', () => {
-    expect(keysOn(d(10, 15))).toEqual(['fall', 'halloween']);
-    expect(pctOn(d(10, 15))).toBe(20);
+  it('October splits 30% Fall + 30% Halloween (50 + 50 capped at 60)', () => {
+    for (const c of [d(10, 1), d(10, 15), d(10, 30)]) {
+      expect(keysOn(c)).toEqual(['fall', 'halloween']);
+      expect(pctOn(c)).toBe(60);
+      expect(shareOn(c, 'fall')).toBe(30);
+      expect(shareOn(c, 'halloween')).toBe(30);
+    }
   });
 
-  it('September and November run one season at 10%', () => {
-    expect(pctOn(d(9, 20))).toBe(10);
-    expect(pctOn(d(11, 10))).toBe(10);
+  it('September and November run Fall alone at 50%', () => {
+    for (const c of [d(9, 20), d(9, 30), d(11, 1), d(11, 10)]) {
+      expect(pctOn(c)).toBe(50);
+      expect(shareOn(c, 'fall')).toBe(50);
+    }
   });
 
   it('nothing at all outside the two windows', () => {
