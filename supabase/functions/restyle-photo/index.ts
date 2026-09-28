@@ -15,6 +15,7 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import type { VibeProfile } from '../_shared/vibeProfile.ts';
+import { checkDirectJobId } from '../_shared/jobIdGuard.ts';
 import { getPhotoRestyleConfig } from '../_shared/photoPrompts.ts';
 import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
@@ -169,6 +170,17 @@ async function handleRequest(req: Request): Promise<Response> {
     typeof body.job_id === 'string' && body.job_id.length > 0 ? body.job_id : undefined;
   if (!jobId && !isQueue) {
     jobId = crypto.randomUUID();
+  } else if (jobId && !isQueue) {
+    // A client-supplied job_id must be NEW on the direct path (see generate-dream +
+    // _shared/jobIdGuard.ts): an old paid job_id would answer 'already_charged' below and
+    // render for free. Checked before the dream_jobs upsert.
+    const jobCheck = await checkDirectJobId(supabase, userId, jobId);
+    if (jobCheck !== 'ok') {
+      return new Response(JSON.stringify({ error: jobCheck }), {
+        status: jobCheck === 'job_check_failed' ? 503 : 409,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
   }
 
   // Per-user rate limit on the DIRECT user path (the queue path is bounded by
@@ -289,6 +301,14 @@ async function handleRequest(req: Request): Promise<Response> {
       if (chargeStatus === 'insufficient') {
         return new Response(JSON.stringify({ error: 'insufficient_sparkles', needed: dreamCost }), {
           status: 402,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+      // Direct path: 'already_charged' = an earlier render paid for this job_id. Never
+      // render it again (the queue path expects it: charged at enqueue).
+      if (chargeStatus === 'already_charged' && !isQueue) {
+        return new Response(JSON.stringify({ error: 'job_id_reused' }), {
+          status: 409,
           headers: { 'Content-Type': 'application/json' },
         });
       }

@@ -617,6 +617,25 @@ Deno.serve(async (req) => {
     // insufficient_sparkles handling routes back to the paywall.
     return json({ error: 'insufficient_sparkles', needed: dreamCost }, 402);
   }
+  if (chargeStatus === 'already_charged') {
+    // Only a genuine retry of THIS user's still-existing queue job may pass: it gets its
+    // row back and is never enqueued again. A debit with no queue row (pruned after 30
+    // days, or a direct-path job) is a reused job_id; accepting it queued a free render
+    // (audit 2026-09-27, critical).
+    const { data: existing, error: exErr } = await supabase
+      .from('dream_queue')
+      .select('user_id, status')
+      .eq('id', jobId)
+      .maybeSingle();
+    if (exErr) {
+      console.error('[enqueue-dream] already_charged lookup failed:', exErr.message);
+      return json({ error: 'charge_failed' }, 503);
+    }
+    if (existing && existing.user_id === userId) {
+      return json({ dream_id: jobId, status: existing.status }, 200);
+    }
+    return json({ error: 'job_id_reused' }, 409);
+  }
 
   // The payload IS the render's RequestBody, with job_id stamped so the
   // x-dream-queue render path resolves the user + reuses the idempotency key.

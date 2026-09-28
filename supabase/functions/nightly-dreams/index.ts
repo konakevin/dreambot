@@ -367,6 +367,22 @@ Deno.serve(async (req) => {
     userId = user.id;
     vibe_profile = body.vibe_profile as VibeProfile | undefined;
 
+    // The user-JWT path is ADMIN QA only (app/dreamTest.tsx). Onboarding first dreams go
+    // through enqueue-dream -> first-dream-render, and real nightlies through the worker.
+    // Open to every trial account it was a free, uncapped render on any model with any
+    // prompt via the force_* QA flags (audit 2026-09-27, critical).
+    const { data: adminRow, error: adminErr } = await supabase
+      .from('users')
+      .select('is_admin')
+      .eq('id', userId)
+      .maybeSingle();
+    if (adminErr || !(adminRow as { is_admin?: boolean } | null)?.is_admin) {
+      return new Response(JSON.stringify({ error: 'forbidden' }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     // L7: the user-JWT path is the onboarding first-dream (and QA). Every new
     // user is auto-enrolled in the trial at signup (migration 176 trigger), so a
     // legitimate first dream is always dream-eligible. Gate on the same nightly

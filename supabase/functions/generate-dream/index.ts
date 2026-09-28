@@ -17,6 +17,7 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
+import { checkDirectJobId } from '../_shared/jobIdGuard.ts';
 import { buildReimaginePrompt } from '../_shared/photoPrompts.ts';
 import {
   describeWithVision,
@@ -388,6 +389,18 @@ async function handleRequest(req: Request): Promise<Response> {
     typeof body.job_id === 'string' && body.job_id.length > 0 ? body.job_id : undefined;
   if (!jobId && !isServerInvoked) {
     jobId = crypto.randomUUID();
+  } else if (jobId && !isServerInvoked) {
+    // A client-supplied job_id must be NEW on the direct path: an old paid dream's id
+    // would answer 'already_charged' below and render for free (audit 2026-09-27).
+    // Checked before anything touches dream_jobs (the payload write below would flip an
+    // old row back to 'processing', which the stuck-job sweeper then refunds).
+    const jobCheck = await checkDirectJobId(supabase, userId, jobId);
+    if (jobCheck !== 'ok') {
+      return new Response(JSON.stringify({ error: jobCheck }), {
+        status: jobCheck === 'job_check_failed' ? 503 : 409,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
   }
 
   // Per-user rate limit on the DIRECT user path. The queue/worker server path is
@@ -537,7 +550,8 @@ async function handleRequest(req: Request): Promise<Response> {
       await supabase
         .from('dream_jobs')
         .update({ payload: body, status: 'processing' })
-        .eq('id', jobId);
+        .eq('id', jobId)
+        .eq('user_id', userId);
     } catch (err) {
       console.warn(
         '[generate-dream] payload persist failed (non-critical):',
@@ -652,6 +666,16 @@ async function handleRequest(req: Request): Promise<Response> {
         // charged, so there is nothing to refund.
         return new Response(JSON.stringify({ error: 'insufficient_sparkles', needed: dreamCost }), {
           status: 402,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+      // Direct path: THIS is the only charge, so 'already_charged' means the job_id was
+      // paid for by an earlier render (checkDirectJobId above catches it first; this
+      // covers the race). Return, never render. The queue path expects it (charged at
+      // enqueue).
+      if (chargeStatus === 'already_charged' && !isServerInvoked) {
+        return new Response(JSON.stringify({ error: 'job_id_reused' }), {
+          status: 409,
           headers: { 'Content-Type': 'application/json' },
         });
       }
