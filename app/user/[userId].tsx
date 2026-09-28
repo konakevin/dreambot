@@ -733,7 +733,15 @@ export default function PublicProfileScreen() {
                         ) : undefined,
                       }
                 }
-                emptyText={viewingReposts ? 'No reposts yet' : 'No posts yet'}
+                // Haven't seen with nothing left means you've seen every post, not that the
+                // bot has none (Kevin 2026-09-27).
+                emptyText={
+                  viewingReposts
+                    ? 'No reposts yet'
+                    : isBot && botMode === 'unseen'
+                      ? 'You’ve seen them all. More soon.'
+                      : 'No posts yet'
+                }
                 ListHeaderComponent={header}
                 highlightPostId={viewedPost}
                 onScrollProgress={handleScrollProgress}
