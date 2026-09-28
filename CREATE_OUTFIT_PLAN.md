@@ -481,7 +481,7 @@ against the other looks from `ai_generation_log.fallback_reasons` before calling
 **Rollback** (no deploy):
 `UPDATE engine_config SET create_outfit_costume_read=false, create_outfit_garment_roll=false, nightly_garment_roll=false WHERE id=1;`
 
-## Phase 9 (2026-09-28): outfits that fit the place (mig 572, scene fit) — built, switches OFF
+## Phase 9 (2026-09-28): outfits that fit the place (mig 572, scene fit) — LIVE on Create + nightly (mig 573)
 
 **Complaint** (Kevin): "the nightly/create engines like to add weird clothes to people in renders - it will add a
 colored cuff to their pants, overly formal outfits at the beach". michele's last 12:
