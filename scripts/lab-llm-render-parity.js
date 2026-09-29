@@ -39,6 +39,13 @@ const OUT = arg('out', '');
 const COUPLES = Number(arg('couples', '20'));
 const SOLOS = Number(arg('solos', '12'));
 const IN_FLIGHT = 2;
+// --arms=4.6 (a noise-floor re-render) or --arms=5.5 (a tuning round against the frozen 4.6 baseline). Default both.
+const ARMS = arg('arms', '4.6,5.5')
+  .split(',')
+  .map((a) => a.trim())
+  .filter(Boolean);
+// --overlays=key1,key2: QA prompt overlays (llm_prompt_overlays) for this round; they only apply on their model.
+const OVERLAYS = arg('overlays', '');
 if (!OUT) throw new Error('--out=DIR is required');
 fs.mkdirSync(OUT, { recursive: true });
 
@@ -106,6 +113,7 @@ async function renderNightly(item, arm) {
     force_slot_input: item.input,
     force_model: item.model,
     ...(arm === '5.5' ? { force_llm_model: ARM55 } : {}),
+    ...(OVERLAYS ? { force_llm_overlays: OVERLAYS } : {}),
   };
   const t0 = Date.now();
   const sinceIso = new Date(t0 - 5000).toISOString();
@@ -200,6 +208,7 @@ async function renderCreate(item, arm, recipe) {
     vibe_profile: recipe,
     hint: item.hint,
     ...(arm === '5.5' ? { qa_llm_model: ARM55 } : {}),
+    ...(OVERLAYS ? { qa_llm_overlays: OVERLAYS } : {}),
   };
   await sb.from('dream_jobs').upsert({ id: jobId, user_id: KEVIN, status: 'processing', payload });
   const { error } = await sb.from('dream_queue').insert({
@@ -307,10 +316,10 @@ async function renderCreate(item, arm, recipe) {
   items = items.filter((it) => !skip.includes(it.key));
   // Both arms per item, in a random order per pair so neither arm always renders first.
   const jobs = items.flatMap((it) =>
-    (Math.random() < 0.5 ? ['4.6', '5.5'] : ['5.5', '4.6']).map((arm) => ({ it, arm }))
+    (Math.random() < 0.5 ? [...ARMS] : [...ARMS].reverse()).map((arm) => ({ it, arm }))
   );
   console.log(
-    `▶ ${SURFACE}: ${items.length} inputs × 2 arms = ${jobs.length} renders (5.5 = ${ARM55}), ≤${IN_FLIGHT} in flight`
+    `▶ ${SURFACE}: ${items.length} inputs × ${ARMS.length} arm(s) = ${jobs.length} renders (5.5 = ${ARM55}), ≤${IN_FLIGHT} in flight`
   );
   const results = [];
   let next = 0;
