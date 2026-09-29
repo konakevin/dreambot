@@ -36,7 +36,7 @@
   7. **Google Play policy gaps** that are likely rejections: no way to report your OWN AI output, broad media /
      audio permissions, privacy policy mismatches, no child-safety standards page.
   8. **Performance on mid/low-end Android:** images are prefetched aggressively (J-2). The Bots tab's 15 mounted
-     cards were cut to 7 on 2026-09-27 (J-3, shipped for iOS in 1.10.0 build 63).
+     cards were cut to 7 on 2026-09-27 (J-3, shipped for iOS in 1.10.0 build 65).
 - **Deferred by default (v2):** home-screen widget (needs a Kotlin Glance widget), full reactive layout for
   foldables (stopgap first), Play Integrity trial-abuse (stopgap first).
 
@@ -408,7 +408,7 @@ does nothing on Android. The old plan's "Android uses adjustResize, correct" is 
 - **J-2 Prefetch on Android:** ~95 images prefetched at launch and on Bots (`useDreamFeed.ts` ~131, 171,
   `bots.tsx` ~126-131) plus `PostGrid.tsx` (~526), `PostTile.tsx` (~130), `FullScreenFeed.tsx` (~510). On
   Android cut to 1-2 per feed and no grid prefetch. **S.**
-- **J-3 Bots tab mounts: DONE 2026-09-27** (1.10.0 build 63). Only the settled bot keeps its current card +/-2;
+- **J-3 Bots tab mounts: DONE 2026-09-27** (1.10.0 build 65). Only the settled bot keeps its current card +/-2;
   its neighbours mount only their current card (15 → 7 cards). `FullScreenFeed` `windowSize` prop +
   `BotsHorizontalPager` `settledIndex` (250ms after the slide). Verify on Android devices in QA.
 - **J-4 MaskedView cost:** per-instance offscreen layers in every feed card and comment row
@@ -566,7 +566,7 @@ Set `latest_app_version_android` (soft) on launch; only hard-gate Android per th
 ## 8. Findings that also help iOS (do these regardless of Android)
 
 **Status 2026-09-27:** all done except where noted; server/website items are live, app items ship in 1.10.0
-build 63. Dropped: the display-image cap (J-1, premise was wrong). Changed: sandbox purchases are TAGGED (store +
+build 65. Dropped: the display-image cap (J-1, premise was wrong). Changed: sandbox purchases are TAGGED (store +
 environment on analytics events), not blocked, because App Review buys in the sandbox and must receive the
 product. `PRODUCT_CHANGE` is informational (C-4). The App Store Connect "Sensitive Info: racial or ethnic data"
 label is Kevin's click (steps in APP_STORE_LISTING.md).
