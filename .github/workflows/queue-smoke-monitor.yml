@@ -38,5 +38,4 @@ jobs:
       - name: Queue smoke test (enqueue → render → complete → cleanup)
         env:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          DREAM_QUEUE_WORKER_TOKEN: ${{ secrets.DREAM_QUEUE_WORKER_TOKEN }}
         run: node scripts/queue-smoke.js
