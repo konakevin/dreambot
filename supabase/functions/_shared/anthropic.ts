@@ -199,9 +199,86 @@ export function parseLlmOverride(raw: unknown): LlmRoute | null {
 
 export type LlmSurface = 'create' | 'nightly' | 'restyle' | 'cast' | 'other';
 
+// ── Prompt overlays (LLM_5_5_TUNING_PLAN.md) ───────────────────────────
+// Model-specific tuning text, as DATA (table llm_prompt_overlays, mig 577). An overlay changes the prompt for ONE
+// job on ONE model, so tuning 5.5 can never change what 4.6 is sent. Applied inside callClaude, per model in the chain
+// (a fallback to 4.6 gets 4.6's own text). active = every request for that job + model; inactive = QA only, picked per
+// request (Create qa_llm_overlays, nightly force_llm_overlays), so a tuning round needs no deploy.
+
+export interface LlmOverlay {
+  key: string;
+  job: string;
+  model: string;
+  mode: 'append' | 'prepend' | 'replace';
+  /** replace: the exact text the body replaces (first occurrence). */
+  find: string | null;
+  body: string;
+  active: boolean;
+}
+
+export function parseLlmOverlays(raw: unknown): LlmOverlay[] {
+  if (!Array.isArray(raw)) return [];
+  const out: LlmOverlay[] = [];
+  for (const r of raw) {
+    if (!r || typeof r !== 'object') continue;
+    const o = r as Record<string, unknown>;
+    const mode = o.mode === 'prepend' || o.mode === 'replace' ? o.mode : 'append';
+    if (typeof o.key !== 'string' || typeof o.job !== 'string' || typeof o.model !== 'string')
+      continue;
+    if (typeof o.body !== 'string') continue;
+    const find = typeof o.find === 'string' && o.find.length > 0 ? o.find : null;
+    if (mode === 'replace' && !find) continue;
+    out.push({
+      key: o.key,
+      job: o.job,
+      model: o.model,
+      mode,
+      find,
+      body: o.body,
+      active: o.active === true,
+    });
+  }
+  return out.sort((a, b) => a.key.localeCompare(b.key));
+}
+
+/** A QA overlay list: "a,b" or ["a", "b"]. */
+export function parseOverlayKeys(raw: unknown): string[] {
+  const list = Array.isArray(raw) ? raw : typeof raw === 'string' ? raw.split(',') : [];
+  return list
+    .filter((x): x is string => typeof x === 'string')
+    .map((x) => x.trim())
+    .filter(Boolean);
+}
+
+/** The overlays for (job, model) applied to one text, in key order. */
+export function applyOverlays(
+  text: string,
+  job: string,
+  model: string,
+  overlays: readonly LlmOverlay[]
+): { text: string; applied: string[]; missed: string[] } {
+  let out = text;
+  const applied: string[] = [];
+  const missed: string[] = [];
+  for (const o of overlays) {
+    if (o.job !== job || o.model !== model) continue;
+    if (o.mode === 'append') out = `${out}\n\n${o.body}`;
+    else if (o.mode === 'prepend') out = `${o.body}\n\n${out}`;
+    else if (o.find && out.includes(o.find)) out = out.replace(o.find, o.body);
+    else {
+      missed.push(o.key);
+      continue;
+    }
+    applied.push(o.key);
+  }
+  return { text: out, applied, missed };
+}
+
 export interface LlmContext {
   /** Which surface this request renders: shared modules pick their job by it (slots on Create vs nightly). */
   readonly surface: LlmSurface;
+  /** The overlays in force for this request: active ones + the QA-picked keys. */
+  readonly overlays: readonly LlmOverlay[];
   /** job → route for THIS request (config, with the preview map merged in for a preview account). */
   readonly routes: Readonly<Record<string, LlmRoute>>;
   /** QA override: every Sonnet-default job in this request runs on it (Haiku jobs keep Haiku). */
@@ -217,6 +294,9 @@ export function createLlmContext(opts: {
   /** Raw QA value from the request body. */
   override?: unknown;
   stamp?: (s: string) => void;
+  /** Every overlay row (fetchLlmOverlays), and the QA-picked keys (raw request value). */
+  overlays?: readonly LlmOverlay[] | null;
+  overlayKeys?: unknown;
 }): LlmContext {
   const routing = opts.routing ?? EMPTY_LLM_ROUTING;
   const preview = !!opts.userId && routing.previewUserIds.includes(opts.userId);
@@ -235,7 +315,15 @@ export function createLlmContext(opts: {
     stamp(`qa:llm_model_ignored:${String(opts.override).slice(0, 40)}`);
   }
   if (preview && Object.keys(routing.previewModels).length > 0) stamp('llm_preview');
-  return { surface: opts.surface, routes, override, stamp };
+  const allOverlays = opts.overlays ?? [];
+  const keys = parseOverlayKeys(opts.overlayKeys);
+  for (const k of keys) {
+    stamp(
+      allOverlays.some((o) => o.key === k) ? `qa:llm_overlay:${k}` : `qa:llm_overlay_unknown:${k}`
+    );
+  }
+  const overlays = allOverlays.filter((o) => o.active || keys.includes(o.key));
+  return { surface: opts.surface, overlays, routes, override, stamp };
 }
 
 /** The slot pipeline's job on this surface. */
@@ -518,6 +606,32 @@ async function callOneModel(
   );
 }
 
+/** The request as THIS model is sent it: its overlays applied (a string content, or the last text block). */
+function withOverlays(
+  opts: LlmCallOptions,
+  model: string,
+  llm: LlmContext | null,
+  stamp: (s: string) => void
+): LlmCallOptions {
+  if (!llm || llm.overlays.length === 0) return opts;
+  const apply = (text: string) => {
+    const r = applyOverlays(text, opts.job, model, llm.overlays);
+    for (const k of r.applied) stamp(`llm_overlay:${opts.job}:${k}`);
+    for (const k of r.missed) stamp(`llm_overlay_miss:${opts.job}:${k}`);
+    return r.text;
+  };
+  if (typeof opts.content === 'string') return { ...opts, content: apply(opts.content) };
+  const blocks = [...opts.content];
+  for (let i = blocks.length - 1; i >= 0; i--) {
+    const b = blocks[i];
+    if (b.type === 'text') {
+      blocks[i] = { type: 'text', text: apply(b.text) };
+      break;
+    }
+  }
+  return { ...opts, content: blocks };
+}
+
 /** One Anthropic call for a job. Throws LlmError only when every model in the chain failed. */
 export async function callClaude(opts: LlmCallOptions): Promise<LlmResult> {
   const llm = opts.llm ?? null;
@@ -541,7 +655,7 @@ export async function callClaude(opts: LlmCallOptions): Promise<LlmResult> {
         ? (resolved.route.effort ?? spec.effort ?? 'high')
         : (spec.effort ?? 'high');
     try {
-      const r = await callOneModel(model, effort, opts, key);
+      const r = await callOneModel(model, effort, withOverlays(opts, model, llm, stamp), key);
       stamp(`llm:${opts.job}:${model}`);
       if (r.stopReason === 'max_tokens') stamp(`llm_truncated:${opts.job}:${model}`);
       if (i > 0 && first) stamp(`llm_fallback:${opts.job}:${chain[0]}→${model}:${first.kind}`);

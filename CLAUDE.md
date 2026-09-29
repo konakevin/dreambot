@@ -400,6 +400,8 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
 - **LLM models (Sonnet 4.6 → 5.5):** `LLM_MIGRATION.md` (status of record): every Anthropic call names a JOB;
   the model per job is `engine_config.llm_models` (+ QA `qa_llm_model` / `force_llm_model` / `--llm-model`), clients
   `_shared/anthropic.ts` + `scripts/lib/anthropic.js`. Never call api.anthropic.com directly in production code.
+  **Tuning the engine for 5.5 (in progress): `LLM_5_5_TUNING.md` is the tracker** (goal, done-when checklist,
+  phases, baselines, ledger, how to resume). 5.5-only prompt tweaks are rows in `llm_prompt_overlays` (mig 577).
 - **Engine + scaling:** `QUEUE_WORKERS_REFACTOR.md` (queue status of record + Fly scale runbook),
   `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_IMPRESS_PLAN.md` (always-impress backlog: quality gate, legendary dreams, holidays, weather, pets, taste, arcs — each handoff-ready), `NIGHTLY_SEED_POOL_QA.md`, `NIGHTLY_FUN_SCENARIOS_PLAN.md` (fun/fantasy
   scenario buckets + Option B location-fit actions — LIVE, playbook for adding/scaling/tuning),

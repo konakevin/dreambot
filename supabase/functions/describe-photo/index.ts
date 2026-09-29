@@ -14,6 +14,7 @@ import {
 } from '../_shared/vision.ts';
 import { analyzeCastPhoto } from '../_shared/analyzeCastPhoto.ts';
 import { createLlmContext } from '../_shared/anthropic.ts';
+import { fetchLlmOverlays } from '../_shared/llmOverlays.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 
 // No `!`: a missing env must fail the REQUEST with a clear 500, not assert at
@@ -87,6 +88,7 @@ Deno.serve(async (req: Request) => {
       surface: 'cast',
       routing: (await fetchEngineConfig(supabaseAdmin)).llmRouting,
       userId: user.id,
+      overlays: await fetchLlmOverlays(supabaseAdmin),
     });
     // Human cast → cast_describe = SONNET (once-per-upload; far better age accuracy + prose for the
     // face-swap brief; eval: scripts/eval-cast-scanner.mjs). Pets → pet_describe = HAIKU.

@@ -35,6 +35,7 @@ import {
 import { captureRenderError } from '../_shared/sentry.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { createLlmContext } from '../_shared/anthropic.ts';
+import { fetchLlmOverlays } from '../_shared/llmOverlays.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import {
   getCostCents,
@@ -340,6 +341,7 @@ async function handleRequest(req: Request): Promise<Response> {
     routing: (await fetchEngineConfig(supabase)).llmRouting,
     userId,
     stamp: (s) => fallbackReasons.push(s),
+    overlays: await fetchLlmOverlays(supabase),
   });
 
   // Stage breadcrumb — pre-render (medium/vibe resolve + vision + Sonnet brief).

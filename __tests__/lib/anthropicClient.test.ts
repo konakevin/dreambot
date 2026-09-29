@@ -7,9 +7,11 @@
  * the bytes. Then: the 5.5 profile, reply parsing, the fallback chain, the stamps, and routing precedence.
  */
 import {
+  applyOverlays,
   buildRequestBody,
   callClaude,
   isMetaReply,
+  parseLlmOverlays,
   createLlmContext,
   LlmError,
   modelChain,
@@ -372,6 +374,125 @@ describe('a message to the user in place of the output (5.5 on a self-contradict
     mockFetch(ok('Sorry, BROKEN: no'));
     const r = await callClaude({ job: 'quality_gate', key: 'k', content: 'x', maxTokens: 24 });
     expect(r.text).toBe('Sorry, BROKEN: no');
+  });
+});
+
+describe('prompt overlays (LLM_5_5_TUNING_PLAN.md): 5.5 tuning that can never touch 4.6', () => {
+  const OVERLAYS = parseLlmOverlays([
+    {
+      key: 'a1',
+      job: 'create_brief',
+      model: SONNET_5_5,
+      mode: 'append',
+      body: 'EXTRA RULE',
+      active: false,
+    },
+    {
+      key: 'a2',
+      job: 'create_brief',
+      model: SONNET_5_5,
+      mode: 'replace',
+      find: 'OLD',
+      body: 'NEW',
+      active: true,
+    },
+    {
+      key: 'a3',
+      job: 'quality_gate',
+      model: SONNET_5_5,
+      mode: 'prepend',
+      body: 'PRE',
+      active: true,
+    },
+    {
+      key: 'bad',
+      job: 'create_brief',
+      model: SONNET_5_5,
+      mode: 'replace',
+      body: 'no find',
+      active: true,
+    },
+  ]);
+  it('parses rows; a replace without `find` is dropped', () => {
+    expect(OVERLAYS.map((o) => o.key)).toEqual(['a1', 'a2', 'a3']);
+  });
+  it('applyOverlays: only its job + model, in key order; a replace miss is reported', () => {
+    expect(applyOverlays('x OLD y', 'create_brief', SONNET_5_5, OVERLAYS)).toEqual({
+      text: 'x NEW y\n\nEXTRA RULE',
+      applied: ['a1', 'a2'],
+      missed: [],
+    });
+    expect(applyOverlays('x y', 'create_brief', SONNET_5_5, OVERLAYS).missed).toEqual(['a2']);
+    expect(applyOverlays('x OLD y', 'create_brief', SONNET, OVERLAYS).text).toBe('x OLD y');
+  });
+  it('the context holds active overlays + the QA-picked keys only, and stamps the pick', () => {
+    const { llm, stamps } = ctxWith({ overlays: OVERLAYS, overlayKeys: 'a1,zz' });
+    expect(llm.overlays.map((o) => o.key)).toEqual(['a1', 'a2', 'a3']);
+    expect(stamps).toEqual(['qa:llm_overlay:a1', 'qa:llm_overlay_unknown:zz']);
+    expect(ctxWith({ overlays: OVERLAYS }).llm.overlays.map((o) => o.key)).toEqual(['a2', 'a3']);
+  });
+  it('a 4.6 request is byte-identical with overlays present; the 5.5 request gets them, stamped', async () => {
+    const { llm, stamps } = ctxWith({ overlays: OVERLAYS, overlayKeys: 'a1' });
+    mockFetch(ok('a long enough four point six reply'));
+    await callClaude({
+      job: 'create_brief',
+      llm,
+      key: 'k',
+      content: 'brief OLD text',
+      maxTokens: 450,
+    });
+    expect(bodies[0]).toBe(
+      JSON.stringify({
+        model: SONNET,
+        max_tokens: 450,
+        messages: [{ role: 'user', content: 'brief OLD text' }],
+      })
+    );
+    const five = ctxWith({ overlays: OVERLAYS, overlayKeys: 'a1', override: SONNET_5_5 });
+    mockFetch(ok('a long enough five point five reply'));
+    await callClaude({
+      job: 'create_brief',
+      llm: five.llm,
+      key: 'k',
+      content: 'brief OLD text',
+      maxTokens: 450,
+    });
+    expect(JSON.parse(bodies[0]).messages[0].content).toBe('brief NEW text\n\nEXTRA RULE');
+    expect(five.stamps).toEqual(
+      expect.arrayContaining(['llm_overlay:create_brief:a1', 'llm_overlay:create_brief:a2'])
+    );
+    expect(stamps.some((x) => x.startsWith('llm_overlay:'))).toBe(false);
+  });
+  it('a 5.5 failure falls back to 4.6 with 4.6 text, not the overlaid text', async () => {
+    const { llm } = ctxWith({ overlays: OVERLAYS, override: SONNET_5_5 });
+    mockFetch(fail(400), ok('the four point six fallback answered'));
+    await callClaude({
+      job: 'create_brief',
+      llm,
+      key: 'k',
+      content: 'brief OLD text',
+      maxTokens: 450,
+    });
+    expect(JSON.parse(bodies[0]).messages[0].content).toBe('brief NEW text');
+    expect(JSON.parse(bodies[1]).messages[0].content).toBe('brief OLD text');
+  });
+  it('on image content, the last text block gets the overlay', async () => {
+    const { llm } = ctxWith({ overlays: OVERLAYS, override: SONNET_5_5 });
+    mockFetch(ok('BROKEN: no'));
+    await callClaude({
+      job: 'quality_gate',
+      llm,
+      key: 'k',
+      content: [
+        { type: 'image', source: { type: 'url', url: 'https://x/y.jpg' } },
+        { type: 'text', text: 'Q' },
+      ],
+      maxTokens: 24,
+    });
+    expect(JSON.parse(bodies[0]).messages[0].content[1]).toEqual({
+      type: 'text',
+      text: 'PRE\n\nQ',
+    });
   });
 });
 

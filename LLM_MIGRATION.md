@@ -6,6 +6,8 @@ until at least 2027-02-17.
 
 ## Status
 
+**Next work: tuning the engine for 5.5 so every job can move. Tracker: `LLM_5_5_TUNING.md`.**
+
 | Step | State |
 |---|---|
 | 0. One client per runtime, every production call on it, still 4.6 | **Deployed 2026-09-29 ~03:45 UTC** (mig 574). The 48h production smoke is running. |

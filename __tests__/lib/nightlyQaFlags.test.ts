@@ -124,3 +124,10 @@ describe('force_llm_model (LLM_MIGRATION.md)', () => {
     expect(parseQaFlags({ force_llm_model: true }).force_llm_model).toBeNull();
   });
 });
+
+describe('force_llm_overlays (LLM_5_5_TUNING_PLAN.md)', () => {
+  it('passes the raw value through for the client to parse; null when absent', () => {
+    expect(parseQaFlags({ force_llm_overlays: 'a,b' }).force_llm_overlays).toBe('a,b');
+    expect(parseQaFlags({}).force_llm_overlays).toBeNull();
+  });
+});

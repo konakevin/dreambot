@@ -113,6 +113,7 @@ import { captureRenderError } from '../_shared/sentry.ts';
 import { persistToStorage, buildDisplayVariant } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { callClaude, createLlmContext, type LlmContext } from '../_shared/anthropic.ts';
+import { fetchLlmOverlays } from '../_shared/llmOverlays.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
 import {
   getCostCents,
@@ -208,6 +209,8 @@ interface RequestBody {
   /** QA (LLM_MIGRATION.md): run every Anthropic job in this render on this model, "model" or "model@effort".
    *  Absent → engine_config.llm_models. A model with no profile in _shared/anthropic.ts is ignored and stamped. */
   qa_llm_model?: string;
+  /** QA (LLM_5_5_TUNING_PLAN.md): prompt overlays to apply (llm_prompt_overlays keys), "a,b" or an array. */
+  qa_llm_overlays?: string | string[];
   /** When false, render + return WITHOUT inserting an uploads row — the caller
    *  persists its own (onboarding RevealStep). Defaults to true. Fixes the
    *  duplicate-first-dream (gen + "Post my Dream" both inserting a row). */
@@ -774,6 +777,8 @@ async function handleRequest(req: Request): Promise<Response> {
     userId,
     override: body.qa_llm_model,
     stamp: (s) => fallbackReasons.push(s),
+    overlays: await fetchLlmOverlays(supabase),
+    overlayKeys: body.qa_llm_overlays,
   });
 
   console.log(

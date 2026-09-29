@@ -116,6 +116,7 @@ import { isBannedLocationName } from '../_shared/locationFilters.ts';
 import type { LocationCard } from '../_shared/essenceCards.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { createLlmContext } from '../_shared/anthropic.ts';
+import { fetchLlmOverlays } from '../_shared/llmOverlays.ts';
 import { generateLocationActionBeat } from '../_shared/locationActionBeat.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
 import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
@@ -471,6 +472,7 @@ Deno.serve(async (req) => {
     force_solo_outfit_early,
     force_outfit_scene_fit,
     force_llm_model,
+    force_llm_overlays,
     qa_big_face_max_hfrac,
     qa_max_face_hfrac,
     force_costume_keys,
@@ -538,6 +540,8 @@ Deno.serve(async (req) => {
     userId,
     override: force_llm_model,
     stamp: (s) => fallbackReasons.push(s),
+    overlays: await fetchLlmOverlays(supabase),
+    overlayKeys: force_llm_overlays,
   });
   const policyMode = engineCfg0.modelPolicyMode;
   // LOOKS PATH (NIGHTLY_LOOKS_REFACTOR_PLAN.md Phase 2, _shared/nightlyLooksPath.ts): 'on' = the style contract

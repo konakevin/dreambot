@@ -124,6 +124,8 @@ export interface NightlyQaFlags {
    *  "model@effort" (e.g. "claude-sonnet-5-5@medium"). A model with no profile in anthropic.ts is ignored and
    *  stamped. Null = engine_config.llm_models. */
   force_llm_model: string | null;
+  /** LLM_5_5_TUNING_PLAN.md: QA-only prompt overlays to apply (keys in llm_prompt_overlays), "a,b" or ["a","b"]. */
+  force_llm_overlays: unknown;
   /** FLUX COUPLE LAB: per-request big-face tier ceiling / composition gate overrides (numbers 0.2-1). */
   qa_big_face_max_hfrac: number | null;
   qa_max_face_hfrac: number | null;
@@ -318,6 +320,7 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
       typeof body.force_llm_model === 'string' && body.force_llm_model.trim().length > 0
         ? body.force_llm_model.trim()
         : null,
+    force_llm_overlays: body.force_llm_overlays ?? null,
     qa_big_face_max_hfrac: num01(body.qa_big_face_max_hfrac),
     qa_max_face_hfrac: num01(body.qa_max_face_hfrac),
     force_prompt_style:

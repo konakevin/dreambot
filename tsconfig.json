@@ -15,6 +15,8 @@
     "scripts/qa-outfit-text.ts",
     "scripts/qa-llm-parity.ts",
     "scripts/lib/llmBenchMeter.ts",
+    "scripts/lib/sceneryScore.ts",
+    "scripts/qa-scenery-score.ts",
     "__tests__/lib/outfitPlan.test.ts",
     "__tests__/lib/outfitSpec.test.ts",
     "__tests__/lib/outfitPlanBrief.test.ts",
