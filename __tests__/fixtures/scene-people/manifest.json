@@ -1,0 +1,72 @@
+[
+ {
+  "file": "empty-bloom-1.jpg",
+  "people": false,
+  "note": "flower archway"
+ },
+ {
+  "file": "empty-dragon-1.jpg",
+  "people": false,
+  "note": "creature lair"
+ },
+ {
+  "file": "empty-earth-2.jpg",
+  "people": false,
+  "note": "beach sunset"
+ },
+ {
+  "file": "empty-fae-1.jpg",
+  "people": false,
+  "note": "frogs and animals rowing a boat (animals are not people)"
+ },
+ {
+  "file": "empty-ocean-1.jpg",
+  "people": false,
+  "note": "tall ship in ice, no crew visible"
+ },
+ {
+  "file": "empty-ocean-2.jpg",
+  "people": false,
+  "note": "manta rays underwater"
+ },
+ {
+  "file": "empty-star-1.jpg",
+  "people": false,
+  "note": "spaceship cockpit, no pilot"
+ },
+ {
+  "file": "empty-steam-2.jpg",
+  "people": false,
+  "note": "tesla machine interior"
+ },
+ {
+  "file": "people-dragon-2.jpg",
+  "people": true,
+  "note": "elf warrior kneeling"
+ },
+ {
+  "file": "people-goth-1.jpg",
+  "people": true,
+  "note": "a woman leaping mid-frame"
+ },
+ {
+  "file": "people-goth-2.jpg",
+  "people": true,
+  "note": "vampire queen portrait"
+ },
+ {
+  "file": "people-goth-3.jpg",
+  "people": true,
+  "note": "vampire portrait"
+ },
+ {
+  "file": "people-manga-1.jpg",
+  "people": true,
+  "note": "a man standing in an arcade"
+ },
+ {
+  "file": "people-star-2.jpg",
+  "people": true,
+  "note": "cyborg woman portrait"
+ }
+]

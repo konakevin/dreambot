@@ -82,23 +82,26 @@ interface JobSpec {
   fallbacks: readonly string[];
   /** Default 5.5 effort for this job. */
   effort?: LlmEffort;
+  /** The reply IS the output (a Flux prompt, an action beat): a message to the user in its place fails the model. */
+  textOut?: boolean;
 }
 
 const BRIEF: JobSpec = { model: SONNET, fallbacks: [HAIKU] };
+const TEXT_OUT: JobSpec = { model: SONNET, fallbacks: [HAIKU], textOut: true };
 const SONNET_ONLY: JobSpec = { model: SONNET, fallbacks: [] };
 const HAIKU_ONLY: JobSpec = { model: HAIKU, fallbacks: [] };
 
 /** Every Edge Anthropic call, by job. Haiku jobs are listed so every call is named and stamped; none moves. */
 export const LLM_JOBS = {
   // Sonnet writers (callSonnet): fall back to Haiku, as before.
-  create_brief: BRIEF, // generate-dream: description / new-scene / dual / solo / text prompts
+  create_brief: TEXT_OUT, // generate-dream: description / new-scene / dual / solo / text prompts
   create_slots: BRIEF, // characterSlotPrompt on Create
-  nightly_brief: BRIEF, // nightly-dreams brief
+  nightly_brief: TEXT_OUT, // nightly-dreams brief
   nightly_slots: BRIEF, // characterSlotPrompt on nightly (and first dream)
   outfit_reader: BRIEF, // outfitSpec: what the user asked each person to wear
   scene_split: BRIEF, // promptSceneSplit: SETTING / ACTION
-  location_beat: BRIEF, // locationActionBeat: Option B action at the exact place
-  restyle_brief: BRIEF, // restyle-photo
+  location_beat: TEXT_OUT, // locationActionBeat: Option B action at the exact place
+  restyle_brief: TEXT_OUT, // restyle-photo
   // Sonnet readers and judges: no fallback (each fails safe on its own).
   essence_card: SONNET_ONLY, // essenceCards: a location card on first encounter
   quality_gate: SONNET_ONLY, // qualityGate: BROKEN / PROFILE
@@ -342,6 +345,18 @@ export function parseReply(data: unknown): ParsedReply {
   return { raw, stopReason, refusalCategory, usage };
 }
 
+/**
+ * A reply that talks TO the user instead of doing the job. Sonnet 5.5 does this when a brief contradicts itself
+ * ("I can't write this one as specified… the two requests conflict", the LLM parity bench, 2026-09-29), and on a
+ * text-out job that sentence would ship to the image model as the prompt. Prompts and beats never open like this.
+ */
+export const META_REPLY_RE =
+  /^\s*["'“]?(?:I can(?:'|’)?t|I cannot|I won(?:'|’)?t|I'm not (?:able|going)|I’m not (?:able|going)|I am not able|I(?:'|’)?m unable|I am unable|I(?:'|’)?ll (?:have to )?pass|I(?:'|’)?d rather not|I(?:'|’)?m going to pass|I don(?:'|’)?t (?:think I can|feel comfortable)|Unfortunately|Sorry|I apologi[sz]e|Could you clarify|Before I write)\b/i;
+
+export function isMetaReply(text: string): boolean {
+  return META_REPLY_RE.test(text);
+}
+
 // ── Errors ─────────────────────────────────────────────────────────────
 
 export type LlmErrorKind =
@@ -466,6 +481,14 @@ async function callOneModel(
       const text = reply.raw.trim();
       if (text.length === 0) throw new LlmError('empty', `${model} response empty`);
       if (text.length < minChars) throw new LlmError('short', `${model} response too short`);
+      if (LLM_JOBS[opts.job].textOut === true && isMetaReply(text)) {
+        throw new LlmError(
+          'refusal',
+          `${model} wrote a message instead of the output`,
+          null,
+          'text'
+        );
+      }
       return {
         text,
         raw: reply.raw,

@@ -53,8 +53,9 @@ function isKnownModel(model) {
 
 /** Every production Node Anthropic call, by job. Offline tools use the generic `script` / `seed_gen` jobs. */
 const LLM_JOBS = {
-  bot_prompt: { model: SONNET, fallbacks: [HAIKU] }, // botEngine: the bot brief → Flux prompt
-  bot_polish: { model: HAIKU, fallbacks: [SONNET] }, // botEngine two-pass: Haiku polishes Sonnet's concept
+  // textOut: the reply IS the output (a Flux prompt): a message to the user in its place fails the model.
+  bot_prompt: { model: SONNET, fallbacks: [HAIKU], textOut: true }, // botEngine: the bot brief → Flux prompt
+  bot_polish: { model: HAIKU, fallbacks: [SONNET], textOut: true }, // botEngine two-pass: Haiku polishes Sonnet's concept
   bot_nudity: { model: HAIKU, fallbacks: [] }, // nudityCheck: the post-render nudity read
   bot_style_distill: { model: HAIKU, fallbacks: [] }, // styleDistiller (DLT fingerprint for bot posts)
   seed_gen: { model: SONNET, fallbacks: [] }, // seedGenHelper.generatePool (offline)
@@ -248,6 +249,12 @@ function parseReply(data) {
   return { raw, stopReason, refusalCategory, usage };
 }
 
+/** Mirror of _shared/anthropic.ts META_REPLY_RE (parity-tested): a reply that talks TO the user instead of doing
+ *  the job ("I can't write this one as specified…"), which on a text-out job would ship as the Flux prompt. */
+const META_REPLY_RE =
+  /^\s*["'“]?(?:I can(?:'|’)?t|I cannot|I won(?:'|’)?t|I'm not (?:able|going)|I’m not (?:able|going)|I am not able|I(?:'|’)?m unable|I am unable|I(?:'|’)?ll (?:have to )?pass|I(?:'|’)?d rather not|I(?:'|’)?m going to pass|I don(?:'|’)?t (?:think I can|feel comfortable)|Unfortunately|Sorry|I apologi[sz]e|Could you clarify|Before I write)\b/i;
+const isMetaReply = (text) => META_REPLY_RE.test(text);
+
 // ── Errors ─────────────────────────────────────────────────────────────
 
 class LlmError extends Error {
@@ -322,6 +329,14 @@ async function callOneModel(model, effort, opts, key) {
       const text = reply.raw.trim();
       if (text.length === 0) throw new LlmError('empty', `${model} response empty`);
       if (text.length < minChars) throw new LlmError('short', `${model} response too short`);
+      if (LLM_JOBS[opts.job].textOut === true && isMetaReply(text)) {
+        throw new LlmError(
+          'refusal',
+          `${model} wrote a message instead of the output`,
+          null,
+          'text'
+        );
+      }
       return {
         text,
         raw: reply.raw,
@@ -421,6 +436,7 @@ module.exports = {
   modelChain,
   buildRequestBody,
   parseReply,
+  isMetaReply,
   LlmError,
   callClaude,
 };

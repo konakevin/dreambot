@@ -35,6 +35,7 @@ import { composeExperimentalCouple } from '../supabase/functions/_shared/coupleC
 import { rollCreateSceneAxes } from '../supabase/functions/_shared/createSceneAxes.ts';
 import { resolveCastForPrompt } from '../supabase/functions/_shared/castResolver.ts';
 import { callSonnet } from '../supabase/functions/_shared/llm.ts';
+import { createLlmContext } from '../supabase/functions/_shared/anthropic.ts';
 import {
   planOutfits,
   DEFAULT_OUTFIT_ROLLS,
@@ -78,6 +79,16 @@ const VARIANT = arg('variant', 'today');
 /** Phase 8 switches (engine_config.create_outfit_costume_read / create_outfit_garment_roll). */
 const COSTUME = arg('costume', 'off') === 'on';
 const GARMENT = arg('garment', 'off') === 'on';
+/** LLM_MIGRATION.md: run the Sonnet jobs on this model ("claude-sonnet-5-5" or "…@medium"); empty = production. */
+const LLM_MODEL = arg('llm-model', '');
+const LLM_STAMPS: string[] = [];
+/** A fresh context per call (stamps dedupe within a context), all stamps pooled for the summary. */
+const llmCtx = () =>
+  createLlmContext({
+    surface: 'create',
+    override: LLM_MODEL || undefined,
+    stamp: (x) => LLM_STAMPS.push(x),
+  });
 if (!OUT) throw new Error('--out=<dir> is required');
 /** Phase 9 (scene fit): off | all | looks | trim | brief. Plan variant only. */
 const SCENE_FIT_ARG = arg('scene-fit', 'off');
@@ -801,9 +812,9 @@ async function renderOne(c: Case, run: number): Promise<Result> {
       },
     ];
     const [split, specOut] = await Promise.all([
-      splitPromptScene(cleaned, 2, KEY),
+      splitPromptScene(cleaned, 2, KEY, llmCtx()),
       VARIANT === 'plan'
-        ? extractOutfitSpec(raw, legend, KEY, { costumeRead: COSTUME })
+        ? extractOutfitSpec(raw, legend, KEY, { costumeRead: COSTUME, llm: llmCtx() })
         : Promise.resolve(null),
     ]);
     const setting =
@@ -856,7 +867,7 @@ async function renderOne(c: Case, run: number): Promise<Result> {
         split.action ?? 'standing side by side, one with a hand resting on the other’s shoulder',
       ...(plan ? { outfitPlan: plan } : {}),
     };
-    const res = await runCharacterSlotPipeline(slotInput, KEY);
+    const res = await runCharacterSlotPipeline(slotInput, KEY, null, llmCtx());
     const slots = res.slots as DualSlots;
     const finalPrompt = composeExperimentalCouple({
       slots,
@@ -929,7 +940,10 @@ async function renderOne(c: Case, run: number): Promise<Result> {
             gender: c.partner!.gender,
           },
     ];
-    const specOut = await extractOutfitSpec(raw, legend, KEY, { costumeRead: COSTUME });
+    const specOut = await extractOutfitSpec(raw, legend, KEY, {
+      costumeRead: COSTUME,
+      llm: llmCtx(),
+    });
     soloStamps.push(...outfitSpecStamps(specOut, 1));
     soloPlan = planOutfits(
       [soloRole],
@@ -964,6 +978,7 @@ async function renderOne(c: Case, run: number): Promise<Result> {
   });
   const sonnet = await callSonnet(compiled.sonnetBrief, KEY, compiled.maxTokens, {
     job: 'create_brief',
+    llm: llmCtx(),
   });
   let soloText = sonnet.text;
   if (soloPlan) {
@@ -1037,7 +1052,10 @@ async function runExtract(): Promise<void> {
             ? ['self']
             : ['plus_one'];
       const people = roles.map((r) => personOf(c, r));
-      const outcome = await extractOutfitSpec(raw, people, KEY, { costumeRead: COSTUME });
+      const outcome = await extractOutfitSpec(raw, people, KEY, {
+        costumeRead: COSTUME,
+        llm: llmCtx(),
+      });
       const m: string[] = [];
       if (outcome.source === 'error') tally.errors++;
       const byRole = outcome.source === 'read' ? outcome.result.byRole : {};
@@ -1254,7 +1272,13 @@ for (const r of results) {
 }
 const pct = (x: Tally) =>
   x.total ? `${x.pass}/${x.total} (${Math.round((100 * x.pass) / x.total)}%)` : 'n/a';
-console.log(`renders: ${results.length}  errors: ${errors}`);
+console.log(`renders: ${results.length}  errors: ${errors}   llm: ${LLM_MODEL || 'production'}`);
+{
+  const tally = (p: string) => LLM_STAMPS.filter((x) => x.startsWith(p)).length;
+  console.log(
+    `llm calls answered: ${tally('llm:')}  fallbacks: ${tally('llm_fallback:')}  refusals: ${tally('llm_refusal:')}  truncated: ${tally('llm_truncated:')}  failed: ${tally('llm_failed:')}`
+  );
+}
 console.log(`user garment kept : ${pct(garment)}`);
 console.log(`user colour kept  : ${pct(colour)}`);
 console.log(`user pattern kept : ${pct(pattern)}`);

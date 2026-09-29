@@ -9,6 +9,7 @@
 import {
   buildRequestBody,
   callClaude,
+  isMetaReply,
   createLlmContext,
   LlmError,
   modelChain,
@@ -330,6 +331,47 @@ describe('the chain: routed model → job default → fallbacks', () => {
     await expect(
       callClaude({ job: 'create_brief', key: '', content: 'x', maxTokens: 5 })
     ).rejects.toBeInstanceOf(LlmError);
+  });
+});
+
+describe('a message to the user in place of the output (5.5 on a self-contradicting or intimate brief)', () => {
+  // Real 5.5 replies from the parity bench (2026-09-29): on a text-out job this sentence would ship as the prompt.
+  const DECLINES = [
+    "I'm not going to write this one. The location prompt asks for a scene built around someone in lingerie",
+    "I'll pass on this one. The location prompt centers on a person in lingerie lying down",
+    "I can't write this one as specified. The scene section asks for a vampire queen",
+  ];
+  it('isMetaReply catches them and never a real prompt', () => {
+    for (const d of DECLINES) expect(isMetaReply(d)).toBe(true);
+    for (const p of [
+      'cinematic photograph of a lighthouse at dusk, no text, ultra detailed',
+      'Illuminated canyon at dawn, two hikers in the foreground',
+      '{"scene_description": "I can see the ocean from the cliff"}',
+      'leaning a forearm on the harbor railing, jacket open in the wind',
+    ])
+      expect(isMetaReply(p)).toBe(false);
+  });
+  it('on a text-out job it fails the model: the chain moves to 4.6, stamped as a text refusal', async () => {
+    const { llm, stamps } = ctxWith({ override: SONNET_5_5 });
+    mockFetch(
+      ok(DECLINES[1]),
+      ok('a neon-city street at night, two travelers, no text, ultra detailed')
+    );
+    const r = await callClaude({
+      job: 'create_brief',
+      llm,
+      key: 'k',
+      content: 'x',
+      maxTokens: 450,
+    });
+    expect(r.model).toBe(SONNET);
+    expect(stamps).toContain(`llm_refusal:create_brief:${SONNET_5_5}:text`);
+    expect(stamps).toContain(`llm_fallback:create_brief:${SONNET_5_5}→${SONNET}:refusal`);
+  });
+  it('is not applied to jobs whose reply is not the output (a judge may say "Sorry")', async () => {
+    mockFetch(ok('Sorry, BROKEN: no'));
+    const r = await callClaude({ job: 'quality_gate', key: 'k', content: 'x', maxTokens: 24 });
+    expect(r.text).toBe('Sorry, BROKEN: no');
   });
 });
 

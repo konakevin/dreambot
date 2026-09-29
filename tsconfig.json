@@ -13,6 +13,8 @@
     "scripts/qa-nightly-coherence.ts",
     "scripts/sim-look-model-roll.ts",
     "scripts/qa-outfit-text.ts",
+    "scripts/qa-llm-parity.ts",
+    "scripts/lib/llmBenchMeter.ts",
     "__tests__/lib/outfitPlan.test.ts",
     "__tests__/lib/outfitSpec.test.ts",
     "__tests__/lib/outfitPlanBrief.test.ts",
@@ -143,6 +145,7 @@
     "__tests__/lib/qualityGate.test.ts",
     "__tests__/lib/anthropicClient.test.ts",
     "__tests__/lib/anthropicClientParity.test.ts",
+    "__tests__/lib/slotJsonLenient.test.ts",
     "__tests__/lib/halloweenPoolsParity.test.ts",
     "scripts/eval-quality-gate.ts"
   ]

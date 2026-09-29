@@ -1291,10 +1291,23 @@ Output ONLY the JSON object. Start with { and end with }. No commentary.`;
 
 // ── JSON parsing ────────────────────────────────────────────────────────
 
-function parseSlotsJson(text: string, castCount: 1 | 2): CharacterSlots {
+/** JSON.parse, and once more without trailing commas if that fails. Sonnet 5.5 occasionally leaves a comma before
+ *  the closing brace (the LLM parity bench, 2026-09-29: 3 of 120 slot replies), which JSON rejects. Valid JSON never
+ *  reaches the second parse, so nothing that parses today changes. */
+function parseLenient(json: string): Record<string, unknown> {
+  try {
+    return JSON.parse(json);
+  } catch (e) {
+    const unTrailed = json.replace(/,(\s*[}\]])/g, '$1');
+    if (unTrailed === json) throw e;
+    return JSON.parse(unTrailed);
+  }
+}
+
+export function parseSlotsJson(text: string, castCount: 1 | 2): CharacterSlots {
   const match = text.match(/\{[\s\S]*\}/);
   if (!match) throw new Error('no JSON object in response');
-  const parsed = JSON.parse(match[0]);
+  const parsed = parseLenient(match[0]);
   const requiredCommon = ['scene_description', 'mood'];
   for (const k of requiredCommon) {
     if (typeof parsed[k] !== 'string' || parsed[k].length < 2) {

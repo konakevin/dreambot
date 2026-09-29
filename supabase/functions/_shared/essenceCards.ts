@@ -67,7 +67,9 @@ async function callSonnet(
     key: anthropicKey,
     content: prompt,
     maxTokens,
-    timeoutMs: 15000,
+    // 45 s, was 15 s: a full card is ~1,100-1,300 tokens, which Sonnet 4.6 cannot write in 15 s (the LLM parity
+    // bench, 2026-09-29: 20 of 20 timed out). Runs once per place (cards are stored for good).
+    timeoutMs: 45000,
   });
   return { text: r.text, model: r.model };
 }
@@ -109,7 +111,8 @@ function ensureRecord(val: unknown): Record<string, string[]> {
 
 // ── Location Card Generation ──────────────────────────────────────────
 
-async function generateLocationCard(
+/** Exported for the LLM parity bench (scripts/qa-llm-parity.ts): generates a card without writing it. */
+export async function generateLocationCard(
   name: string,
   anthropicKey: string,
   llm: LlmContext | null
@@ -146,7 +149,8 @@ No metaphors, no cliches.
 Reply with the JSON object only, starting with { and ending with }: no code fences, no words before or after it.`;
 
   try {
-    const reply = await callSonnet(prompt, anthropicKey, 800, llm);
+    // 1600, was 800: 800 cannot hold the 8-section card (the bench: every 5.5 card stopped at max_tokens).
+    const reply = await callSonnet(prompt, anthropicKey, 1600, llm);
     const parsed = parseJsonSafe(reply.text);
     if (!parsed) return null;
 

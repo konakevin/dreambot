@@ -79,6 +79,22 @@ describe('Edge ↔ Node client parity', () => {
     }
   });
 
+  it('the same text-refusal guard', () => {
+    for (const t of [
+      "I'll pass on this one.",
+      "I'm not going to write this one.",
+      'I can’t write this as specified.',
+      'Unfortunately I cannot help',
+      'cinematic photograph of a lighthouse',
+      '{"scene_description": "I can see it"}',
+    ])
+      expect(node.isMetaReply(t)).toBe(edge.isMetaReply(t));
+    expect(Object.keys(node.LLM_JOBS).filter((j: string) => node.LLM_JOBS[j].textOut)).toEqual([
+      'bot_prompt',
+      'bot_polish',
+    ]);
+  });
+
   it('the same retry ladder and retryable statuses', () => {
     expect(node.RETRY_DELAYS_MS).toEqual([...edge.RETRY_DELAYS_MS]);
     expect([...node.RETRYABLE_STATUSES].sort()).toEqual([...edge.RETRYABLE_STATUSES].sort());
