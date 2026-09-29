@@ -57,8 +57,8 @@ Status: ☐ not started · ◐ in progress · ☑ done (with the commit).
 | # | Task | Pass bar | Status |
 |---|---|---|---|
 | 0.1 | 5.5-only prompt overlays as data: table `llm_prompt_overlays` (mig 577), `applyOverlays` in `_shared/anthropic.ts`, loader `_shared/llmOverlays.ts`, QA flags `qa_llm_overlays` (Create) / `force_llm_overlays` (nightly) | 4.6 bodies byte-identical with overlays present (tests); a 5.5 fallback to 4.6 gets 4.6's text; deployed; live proof; 0 active overlays | ☑ 2026-09-29: tests 85/85, check 251 suites, 8 fns deployed. Live nightly dry runs: on 5.5 `llm_overlay:nightly_slots:phase0-proof` applied; on 4.6 picked but not applied. Test row deleted. Commit: this one |
-| 0.2 | Scenery score: `scripts/lib/sceneryScore.ts` (the production YuNet detector masks the people; Sobel detail on the rest; tallest-face fraction too) + `scripts/qa-scenery-score.ts` | AUC ≥ 0.85, full vs plain, on ≥ 20 renders labelled by eye BEFORE scoring | ◐ scorer written; validation next |
-| 0.3 | Frozen tuning sets + 4.6 baselines (see Baselines) | Each set saved, with its 4.6 numbers recorded here | ◐ sets saved to `~/.dreambot-qa/llm-tuning/`; scenery baseline pending 0.2 |
+| 0.2 | Scenery score: `scripts/lib/sceneryScore.ts` (the production YuNet detector masks the people; Sobel detail on the rest; tallest-face fraction too) + `scripts/qa-scenery-score.ts` | AUC ≥ 0.85, full vs plain, on ≥ 20 renders labelled by eye BEFORE scoring | ☑ 2026-09-29: **AUC 0.877** (19 full, 6 plain, 9 partial left out; labels in `~/.dreambot-qa/llm-tuning/scenery-labels/labels.json`). Caveats: it measures DETAIL, so an open landscape with a smooth sky reads low and a textured watercolour wash reads mid. Use set medians, never a per-image threshold, and always with eyes |
+| 0.3 | Frozen tuning sets + 4.6 baselines (see Baselines) | Each set saved, with its 4.6 numbers recorded here | ☑ 2026-09-29: sets in `~/.dreambot-qa/llm-tuning/`; baselines below (scenery per render: `scenery-baseline.tsv`) |
 | 0.4 | This tracker | committed, linked from CLAUDE.md + memory | ☑ this commit |
 
 ### Phase 1: couples (`create_slots`, `nightly_slots`)
@@ -124,7 +124,8 @@ Each round is about 60 renders on the 5.5 side (about $4-5). One overlay per rou
 | Create couples, first-try | 20/20 | 18/19 | step 2 |
 | Solos, first-try (nightly + Create) | 23/23 | 23/23 | step 2 |
 | Blind vote: 5.5 picked | — | all 47%, bots 51%, Create solos 80%, Create couples 35%, nightly couples 41%, nightly solos 46% | Kevin 2026-09-29 |
-| Scenery score (couple renders) | pending 0.2 | pending 0.2 | |
+| Scenery score, median (couple renders) | nightly 16.09 (n=40), Create 13.85 (n=20) | nightly **13.43** (17% plainer), Create 16.09 | `scenery-baseline.tsv` |
+| Tallest face / height, median (couples) | 0.137 | 0.135 | same detector |
 | Couple slots: props written | 22/55 | 0/55 | slot text |
 | Cast: ethnicity / hair / grey FP / age ±5y | 100% / 100% / 0 / 88.9% | 0% / 84.6% / 1 / 81.5% | labelled 27 |
 | Location beats: median words / in 8-20 | 14 / 93.3% | 19 / 81.7% | text bench |
@@ -180,3 +181,5 @@ Newest last. Every attempt goes here, kept or rejected, with its numbers.
 | 2026-09-29 | diagnosis | Couple slot text: 4.6 vs 5.5 in the voted pairs | 5.5 wrote props 0/55 vs 22/55; wardrobe longer; face-down actions 2/55; saturation equal; 5.5 slightly darker (lightness 0.383 vs 0.416). Kevin: prefers full scenery | → rounds 1.1-1.4 |
 | 2026-09-29 | 0.2 | First scenery measure: ImageMagick `-edge 1` mean | returned ~0 for every render: broken | rejected, not used |
 | 2026-09-29 | 0.1 | Overlay plumbing + live proof (`phase0-proof` row, deleted) | applied on 5.5 only; 4.6 untouched | ☑ |
+| 2026-09-29 | 0.2 | Scenery score (YuNet masks the people; Sobel detail on the rest), validated blind on 34 labelled renders | AUC 0.877 ≥ 0.85; misses: smooth open landscapes low, textured wash mid | ☑ use set medians only |
+| 2026-09-29 | 0.3 | Scenery baseline on the step 2 couple renders | nightly 4.6 16.09 vs 5.5 13.43 (plainer); Create 4.6 13.85 vs 5.5 16.09; face size equal (0.137 / 0.135) | → round 1.1 targets **nightly** scenery ≥ 16.09 |
