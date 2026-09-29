@@ -108,16 +108,65 @@ async function renderNightly(item, arm) {
     ...(arm === '5.5' ? { force_llm_model: ARM55 } : {}),
   };
   const t0 = Date.now();
-  const res = await fetch(`${URL_}/functions/v1/nightly-dreams`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${TOK}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  const p = await res.json().catch(() => ({}));
-  if (!p.upload_id)
-    return { error: String(p.error || res.status), seconds: Math.round((Date.now() - t0) / 1000) };
-  const log = await logFor({ upload_id: p.upload_id });
-  return { uploadId: p.upload_id, seconds: Math.round((Date.now() - t0) / 1000), ...log };
+  const sinceIso = new Date(t0 - 5000).toISOString();
+  let p = {};
+  let netErr = null;
+  try {
+    const res = await fetch(`${URL_}/functions/v1/nightly-dreams`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${TOK}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(200_000),
+    });
+    p = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
+  } catch (e) {
+    // Long (~90 s) requests lose their response on this network although the render finishes server-side
+    // (2026-09-29). Don't depend on it: find the render in the log.
+    netErr = `${e.message}${e.cause ? ' / ' + (e.cause.code || e.cause.message) : ''}`;
+  }
+  const uploadId = p.upload_id || (netErr ? await findRender(item, arm, sinceIso) : null);
+  if (!uploadId) {
+    return {
+      error: String(p.error || netErr || 'no upload'),
+      seconds: Math.round((Date.now() - t0) / 1000),
+    };
+  }
+  claimed.add(uploadId);
+  const log = await logFor({ upload_id: uploadId });
+  return {
+    uploadId,
+    recovered: !p.upload_id,
+    netErr,
+    seconds: Math.round((Date.now() - t0) / 1000),
+    ...log,
+  };
+}
+
+const claimed = new Set();
+/** This request's render: Kevin's, since it started, a forced slot input for THIS place, on THIS arm's model. */
+async function findRender(item, arm, sinceIso) {
+  const wantModel = arm === '5.5' ? 'claude-sonnet-5-5' : 'claude-sonnet-4-6';
+  for (let tries = 0; tries < 24; tries++) {
+    const { data } = await sb
+      .from('ai_generation_log')
+      .select(
+        'upload_id, fallback_reasons, place:rolled_axes->observability->slotInput->>userPlace'
+      )
+      .eq('user_id', KEVIN)
+      .gte('created_at', sinceIso)
+      .contains('fallback_reasons', ['qa:force_slot_input'])
+      .order('created_at', { ascending: true });
+    const hit = (data || []).find(
+      (r) =>
+        r.upload_id &&
+        !claimed.has(r.upload_id) &&
+        (r.place || null) === (item.place || null) &&
+        (r.fallback_reasons || []).includes(`llm:nightly_slots:${wantModel}`)
+    );
+    if (hit) return hit.upload_id;
+    await new Promise((r) => setTimeout(r, 10_000));
+  }
+  return null;
 }
 
 const CREATE_PROMPTS = [
@@ -194,21 +243,36 @@ async function renderCreate(item, arm, recipe) {
 (async () => {
   let items;
   let recipe = null;
-  if (SURFACE === 'nightly') {
+  const itemsPath = path.join(OUT, `items-${SURFACE}.json`);
+  if (fs.existsSync(itemsPath)) {
+    items = JSON.parse(fs.readFileSync(itemsPath, 'utf8'));
+    if (SURFACE === 'create') {
+      recipe = (await sb.from('user_recipes').select('recipe').eq('user_id', KEVIN).single()).data
+        .recipe;
+    }
+  } else if (SURFACE === 'nightly') {
     const rows = await sql(`
       select id, model_used as model, rolled_axes->'observability'->'slotInput' as input,
              jsonb_array_length(rolled_axes->'observability'->'slotInput'->'cast') as cast
       from ai_generation_log
       where user_id = '${KEVIN}' and status = 'completed' and created_at > now() - interval '14 days'
         and rolled_axes->'observability'->'slotInput' is not null and model_used like 'black-forest-labs/%'
+        and not ('qa:force_slot_input' = any(fallback_reasons))
       order by created_at desc limit 400`);
+    // --offset=N skips the first N distinct inputs of each cast size (a second round on fresh inputs).
+    const OFFSET = Number(arg('offset', '0'));
     const pick = (cast, n) => {
       const seen = new Set();
       const out = [];
+      let skipped = 0;
       for (const r of rows.filter((x) => x.cast === cast)) {
         const k = `${r.input.userPlace || ''}|${r.input.mediumFluxFragment || ''}`.slice(0, 120);
         if (seen.has(k)) continue;
         seen.add(k);
+        if (skipped < OFFSET) {
+          skipped++;
+          continue;
+        }
         out.push(r);
         if (out.length >= n) break;
       }
@@ -237,6 +301,10 @@ async function renderCreate(item, arm, recipe) {
       }))
     );
   }
+  if (!fs.existsSync(itemsPath)) fs.writeFileSync(itemsPath, JSON.stringify(items));
+  // --skip=n1,n2: inputs already rendered in an earlier run (their renders are recovered from the log separately).
+  const skip = arg('skip', '').split(',').filter(Boolean);
+  items = items.filter((it) => !skip.includes(it.key));
   // Both arms per item, in a random order per pair so neither arm always renders first.
   const jobs = items.flatMap((it) =>
     (Math.random() < 0.5 ? ['4.6', '5.5'] : ['5.5', '4.6']).map((arm) => ({ it, arm }))

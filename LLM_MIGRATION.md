@@ -9,8 +9,8 @@ until at least 2027-02-17.
 | Step | State |
 |---|---|
 | 0. One client per runtime, every production call on it, still 4.6 | **Deployed 2026-09-29 ~03:45 UTC** (mig 574). The 48h production smoke is running. |
-| 1. Text parity bench (QA override only) | Not started |
-| 2. Render parity + blind A/B | Not started |
+| 1. Text parity bench (QA override only) | **Done 2026-09-29**: 12 of 15 Sonnet jobs pass; the 3 cast reads stay on 4.6. Report: https://claude.ai/artifact/DTXKmn83nBpvBG9DFF3rPn |
+| 2. Render parity + blind A/B | **Renders done 2026-09-29**: Create, solos and bots pass; nightly couples fail first-try hold. Blind vote waiting on Kevin: https://claude.ai/artifact/DBFPCRe5tyosfzjkAgFtaK |
 | 3. Staged rollout by config | Not started |
 | 4. Cleanup (defaults → 5.5, offline scripts) | Not started |
 
@@ -100,6 +100,73 @@ Edge stamps go to `ai_generation_log.fallback_reasons`; bot stamps go to `bot_ru
 - Not exercised live: describe-photo needs a user JWT. It is covered by the unit tests, and Kevin's next cast upload
   is its first live run.
 
+## Step 1 results (2026-09-29)
+
+Real production inputs (60 per suite where the logs allowed) were replayed through the real modules on 4.6, 5.5@high
+and 5.5@medium: `scripts/qa-llm-parity.ts`, `scripts/qa-llm-parity-bots.js`, and `qa-outfit-text.ts --llm-model`.
+About 1,900 calls, about $20. 5.5@high and @medium cost and time the same, and high was slightly more complete, so
+**high is the setting to roll out**.
+
+| Job | 4.6 | 5.5@high | Verdict |
+|---|---|---|---|
+| create_brief | required finish 94.9%, p50 8.4 s | 100%, 3.1 s | move |
+| create_slots / outfit_reader / scene_split | outfit harness: garments 74/74, misfit 0/34, plain retries 4 | 74/74, 0/34, 2 | move |
+| nightly_slots (120 replays) | clean first try 93.3%, 1 fallback, 5.9 s | 94.2%, 1 fallback, 3.0 s | move (Kevin's word) |
+| nightly_brief | **cut off 26.7%**, 161 words (asks 50-75) | 0%, 97 words | move (Kevin's word) |
+| location_beat | passes filters 95%, 14 words | 95%, 19 words (18% over the 20 asked) | move (watch in renders) |
+| quality_gate | 0 false alarms, broken 10/12 | 0, 12/12 | move |
+| scene_people | 73.8% (misses people 26%) | 100% | move |
+| bot_prompt | 60/60, p50 9.3 s | 60/60, 3.8 s | move |
+| essence_card | 20/20 (after the budget fix) | 20/20 | stays off |
+| cast_ethnicity | 100% | **0%: 5.5 declines to infer race** | keep 4.6 |
+| cast_hair | 100%, 0 grey false positives | 84.6%, 1 | keep 4.6 |
+| cast_describe | age ±5y 88.9% | 81.5% | keep 4.6 |
+
+Edgy Create requests (lingerie, bikinis, gore, a bloodied gladiator, a demon throne and so on) were written on
+every arm with the element kept, 24 of 24. Fixes the bench drove, all shipped in 739182a9:
+- **Text-refusal guard:** 5.5 answered a real intimate-couple Create prompt with "I'll pass on this one". On a
+  text-out job that sentence would have gone to Flux as the prompt. Now it fails the model and the chain falls
+  back to 4.6. 0 false positives on 851 real outputs.
+- **Slot JSON:** a trailing comma is accepted (5.5: 3 of 120 replies).
+- **Essence cards:** 1600 tokens and 45 s (800 and 15 s never produced a card).
+
+## Step 2 results (2026-09-29)
+
+These are paired renders (`scripts/lab-llm-render-parity.js`). Nightly replays Kevin's own logged slot inputs
+(`force_slot_input`) with the image model pinned (`force_model`), so a pair differs only in the slots each model
+wrote. Create uses 15 fixed prompts × 2, through the queue. The bots come from `iter-bot --post --shadow`, 6 bots ×
+2 paths × 3. It cost about $10.72 (168 app renders, 72 bot renders). Everything is in Kevin's private album, and
+the bot posts are hidden.
+
+The 3 Fly face-swap HTTP 500s (the service's normal 2-7% rate) are left out:
+
+| Surface | 4.6 | 5.5@high | Gate |
+|---|---|---|---|
+| Nightly couples, first-try hold | 38/40 (95%) | 33/38 (86.8%) | **fail** (88%) |
+| Nightly couples, still a couple / degraded | 38/40 / 2 | 37/38 / 1 | pass |
+| Create couples, first-try hold | 20/20 | 18/19 (94.7%) | pass |
+| Solos (nightly + Create) | 23/23 | 23/23 | pass |
+| Bots rendered + posted | 35/36 (1 Replicate timeout) | 36/36 | pass |
+
+**Why nightly couples fail on 5.5:** it writes physical actions that turn faces away. For example, "One person
+crouches to set a glowing lantern beside the stone path, the other stands with arms folded" names no face, head or
+eyes, so it passes every direction filter, yet both people look down and the identity check fails (0.25 against a
+0.35 bar). 4.6 wrote "brushes a hand along the fence, hands in pockets". This happened on 3 of 38 nightly couples on
+5.5 and 0 of 40 on 4.6. The fix is a brief rule (faces toward the camera, no crouching or setting things down),
+which belongs to a later prompt-tuning round. Until then nightly stays on 4.6.
+
+**Next (step 3):** wait for Kevin's blind vote; the bar is 5.5 winning in at least 45% of pairs. If it clears:
+1. Canary on Kevin only: `llm_preview_user_ids = {Kevin}`, with `llm_preview_models` = the Create jobs +
+   restyle_brief at `claude-sonnet-5-5@high`, for 48 h.
+2. Create for everyone.
+3. The judges (quality_gate, scene_people).
+4. AlphaBot, through the preview list with its user id, then the fleet (`bot_prompt`).
+
+Nightly and the cast reads are not in this rollout.
+
+Found along the way: the Haiku style distiller (the "Dream Like This" fingerprint, 150 tokens) hits max_tokens on
+most bot posts (`llm_truncated:bot_style_distill` on 25 of 36). This is pre-existing and not part of this migration.
+
 ## Findings the stamps surfaced
 
 1. **Create plain-text briefs truncated on 4.6. FIXED 2026-09-29.** `promptCompiler.ts` capped the text,
@@ -111,6 +178,11 @@ Edge stamps go to `ai_generation_log.fallback_reasons`; bot stamps go to `bot_ru
 2. **Essence cards have been dead since 2026-05-11.** The generator pre-filled the reply with `{`, and 4.6 rejects
    that with a 400. The fixed generator ships behind `engine_config.essence_card_generation` (off). Turning it on
    changes nightly, so it's Kevin's call.
+
+3. **Nightly pure-scene and holiday prompts are cut off on 4.6 26.7% of the time** (the step-1 bench, 60 real
+   briefs). They ask for 50-75 words, 4.6 writes about 161, and the 300-token budget ends mid-phrase. 5.5 writes
+   about 97 and never ran out. Not changed: nightly, Kevin's call (a budget raise on 4.6, or the move to 5.5).
+4. **The empty-scene people judge misses people 26% of the time on 4.6** (14 labelled images × 3). 5.5 got 100%.
 
 ## Deviations from the plan
 
