@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { queryOptions, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { asDbResult } from '@/lib/dbResult';
 
@@ -31,10 +31,16 @@ export interface ProfileHeaderImage {
   credit: { userId: string; username: string; avatarUrl: string | null } | null;
 }
 
-export function usePublicProfile(userId: string) {
-  return useQuery({
+/**
+ * The ONE definition of a profile query (key + fetch + shape). The app's boot prefetch
+ * (app/_layout.tsx) must use this too: it used to cache the raw RPC row under the same key,
+ * so the Profile tab's first render saw no `header` / `postCount`, flashed the "Add a header"
+ * strip, then refetched and the banner popped in and pushed the page down (2026-09-28).
+ */
+export function publicProfileQueryOptions(userId: string) {
+  return queryOptions({
     queryKey: ['publicProfile', userId],
-    queryFn: async () => {
+    queryFn: async (): Promise<PublicProfile> => {
       const { data, error } = await supabase.rpc('get_public_profile', {
         p_user_id: userId,
       });
@@ -78,7 +84,10 @@ export function usePublicProfile(userId: string) {
           : null,
       } as PublicProfile;
     },
-    enabled: !!userId,
     staleTime: 60_000,
   });
+}
+
+export function usePublicProfile(userId: string) {
+  return useQuery({ ...publicProfileQueryOptions(userId), enabled: !!userId });
 }

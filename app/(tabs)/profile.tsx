@@ -830,7 +830,9 @@ export default function ProfileScreen() {
         header={profileHeader}
         onHeaderPress={() => nav.push('/headerPicker')}
         addHeaderStrip={
-          headersEnabled && !profile?.header && !headerStripDismissed
+          // Only once the profile has LOADED and has no header: while it loads, `profile` is
+          // undefined, and showing the strip then flashed it before the banner arrived.
+          headersEnabled && !!profile && !profile.header && !headerStripDismissed
             ? { onPress: () => nav.push('/headerPicker'), onDismiss: dismissHeaderStrip }
             : null
         }

@@ -22,7 +22,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
-import { asDbResult } from '@/lib/dbResult';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { useBadgeSync } from '@/hooks/useBadgeSync';
 import { useSyncTimezone } from '@/hooks/useSyncTimezone';
@@ -50,6 +49,8 @@ import { UpscaleModalHost, UpscaleModal } from '@/components/UpscaleOverlay';
 import { EditDescriptionModalHost } from '@/components/EditDescriptionModal';
 
 import { queryClient, persistOptions } from '@/lib/queryClient';
+import { Image as ExpoImage } from 'expo-image';
+import { publicProfileQueryOptions } from '@/hooks/usePublicProfile';
 import { prefetchDreamFeed } from '@/hooks/useDreamFeed';
 import { AppErrorBoundary } from '@/components/AppErrorBoundary';
 import { ForceUpdateGate } from '@/components/ForceUpdateGate';
@@ -600,19 +601,20 @@ function DataPrefetcher() {
   useEffect(() => {
     if (!user) return;
     const handle = InteractionManager.runAfterInteractions(() => {
-      // Profile stats
-      queryClient.prefetchQuery({
-        queryKey: ['publicProfile', user.id],
-        queryFn: async () => {
-          const { data, error } = await supabase.rpc('get_public_profile', {
-            p_user_id: user.id,
-          });
-          if (error) throw error;
-          const row = asDbResult<Record<string, unknown>[]>(data)?.[0];
-          return row ?? null;
-        },
-        staleTime: 5 * 60_000,
-      });
+      // Own profile: the SAME query definition the Profile tab uses (it used to cache the
+      // raw RPC row here, so the tab's first render saw no header, flashed "Add a header"
+      // and then shifted when the banner arrived). Then warm the header + avatar images
+      // so the banner paints from cache the first time the tab opens.
+      queryClient
+        .fetchQuery(publicProfileQueryOptions(user.id))
+        .then((p) => {
+          const urls = [p.header?.url, p.avatar_url].filter((u): u is string => !!u);
+          if (urls.length) return ExpoImage.prefetch(urls, 'memory-disk');
+          return undefined;
+        })
+        .catch((e: unknown) => {
+          if (__DEV__) console.warn('[boot] profile prefetch failed', e);
+        });
       // Dream styles (mediums + vibes from DB)
       queryClient.prefetchQuery({
         queryKey: ['dreamMediums'],

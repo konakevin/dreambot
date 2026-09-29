@@ -35,6 +35,11 @@ const PERSISTED_ROOTS = new Set<string>([
   'unseenDreamsCount',
   'dreamMediums',
   'dreamVibes',
+  // Profiles (small rows): after a restart the Profile tab knows at once whether you have a
+  // header, so it paints the right layout on the first frame instead of shifting when the
+  // fetch lands (2026-09-28). Cleared with the rest of the cache on sign-out; the version
+  // buster drops it on every new build.
+  'publicProfile',
 ]);
 
 export const asyncStoragePersister = createAsyncStoragePersister({
