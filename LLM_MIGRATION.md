@@ -10,8 +10,8 @@ until at least 2027-02-17.
 |---|---|
 | 0. One client per runtime, every production call on it, still 4.6 | **Deployed 2026-09-29 ~03:45 UTC** (mig 574). The 48h production smoke is running. |
 | 1. Text parity bench (QA override only) | **Done 2026-09-29**: 12 of 15 Sonnet jobs pass; the 3 cast reads stay on 4.6. Report: https://claude.ai/artifact/DTXKmn83nBpvBG9DFF3rPn |
-| 2. Render parity + blind A/B | **Renders done 2026-09-29**: Create, solos and bots pass; nightly couples fail first-try hold. Blind vote waiting on Kevin: https://claude.ai/artifact/DBFPCRe5tyosfzjkAgFtaK |
-| 3. Staged rollout by config | Not started |
+| 2. Render parity + blind A/B | **Done 2026-09-29**: 5.5 picked in 55/117 pairs (47%); it wins single-subject prompts and loses couples. |
+| 3. Staged rollout by config | **3.1 canary LIVE 2026-09-29 ~16:55 UTC** (mig 576): Kevin only, create_brief + restyle_brief on 5.5@high. |
 | 4. Cleanup (defaults → 5.5, offline scripts) | Not started |
 
 ## How switching works
@@ -166,6 +166,44 @@ Nightly and the cast reads are not in this rollout.
 
 Found along the way: the Haiku style distiller (the "Dream Like This" fingerprint, 150 tokens) hits max_tokens on
 most bot posts (`llm_truncated:bot_style_distill` on 25 of 36). This is pre-existing and not part of this migration.
+
+## The blind vote (2026-09-29, Kevin, 117 of 118 pairs)
+
+The page was https://claude.ai/artifact/DBFPCRe5tyosfzjkAgFtaK (collection `ab`). The arm map was kept off the page;
+Kevin's paste matched the saved picks exactly.
+
+| Surface | 5.5 picked | Bar (45%) |
+|---|---|---|
+| All pairs | 55/117 (47%) | pass |
+| Bots | 18/35 (51%) | pass |
+| Create solos | 8/10 (80%) | pass |
+| Create couples | 7/20 (35%) | fail |
+| Nightly couples | 16/39 (41%) | fail |
+| Nightly solos | 6/13 (46%) | about even |
+
+Taste and swap hold agree: **5.5 writes worse couples** and equal or better single-subject prompts. So only the jobs
+that won move:
+- **Moving:** `create_brief` (solo and text Create prompts), `restyle_brief` (same shape), then `quality_gate` +
+  `scene_people` (more accurate on labelled images; no visual output to vote on), then `bot_prompt`.
+- **Staying on 4.6:** `create_slots`, `nightly_slots`, `scene_split`, `outfit_reader` (the couple pipeline), every
+  nightly job, and the cast reads.
+
+## Step 3: rollout
+
+**3.1, Kevin-only canary (mig 576, 2026-09-29 ~16:55 UTC):** `llm_preview_user_ids = {Kevin}`, and
+`llm_preview_models = {create_brief, restyle_brief → claude-sonnet-5-5@high}`. Verified: a text dream stamped
+`llm_preview llm:create_brief:claude-sonnet-5-5`, with a complete 116-word prompt, finished in 15 s against about
+20 s on 4.6.
+
+- Watch with `node scripts/llm-rollout-report.mjs --user=eab700d8-f11a-4f47-a3a1-addda6fb67ec`.
+- Rollback: `UPDATE engine_config SET llm_preview_models = '{}' WHERE id = 1;`
+
+Remaining steps, each for 48 h and each gated on the report:
+1. **3.2, Create for everyone:** `llm_models = {create_brief, restyle_brief → 5.5@high}`.
+2. **3.3, the judges:** add `quality_gate` and `scene_people`.
+3. **3.4, bots:** add `bot_prompt`.
+   - AlphaBot never posts on a schedule, so a canary on it produces no traffic. Start with one public bot instead:
+     put its user id in `llm_preview_user_ids` and `bot_prompt` in `llm_preview_models`.
 
 ## Findings the stamps surfaced
 
