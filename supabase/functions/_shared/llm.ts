@@ -2,8 +2,9 @@
  * Anthropic Claude client — hardened against transient API pressure.
  *
  * Every production prompt-writing path (V4 generate-dream, nightly-dreams,
- * restyle-photo) goes through callSonnet here. 529/429/5xx failures retry
- * with exponential backoff, then fall back to Haiku on exhaustion. A
+ * restyle-photo) goes through callSonnet here, which runs on anthropic.ts (the
+ * one Edge client: job routing, model profiles, stamps). 529/429/5xx failures
+ * retry with exponential backoff, then fall back to Haiku on exhaustion. A
  * top-level template-based fallback happens at the call site when the
  * entire Claude layer gives up — see fallbackReasons in generate-dream.
  *
@@ -15,8 +16,11 @@
  * calling function can log it to ai_generation_log.
  */
 
-import { SONNET, HAIKU } from './models.ts';
-import { jitter } from './jitter.ts';
+import { callClaude, RETRY_DELAYS_MS, type LlmContext, type LlmJob } from './anthropic.ts';
+
+// Re-exported: the vision path and older imports read the shared retry ladder from here.
+export { RETRY_DELAYS_MS, RETRYABLE_STATUSES } from './anthropic.ts';
+
 export interface SonnetResult {
   text: string;
   brief: string;
@@ -32,111 +36,42 @@ export interface SonnetResult {
   stopReason?: string | null;
 }
 
-const PRIMARY_MODEL = SONNET;
-const SECONDARY_MODEL = HAIKU;
-// Exported so the vision path (vision.ts) shares ONE definition of "which
-// Anthropic statuses are worth retrying" and the same backoff ladder.
-export const RETRY_DELAYS_MS = [1000, 3000, 10000, 30000]; // up to 4 retries
-export const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504, 529]);
-
-async function sleep(ms: number): Promise<void> {
-  return new Promise((r) => setTimeout(r, ms));
+/** Which job this call is (routes the model, names the stamps) and the request's LLM context. */
+export interface SonnetCall {
+  job: LlmJob;
+  llm?: LlmContext | null;
 }
 
 /**
- * One shot at a given model with retry-on-transient.
- * Returns { text, rawResponse, retries } on success; throws on terminal
- * failure (non-retryable status, or retries exhausted).
- */
-async function callModelWithRetry(
-  model: string,
-  brief: string,
-  anthropicKey: string,
-  maxTokens: number
-): Promise<{ text: string; rawResponse: string; retries: number; stopReason: string | null }> {
-  let lastErr = '';
-  for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt++) {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': anthropicKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model,
-        max_tokens: maxTokens,
-        messages: [{ role: 'user', content: brief }],
-      }),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      const rawResponse = data.content?.[0]?.text ?? '';
-      const text = rawResponse.trim();
-      if (text.length < 10) throw new Error(`${model} response too short`);
-      const stopReason: string | null =
-        typeof data.stop_reason === 'string' ? data.stop_reason : null;
-      return { text, rawResponse, retries: attempt, stopReason };
-    }
-    lastErr = `${res.status}: ${(await res.text()).slice(0, 200)}`;
-    // If this status isn't retryable, fail immediately — no point burning retries
-    if (!RETRYABLE_STATUSES.has(res.status)) {
-      throw new Error(`${model} ${lastErr}`);
-    }
-    // Retryable — back off and try again (unless we've used all attempts)
-    if (attempt < RETRY_DELAYS_MS.length) {
-      console.warn(
-        `[llm] ${model} ${res.status} on attempt ${attempt + 1}/${RETRY_DELAYS_MS.length + 1}, retrying in ${
-          RETRY_DELAYS_MS[attempt] / 1000
-        }s`
-      );
-      await sleep(jitter(RETRY_DELAYS_MS[attempt]));
-    }
-  }
-  throw new Error(`${model} retries exhausted — ${lastErr}`);
-}
-
-/**
- * Public API: call Claude (Sonnet by default) with full hardening.
+ * Public API: call Claude (the job's model, Sonnet 4.6 by default) with full hardening.
  *
- * Tries the primary model with retry. On exhaustion, falls back to Haiku
- * with retry. If both exhaust, throws so the caller can run its own
- * template-based fallback (see generate-dream's fallbackReasons flow).
+ * A thin wrapper over anthropic.ts callClaude that keeps this function's contract: 429/5xx retry on the
+ * 1/3/10/30 s ladder, a reply under 10 characters fails the model, and the chain ends on Haiku. If every
+ * model fails it throws, so the caller can run its own template fallback (generate-dream's fallbackReasons).
  */
 export async function callSonnet(
   brief: string,
   anthropicKey: string | undefined,
-  maxTokens: number = 200
+  maxTokens: number = 200,
+  call: SonnetCall
 ): Promise<SonnetResult> {
   if (!anthropicKey) throw new Error('No Anthropic API key');
-
-  // Try primary (Sonnet)
-  try {
-    const r = await callModelWithRetry(PRIMARY_MODEL, brief, anthropicKey, maxTokens);
-    return {
-      text: r.text,
-      brief,
-      rawResponse: r.rawResponse,
-      modelUsed: PRIMARY_MODEL,
-      retries: r.retries,
-      fellBackToSecondary: false,
-      stopReason: r.stopReason,
-    };
-  } catch (primaryErr) {
-    console.warn(
-      `[llm] primary model failed after retries: ${(primaryErr as Error).message} — falling back to ${SECONDARY_MODEL}`
-    );
-  }
-
-  // Fallback: Haiku
-  const r = await callModelWithRetry(SECONDARY_MODEL, brief, anthropicKey, maxTokens);
+  const r = await callClaude({
+    job: call.job,
+    llm: call.llm,
+    key: anthropicKey,
+    content: brief,
+    maxTokens,
+    retryDelaysMs: RETRY_DELAYS_MS,
+    minChars: 10,
+  });
   return {
     text: r.text,
     brief,
-    rawResponse: r.rawResponse,
-    modelUsed: SECONDARY_MODEL,
+    rawResponse: r.raw,
+    modelUsed: r.model,
     retries: r.retries,
-    fellBackToSecondary: true,
+    fellBackToSecondary: r.fellBackFrom !== null,
     stopReason: r.stopReason,
   };
 }

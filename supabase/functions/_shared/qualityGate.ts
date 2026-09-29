@@ -32,7 +32,7 @@
  *    enforce-mode retries are fresh RE-ROLLS, ship-best on exhaustion).
  */
 
-import { SONNET } from './models.ts';
+import { callClaude, type LlmContext } from './anthropic.ts';
 
 export interface QualityVerdict {
   /** false = blatantly broken per the single BROKEN check. */
@@ -80,42 +80,28 @@ export function parseGateResponse(raw: string): QualityVerdict | null {
  * Assess a finished render. FAIL-OPEN: null on any error — callers ship
  * ungated and stamp quality_gate:error for telemetry.
  */
-export async function assessRenderQuality(imageUrl: string): Promise<QualityVerdict | null> {
+export async function assessRenderQuality(
+  imageUrl: string,
+  llm?: LlmContext | null
+): Promise<QualityVerdict | null> {
   const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
   if (!anthropicKey) return null;
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': anthropicKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        // SONNET judge: labeled calibration (2026-09-03, 30 good + 3 broken) scored
-        // Haiku 1/3 detection vs Sonnet 2/3, both at 0/30 false positives. The one
-        // accepted miss is panel-layout weirdness — deliberately NOT chased (would
-        // false-flag legit comics-medium renders).
-        model: SONNET,
-        max_tokens: 24,
-        messages: [
-          {
-            role: 'user',
-            content: [
-              { type: 'image', source: { type: 'url', url: imageUrl } },
-              { type: 'text', text: buildGatePrompt() },
-            ],
-          },
-        ],
-      }),
+    // quality_gate = SONNET judge: labeled calibration (2026-09-03, 30 good + 3 broken) scored
+    // Haiku 1/3 detection vs Sonnet 2/3, both at 0/30 false positives. The one
+    // accepted miss is panel-layout weirdness — deliberately NOT chased (would
+    // false-flag legit comics-medium renders).
+    const r = await callClaude({
+      job: 'quality_gate',
+      llm,
+      key: anthropicKey,
+      content: [
+        { type: 'image', source: { type: 'url', url: imageUrl } },
+        { type: 'text', text: buildGatePrompt() },
+      ],
+      maxTokens: 24,
     });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const txt =
-      data.content && data.content[0] && data.content[0].type === 'text'
-        ? String(data.content[0].text)
-        : '';
-    return parseGateResponse(txt);
+    return parseGateResponse(r.raw);
   } catch (_e) {
     return null;
   }
@@ -151,39 +137,23 @@ export function parseScenePeopleResponse(raw: string): ScenePeopleVerdict | null
 
 /** FAIL-OPEN: null on any error — the caller ships the fallback ungated. */
 export async function assessSceneFallbackPeople(
-  imageUrl: string
+  imageUrl: string,
+  llm?: LlmContext | null
 ): Promise<ScenePeopleVerdict | null> {
   const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
   if (!anthropicKey) return null;
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': anthropicKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: SONNET,
-        max_tokens: 16,
-        messages: [
-          {
-            role: 'user',
-            content: [
-              { type: 'image', source: { type: 'url', url: imageUrl } },
-              { type: 'text', text: buildScenePeoplePrompt() },
-            ],
-          },
-        ],
-      }),
+    const r = await callClaude({
+      job: 'scene_people',
+      llm,
+      key: anthropicKey,
+      content: [
+        { type: 'image', source: { type: 'url', url: imageUrl } },
+        { type: 'text', text: buildScenePeoplePrompt() },
+      ],
+      maxTokens: 16,
     });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const txt =
-      data.content && data.content[0] && data.content[0].type === 'text'
-        ? String(data.content[0].text)
-        : '';
-    return parseScenePeopleResponse(txt);
+    return parseScenePeopleResponse(r.raw);
   } catch (_e) {
     return null;
   }

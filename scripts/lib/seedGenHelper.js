@@ -29,6 +29,7 @@
 const fs = require('fs');
 const path = require('path');
 const { SONNET } = require('./models');
+const { offlineModel, offlineBody, parseReply } = require('./anthropic');
 
 // Tokens that make Flux render a generic modern HUMAN instead of the fantasy
 // race (age framing + man/woman/male/female nouns). Pools passing
@@ -291,15 +292,13 @@ async function generatePool({
         parseAttempt > 0
           ? '\n\n━━━ CRITICAL: OUTPUT A VALID JSON ARRAY ONLY — no preamble, no explanation after, no unescaped quotes inside entries ━━━'
           : '';
+      // offlineModel: `--llm-model` swaps a Sonnet 4.6 call (scripts/lib/anthropic.js); the body is the model
+      // profile's (4.6 unchanged) and the reply is every text block, never content[0].
       const data = await callWithRetry(
-        {
-          model,
-          max_tokens: maxTokens,
-          messages: [{ role: 'user', content: base + strictNote }],
-        },
+        offlineBody(offlineModel(model), base + strictNote, maxTokens),
         anthropicKey
       );
-      const raw = (data.content[0]?.text || '').trim();
+      const raw = parseReply(data).raw.trim();
       // Try JSON array first
       const match = raw.match(/\[[\s\S]*\]/);
       if (match) {

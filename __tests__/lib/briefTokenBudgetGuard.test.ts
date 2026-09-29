@@ -69,7 +69,8 @@ describe('botEngine brief budget — a prompt can never be silently cut off agai
   it('checks stop_reason so a truncated response is loud, not swallowed', () => {
     // Detection is the half that makes the budget safe: if a future brief really
     // does outgrow the ceiling, it must SAY so instead of shipping half a prompt.
-    expect(src).toMatch(/stop_reason\s*===\s*['"]max_tokens['"]/);
+    // (The reply comes through scripts/lib/anthropic.js since the LLM migration: `stopReason`.)
+    expect(src).toMatch(/stop_?[rR]eason\s*===\s*['"]max_tokens['"]/);
     // and it must actually surface it, not just compute a dead variable
     expect(src).toMatch(/console\.(warn|error)\([\s\S]{0,200}TRUNCATED/);
   });

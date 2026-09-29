@@ -29,6 +29,7 @@
 // ever improve the prompt or step aside.
 
 import { callSonnet } from './llm.ts';
+import type { LlmContext } from './anthropic.ts';
 import { UNSAFE_WORDS, TOO_ENERGETIC, DIRECTION_WORDS } from './actionSafety.ts';
 
 export interface PromptSceneSplit {
@@ -70,7 +71,8 @@ function tidy(value: unknown, cap: number): string {
 export async function splitPromptScene(
   prompt: string,
   castCount: 1 | 2,
-  anthropicKey: string | undefined
+  anthropicKey: string | undefined,
+  llm?: LlmContext | null
 ): Promise<PromptSceneSplit> {
   const text = (prompt || '').trim();
   if (!text || !anthropicKey) return whole(text);
@@ -97,7 +99,7 @@ SETTING: <the place>
 ACTION: <the action, or NONE>`;
 
   try {
-    const result = await callSonnet(brief, anthropicKey, 150);
+    const result = await callSonnet(brief, anthropicKey, 150, { job: 'scene_split', llm });
     const raw = result.text || '';
     const settingLine = /^\s*SETTING:\s*(.+)$/im.exec(raw);
     const actionLine = /^\s*ACTION:\s*(.+)$/im.exec(raw);

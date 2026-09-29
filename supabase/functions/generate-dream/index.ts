@@ -89,7 +89,6 @@ import {
 } from '../_shared/characterSlotPrompt.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { loadClassicPools } from '../_shared/pools/actionPoseLoader.ts';
-import { HAIKU } from '../_shared/models.ts';
 // Shared post-processing (extracted Phase 3.1)
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { generateImage } from '../_shared/generateImage.ts';
@@ -113,6 +112,7 @@ import {
 import { captureRenderError } from '../_shared/sentry.ts';
 import { persistToStorage, buildDisplayVariant } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
+import { callClaude, createLlmContext, type LlmContext } from '../_shared/anthropic.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
 import {
   getCostCents,
@@ -205,6 +205,9 @@ interface RequestBody {
   /** QA (lab renders, CREATE_OUTFIT_PLAN.md phase 9): force outfit scene fit on/off, or one fix alone
    *  ('looks' | 'trim' | 'brief'). Absent → engine_config.create_outfit_scene_fit / the preview list. */
   qa_outfit_scene_fit?: boolean | 'looks' | 'trim' | 'brief';
+  /** QA (LLM_MIGRATION.md): run every Anthropic job in this render on this model, "model" or "model@effort".
+   *  Absent → engine_config.llm_models. A model with no profile in _shared/anthropic.ts is ignored and stamped. */
+  qa_llm_model?: string;
   /** When false, render + return WITHOUT inserting an uploads row — the caller
    *  persists its own (onboarding RevealStep). Defaults to true. Fixes the
    *  duplicate-first-dream (gen + "Post my Dream" both inserting a row). */
@@ -764,6 +767,14 @@ async function handleRequest(req: Request): Promise<Response> {
   let visionDescription: string | null = null;
   let replicatePredictionId: string | null = null;
   const fallbackReasons: string[] = [];
+  // Every Anthropic call in this render routes and stamps through this (_shared/anthropic.ts, LLM_MIGRATION.md).
+  const llm = createLlmContext({
+    surface: 'create',
+    routing: (await fetchEngineConfig(supabase)).llmRouting,
+    userId,
+    override: body.qa_llm_model,
+    stamp: (s) => fallbackReasons.push(s),
+  });
 
   console.log(
     '[generate-dream] RAW BODY:',
@@ -1084,7 +1095,10 @@ async function handleRequest(req: Request): Promise<Response> {
         });
 
         try {
-          const sonnet = await callSonnet(compiled.sonnetBrief, ANTHROPIC_KEY, compiled.maxTokens);
+          const sonnet = await callSonnet(compiled.sonnetBrief, ANTHROPIC_KEY, compiled.maxTokens, {
+            job: 'create_brief',
+            llm,
+          });
           sonnetBrief = sonnet.brief;
           sonnetRawResponse = sonnet.rawResponse;
           if (sonnet.text.length < 10) throw new Error('too short');
@@ -1134,7 +1148,14 @@ async function handleRequest(req: Request): Promise<Response> {
           // high-quality clothing-free dreamcast prompt as stored cast members, so
           // uploaded-photo dreams get cast-grade resemblance and no outfit bleed.
           stripCastMeta(
-            await describeWithVision(input_image!, VISION_PROMPTS.castPerson, REPLICATE_TOKEN, 300)
+            await describeWithVision(
+              input_image!,
+              VISION_PROMPTS.castPerson,
+              REPLICATE_TOKEN,
+              300,
+              undefined,
+              { job: 'photo_describe', llm }
+            )
           );
         visionDescription = photoDescription;
         lap('new-scene-vision');
@@ -1213,7 +1234,10 @@ async function handleRequest(req: Request): Promise<Response> {
         });
 
         try {
-          const sonnet = await callSonnet(compiled.sonnetBrief, ANTHROPIC_KEY, compiled.maxTokens);
+          const sonnet = await callSonnet(compiled.sonnetBrief, ANTHROPIC_KEY, compiled.maxTokens, {
+            job: 'create_brief',
+            llm,
+          });
           sonnetBrief = sonnet.brief;
           sonnetRawResponse = sonnet.rawResponse;
           if (sonnet.text.length < 10) throw new Error('too short');
@@ -1259,7 +1283,14 @@ async function handleRequest(req: Request): Promise<Response> {
         const photoDescription = stripCastMeta(
           // Same high-quality clothing-free dreamcast prompt — reimagine re-renders
           // the person in a new medium, so the uploaded outfit shouldn't carry over.
-          await describeWithVision(input_image!, VISION_PROMPTS.castPerson, REPLICATE_TOKEN, 300)
+          await describeWithVision(
+            input_image!,
+            VISION_PROMPTS.castPerson,
+            REPLICATE_TOKEN,
+            300,
+            undefined,
+            { job: 'photo_describe', llm }
+          )
         );
         visionDescription = photoDescription;
         lap('reimagine-vision');
@@ -1278,7 +1309,8 @@ async function handleRequest(req: Request): Promise<Response> {
             reimagineTemplate,
             reimagineTemplate,
             ANTHROPIC_KEY,
-            150
+            150,
+            llm
           );
         } else {
           const styleRef = style_prompt
@@ -1293,7 +1325,7 @@ async function handleRequest(req: Request): Promise<Response> {
 - Framing: waist-up to three-quarter body. The person's face must be clearly visible and well-lit. Show the person IN the scene, interacting with elements around them. The environment should be visible — don't crop it out.
 - DO NOT invent your own scenario — use the user's request EXACTLY
 Output ONLY the prompt.`;
-          finalPrompt = await enhanceViaHaiku(genericBrief, genericBrief, ANTHROPIC_KEY, 150);
+          finalPrompt = await enhanceViaHaiku(genericBrief, genericBrief, ANTHROPIC_KEY, 150, llm);
         }
 
         photoOverrideMode = 'flux-dev';
@@ -1640,6 +1672,7 @@ Output ONLY the prompt.`;
           ? outfitLockOn
             ? extractOutfitSpec(userSubject, outfitLegend, ANTHROPIC_KEY, {
                 costumeRead: costumeReadOn,
+                llm,
               })
             : Promise.resolve<OutfitSpecOutcome>({ source: 'skipped', result: null, reason: 'off' })
           : null;
@@ -1755,7 +1788,8 @@ Output ONLY the prompt.`;
                 sceneSplit = await splitPromptScene(
                   cleanedPrompt,
                   resolvedCast.length >= 2 ? 2 : 1,
-                  ANTHROPIC_KEY
+                  ANTHROPIC_KEY,
+                  llm
                 );
                 fallbackReasons.push(`create_scene_split:${sceneSplit.source}`);
               }
@@ -1866,7 +1900,12 @@ Output ONLY the prompt.`;
                   }
                 })(),
               };
-              const slotResult = await runCharacterSlotPipeline(slotInput, ANTHROPIC_KEY);
+              const slotResult = await runCharacterSlotPipeline(
+                slotInput,
+                ANTHROPIC_KEY,
+                null,
+                llm
+              );
               sonnetBrief = slotResult.briefUsed;
               sonnetRawResponse = slotResult.rawResponse;
               finalPrompt = slotResult.assembledPrompt;
@@ -1914,7 +1953,8 @@ Output ONLY the prompt.`;
               const sonnet = await callSonnet(
                 compiled.sonnetBrief,
                 ANTHROPIC_KEY,
-                compiled.maxTokens
+                compiled.maxTokens,
+                { job: 'create_brief', llm }
               );
               sonnetBrief = sonnet.brief;
               sonnetRawResponse = sonnet.rawResponse;
@@ -1929,7 +1969,8 @@ Output ONLY the prompt.`;
             const sonnet = await callSonnet(
               compiled.sonnetBrief,
               ANTHROPIC_KEY,
-              compiled.maxTokens
+              compiled.maxTokens,
+              { job: 'create_brief', llm }
             );
             sonnetBrief = sonnet.brief;
             sonnetRawResponse = sonnet.rawResponse;
@@ -2142,7 +2183,10 @@ Output ONLY the prompt.`;
         });
 
         try {
-          const sonnet = await callSonnet(compiled.sonnetBrief, ANTHROPIC_KEY, compiled.maxTokens);
+          const sonnet = await callSonnet(compiled.sonnetBrief, ANTHROPIC_KEY, compiled.maxTokens, {
+            job: 'create_brief',
+            llm,
+          });
           sonnetBrief = sonnet.brief;
           sonnetRawResponse = sonnet.rawResponse;
           if (sonnet.text.length < 10) throw new Error('too short');
@@ -2389,7 +2433,8 @@ Output ONLY the prompt.`;
                 target,
                 sideWardrobes.a,
                 sideWardrobes.b,
-                REPLICATE_TOKEN
+                REPLICATE_TOKEN,
+                llm
               );
               return r.aSide ? sidesToGenders(r.aSide, sideGenders.left, sideGenders.right) : null;
             }
@@ -2442,7 +2487,7 @@ Output ONLY the prompt.`;
               'interactive'
             ),
           confirmGenders: async (target) => {
-            const r = await classifyDualGenders(target, REPLICATE_TOKEN);
+            const r = await classifyDualGenders(target, REPLICATE_TOKEN, llm);
             return { left: r.left, right: r.right, faceCount: r.faceCount };
           },
           ...(confirmSides ? { confirmSides } : {}),
@@ -2467,6 +2512,7 @@ Output ONLY the prompt.`;
               {
                 castGender: selfGender,
                 replicateToken: REPLICATE_TOKEN,
+                llm,
                 rerender: async () => {
                   // Rebuild a GENUINE solo prompt for self (partner dropped) from
                   // the dual's own slots — replaces the couple-prompt + prefix
@@ -2584,6 +2630,7 @@ Output ONLY the prompt.`;
         {
           castGender: faceSwapGender,
           replicateToken: REPLICATE_TOKEN,
+          llm,
           rerender: async () => {
             // Re-rolling the identical prompt mostly re-renders the same couple
             // (couple-coded scenes beat the mid-prompt solo mandate ~4/6 in QA).
@@ -2982,7 +3029,8 @@ Output ONLY the prompt.`;
         vibeKey: resolvedVibeKey ?? null,
       },
       ANTHROPIC_KEY,
-      supabase
+      supabase,
+      llm
     )
       .then((summary) => {
         if (!summary || !uploadId) return;
@@ -3386,58 +3434,33 @@ function stripCastMeta(raw: string): string {
 // Mirrors the retry logic in _shared/llm.ts (without model fallback — Haiku
 // IS the fallback in this path).
 const HAIKU_RETRY_DELAYS_MS = [1000, 3000, 10000, 30000];
-const HAIKU_RETRYABLE = new Set([429, 500, 502, 503, 504, 529]);
 
 async function enhanceViaHaiku(
   brief: string,
   fallback: string,
   anthropicKey: string | undefined,
-  maxTokens: number = 150
+  maxTokens: number = 150,
+  llm: LlmContext | null = null
 ): Promise<string> {
   if (!anthropicKey) return fallback;
-  let lastErr = '';
-  for (let attempt = 0; attempt <= HAIKU_RETRY_DELAYS_MS.length; attempt++) {
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': anthropicKey,
-          'anthropic-version': '2023-06-01',
-        },
-        body: JSON.stringify({
-          model: HAIKU,
-          max_tokens: maxTokens,
-          messages: [{ role: 'user', content: brief }],
-        }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        const text = data.content?.[0]?.text?.trim() ?? '';
-        return text.length >= 10 ? text : fallback;
-      }
-      lastErr = `Haiku ${res.status}`;
-      if (!HAIKU_RETRYABLE.has(res.status)) {
-        console.warn(`[generate-dream] ${lastErr} non-retryable — using template fallback`);
-        return fallback;
-      }
-      if (attempt < HAIKU_RETRY_DELAYS_MS.length) {
-        console.warn(
-          `[generate-dream] ${lastErr} on ${attempt + 1}/${HAIKU_RETRY_DELAYS_MS.length + 1}, retrying in ${
-            HAIKU_RETRY_DELAYS_MS[attempt] / 1000
-          }s`
-        );
-        await new Promise((r) => setTimeout(r, HAIKU_RETRY_DELAYS_MS[attempt]));
-      }
-    } catch (err) {
-      lastErr = (err as Error).message;
-      if (attempt < HAIKU_RETRY_DELAYS_MS.length) {
-        await new Promise((r) => setTimeout(r, HAIKU_RETRY_DELAYS_MS[attempt]));
-      }
-    }
+  try {
+    const r = await callClaude({
+      job: 'prompt_enhance',
+      llm,
+      key: anthropicKey,
+      content: brief,
+      maxTokens,
+      retryDelaysMs: HAIKU_RETRY_DELAYS_MS,
+      retryNetworkErrors: true,
+      minChars: 10,
+    });
+    return r.text;
+  } catch (err) {
+    console.warn(
+      `[generate-dream] Haiku failed (${(err as Error).message}) — using template fallback`
+    );
+    return fallback;
   }
-  console.warn(`[generate-dream] Haiku exhausted retries (${lastErr}) — using template fallback`);
-  return fallback;
 }
 
 // Sonnet, pickModel, generateImage, persistToStorage, sanitizePrompt,

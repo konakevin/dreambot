@@ -231,7 +231,16 @@ Deno.serve(async (req) => {
 
   try {
     const t0 = Date.now();
-    const raw = await describeWithVision(input_image, CLASSIFY_PROMPT, REPLICATE_TOKEN, 220);
+    const raw = await describeWithVision(
+      input_image,
+      CLASSIFY_PROMPT,
+      REPLICATE_TOKEN,
+      220,
+      undefined,
+      {
+        job: 'photo_classify',
+      }
+    );
     const { description, type, num_people, num_animals, face } = parseResponse(raw);
     console.log(
       `[classify-photo] ${Date.now() - t0}ms | type=${type} people=${num_people} animals=${num_animals} face=${face} | desc="${description.slice(0, 70)}..."`

@@ -18,6 +18,7 @@ import {
   DEFAULT_NAME_STOP_WORDS,
 } from './selfInsertDetector.ts';
 import { DEFAULT_GARMENT_WEIGHTS, normalizeGarmentWeights } from './outfitPlan.ts';
+import { EMPTY_LLM_ROUTING, parseLlmRoutes, type LlmRoutingConfig } from './anthropic.ts';
 
 /** Nightly LOOKS path mode (mig 502): 'off' = legacy chain, 'shadow' = legacy + style_shadow stamps, 'on' = the contract decides. */
 export type NightlyLooksMode = 'off' | 'shadow' | 'on';
@@ -232,6 +233,12 @@ export interface EngineConfig {
   /** Holiday POSTCARD overlay scope (migration 459): 'off' | 'day_of' (the day-of hero
    *  only — default) | 'window' (every in-season holiday dream). */
   holidayPostcardScope: 'off' | 'day_of' | 'window';
+  /** LLM ROUTING (mig 574, LLM_MIGRATION.md): which Anthropic model each job runs on (anthropic.ts LLM_JOBS).
+   *  Empty = every job on its code default (Sonnet 4.6 / Haiku). Preview accounts get the preview map on top. */
+  llmRouting: LlmRoutingConfig;
+  /** ESSENCE CARDS (mig 574): write a location card for a nightly place that has none. Off = read existing cards
+   *  only, which is what production did in practice from 2026-05-11 (the old prefill 400'd every generation). */
+  essenceCardGeneration: boolean;
 }
 
 // Defaults = the values currently hardcoded in code (behavior unchanged pre-edit).
@@ -337,6 +344,8 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   dayOfEveningCutoffHour: 20,
   dayOfCostumePct: 100,
   holidayPostcardScope: 'day_of',
+  llmRouting: EMPTY_LLM_ROUTING,
+  essenceCardGeneration: false,
 };
 
 let cached: EngineConfig | null = null;
@@ -530,6 +539,14 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
       data.holiday_postcard_scope === 'off' || data.holiday_postcard_scope === 'window'
         ? data.holiday_postcard_scope
         : 'day_of',
+    llmRouting: {
+      models: parseLlmRoutes(data.llm_models),
+      previewUserIds: Array.isArray(data.llm_preview_user_ids)
+        ? data.llm_preview_user_ids.filter((x: unknown): x is string => typeof x === 'string')
+        : [],
+      previewModels: parseLlmRoutes(data.llm_preview_models),
+    },
+    essenceCardGeneration: data.essence_card_generation === true,
     newScenePriceStandard: Number(
       data.new_scene_price_standard ?? DEFAULT_ENGINE_CONFIG.newScenePriceStandard
     ),

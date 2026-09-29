@@ -28,11 +28,14 @@
  */
 
 import { classifyDualGenders } from './vision.ts';
+import type { LlmContext } from './anthropic.ts';
 
 export interface SoloSwapGuardDeps {
   /** The cast member's gender, when known (genderLock / describe-photo). */
   castGender: 'male' | 'female' | null;
   replicateToken: string;
+  /** The request's LLM context (anthropic.ts), for the probe_genders read. */
+  llm?: LlmContext | null;
   /** Re-render the SAME prompt to replace an unsafe target. */
   /**
    * Re-render the solo scene. Receives the ATTEMPT NUMBER (1-based) so the caller can decide to move to
@@ -310,7 +313,7 @@ export async function ensureSoloSwapTarget(
         read = await flyProbe(target);
         if (!read) reasons.push('solo_probe_fly_fallback_haiku');
       }
-      read = read ?? (await classifyDualGenders(target, deps.replicateToken));
+      read = read ?? (await classifyDualGenders(target, deps.replicateToken, deps.llm));
       last = judge(read, deps.castGender);
     } catch (e) {
       // Probe infrastructure error → benefit of the doubt (see header).

@@ -17,6 +17,7 @@
 // (0 = off) + a force_location_action QA flag.
 
 import { callSonnet } from './llm.ts';
+import type { LlmContext } from './anthropic.ts';
 import { UNSAFE_WORDS, TOO_ENERGETIC, DIRECTION_WORDS } from './actionSafety.ts';
 
 // Words that would fight the downstream face-forward framing or occlude the face
@@ -39,7 +40,8 @@ import { UNSAFE_WORDS, TOO_ENERGETIC, DIRECTION_WORDS } from './actionSafety.ts'
 export async function generateLocationActionBeat(
   location: string,
   castCount: 1 | 2,
-  anthropicKey: string
+  anthropicKey: string,
+  llm?: LlmContext | null
 ): Promise<string | null> {
   const place = (location || '').trim();
   if (!place) return null;
@@ -68,7 +70,7 @@ Write ONLY the action phrase, 8-20 words, present-tense gerund style like a phot
 STYLE examples (invent your own, do NOT reuse) — energetic OR calm, prop ONLY where it truly fits: "clapping along to the live music, shoulders loose and swaying" · "trailing fingertips through tall meadow grass at hip height" · "leaning a forearm on the harbor railing, jacket open in the wind" · "cracking open a fresh coconut on the sand, a machete tucked at the belt"`;
 
   try {
-    const result = await callSonnet(prompt, anthropicKey, 90);
+    const result = await callSonnet(prompt, anthropicKey, 90, { job: 'location_beat', llm });
     const beat = (result.text || '')
       .split('\n')[0]
       .trim()

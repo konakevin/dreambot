@@ -17,7 +17,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { HAIKU } = require('./models');
+const { callClaude } = require('./anthropic');
 
 function loadEnvFile() {
   try {
@@ -72,7 +72,7 @@ Reply with the single word SAFE or BARE on its own line. No explanation.`;
  * @param {number} [opts.timeoutMs] — request timeout (default 30s)
  * @returns {Promise<{ flagged: boolean, reason: string, raw: string }>}
  */
-async function classifyImageForNudity({ localPath, anthropicKey, timeoutMs = 30_000 }) {
+async function classifyImageForNudity({ localPath, anthropicKey, timeoutMs = 30_000, llm }) {
   const key = anthropicKey || getAnthropicKey();
   if (!key) throw new Error('nudityCheck: ANTHROPIC_API_KEY missing');
   if (!fs.existsSync(localPath)) throw new Error(`nudityCheck: file not found ${localPath}`);
@@ -81,42 +81,20 @@ async function classifyImageForNudity({ localPath, anthropicKey, timeoutMs = 30_
   const b64 = buf.toString('base64');
   const mime = mimeFromPath(localPath);
 
-  const body = {
-    model: HAIKU,
-    max_tokens: 10,
-    messages: [
-      {
-        role: 'user',
-        content: [
-          { type: 'image', source: { type: 'base64', media_type: mime, data: b64 } },
-          { type: 'text', text: CLASSIFY_PROMPT },
-        ],
-      },
-    ],
-  };
-
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-      signal: controller.signal,
+    // bot_nudity (Haiku), through scripts/lib/anthropic.js.
+    const r = await callClaude({
+      job: 'bot_nudity',
+      llm,
+      key,
+      maxTokens: 10,
+      timeoutMs,
+      content: [
+        { type: 'image', source: { type: 'base64', media_type: mime, data: b64 } },
+        { type: 'text', text: CLASSIFY_PROMPT },
+      ],
     });
-    if (!res.ok) {
-      const t = (await res.text()).slice(0, 200);
-      // Fail-open on API errors — don't block legit renders on a classifier outage.
-      // Log but treat as SAFE so the render goes through.
-      console.warn(`  ⚠️ nudityCheck API ${res.status}: ${t} — failing open`);
-      return { flagged: false, reason: 'classifier-error-fail-open', raw: `HTTP ${res.status}` };
-    }
-    const data = await res.json();
-    const raw = (data.content?.[0]?.text || '').trim().toUpperCase();
+    const raw = r.text.toUpperCase();
     const flagged = raw.startsWith('BARE');
     return {
       flagged,
@@ -124,11 +102,14 @@ async function classifyImageForNudity({ localPath, anthropicKey, timeoutMs = 30_
       raw,
     };
   } catch (err) {
-    // Same fail-open on network / timeout — don't strand the render.
+    // Fail-open on API errors, network, timeout or a refusal — don't block legit renders on a classifier outage.
+    // Log but treat as SAFE so the render goes through.
     console.warn(`  ⚠️ nudityCheck error: ${err.message} — failing open`);
-    return { flagged: false, reason: 'classifier-error-fail-open', raw: err.message };
-  } finally {
-    clearTimeout(timer);
+    return {
+      flagged: false,
+      reason: 'classifier-error-fail-open',
+      raw: err.status ? `HTTP ${err.status}` : err.message,
+    };
   }
 }
 

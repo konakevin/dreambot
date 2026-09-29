@@ -17,7 +17,7 @@
  */
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
-import { HAIKU } from '../../_shared/models.ts';
+import { callClaude } from '../../_shared/anthropic.ts';
 import { captureServer } from '../../_shared/posthogCapture.ts';
 
 export interface NightlyDispatcherArgs {
@@ -180,20 +180,12 @@ async function generateBotMessage(
 ): Promise<string | null> {
   if (!anthropicKey) return null;
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': anthropicKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: HAIKU,
-        max_tokens: 60,
-        messages: [
-          {
-            role: 'user',
-            content: `You are titling a dream image for its owner's inbox — a short postcard-style title for WHERE the dream took place, so they can tell their dreams apart at a glance.
+    // inbox_title (Haiku). No request context here: the render already logged, so the code default runs.
+    const r = await callClaude({
+      job: 'inbox_title',
+      key: anthropicKey,
+      maxTokens: 60,
+      content: `You are titling a dream image for its owner's inbox — a short postcard-style title for WHERE the dream took place, so they can tell their dreams apart at a glance.
 
 Dream prompt: "${promptUsed.slice(0, 600)}"
 
@@ -209,16 +201,8 @@ RULES:
 - No emojis, no quotation marks, no trailing punctuation.
 
 Output ONLY the title, nothing else.`,
-          },
-        ],
-      }),
     });
-    if (!res.ok) return null;
-    const json = await res.json();
-    let text =
-      json && json.content && json.content[0] && typeof json.content[0].text === 'string'
-        ? json.content[0].text.trim()
-        : '';
+    let text = r.text;
     // Strip wrapping quotes + trailing punctuation the model sometimes adds.
     text = text
       .replace(/^["'“”]+|["'“”]+$/g, '')

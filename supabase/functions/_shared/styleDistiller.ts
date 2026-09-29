@@ -27,9 +27,7 @@
  */
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
-import { HAIKU } from './models.ts';
-const HAIKU_MODEL = HAIKU;
-const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504, 529]);
+import { callClaude, type LlmContext } from './anthropic.ts';
 const RETRY_DELAYS_MS = [1000, 3000, 8000];
 
 const SYSTEM_PROMPT = `You synthesize a unified style fingerprint from three sources that together defined a rendered image: a MEDIUM (art style identity), a VIBE (mood identity), and the final FLUX PROMPT used by the image model.
@@ -122,7 +120,8 @@ interface DistillInput {
 export async function distillStyle(
   input: DistillInput,
   anthropicKey: string | undefined,
-  supabase: SupabaseClient
+  supabase: SupabaseClient,
+  llm?: LlmContext | null
 ): Promise<string | null> {
   const { rawPrompt, mediumKey, vibeKey } = input;
   if (!anthropicKey) return null;
@@ -168,51 +167,27 @@ export async function distillStyle(
 VIBE: ${vibeLine}
 FLUX PROMPT: "${promptLine}"`;
 
-  for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt++) {
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': anthropicKey,
-          'anthropic-version': '2023-06-01',
-        },
-        body: JSON.stringify({
-          model: HAIKU_MODEL,
-          max_tokens: 150,
-          system: SYSTEM_PROMPT,
-          messages: [{ role: 'user', content: userMessage }],
-        }),
-      });
-
-      if (!res.ok) {
-        if (RETRYABLE_STATUSES.has(res.status) && attempt < RETRY_DELAYS_MS.length) {
-          await sleep(RETRY_DELAYS_MS[attempt]);
-          continue;
-        }
-        console.warn(`[styleDistiller] non-retryable ${res.status}`);
-        return null;
-      }
-
-      const data = await res.json();
-      const text = (data?.content?.[0]?.text ?? '').trim();
-      if (!text) return null;
-      if (text === 'NO_STYLE_SIGNAL' || text.startsWith('NO_STYLE_SIGNAL')) {
-        return null;
-      }
-      // Cap at 400 chars to fit the format clause + style anchors (45-word budget).
-      return text.length > 400 ? text.slice(0, 400) : text;
-    } catch (err) {
-      if (attempt < RETRY_DELAYS_MS.length) {
-        console.warn(`[styleDistiller] attempt ${attempt + 1} failed: ${(err as Error).message}`);
-        await sleep(RETRY_DELAYS_MS[attempt]);
-        continue;
-      }
-      console.warn(`[styleDistiller] retries exhausted: ${(err as Error).message}`);
+  try {
+    const r = await callClaude({
+      job: 'style_distill',
+      llm,
+      key: anthropicKey,
+      system: SYSTEM_PROMPT,
+      content: userMessage,
+      maxTokens: 150,
+      retryDelaysMs: RETRY_DELAYS_MS,
+      retryNetworkErrors: true,
+    });
+    const text = r.text;
+    if (text === 'NO_STYLE_SIGNAL' || text.startsWith('NO_STYLE_SIGNAL')) {
       return null;
     }
+    // Cap at 400 chars to fit the format clause + style anchors (45-word budget).
+    return text.length > 400 ? text.slice(0, 400) : text;
+  } catch (err) {
+    console.warn(`[styleDistiller] failed: ${(err as Error).message}`);
+    return null;
   }
-  return null;
 }
 
 /**
@@ -224,8 +199,4 @@ function truncateDirective(directive: string): string {
   const cleaned = directive.replace(/\s+/g, ' ').trim();
   if (cleaned.length <= 400) return cleaned;
   return cleaned.slice(0, 400).replace(/\s+\S*$/, '') + '…';
-}
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((r) => setTimeout(r, ms));
 }

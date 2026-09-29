@@ -86,7 +86,12 @@ async function countSince(since, extra) {
     ).limit(200);
     const tally = {};
     for (const r of failRows || []) {
-      for (const reason of r.fallback_reasons || []) tally[reason] = (tally[reason] || 0) + 1;
+      for (const reason of r.fallback_reasons || []) {
+        // `llm:<job>:<model>` is a routine "who answered" stamp (LLM_MIGRATION.md), present on every render;
+        // the llm_fallback / llm_refusal / llm_failed stamps are the interesting ones and stay in.
+        if (String(reason).startsWith('llm:')) continue;
+        tally[reason] = (tally[reason] || 0) + 1;
+      }
     }
     const top = Object.entries(tally)
       .sort((a, b) => b[1] - a[1])

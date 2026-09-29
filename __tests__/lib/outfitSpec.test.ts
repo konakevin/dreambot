@@ -329,7 +329,10 @@ describe('the costume read (create_outfit_costume_read)', () => {
       'A_GARMENT: NONE\nA_ROLE: Celtic bowhuntress\nA_STYLE: sexy, sleek and deadly\nA_COLOUR: NONE\nA_PATTERN: NONE'
     );
     const out = await extractOutfitSpec(BOWHUNTRESS, [STEPH], 'key', { costumeRead: true });
-    expect(mockSonnet).toHaveBeenCalledWith(expect.any(String), 'key', 260);
+    expect(mockSonnet).toHaveBeenCalledWith(expect.any(String), 'key', 260, {
+      job: 'outfit_reader',
+      llm: undefined,
+    });
     expect(out.source).toBe('read');
     if (out.source !== 'read') return;
     expect(out.result.byRole.plus_one).toEqual({

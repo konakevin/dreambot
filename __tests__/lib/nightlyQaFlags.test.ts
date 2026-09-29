@@ -111,3 +111,16 @@ describe('force_final_prompt (QA model comparison, 2026-09-07)', () => {
     expect(parseQaFlags({ force_final_prompt: 42 }).force_final_prompt).toBeNull();
   });
 });
+
+describe('force_llm_model (LLM_MIGRATION.md)', () => {
+  it('passes a model or model@effort through trimmed; the client validates it', () => {
+    expect(parseQaFlags({ force_llm_model: ' claude-sonnet-5-5@medium ' }).force_llm_model).toBe(
+      'claude-sonnet-5-5@medium'
+    );
+  });
+  it('is null when absent, empty, or not a string', () => {
+    expect(parseQaFlags({}).force_llm_model).toBeNull();
+    expect(parseQaFlags({ force_llm_model: '' }).force_llm_model).toBeNull();
+    expect(parseQaFlags({ force_llm_model: true }).force_llm_model).toBeNull();
+  });
+});

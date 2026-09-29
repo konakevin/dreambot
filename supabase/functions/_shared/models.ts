@@ -7,3 +7,6 @@
 
 export const SONNET = 'claude-sonnet-4-6';
 export const HAIKU = 'claude-haiku-4-5-20251001';
+/** Sonnet 5.5. Nothing defaults to it: a job moves by engine_config.llm_models (anthropic.ts, LLM_MIGRATION.md).
+ *  SONNET stays 4.6 until the migration's cleanup step. */
+export const SONNET_5_5 = 'claude-sonnet-5-5';

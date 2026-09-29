@@ -11,7 +11,7 @@
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
-import { HAIKU } from '../_shared/models.ts';
+import { callClaude } from '../_shared/anthropic.ts';
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -74,20 +74,15 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_KEY,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: HAIKU,
-        max_tokens: 100,
-        messages: [
-          {
-            role: 'user',
-            content: `Extract ONLY the visual art style from this AI image prompt. Include: the rendering medium/technique, color palette description, lighting quality, and texture. Do NOT include any subject matter, characters, objects, scenes, or environments — ONLY how the image looks and feels visually.
+    // style_extract (Haiku). An Anthropic error used to return 200 with an empty style and log nothing: the old
+    // code never checked the status. The response is unchanged (an empty style); the error is now logged.
+    let style = '';
+    try {
+      const r = await callClaude({
+        job: 'style_extract',
+        key: ANTHROPIC_KEY,
+        maxTokens: 100,
+        content: `Extract ONLY the visual art style from this AI image prompt. Include: the rendering medium/technique, color palette description, lighting quality, and texture. Do NOT include any subject matter, characters, objects, scenes, or environments — ONLY how the image looks and feels visually.
 
 Return a single comma-separated phrase, 15-30 words max. Examples:
 - "watercolor on textured paper, soft muted pastels, diffused warm lighting, visible brushstrokes"
@@ -95,13 +90,11 @@ Return a single comma-separated phrase, 15-30 words max. Examples:
 - "oil painting, thick impasto brushstrokes, dramatic chiaroscuro lighting, rich warm tones"
 
 Prompt: "${body.prompt.slice(0, 400)}"`,
-          },
-        ],
-      }),
-    });
-
-    const data = await resp.json();
-    const style = data?.content?.[0]?.text?.trim() ?? '';
+      });
+      style = r.text;
+    } catch (e) {
+      console.error('[extract-style] Anthropic call failed:', (e as Error).message);
+    }
     console.log('[extract-style] Input:', body.prompt.slice(0, 80));
     console.log('[extract-style] Extracted:', style);
 

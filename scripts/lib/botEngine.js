@@ -48,7 +48,8 @@ const { extendBriefForConcept, buildPolishBrief } = require('./twoPassPolish');
 const { distillStyle } = require('./styleDistiller');
 const { upscaleAndCache } = require('./upscaleClarity');
 const { buildRecipe } = require('./recipeBuilder');
-const { SONNET, HAIKU } = require('./models');
+const { SONNET, HAIKU, SONNET_5_5 } = require('./models');
+const anthropic = require('./anthropic');
 
 // ─────────────────────────────────────────────────────────────
 // SCAFFOLD-TOKEN SANITIZER (all bots)
@@ -124,14 +125,15 @@ function getSupabase() {
 
 const PRIMARY_MODEL = SONNET;
 const SECONDARY_MODEL = HAIKU;
-const RETRY_DELAYS_MS = [1000, 3000, 10000, 30000];
-const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504, 529]);
+const RETRY_DELAYS_MS = anthropic.RETRY_DELAYS_MS;
 
 // Approximate pricing in cents/million tokens (input+output averaged).
 // Just a budget estimate — adjust if pricing shifts materially.
 const MODEL_COST_PER_CALL_CENTS = {
   [PRIMARY_MODEL]: 0.3, // rough avg for a 500-token-in / 250-token-out brief
   [SECONDARY_MODEL]: 0.05,
+  // $2/$10 per MTok vs 4.6's $3/$15, but its tokenizer counts the same text ~1.35x: ~10% cheaper per brief.
+  [SONNET_5_5]: 0.27,
 };
 
 /**
@@ -165,58 +167,6 @@ async function withNsfwRetry(nsfwRetries, fn) {
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
-}
-
-async function callModelWithRetry({ model, brief, maxTokens, anthropicKey }) {
-  let lastErr = '';
-  for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt++) {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': anthropicKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model,
-        max_tokens: maxTokens,
-        messages: [{ role: 'user', content: brief }],
-      }),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      const raw = data.content?.[0]?.text ?? '';
-      const text = raw.trim().replace(/^["']|["']$/g, '');
-      if (text.length < 10) throw new Error(`${model} response too short`);
-      // FAIL LOUD ON TRUNCATION. `stop_reason: 'max_tokens'` means the model was
-      // cut off mid-word and the tail of the prompt — usually the output-order
-      // block that carries the path's closing instructions — was silently
-      // deleted. This was invisible for months: measured 2026-09-22 at 6.7% of
-      // all bot prompts fleet-wide and 21.4% on FarmBot, with nothing in any log
-      // to say so. Never let it be silent again.
-      const truncated = data.stop_reason === 'max_tokens';
-      if (truncated) {
-        console.warn(
-          `  ✂️  TRUNCATED: ${model} hit max_tokens=${maxTokens} — the prompt tail was cut mid-word. ` +
-            `Raise maxTokens for this call or shorten the brief. Tail: …${text.slice(-70)}`
-        );
-      }
-      return { text, retries: attempt, truncated };
-    }
-    lastErr = `${res.status}: ${(await res.text()).slice(0, 200)}`;
-    if (!RETRYABLE_STATUSES.has(res.status)) {
-      throw new Error(`${model} ${lastErr}`);
-    }
-    if (attempt < RETRY_DELAYS_MS.length) {
-      console.warn(
-        `  ⏳ ${model} ${res.status} retry ${attempt + 1}/${RETRY_DELAYS_MS.length} in ${
-          RETRY_DELAYS_MS[attempt] / 1000
-        }s`
-      );
-      await sleep(RETRY_DELAYS_MS[attempt]);
-    }
-  }
-  throw new Error(`${model} exhausted retries — ${lastErr}`);
 }
 
 /**
@@ -340,37 +290,55 @@ async function callClaude({
   brief,
   maxTokens = BRIEF_MAX_TOKENS,
   primary = PRIMARY_MODEL,
-  secondary = SECONDARY_MODEL,
   anthropicKey,
+  job,
+  llm,
 } = {}) {
   const key = anthropicKey || getKey('ANTHROPIC_API_KEY');
   if (!key) throw new Error('ANTHROPIC_API_KEY missing');
+  // The job decides the model chain (scripts/lib/anthropic.js LLM_JOBS): bot_prompt = Sonnet → Haiku, bot_polish
+  // = Haiku → Sonnet. Callers that still pass `primary: SECONDARY_MODEL` get the polish chain, as before.
+  const resolvedJob = job || (primary === SECONDARY_MODEL ? 'bot_polish' : 'bot_prompt');
+  let r;
   try {
-    const r = await callModelWithRetry({ model: primary, brief, maxTokens, anthropicKey: key });
-    return {
-      text: r.text,
-      modelUsed: primary,
-      retries: r.retries,
-      fellBackToSecondary: false,
-      truncated: r.truncated,
-    };
-  } catch (primaryErr) {
-    console.warn(`  ⚠️ ${primary} failed → falling back to ${secondary}: ${primaryErr.message}`);
-    try {
-      const r = await callModelWithRetry({ model: secondary, brief, maxTokens, anthropicKey: key });
-      return {
-        text: r.text,
-        modelUsed: secondary,
-        retries: r.retries,
-        fellBackToSecondary: true,
-        truncated: r.truncated,
-      };
-    } catch (secondaryErr) {
-      // Both exhausted — caller is responsible for fail-loud behavior.
-      const msg = `Claude exhausted: primary=${primaryErr.message}, secondary=${secondaryErr.message}`;
-      throw new Error(msg);
-    }
+    r = await anthropic.callClaude({
+      job: resolvedJob,
+      llm,
+      key,
+      content: brief,
+      maxTokens,
+      retryDelaysMs: RETRY_DELAYS_MS,
+      minChars: 10,
+    });
+  } catch (err) {
+    // Both exhausted — caller is responsible for fail-loud behavior. check-bot-health.js and dispatch-bots.js
+    // match "Claude exhausted": keep the wording.
+    const f = (err && err.failures) || [];
+    const first = f.length ? f[0].message : err.message;
+    const last = f.length ? f[f.length - 1].message : err.message;
+    throw new Error(`Claude exhausted: primary=${first}, secondary=${last}`);
   }
+  const text = r.text.replace(/^["']|["']$/g, '');
+  // FAIL LOUD ON TRUNCATION. `stop_reason: 'max_tokens'` means the model was
+  // cut off mid-word and the tail of the prompt — usually the output-order
+  // block that carries the path's closing instructions — was silently
+  // deleted. This was invisible for months: measured 2026-09-22 at 6.7% of
+  // all bot prompts fleet-wide and 21.4% on FarmBot, with nothing in any log
+  // to say so. Never let it be silent again.
+  const truncated = r.stopReason === 'max_tokens';
+  if (truncated) {
+    console.warn(
+      `  ✂️  TRUNCATED: ${r.model} hit max_tokens=${maxTokens} — the prompt tail was cut mid-word. ` +
+        `Raise maxTokens for this call or shorten the brief. Tail: …${text.slice(-70)}`
+    );
+  }
+  return {
+    text,
+    modelUsed: r.model,
+    retries: r.retries,
+    fellBackToSecondary: r.fellBackFrom !== null,
+    truncated,
+  };
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -1067,6 +1035,7 @@ async function postAsBot({
   model,
   path = null,
   shadow = false,
+  llm = null,
 }) {
   const bytes = fs.readFileSync(localPath);
   // Pipeline produces JPG (post 2026-05-09 webp revert). PNG kept as a
@@ -1183,7 +1152,8 @@ async function postAsBot({
     const summary = await distillStyle(
       { rawPrompt: prompt, mediumKey: medium, vibeKey },
       anthropicKey,
-      sb
+      sb,
+      llm
     );
     if (summary) {
       const { error: updErr } = await sb
@@ -1214,7 +1184,12 @@ async function postAsBot({
 }
 
 async function writeRunLog(sb, row) {
-  const { error } = await sb.from('bot_run_log').insert(row);
+  let { error } = await sb.from('bot_run_log').insert(row);
+  // llm_models arrived in migration 574. If a run ever lands before the column does, keep the rest of the row.
+  if (error && 'llm_models' in row && /llm_models/.test(error.message || '')) {
+    const { llm_models: _dropped, ...rest } = row;
+    ({ error } = await sb.from('bot_run_log').insert(rest));
+  }
   if (error) {
     // Don't throw — run log write failing is not worth aborting.
     console.warn(`  ⚠️ bot_run_log write failed: ${error.message}`);
@@ -1270,6 +1245,19 @@ async function runBot(opts) {
   // set; no row = pure code). Infra only; never touches creative content.
   const bot = await applyBotConfigOverlay(sb, baseBot);
   const startedAt = Date.now();
+  // LLM routing for this run (scripts/lib/anthropic.js, LLM_MIGRATION.md): engine_config.llm_models, the preview
+  // map when this bot's user is in llm_preview_user_ids (AlphaBot canaries a model this way), or a script's
+  // --llm-model. Its stamps land in bot_run_log.llm_models.
+  const llmRouting = await anthropic.fetchLlmRouting(sb);
+  let llmUserId = null;
+  if (llmRouting.previewUserIds.length > 0) {
+    llmUserId = await lookupBotUserId(sb, bot.username).catch(() => null);
+  }
+  const llm = anthropic.createLlmContext({
+    routing: llmRouting,
+    userId: llmUserId,
+    override: opts.llmModel !== undefined ? opts.llmModel : anthropic.llmOverrideFromArgs(),
+  });
   const isBatchMode = Boolean(outDir); // iter-bot sets this
   const shouldPostToDB = !dryRun && (!isBatchMode || post);
 
@@ -1556,7 +1544,12 @@ async function runBot(opts) {
             // Pass 1: Sonnet writes a vivid extended concept (no compression pressure)
             const conceptWords = tp.conceptWords || 150;
             const conceptBrief = extendBriefForConcept(brief, conceptWords);
-            const sonnet = await callClaude({ brief: conceptBrief, maxTokens: BRIEF_MAX_TOKENS });
+            const sonnet = await callClaude({
+              brief: conceptBrief,
+              maxTokens: BRIEF_MAX_TOKENS,
+              job: 'bot_prompt',
+              llm,
+            });
             // Pass 2: Haiku polishes to Flux-ready length, preserving anchor phrases.
             // Per-path word range overrides global (vampire-girls-2 needs more headroom).
             const polishedWords =
@@ -1579,8 +1572,8 @@ async function runBot(opts) {
             const haiku = await callClaude({
               brief: polishBrief,
               maxTokens: BRIEF_MAX_TOKENS,
-              primary: SECONDARY_MODEL,
-              secondary: PRIMARY_MODEL,
+              job: 'bot_polish',
+              llm,
             });
             return {
               text: haiku.text,
@@ -1591,7 +1584,7 @@ async function runBot(opts) {
             };
           }
           // Standard single-pass
-          return callClaude({ brief, maxTokens: BRIEF_MAX_TOKENS });
+          return callClaude({ brief, maxTokens: BRIEF_MAX_TOKENS, job: 'bot_prompt', llm });
         };
 
         const claude = await generateMiddle();
@@ -1947,7 +1940,7 @@ async function runBot(opts) {
       if (isNudityGated) {
         errorStage = 'nudity-check';
         const { classifyImageForNudity } = require('./nudityCheck');
-        const result = await classifyImageForNudity({ localPath });
+        const result = await classifyImageForNudity({ localPath, llm });
         if (result.flagged) {
           if (nudityRecoveryAttempt < MAX_NUDITY_RECOVERY) {
             nudityRecoveryAttempt++;
@@ -2002,6 +1995,7 @@ async function runBot(opts) {
         model: renderModel,
         path: resolvedPath,
         shadow: isShadowPath || forceShadow,
+        llm,
       });
 
       // 13. Commit dedup picks ONLY on successful post
@@ -2051,6 +2045,7 @@ async function runBot(opts) {
         sonnet_retries: claudeMeta.retries,
         sonnet_fell_back_to_secondary: claudeMeta.fellBackToSecondary,
         sonnet_truncated: claudeMeta.truncated,
+        llm_models: llm.stamps().join(' ') || null,
       });
     }
 
@@ -2105,6 +2100,7 @@ async function runBot(opts) {
           sonnet_retries: claudeMeta.retries,
           sonnet_fell_back_to_secondary: claudeMeta.fellBackToSecondary,
           sonnet_truncated: claudeMeta.truncated,
+          llm_models: llm.stamps().join(' ') || null,
         });
       } catch (logErr) {
         console.warn(`  ⚠️ failed to write bot_run_log: ${logErr.message}`);

@@ -397,6 +397,9 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
   "photograph" 3× after naming the look. BOTH fixes already existed and were switched off by
   `LOOKS_MINIMAL`. Five hypotheses tested, three rejected with renders — check the ledger before re-running
   any of them.
+- **LLM models (Sonnet 4.6 → 5.5):** `LLM_MIGRATION.md` (status of record): every Anthropic call names a JOB;
+  the model per job is `engine_config.llm_models` (+ QA `qa_llm_model` / `force_llm_model` / `--llm-model`), clients
+  `_shared/anthropic.ts` + `scripts/lib/anthropic.js`. Never call api.anthropic.com directly in production code.
 - **Engine + scaling:** `QUEUE_WORKERS_REFACTOR.md` (queue status of record + Fly scale runbook),
   `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_IMPRESS_PLAN.md` (always-impress backlog: quality gate, legendary dreams, holidays, weather, pets, taste, arcs — each handoff-ready), `NIGHTLY_SEED_POOL_QA.md`, `NIGHTLY_FUN_SCENARIOS_PLAN.md` (fun/fantasy
   scenario buckets + Option B location-fit actions — LIVE, playbook for adding/scaling/tuning),

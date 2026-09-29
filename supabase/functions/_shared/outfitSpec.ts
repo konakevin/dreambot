@@ -23,6 +23,7 @@
  */
 
 import { callSonnet } from './llm.ts';
+import type { LlmContext } from './anthropic.ts';
 import { sanitizeUserText } from './sanitizeUserText.ts';
 import {
   MATERIAL_COLOURED,
@@ -246,6 +247,8 @@ const KEYS = ['A', 'B'] as const;
 /** Phase 8 switch (engine_config.create_outfit_costume_read). Off = the reader exactly as before. */
 export interface OutfitSpecOptions {
   costumeRead?: boolean;
+  /** The request's LLM context (anthropic.ts): routes the outfit_reader job and stamps the call. */
+  llm?: LlmContext | null;
 }
 
 export function buildOutfitSpecBrief(
@@ -494,7 +497,8 @@ export async function extractOutfitSpec(
     const reply = await callSonnet(
       buildOutfitSpecBrief(prompt, people, opts),
       anthropicKey,
-      opts.costumeRead ? 260 : 160
+      opts.costumeRead ? 260 : 160,
+      { job: 'outfit_reader', llm: opts.llm }
     );
     return { source: 'read', result: parseOutfitSpecReply(reply.text, people, prompt, opts) };
   } catch (e) {

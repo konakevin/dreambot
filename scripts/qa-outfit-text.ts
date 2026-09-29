@@ -962,7 +962,9 @@ async function renderOne(c: Case, run: number): Promise<Result> {
     ...(soloPlan ? { outfitPlan: soloPlan } : {}),
     ...(soloPlan && (COSTUME || GARMENT) ? { outfitEarly: true } : {}),
   });
-  const sonnet = await callSonnet(compiled.sonnetBrief, KEY, compiled.maxTokens);
+  const sonnet = await callSonnet(compiled.sonnetBrief, KEY, compiled.maxTokens, {
+    job: 'create_brief',
+  });
   let soloText = sonnet.text;
   if (soloPlan) {
     const enforced = enforceSoloOutfit(soloText, soloPlan.people[0]);

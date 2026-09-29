@@ -26,9 +26,7 @@
  *   Zero-regression scenario.
  */
 
-const { HAIKU } = require('./models');
-const HAIKU_MODEL = HAIKU;
-const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504, 529]);
+const { callClaude } = require('./anthropic');
 const RETRY_DELAYS_MS = [1000, 3000, 8000];
 
 const SYSTEM_PROMPT = `You synthesize a unified style fingerprint from three sources that together defined a rendered image: a MEDIUM (art style identity), a VIBE (mood identity), and the final FLUX PROMPT used by the image model.
@@ -134,19 +132,16 @@ function truncateDirective(directive) {
   return cleaned.slice(0, 400).replace(/\s+\S*$/, '') + '…';
 }
 
-function sleep(ms) {
-  return new Promise((r) => setTimeout(r, ms));
-}
-
 /**
  * Distill a unified style fingerprint from medium + vibe + ai_prompt.
  *
  * @param {{rawPrompt:string|null, mediumKey:string|null, vibeKey:string|null}} input
  * @param {string} anthropicKey
  * @param {object} supabase  Supabase client (for directive lookups, cached)
+ * @param {object|null} [llm]  the run's LLM context (scripts/lib/anthropic.js)
  * @returns {Promise<string|null>}  ≤320 char fingerprint, or null on failure / NO_STYLE_SIGNAL
  */
-async function distillStyle(input, anthropicKey, supabase) {
+async function distillStyle(input, anthropicKey, supabase, llm = null) {
   const { rawPrompt, mediumKey, vibeKey } = input;
   if (!anthropicKey) return null;
   if (!rawPrompt?.trim() && !mediumKey && !vibeKey) return null;
@@ -162,46 +157,25 @@ async function distillStyle(input, anthropicKey, supabase) {
 
   const userMessage = `MEDIUM: ${mediumLine}\nVIBE: ${vibeLine}\nFLUX PROMPT: "${promptLine}"`;
 
-  for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt++) {
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': anthropicKey,
-          'anthropic-version': '2023-06-01',
-        },
-        body: JSON.stringify({
-          model: HAIKU_MODEL,
-          max_tokens: 150,
-          system: SYSTEM_PROMPT,
-          messages: [{ role: 'user', content: userMessage }],
-        }),
-      });
-
-      if (!res.ok) {
-        if (RETRYABLE_STATUSES.has(res.status) && attempt < RETRY_DELAYS_MS.length) {
-          await sleep(RETRY_DELAYS_MS[attempt]);
-          continue;
-        }
-        return null;
-      }
-
-      const data = await res.json();
-      const text = (data?.content?.[0]?.text ?? '').trim();
-      if (!text) return null;
-      if (text === 'NO_STYLE_SIGNAL' || text.startsWith('NO_STYLE_SIGNAL')) return null;
-      // Cap at 400 chars to fit the format clause + style anchors (45-word budget).
-      return text.length > 400 ? text.slice(0, 400) : text;
-    } catch (err) {
-      if (attempt < RETRY_DELAYS_MS.length) {
-        await sleep(RETRY_DELAYS_MS[attempt]);
-        continue;
-      }
-      return null;
-    }
+  try {
+    // bot_style_distill (Haiku), through scripts/lib/anthropic.js.
+    const r = await callClaude({
+      job: 'bot_style_distill',
+      llm,
+      key: anthropicKey,
+      system: SYSTEM_PROMPT,
+      content: userMessage,
+      maxTokens: 150,
+      retryDelaysMs: RETRY_DELAYS_MS,
+      retryNetworkErrors: true,
+    });
+    const text = r.text;
+    if (text === 'NO_STYLE_SIGNAL' || text.startsWith('NO_STYLE_SIGNAL')) return null;
+    // Cap at 400 chars to fit the format clause + style anchors (45-word budget).
+    return text.length > 400 ? text.slice(0, 400) : text;
+  } catch (_err) {
+    return null;
   }
-  return null;
 }
 
 module.exports = { distillStyle };

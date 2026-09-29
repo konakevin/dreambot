@@ -115,6 +115,7 @@ import { getLocationCard } from '../_shared/essenceCards.ts';
 import { isBannedLocationName } from '../_shared/locationFilters.ts';
 import type { LocationCard } from '../_shared/essenceCards.ts';
 import { callSonnet } from '../_shared/llm.ts';
+import { createLlmContext } from '../_shared/anthropic.ts';
 import { generateLocationActionBeat } from '../_shared/locationActionBeat.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
 import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
@@ -469,6 +470,7 @@ Deno.serve(async (req) => {
     force_garment_roll,
     force_solo_outfit_early,
     force_outfit_scene_fit,
+    force_llm_model,
     qa_big_face_max_hfrac,
     qa_max_face_hfrac,
     force_costume_keys,
@@ -529,6 +531,14 @@ Deno.serve(async (req) => {
   // the legacy picker everywhere below; 'shadow' = legacy still renders, the policy resolver runs beside
   // it at every pick site and stamps policy_shadow:<site>:match|diff; 'on' = the policy table decides.
   const engineCfg0 = await fetchEngineConfig(supabase);
+  // Every Anthropic call in this render routes and stamps through this (_shared/anthropic.ts, LLM_MIGRATION.md).
+  const llm = createLlmContext({
+    surface: 'nightly',
+    routing: engineCfg0.llmRouting,
+    userId,
+    override: force_llm_model,
+    stamp: (s) => fallbackReasons.push(s),
+  });
   const policyMode = engineCfg0.modelPolicyMode;
   // LOOKS PATH (NIGHTLY_LOOKS_REFACTOR_PLAN.md Phase 2, _shared/nightlyLooksPath.ts): 'on' = the style contract
   // decides model + look + vibe; 'shadow' = legacy renders, the contract is stamped; 'off' = legacy. QA:
@@ -1539,7 +1549,10 @@ Deno.serve(async (req) => {
     let locationCard: LocationCard | null = null;
     if (userPlace && ANTHROPIC_KEY) {
       try {
-        locationCard = await getLocationCard(userPlace, ANTHROPIC_KEY);
+        locationCard = await getLocationCard(userPlace, ANTHROPIC_KEY, {
+          generate: engineCfg0.essenceCardGeneration,
+          llm,
+        });
       } catch (err) {
         console.warn('[nightly-dreams] Location card failed:', (err as Error).message);
         fallbackReasons.push(`location_card_failed:${(err as Error).message}`);
@@ -3052,7 +3065,8 @@ Deno.serve(async (req) => {
             locationAction = await generateLocationActionBeat(
               iconicAnchor || userPlace || '',
               selectedCast.length === 2 ? 2 : 1,
-              ANTHROPIC_KEY
+              ANTHROPIC_KEY,
+              llm
             );
             if (locationAction) fallbackReasons.push('location_action');
           }
@@ -3089,7 +3103,8 @@ Deno.serve(async (req) => {
             const generated = await generateLocationActionBeat(
               dualSpecialScene,
               selectedCast.length === 2 ? 2 : 1,
-              beatKey
+              beatKey,
+              llm
             );
             if (generated) {
               dualScenarioAction = generated;
@@ -3541,7 +3556,8 @@ Deno.serve(async (req) => {
         const slotResult = await runCharacterSlotPipeline(
           slotInputUsed,
           ANTHROPIC_KEY,
-          isDualFaceSwap ? force_dual_slots : (force_single_slots ?? null)
+          isDualFaceSwap ? force_dual_slots : (force_single_slots ?? null),
+          llm
         );
         sonnetBrief = slotResult.briefUsed;
         sonnetRawResponse = slotResult.rawResponse;
@@ -4056,7 +4072,10 @@ Output ONLY the prompt.`;
       if (slotPipelineFallbacks.length > 0) fallbackReasons.push(...slotPipelineFallbacks);
     } else {
       try {
-        const sonnet = await callSonnet(nightlyBrief, ANTHROPIC_KEY, isDualFaceSwap ? 350 : 300);
+        const sonnet = await callSonnet(nightlyBrief, ANTHROPIC_KEY, isDualFaceSwap ? 350 : 300, {
+          job: 'nightly_brief',
+          llm,
+        });
         sonnetBrief = sonnet.brief;
         sonnetRawResponse = sonnet.rawResponse;
         if (sonnet.text.length < 20) throw new Error('too short');
@@ -4568,7 +4587,8 @@ Output ONLY the prompt.`;
                 target,
                 sideWardrobes.a,
                 sideWardrobes.b,
-                REPLICATE_TOKEN
+                REPLICATE_TOKEN,
+                llm
               );
               return r.aSide ? sidesToGenders(r.aSide, sideGenders.left, sideGenders.right) : null;
             }
@@ -4606,7 +4626,7 @@ Output ONLY the prompt.`;
               'batch'
             ),
           confirmGenders: async (target) => {
-            const r = await classifyDualGenders(target, REPLICATE_TOKEN);
+            const r = await classifyDualGenders(target, REPLICATE_TOKEN, llm);
             return { left: r.left, right: r.right, faceCount: r.faceCount };
           },
           ...(confirmSides ? { confirmSides } : {}),
@@ -4636,6 +4656,7 @@ Output ONLY the prompt.`;
               {
                 castGender: selfGender,
                 replicateToken: REPLICATE_TOKEN,
+                llm,
                 rerender: async () => {
                   rebuildAttempt += 1;
                   // Rebuild a GENUINE solo prompt for self (partner dropped) from
@@ -4978,6 +4999,7 @@ Output ONLY the prompt.`;
         {
           castGender: faceSwapGender,
           replicateToken: REPLICATE_TOKEN,
+          llm,
           rerender: async (attempt: number) => {
             /**
              * THE GEMINI RUNG FOR SOLOS (Kevin 2026-09-17): a solo that the guard cannot make safe used to
@@ -5289,7 +5311,7 @@ Output ONLY the prompt.`;
           // gets its own ONE-question check — an "empty" scene that renders
           // people is exactly the "strangers shipped" failure (two women in
           // profile, 2026-09-04). One people-free re-render, then ship the best.
-          const pv = await assessSceneFallbackPeople(sceneUrl);
+          const pv = await assessSceneFallbackPeople(sceneUrl, llm);
           if (pv && !pv.pass) {
             fallbackReasons.push('pure_scene_fallback:people');
             if (Date.now() - t0 < 110_000) {
@@ -5307,7 +5329,7 @@ Output ONLY the prompt.`;
                   undefined,
                   'jpg'
                 );
-                const pv2 = await assessSceneFallbackPeople(scene2.url);
+                const pv2 = await assessSceneFallbackPeople(scene2.url, llm);
                 if (!pv2 || pv2.pass) {
                   sceneUrl = scene2.url;
                   scenePred = scene2.predictionId;
@@ -5596,7 +5618,7 @@ Output ONLY the prompt.`;
         if (gateMode === 'shadow' || gateMode === 'enforce') {
           const GATE_MAX_ELAPSED_MS = 100_000;
           const firstUrl = tempUrl;
-          let verdict = await assessRenderQuality(tempUrl);
+          let verdict = await assessRenderQuality(tempUrl, llm);
           if (verdict === null) fallbackReasons.push('quality_gate:error');
           else if (verdict.pass) fallbackReasons.push(`quality_gate:${gateMode}:pass`);
           else {
@@ -5716,7 +5738,7 @@ Output ONLY the prompt.`;
                   );
                   break;
                 }
-                verdict = await assessRenderQuality(tempUrl);
+                verdict = await assessRenderQuality(tempUrl, llm);
                 if (verdict === null || verdict.pass) {
                   cleared = true;
                   fallbackReasons.push(`quality_gate:cleared_after:${ga + 1}`);
@@ -6019,7 +6041,8 @@ Output ONLY the prompt.`;
           vibeKey: resolvedVibeKey ?? null,
         },
         ANTHROPIC_KEY,
-        supabase
+        supabase,
+        llm
       )
         .then((summary) => {
           if (!summary) return;

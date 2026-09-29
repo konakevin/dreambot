@@ -25,6 +25,7 @@
  */
 
 import { callSonnet } from './llm.ts';
+import { slotsJob, type LlmContext } from './anthropic.ts';
 import { resolveCastGender, genderNoun, genderLockShout, type CastGender } from './genderLock.ts';
 import { varyFemaleHair, type HairSceneRegister } from './femaleHairVariation.ts';
 import { buildSceneHook } from './sceneHook.ts';
@@ -2088,7 +2089,9 @@ export async function runCharacterSlotPipeline(
   /** QA-only (nightly `force_dual_slots`, COUPLE_PROMPT_PARITY_PLAN.md §2): assemble from a
    *  caller-supplied slot set instead of calling Sonnet, so two prompt styles can be compared on
    *  IDENTICAL slots. Ignored unless it matches the cast count. */
-  forcedSlots: CharacterSlots | null = null
+  forcedSlots: CharacterSlots | null = null,
+  /** The request's LLM context (anthropic.ts): create_slots on Create, nightly_slots on nightly. */
+  llm: LlmContext | null = null
 ): Promise<CharacterSlotPipelineResult> {
   if (input.cast.length < 1 || input.cast.length > 2) {
     throw new Error(
@@ -2148,7 +2151,10 @@ export async function runCharacterSlotPipeline(
       // 2026-09-08: 500 → 900 output tokens. Day-of R35: 3 of 12 responses were cut off INSIDE the action
       // field (the last key) once the costume lock lengthened the wardrobe fields → parsed as "action
       // missing" → pool-pose fallback. Output tokens only; the brief is unchanged.
-      const sonnet = await callSonnet(lastAttemptBrief, anthropicKey, 900);
+      const sonnet = await callSonnet(lastAttemptBrief, anthropicKey, 900, {
+        job: slotsJob(llm),
+        llm,
+      });
       rawResponse = sonnet.rawResponse;
       retries = attempt;
       const parsed = parseSlotsJson(sonnet.text, castCount);

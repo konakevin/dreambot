@@ -141,6 +141,8 @@
     "__tests__/lib/embodiedSingleBrief.test.ts",
     "__tests__/lib/sceneHook.test.ts",
     "__tests__/lib/qualityGate.test.ts",
+    "__tests__/lib/anthropicClient.test.ts",
+    "__tests__/lib/anthropicClientParity.test.ts",
     "__tests__/lib/halloweenPoolsParity.test.ts",
     "scripts/eval-quality-gate.ts"
   ]

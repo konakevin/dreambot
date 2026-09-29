@@ -356,6 +356,7 @@ export type Database = {
           error_stage: string | null;
           id: string;
           image_url: string | null;
+          llm_models: string | null;
           medium: string | null;
           model: string | null;
           path: string | null;
@@ -377,6 +378,7 @@ export type Database = {
           error_stage?: string | null;
           id?: string;
           image_url?: string | null;
+          llm_models?: string | null;
           medium?: string | null;
           model?: string | null;
           path?: string | null;
@@ -398,6 +400,7 @@ export type Database = {
           error_stage?: string | null;
           id?: string;
           image_url?: string | null;
+          llm_models?: string | null;
           medium?: string | null;
           model?: string | null;
           path?: string | null;
@@ -1701,10 +1704,13 @@ export type Database = {
           create_activity_wardrobe: boolean;
           create_couple_approvals: boolean;
           create_couple_engine: string;
+          create_outfit_costume_read: boolean;
+          create_outfit_garment_roll: boolean;
           create_outfit_independent_pct: number;
           create_outfit_pattern_pct: number;
           create_outfit_preview_user_ids: string[];
           create_outfit_rolls: boolean;
+          create_outfit_scene_fit: boolean;
           create_outfit_separate_cut_pct: number;
           create_outfit_user_lock: boolean;
           create_prompt_scene_split: boolean;
@@ -1734,6 +1740,7 @@ export type Database = {
           dual_side_check_mode: string;
           embodied_mediums_high: string[];
           embodied_mediums_mid: string[];
+          essence_card_generation: boolean;
           extra_models_high: string[];
           extra_models_mid: string[];
           face_restore_create_enabled: boolean;
@@ -1764,6 +1771,9 @@ export type Database = {
           id: number;
           identity_degrade_floor: number;
           latest_app_version: string | null;
+          llm_models: Json;
+          llm_preview_models: Json;
+          llm_preview_user_ids: string[];
           location_action_pct: number;
           max_inflight_dreams_per_user: number;
           max_pinned_posts: number;
@@ -1779,15 +1789,19 @@ export type Database = {
           nightly_enqueue_max_spread_min: number;
           nightly_enqueue_spacing_s: number;
           nightly_flux_couple_honest_looks: boolean;
+          nightly_garment_roll: boolean;
           nightly_legacy_look_pct: number;
           nightly_look_recency: number;
           nightly_looks_allowlist: string[];
           nightly_looks_mode: string;
           nightly_max_face_hfrac: number;
           nightly_max_jobs: number;
+          nightly_outfit_scene_fit: boolean;
           nightly_require_ai_enabled: boolean;
           nightly_require_onboarding: boolean;
+          nightly_solo_outfit_early: boolean;
           nightly_swap_capacity_retries: number;
+          outfit_garment_weights: Json;
           pet_words: string;
           photo_preprocess_quality: number;
           photo_preprocess_width: number;
@@ -1833,10 +1847,13 @@ export type Database = {
           create_activity_wardrobe?: boolean;
           create_couple_approvals?: boolean;
           create_couple_engine?: string;
+          create_outfit_costume_read?: boolean;
+          create_outfit_garment_roll?: boolean;
           create_outfit_independent_pct?: number;
           create_outfit_pattern_pct?: number;
           create_outfit_preview_user_ids?: string[];
           create_outfit_rolls?: boolean;
+          create_outfit_scene_fit?: boolean;
           create_outfit_separate_cut_pct?: number;
           create_outfit_user_lock?: boolean;
           create_prompt_scene_split?: boolean;
@@ -1866,6 +1883,7 @@ export type Database = {
           dual_side_check_mode?: string;
           embodied_mediums_high?: string[];
           embodied_mediums_mid?: string[];
+          essence_card_generation?: boolean;
           extra_models_high?: string[];
           extra_models_mid?: string[];
           face_restore_create_enabled?: boolean;
@@ -1896,6 +1914,9 @@ export type Database = {
           id?: number;
           identity_degrade_floor?: number;
           latest_app_version?: string | null;
+          llm_models?: Json;
+          llm_preview_models?: Json;
+          llm_preview_user_ids?: string[];
           location_action_pct?: number;
           max_inflight_dreams_per_user?: number;
           max_pinned_posts?: number;
@@ -1911,15 +1932,19 @@ export type Database = {
           nightly_enqueue_max_spread_min?: number;
           nightly_enqueue_spacing_s?: number;
           nightly_flux_couple_honest_looks?: boolean;
+          nightly_garment_roll?: boolean;
           nightly_legacy_look_pct?: number;
           nightly_look_recency?: number;
           nightly_looks_allowlist?: string[];
           nightly_looks_mode?: string;
           nightly_max_face_hfrac?: number;
           nightly_max_jobs?: number;
+          nightly_outfit_scene_fit?: boolean;
           nightly_require_ai_enabled?: boolean;
           nightly_require_onboarding?: boolean;
+          nightly_solo_outfit_early?: boolean;
           nightly_swap_capacity_retries?: number;
+          outfit_garment_weights?: Json;
           pet_words?: string;
           photo_preprocess_quality?: number;
           photo_preprocess_width?: number;
@@ -1965,10 +1990,13 @@ export type Database = {
           create_activity_wardrobe?: boolean;
           create_couple_approvals?: boolean;
           create_couple_engine?: string;
+          create_outfit_costume_read?: boolean;
+          create_outfit_garment_roll?: boolean;
           create_outfit_independent_pct?: number;
           create_outfit_pattern_pct?: number;
           create_outfit_preview_user_ids?: string[];
           create_outfit_rolls?: boolean;
+          create_outfit_scene_fit?: boolean;
           create_outfit_separate_cut_pct?: number;
           create_outfit_user_lock?: boolean;
           create_prompt_scene_split?: boolean;
@@ -1998,6 +2026,7 @@ export type Database = {
           dual_side_check_mode?: string;
           embodied_mediums_high?: string[];
           embodied_mediums_mid?: string[];
+          essence_card_generation?: boolean;
           extra_models_high?: string[];
           extra_models_mid?: string[];
           face_restore_create_enabled?: boolean;
@@ -2028,6 +2057,9 @@ export type Database = {
           id?: number;
           identity_degrade_floor?: number;
           latest_app_version?: string | null;
+          llm_models?: Json;
+          llm_preview_models?: Json;
+          llm_preview_user_ids?: string[];
           location_action_pct?: number;
           max_inflight_dreams_per_user?: number;
           max_pinned_posts?: number;
@@ -2043,15 +2075,19 @@ export type Database = {
           nightly_enqueue_max_spread_min?: number;
           nightly_enqueue_spacing_s?: number;
           nightly_flux_couple_honest_looks?: boolean;
+          nightly_garment_roll?: boolean;
           nightly_legacy_look_pct?: number;
           nightly_look_recency?: number;
           nightly_looks_allowlist?: string[];
           nightly_looks_mode?: string;
           nightly_max_face_hfrac?: number;
           nightly_max_jobs?: number;
+          nightly_outfit_scene_fit?: boolean;
           nightly_require_ai_enabled?: boolean;
           nightly_require_onboarding?: boolean;
+          nightly_solo_outfit_early?: boolean;
           nightly_swap_capacity_retries?: number;
+          outfit_garment_weights?: Json;
           pet_words?: string;
           photo_preprocess_quality?: number;
           photo_preprocess_width?: number;
@@ -2419,6 +2455,7 @@ export type Database = {
           ramp_start_pct: number;
           ramp_style: string;
           sort_order: number;
+          stacked_pct: number | null;
           start_day: number | null;
           start_month: number | null;
           window_days: number;
@@ -2450,6 +2487,7 @@ export type Database = {
           ramp_start_pct?: number;
           ramp_style?: string;
           sort_order?: number;
+          stacked_pct?: number | null;
           start_day?: number | null;
           start_month?: number | null;
           window_days: number;
@@ -2481,6 +2519,7 @@ export type Database = {
           ramp_start_pct?: number;
           ramp_style?: string;
           sort_order?: number;
+          stacked_pct?: number | null;
           start_day?: number | null;
           start_month?: number | null;
           window_days?: number;
@@ -5210,6 +5249,13 @@ export type Database = {
       };
       reroll_topic: { Args: { p_game_id: string }; Returns: Json };
       reset_my_profile: { Args: never; Returns: undefined };
+      revenuecat_refund_clawback: {
+        Args: { p_original_reason: string; p_user_id: string };
+        Returns: {
+          amount: number;
+          outcome: string;
+        }[];
+      };
       sanitize_user_multiline_text: {
         Args: { p_text: string };
         Returns: string;

@@ -120,6 +120,10 @@ export interface NightlyQaFlags {
   /** SCENE FIT (mig 572): true = all fixes (looks + brief on nightly), 'looks' / 'brief' = one fix alone (the
    *  one-variable QA), false = off; null = engine_config.nightly_outfit_scene_fit. */
   force_outfit_scene_fit: boolean | 'looks' | 'trim' | 'brief' | null;
+  /** LLM MIGRATION (LLM_MIGRATION.md): run every Anthropic job in this render on this model, "model" or
+   *  "model@effort" (e.g. "claude-sonnet-5-5@medium"). A model with no profile in anthropic.ts is ignored and
+   *  stamped. Null = engine_config.llm_models. */
+  force_llm_model: string | null;
   /** FLUX COUPLE LAB: per-request big-face tier ceiling / composition gate overrides (numbers 0.2-1). */
   qa_big_face_max_hfrac: number | null;
   qa_max_face_hfrac: number | null;
@@ -309,6 +313,10 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
       body.force_outfit_scene_fit === 'trim' ||
       body.force_outfit_scene_fit === 'brief'
         ? body.force_outfit_scene_fit
+        : null,
+    force_llm_model:
+      typeof body.force_llm_model === 'string' && body.force_llm_model.trim().length > 0
+        ? body.force_llm_model.trim()
         : null,
     qa_big_face_max_hfrac: num01(body.qa_big_face_max_hfrac),
     qa_max_face_hfrac: num01(body.qa_max_face_hfrac),

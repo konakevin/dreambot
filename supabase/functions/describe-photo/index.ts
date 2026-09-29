@@ -1,5 +1,5 @@
 /**
- * describe-photo — Takes a photo URL, sends it to Claude Haiku vision,
+ * describe-photo — Takes a photo URL, sends it to Claude vision (Sonnet for people, Haiku for pets),
  * returns a detailed text description + physical trait summary.
  * One-time cost at profile save time.
  */
@@ -13,7 +13,8 @@ import {
   replaceHairColorInSummary,
 } from '../_shared/vision.ts';
 import { analyzeCastPhoto } from '../_shared/analyzeCastPhoto.ts';
-import { HAIKU, SONNET } from '../_shared/models.ts';
+import { createLlmContext } from '../_shared/anthropic.ts';
+import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 
 // No `!`: a missing env must fail the REQUEST with a clear 500, not assert at
 // module scope (audit 2026-09-03 M6).
@@ -80,17 +81,35 @@ Deno.serve(async (req: Request) => {
     }
 
     const prompt = role === 'pet' ? VISION_PROMPTS.castPet : VISION_PROMPTS.castPerson;
-    // Human cast → SONNET (once-per-upload; far better age accuracy + prose for the
-    // face-swap brief; eval: scripts/eval-cast-scanner.mjs). Pets stay on HAIKU.
-    const castModel = role === 'pet' ? HAIKU : SONNET;
-    const rawDescription = await describeWithVision(
-      image_url,
-      prompt,
-      REPLICATE_TOKEN,
-      400,
-      undefined,
-      castModel
-    );
+    // Every Anthropic read here routes through engine_config.llm_models (_shared/anthropic.ts). No stamps: this
+    // function writes no ai_generation_log row.
+    const llm = createLlmContext({
+      surface: 'cast',
+      routing: (await fetchEngineConfig(supabaseAdmin)).llmRouting,
+      userId: user.id,
+    });
+    // Human cast → cast_describe = SONNET (once-per-upload; far better age accuracy + prose for the
+    // face-swap brief; eval: scripts/eval-cast-scanner.mjs). Pets → pet_describe = HAIKU.
+    const describeJob = role === 'pet' ? 'pet_describe' : 'cast_describe';
+    const describe = () =>
+      describeWithVision(image_url, prompt, REPLICATE_TOKEN, 400, undefined, {
+        job: describeJob,
+        llm,
+      });
+    // An empty reply (a refusal, or a model that spent its budget elsewhere) used to fall through to the
+    // gender regex below, which reads nothing as MALE, and stored an empty description. Read once more; if it
+    // is still empty, fail the upload so the client asks for another photo.
+    let rawDescription = await describe();
+    if (!rawDescription.trim()) {
+      console.warn(`[describe-photo] empty ${role} description, reading once more`);
+      rawDescription = await describe();
+    }
+    if (!rawDescription.trim()) {
+      return new Response(JSON.stringify({ error: 'describe_failed' }), {
+        status: 502,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
     // Split the AGE: and TRAITS: sections from the description. These labels USED
     // to sit on their own lines, but _shared/sanitizeUserText (run on the vision
@@ -208,7 +227,7 @@ Deno.serve(async (req: Request) => {
     // (client persists it into dream_cast), read at render time as the race anchor
     // so a location prior can't override the cast's real race. Null-safe: any
     // uncertain/refusal → null → skin-tone fallback. (RACE_FIDELITY_PLAN.md)
-    const ethnicity = role === 'pet' ? null : await classifyEthnicity(image_url);
+    const ethnicity = role === 'pet' ? null : await classifyEthnicity(image_url, llm);
 
     // Focused HAIR-COLOR read — the combined describe above is unreliable on hair
     // color (mislabeled a dirty-blonde/greying man "chestnut brown"); a focused
@@ -216,7 +235,7 @@ Deno.serve(async (req: Request) => {
     // render anchors the TRUE color. Null-safe → keep the combined color on failure.
     let correctedSummary = physicalSummary;
     if (role !== 'pet' && physicalSummary) {
-      const hairColor = await classifyHairColor(image_url);
+      const hairColor = await classifyHairColor(image_url, llm);
       if (hairColor) correctedSummary = replaceHairColorInSummary(physicalSummary, hairColor);
     }
 

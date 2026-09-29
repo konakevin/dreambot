@@ -34,6 +34,8 @@ import {
 } from '../_shared/dreamQueueLifecycle.ts';
 import { captureRenderError } from '../_shared/sentry.ts';
 import { callSonnet } from '../_shared/llm.ts';
+import { createLlmContext } from '../_shared/anthropic.ts';
+import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import {
   getCostCents,
   getSparkleCost,
@@ -332,6 +334,13 @@ async function handleRequest(req: Request): Promise<Response> {
   let visionDescription: string | null = null;
   let replicatePredictionId: string | null = null;
   const fallbackReasons: string[] = [];
+  // Every Anthropic call in this render routes and stamps through this (_shared/anthropic.ts, LLM_MIGRATION.md).
+  const llm = createLlmContext({
+    surface: 'restyle',
+    routing: (await fetchEngineConfig(supabase)).llmRouting,
+    userId,
+    stamp: (s) => fallbackReasons.push(s),
+  });
 
   // Stage breadcrumb — pre-render (medium/vibe resolve + vision + Sonnet brief).
   markStage(supabase, jobId, 'resolve');
@@ -381,7 +390,9 @@ async function handleRequest(req: Request): Promise<Response> {
         input_image,
         VISION_PROMPTS.photoSubject,
         REPLICATE_TOKEN,
-        100
+        100,
+        undefined,
+        { job: 'photo_describe', llm }
       );
       visionDescription = photoDescription;
       lap('vision-describe');
@@ -389,7 +400,10 @@ async function handleRequest(req: Request): Promise<Response> {
 
       const restyleBrief = config.buildPrompt(photoDescription, vibeDirective, hint ?? '');
 
-      const sonnetResult = await callSonnet(restyleBrief, ANTHROPIC_KEY, 150);
+      const sonnetResult = await callSonnet(restyleBrief, ANTHROPIC_KEY, 150, {
+        job: 'restyle_brief',
+        llm,
+      });
       sonnetBrief = sonnetResult.brief;
       sonnetRawResponse = sonnetResult.rawResponse;
       finalPrompt = sonnetResult.text;

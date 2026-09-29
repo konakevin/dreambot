@@ -36,6 +36,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { loadEnv } = require('../../lib/seedGenHelper');
+const { offlineModel, offlineBody, parseReply } = require('../../lib/anthropic');
 
 const KEY = process.env.ANTHROPIC_API_KEY || loadEnv().ANTHROPIC_API_KEY;
 
@@ -53,11 +54,8 @@ async function claude(model, prompt, maxTokens) {
           'anthropic-version': '2023-06-01',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          model,
-          max_tokens: maxTokens,
-          messages: [{ role: 'user', content: prompt }],
-        }),
+        // `--llm-model` swaps a Sonnet 4.6 call (scripts/lib/anthropic.js); 4.6's body is unchanged.
+        body: JSON.stringify(offlineBody(offlineModel(model), prompt, maxTokens)),
       });
     } catch (e) {
       if (i < delays.length) {
@@ -67,8 +65,7 @@ async function claude(model, prompt, maxTokens) {
       throw e;
     }
     if (res.ok) {
-      const j = await res.json();
-      return j.content.map((c) => c.text || '').join('');
+      return parseReply(await res.json()).raw;
     }
     if ((res.status === 429 || res.status === 529 || res.status >= 500) && i < delays.length) {
       await new Promise((r) => setTimeout(r, delays[i]));

@@ -7,7 +7,7 @@
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
-import { SONNET } from './models.ts';
+import { callClaude, type LlmContext } from './anthropic.ts';
 import { isBannedLocationName, isBannedLocationBiome } from './locationFilters.ts';
 
 // ── Types ─────────────────────────────────────────────────────────────
@@ -48,46 +48,28 @@ export function normalizeName(raw: string): string {
     .replace(/\s+/g, ' ');
 }
 
-const PROMPT_VERSION = 1;
-const MODEL_VERSION = SONNET;
+// 2 (2026-09-28): the reply is no longer pre-filled with "{" (4.6 and 5.5 both reject an assistant prefill,
+// which is why no card was written from 2026-05-11). The prompt asks for the bare object instead.
+const PROMPT_VERSION = 2;
 
 // ── Sonnet call ───────────────────────────────────────────────────────
 
+/** One card request. Returns the reply text and the model that wrote it (location_cards.model_version). */
 async function callSonnet(
   prompt: string,
   anthropicKey: string,
-  maxTokens: number
-): Promise<string> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': anthropicKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: MODEL_VERSION,
-        max_tokens: maxTokens,
-        messages: [
-          { role: 'user', content: prompt },
-          { role: 'assistant', content: '{' },
-        ],
-      }),
-      signal: controller.signal,
-    });
-
-    if (!res.ok) throw new Error('Sonnet ' + res.status);
-    const data = await res.json();
-    const text =
-      data.content && data.content[0] && data.content[0].text ? data.content[0].text : '';
-    return '{' + text;
-  } finally {
-    clearTimeout(timeout);
-  }
+  maxTokens: number,
+  llm: LlmContext | null
+): Promise<{ text: string; model: string }> {
+  const r = await callClaude({
+    job: 'essence_card',
+    llm,
+    key: anthropicKey,
+    content: prompt,
+    maxTokens,
+    timeoutMs: 15000,
+  });
+  return { text: r.text, model: r.model };
 }
 
 function parseJsonSafe(text: string): Record<string, unknown> | null {
@@ -96,7 +78,10 @@ function parseJsonSafe(text: string): Record<string, unknown> | null {
       .replace(/```json\s*/g, '')
       .replace(/```/g, '')
       .trim();
-    return JSON.parse(cleaned);
+    // Without a prefill a model can still add a word before or after the object: read the outermost braces.
+    const start = cleaned.indexOf('{');
+    const end = cleaned.lastIndexOf('}');
+    return JSON.parse(start >= 0 && end > start ? cleaned.slice(start, end + 1) : cleaned);
   } catch {
     return null;
   }
@@ -126,8 +111,9 @@ function ensureRecord(val: unknown): Record<string, string[]> {
 
 async function generateLocationCard(
   name: string,
-  anthropicKey: string
-): Promise<LocationCard | null> {
+  anthropicKey: string,
+  llm: LlmContext | null
+): Promise<(LocationCard & { modelVersion: string }) | null> {
   const prompt = `You are a cinematic location scout creating a visual essence card for an AI dream generator.
 
 Given this place: "${name}"
@@ -155,14 +141,17 @@ Even fantasy/scifi entries should be BEAUTIFUL and WONDER-FILLED, not dark or th
 Each fusion setting MUST include a camera distance term (medium wide, medium, three-quarter, environmental portrait).
 NEVER include: looking out over, gazing at horizon, standing at the edge, silhouette against, from behind, walking away.
 Each phrase max 10 words. Fusion settings max 25 words.
-No metaphors, no cliches.`;
+No metaphors, no cliches.
+
+Reply with the JSON object only, starting with { and ending with }: no code fences, no words before or after it.`;
 
   try {
-    const raw = await callSonnet(prompt, anthropicKey, 800);
-    const parsed = parseJsonSafe(raw);
+    const reply = await callSonnet(prompt, anthropicKey, 800, llm);
+    const parsed = parseJsonSafe(reply.text);
     if (!parsed) return null;
 
     return {
+      modelVersion: reply.model,
       name,
       tags: ensureArray(parsed.tags),
       visual_palette: ensureArray(parsed.visual_palette),
@@ -183,9 +172,17 @@ No metaphors, no cliches.`;
 
 // ── Public API ────────────────────────────────────────────────────────
 
+export interface LocationCardOptions {
+  /** engine_config.essence_card_generation: write a card for a place that has none. Off = read existing
+   *  cards only, which is what happened in practice from 2026-05-11 (every generation 400'd on the prefill). */
+  generate: boolean;
+  llm?: LlmContext | null;
+}
+
 export async function getLocationCard(
   rawName: string,
-  anthropicKey: string
+  anthropicKey: string,
+  opts: LocationCardOptions
 ): Promise<LocationCard | null> {
   const name = normalizeName(rawName);
 
@@ -238,16 +235,18 @@ export async function getLocationCard(
   }
 
   // Generate new card
+  if (!opts.generate) return null;
   console.log('[essenceCards] Generating location card for:', name);
-  const card = await generateLocationCard(name, anthropicKey);
-  if (!card) return null;
+  const generated = await generateLocationCard(name, anthropicKey, opts.llm ?? null);
+  if (!generated) return null;
+  const { modelVersion, ...card } = generated;
 
   // Insert into DB (handle race condition)
   const { error: insertErr } = await sb.from('location_cards').insert({
     name,
     tags: card.tags,
     prompt_version: PROMPT_VERSION,
-    model_version: MODEL_VERSION,
+    model_version: modelVersion,
     visual_palette: card.visual_palette,
     atmosphere: card.atmosphere,
     architecture: card.architecture,

@@ -5,10 +5,15 @@
  * System prompt establishes art-generation context to prevent refusals.
  */
 
-import { HAIKU, SONNET } from './models.ts';
 import { sanitizeUserText } from './sanitizeUserText.ts';
-import { jitter } from './jitter.ts';
-import { RETRY_DELAYS_MS, RETRYABLE_STATUSES } from './llm.ts';
+import {
+  callClaude,
+  LlmError,
+  RETRY_DELAYS_MS,
+  type LlmContentBlock,
+  type LlmContext,
+  type LlmJob,
+} from './anthropic.ts';
 import { buildWardrobeSidesPrompt, parseWardrobeSidesReply } from './wardrobeSides.ts';
 
 // Vision retries fewer times than the brief path (llm.ts, 4): the callers here
@@ -28,14 +33,36 @@ const SYSTEM_PROMPT = `You are a visual description assistant for an AI art app 
 // exactly what trips the refusal.
 const RENDER_ANALYSIS_SYSTEM_PROMPT = `You are an image-analysis assistant for an AI art application. You are shown AI-generated artwork produced by the app itself and answer factual questions about the image content (composition, subject count, apparent attributes) concisely and in the exact format requested.`;
 
+/** Which job a vision read is (routes the model, names the stamps) and the request's LLM context. */
+export interface VisionCall {
+  /** Default photo_describe (Haiku). The CAST-PHOTO scan passes cast_describe (Sonnet): on a labeled
+   *  27-image eval Sonnet cut age error (MAE 4.3y→3.1y, within±5y 62%→88%) and lifted ethnicity (82%→91%)
+   *  vs Haiku, and the cast scan runs ONCE per upload, so the cost is trivial. (Cast-scanner accuracy work,
+   *  2026-09-01; eval: scripts/eval-cast-scanner.mjs.) */
+  job?: LlmJob;
+  llm?: LlmContext | null;
+}
+
+/** A public URL or a base64 data URL as an Anthropic image block; null for a malformed data URL. */
+function imageBlock(imageInput: string): LlmContentBlock | null {
+  if (imageInput.startsWith('data:')) {
+    // base64 data URL → extract media type and data
+    const match = imageInput.match(/^data:(image\/\w+);base64,(.+)$/);
+    if (!match) return null;
+    return { type: 'image', source: { type: 'base64', media_type: match[1], data: match[2] } };
+  }
+  return { type: 'image', source: { type: 'url', url: imageInput } };
+}
+
 /**
- * Describe a photo using Claude Haiku vision.
+ * Describe a photo using Claude vision (Haiku unless the job routes elsewhere).
  *
  * @param imageInput — either a public URL or a base64 data URL (data:image/jpeg;base64,...)
  * @param prompt — the instruction for what to describe
  * @param _replicateToken — unused, kept for backward compat (callers still pass it)
  * @param maxTokens — max response length (default 200)
  * @param systemPrompt — override for non-photo use (AI-render analysis probes)
+ * @param call — the job (default photo_describe) and the request's LLM context
  */
 export async function describeWithVision(
   imageInput: string,
@@ -43,85 +70,40 @@ export async function describeWithVision(
   _replicateToken: string,
   maxTokens: number = 200,
   systemPrompt: string = SYSTEM_PROMPT,
-  // Model override. Default HAIKU (cheap) for per-render analysis probes. The
-  // CAST-PHOTO scan passes SONNET: on a labeled 27-image eval Sonnet cut age error
-  // (MAE 4.3y→3.1y, within±5y 62%→88%) and lifted ethnicity (82%→91%) vs Haiku —
-  // and the cast scan runs ONCE per upload, so the cost is trivial. (Cast-scanner
-  // accuracy work, 2026-09-01; eval: scripts/eval-cast-scanner.mjs.)
-  model: string = HAIKU
+  call: VisionCall = {}
 ): Promise<string> {
   const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
   if (!anthropicKey) throw new Error('Missing ANTHROPIC_API_KEY');
 
-  // Build the image content block
-  let imageContent: Record<string, unknown>;
-  if (imageInput.startsWith('data:')) {
-    // base64 data URL → extract media type and data
-    const match = imageInput.match(/^data:(image\/\w+);base64,(.+)$/);
-    if (!match) throw new Error('Invalid base64 data URL');
-    imageContent = {
-      type: 'image',
-      source: {
-        type: 'base64',
-        media_type: match[1],
-        data: match[2],
-      },
-    };
-  } else {
-    // Public URL
-    imageContent = {
-      type: 'image',
-      source: {
-        type: 'url',
-        url: imageInput,
-      },
-    };
-  }
-
-  const body = JSON.stringify({
-    model,
-    max_tokens: maxTokens,
-    system: systemPrompt,
-    messages: [
-      {
-        role: 'user',
-        content: [imageContent, { type: 'text', text: prompt }],
-      },
-    ],
-  });
+  const imageContent = imageBlock(imageInput);
+  if (!imageContent) throw new Error('Invalid base64 data URL');
 
   // Retry transient Anthropic pressure (429/5xx) with jittered backoff — a single
   // 429 used to throw immediately and silently degrade the whole dual-gender /
   // cast-description path (Anthropic is the first provider to throttle under a
   // burst). Non-retryable statuses (e.g. 400/401) still fail fast.
-  let res: Response;
-  for (let attempt = 0; ; attempt++) {
-    res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': anthropicKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body,
+  let text = '';
+  try {
+    const r = await callClaude({
+      job: call.job ?? 'photo_describe',
+      llm: call.llm,
+      key: anthropicKey,
+      system: systemPrompt,
+      content: [imageContent, { type: 'text', text: prompt }],
+      maxTokens,
+      retryDelaysMs: RETRY_DELAYS_MS.slice(0, VISION_MAX_RETRIES),
     });
-    if (res.ok) break;
-    if (!RETRYABLE_STATUSES.has(res.status) || attempt >= VISION_MAX_RETRIES) {
-      const err = await res.text();
-      console.error('[vision] Anthropic API error:', res.status, err);
-      throw new Error(`Vision API failed: ${res.status}`);
+    text = r.raw;
+  } catch (e) {
+    // An empty or refused reply came back as '' before this client existed, and every caller reads '' as
+    // "unread". Only a failed request throws.
+    if (!(e instanceof LlmError) || (e.kind !== 'empty' && e.kind !== 'refusal')) {
+      console.error('[vision] Anthropic API error:', (e as Error).message);
+      throw new Error(
+        `Vision API failed: ${e instanceof LlmError ? (e.status ?? e.kind) : (e as Error).message}`
+      );
     }
-    console.warn(
-      `[vision] ${res.status} on attempt ${attempt + 1}/${VISION_MAX_RETRIES + 1}, retrying`
-    );
-    await new Promise((r) =>
-      setTimeout(r, jitter(RETRY_DELAYS_MS[Math.min(attempt, RETRY_DELAYS_MS.length - 1)]))
-    );
   }
-
-  const data = await res.json();
-  const text =
-    data.content && data.content[0] && data.content[0].type === 'text' ? data.content[0].text : '';
   // Treat the description as UNTRUSTED — a user can paint instructions onto the
   // photo (indirect prompt injection) which the model would faithfully repeat
   // into the brief. Strip injection/control/zero-width before any caller uses it.
@@ -153,46 +135,29 @@ export type CastEthnicity = (typeof CAST_ETHNICITY_BUCKETS)[number];
  * Runs ONCE at cast-photo upload (describe-photo) + the backfill — never per render.
  * Justification-FREE closed-set prompt (Haiku refuses "justified" probes).
  */
-export async function classifyEthnicity(imageInput: string): Promise<CastEthnicity | null> {
+export async function classifyEthnicity(
+  imageInput: string,
+  llm?: LlmContext | null
+): Promise<CastEthnicity | null> {
   const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
   if (!anthropicKey) return null;
   try {
-    let imageContent: Record<string, unknown>;
-    if (imageInput.startsWith('data:')) {
-      const match = imageInput.match(/^data:(image\/\w+);base64,(.+)$/);
-      if (!match) return null;
-      imageContent = {
-        type: 'image',
-        source: { type: 'base64', media_type: match[1], data: match[2] },
-      };
-    } else {
-      imageContent = { type: 'image', source: { type: 'url', url: imageInput } };
-    }
+    const imageContent = imageBlock(imageInput);
+    if (!imageContent) return null;
     const prompt =
       "Which single option best matches this person's broad appearance? Choose EXACTLY one and reply with only that option, nothing else:\n" +
       CAST_ETHNICITY_BUCKETS.join(', ') +
       ', Uncertain.';
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': anthropicKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        // SONNET: cast ethnicity read is once-per-upload; Sonnet scored 91% vs
-        // Haiku's 82% on the labeled eval (scripts/eval-cast-scanner.mjs).
-        model: SONNET,
-        max_tokens: 30,
-        messages: [{ role: 'user', content: [imageContent, { type: 'text', text: prompt }] }],
-      }),
+    // cast_ethnicity = SONNET: the read is once-per-upload; Sonnet scored 91% vs Haiku's 82% on the labeled
+    // eval (scripts/eval-cast-scanner.mjs).
+    const r = await callClaude({
+      job: 'cast_ethnicity',
+      llm,
+      key: anthropicKey,
+      content: [imageContent, { type: 'text', text: prompt }],
+      maxTokens: 30,
     });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const txt =
-      data.content && data.content[0] && data.content[0].type === 'text'
-        ? String(data.content[0].text).toLowerCase()
-        : '';
+    const txt = r.raw.toLowerCase();
     // Longest-first match so "South Asian" isn't shadowed by "Asian" etc.
     const hit = [...CAST_ETHNICITY_BUCKETS]
       .sort((a, b) => b.length - a.length)
@@ -223,43 +188,25 @@ export const HAIR_COLOR_PROMPT =
  * 88% family). Returns a short color phrase or null. NULL-SAFE. Runs once at upload
  * + backfill — never per render. (scripts/eval-cast-scanner.mjs, RACE_FIDELITY_PLAN.md)
  */
-export async function classifyHairColor(imageInput: string): Promise<string | null> {
+export async function classifyHairColor(
+  imageInput: string,
+  llm?: LlmContext | null
+): Promise<string | null> {
   const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
   if (!anthropicKey) return null;
   try {
-    let imageContent: Record<string, unknown>;
-    if (imageInput.startsWith('data:')) {
-      const match = imageInput.match(/^data:(image\/\w+);base64,(.+)$/);
-      if (!match) return null;
-      imageContent = {
-        type: 'image',
-        source: { type: 'base64', media_type: match[1], data: match[2] },
-      };
-    } else {
-      imageContent = { type: 'image', source: { type: 'url', url: imageInput } };
-    }
-    const prompt = HAIR_COLOR_PROMPT;
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': anthropicKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        // SONNET + de-biased prompt: 88% hair-family accuracy, 0 grey false-positives
-        // (vs Haiku+biased 46% / 10-of-21). Once-per-upload, so cost is trivial.
-        model: SONNET,
-        max_tokens: 20,
-        messages: [{ role: 'user', content: [imageContent, { type: 'text', text: prompt }] }],
-      }),
+    const imageContent = imageBlock(imageInput);
+    if (!imageContent) return null;
+    // cast_hair = SONNET + de-biased prompt: 88% hair-family accuracy, 0 grey false-positives
+    // (vs Haiku+biased 46% / 10-of-21). Once-per-upload, so cost is trivial.
+    const r = await callClaude({
+      job: 'cast_hair',
+      llm,
+      key: anthropicKey,
+      content: [imageContent, { type: 'text', text: HAIR_COLOR_PROMPT }],
+      maxTokens: 20,
     });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const txt =
-      data.content && data.content[0] && data.content[0].type === 'text'
-        ? String(data.content[0].text).trim()
-        : '';
+    const txt = r.text;
     // Guard: a short color phrase only — reject refusals / sentences.
     if (!txt || txt.length > 40 || /(cannot|can't|unable|sorry|not able)/i.test(txt)) return null;
     return sanitizeUserText(txt, 'vision').toLowerCase();
@@ -340,7 +287,8 @@ export function replaceHairColorInSummary(summary: string, color: string): strin
  */
 export async function classifyDualGenders(
   imageInput: string,
-  replicateToken: string
+  replicateToken: string,
+  llm?: LlmContext | null
 ): Promise<{
   left: 'male' | 'female' | null;
   right: 'male' | 'female' | null;
@@ -372,7 +320,8 @@ export async function classifyDualGenders(
         prompt,
         replicateToken,
         40,
-        RENDER_ANALYSIS_SYSTEM_PROMPT
+        RENDER_ANALYSIS_SYSTEM_PROMPT,
+        { job: 'probe_genders', llm }
       )
     ).trim();
     const parts = raw.split('|');
@@ -454,7 +403,8 @@ export async function classifyWardrobeSides(
   imageInput: string,
   outfitA: string,
   outfitB: string,
-  replicateToken: string
+  replicateToken: string,
+  llm?: LlmContext | null
 ): Promise<{ aSide: 'left' | 'right' | null }> {
   const prompt = buildWardrobeSidesPrompt(outfitA, outfitB);
   const once = async () =>
@@ -465,7 +415,8 @@ export async function classifyWardrobeSides(
           prompt,
           replicateToken,
           20,
-          RENDER_ANALYSIS_SYSTEM_PROMPT
+          RENDER_ANALYSIS_SYSTEM_PROMPT,
+          { job: 'probe_wardrobe', llm }
         )
       ).trim()
     );
