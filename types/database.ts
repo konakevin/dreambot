@@ -4925,6 +4925,7 @@ export type Database = {
       };
       get_my_ballot: { Args: { p_game_id: string }; Returns: Json };
       get_my_games: { Args: never; Returns: Json };
+      get_my_like_ids: { Args: never; Returns: string[] };
       get_new_notification_count: {
         Args: { p_user_id: string };
         Returns: number;

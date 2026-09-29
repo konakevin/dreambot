@@ -51,6 +51,8 @@ import { EditDescriptionModalHost } from '@/components/EditDescriptionModal';
 import { queryClient, persistOptions } from '@/lib/queryClient';
 import { Image as ExpoImage } from 'expo-image';
 import { publicProfileQueryOptions } from '@/hooks/usePublicProfile';
+import { likeIdsQueryOptions } from '@/hooks/useLikeIds';
+import { favoriteIdsQueryOptions } from '@/hooks/useFavoriteIds';
 import { prefetchDreamFeed } from '@/hooks/useDreamFeed';
 import { AppErrorBoundary } from '@/components/AppErrorBoundary';
 import { ForceUpdateGate } from '@/components/ForceUpdateGate';
@@ -857,6 +859,12 @@ function BootFeedPrewarm() {
     // (App-Hang guard — the JS thread is busiest during first paint).
     const task = InteractionManager.runAfterInteractions(() => {
       void prefetchDreamFeed(queryClient, 'forYou', uid, useFeedStore.getState().feedSeed);
+      // Start the liked / saved sets WITH the feed, so the first card's heart and bookmark
+      // are right on first paint. They used to start only when the feed screen mounted and
+      // (liked: ~6 paged requests for a heavy liker) landed after the first card, so the
+      // heart showed empty and filled red a moment later (2026-09-28). One request each now.
+      void queryClient.prefetchQuery(likeIdsQueryOptions(uid, queryClient));
+      void queryClient.prefetchQuery(favoriteIdsQueryOptions(uid, queryClient));
     });
     return () => task.cancel();
   }, [initialized, user]);
