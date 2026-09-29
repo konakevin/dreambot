@@ -166,9 +166,10 @@ describe('compilePrompt', () => {
     expect(output.faceSwapSource).toBeNull();
   });
 
-  it('maxTokens is always 200', () => {
+  // 200 truncated 71 of 71 real text briefs mid-word (Sonnet writes ~119 words to a 70-90 ask). Never below 450.
+  it('maxTokens is 450, room for the whole prompt and its finish', () => {
     const sceneInput = makeInput();
-    expect(compilePrompt(sceneInput).maxTokens).toBe(200);
+    expect(compilePrompt(sceneInput).maxTokens).toBe(450);
 
     const charInput = makeInput({
       cast: [makeCast()],
@@ -179,7 +180,7 @@ describe('compilePrompt', () => {
         focalAnchor: 'the main character',
       },
     });
-    expect(compilePrompt(charInput).maxTokens).toBe(200);
+    expect(compilePrompt(charInput).maxTokens).toBe(450);
   });
 });
 

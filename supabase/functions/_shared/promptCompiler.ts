@@ -611,7 +611,10 @@ Output ONLY the prompt.`;
   return {
     sonnetBrief: brief,
     fallbackPrompt: fallback,
-    maxTokens: 200,
+    // 450, was 200 (2026-09-29, LLM_MIGRATION.md finding 1). The brief asks 70-90 words but Sonnet 4.6 writes ~119
+    // (30-day mean): 200 tokens cut EVERY real text / description / new-scene prompt mid-word (71 of 71), losing
+    // the camera + mood tail and the "no text, no words, no watermarks" finish. Same budget as singleBriefBuilder.
+    maxTokens: 450,
     postProcess: {
       appendFaceLock: composition.faceSwapEligible,
       appendPortraitTags: true,

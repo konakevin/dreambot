@@ -1102,7 +1102,13 @@ async function handleRequest(req: Request): Promise<Response> {
           sonnetBrief = sonnet.brief;
           sonnetRawResponse = sonnet.rawResponse;
           if (sonnet.text.length < 10) throw new Error('too short');
-          finalPrompt = postProcessPrompt(sonnet.text, compiled.postProcess);
+          // Cut off mid-phrase at maxTokens: drop the unfinished clause rather than ship it.
+          let briefText = sonnet.text;
+          if (sonnet.stopReason === 'max_tokens') {
+            briefText = trimTruncatedPrompt(briefText);
+            fallbackReasons.push('sonnet_truncated');
+          }
+          finalPrompt = postProcessPrompt(briefText, compiled.postProcess);
         } catch (err) {
           console.error(
             '[generate-dream] DESCRIPTION ROUTE Sonnet failed:',
@@ -1241,7 +1247,13 @@ async function handleRequest(req: Request): Promise<Response> {
           sonnetBrief = sonnet.brief;
           sonnetRawResponse = sonnet.rawResponse;
           if (sonnet.text.length < 10) throw new Error('too short');
-          finalPrompt = postProcessPrompt(sonnet.text, compiled.postProcess);
+          // Cut off mid-phrase at maxTokens: drop the unfinished clause rather than ship it.
+          let briefText = sonnet.text;
+          if (sonnet.stopReason === 'max_tokens') {
+            briefText = trimTruncatedPrompt(briefText);
+            fallbackReasons.push('sonnet_truncated');
+          }
+          finalPrompt = postProcessPrompt(briefText, compiled.postProcess);
         } catch (err) {
           console.error('[generate-dream] NEW SCENE Sonnet failed:', (err as Error).message);
           fallbackReasons.push(`new_scene_sonnet_failed:${(err as Error).message}`);
@@ -2190,7 +2202,13 @@ Output ONLY the prompt.`;
           sonnetBrief = sonnet.brief;
           sonnetRawResponse = sonnet.rawResponse;
           if (sonnet.text.length < 10) throw new Error('too short');
-          finalPrompt = postProcessPrompt(sonnet.text, compiled.postProcess);
+          // Cut off mid-phrase at maxTokens: drop the unfinished clause rather than ship it.
+          let briefText = sonnet.text;
+          if (sonnet.stopReason === 'max_tokens') {
+            briefText = trimTruncatedPrompt(briefText);
+            fallbackReasons.push('sonnet_truncated');
+          }
+          finalPrompt = postProcessPrompt(briefText, compiled.postProcess);
         } catch (err) {
           fallbackReasons.push(`${inputType}_sonnet_failed:${(err as Error).message}`);
           finalPrompt = compiled.fallbackPrompt;

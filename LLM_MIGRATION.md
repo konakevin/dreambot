@@ -102,9 +102,12 @@ Edge stamps go to `ai_generation_log.fallback_reasons`; bot stamps go to `bot_ru
 
 ## Findings the stamps surfaced
 
-1. **Create plain-text briefs truncate on 4.6 today.** `promptCompiler.ts:614` caps the text-prompt brief at
-   `maxTokens: 200`, while the solo and couple builders get 450 and 500. The canary hit `llm_truncated:create_brief`
-   2 of 2 times (a ~940-character prompt, with the last clause lost). This is pre-existing and not changed in step 0.
+1. **Create plain-text briefs truncated on 4.6. FIXED 2026-09-29.** `promptCompiler.ts` capped the text,
+   description and new-scene briefs at `maxTokens: 200`, while the solo and couple builders get 450 and 500. The
+   brief asks for 70-90 words but 4.6 writes ~119 (30-day mean), so **71 of 71** real briefs in the last 30 days
+   were cut mid-word ("…stacking water to", "…hanging v"), losing the camera and mood tail and the "no text, no
+   words, no watermarks" finish. The cap is now 450, and those three paths trim and stamp `sonnet_truncated` like
+   the solo path. After the deploy, 3 of 3 canaries were complete (112-136 words), with render time unchanged.
 2. **Essence cards have been dead since 2026-05-11.** The generator pre-filled the reply with `{`, and 4.6 rejects
    that with a 400. The fixed generator ships behind `engine_config.essence_card_generation` (off). Turning it on
    changes nightly, so it's Kevin's call.
