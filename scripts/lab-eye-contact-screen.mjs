@@ -109,6 +109,9 @@ export const ARMS = {
   },
   // Solos, round 6: the shipped solo gaze (c2 on a solo = after the medium) plus s1's two removals.
   s2: (p) => ARMS.s1(ARMS.c2(p)),
+  // Solos, round 8: the gaze AFTER the early wardrobe (the couple winner's place), and s3 without the three-quarter head.
+  s3: (p) => p.replace(/(, wearing [^—]*?)(, set at )/, '$1, looking into the camera$2'),
+  s4: (p) => ARMS.s3(p).replace(SOLO_ANGLE, 'turned naturally toward the viewer'),
   // Solos: eyes to the camera, no "gently off", no three-quarter head.
   s1: (p) =>
     p
