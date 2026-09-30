@@ -137,6 +137,10 @@ hook. (`nightly-dreams/index.ts` ~line 1994.)
 9. **Thumbnail:** `node scripts/generate-location-thumbnails.js "<name>"`.
 10. **QA:** `node scripts/qa-location.js --location "<name>"` → post to Kevin's Dreams album → grade to
     ≥4.5 over the 3-round loop → flip `admin_only=false` when the section is signed off.
+    QA renders skip holidays by default (`force_no_holiday`, 2026-09-30): in a holiday window the in-season roll
+    (Fall = 50%) replaced every scene-only QA render of the surreal cards with a festive scene, so the location's own
+    spots were never graded. Pass `--with-holiday` only to see the live mix. Grade on `ai_generation_log` too: a
+    `holiday_roll:...` or `scenario_card:` reason means the render wasn't the location.
 
 > ⚠️ **CURATION-GATE — set the gate columns BEFORE the global steps (learned 2026-08-24, the hard way):**
 > The global curation scripts (postcards, classify-scale, classify-pure-scene-eligible, qa-character-pool,
@@ -164,6 +168,16 @@ hook. (`nightly-dreams/index.ts` ~line 1994.)
 
 **Verify integration on `ai_generation_log.fallback_reasons` (look for `location_action` / `active_pose`),
 NOT by eyeballing the image.**
+
+## Seeding an invented world from a concept (2026-09-30, Surreal Dreams)
+- The recipe, biome and wardrobe generators work from the card's NAME plus `sub_regions` / `must_include`. For an
+  invented world a short name is not enough: "land of giants" came back as megaliths, with bans that contradicted
+  the spots. Generate the recipe under a descriptive name that states the concept, rename to the key, and seed
+  `sub_regions` / `must_include` from the actual spot pool BEFORE `gen-location-biome.js` (clear `biome_config` to
+  regenerate; `gen-location-wardrobe.js --force`).
+- A colossal-object spot must name ONE instantly recognisable object first ("a teacup the size of a lake"); a
+  process description ("a corkscrew drilling through bedrock, helical tunnels spiraling") renders as generic
+  spiral architecture.
 
 ## Themed / imagined worlds — depth + real-place hygiene (2026-09-08)
 - **Top up** a thin imagined world's pure-scene pool with `node scripts/gen-themed-postcard-spots.mjs

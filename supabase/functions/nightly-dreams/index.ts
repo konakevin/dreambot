@@ -504,6 +504,7 @@ Deno.serve(async (req) => {
     force_age_fidelity,
     force_couple_hair_anchor,
     force_scenario_scope,
+    force_no_holiday,
     force_solo_outfit_early,
     force_outfit_scene_fit,
     force_llm_model,
@@ -907,7 +908,8 @@ Deno.serve(async (req) => {
         // first dream that fell to the scene tier in a holiday window could land on a festive scene instead.
         // Resolving no holidays here turns off every holiday branch (scene, cast roll, day-of) at once.
         else if (isFirstDream) holidayResolveNote = 'first_dream';
-        if (holCfg.holidaysEnabled && !isFirstDream) {
+        else if (force_no_holiday) holidayResolveNote = 'qa_no_holiday';
+        if (holCfg.holidaysEnabled && !isFirstDream && !force_no_holiday) {
           const { data: tzRow } = await supabase
             .from('users')
             .select('timezone')

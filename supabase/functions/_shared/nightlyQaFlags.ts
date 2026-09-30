@@ -129,6 +129,9 @@ export interface NightlyQaFlags {
   /** SCENARIO SCOPE (SCENARIO_LOCATION_SCOPE.md): true draws only scenarios tagged with the dreamer's chosen places,
    *  false the whole pools; null = engine_config.nightly_scenarios_location_scoped. */
   force_scenario_scope: boolean | null;
+  /** QA: resolve no holidays for this render, as a first dream does, so a location QA shows the location and not the
+   *  in-season holiday (Fall rolls 50% in its window). qa-location.js sends it by default. */
+  force_no_holiday: boolean;
   /** SOLO OUTFIT EARLY (mig 565): true names a solo's wardrobe right after the medium, false the old order;
    *  null = engine_config.nightly_solo_outfit_early. */
   force_solo_outfit_early: boolean | null;
@@ -329,6 +332,7 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
         : body.force_couple_hair_anchor === false
           ? false
           : null,
+    force_no_holiday: body.force_no_holiday === true,
     force_scenario_scope:
       body.force_scenario_scope === true
         ? true
