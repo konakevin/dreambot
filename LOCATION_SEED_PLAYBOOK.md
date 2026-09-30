@@ -178,6 +178,11 @@ NOT by eyeballing the image.**
 - A colossal-object spot must name ONE instantly recognisable object first ("a teacup the size of a lake"); a
   process description ("a corkscrew drilling through bedrock, helical tunnels spiraling") renders as generic
   spiral architecture.
+- Even then, Flux draws the object and drops the impossible part: scale ("a gong as wide as a lake" → person-sized)
+  and inverted physics ("a river flowing uphill", "flames burning downward", "tables drifting weightless" → normal).
+  Round 2 of Land of Giants and Gravity's Off: 6 of 6 spots reached the prompt, 1 of 6 read. A world whose whole
+  identity is scale or physics cannot be carried by wording; pick concepts whose look is the thing itself (glowing
+  elements, whimsical objects), which rendered well.
 
 ## Themed / imagined worlds — depth + real-place hygiene (2026-09-08)
 - **Top up** a thin imagined world's pure-scene pool with `node scripts/gen-themed-postcard-spots.mjs

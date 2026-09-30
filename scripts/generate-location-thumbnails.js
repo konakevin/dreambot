@@ -124,8 +124,6 @@ const LOCATION_PROMPTS = {
     'Whimsical fairy tale castle on rolling hills, candy-colored towers, enchanted gardens with oversized flowers, warm storybook light, fantasy, cinematic wide shot',
   'paris cafe':
     'Intimate Parisian café terrace at golden hour, bistro chairs on cobblestone, warm lamplight, flowering window boxes, romantic atmosphere, cinematic medium shot, photorealistic',
-  'cherry blossoms':
-    'Avenue of cherry blossom trees in full bloom, pink petals drifting in warm breeze, soft golden light, serene pathway, cinematic wide shot, photorealistic',
   'japanese garden':
     'Traditional Japanese zen garden with raked gravel, moss-covered stones, red maple, koi pond, bamboo water feature, peaceful atmosphere, cinematic wide shot, photorealistic',
   'fairy cottage':
@@ -200,6 +198,13 @@ const LOCATION_PROMPTS = {
     'A rain-slicked 1940s city street at night, neon signs and a lone streetlamp in drifting fog, film noir style, cinematic wide shot, no people',
   'retro decades':
     'A colorful retro roller rink and neon diner at night with a spinning disco ball, vibrant vintage colors, cinematic wide shot, no people',
+  // Romantic Escapes places (mig 605): pretty, lush, romantic (Kevin 2026-09-30).
+  'cherry blossoms':
+    'Kyoto canal path beneath a tunnel of pink cherry blossoms, petals drifting on the water, stone lanterns and a small wooden bridge, soft spring light, romantic, cinematic wide shot, no people',
+  'tuscan villa':
+    'Honey-stone Tuscan hilltop villa draped in climbing roses, cypress-lined drive, vineyard terraces and olive groves below, golden light, romantic, cinematic wide shot, no people',
+  'lavender fields':
+    'Provence lavender field in full purple bloom leading to a stone abbey, rows curving into the distance, sunflowers at the edge, golden light, romantic, cinematic wide shot, no people',
   'gardens and romance':
     'A romantic formal garden with a rose-covered pavilion and a glowing glasshouse, blooming flowers, golden light, cinematic wide shot, no people',
 };
