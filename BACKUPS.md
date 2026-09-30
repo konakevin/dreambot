@@ -328,3 +328,7 @@ last. Nothing in this plan changes app behaviour; everything runs outside the ap
   - Phase 2 + 3 done on GitHub (results under each phase). The first drill found the push-notification webhook
     trigger that a rebuild would silently lose.
   - Phase 4 code in; dry run + speed probe done. `avatars` and `location-thumbnails` already copied by the probe.
+  - The first 75 GB copy waits for Kevin: an automated overnight supervisor was declined, so the schedule does NOT
+    start the mirror until a first copy has been started by hand (`is-due.js`: storage with no status is never
+    due unless forced, and doesn't alarm). To start it: Actions → Backup → Run workflow → only `storage`, force on,
+    transfers `8`.

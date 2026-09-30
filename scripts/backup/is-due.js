@@ -15,8 +15,16 @@ const { STALE_ALARM_HOURS, isDue, readStatus } = require('./lib');
   const status = await readStatus(job);
   const last = status ? new Date(status.lastSuccessAt) : null;
   const ageH = last ? (Date.now() - last) / 3600000 : Infinity;
-  const due = process.env.BACKUP_FORCE === 'true' ? { due: true, why: 'forced' } : isDue(last);
-  const stale = ageH > STALE_ALARM_HOURS;
+  const forced = process.env.BACKUP_FORCE === 'true';
+  // The mirror's FIRST copy (75 GB, hours) is started by hand and watched (BACKUPS.md Phase 4); the schedule only
+  // takes over once one has succeeded, and nothing alarms before then.
+  const firstMirrorPending = job === 'storage' && !status && !forced;
+  const due = forced
+    ? { due: true, why: 'forced' }
+    : firstMirrorPending
+      ? { due: false, why: 'first copy not done yet; start it by hand (BACKUPS.md Phase 4)' }
+      : isDue(last);
+  const stale = !firstMirrorPending && ageH > STALE_ALARM_HOURS;
 
   console.log(
     `${job}: ${last ? `last success ${ageH.toFixed(1)} h ago` : 'no previous success'}; ` +
