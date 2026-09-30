@@ -622,7 +622,13 @@ function withOverlays(
   const apply = (text: string) => {
     const r = applyOverlays(text, opts.job, model, llm.overlays);
     for (const k of r.applied) stamp(`llm_overlay:${opts.job}:${k}`);
-    for (const k of r.missed) stamp(`llm_overlay_miss:${opts.job}:${k}`);
+    // A miss is stamped only for a QA-picked overlay (a tuning round wants to know). A LIVE overlay misses by design
+    // on prompts it doesn't target (the holiday-length row on a plain scene, the couple row on a solo), and a live
+    // row's `find` text is locked by __tests__/lib/llmTuningGuards.test.ts, so that note was noise (2026-09-30).
+    for (const k of r.missed) {
+      const o = llm.overlays.find((x) => x.key === k);
+      if (o && !o.active) stamp(`llm_overlay_miss:${opts.job}:${k}`);
+    }
     return r.text;
   };
   if (typeof opts.content === 'string') return { ...opts, content: apply(opts.content) };

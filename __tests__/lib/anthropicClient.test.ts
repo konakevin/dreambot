@@ -496,6 +496,34 @@ describe('prompt overlays (LLM_5_5_TUNING_PLAN.md): 5.5 tuning that can never to
     expect(JSON.parse(bodies[0]).messages[0].content).toBe('brief NEW text');
     expect(JSON.parse(bodies[1]).messages[0].content).toBe('brief OLD text');
   });
+  it('a miss is stamped for a QA-picked overlay, silent for a live one (it misses by design on other prompts)', async () => {
+    const qaRow = parseLlmOverlays([
+      {
+        key: 'q1',
+        job: 'create_brief',
+        model: SONNET_5_5,
+        mode: 'replace',
+        find: 'ABSENT',
+        body: 'X',
+        active: false,
+      },
+    ]);
+    const qa = ctxWith({
+      overlays: [...OVERLAYS, ...qaRow],
+      overlayKeys: 'q1',
+      override: SONNET_5_5,
+    });
+    mockFetch(ok('a long enough five point five reply'));
+    await callClaude({
+      job: 'create_brief',
+      llm: qa.llm,
+      key: 'k',
+      content: 'no anchor here',
+      maxTokens: 450,
+    });
+    expect(qa.stamps).toContain('llm_overlay_miss:create_brief:q1');
+    expect(qa.stamps).not.toContain('llm_overlay_miss:create_brief:a2');
+  });
   it('on image content, the last text block gets the overlay', async () => {
     const { llm } = ctxWith({ overlays: OVERLAYS, override: SONNET_5_5 });
     mockFetch(ok('BROKEN: no'));
