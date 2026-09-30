@@ -743,12 +743,12 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
     if (plusOneNeedsName) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
       // Onboarding copy can't lean on the Create screen (Kevin 2026-09-30: new users haven't seen it yet), so it says
-      // what the name does in plain terms; Settings keeps its original wording.
+      // what the name is for: THEY will use it to put their +1 in dreams they make later. Settings keeps its wording.
       showAlert(
         settingsCopy ? 'Name Required' : "What's their name?",
         settingsCopy
           ? 'Give your +1 a name so you can cast them in a dream: "me and Ken at the beach".'
-          : 'Add your +1’s name so DreamBot knows who they are and can bring them into your dreams.',
+          : 'When you make your own dreams later, just use their name to put them in, like “me and Ken in Paris.”',
         [
           { text: settingsCopy ? 'Name them' : 'Add their name', style: 'cancel' },
           {
