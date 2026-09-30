@@ -18,6 +18,11 @@ const POOLER_SESSION_PORT = 5432; // session mode: pg_dump and exported snapshot
 const STORAGE_S3_ENDPOINT = `https://${PROJECT_REF}.storage.supabase.co/storage/v1/s3`;
 const READ_ONLY_ROLE = 'supabase_read_only_user'; // pg_read_all_data + BYPASSRLS, cannot write
 
+// What the database copy holds (BACKUPS.md "The database copy").
+const SCHEMAS = ['public', 'auth', 'storage', 'supabase_migrations'];
+// Rows left out: a 30-day debug log that is ~75% of the database. Its table definition is still dumped.
+const EXCLUDED_DATA = ['public.ai_generation_log'];
+
 // Schedule. GitHub fires this repo's scheduled runs ~1 time in 4, so the workflow WAKES hourly and a job runs
 // only when its last success is DUE_AFTER_HOURS old and the hour is outside the busy window (the nightly queue
 // drain + Supabase's own 04:00 backup). With every wake firing, successes settle at ~09:37 UTC.
@@ -201,6 +206,28 @@ function pgBin(name) {
   return fs.existsSync(brew) ? brew : name;
 }
 
+/**
+ * Per-schema counts of the structure a restore must bring back (functions, policies, triggers, indexes,
+ * views, sequences), excluding extension-owned objects. The restore drill runs the same query on the restored
+ * database and compares.
+ */
+async function countSchemaObjects(client, schemas = SCHEMAS) {
+  const { rows } = await client.query(
+    `with s as (select oid, nspname from pg_namespace where nspname = any($1)),
+          ext as (select objid from pg_depend where deptype = 'e')
+     select s.nspname as schema,
+       (select count(*) from pg_proc p where p.pronamespace = s.oid and p.oid not in (select objid from ext))::int as functions,
+       (select count(*) from pg_policy pol join pg_class c on c.oid = pol.polrelid where c.relnamespace = s.oid)::int as policies,
+       (select count(*) from pg_trigger t join pg_class c on c.oid = t.tgrelid where c.relnamespace = s.oid and not t.tgisinternal)::int as triggers,
+       (select count(*) from pg_class c where c.relnamespace = s.oid and c.relkind = 'i')::int as indexes,
+       (select count(*) from pg_class c where c.relnamespace = s.oid and c.relkind in ('v', 'm'))::int as views,
+       (select count(*) from pg_class c where c.relnamespace = s.oid and c.relkind = 'S')::int as sequences
+     from s order by 1`,
+    [schemas]
+  );
+  return Object.fromEntries(rows.map(({ schema, ...counts }) => [schema, counts]));
+}
+
 function mb(bytes) {
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 }
@@ -232,6 +259,9 @@ module.exports = {
   PROJECT_REF,
   R2_BUCKET,
   READ_ONLY_ROLE,
+  SCHEMAS,
+  EXCLUDED_DATA,
+  countSchemaObjects,
   BACKUP_INTERVAL_HOURS,
   DUE_AFTER_HOURS,
   BLACKOUT_UTC_HOURS,

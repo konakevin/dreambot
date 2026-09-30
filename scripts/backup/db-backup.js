@@ -24,6 +24,9 @@ const { getHeadroom } = require('../lib/poolHeadroom');
 const {
   R2_BUCKET,
   READ_ONLY_ROLE,
+  SCHEMAS,
+  EXCLUDED_DATA,
+  countSchemaObjects,
   isDue,
   readStatus,
   writeStatus,
@@ -37,9 +40,6 @@ const {
   elapsed,
 } = require('./lib');
 
-const SCHEMAS = ['public', 'auth', 'storage', 'supabase_migrations'];
-// Rows left out: a 30-day debug log that is ~75% of the database. Its table definition is still dumped.
-const EXCLUDED_DATA = ['public.ai_generation_log'];
 // Tables that shrink on purpose (scheduled cleanup jobs, auth session churn). Every OTHER table is watched by
 // the lost-rows alarm, so a new table is watched by default.
 const CHURN_TABLES = new Set([
@@ -148,6 +148,14 @@ async function dumpDatabase(dumpPath) {
     const { rows: cronJobs } = await client.query(
       'select jobid, jobname, schedule, command, active from cron.job order by jobname'
     );
+    const schemaObjects = await countSchemaObjects(client);
+    const { rows: realtime } = await client.query(
+      "select schemaname || '.' || tablename as t from pg_publication_tables " +
+        "where pubname = 'supabase_realtime' order by 1"
+    );
+    const { rows: extensions } = await client.query(
+      'select extname, extversion from pg_extension order by 1'
+    );
 
     let dumped = await dumping;
     // Same intermittent login failure as lib.connectReadOnly; the snapshot stays valid while this txn is open.
@@ -164,6 +172,9 @@ async function dumpDatabase(dumpPath) {
       server: { version: meta.version, dbBytes: Number(meta.db_bytes) },
       manifestTables,
       cronJobs,
+      schemaObjects,
+      realtimeTables: realtime.map((r) => r.t),
+      extensions,
     };
   } finally {
     await client.end().catch(() => {});
@@ -243,6 +254,9 @@ function lostRows(prev, now) {
       excludedData: EXCLUDED_DATA,
       dumpBytes,
       tables: snap.manifestTables,
+      schemaObjects: snap.schemaObjects,
+      realtimeTables: snap.realtimeTables, // re-add these to the supabase_realtime publication after a rebuild
+      extensions: snap.extensions,
     };
 
     await upload(dumpPath, `${prefix}/dreambot.dump`);

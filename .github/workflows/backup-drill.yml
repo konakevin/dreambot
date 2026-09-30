@@ -1,0 +1,95 @@
+name: Backup restore drill
+
+# Proves the off-site backups actually restore (BACKUPS.md Phase 3), and is the second, independent freshness
+# alarm next to backup.yml. Wakes every 6 hours: each wake checks that the newest database copy (and, once live,
+# the image mirror) is younger than STALE_ALARM_HOURS; a full drill runs when the last passing one is over 7 days
+# old. The drill restores the newest copy into a THROWAWAY container of the same Postgres image Supabase runs,
+# checks every table's rows and the structure against the manifest, rehearses the single-table restore, and
+# samples the image mirror. Nothing here touches production. The repo is public: counts only in the log.
+
+on:
+  schedule:
+    - cron: '23 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Run the full drill now'
+        type: boolean
+        default: false
+
+concurrency:
+  group: backup-drill
+  cancel-in-progress: false
+
+jobs:
+  drill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+      SUPABASE_S3_ACCESS_KEY_ID: ${{ secrets.SUPABASE_S3_ACCESS_KEY_ID }}
+      SUPABASE_S3_SECRET_ACCESS_KEY: ${{ secrets.SUPABASE_S3_SECRET_ACCESS_KEY }}
+      BACKUP_FORCE: ${{ inputs.force }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install rclone (pinned, checksum-verified)
+        run: |
+          curl -fsSLo /tmp/rclone.zip https://downloads.rclone.org/v1.75.1/rclone-v1.75.1-linux-amd64.zip
+          echo "982b5aa772841168f8e380f139e9e787b2a105403e32b94da8676a0e1c0a13ab  /tmp/rclone.zip" | sha256sum -c --quiet
+          unzip -qj /tmp/rclone.zip '*/rclone' -d /tmp/rclone && sudo install /tmp/rclone/rclone /usr/local/bin/
+
+      - name: Fresh? Drill due?
+        id: due
+        run: node scripts/backup/restore-drill.js --check
+
+      - uses: actions/setup-node@v4
+        if: steps.due.outputs.due == 'true'
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: steps.due.outputs.due == 'true'
+        run: npm ci --ignore-scripts
+
+      - name: Install Postgres 17 client
+        if: steps.due.outputs.due == 'true'
+        run: |
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl -fsSL -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" \
+            | sudo tee /etc/apt/sources.list.d/pgdg.list >/dev/null
+          sudo apt-get update -qq >/dev/null
+          sudo apt-get install -y -qq postgresql-client-17 >/dev/null
+          echo "/usr/lib/postgresql/17/bin" >> "$GITHUB_PATH"
+
+      - name: Start a throwaway Supabase Postgres (same image as production)
+        if: steps.due.outputs.due == 'true'
+        run: |
+          docker run -d --name drilldb -p 54322:5432 -e POSTGRES_PASSWORD=drill \
+            supabase/postgres:17.6.1.084 postgres -c config_file=/etc/postgresql/postgresql.conf
+          for i in $(seq 1 90); do pg_isready -h localhost -p 54322 -q && break; sleep 2; done
+          sleep 5
+          for u in supabase_admin postgres; do
+            if PGPASSWORD=drill psql -h localhost -p 54322 -U "$u" -d postgres -tAc \
+                "select rolsuper from pg_roles where rolname = current_user" 2>/dev/null | grep -q t; then
+              echo "DRILL_DB_URL=postgresql://$u:drill@localhost:54322/postgres" >> "$GITHUB_ENV"
+              echo "superuser: $u"; exit 0
+            fi
+          done
+          echo "::error::no superuser login on the drill database"; docker logs drilldb 2>&1 | tail -20; exit 1
+
+      - name: Restore drill
+        id: drill
+        if: steps.due.outputs.due == 'true'
+        run: node scripts/backup/restore-drill.js --run
+
+      - name: Alarm if backups are stale
+        if: always() && steps.due.outputs.stale == 'true'
+        run: |
+          echo "::error::The newest off-site backup is older than the alarm threshold. See BACKUPS.md."
+          exit 1
