@@ -181,7 +181,14 @@ import {
   type DualSlots,
   type CharacterSlots,
 } from '../_shared/characterSlotPrompt.ts';
-import { rollFashion, sceneFitFrom } from '../_shared/outfitPlan.ts';
+import {
+  planOutfits,
+  recentLooksFromStamps,
+  rollFashion,
+  sceneFitFrom,
+  WOMEN_GARMENT_FAMILIES,
+  type OutfitPlan,
+} from '../_shared/outfitPlan.ts';
 import {
   settingFromCategory,
   settingFromLocation,
@@ -469,6 +476,7 @@ Deno.serve(async (req) => {
     force_couple_variant,
     force_honest_looks,
     force_garment_roll,
+    force_outfit_plan,
     force_solo_outfit_early,
     force_outfit_scene_fit,
     force_llm_model,
@@ -724,7 +732,8 @@ Deno.serve(async (req) => {
     // no dedicated rolled_axes.location field.
     const { data: recentLogs } = await supabase
       .from('ai_generation_log')
-      .select('rolled_axes, enhanced_prompt')
+      // fallback_reasons: the outfit memory reads the recent garment_roll stamps (NIGHTLY_OUTFIT_VARIETY_PLAN.md).
+      .select('rolled_axes, enhanced_prompt, fallback_reasons')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(7);
@@ -3370,6 +3379,21 @@ Deno.serve(async (req) => {
         const fashionRollable =
           !costumePicks &&
           (dualSpecialScene ? !!holidayCategory || genericAttire : !locationWardrobe);
+        // NIGHTLY OUTFIT PLAN (mig 585, NIGHTLY_OUTFIT_VARIETY_PLAN.md): Create's full plan (a colour pair, a cut, a
+        // pattern + the look) instead of a look alone, so the same look never ships as the same outfit. Holiday rows
+        // keep the looks-only path: the row's attire is the colour + texture anchor and a rolled palette would fight
+        // the festive one. Off → the looks-only path exactly (slot golden).
+        const outfitPlanOn = force_outfit_plan ?? engineCfg0.nightlyOutfitPlan;
+        const outfitPlanEligible =
+          outfitPlanOn && fashionRollable && !(dualSpecialScene && holidayCategory);
+        // Anti-lock for every look roll here: the favoured-look rate, and the looks of the dreamer's recent nightlies.
+        const recentLooks = recentLooksFromStamps(
+          (recentLogs ?? []).map(
+            (l) => (l as { fallback_reasons?: string[] | null }).fallback_reasons
+          ),
+          engineCfg0.nightlyOutfitRecentLooks
+        );
+        const lookTuning = { favouredPct: engineCfg0.outfitFavouredLookPct, recentLooks };
         // SCENE FIT (mig 572, CREATE_OUTFIT_PLAN.md phase 9): the roll picks only looks that fit the place
         // and the brief dresses for the place first. The setting comes from the scenario row when there is one
         // (its category, else its own scene text), otherwise from the location card (biome, tags, imagined).
@@ -3381,7 +3405,7 @@ Deno.serve(async (req) => {
               ? sceneFitFrom(true)
               : null;
         let nightlySetting: Setting | null = null;
-        if (nightlySceneFit && garmentRollOn && fashionRollable) {
+        if (nightlySceneFit && fashionRollable && (garmentRollOn || outfitPlanEligible)) {
           const fromRow = dualSpecialScene
             ? (settingFromCategory(dualSceneCategory) ??
               settingFromText(dualSpecialScene, dualScenarioAction))
@@ -3409,8 +3433,57 @@ Deno.serve(async (req) => {
             `outfit_setting:${nightlySetting}:${fromRow ? 'row' : byName ? 'place_name' : 'location'}`
           );
         }
+        const sceneText = [userPlace, iconicAnchor, dualSpecialScene].filter(Boolean).join(' ');
+        const castGenders = Object.fromEntries(
+          resolvedCast.map((rc, i) => [
+            rc.role,
+            (selectedCast[i] as DreamCastMember).gender ?? null,
+          ])
+        );
+        const nightlyOutfitPlan: OutfitPlan | null = outfitPlanEligible
+          ? planOutfits(
+              resolvedCast.map((rc) => rc.role),
+              {
+                independentPct: engineCfg0.createOutfitIndependentPct,
+                separateCutPct: engineCfg0.createOutfitSeparateCutPct,
+                patternPct: engineCfg0.createOutfitPatternPct,
+                ...(garmentRollOn
+                  ? {
+                      garmentRoll: true,
+                      garmentWeights: engineCfg0.outfitGarmentWeights,
+                      genders: castGenders,
+                    }
+                  : {}),
+                ...(nightlySceneFit && nightlySetting
+                  ? { sceneFit: nightlySceneFit, setting: nightlySetting, sceneText }
+                  : {}),
+                ...lookTuning,
+              },
+              {}
+            )
+          : null;
+        if (nightlyOutfitPlan) {
+          fallbackReasons.push('outfit_plan:nightly');
+          for (const p of nightlyOutfitPlan.people) {
+            const fam = WOMEN_GARMENT_FAMILIES.find((f) => f.text === p.garmentFamily);
+            // Same format as the looks-only path: the outfit memory and the reports read it.
+            if (p.lookKey)
+              fallbackReasons.push(`garment_roll:${p.role}:${fam ? fam.key : 'none'}:${p.lookKey}`);
+            if (p.colour)
+              fallbackReasons.push(
+                `outfit_colour:${p.role}:${p.colour.lead}${p.colour.accent ? `/${p.colour.accent}` : ''}`
+              );
+            fallbackReasons.push(
+              `outfit_pattern:${p.role}:${!p.pattern ? 'solid' : p.patternAsTrim ? 'trim' : 'roll'}`
+            );
+          }
+        }
+        for (const [role, keys] of Object.entries(recentLooks)) {
+          if ((nightlyOutfitPlan || garmentRollOn) && fashionRollable && keys.length)
+            fallbackReasons.push(`look_memory:${role}:${keys.length}`);
+        }
         const nightlyFashion =
-          garmentRollOn && fashionRollable
+          !nightlyOutfitPlan && garmentRollOn && fashionRollable
             ? rollFashion(
                 resolvedCast.map((rc) => rc.role),
                 Object.fromEntries(
@@ -3426,7 +3499,8 @@ Deno.serve(async (req) => {
                       setting: nightlySetting,
                       text: [userPlace, iconicAnchor, dualSpecialScene].filter(Boolean).join(' '),
                     }
-                  : undefined
+                  : undefined,
+                lookTuning
               )
             : null;
         if (nightlyFashion) {
@@ -3444,6 +3518,7 @@ Deno.serve(async (req) => {
           (force_solo_outfit_early ?? engineCfg0.nightlySoloOutfitEarly);
         if (soloOutfitEarly) fallbackReasons.push('solo_outfit_early');
         const slotInput: CharacterSlotPipelineInput = {
+          ...(nightlyOutfitPlan ? { outfitPlan: nightlyOutfitPlan } : {}),
           ...(nightlyFashion ? { fashionLooks: nightlyFashion } : {}),
           ...(nightlyFashion && nightlySceneFit && nightlySceneFit.brief && nightlySetting
             ? { wardrobeSceneFit: { setting: nightlySetting } }

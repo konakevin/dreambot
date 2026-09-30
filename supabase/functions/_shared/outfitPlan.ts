@@ -609,6 +609,19 @@ export interface FashionRollOptions {
   text?: string | null;
 }
 
+/**
+ * Anti-lock tuning for the look roll (NIGHTLY_OUTFIT_VARIETY_PLAN.md, 2026-09-30). Kevin: "we absolutely do not want
+ * outfit lock or freeze due to certain settings or biomes" (two of five nightlies in the same nautical jacket).
+ */
+export interface LookRollTuning {
+  /** % of the time a look the scene names (a pier → nautical) is taken over the rest of the place's looks.
+   *  engine_config.outfit_favoured_look_pct; absent = the legacy AFFINITY_PCT. */
+  favouredPct?: number;
+  /** Look keys to skip per role (the dreamer's recent nightlies). Never empties a pool: when every fitting look is
+   *  recent, the full fitting pool is used. */
+  recentLooks?: Readonly<Record<string, readonly string[]>>;
+}
+
 /** Settings whose dress code is the activity's own kit: nobody gets a rolled look there (a golf course dresses
  *  golfers, the slopes dress skiers). */
 const KIT_SETTINGS: ReadonlySet<Setting> = new Set<Setting>(['sport', 'snow']);
@@ -640,8 +653,32 @@ export function lookFavoured(look: FashionLook, text?: string | null): boolean {
   );
 }
 
-/** How often a favoured look is taken when the scene names one (the rest keep the place's variety). */
+/**
+ * The looks a dreamer wore in recent nightlies, per role, from those renders' `garment_roll:<role>:<family>:<look>`
+ * stamps (NIGHTLY_OUTFIT_VARIETY_PLAN.md). `stampLists` newest first, one list per render; only the first `n`
+ * renders count. A render with no look for a role adds nothing for it.
+ */
+export function recentLooksFromStamps(
+  stampLists: ReadonlyArray<ReadonlyArray<string> | null | undefined>,
+  n: number
+): Record<string, string[]> {
+  const out: Record<string, string[]> = {};
+  for (const stamps of stampLists.slice(0, Math.max(0, n))) {
+    for (const s of stamps ?? []) {
+      const m = /^garment_roll:([^:]+):[^:]*:([^:]+)$/.exec(s);
+      if (!m) continue;
+      const list = (out[m[1]] ||= []);
+      if (!list.includes(m[2])) list.push(m[2]);
+    }
+  }
+  return out;
+}
+
+/** How often a favoured look is taken when the scene names one (the rest keep the place's variety). Legacy default
+ *  for callers without LookRollTuning; production passes engine_config.outfit_favoured_look_pct (default
+ *  DEFAULT_FAVOURED_LOOK_PCT: at 85 a pier or harbour put every man in the same nautical jacket, 89% measured). */
 const AFFINITY_PCT = 0.85;
+export const DEFAULT_FAVOURED_LOOK_PCT = 30;
 
 /** Per-setting nudges on the garment weights (multiplied into engine_config.outfit_garment_weights). */
 const SETTING_GARMENT_FACTORS: Partial<Record<Setting, Readonly<Record<string, number>>>> = {
@@ -705,10 +742,21 @@ export function rollFashion(
   genders: Readonly<Record<string, 'male' | 'female' | null | undefined>>,
   weights: Readonly<Record<string, number>> = DEFAULT_GARMENT_WEIGHTS,
   rng: () => number = Math.random,
-  opts?: FashionRollOptions
+  opts?: FashionRollOptions,
+  tuning: LookRollTuning = {}
 ): (FashionPick | null)[] {
   const out: (FashionPick | null)[] = roles.map(() => null);
   if (opts && KIT_SETTINGS.has(opts.setting)) return out;
+  const affinity = tuning.favouredPct !== undefined ? pct(tuning.favouredPct) : AFFINITY_PCT;
+  const recentFor = (role: string): readonly string[] =>
+    (tuning.recentLooks && tuning.recentLooks[role]) || [];
+  /** The pool minus this role's recent looks, unless that would leave nothing. */
+  const fresh = (pool: readonly FashionLook[], role: string): readonly FashionLook[] => {
+    const recent = recentFor(role);
+    if (!recent.length) return pool;
+    const left = pool.filter((l) => !recent.includes(l.key));
+    return left.length ? left : pool;
+  };
   // Off (no opts): the phase 8 pools exactly, scene-fit-only looks excluded.
   const fits = (l: FashionLook): boolean =>
     opts ? lookFits(l, opts.setting, opts.text) : !l.sceneFitOnly;
@@ -725,8 +773,11 @@ export function rollFashion(
     let fam: GarmentFamily | null = null;
     if (g === 'female') {
       if (!family && opts) {
-        const fav = WOMEN_FASHION_LOOKS.filter((l) => fits(l) && favoured(l));
-        if (fav.length && rng() < AFFINITY_PCT) {
+        // A recent look is never FORCED as the favoured one (it can still come up in the ordinary roll below).
+        const fav = WOMEN_FASHION_LOOKS.filter(
+          (l) => fits(l) && favoured(l) && !recentFor(role).includes(l.key)
+        );
+        if (fav.length && rng() < affinity) {
           forcedWomanLook = pick(fav, rng);
           const w = garmentWeightsFor(opts.setting, weights, opts.text);
           const keys = (
@@ -755,6 +806,7 @@ export function rollFashion(
       pool = MEN_FASHION_LOOKS.filter(fits);
       if (!pool.length) pool = MEN_FASHION_LOOKS.filter((l) => !l.sceneFitOnly);
     }
+    pool = fresh(pool, role);
     // A matching couple theme never overrides the place's own theme (a 1950s diner rolled resort for both).
     const placeTheme = !!opts && pool.some(favoured);
     const match =
@@ -769,7 +821,7 @@ export function rollFashion(
     } else {
       // The scene names a look's place or theme: favour it (only with scene fit on).
       const fav = opts ? pool.filter(favoured) : [];
-      look = fav.length && rng() < AFFINITY_PCT ? pick(fav, rng) : pick(pool, rng);
+      look = fav.length && rng() < affinity ? pick(fav, rng) : pick(pool, rng);
     }
     if (firstKey === null) firstKey = look.key;
     out[i] = { family: fam, look };
@@ -870,6 +922,9 @@ export interface OutfitRollConfig {
   sceneFit?: SceneFit;
   /** Phase 9: the scene's own words, for regional looks (sceneSetting's input, joined). */
   sceneText?: string | null;
+  /** Anti-lock (NIGHTLY_OUTFIT_VARIETY_PLAN.md): the favoured-look rate and the looks to skip per role. */
+  favouredPct?: number;
+  recentLooks?: Readonly<Record<string, readonly string[]>>;
 }
 
 /**
@@ -1046,7 +1101,8 @@ export function planOutfits(
         rng,
         cfg.sceneFit && cfg.sceneFit.looks
           ? { setting: cfg.setting ?? 'unknown', text: cfg.sceneText ?? null }
-          : undefined
+          : undefined,
+        { favouredPct: cfg.favouredPct, recentLooks: cfg.recentLooks }
       );
     }
   }

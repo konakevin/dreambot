@@ -17,7 +17,11 @@ import {
   DEFAULT_PET_WORDS,
   DEFAULT_NAME_STOP_WORDS,
 } from './selfInsertDetector.ts';
-import { DEFAULT_GARMENT_WEIGHTS, normalizeGarmentWeights } from './outfitPlan.ts';
+import {
+  DEFAULT_FAVOURED_LOOK_PCT,
+  DEFAULT_GARMENT_WEIGHTS,
+  normalizeGarmentWeights,
+} from './outfitPlan.ts';
 import { EMPTY_LLM_ROUTING, parseLlmRoutes, type LlmRoutingConfig } from './anthropic.ts';
 
 /** Nightly LOOKS path mode (mig 502): 'off' = legacy chain, 'shadow' = legacy + style_shadow stamps, 'on' = the contract decides. */
@@ -217,6 +221,14 @@ export interface EngineConfig {
   createOutfitSceneFit: boolean;
   /** SCENE FIT on nightly (looks + brief; nightly has no colour roll). Flip only on Kevin's word. */
   nightlyOutfitSceneFit: boolean;
+  /** NIGHTLY OUTFIT PLAN (mig 585, NIGHTLY_OUTFIT_VARIETY_PLAN.md): nightly rolls Create's full plan (colour pair,
+   *  cut, pattern + the look) instead of a look alone. QA: force_outfit_plan. */
+  nightlyOutfitPlan: boolean;
+  /** % a look the scene names (a pier → nautical) wins over the place's other looks; both surfaces. 85 was the
+   *  old constant and locked outfits (NIGHTLY_OUTFIT_VARIETY_PLAN.md). */
+  outfitFavouredLookPct: number;
+  /** Nightly: skip the looks of this many recent nightlies per role (0 = off). */
+  nightlyOutfitRecentLooks: number;
   /** SWAP CAPACITY GATE (mig 549, NIGHTLY_ROBUSTNESS_PLAN.md): dual swaps wait for a free Fly slot. */
   swapGateEnabled: boolean;
   /** Longest a dual swap waits for a slot before `swap_capacity_busy` (ms). */
@@ -338,6 +350,9 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   nightlySoloOutfitEarly: false,
   createOutfitSceneFit: false,
   nightlyOutfitSceneFit: false,
+  nightlyOutfitPlan: false,
+  outfitFavouredLookPct: DEFAULT_FAVOURED_LOOK_PCT,
+  nightlyOutfitRecentLooks: 5,
   swapGateEnabled: false,
   swapGateMaxWaitMs: 45_000,
   nightlySwapCapacityRetries: 0,
@@ -526,6 +541,11 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     nightlySoloOutfitEarly: data.nightly_solo_outfit_early === true,
     createOutfitSceneFit: data.create_outfit_scene_fit === true,
     nightlyOutfitSceneFit: data.nightly_outfit_scene_fit === true,
+    nightlyOutfitPlan: data.nightly_outfit_plan === true,
+    outfitFavouredLookPct: clampPct(data.outfit_favoured_look_pct, DEFAULT_FAVOURED_LOOK_PCT),
+    nightlyOutfitRecentLooks: Number.isFinite(Number(data.nightly_outfit_recent_looks))
+      ? Math.max(0, Math.min(7, Math.round(Number(data.nightly_outfit_recent_looks))))
+      : 5,
     swapGateEnabled: data.swap_gate_enabled === true,
     swapGateMaxWaitMs: Number.isFinite(Number(data.swap_gate_max_wait_ms))
       ? Math.max(0, Math.min(120_000, Number(data.swap_gate_max_wait_ms)))

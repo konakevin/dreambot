@@ -131,3 +131,12 @@ describe('force_llm_overlays (LLM_5_5_TUNING_PLAN.md)', () => {
     expect(parseQaFlags({}).force_llm_overlays).toBeNull();
   });
 });
+
+describe('force_outfit_plan (NIGHTLY_OUTFIT_VARIETY_PLAN.md)', () => {
+  it('true / false force the plan on / off; anything else defers to engine_config', () => {
+    expect(parseQaFlags({ force_outfit_plan: true }).force_outfit_plan).toBe(true);
+    expect(parseQaFlags({ force_outfit_plan: false }).force_outfit_plan).toBe(false);
+    expect(parseQaFlags({}).force_outfit_plan).toBeNull();
+    expect(parseQaFlags({ force_outfit_plan: 'yes' }).force_outfit_plan).toBeNull();
+  });
+});

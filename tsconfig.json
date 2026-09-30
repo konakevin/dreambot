@@ -17,6 +17,7 @@
     "scripts/lib/llmBenchMeter.ts",
     "scripts/lib/sceneryScore.ts",
     "scripts/qa-scenery-score.ts",
+    "scripts/qa-face-yaw.ts",
     "__tests__/lib/outfitPlan.test.ts",
     "__tests__/lib/outfitSpec.test.ts",
     "__tests__/lib/outfitPlanBrief.test.ts",
@@ -150,6 +151,7 @@
     "__tests__/lib/anthropicClientParity.test.ts",
     "__tests__/lib/llmTuningGuards.test.ts",
     "__tests__/lib/styleFingerprintTrim.test.ts",
+    "__tests__/lib/outfitAntiLock.test.ts",
     "__tests__/lib/slotJsonLenient.test.ts",
     "__tests__/lib/halloweenPoolsParity.test.ts",
     "scripts/eval-quality-gate.ts"

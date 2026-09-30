@@ -1796,11 +1796,14 @@ export type Database = {
           nightly_looks_mode: string;
           nightly_max_face_hfrac: number;
           nightly_max_jobs: number;
+          nightly_outfit_plan: boolean;
+          nightly_outfit_recent_looks: number;
           nightly_outfit_scene_fit: boolean;
           nightly_require_ai_enabled: boolean;
           nightly_require_onboarding: boolean;
           nightly_solo_outfit_early: boolean;
           nightly_swap_capacity_retries: number;
+          outfit_favoured_look_pct: number;
           outfit_garment_weights: Json;
           pet_words: string;
           photo_preprocess_quality: number;
@@ -1939,11 +1942,14 @@ export type Database = {
           nightly_looks_mode?: string;
           nightly_max_face_hfrac?: number;
           nightly_max_jobs?: number;
+          nightly_outfit_plan?: boolean;
+          nightly_outfit_recent_looks?: number;
           nightly_outfit_scene_fit?: boolean;
           nightly_require_ai_enabled?: boolean;
           nightly_require_onboarding?: boolean;
           nightly_solo_outfit_early?: boolean;
           nightly_swap_capacity_retries?: number;
+          outfit_favoured_look_pct?: number;
           outfit_garment_weights?: Json;
           pet_words?: string;
           photo_preprocess_quality?: number;
@@ -2082,11 +2088,14 @@ export type Database = {
           nightly_looks_mode?: string;
           nightly_max_face_hfrac?: number;
           nightly_max_jobs?: number;
+          nightly_outfit_plan?: boolean;
+          nightly_outfit_recent_looks?: number;
           nightly_outfit_scene_fit?: boolean;
           nightly_require_ai_enabled?: boolean;
           nightly_require_onboarding?: boolean;
           nightly_solo_outfit_early?: boolean;
           nightly_swap_capacity_retries?: number;
+          outfit_favoured_look_pct?: number;
           outfit_garment_weights?: Json;
           pet_words?: string;
           photo_preprocess_quality?: number;
@@ -2603,6 +2612,45 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      llm_prompt_overlays: {
+        Row: {
+          active: boolean;
+          body: string;
+          created_at: string;
+          find: string | null;
+          job: string;
+          key: string;
+          mode: string;
+          model: string;
+          note: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          active?: boolean;
+          body: string;
+          created_at?: string;
+          find?: string | null;
+          job: string;
+          key: string;
+          mode?: string;
+          model: string;
+          note?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          active?: boolean;
+          body?: string;
+          created_at?: string;
+          find?: string | null;
+          job?: string;
+          key?: string;
+          mode?: string;
+          model?: string;
+          note?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
       };
       location_cards: {
         Row: {

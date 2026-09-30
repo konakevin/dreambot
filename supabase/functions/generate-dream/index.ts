@@ -1730,6 +1730,8 @@ Output ONLY the prompt.`;
               ...(sceneFit && setting
                 ? { sceneFit, setting, sceneText: sceneTexts.filter(Boolean).join(' ') }
                 : {}),
+              // Anti-lock (NIGHTLY_OUTFIT_VARIETY_PLAN.md): a look the scene names wins this % of the time, not 85.
+              favouredPct: castCfg.outfitFavouredLookPct,
             },
             spec.source === 'read' ? spec.result.byRole : {}
           );
