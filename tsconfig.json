@@ -11,6 +11,7 @@
     "supabase/functions/**",
     "services/**",
     "scripts/qa-nightly-coherence.ts",
+    "scripts/check-location-health.ts",
     "scripts/sim-look-model-roll.ts",
     "scripts/qa-outfit-text.ts",
     "scripts/qa-llm-parity.ts",

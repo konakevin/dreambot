@@ -18,7 +18,13 @@ import { OnboardingFooter } from './OnboardingFooter';
 import { showAlert } from '@/components/CustomAlert';
 import { supabase } from '@/lib/supabase';
 import { hasRequiredPlaces } from '@/lib/placeRequirement';
-import { buildPickerSections, groupPickerSections, type PickerSection } from '@/lib/pickerSections';
+import {
+  buildPickerSections,
+  groupPickerSections,
+  isWideTile,
+  tileImageKey,
+  type PickerSection,
+} from '@/lib/pickerSections';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const TILE_GAP = 10;
@@ -234,10 +240,7 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
                 {renderSectionHeader(g.title, gi > 0)}
                 <View style={s.catGrid}>
                   {g.sections.map((sec, i) =>
-                    renderCategoryCard(
-                      sec,
-                      g.sections.length % 2 === 1 && i === g.sections.length - 1
-                    )
+                    renderCategoryCard(sec, isWideTile(i, g.sections.length))
                   )}
                 </View>
               </View>
@@ -253,7 +256,8 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
     // teal-green highlighted border + a check badge. Title only — no subtitle
     // (the title is descriptive enough, Kevin 2026-08-29).
     const renderCategoryCard = (section: PickerSection, wide = false) => {
-      const repThumb = section.items.map((i) => thumbnails.get(i.key)).find(Boolean);
+      const leadKey = tileImageKey(section.items, thumbnails);
+      const repThumb = leadKey ? thumbnails.get(leadKey) : undefined;
       const sectionKeys = section.items.map((i) => i.key);
       const selected = sectionKeys.length > 0 && sectionKeys.every((k) => places.includes(k));
       return (

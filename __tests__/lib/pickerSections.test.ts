@@ -4,6 +4,8 @@ import {
   buildPickerSections,
   FALLBACK_SECTIONS,
   groupPickerSections,
+  isWideTile,
+  tileImageKey,
   type PickerCardRow,
   type PickerTileRow,
 } from '@/lib/pickerSections';
@@ -140,5 +142,49 @@ describe('groupPickerSections (mig 621: mood groups instead of Real World / Drea
     ]);
     const fallback = groupPickerSections(buildPickerSections(cards, null, false));
     expect(fallback.map((g) => g.title)).toEqual(['Real World', 'Dream Worlds']);
+  });
+});
+
+describe('tile image + wide tile (the two rules the picker renders by)', () => {
+  const items = [
+    { key: 'paris', label: 'Paris' },
+    { key: 'venice', label: 'Venice' },
+    { key: 'rome', label: 'Rome' },
+  ];
+  it('the tile image is the first card, in order, that has a thumbnail', () => {
+    expect(
+      tileImageKey(
+        items,
+        new Map([
+          ['venice', 'v.jpg'],
+          ['rome', 'r.jpg'],
+        ])
+      )
+    ).toBe('venice');
+    expect(
+      tileImageKey(
+        items,
+        new Map([
+          ['paris', 'p.jpg'],
+          ['venice', 'v.jpg'],
+        ])
+      )
+    ).toBe('paris');
+    expect(tileImageKey(items, new Map())).toBeNull();
+    // Order decides, not the map: moving a card to the front (migs 619, 620) makes it the image.
+    expect(
+      tileImageKey(
+        [items[2], items[0]],
+        new Map([
+          ['paris', 'p.jpg'],
+          ['rome', 'r.jpg'],
+        ])
+      )
+    ).toBe('rome');
+  });
+  it('only the last tile of an odd-sized group is wide', () => {
+    expect([0, 1, 2].map((i) => isWideTile(i, 3))).toEqual([false, false, true]);
+    expect([0, 1, 2, 3].map((i) => isWideTile(i, 4))).toEqual([false, false, false, false]);
+    expect(isWideTile(0, 1)).toBe(true);
   });
 });

@@ -222,3 +222,18 @@ export function groupPickerSections(sections: readonly PickerSection[]): PickerG
   }
   return [...groups.entries()].map(([title, secs]) => ({ title, sections: secs }));
 }
+
+/** A tile's image: its first card (cards arrive in picker_sort_order) that has a thumbnail. Kevin's tile-image picks
+ *  (migs 619, 620) rely on this rule: a picked card is moved to the front of its tile. */
+export function tileImageKey(
+  items: readonly PickerItem[],
+  thumbnails: ReadonlyMap<string, string>
+): string | null {
+  const hit = items.find((i) => thumbnails.has(i.key));
+  return hit ? hit.key : null;
+}
+
+/** The last tile of an odd-sized group spans the row, so a group never leaves an empty cell. */
+export function isWideTile(index: number, count: number): boolean {
+  return count % 2 === 1 && index === count - 1;
+}
