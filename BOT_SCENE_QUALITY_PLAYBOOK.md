@@ -1115,8 +1115,10 @@ Kevin's decisions and the work on these are tracked in `BOT_FOLLOWUPS_TRACKER.md
 - **Bot-wide wrapper defects still live**: FaeBot's suffix "dreamy dappled light … no text, no watermarks" (warm cast +
   watermark leak); BloomBot `shared-blocks.js` "lush abundant blooms filling the frame" frame-packing mandate. Pilot any
   fix on ONE path.
-- **Camera-framing sweep**: OceanBot's framing pools were purged of scene-dissolving entries; the same sweep on every other
-  bot's `*_camera_framing` pools is unverified.
+- **Camera-framing sweep (run 2026-09-30, tracker C14)**: ToyBot's shared `camera_angles.json` holds 11 texture-only
+  abstract macros; MangaBot's rooftop-sunsets / occult-tokyo / post-apocalyptic / neo-tokyo pools are 13-18% face-fills-
+  frame close-ups; FarmBot, MangaBot-village and BrickBot carry near-duplicate vanishing-point corridor framings; BrickBot
+  macro-display ~15 top-down plan views; YumBot candy-fantasy 3 "standing figure" framings. Awaiting Kevin's calls.
 - **Fleet `vibeDirective.slice(0, 250)`**: only YumBot was cut to 150; not a fleet rule, noted in case length work resumes.
 - **Decided 2026-09-29, leave alone** (tracker D): the AUTHORITY wording in five bots' look blocks (0 refusal-style
   prompts in ~3,000 bot renders over 30 days), the fleet "no text, no watermarks" suffix (inconclusive A/B; revisit
