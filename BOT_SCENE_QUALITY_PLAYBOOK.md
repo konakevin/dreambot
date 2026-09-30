@@ -1082,10 +1082,13 @@ Live paths are `paths[]` in each `index.js`; don't trust a list here over the co
   characters candid mid-task at ~20-35% of frame in a populated, in-focus world. Men "varied, handsome, mixed ages".
   Airships are in the SKY, never age-of-sail ships at sea. steampunk-curio = STILL mechanical automata at rest in a
   lived-in room. brass-glasshouse is pro-only (documented) with its own medium. Crowds on flux-1.1 must be sparse and
-  distant. Chaos skipped on steampunk-labs, steampunk-spectacle, brass-glasshouse.
+  distant. Since 2026-09-30 `steambot_neutral` names no text-shaped objects (no gears, gauges, clockwork); a path whose
+  premise is clocks names them in its own text. Chaos skipped on steampunk-labs, steampunk-spectacle, brass-glasshouse.
 - **TinyBot**: tiny whimsy SCENES (not macro zoom on one object), strict NO humans (cute critters only; cute-bug
   allow-list, spider words banned; `TINY_CREATURES` is shared by ~8 paths). snow-globe-world (moved from ToyBot) is the
-  CONCRETE-BUT-CROPPED reference. Seasonal: Fall ×1 (tiny-pumpkin-patch), Halloween ×4.
+  CONCRETE-BUT-CROPPED reference. Seasonal: Fall ×1 (tiny-pumpkin-patch), Halloween ×4. The macro wrapper ("tilt-shift macro lens") was
+  measured 2026-09-30: live posts mostly read as tiny scenes (≤2/10 close-ups); a "whole tiny village" rewording
+  drew tiny townspeople, so the wrapper stays.
 - **ToyBot**: NOT a no-humans bot (peg-people, tin soldiers, dolls are on-brand). Shallow depth of field is on-register.
   Material-tradition paths name the tradition (Waldorf/Grimm's wood, Masudaya/Yonezawa litho tin). wooden-toy-land
   deactivated. ultra excluded from camera-height/condition paths. Halloween seasonal ×4.
@@ -1109,9 +1112,7 @@ Kevin's decisions and the work on these are tracked in `BOT_FOLLOWUPS_TRACKER.md
   short reader that only sees the start of the prompt). Separately, FLUX.1 models read only ~512 tokens (~380 words):
   in the two weeks to 2026-09-29, BrickBot 21/62, MangaBot 22/66, FaeBot 13/232, YumBot 8/45 and PixelBot 7/53
   successful prompts ran longer, so their endings (often the suffix) were likely never read.
-- **Bot-wide wrapper defects still live**: TinyBot's always-on "tilt-shift macro lens" + NON-NEGOTIABLE macro block and
-  `render` medium push single-object macro shots; SteamBot's "clockwork machinery / glass gauges" in the prefix and
-  neutral style inject clock text; FaeBot's suffix "dreamy dappled light … no text, no watermarks" (warm cast +
+- **Bot-wide wrapper defects still live**: FaeBot's suffix "dreamy dappled light … no text, no watermarks" (warm cast +
   watermark leak); BloomBot `shared-blocks.js` "lush abundant blooms filling the frame" frame-packing mandate. Pilot any
   fix on ONE path.
 - **Camera-framing sweep**: OceanBot's framing pools were purged of scene-dissolving entries; the same sweep on every other

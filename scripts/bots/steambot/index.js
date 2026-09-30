@@ -88,8 +88,14 @@ const STEAMBOT_GROUNDED_PAINTED_STYLE =
 // LOOK (rolled in rollSharedDNA, prepended in buildBrief) supplies the render
 // style. Replaces the per-path painted-woman/man/interior + hyperreal mediums
 // so the bot rolls a dynamic range of treatments instead of one locked look.
+// 2026-09-30 (BOT_FOLLOWUPS_TRACKER.md C10d): "exposed gears", "glass gauges" and "impossible clockwork
+// engineering" are TEXT-SHAPED priors (dials and clock faces grow pseudo-numerals) that reached every look
+// path, and the closing sentence ("render exactly the scene… set entirely by the LOOK") is an instruction
+// Flux can't act on. The same three-noun swap on rooftop-telegraph (Stage N2 below) took clock faces 3/6 →
+// 1/6. Steampunk identity rides on brass, copper, rivets, pipes, steam, wood, leather and gaslight. A path
+// whose premise IS clocks (clocktower-heart) names them in its own text.
 const STEAMBOT_NEUTRAL_STYLE =
-  'richly detailed steampunk Victorian-industrial imagery — brass, copper, riveted iron, exposed gears, pipework, glass gauges, oiled wood and gaslight, an 1800s world of impossible clockwork engineering; render exactly the scene and composition the brief describes — the art-style, medium, palette and finish are set entirely by the LOOK at the top of the prompt';
+  'richly detailed steampunk Victorian-industrial imagery, brass, copper, riveted iron, pipework and venting steam, oiled wood, leather and gaslight, an 1800s world of impossible brass-and-steam engineering';
 
 // Stage N2: rooftop-telegraph's own medium. IDENTICAL to STEAMBOT_NEUTRAL_STYLE
 // except that "exposed gears", "glass gauges" and "impossible clockwork
@@ -235,7 +241,7 @@ module.exports = {
     'steambot-hyperreal': blocks.PROMPT_PREFIX,
     // Neutral medium: tight CONTENT-only anchor (no style/palette tokens) so the
     // rolled LOOK leads the CLIP anchor.
-    steambot_neutral: 'steampunk illustration, Victorian-industrial clockwork machinery',
+    steambot_neutral: 'steampunk illustration, Victorian-industrial brass and steam machinery',
     // CONTENT-only anchor, no style tokens, so the rolled LOOK still leads.
     steambot_rooftop: 'steampunk illustration, Victorian-industrial ironwork and aerial cables',
     'steambot-grounded-painted':
