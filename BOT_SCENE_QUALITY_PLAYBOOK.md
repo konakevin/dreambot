@@ -1098,9 +1098,6 @@ Kevin's decisions and the work on these are tracked in `BOT_FOLLOWUPS_TRACKER.md
 - **AUTHORITY wording not back-ported.** The 2026-09-08 lesson (§5.5) was never applied to MangaBot `lookOverride`,
   BloomBot `buildBrief` mandates ("NON-NEGOTIABLE"; 0 refusals seen in 21 renders), GothBot, OutlawBot or SteamBot look
   blocks. Worth re-checking under Sonnet 5.5 (`LLM_5_5_TUNING.md`).
-- **FarmBot prompt length: trimmed 2026-09-30, awaiting Kevin's review** of the shadow before/after batches (medium
-  276 → 45 words + a brief word count; prompts ~770 → ~236 words). Open follow-up: the camera pool's 11 "looking through
-  a farmhouse window" entries now render as literal window frames; keep or trim is Kevin's call.
 - **Prefix/medium cruft audit is overdue** (last documented 2026-06-02): 38 of 94 `promptPrefixByPath` entries exceed 120
   chars (24 are DragonBot's, incl. the 5-artist ~480-char dragon-scene prefix) and 62 of 114 `mediumStyles` exceed 250.
   Nothing is cut off at the front (prefix and medium always come first); the cost is that the scene starts later. On
