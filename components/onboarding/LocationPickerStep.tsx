@@ -76,9 +76,9 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
         handleBack: (onLeave) => {
           if (!hasRequiredPlaces(places)) {
             showAlert(
-              'Pick at least one place',
-              'Your dreams are set in the places you choose, so keep at least one.',
-              [{ text: 'Keep choosing' }]
+              'Choose a place first',
+              'Every dream is set in the places you pick, so choose at least one tile before you go.',
+              [{ text: 'Got it' }]
             );
             return;
           }
