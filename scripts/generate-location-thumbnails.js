@@ -198,6 +198,66 @@ const LOCATION_PROMPTS = {
     'A rain-slicked 1940s city street at night, neon signs and a lone streetlamp in drifting fog, film noir style, cinematic wide shot, no people',
   'retro decades':
     'A colorful retro roller rink and neon diner at night with a spinning disco ball, vibrant vintage colors, cinematic wide shot, no people',
+  // Places that never had a thumbnail (Kevin 2026-09-30: "generate the missing 30").
+  'amalfi coast':
+    'Positano pastel houses cascading down the cliffs to a turquoise bay, lemon terraces and bougainvillea, small boats below, golden afternoon light, cinematic wide shot, photorealistic, no people',
+  italy:
+    'Florence skyline with the Duomo dome at golden hour, terracotta rooftops, Arno river bridges, rolling Tuscan hills beyond, cinematic wide shot, photorealistic, no people',
+  greece:
+    'Acropolis and the Parthenon on its hill above Athens at sunset, marble columns glowing amber, olive trees in the foreground, cinematic wide shot, photorealistic, no people',
+  france:
+    'Mont-Saint-Michel abbey rising from tidal flats at sunset, reflections on wet sand, golden sky, cinematic wide shot, photorealistic, no people',
+  spain:
+    'Alhambra palace in Granada at golden hour, red fortress walls above cypress gardens, snowy Sierra Nevada peaks behind, cinematic wide shot, photorealistic, no people',
+  ireland:
+    'Cliffs of Moher towering over the Atlantic, emerald grass on the clifftops, sea mist and a dramatic sky, cinematic wide shot, photorealistic, no people',
+  germany:
+    'Neuschwanstein castle on its forested crag above a green valley at sunrise, Alpine peaks behind, mist in the valley, cinematic wide shot, photorealistic, no people',
+  scotland:
+    'Eilean Donan castle on its island where three lochs meet, arched stone bridge, misty Highland mountains, moody golden light, cinematic wide shot, photorealistic, no people',
+  japan:
+    'Mount Fuji rising above Lake Kawaguchi at dawn, snowcap glowing pink, still water reflection, pine-lined shore, cinematic wide shot, photorealistic, no people',
+  vietnam:
+    'Ha Long Bay limestone karsts rising from emerald water, traditional junk boats with red sails, soft morning mist, cinematic wide shot, photorealistic, no people',
+  sydney:
+    'Sydney Opera House and Harbour Bridge at golden hour, sailboats on the harbour, glowing sky, cinematic wide shot, photorealistic, no people',
+  brazil:
+    'Iguazu Falls thundering through lush rainforest, rainbow in the spray, walkways over the gorge, cinematic wide shot, photorealistic, no people',
+  egypt:
+    'Felucca sailboats on the Nile at sunset, palm-lined banks, desert cliffs and temple ruins beyond, golden light, cinematic wide shot, photorealistic, no people',
+  fiji: 'Palm-fringed Fijian islet ringed by white sand in a turquoise lagoon, coral reef shallows, bright tropical sun, cinematic wide shot, photorealistic, no people',
+  cancun:
+    'Tulum Mayan ruins on a cliff above a turquoise Caribbean beach, palm trees and white sand, bright sun, cinematic wide shot, photorealistic, no people',
+  tahiti:
+    'Jagged green volcanic peaks of Tahiti above a turquoise lagoon, overwater bungalows, black-sand shore, soft morning light, cinematic wide shot, photorealistic, no people',
+  'mount everest':
+    'Mount Everest summit pyramid above a sea of clouds at sunrise, prayer flags in the foreground, glaciers glowing gold, cinematic wide shot, photorealistic, no people',
+  prehistoric:
+    'Prehistoric valley with a smoking volcano in the distance, giant ferns and cycads, long-necked dinosaurs grazing by a river, misty primeval light, cinematic wide shot, no people',
+  'haunted mansion':
+    'Victorian haunted mansion on a hill under a full moon, dead trees, wrought-iron gate, glowing windows and drifting fog, gothic, cinematic wide shot, no people',
+  'vampire castle':
+    'Vampire castle of black spires on a cliff above a moonlit gorge, red-lit windows, bats against a stormy sky, gothic, cinematic wide shot, no people',
+  'foggy graveyard':
+    'Foggy old graveyard with crooked headstones and a stone angel, lantern light, gnarled trees, moonlight through the mist, gothic, cinematic wide shot, no people',
+  'gothic cathedral':
+    'Gothic cathedral nave with soaring stone arches, candlelight and stained-glass windows glowing in jewel colours, gothic, cinematic wide shot, no people',
+  "witch's cottage":
+    "Witch's cottage in a dark forest, crooked thatched roof, glowing windows, cauldron smoke, mushrooms and hanging lanterns, gothic fairy tale, cinematic wide shot, no people",
+  catacombs:
+    'Candlelit catacombs with walls of stacked skulls and bones, vaulted stone tunnels receding into darkness, eerie amber glow, gothic, cinematic wide shot, no people',
+  'ghost town':
+    'Abandoned Old West ghost town at dusk, weathered wooden storefronts, tumbleweed on the dusty street, eerie mist and a pale moon, gothic, cinematic wide shot, no people',
+  'moon base':
+    'Lunar base of white domes and solar arrays on the grey Moon surface, Earth rising over the horizon, stark shadows, sci-fi, cinematic wide shot, no people',
+  'starship bridge':
+    "Starship bridge with a vast curved viewscreen showing a nebula, glowing consoles and a captain's chair, sleek metallic interior, sci-fi, cinematic wide shot, no people",
+  saloon:
+    'Old West saloon interior, polished wooden bar lined with bottles, swinging doors, an upright piano, oil lamps and warm golden light through dusty windows, cinematic wide shot, no people',
+  'outlaw hideout':
+    'Outlaw hideout cabin tucked in a red rock canyon, campfire smoke, horses tied at a rail, dramatic sunset light, western, cinematic wide shot, no people',
+  'railroad town':
+    'Frontier railroad town with a steam locomotive at the wooden depot, water tower, false-front buildings, golden-hour dust, western, cinematic wide shot, no people',
   // Romantic Escapes places (mig 605): pretty, lush, romantic (Kevin 2026-09-30).
   'cherry blossoms':
     'Kyoto canal path beneath a tunnel of pink cherry blossoms, petals drifting on the water, stone lanterns and a small wooden bridge, soft spring light, romantic, cinematic wide shot, no people',
