@@ -16,6 +16,10 @@
  *     carries its own BEGIN/COMMIT loses that guarantee; `CREATE INDEX CONCURRENTLY` cannot run here
  *     at all (same as the editor) — run such statements alone with --no-record.
  *   - The response body is the row set of the LAST statement in the file.
+ *   - Every run is prefixed with `SET LOCAL lock_timeout = '10s'` (MIGRATION_LOCK_TIMEOUT). A migration
+ *     that needs a table lock another session holds (e.g. the nightly backup's pg_dump, BACKUPS.md)
+ *     fails fast and rolls back instead of queueing every app query on that table behind it. Re-run
+ *     it; a file that must wait longer sets its own `SET LOCAL lock_timeout` first.
  *
  * Tracking: `supabase/migrations/` in the repo remains the source of truth. On success the prefix is
  * ALSO recorded in `supabase_migrations.schema_migrations` purely as a double-apply guard. The CLI's
@@ -35,6 +39,7 @@ import { Buffer } from 'buffer';
 const MIGRATIONS_DIR = path.join(process.cwd(), 'supabase', 'migrations');
 const DEFAULT_PROJECT_REF = 'jimftynwrinwenonjrlj';
 const PREFIX_RE = /^(\d{3}[a-z]?)_.+\.sql$/;
+const MIGRATION_LOCK_TIMEOUT = '10s';
 const USAGE =
   'usage: node scripts/apply-migration.mjs <NNN | path/to/NNN_name.sql> [--dry-run] [--force] [--no-record]';
 
@@ -228,7 +233,7 @@ async function main() {
   const t0 = Date.now();
   let result;
   try {
-    result = await runSql(ctx, sql);
+    result = await runSql(ctx, `SET LOCAL lock_timeout = '${MIGRATION_LOCK_TIMEOUT}';\n${sql}`);
   } catch (e) {
     console.error(
       `✗ migration failed after ${Date.now() - t0}ms — rolled back (implicit transaction)`
