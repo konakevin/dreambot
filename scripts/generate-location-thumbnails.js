@@ -258,6 +258,9 @@ const LOCATION_PROMPTS = {
     'Outlaw hideout cabin tucked in a red rock canyon, campfire smoke, horses tied at a rail, dramatic sunset light, western, cinematic wide shot, no people',
   'railroad town':
     'Frontier railroad town with a steam locomotive at the wooden depot, water tower, false-front buildings, golden-hour dust, western, cinematic wide shot, no people',
+  // Game On scene card (mig 623): the active half of Just for Fun.
+  'game on':
+    'Neon arcade with glowing skee-ball lanes beside a roller rink and karaoke booth, string lights and bright playful colours, cinematic wide shot, no people',
   // Dreamscapes worlds (Kevin 2026-09-30: "build all three"); the look carries the image.
   'celestial realm':
     'A ringed planet rising low over a meadow of glowing wildflowers, nebula-coloured sky full of stars, a small glass observatory, dreamy luminous fantasy, cinematic wide shot, no people',
