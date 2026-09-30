@@ -212,8 +212,9 @@ module.exports = {
   ],
 
   // Dark-launched (shadow) paths — renderable on demand, hidden from public + rotation.
-  // cozy-farming-life-sim: pulled from rotation 2026-09-19 for a rework (cozy-cute pixel
-  // farm, FarmBot-in-pixels). Kept renderable + hidden here until the rework is approved.
+  // cozy-farming-life-sim: DEACTIVATED 2026-09-29 (Kevin approved; his 2026-09-19 call: "scrap
+  // the farm pixels, we'll leave that domain to farmbot"). Pulled from rotation 2026-09-19 and
+  // parked here; now out of shadowPaths too, so nothing renders it. Builder + pools kept.
   // The scene paths went live 2026-09-19 (volcano-forge + floating-market-canal 2026-09-24);
   // only the pulled farm path stays parked here. castle-town-gate was DISABLED 2026-09-24
   // (Kevin): its prompts trip Replicate's safety checker on EVERY Flux model (1.1-pro, ultra,
@@ -222,7 +223,7 @@ module.exports = {
   // showed a combination trigger involving the "figure hauling a heavy basket up on a rope"
   // clause (removing it un-flags 3/3; alone it does not flag), not settled further. Its
   // builder line in SCENE_PATHS is commented out so nothing can render it by accident.
-  shadowPaths: ['cozy-farming-life-sim'],
+  shadowPaths: [],
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.

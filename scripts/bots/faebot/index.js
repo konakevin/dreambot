@@ -55,10 +55,10 @@ module.exports = {
   // flower-fairy uses painted_fantasy_novel (FaeBot's default) so it
   // matches the soft painterly look of the other FaeBot paths
   // (Manchess + Giancola + Bonner painted-fantasy lineage).
-  // mediumByPath — ADDED 2026-09-23 for autumn-seed-gathering; flower-fairy and every
-  // other path still fall through to defaultMedium, which is what the old comment here
-  // described. This path needs its own medium because the bot-wide register is what was
-  // beating it: see promptPrefixByMedium below. Worth +1.06 on the round average.
+  // mediumByPath: empty. Its one entry (autumn-seed-gathering's own `faebot_seedfall`
+  // medium) went with that path when it was cut 2026-09-23; every path uses defaultMedium.
+  // The lesson it proved (a path-own medium beats a bot-wide register mandate) is in
+  // BOT_SCENE_QUALITY_PLAYBOOK.md §4.4.
   mediumByPath: {
   },
 
@@ -69,7 +69,6 @@ module.exports = {
   mediumStyles: {
     painted_fantasy_novel: blocks.PAINTED_FANTASY_NOVEL_MEDIUM,
     faebot_gpt_clean: blocks.GPT_CLEAN,
-    faebot_seedfall: 'autumn seedfall fantasy concept art, painterly',
   },
 
   // nano-banana clean-render override (2026-06-07; no gpt-image-2 in FaeBot's
@@ -88,19 +87,6 @@ module.exports = {
     painted_fantasy_novel:
       'soft ethereal painterly fantasy illustration, visible oil-brushwork, painted fantasy concept art, Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage, dreamy atmospheric painted glow',
     faebot_gpt_clean: '',
-    // faebot_seedfall — the single highest-value change on this path (avg 2.27 -> 3.33).
-    // The bot-wide `painted_fantasy_novel` prefix above is a 35-word REGISTER MANDATE
-    // ("soft ethereal painterly ... dreamy atmospheric painted glow") and the engine lands
-    // it at 18-25% of the emitted prompt, BETWEEN the path prefix and Sonnet's scene, on
-    // 6 of 6 renders. On a path whose premise is a wind rodeo it is the literal opposite
-    // instruction, and it won: costume 0/6, pale monochrome 6/6, the beat ~1/6, even though
-    // every one of the path's own laws was present AND correctly placed at 1-11%.
-    // Swapping it for a path-own register of the SAME LENGTH (35 -> 33 words, lineage
-    // anchors kept verbatim) took costume 0/6 -> 4/6, saturated palette 0/6 -> 6/6 and
-    // near-nudity 2/6 -> 0/6. Rollback = delete this entry plus the mediumByPath and
-    // mediumStyles entries, which returns the path to its round-1 state.
-    faebot_seedfall:
-      'painted fantasy concept art, visible oil-brushwork, Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage, saturated autumn colour, hard directional light, everything in the frame moving on a strong wind',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -114,15 +100,6 @@ module.exports = {
     // humanoid is a naked-cherub prior). Do not demote it to buy room for anything
     // else — a measured round that did exactly that lost wings in 4 of 6 and the
     // costume in 3 of 6.
-    // honey-harvest: the first EIGHT WORDS are the path. With a static portrait
-    // opener the beat rendered 0 of 12 across two rounds while sitting in 12 of 12
-    // prompts; putting "hard at work, caught mid-movement" IN FRONT of the figure
-    // clause — additively, nothing removed — took it to 6 of 6. Do not demote the
-    // fae clause (lesson 34) and do not tidy out the action.
-    // autumn-seed-gathering: inherits honey-harvest's measured opener verbatim (the action
-    // clause IN FRONT of the figure clause). The stalk-fills-one-side clause is the
-    // anti-vista law, and "two hundred white seed tufts" carries the count from the prefix
-    // on 6 of 6 renders, which is why the output order's own air item is the named lever.
     'star-charting':
       'one slender grown fae close in the foreground, painted large, in a layered fae-craft coat and hood with open wings, on a high woodland perch whose broad surface fills the near frame, beneath a blazing saturated night sky of indigo, violet and green',
     // acorn-boat-regatta: a path staged on a LINEAR feature (a stream) renders as a receding
@@ -274,21 +251,9 @@ module.exports = {
     // (23/23 + 47/47 since, zero flags). The instrument is a nice-to-have he did not miss.
     // Do NOT re-pin to a flux-2 model while the medium names artists.
     'star-charting': ['black-forest-labs/flux-1.1-pro'],
-    // honey-harvest: flux-1.1-pro ONLY — 12 of 12 delivered, zero signatures.
-    // MEASURED so nobody re-runs it: flux-2-pro renders the premise BETTER (beat
-    // 2/4, cups 4/4) and is unshippable — it signed 4 of 4 and took 20 safety
-    // retries for 4 deliveries. flux-2-FLEX hits the SAME E005 wall on the same
-    // content, so this is a flux-2 FAMILY fact, not a flux-2-pro one: there is no
-    // shippable flux-2 option for a FaeBot path with a close adult-fae body.
-    // autumn-seed-gathering: flux-1.1-pro ONLY — 18 of 18 delivered, zero E005, zero
-    // signatures. Load-bearing for TWO reasons. (1) FaeBot's picker rolled ultra on 15 of
-    // 15 mushroom-apothecary renders and ultra signs its work, so an unpinned pick puts
-    // readable text on the path. (2) This path uses a code-only medium key with no
-    // `dream_mediums` row, and modelByPath is checked BEFORE pickModel (botEngine ~1723),
-    // so the pin keeps the picker out of it entirely. NOTE, corrected from the build
-    // report: an absent row does NOT break the picker — `mediumModelsCache.get()` returns
-    // undefined and it falls THROUGH to a default pool. The risk is an unpinned roll
-    // (i.e. ultra), not an exception.
+    // (honey-harvest + autumn-seed-gathering were pinned here too until they were cut
+    // 2026-09-23. Their finding: flux-2-pro AND flux-2-flex hit the same E005 wall on FaeBot,
+    // i.e. the named-artist medium clause above, so no flux-2 model is shippable here.)
   },
   // modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
   // Original locks (restore individual lines if a path needs pinning again):

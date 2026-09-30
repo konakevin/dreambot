@@ -181,11 +181,12 @@ fresh tone/subject, Tier 3 adjacent, plus a pure-spectacle tier) → Kevin picks
 
 ### 2.7 HTML matrix (per-bot model triage)
 "Run an HTML matrix on `<bot>`" = `node scripts/qa-bot-model-matrix.js --bot <name>`. Defaults: 1 render per
-(path × model), `--post`, all paths × all allowedModels, one process per model. Narrow with `--paths` / `--models`;
-`--count 3` or `--no-post` only if asked. Output `/tmp/<bot>-matrix.html`. Never ask Kevin to confirm defaults. In
-THIS protocol Kevin hearts the BAD cells; tally them into `modelByPath` bans after he confirms. Outside a protocol
-where he states their meaning, hearts are pointers, never ratings: never mine likes to calibrate. (See §9 open item:
-the script posts publicly, not shadow.)
+(path × model), posted as SHADOW posts (hidden, since 2026-09-29; the June/July matrix runs went public), all paths ×
+all allowedModels, one process per model. Narrow with `--paths` / `--models`; `--count 3` or `--no-post` only if asked.
+Output `/tmp/<bot>-matrix.html`. Never ask Kevin to confirm defaults. In THIS protocol Kevin hearts the BAD cells;
+tally them into `modelByPath` bans after he confirms. Outside a protocol where he states their meaning, hearts are
+pointers, never ratings: never mine likes to calibrate. The grid groups renders by a `[path]` caption, so a bot whose
+caption differs (FarmBot's is `FarmBot › <path>`) won't fill its grid.
 
 ### 2.8 Command cheat sheet
 ```sh
@@ -1091,13 +1092,6 @@ Live paths are `paths[]` in each `index.js`; don't trust a list here over the co
 
 Kevin's decisions and the work on these are tracked in `BOT_FOLLOWUPS_TRACKER.md`; remove an item here once it's done.
 
-- **HTML matrix posts PUBLICLY.** `qa-bot-model-matrix.js` passes `--post` without `--shadow`, so on live paths every
-  matrix render lands on the bot's public profile and in the feed (by design in 2026-06, before shadow posts existed).
-  The June/July runs are still public (e.g. GothBot 62 renders across 7 models on 2026-06-29; StarBot 154 on
-  2026-07-01). Needs a decision: add `--shadow` to the script, or keep matrix renders public.
-- **AUTHORITY wording not back-ported.** The 2026-09-08 lesson (§5.5) was never applied to MangaBot `lookOverride`,
-  BloomBot `buildBrief` mandates ("NON-NEGOTIABLE"; 0 refusals seen in 21 renders), GothBot, OutlawBot or SteamBot look
-  blocks. Worth re-checking under Sonnet 5.5 (`LLM_5_5_TUNING.md`).
 - **Prefix/medium cruft audit is overdue** (last documented 2026-06-02): 38 of 94 `promptPrefixByPath` entries exceed 120
   chars (24 are DragonBot's, incl. the 5-artist ~480-char dragon-scene prefix) and 62 of 114 `mediumStyles` exceed 250.
   Nothing is cut off at the front (prefix and medium always come first); the cost is that the scene starts later. On
@@ -1105,23 +1099,16 @@ Kevin's decisions and the work on these are tracked in `BOT_FOLLOWUPS_TRACKER.md
   short reader that only sees the start of the prompt). Separately, FLUX.1 models read only ~512 tokens (~380 words):
   in the two weeks to 2026-09-29, BrickBot 21/62, MangaBot 22/66, FaeBot 13/232, YumBot 8/45 and PixelBot 7/53
   successful prompts ran longer, so their endings (often the suffix) were likely never read.
-- **Fleet `PROMPT_SUFFIX` "no text, no words, no watermarks"** is a Flux-side negation; an A/B was inconclusive (0/8 vs
-  1/8). Removing it fleet-wide is Kevin's call.
 - **Bot-wide wrapper defects still live**: TinyBot's always-on "tilt-shift macro lens" + NON-NEGOTIABLE macro block and
   `render` medium push single-object macro shots; SteamBot's "clockwork machinery / glass gauges" in the prefix and
   neutral style inject clock text; FaeBot's suffix "dreamy dappled light … no text, no watermarks" (warm cast +
   watermark leak); BloomBot `shared-blocks.js` "lush abundant blooms filling the frame" frame-packing mandate. Pilot any
   fix on ONE path.
-- **Two-pass polish still on** for some declarative DragonBot paths (fantasy-scene, epic-moment, iconic-landscape,
-  dragon-scene) despite the "off for declarative paths" rule: exceptions or unaudited.
 - **Camera-framing sweep**: OceanBot's framing pools were purged of scene-dissolving entries; the same sweep on every other
   bot's `*_camera_framing` pools is unverified.
-- **EarthBot "Nat Geo"**: an old rule said never use "Nat Geo" in scenery prompts, but EarthBot's hidden-corner template
-  still asks for "National Geographic intimate-nature feature quality". Needs a call.
-- **DinoBot**: the flux-2-pro exclusion on night/storm paths is not implemented.
 - **Flagged Flux text is not logged** (`withNsfwRetry`), so a flag can only be diagnosed by replay + bisect.
-- **PixelBot `shadowPaths: ['cozy-farming-life-sim']`** (a 2026-05 life-sim farm path) sits against the later rule that
-  PixelBot posts no farm content (FarmBot owns farms). Remove it, or keep it parked?
-- **Orphaned config**: FaeBot `index.js` still carries `mediumByPath` / `modelByPath` / medium entries for the deleted
-  `autumn-seed-gathering` path (the file was removed in `3c655e0f`).
 - **Fleet `vibeDirective.slice(0, 250)`**: only YumBot was cut to 150; not a fleet rule, noted in case length work resumes.
+- **Decided 2026-09-29, leave alone** (tracker D): the AUTHORITY wording in five bots' look blocks (0 refusal-style
+  prompts in ~3,000 bot renders over 30 days), the fleet "no text, no watermarks" suffix (inconclusive A/B; revisit
+  after the per-bot length clean-ups), two-pass polish on four DragonBot paths (dragon-scene is the hearted reference),
+  and DinoBot's flux-2-pro on night/storm paths (check only if a bad night render appears).

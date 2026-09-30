@@ -161,7 +161,7 @@ loss such as a cropped dome), write the numbers next to the pin, and add the pat
 > lesson the moment you learn it — as ONE bullet in the right section, editing (not contradicting) older bullets;
 > narratives and round logs go to `BOT_SCENE_QUALITY_PLAYBOOK_ARCHIVE.md`** (the frozen pre-2026-09-29 playbook,
 > which old "playbook lesson N" code comments cite). When Kevin says "run an HTML matrix on `<bot>`", just run `node scripts/qa-bot-model-matrix.js
---bot <name>` (defaults: 1×/(path×model), `--post` on).
+--bot <name>` (defaults: 1×/(path×model), posts hidden as shadow posts).
 
 ---
 

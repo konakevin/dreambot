@@ -22,8 +22,8 @@ Status key: ☐ todo · ◐ in progress · ☑ done · ⏸ deferred · ✋ decid
 | # | Item | Status | Test / evidence | Commit |
 |---|---|---|---|---|
 | A1 | **Ship the FarmBot prompt trim.** Medium 276 → 45 words; every brief ends with `FARMBOT_LENGTH_RULE` (120-160 words, style → subject → setting); AlphaBot's FarmBot-destined candidates append the same rule. | ☑ | 24 shadow posts on FarmBot 2026-09-30 ~02:45-02:54 UTC: 8 baseline (median ~770 words), 8 first try (characters drew older; fixed), 8 final (~236 words, cute characters back). All 43 FarmBot briefs dry-built with the new ending. | e5eae801 (pushed) |
-| A2 | **FarmBot window camera shots 11 → 3** of 98 camera entries (they render as literal window frames now that prompts are short). | ☑ | Removed 8 near-duplicate "looking through a farmhouse window" entries; kept the 3 distinct ones (wavy glass, looking inward, curtains + interior light). Pool 98 → 90, window share ~1 in 9 → ~1 in 30. Pool loads; seed-dupe scan OK. | (next) |
-| A3 | **HTML matrix posts hidden (shadow).** `qa-bot-model-matrix.js` adds `--shadow`; old June/July public matrix posts stay as they are. Update CLAUDE.md, the playbook §2.7 and the matrix memory. | ☐ | | |
+| A2 | **FarmBot window camera shots 11 → 3** of 98 camera entries (they render as literal window frames now that prompts are short). | ☑ | Removed 8 near-duplicate "looking through a farmhouse window" entries; kept the 3 distinct ones (wavy glass, looking inward, curtains + interior light). Pool 98 → 90, window share ~1 in 9 → ~1 in 30. Pool loads; seed-dupe scan OK. | 14edfab1 |
+| A3 | **HTML matrix posts hidden (shadow).** `qa-bot-model-matrix.js` adds `--shadow`; old June/July public matrix posts stay as they are. Update CLAUDE.md, the playbook §2.7 and the matrix memory. | ☑ | 1-cell live matrix (OceanBot reef-paradise × flux-1.1-pro) posted `shadow=true, is_public=false`; HTML grid still fills. Noted: the grid groups by a `[path]` caption, so FarmBot (`FarmBot › path`) wouldn't fill. | (next) |
 | A4 | **Keep `BOT_SCENE_QUALITY_PLAYBOOK_ARCHIVE.md`** (old 6,007-line playbook, verbatim, byte-checked). | ☑ | Body md5 = the pre-rewrite file's (0d9d7788…). | 3cd8ecff |
 | A5 | **Commit the rewritten playbook + CLAUDE.md pointer.** | ☑ | 6,007 → ~1,120 lines; every rule re-checked against code by 6 slice reviews. | 3cd8ecff |
 
@@ -46,9 +46,9 @@ Status key: ☐ todo · ◐ in progress · ☑ done · ⏸ deferred · ✋ decid
 | C10d | **SteamBot wrapper**: "clockwork machinery / glass gauges" in the prefix + neutral style inject clock-face text. | ☐ | | |
 | C11 | **FarmBot costume parade back to 3 humans** (the 2-human cap was a workaround for the fixed truncation bug). | ☐ | | |
 | C12 | **Log the prompt text when a render is safety-flagged** (today it's discarded, so flags can only be diagnosed by replay + bisect). | ☐ | | |
-| C13a | **Deactivate PixelBot's shadow farm path** `cozy-farming-life-sim` (farms belong to FarmBot); keep files. | ☐ | | |
-| C13b | **Delete FaeBot's leftover config** for the deleted `autumn-seed-gathering` path. | ☐ | | |
-| C13c | **Drop the old "never say Nat Geo" rule** (EarthBot's current look is Kevin's pick); playbook §11 only, no code. | ☐ | | |
+| C13a | **Deactivate PixelBot's shadow farm path** `cozy-farming-life-sim` (farms belong to FarmBot); keep files. | ☑ | Out of `shadowPaths` (builder + pools kept); Kevin's 2026-09-19 call was "scrap the farm pixels". `--mode cozy-farming-life-sim` now refused; bot loads. | (next) |
+| C13b | **Delete FaeBot's leftover config** for the deleted `autumn-seed-gathering` path. | ☑ | Removed the `faebot_seedfall` medium + prefix, the dead mediumByPath/prefix/model comments (also honey-harvest's, cut the same day; its flux-2 finding kept as one line) and the orphaned `gen-seeds/faebot/gen-autumn-seed-pools.js`. star-charting brief dry-built OK. | (next) |
+| C13c | **Drop the old "never say Nat Geo" rule** (EarthBot's current look is Kevin's pick); playbook §11 only, no code. | ☑ | Old rule lives only in the archive; open item removed. | (next) |
 | C14 | **Camera-framing sweep** of every bot's camera pools for entries that zoom past the subject (OceanBot's 2026-06-30 problem). Read-only report; fix hits on the C10 bots. | ☐ | | |
 
 ## D. Decided: leave alone (2026-09-29)

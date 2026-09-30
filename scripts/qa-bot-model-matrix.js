@@ -2,7 +2,9 @@
 /**
  * QA tool — Bot × Model HTML Matrix Test.
  *
- * Fires N renders per (path × model) for a bot, posts them to the live feed,
+ * Fires N renders per (path × model) for a bot, posts them HIDDEN (shadow posts,
+ * visible only to Kevin on the bot's profile; 2026-09-29, the standing rule for every
+ * test batch; before that the renders went public on the bot's profile and feed),
  * then builds an HTML matrix Kevin can open locally to triage which models
  * to keep enabled for which paths.
  *
@@ -19,12 +21,12 @@
  *                         Use 3 for stronger sample at 3× cost.
  *   --paths <csv>         Override which paths to test. Default = bot.paths.
  *   --models <csv>        Override which models to test. Default = bot.allowedModels.
- *   --no-post             Don't post to live feed. Renders save to /tmp only,
+ *   --no-post             Don't post at all. Renders save to /tmp only,
  *                         HTML uses local file:// URLs (only opens on this Mac).
- *                         Default: POST ENABLED (matrix uses Supabase URLs).
+ *                         Default: POST ENABLED, as shadow posts (matrix uses Supabase URLs).
  *   --output <path>       HTML output path. Default /tmp/<bot>-matrix.html
  *
- * Default behavior: 1×/(model×path), --post enabled, HTML to /tmp/<bot>-matrix.html.
+ * Default behavior: 1×/(model×path), --post --shadow, HTML to /tmp/<bot>-matrix.html.
  *
  * Cost estimate per render: ~3-7¢ depending on model. For 18 paths × 8 models × 1
  * render = ~$7 (BloomBot full matrix). Sonnet brief composition adds ~$1.
@@ -82,7 +84,7 @@ console.log(`Bot: ${BOT}`);
 console.log(`Paths: ${PATHS.length} — ${PATHS.join(', ')}`);
 console.log(`Models: ${MODELS.length} — ${MODELS.map((m) => m.replace(/.*\//, '')).join(', ')}`);
 console.log(`Renders: ${totalCells} cells × ${COUNT} each = ${totalRenders} total`);
-console.log(`Posting: ${POST ? 'YES (live feed)' : 'no — /tmp only'}`);
+console.log(`Posting: ${POST ? 'YES (shadow: hidden, admin-only)' : 'no — /tmp only'}`);
 console.log(`Output:  ${OUT}`);
 console.log('');
 
@@ -112,7 +114,8 @@ function runIterBot(p, m) {
       '--model', m,
       '--label', `matrix-${modelShort(m)}`,
     ];
-    if (POST) a.push('--post');
+    // --shadow: matrix renders are test renders, so they post hidden (admin-only), never public.
+    if (POST) a.push('--post', '--shadow');
     const proc = spawn('node', a, { stdio: ['ignore', 'pipe', 'pipe'] });
     let killed = false;
     proc.on('close', (code) => {
