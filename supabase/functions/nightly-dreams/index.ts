@@ -1708,6 +1708,12 @@ Deno.serve(async (req) => {
     // SOLO-AND-SCENE-ONLY CARDS (mig 606; Kevin 2026-09-30 on Surreal Dreams: "single and scene only"): a couple dream
     // whose place roll lands on a couples_ok = false card re-rolls to another of the dreamer's places, else the
     // catalogue. Runs before the scenario-card step so a re-rolled scenario card is still handled there.
+    // WHY the Dreamscapes tile (surreal_dreams) is couples_ok = false: an imagined world lives in its backdrop, and a
+    // couple two-shot fills the frame, so the world gets squeezed out. In the first surreal QA round 3 of 4 couples came
+    // back as plain portraits with no world behind them and one lost a face to a failed dual swap; solo and scene-only
+    // renders of the same cards scored well. Kevin kept the three worlds added in mig 615 (Celestial, Overgrown Wonders,
+    // Impossible Architecture) solo too: "just leave that one single only". Don't open couples here without a QA round
+    // that shows the world reading behind the pair.
     if (isDualFaceSwap && userPlace && noCoupleCards.has(userPlace)) {
       const from = userPlace;
       const coupleOk = placePool.filter((p: string) => !noCoupleCards.has(p));

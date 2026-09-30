@@ -258,6 +258,13 @@ const LOCATION_PROMPTS = {
     'Outlaw hideout cabin tucked in a red rock canyon, campfire smoke, horses tied at a rail, dramatic sunset light, western, cinematic wide shot, no people',
   'railroad town':
     'Frontier railroad town with a steam locomotive at the wooden depot, water tower, false-front buildings, golden-hour dust, western, cinematic wide shot, no people',
+  // Dreamscapes worlds (Kevin 2026-09-30: "build all three"); the look carries the image.
+  'celestial realm':
+    'A ringed planet rising low over a meadow of glowing wildflowers, nebula-coloured sky full of stars, a small glass observatory, dreamy luminous fantasy, cinematic wide shot, no people',
+  'overgrown wonders':
+    'A grand palace ballroom swallowed by flowers and vines, blossoming trees growing through the marble floor, sunbeams through a broken glass dome, lush and peaceful fantasy, cinematic wide shot, no people',
+  'impossible architecture':
+    'Spiral marble staircases rising into pink clouds between floating towers linked by arched bridges, serene dreamlike fantasy architecture, cinematic wide shot, no people',
   // Romantic Escapes places (mig 605): pretty, lush, romantic (Kevin 2026-09-30).
   'cherry blossoms':
     'Kyoto canal path beneath a tunnel of pink cherry blossoms, petals drifting on the water, stone lanterns and a small wooden bridge, soft spring light, romantic, cinematic wide shot, no people',
