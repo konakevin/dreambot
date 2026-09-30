@@ -66,12 +66,38 @@ async function pool(items, n, fn) {
   );
 }
 
-/** Cast ages in prompt order ("NN years old"); a couple takes the first two, a solo the first. */
+const DECADE_WORDS = {
+  twenties: 20,
+  thirties: 30,
+  forties: 40,
+  fifties: 50,
+  sixties: 60,
+  seventies: 70,
+  eighties: 80,
+};
+/** A decade phrase ("in her early forties", "mid-40s", "in his 60s") → the age it asks for (early 42, mid 45, late 48,
+ *  bare 45). Create solos state age this way: Sonnet writes the prompt from the cast description. */
+function ageFromDecade(text) {
+  const m = (text || '').match(
+    /\b(?:(early|mid|late)[- ])?(twenties|thirties|forties|fifties|sixties|seventies|eighties|[2-8]0s)\b/i
+  );
+  if (!m) return null;
+  const base = DECADE_WORDS[m[2].toLowerCase()] ?? Number(m[2].slice(0, 2));
+  const step = { early: 2, mid: 5, late: 8 }[(m[1] || '').toLowerCase()] ?? 5;
+  return base + step;
+}
+
+/** Cast ages in prompt order ("NN years old"); a couple takes the first two, a solo the first. A solo with no
+ *  "NN years old" falls back to its first decade phrase. */
 function agesFromPrompt(prompt, count) {
   const out = [];
   for (const m of (prompt || '').matchAll(/\b(\d{1,2}) years old\b/g)) {
     out.push(Number(m[1]));
     if (out.length === count) break;
+  }
+  if (!out.length && count === 1) {
+    const d = ageFromDecade(prompt);
+    if (d) out.push(d);
   }
   return out;
 }
@@ -89,7 +115,15 @@ async function pullProduction(sb) {
       .order('created_at', { ascending: false })
       .range(from, from + 999);
     if (error) throw error;
-    rows.push(...data.filter((r) => !r.is_qa && /years old/.test(r.enhanced_prompt || '')));
+    rows.push(
+      ...data.filter(
+        (r) =>
+          !r.is_qa &&
+          /years old|\b(?:twenties|thirties|forties|fifties|sixties|seventies|[2-8]0s)\b/i.test(
+            r.enhanced_prompt || ''
+          )
+      )
+    );
     if (data.length < 1000) break;
   }
   const byJob = new Map();
