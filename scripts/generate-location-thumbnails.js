@@ -22,87 +22,186 @@ const sb = createClient(
 const BUCKET = 'location-thumbnails';
 
 const LOCATION_PROMPTS = {
-  'new york city': 'Aerial view of Manhattan skyline at golden hour, towering skyscrapers reflecting warm sunset light, Central Park visible below, dramatic clouds, cinematic wide shot, photorealistic',
-  'tokyo': 'Shibuya crossing at twilight with glowing neon signs, dense urban Japanese cityscape, rain-slicked streets reflecting colorful lights, cinematic wide shot, photorealistic',
-  'paris': 'Eiffel Tower framed by Haussmann buildings at blue hour, Seine river reflecting city lights, warm café glow, romantic atmosphere, cinematic wide shot, photorealistic',
-  'venice': 'Grand Canal with gondolas at sunset, ornate Venetian palazzos reflected in turquoise water, golden light on marble facades, cinematic wide shot, photorealistic',
-  'london': 'Tower Bridge and Thames at twilight, dramatic cloudy sky, city lights reflecting on water, iconic British architecture, cinematic wide shot, photorealistic',
-  'dubai': 'Burj Khalifa towering above cloud layer at sunrise, futuristic glass skyline, golden desert light, ultra-modern cityscape, cinematic wide shot, photorealistic',
-  'santorini': 'White-washed buildings with blue domes overlooking Aegean Sea at sunset, dramatic caldera cliffs, warm Mediterranean light, cinematic wide shot, photorealistic',
-  'hong kong': 'Victoria Harbour at night with dense neon-lit skyscrapers, light reflections on water, dramatic urban density, cinematic wide shot, photorealistic',
-  'rome': 'Roman Forum ruins at golden hour, ancient columns and arches bathed in warm light, Mediterranean pines in background, cinematic wide shot, photorealistic',
-  'los angeles': 'Los Angeles skyline from Griffith Observatory at sunset, palm trees silhouetted, purple and orange sky, sprawling city lights below, cinematic wide shot, photorealistic',
-  'miami': 'Miami Beach Art Deco district at dusk, pastel-colored buildings, palm trees, turquoise ocean, warm tropical light, cinematic wide shot, photorealistic',
-  'san francisco': 'Golden Gate Bridge emerging from fog at sunrise, dramatic Pacific coastline, warm golden light on red towers, cinematic wide shot, photorealistic',
-  'barcelona': 'Sagrada Familia towering above Barcelona rooftops at golden hour, Gothic Quarter in foreground, Mediterranean Sea in distance, cinematic wide shot, photorealistic',
-  'rio de janeiro': 'Christ the Redeemer overlooking Guanabara Bay at sunset, Sugarloaf Mountain, lush green hills meeting turquoise water, cinematic wide shot, photorealistic',
-  'seoul': 'Traditional Korean hanok village with modern Seoul skyline behind, cherry blossoms, Namsan Tower on hilltop, cinematic wide shot, photorealistic',
-  'las vegas': 'Las Vegas Strip at night, dazzling neon lights and casino marquees, dramatic desert sky, electric energy, cinematic wide shot, photorealistic',
-  'hawaii': 'Na Pali Coast cliffs at golden hour, dramatic volcanic ridges meeting turquoise Pacific Ocean, lush green valleys, tropical mist, cinematic wide shot, photorealistic',
-  'maldives': 'Overwater bungalows on crystal-clear turquoise lagoon, white sand, tropical sunset, pristine coral reef visible through water, cinematic wide shot, photorealistic',
-  'bali': 'Terraced rice paddies in Ubud at sunrise, morning mist through palm trees, ancient stone temple in background, lush tropical green, cinematic wide shot, photorealistic',
-  'costa rica': 'Dense cloud forest canopy with hanging bridges, exotic birds, waterfalls cascading through emerald green jungle, tropical mist, cinematic wide shot, photorealistic',
-  'bora bora tahiti': 'Mount Otemanu rising above crystal lagoon, overwater bungalows on turquoise water, white sand motus, tropical sunset, cinematic wide shot, photorealistic',
-  'caribbean island': 'Pristine Caribbean beach with powdery white sand, swaying palm trees, crystal turquoise water, colorful fishing boats, cinematic wide shot, photorealistic',
-  'yosemite': 'El Capitan and Half Dome at golden hour, Yosemite Valley with waterfalls, towering granite cliffs, pine forests, dramatic light rays, cinematic wide shot, photorealistic',
-  'moab arches': 'Delicate Arch at sunset with La Sal Mountains behind, red sandstone formations glowing orange, dramatic desert sky, cinematic wide shot, photorealistic',
-  'swiss alps': 'Matterhorn peak reflected in alpine lake at sunrise, snow-capped mountains, green meadows with wildflowers, Swiss chalets, cinematic wide shot, photorealistic',
-  'iceland': 'Dramatic Icelandic landscape with glacier, black volcanic beach, northern lights in sky, steaming geothermal vents, surreal terrain, cinematic wide shot, photorealistic',
-  'canadian rockies': 'Lake Louise with turquoise glacial water reflecting snow-capped Rocky Mountains, evergreen forests, dramatic clouds, cinematic wide shot, photorealistic',
-  'grand canyon': 'Grand Canyon layers at golden hour, vast red and orange rock formations, Colorado River far below, dramatic shadows, cinematic wide shot, photorealistic',
-  'zion national park': 'The Narrows in Zion with towering red canyon walls, Virgin River reflecting sky, lush hanging gardens, dramatic light, cinematic wide shot, photorealistic',
-  'redwood forest': 'Ancient redwood trees towering overhead, cathedral-like forest, shafts of golden light through canopy, fern-covered floor, cinematic wide shot, photorealistic',
-  'amazon rainforest': 'Dense Amazon canopy from river level, massive tropical trees, exotic wildlife, misty atmosphere, lush biodiversity, cinematic wide shot, photorealistic',
-  'arctic wilderness': 'Arctic landscape with glaciers calving into deep blue sea, polar ice formations, aurora borealis, pristine white snow, cinematic wide shot, photorealistic',
-  'sahara desert': 'Towering Saharan sand dunes at golden hour, dramatic shadows and curves, caravan of camels in distance, vast endless desert, cinematic wide shot, photorealistic',
-  'big sur cliffs': 'Bixby Bridge spanning Big Sur coastline, dramatic Pacific cliffs, crashing waves, wildflowers on hillside, golden California light, cinematic wide shot, photorealistic',
-  'ancient egypt': 'Great Pyramids of Giza at golden hour, Sphinx in foreground, vast desert stretching to horizon, warm amber light on limestone, cinematic wide shot, photorealistic',
-  'machu picchu': 'Machu Picchu ruins emerging from morning clouds, Huayna Picchu peak behind, Incan stone terraces, dramatic Andean mountains, cinematic wide shot, photorealistic',
-  'angkor wat': 'Angkor Wat temple complex reflected in lotus pond at sunrise, ancient stone towers, jungle growing through ruins, golden light, cinematic wide shot, photorealistic',
-  'ancient rome': 'Roman Colosseum interior at golden hour, ancient arches and corridors, warm light on travertine stone, dramatic shadows, cinematic wide shot, photorealistic',
-  'petra': 'The Treasury of Petra carved into rose-red cliff face, narrow Siq canyon entrance, warm golden light on sandstone, cinematic wide shot, photorealistic',
-  'taj mahal': 'Taj Mahal reflected in long pool at sunrise, white marble glowing in warm light, symmetrical Mughal gardens, misty atmosphere, cinematic wide shot, photorealistic',
-  'great wall of china': 'Great Wall winding across misty mountain ridges at sunrise, watchtowers disappearing into fog, autumn foliage, dramatic scale, cinematic wide shot, photorealistic',
-  'enchanted forest': 'Magical glowing forest with bioluminescent mushrooms and fireflies, ancient twisted trees with golden leaves, ethereal mist, fantasy, cinematic wide shot',
-  'floating sky islands': 'Massive floating islands in a sunset sky, waterfalls cascading into clouds below, lush vegetation on rocky platforms, fantasy, cinematic wide shot',
-  'wizard academy': 'Grand magical academy with soaring towers and floating staircases, arcane symbols glowing, vast library visible through arched windows, fantasy, cinematic wide shot',
-  'underwater city atlantis': 'Luminous underwater city with crystal domes and coral-covered spires, bioluminescent sea life, light rays penetrating deep blue water, fantasy, cinematic wide shot',
-  'ancient elven city': 'Ethereal elven city built into massive ancient trees, silver bridges between platforms, soft golden light filtering through canopy, fantasy, cinematic wide shot',
-  'dwarven fortress': 'Vast underground dwarven hall with towering stone pillars, rivers of molten gold, massive forge fires, carved mountain interior, fantasy, cinematic wide shot',
-  'dragons keep': 'Dragon perched atop volcanic mountain fortress, treasure hoard visible in cavern below, dramatic storm clouds, fire-lit peaks, fantasy, cinematic wide shot',
-  'crystal caverns': 'Enormous crystal cavern with massive prismatic formations, light refracting into rainbow spectrums, underground lake reflecting crystals, fantasy, cinematic wide shot',
-  'cloud kingdom': 'Majestic palace built on clouds at sunset, golden spires piercing sky, rainbow bridges between cloud platforms, ethereal atmosphere, fantasy, cinematic wide shot',
-  'fairy tale kingdom': 'Whimsical fairy tale castle on rolling hills, candy-colored towers, enchanted gardens with oversized flowers, warm storybook light, fantasy, cinematic wide shot',
-  'paris cafe': 'Intimate Parisian café terrace at golden hour, bistro chairs on cobblestone, warm lamplight, flowering window boxes, romantic atmosphere, cinematic medium shot, photorealistic',
-  'cherry blossoms': 'Avenue of cherry blossom trees in full bloom, pink petals drifting in warm breeze, soft golden light, serene pathway, cinematic wide shot, photorealistic',
-  'japanese garden': 'Traditional Japanese zen garden with raked gravel, moss-covered stones, red maple, koi pond, bamboo water feature, peaceful atmosphere, cinematic wide shot, photorealistic',
-  'fairy cottage': 'Tiny magical cottage in a woodland clearing, thatched roof covered in flowers, warm light from windows, garden of wildflowers and herbs, fantasy, cinematic medium shot',
-  'princess garden castle': 'Romantic garden castle with climbing roses, marble fountains, manicured hedges, warm golden afternoon light, fairy tale atmosphere, fantasy, cinematic wide shot',
-  'rose palace': 'Opulent palace courtyard filled with thousands of roses in every color, marble columns draped in vines, soft pink light, fantasy, cinematic wide shot',
-  'victorian london': 'Foggy Victorian London street with gas lamps glowing, cobblestone roads, ornate brick buildings, horse carriages, moody atmospheric light, cinematic wide shot, photorealistic',
-  'transylvania': 'Gothic castle on misty mountain peak at twilight, dark forests below, dramatic clouds, full moon, Carpathian Mountains, cinematic wide shot, photorealistic',
-  'haunted cathedral': 'Vast gothic cathedral interior with stained glass windows casting colored light, stone arches, dramatic shadows, sacred atmosphere, cinematic wide shot, photorealistic',
-  'noir cityscape': 'Rain-soaked city street at night, neon signs reflecting on wet asphalt, fire escapes and steam vents, dramatic film noir shadows, cinematic wide shot, photorealistic',
-  'gothic realm': 'Imposing gothic cathedral with towering spires and flying buttresses silhouetted against a full moon, mist drifting over cobblestone street below, gas lamps glowing amber, dark forested mountains in the distance, dramatic stormy twilight sky, ravens in flight, ornate stone gargoyles, cinematic wide shot, photorealistic, moody',
-  'amsterdam': 'Amsterdam canal in spring at brilliant midday, gabled Dutch houses lined with tulip-filled window boxes, ornate cast-iron bridges arcing over bright water, locals on bikes crossing, sun-dappled cobblestones, vivid blue sky with scattered white clouds, cinematic wide shot, photorealistic',
-  'prague': 'Prague Old Town in winter snow at dusk, gothic Tyn Church spires and baroque rooftops dusted with fresh snow, snow falling gently, warm window light glowing amber, Vltava River steam rising, moody overcast atmosphere, cinematic wide shot, photorealistic',
-  'singapore': 'Singapore Marina Bay at full night, Marina Bay Sands towers and skyline in vivid neon and LED, Supertree Grove in colorful light show, ArtScience Museum lotus glowing, all colors reflected on glassy water, dramatic black sky, cinematic wide shot, photorealistic',
-  'china': 'Great Wall of China at dawn breaking through low mountain clouds, ridge after ridge of green peaks fading into pearly mist, stone watchtowers emerging from fog, soft cool morning light, cinematic wide shot, photorealistic',
-  'thailand': 'Phi Phi Island lagoon at brilliant tropical midday, towering limestone karsts reflected in glass-clear turquoise water, traditional longtail boats anchored on white powder sand, vivid cobalt sky with no clouds, palm trees framing, cinematic wide shot, photorealistic',
-  'australia': 'Uluru sandstone monolith under a dramatic afternoon storm, deep red rock glowing against bruise-purple sky, lightning in distance, red Outback desert plains, scattered eucalyptus and spinifex, moody and dramatic, cinematic wide shot, photorealistic',
-  'india': 'Taj Mahal under a full moon at night, white marble glowing silver-blue in cool moonlight, reflecting pool catching stars, faint mist over Mughal gardens, dramatic deep indigo sky, cinematic wide shot, photorealistic',
-  'mexico': 'Mexico City zócalo at brilliant midday, ornate baroque cathedral facade, papel picado banners in pink yellow blue crisscrossing the square, mariachi musicians, vendor stalls with vivid marigolds and produce, vibrant city life, brilliant sunshine, cinematic wide shot, photorealistic',
-  'morocco': 'Marrakech souk at full night, brass and copper lanterns glowing warm amber overhead in a maze of mosaic-tiled passages, jewel-tone fabrics and rugs hanging, dramatic pools of warm light against deep shadows, smoke from grill stalls, cinematic wide shot, photorealistic',
-  'turkey': 'Hagia Sophia and Blue Mosque silhouetted at blue hour over the Bosphorus, ferries crossing dark water with warm running lights, Istanbul skyline of minarets and domes, dramatic deep-indigo sky with first stars, cinematic wide shot, photorealistic',
-  'yellowstone': 'Grand Prismatic Spring at brilliant clear midday from aerial view, vivid rainbow rings of orange yellow green turquoise deep blue, vertical plumes of steam, surrounding lodgepole pine forest, bright cobalt sky with cumulus clouds, cinematic aerial wide shot, photorealistic',
-  'new zealand': 'Milford Sound in dramatic stormy weather, towering Mitre Peak with rain clouds breaking violently across cliffs, waterfalls cascading at full force, glassy dark fjord water mirroring moody sky, mist rolling through valley, cinematic wide shot, photorealistic',
-  'patagonia': 'Torres del Paine granite spires in late autumn, golden lenga forest in foreground turning red and amber, glacial turquoise Pehoé Lake, dramatic Patagonian cumulus clouds racing across vast sky, cinematic wide shot, photorealistic',
-  'norwegian fjords': 'Norwegian fjord at full night under brilliant aurora borealis, green and purple ribbons of light dancing across sky, traditional red Norwegian cabins warmly lit against dark cliffs, fjord water mirror-still reflecting the aurora, sharp winter stars, cinematic wide shot, photorealistic',
-  'african safari': 'Vast Serengeti plain at brilliant African midday, single acacia tree silhouetted, herd of elephants and zebras at a watering hole, golden grass stretching to horizon, towering cumulus clouds in vivid blue sky, heat-haze shimmer, cinematic wide shot, photorealistic',
-  'alien planet': 'Alien landscape with bioluminescent flora, twin suns setting over crystalline mountains, strange geological formations, unearthly color palette, sci-fi, cinematic wide shot',
-  'cyberpunk megacity': 'Massive cyberpunk city with towering holographic billboards, flying vehicles, dense vertical architecture, neon-drenched rain, sci-fi, cinematic wide shot',
-  'space station': 'Orbital space station with Earth visible through massive viewport, metallic corridors with blue lighting, zero-gravity elements, sci-fi, cinematic wide shot',
-  'mars colony': 'Human settlement on Mars with pressurized domes, red desert landscape, distant Olympus Mons, Earth visible in sky, sci-fi, cinematic wide shot',
+  'new york city':
+    'Aerial view of Manhattan skyline at golden hour, towering skyscrapers reflecting warm sunset light, Central Park visible below, dramatic clouds, cinematic wide shot, photorealistic',
+  tokyo:
+    'Shibuya crossing at twilight with glowing neon signs, dense urban Japanese cityscape, rain-slicked streets reflecting colorful lights, cinematic wide shot, photorealistic',
+  paris:
+    'Eiffel Tower framed by Haussmann buildings at blue hour, Seine river reflecting city lights, warm café glow, romantic atmosphere, cinematic wide shot, photorealistic',
+  venice:
+    'Grand Canal with gondolas at sunset, ornate Venetian palazzos reflected in turquoise water, golden light on marble facades, cinematic wide shot, photorealistic',
+  london:
+    'Tower Bridge and Thames at twilight, dramatic cloudy sky, city lights reflecting on water, iconic British architecture, cinematic wide shot, photorealistic',
+  dubai:
+    'Burj Khalifa towering above cloud layer at sunrise, futuristic glass skyline, golden desert light, ultra-modern cityscape, cinematic wide shot, photorealistic',
+  santorini:
+    'White-washed buildings with blue domes overlooking Aegean Sea at sunset, dramatic caldera cliffs, warm Mediterranean light, cinematic wide shot, photorealistic',
+  'hong kong':
+    'Victoria Harbour at night with dense neon-lit skyscrapers, light reflections on water, dramatic urban density, cinematic wide shot, photorealistic',
+  rome: 'Roman Forum ruins at golden hour, ancient columns and arches bathed in warm light, Mediterranean pines in background, cinematic wide shot, photorealistic',
+  'los angeles':
+    'Los Angeles skyline from Griffith Observatory at sunset, palm trees silhouetted, purple and orange sky, sprawling city lights below, cinematic wide shot, photorealistic',
+  miami:
+    'Miami Beach Art Deco district at dusk, pastel-colored buildings, palm trees, turquoise ocean, warm tropical light, cinematic wide shot, photorealistic',
+  'san francisco':
+    'Golden Gate Bridge emerging from fog at sunrise, dramatic Pacific coastline, warm golden light on red towers, cinematic wide shot, photorealistic',
+  barcelona:
+    'Sagrada Familia towering above Barcelona rooftops at golden hour, Gothic Quarter in foreground, Mediterranean Sea in distance, cinematic wide shot, photorealistic',
+  'rio de janeiro':
+    'Christ the Redeemer overlooking Guanabara Bay at sunset, Sugarloaf Mountain, lush green hills meeting turquoise water, cinematic wide shot, photorealistic',
+  seoul:
+    'Traditional Korean hanok village with modern Seoul skyline behind, cherry blossoms, Namsan Tower on hilltop, cinematic wide shot, photorealistic',
+  'las vegas':
+    'Las Vegas Strip at night, dazzling neon lights and casino marquees, dramatic desert sky, electric energy, cinematic wide shot, photorealistic',
+  hawaii:
+    'Na Pali Coast cliffs at golden hour, dramatic volcanic ridges meeting turquoise Pacific Ocean, lush green valleys, tropical mist, cinematic wide shot, photorealistic',
+  maldives:
+    'Overwater bungalows on crystal-clear turquoise lagoon, white sand, tropical sunset, pristine coral reef visible through water, cinematic wide shot, photorealistic',
+  bali: 'Terraced rice paddies in Ubud at sunrise, morning mist through palm trees, ancient stone temple in background, lush tropical green, cinematic wide shot, photorealistic',
+  'costa rica':
+    'Dense cloud forest canopy with hanging bridges, exotic birds, waterfalls cascading through emerald green jungle, tropical mist, cinematic wide shot, photorealistic',
+  'bora bora tahiti':
+    'Mount Otemanu rising above crystal lagoon, overwater bungalows on turquoise water, white sand motus, tropical sunset, cinematic wide shot, photorealistic',
+  'caribbean island':
+    'Pristine Caribbean beach with powdery white sand, swaying palm trees, crystal turquoise water, colorful fishing boats, cinematic wide shot, photorealistic',
+  yosemite:
+    'El Capitan and Half Dome at golden hour, Yosemite Valley with waterfalls, towering granite cliffs, pine forests, dramatic light rays, cinematic wide shot, photorealistic',
+  'moab arches':
+    'Delicate Arch at sunset with La Sal Mountains behind, red sandstone formations glowing orange, dramatic desert sky, cinematic wide shot, photorealistic',
+  'swiss alps':
+    'Matterhorn peak reflected in alpine lake at sunrise, snow-capped mountains, green meadows with wildflowers, Swiss chalets, cinematic wide shot, photorealistic',
+  iceland:
+    'Dramatic Icelandic landscape with glacier, black volcanic beach, northern lights in sky, steaming geothermal vents, surreal terrain, cinematic wide shot, photorealistic',
+  'canadian rockies':
+    'Lake Louise with turquoise glacial water reflecting snow-capped Rocky Mountains, evergreen forests, dramatic clouds, cinematic wide shot, photorealistic',
+  'grand canyon':
+    'Grand Canyon layers at golden hour, vast red and orange rock formations, Colorado River far below, dramatic shadows, cinematic wide shot, photorealistic',
+  'zion national park':
+    'The Narrows in Zion with towering red canyon walls, Virgin River reflecting sky, lush hanging gardens, dramatic light, cinematic wide shot, photorealistic',
+  'redwood forest':
+    'Ancient redwood trees towering overhead, cathedral-like forest, shafts of golden light through canopy, fern-covered floor, cinematic wide shot, photorealistic',
+  'amazon rainforest':
+    'Dense Amazon canopy from river level, massive tropical trees, exotic wildlife, misty atmosphere, lush biodiversity, cinematic wide shot, photorealistic',
+  'arctic wilderness':
+    'Arctic landscape with glaciers calving into deep blue sea, polar ice formations, aurora borealis, pristine white snow, cinematic wide shot, photorealistic',
+  'sahara desert':
+    'Towering Saharan sand dunes at golden hour, dramatic shadows and curves, caravan of camels in distance, vast endless desert, cinematic wide shot, photorealistic',
+  'big sur cliffs':
+    'Bixby Bridge spanning Big Sur coastline, dramatic Pacific cliffs, crashing waves, wildflowers on hillside, golden California light, cinematic wide shot, photorealistic',
+  'ancient egypt':
+    'Great Pyramids of Giza at golden hour, Sphinx in foreground, vast desert stretching to horizon, warm amber light on limestone, cinematic wide shot, photorealistic',
+  'machu picchu':
+    'Machu Picchu ruins emerging from morning clouds, Huayna Picchu peak behind, Incan stone terraces, dramatic Andean mountains, cinematic wide shot, photorealistic',
+  'angkor wat':
+    'Angkor Wat temple complex reflected in lotus pond at sunrise, ancient stone towers, jungle growing through ruins, golden light, cinematic wide shot, photorealistic',
+  'ancient rome':
+    'Roman Colosseum interior at golden hour, ancient arches and corridors, warm light on travertine stone, dramatic shadows, cinematic wide shot, photorealistic',
+  petra:
+    'The Treasury of Petra carved into rose-red cliff face, narrow Siq canyon entrance, warm golden light on sandstone, cinematic wide shot, photorealistic',
+  'taj mahal':
+    'Taj Mahal reflected in long pool at sunrise, white marble glowing in warm light, symmetrical Mughal gardens, misty atmosphere, cinematic wide shot, photorealistic',
+  'great wall of china':
+    'Great Wall winding across misty mountain ridges at sunrise, watchtowers disappearing into fog, autumn foliage, dramatic scale, cinematic wide shot, photorealistic',
+  'enchanted forest':
+    'Magical glowing forest with bioluminescent mushrooms and fireflies, ancient twisted trees with golden leaves, ethereal mist, fantasy, cinematic wide shot',
+  'floating sky islands':
+    'Massive floating islands in a sunset sky, waterfalls cascading into clouds below, lush vegetation on rocky platforms, fantasy, cinematic wide shot',
+  'wizard academy':
+    'Grand magical academy with soaring towers and floating staircases, arcane symbols glowing, vast library visible through arched windows, fantasy, cinematic wide shot',
+  'underwater city atlantis':
+    'Luminous underwater city with crystal domes and coral-covered spires, bioluminescent sea life, light rays penetrating deep blue water, fantasy, cinematic wide shot',
+  'ancient elven city':
+    'Ethereal elven city built into massive ancient trees, silver bridges between platforms, soft golden light filtering through canopy, fantasy, cinematic wide shot',
+  'dwarven fortress':
+    'Vast underground dwarven hall with towering stone pillars, rivers of molten gold, massive forge fires, carved mountain interior, fantasy, cinematic wide shot',
+  'dragons keep':
+    'Dragon perched atop volcanic mountain fortress, treasure hoard visible in cavern below, dramatic storm clouds, fire-lit peaks, fantasy, cinematic wide shot',
+  'crystal caverns':
+    'Enormous crystal cavern with massive prismatic formations, light refracting into rainbow spectrums, underground lake reflecting crystals, fantasy, cinematic wide shot',
+  'cloud kingdom':
+    'Majestic palace built on clouds at sunset, golden spires piercing sky, rainbow bridges between cloud platforms, ethereal atmosphere, fantasy, cinematic wide shot',
+  'fairy tale kingdom':
+    'Whimsical fairy tale castle on rolling hills, candy-colored towers, enchanted gardens with oversized flowers, warm storybook light, fantasy, cinematic wide shot',
+  'paris cafe':
+    'Intimate Parisian café terrace at golden hour, bistro chairs on cobblestone, warm lamplight, flowering window boxes, romantic atmosphere, cinematic medium shot, photorealistic',
+  'cherry blossoms':
+    'Avenue of cherry blossom trees in full bloom, pink petals drifting in warm breeze, soft golden light, serene pathway, cinematic wide shot, photorealistic',
+  'japanese garden':
+    'Traditional Japanese zen garden with raked gravel, moss-covered stones, red maple, koi pond, bamboo water feature, peaceful atmosphere, cinematic wide shot, photorealistic',
+  'fairy cottage':
+    'Tiny magical cottage in a woodland clearing, thatched roof covered in flowers, warm light from windows, garden of wildflowers and herbs, fantasy, cinematic medium shot',
+  'princess garden castle':
+    'Romantic garden castle with climbing roses, marble fountains, manicured hedges, warm golden afternoon light, fairy tale atmosphere, fantasy, cinematic wide shot',
+  'rose palace':
+    'Opulent palace courtyard filled with thousands of roses in every color, marble columns draped in vines, soft pink light, fantasy, cinematic wide shot',
+  'victorian london':
+    'Foggy Victorian London street with gas lamps glowing, cobblestone roads, ornate brick buildings, horse carriages, moody atmospheric light, cinematic wide shot, photorealistic',
+  transylvania:
+    'Gothic castle on misty mountain peak at twilight, dark forests below, dramatic clouds, full moon, Carpathian Mountains, cinematic wide shot, photorealistic',
+  'haunted cathedral':
+    'Vast gothic cathedral interior with stained glass windows casting colored light, stone arches, dramatic shadows, sacred atmosphere, cinematic wide shot, photorealistic',
+  'noir cityscape':
+    'Rain-soaked city street at night, neon signs reflecting on wet asphalt, fire escapes and steam vents, dramatic film noir shadows, cinematic wide shot, photorealistic',
+  'gothic realm':
+    'Imposing gothic cathedral with towering spires and flying buttresses silhouetted against a full moon, mist drifting over cobblestone street below, gas lamps glowing amber, dark forested mountains in the distance, dramatic stormy twilight sky, ravens in flight, ornate stone gargoyles, cinematic wide shot, photorealistic, moody',
+  amsterdam:
+    'Amsterdam canal in spring at brilliant midday, gabled Dutch houses lined with tulip-filled window boxes, ornate cast-iron bridges arcing over bright water, locals on bikes crossing, sun-dappled cobblestones, vivid blue sky with scattered white clouds, cinematic wide shot, photorealistic',
+  prague:
+    'Prague Old Town in winter snow at dusk, gothic Tyn Church spires and baroque rooftops dusted with fresh snow, snow falling gently, warm window light glowing amber, Vltava River steam rising, moody overcast atmosphere, cinematic wide shot, photorealistic',
+  singapore:
+    'Singapore Marina Bay at full night, Marina Bay Sands towers and skyline in vivid neon and LED, Supertree Grove in colorful light show, ArtScience Museum lotus glowing, all colors reflected on glassy water, dramatic black sky, cinematic wide shot, photorealistic',
+  china:
+    'Great Wall of China at dawn breaking through low mountain clouds, ridge after ridge of green peaks fading into pearly mist, stone watchtowers emerging from fog, soft cool morning light, cinematic wide shot, photorealistic',
+  thailand:
+    'Phi Phi Island lagoon at brilliant tropical midday, towering limestone karsts reflected in glass-clear turquoise water, traditional longtail boats anchored on white powder sand, vivid cobalt sky with no clouds, palm trees framing, cinematic wide shot, photorealistic',
+  australia:
+    'Uluru sandstone monolith under a dramatic afternoon storm, deep red rock glowing against bruise-purple sky, lightning in distance, red Outback desert plains, scattered eucalyptus and spinifex, moody and dramatic, cinematic wide shot, photorealistic',
+  india:
+    'Taj Mahal under a full moon at night, white marble glowing silver-blue in cool moonlight, reflecting pool catching stars, faint mist over Mughal gardens, dramatic deep indigo sky, cinematic wide shot, photorealistic',
+  mexico:
+    'Mexico City zócalo at brilliant midday, ornate baroque cathedral facade, papel picado banners in pink yellow blue crisscrossing the square, mariachi musicians, vendor stalls with vivid marigolds and produce, vibrant city life, brilliant sunshine, cinematic wide shot, photorealistic',
+  morocco:
+    'Marrakech souk at full night, brass and copper lanterns glowing warm amber overhead in a maze of mosaic-tiled passages, jewel-tone fabrics and rugs hanging, dramatic pools of warm light against deep shadows, smoke from grill stalls, cinematic wide shot, photorealistic',
+  turkey:
+    'Hagia Sophia and Blue Mosque silhouetted at blue hour over the Bosphorus, ferries crossing dark water with warm running lights, Istanbul skyline of minarets and domes, dramatic deep-indigo sky with first stars, cinematic wide shot, photorealistic',
+  yellowstone:
+    'Grand Prismatic Spring at brilliant clear midday from aerial view, vivid rainbow rings of orange yellow green turquoise deep blue, vertical plumes of steam, surrounding lodgepole pine forest, bright cobalt sky with cumulus clouds, cinematic aerial wide shot, photorealistic',
+  'new zealand':
+    'Milford Sound in dramatic stormy weather, towering Mitre Peak with rain clouds breaking violently across cliffs, waterfalls cascading at full force, glassy dark fjord water mirroring moody sky, mist rolling through valley, cinematic wide shot, photorealistic',
+  patagonia:
+    'Torres del Paine granite spires in late autumn, golden lenga forest in foreground turning red and amber, glacial turquoise Pehoé Lake, dramatic Patagonian cumulus clouds racing across vast sky, cinematic wide shot, photorealistic',
+  'norwegian fjords':
+    'Norwegian fjord at full night under brilliant aurora borealis, green and purple ribbons of light dancing across sky, traditional red Norwegian cabins warmly lit against dark cliffs, fjord water mirror-still reflecting the aurora, sharp winter stars, cinematic wide shot, photorealistic',
+  'african safari':
+    'Vast Serengeti plain at brilliant African midday, single acacia tree silhouetted, herd of elephants and zebras at a watering hole, golden grass stretching to horizon, towering cumulus clouds in vivid blue sky, heat-haze shimmer, cinematic wide shot, photorealistic',
+  'alien planet':
+    'Alien landscape with bioluminescent flora, twin suns setting over crystalline mountains, strange geological formations, unearthly color palette, sci-fi, cinematic wide shot',
+  'cyberpunk megacity':
+    'Massive cyberpunk city with towering holographic billboards, flying vehicles, dense vertical architecture, neon-drenched rain, sci-fi, cinematic wide shot',
+  'space station':
+    'Orbital space station with Earth visible through massive viewport, metallic corridors with blue lighting, zero-gravity elements, sci-fi, cinematic wide shot',
+  'mars colony':
+    'Human settlement on Mars with pressurized domes, red desert landscape, distant Olympus Mons, Earth visible in sky, sci-fi, cinematic wide shot',
+  // Scenario cards (mig 594): their content is tagged scenarios, not a recipe, so the fallback below has nothing to
+  // build from. Each prompt shows the kind of dream the card holds.
+  'just for fun':
+    'A cheerful carnival midway at golden hour, colorful rides, a Ferris wheel and striped tents, bunting and balloons, playful storybook illustration, no people',
+  'sports arenas':
+    'A grand floodlit stadium at dusk, glowing pitch and packed stands, confetti drifting in the air, cinematic wide shot, no people',
+  'adventure sports':
+    'Dramatic sea cliffs above a turquoise cove with a zip line and climbing ropes strung across, bright adventurous daylight, cinematic wide shot, no people',
+  'stage and spotlight':
+    'An empty grand concert stage under sweeping spotlights and haze, glittering confetti, deep velvet curtains, cinematic wide shot, no people',
+  'winter wonderland':
+    'A snowy village square at twilight with glowing ice lanterns and an ice palace beyond, sparkling fresh snow, cinematic wide shot, no people',
+  'regency england':
+    'A Regency-era English country house at dusk, a candlelit ballroom glowing through tall windows, formal gardens, painterly, no people',
+  '1940s noir':
+    'A rain-slicked 1940s city street at night, neon signs and a lone streetlamp in drifting fog, film noir style, cinematic wide shot, no people',
+  'retro decades':
+    'A colorful retro roller rink and neon diner at night with a spinning disco ball, vibrant vintage colors, cinematic wide shot, no people',
+  'gardens and romance':
+    'A romantic formal garden with a rose-covered pavilion and a glowing glasshouse, blooming flowers, golden light, cinematic wide shot, no people',
 };
 
 async function generateThumbnail(locationKey) {
@@ -147,7 +246,7 @@ async function generateThumbnail(locationKey) {
 
   let imageUrl = null;
   for (let i = 0; i < 60; i++) {
-    await new Promise(r => setTimeout(r, 3000));
+    await new Promise((r) => setTimeout(r, 3000));
     const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${pred.id}`, {
       headers: { Authorization: 'Bearer ' + REPLICATE_KEY },
     });
@@ -174,12 +273,10 @@ async function generateThumbnail(locationKey) {
   const filename = `${locationKey.replace(/\s+/g, '-')}.jpg`;
   console.log(`  Uploading to ${BUCKET}/${filename}...`);
 
-  const { error: uploadErr } = await sb.storage
-    .from(BUCKET)
-    .upload(filename, buffer, {
-      contentType: 'image/jpeg',
-      upsert: true,
-    });
+  const { error: uploadErr } = await sb.storage.from(BUCKET).upload(filename, buffer, {
+    contentType: 'image/jpeg',
+    upsert: true,
+  });
 
   if (uploadErr) {
     console.error(`  ❌ Upload failed:`, uploadErr.message);
@@ -221,7 +318,7 @@ async function processLocation(locationKey) {
 
   // Ensure bucket exists
   const { data: buckets } = await sb.storage.listBuckets();
-  if (!buckets.find(b => b.name === BUCKET)) {
+  if (!buckets.find((b) => b.name === BUCKET)) {
     const { error } = await sb.storage.createBucket(BUCKET, { public: true });
     if (error) console.warn('Bucket creation:', error.message);
     else console.log(`Created bucket: ${BUCKET}`);
@@ -239,7 +336,7 @@ async function processLocation(locationKey) {
       .select('name')
       .is('thumbnail_url', null)
       .not('picker_category', 'is', null); // only picker-visible cards; fallback prompt handles unmapped
-    const names = (rows || []).map(r => r.name);
+    const names = (rows || []).map((r) => r.name);
     console.log(`${names.length} locations missing thumbnails...`);
     for (const name of names) {
       await processLocation(name);
