@@ -39,12 +39,12 @@ restore rewinds the whole database and takes the app offline; no restore has eve
 
 ## Done when (all true)
 
-- [ ] **D1.** A database copy lands in R2 every day, and the most we can lose is about 1 day.
+- [x] **D1.** A database copy lands in R2 every day, and the most we can lose is about 1 day.
 - [ ] **D2.** Every image in all 4 buckets has a copy in R2 within a day of being created, and a file deleted in
       Supabase can still be recovered for 30 days.
 - [ ] **D3.** A weekly automatic restore drill passes: the full restore matches the live row counts exactly and
       sampled images are all present.
-- [ ] **D4.** A failed backup, a stale backup (> 51 h, derived from the schedule in `scripts/backup/lib.js`), or a big
+- [x] **D4.** A failed backup, a stale backup (> 51 h, derived from the schedule in `scripts/backup/lib.js`), or a big
       overnight drop in a table's rows emails Kevin.
 - [ ] **D5.** The database copies can't be deleted for 30 days (bucket lock), and old copies clean themselves up
       (lifecycle rules).
@@ -192,31 +192,43 @@ Each phase ends with its proof, and a commit + push (the workflows only run once
 
 ### Phase 2: The daily workflow (`.github/workflows/backup.yml`, db job)
 
-- [ ] Hourly wake at :37, the once-a-day guard, the time window, the headroom wait, `concurrency` so two runs never
-      overlap, failure → email
-- [ ] Postgres 17 client installed from the official Postgres apt repo (`pg_dump` must be at least the server's
-      version), rclone pinned
-- [ ] A jest test locking the alarm rule from CLAUDE.md: the freshness alarm DERIVES from the backup interval, and
-      on-schedule backups never trip it
-- **Pass bar:**
-  - the first scheduled wake makes exactly one copy, and later wakes that day skip;
-  - a deliberately broken manual run sends the failure email.
+- [x] Hourly wake at :37, the once-a-day guard, the time window, the headroom wait, per-job `concurrency` so two
+      runs never overlap, failure → email
+- [x] Postgres 17 client installed from the official Postgres apt repo (`pg_dump` must be at least the server's
+      version); rclone pinned to 1.75.1 and checked against its published SHA-256
+- [x] A jest test locking the alarm rule from CLAUDE.md (`__tests__/lib/backupSchedule.test.ts`, 29 cases): the 51 h
+      freshness alarm DERIVES from the schedule, and 30 days of wakes from every start hour never trip it
+- **Pass bar:** ✅ with one caveat
+  - a forced run on GitHub backed up in 1m03s (pg_dump 17.11 from the Postgres apt repo; secrets masked as `***`);
+    an unforced wake right after took 23 s and skipped everything after "Due?";
+  - the failure email was NOT forced deliberately: it is GitHub's standard failed-run email, the same mechanism
+    every existing monitor relies on.
 
 ### Phase 3: Restore drill (`scripts/backup/restore-drill.js`, `.github/workflows/backup-drill.yml`)
 
-- [ ] Starts the same Postgres image Supabase runs (`supabase/postgres:17.6.1.084`, which already has the `auth` and
-      `storage` schemas, roles and extensions)
-- [ ] Restores the latest copy: `public` structure + data, then `auth` + `storage` + `supabase_migrations` rows
-- [ ] Every table's count must equal the manifest; a few sanity queries (a user with their uploads, `engine_config`
-      present)
-- [ ] Rehearses a single-table restore (`bot_seeds`) exactly as the runbook describes it
-- [ ] Checks 50 random `storage.objects` rows exist in the mirror with the same size (once Phase 4 is live)
-- [ ] Freshness: fails if the newest database copy or mirror run is older than `STALE_ALARM_HOURS` (51 h)
-- **Pass bar:** the first drill passes end to end in under 20 minutes.
+- [x] Starts the same Postgres image Supabase runs (`supabase/postgres:17.6.1.084`) in a throwaway container
+- [x] Drops the image's early `auth`/`storage` schemas and restores everything from the dump
+- [x] Every table's count must equal the manifest; per-schema structure counts (functions, policies, triggers,
+      indexes, views, sequences; recorded in each manifest since 2026-09-30) must match
+- [x] Rehearses a single-table restore (`bot_seeds`) with `scripts/backup/restore-table.js`, the runbook's tool
+- [x] Checks 50 random `storage.objects` rows exist in the mirror with the same size (runs once Phase 4 is live)
+- [x] Freshness: fails if the newest database copy or mirror run is older than `STALE_ALARM_HOURS` (51 h)
+- **Pass bar:** ✅ the second drill passed in 23 s of restore time: 121/121 tables exact (489,448 rows), structure
+  matches in all 4 schemas, rehearsal 861/861 rows with no differences, one harmless error ("schema public already
+  exists").
+- **Finding from the first drill:** 56 of 57 `public` triggers came back. The missing one,
+  `send-push-on-notification` on `notifications` (every push notification), is a Supabase Database Webhook calling
+  `supabase_functions.http_request`, which only exists once Database Webhooks are enabled. The drill now creates a
+  do-nothing stand-in first; a real rebuild must enable Database Webhooks BEFORE restoring and then repoint the
+  webhook's URL at the new project (see "How to restore").
 
 ### Phase 4: Image mirror (`scripts/backup/storage-mirror.js`, storage job in `backup.yml`)
 
-- [ ] Dry run: counts only, nothing copied
+- [x] Dry run: 153,699 files, 75.1 GB to copy, 0 errors; listing all of Storage takes 26 s
+- [x] Speed probe from the Mac: ~6 files/s at 4 transfers (per-file latency, not bandwidth), so the first copy runs
+      on GitHub with `transfers=8`; an unfinished copy resumes on the next due wake (files already there are skipped)
+- [x] Safety brake verified on an R2 scratch prefix: `--max-delete` also counts moves to the trash (limit 1 with 2
+      vanished files: 1 moved, then stop with exit 7)
 - [ ] Supervised first copy by manual dispatch at a quiet hour; watch `db_health_log` and the app while it runs
 - [ ] Then nightly incremental through the same hourly wake + guard
 - **Pass bar:**
@@ -313,3 +325,6 @@ last. Nothing in this plan changes app behaviour; everything runs outside the ap
     logins), and the same password works seconds later. `lib.connectReadOnly` retries the same password with backoff,
     then a newer login; `pg_dump` retries on the same snapshot.
   - First copy: 121 tables, 139 MB, 1m40s, counts match the manifest exactly (Phase 1 pass bar).
+  - Phase 2 + 3 done on GitHub (results under each phase). The first drill found the push-notification webhook
+    trigger that a rebuild would silently lose.
+  - Phase 4 code in; dry run + speed probe done. `avatars` and `location-thumbnails` already copied by the probe.

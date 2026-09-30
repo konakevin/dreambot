@@ -1,6 +1,8 @@
 name: Backup
 
-# Daily off-site copy of the database to Cloudflare R2 (BACKUPS.md; the image mirror joins in Phase 4).
+# Daily off-site copies to Cloudflare R2 (BACKUPS.md): the database (job `database`) and every Storage bucket
+# (job `storage`, an incremental mirror). Each job has its own concurrency group, so a long mirror run never
+# holds up the database copy.
 #
 # GitHub fires this repo's scheduled runs only ~1 time in 4 (memory: project_gh_actions_scheduled_workflow_dropout),
 # so this WAKES every hour and backs up only when the last success is old enough and the hour is outside the busy
@@ -19,15 +21,24 @@ on:
         description: 'Back up now even if not due'
         type: boolean
         default: false
-
-concurrency:
-  group: backup-db
-  cancel-in-progress: false # never kill a backup mid-upload
+      only:
+        description: 'Which job (both, database, storage)'
+        type: choice
+        options: [both, database, storage]
+        default: both
+      transfers:
+        description: 'Storage mirror parallel transfers (4 nightly; 8 for the supervised first copy)'
+        type: number
+        default: 4
 
 jobs:
   database:
+    if: github.event_name == 'schedule' || inputs.only != 'storage'
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    concurrency:
+      group: backup-database
+      cancel-in-progress: false # never kill a backup mid-upload
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
@@ -84,4 +95,58 @@ jobs:
         if: always() && steps.due.outputs.stale == 'true' && steps.backup.outputs.backed_up != 'true'
         run: |
           echo "::error::The last successful database backup is older than the alarm threshold. See BACKUPS.md."
+          exit 1
+
+  storage:
+    if: github.event_name == 'schedule' || inputs.only != 'database'
+    runs-on: ubuntu-latest
+    timeout-minutes: 350 # GitHub's ceiling is 360; an unfinished first copy resumes on the next due wake
+    concurrency:
+      group: backup-storage
+      cancel-in-progress: false
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+      SUPABASE_S3_ACCESS_KEY_ID: ${{ secrets.SUPABASE_S3_ACCESS_KEY_ID }}
+      SUPABASE_S3_SECRET_ACCESS_KEY: ${{ secrets.SUPABASE_S3_SECRET_ACCESS_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install rclone (pinned, checksum-verified)
+        run: |
+          curl -fsSLo /tmp/rclone.zip https://downloads.rclone.org/v1.75.1/rclone-v1.75.1-linux-amd64.zip
+          echo "982b5aa772841168f8e380f139e9e787b2a105403e32b94da8676a0e1c0a13ab  /tmp/rclone.zip" | sha256sum -c --quiet
+          unzip -qj /tmp/rclone.zip '*/rclone' -d /tmp/rclone && sudo install /tmp/rclone/rclone /usr/local/bin/
+
+      - name: Due?
+        id: due
+        env:
+          BACKUP_FORCE: ${{ inputs.force }}
+        run: node scripts/backup/is-due.js storage
+
+      - uses: actions/setup-node@v4
+        if: steps.due.outputs.due == 'true'
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: steps.due.outputs.due == 'true'
+        run: npm ci --ignore-scripts
+
+      - name: Mirror Storage
+        id: backup
+        if: steps.due.outputs.due == 'true'
+        env:
+          MIRROR_TRANSFERS: ${{ inputs.transfers || 4 }}
+        run: node scripts/backup/storage-mirror.js
+
+      - name: Alarm if the mirror is stale
+        if: always() && steps.due.outputs.stale == 'true' && steps.backup.outputs.backed_up != 'true'
+        run: |
+          echo "::error::The last successful Storage mirror run is older than the alarm threshold. See BACKUPS.md."
           exit 1
