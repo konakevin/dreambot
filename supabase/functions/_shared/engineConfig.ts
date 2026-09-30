@@ -230,6 +230,9 @@ export interface EngineConfig {
   /** EYE CONTACT (mig 587, NIGHTLY_EYE_CONTACT_PLAN.md): the gaze rides each person's description ("…, looking into
    *  the camera, wearing …") instead of only the closing faces line. QA: force_eye_contact. */
   nightlyEyeContact: boolean;
+  /** AGE FIDELITY (mig 589, AGE_FIDELITY_PLAN.md): a 55+ cast member's real age, hair and clean-shaven lead the solo
+   *  opener and the couple description. QA: force_age_fidelity. */
+  nightlyAgeFidelity: boolean;
   /** Nightly: skip the looks of this many recent nightlies per role (0 = off). */
   nightlyOutfitRecentLooks: number;
   /** SWAP CAPACITY GATE (mig 549, NIGHTLY_ROBUSTNESS_PLAN.md): dual swaps wait for a free Fly slot. */
@@ -355,6 +358,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   nightlyOutfitSceneFit: false,
   nightlyOutfitPlan: false,
   nightlyEyeContact: false,
+  nightlyAgeFidelity: false,
   outfitFavouredLookPct: DEFAULT_FAVOURED_LOOK_PCT,
   nightlyOutfitRecentLooks: 5,
   swapGateEnabled: false,
@@ -547,6 +551,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     nightlyOutfitSceneFit: data.nightly_outfit_scene_fit === true,
     nightlyOutfitPlan: data.nightly_outfit_plan === true,
     nightlyEyeContact: data.nightly_eye_contact === true,
+    nightlyAgeFidelity: data.nightly_age_fidelity === true,
     outfitFavouredLookPct: clampPct(data.outfit_favoured_look_pct, DEFAULT_FAVOURED_LOOK_PCT),
     nightlyOutfitRecentLooks: Number.isFinite(Number(data.nightly_outfit_recent_looks))
       ? Math.max(0, Math.min(7, Math.round(Number(data.nightly_outfit_recent_looks))))

@@ -490,6 +490,7 @@ Deno.serve(async (req) => {
     force_garment_roll,
     force_outfit_plan,
     force_eye_contact,
+    force_age_fidelity,
     force_solo_outfit_early,
     force_outfit_scene_fit,
     force_llm_model,
@@ -3554,6 +3555,9 @@ Deno.serve(async (req) => {
         // EYE CONTACT (mig 587, NIGHTLY_EYE_CONTACT_PLAN.md): the gaze on each person's own description.
         const eyeContact = force_eye_contact ?? engineCfg0.nightlyEyeContact;
         if (eyeContact) fallbackReasons.push('eye_contact');
+        // AGE FIDELITY (mig 589, AGE_FIDELITY_PLAN.md): a 55+ cast member's real age up front.
+        const ageFidelity = force_age_fidelity ?? engineCfg0.nightlyAgeFidelity;
+        if (ageFidelity) fallbackReasons.push('age_fidelity');
         const slotInput: CharacterSlotPipelineInput = {
           ...(nightlyOutfitPlan ? { outfitPlan: nightlyOutfitPlan } : {}),
           ...(nightlyFashion ? { fashionLooks: nightlyFashion } : {}),
@@ -3562,6 +3566,7 @@ Deno.serve(async (req) => {
             : {}),
           ...(soloOutfitEarly ? { soloOutfitEarly: true } : {}),
           ...(eyeContact ? { eyeContact: true } : {}),
+          ...(ageFidelity ? { ageFidelity: true } : {}),
           cast: resolvedCast.map((rc, i) => ({
             role: rc.role,
             promptDesc: rc.promptDesc,
@@ -5595,8 +5600,9 @@ Output ONLY the prompt.`;
     // face needs a new photo" nudge (deduped per photo via a stable reference_id).
     // If both probe fine — a transient/compositional miss, not a bad photo — stay
     // quiet; never nag a good photo. Best-effort: wrapped so it can never break the
-    // render. strict (onboarding first-dream) is left alone by design.
-    if (swapUnusable && !strict_face_swap) {
+    // render. strict (onboarding first-dream) is left alone by design. Never on a persist:false test render (a QA
+    // render must never message the user; AGE_FIDELITY_PLAN.md, 2026-09-30).
+    if (swapUnusable && !strict_face_swap && persist) {
       try {
         const candidates: CastCandidate[] = [];
         for (const m of castNotifyMembers) {

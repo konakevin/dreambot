@@ -153,6 +153,7 @@
     "__tests__/lib/styleFingerprintTrim.test.ts",
     "__tests__/lib/outfitAntiLock.test.ts",
     "__tests__/lib/eyeContact.test.ts",
+    "__tests__/lib/ageFidelity.test.ts",
     "__tests__/lib/slotJsonLenient.test.ts",
     "__tests__/lib/halloweenPoolsParity.test.ts",
     "scripts/eval-quality-gate.ts"

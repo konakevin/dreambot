@@ -120,6 +120,9 @@ export interface NightlyQaFlags {
   /** EYE CONTACT (NIGHTLY_EYE_CONTACT_PLAN.md): true puts the gaze on each person's description, false forces it
    *  off; null = engine_config.nightly_eye_contact. */
   force_eye_contact: boolean | null;
+  /** AGE FIDELITY (AGE_FIDELITY_PLAN.md): true puts a 55+ cast member's real age up front, false forces it off;
+   *  null = engine_config.nightly_age_fidelity. */
+  force_age_fidelity: boolean | null;
   /** SOLO OUTFIT EARLY (mig 565): true names a solo's wardrobe right after the medium, false the old order;
    *  null = engine_config.nightly_solo_outfit_early. */
   force_solo_outfit_early: boolean | null;
@@ -312,6 +315,8 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
       body.force_outfit_plan === true ? true : body.force_outfit_plan === false ? false : null,
     force_eye_contact:
       body.force_eye_contact === true ? true : body.force_eye_contact === false ? false : null,
+    force_age_fidelity:
+      body.force_age_fidelity === true ? true : body.force_age_fidelity === false ? false : null,
     force_solo_outfit_early:
       body.force_solo_outfit_early === true
         ? true

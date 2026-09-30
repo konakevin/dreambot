@@ -160,6 +160,12 @@ export interface CharacterSlotPipelineInput {
    *  couples: eyes on camera 72% → 91%, heads turned 19% → 2%; the same words in the closing faces line did nothing.
    *  Solos (16): 71% → 81%. Unset → byte-identical. */
   eyeContact?: boolean;
+  /** AGE FIDELITY (AGE_FIDELITY_PLAN.md, 2026-09-30): a cast member 55+ gets their real age at the front — the solo
+   *  opener "a 78-YEAR-OLD BLUE-GRAY-EYED WHITE-HAIRED OLDER CLEAN-SHAVEN MALE man in his late seventies", a couple
+   *  person "an older white-haired White man in his late seventies". Only real seniors (the cast's own age); under 55
+   *  nothing changes. Same-seed screen on production prompts the audit judged 10+ years too young: solo 55+ −43 → −10
+   *  years, couple 55+ −18 → −9. Unset → byte-identical. */
+  ageFidelity?: boolean;
   /** Whether the location is a REAL-WORLD place (not a fantasy/imagined dream
    * world). Drives the TRAVELER wardrobe rule: on real places the cast are
    * VISITORS and must wear contemporary travel clothes, never the traditional/
@@ -742,7 +748,7 @@ export function skinToneAdjective(skin: string | null | undefined): string | nul
 // in a China dual). An early positive restatement holds it (verified). Positive
 // only — never a negation ("not black" leaks into Flux). Returns null when no
 // color word (bald / color-less clause) → no anchor.
-function extractHairColor(hairStr: string | null): string | null {
+export function extractHairColor(hairStr: string | null): string | null {
   if (!hairStr) return null;
   const m = hairStr.match(
     /\b(jet[- ]?black|salt[- ]and[- ]pepper|dark brown|light brown|dirty blonde|dirty blond|strawberry blonde|ash blonde|platinum blonde|chestnut(?:[- ]brown)?|auburn|mahogany|copper|ginger|brunette|blonde|blond|brown|red|black|grey|gray|silver|white|sandy|honey|caramel|raven|golden)\b/i
@@ -751,6 +757,47 @@ function extractHairColor(hairStr: string | null): string | null {
 }
 
 type HairVariationOpts = { pct: number; register: HairSceneRegister | null };
+
+/** AGE FIDELITY: the age in years from a resolved "78 years old" / "mid-70s" string, or null. */
+export function ageYearsOf(age: string | null | undefined): number | null {
+  const a = (age || '').match(/\d+/);
+  return a ? parseInt(a[0], 10) : null;
+}
+/** AGE FIDELITY: a decade phrase for an age ("late seventies", "mid-sixties", "early fifties"). */
+export function ageDecade(age: number): string {
+  const words: Record<number, string> = {
+    20: 'twenties',
+    30: 'thirties',
+    40: 'forties',
+    50: 'fifties',
+    60: 'sixties',
+    70: 'seventies',
+    80: 'eighties',
+    90: 'nineties',
+  };
+  const word = words[Math.floor(age / 10) * 10];
+  if (!word) return `${age}s`;
+  const r = age % 10;
+  return `${r <= 3 ? 'early ' : r <= 6 ? 'mid-' : 'late '}${word}`;
+}
+/** AGE FIDELITY: the senior line applies only to real seniors (the cast's own age, 55+). */
+export const AGE_FIDELITY_SENIOR_MIN = 55;
+const CLEAN_SHAVEN = /\bclean[- ]shaven\b/i;
+/** "a" / "an" for a spoken number or word ("an 80-YEAR-OLD", "a 78-YEAR-OLD"). */
+function articleFor(word: string): 'a' | 'an' {
+  return /^(8\d*|11|18)\b/.test(word) || /^[aeiou]/i.test(word) ? 'an' : 'a';
+}
+/** The couple composer's senior lead (coupleComposerX): "an older white-haired White man in his late seventies". */
+export function seniorPersonLead(
+  identity: string,
+  age: number,
+  ethnicity: string | null,
+  gender: 'man' | 'woman'
+): string {
+  const hc = extractHairColor(identity);
+  const head = `older ${hc ? `${hc}-haired ` : ''}${ethnicity ? `${ethnicity} ` : ''}${gender}`;
+  return `${articleFor(head)} ${head} in ${gender === 'man' ? 'his' : 'her'} ${ageDecade(age)}`;
+}
 
 function buildIdentityBlock(
   prefix: string,
@@ -1640,13 +1687,38 @@ export function assembleCharacterPrompt(
     // body (and vice-versa) on the single-cast nightly path.
     const soloEye = m.castGender && input.eyeLock !== false ? eyeEcho(m) : '';
     const soloEcho = m.castGender ? `${soloEye}${hairEcho(m)}` : '';
+    // AGE FIDELITY (AGE_FIDELITY_PLAN.md): a real senior's age, hair and (for a clean-shaven man) CLEAN-SHAVEN ride
+    // the opener, and the beard invitation goes — "(beard or facial hair if he has it)" next to "older white-haired"
+    // grew a clean-shaven 78-year-old a full white beard on every seed.
+    const soloYears = ageYearsOf(m.age);
+    const soloSenior =
+      !!input.ageFidelity &&
+      !!m.castGender &&
+      soloYears !== null &&
+      soloYears >= AGE_FIDELITY_SENIOR_MIN;
+    const seniorLock = (): string => {
+      const g = m.castGender as CastGender;
+      const hc = extractHairColor(m.identity);
+      const clean = g === 'male' && CLEAN_SHAVEN.test(m.identity);
+      const words = `${soloYears}-YEAR-OLD ${soloEye}${hc ? `${hc.toUpperCase()}-HAIRED ` : ''}OLDER ${clean ? 'CLEAN-SHAVEN ' : ''}`;
+      const shout = clean
+        ? genderLockShout(g).replace(' (beard or facial hair if he has it)', '')
+        : genderLockShout(g);
+      return shout.replace(
+        /^a (MALE man|FEMALE woman)/,
+        (_x, noun: string) =>
+          `${articleFor(words)} ${words}${noun} in ${g === 'male' ? 'his' : 'her'} ${ageDecade(soloYears as number)}`
+      );
+    };
     const genderLock = m.castGender
-      ? soloEcho
-        ? genderLockShout(m.castGender).replace(
-            /^a /,
-            `${/^[aeiou]/i.test(soloEcho) ? 'an' : 'a'} ${soloEcho}`
-          )
-        : genderLockShout(m.castGender)
+      ? soloSenior
+        ? seniorLock()
+        : soloEcho
+          ? genderLockShout(m.castGender).replace(
+              /^a /,
+              `${/^[aeiou]/i.test(soloEcho) ? 'an' : 'a'} ${soloEcho}`
+            )
+          : genderLockShout(m.castGender)
       : '';
 
     // Single anchor — positive phrasing, no L/R. Relaxed 2026-08-24 (Kevin): the

@@ -1,0 +1,51 @@
+# Age fidelity: every cast render looks its real age (plan of record, 2026-09-30)
+
+Kevin, 2026-09-30, on michele's nightly: her 78-year-old +1 "seems to have cast him way younger". Then: "need to be
+careful to only age people as senior who actually are, but i suspect we need to fix the age of character renders
+universally - solo, couples, create, nightly".
+
+## What we found (michele, measured)
+
+- **Not the 5.5 cutover, not the describer.** His cast record (age 78, "approximately 75–80", bright white hair,
+  clean-shaven) is unchanged since 09-28, and last night's prompt carries it word for word ("a distinguished older
+  white-haired White man … truly 78 years old"). His 09-24 solo, all on 4.6, was just as young.
+- **Solos lose age, couples keep it.** Every couple of him (09-25 to 09-28) renders a white-haired 70-something; both
+  solos render a dark-haired man about 33. In the couple prompt his age sits at word ~50-100; in the solo prompt at
+  word ~210 of ~400, after the scene, framing and action. The solo opener says only "a BLUE-GRAY-EYED MALE man —
+  masculine face, masculine build, clearly a man (beard or facial hair if he has it)".
+- **The 2026-09-02 fix (commit 397ba984, "the Michele bug") only reached the couple opener.** Its position-1
+  "WHITE-HAIRED OLDER MAN" echo was added to the dual gender lock; the solo lock never got it, and the solo hair echo
+  deliberately skips 55+ "because the senior echo carries the colour" — so a senior solo has neither.
+- **"(beard or facial hair if he has it)" is a beard magnet on an older man.** With the senior echo alone he grows a
+  full white beard on every seed; dropping that phrase and saying CLEAN-SHAVEN early gives clean-shaven 4/4.
+- **Women are harder.** Her solos (she is 65) render ~24 (9 seeds). Same-seed arms: "DARK BROWN-HAIRED OLDER" 26,
+  "65-YEAR-OLD" early 29, "65-YEAR-OLD … in her mid-sixties" 43, the whole character block moved first 32.
+
+Same-seed screen (flux-1.1-pro, no swap, vision-judged age), him (78): base 33 → senior echo 65 (bearded) → echo +
+CLEAN-SHAVEN + no beard parenthetical 55-70, clean-shaven.
+
+## Rules
+
+- **Only real seniors get "older".** Anything that says older, white-haired, senior stays gated on the cast's own
+  age (55+) and hair (only the colour the cast description states). A 25-year-old must still render 25.
+- **Flattering register always** (the 09-02 rule): "aging handsomely / gracefully", never age-line talk.
+- **Measure delivered, not the prompt:** the audit judges production images after the face swap.
+- One variable per round, same seeds, and the swap hold must not drop.
+
+## Steps
+
+1. **Audit** (`scripts/qa-age-fidelity.js`): recent production face-swap renders per surface (nightly / Create /
+   redream × solo / couple), apparent − true age by surface, age band (<35, 35-54, 55+) and gender.
+2. **Fix the known gap first (nightly + Create solos, 55+):** the senior echo in the solo opener, plus CLEAN-SHAVEN
+   and no beard parenthetical for a clean-shaven senior man.
+3. **Universal age cue** for surfaces the audit flags: the age stated at position 1 for everyone in a neutral
+   register (a number or a decade, never "older" under 55), tested per surface and gender on same seeds.
+4. **Women 45+:** keep testing wording (decade phrases, where the age sits) until the delivered age is within range.
+5. Render check with face swap on real casts (Kevin's account and lab casts), then switch on per surface.
+
+## Ledger
+
+| Date       | Step                                                                                           | Result                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ---------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-30 | michele diagnosis + solo screen (above)                                                        | the solo opener has no age; the senior echo fixes a 78-year-old man (33 → 65); "(beard or facial hair if he has it)" grows him a beard; her solos stay ~24-43                                                                                                                                                                                                                                                                                                                                                                                                               |
+| 2026-09-30 | Production audit (`qa-age-fidelity.js`, 21 days, post-swap, judged age − cast age; 226 people) | under 35: median +1, never 10+ too young. 35-54: −3, 17% 10+ too young. **55+: −15, 90% 10+ too young.** Worst: nightly solos 35-54 −8 (48%), nightly solos 55+ −29 (100%), nightly couples 55+ −13 (87%); women worse than men (nightly solo −6 / 41%, couple −5 / 29%). Nightly couples lost the 09-02 senior echo when coupleComposerX went live (09-18): it builds each person from its own description. Create solos state age only as a decade ("woman in her early forties") next to beauty-polish look text; only 2 of 49 matched the audit's "NN years old" parser |

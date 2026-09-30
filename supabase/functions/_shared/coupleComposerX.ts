@@ -11,7 +11,12 @@
  *  - narrative_faces narrative with the two-faces-to-camera line FIRST (position control)
  *  - json            FLUX.2 structured prompt (scene / camera / subjects[] / style) as a JSON string
  */
-import { resolveIdentity } from './characterSlotPrompt.ts';
+import {
+  AGE_FIDELITY_SENIOR_MIN,
+  ageYearsOf,
+  resolveIdentity,
+  seniorPersonLead,
+} from './characterSlotPrompt.ts';
 import type { CharacterSlotPipelineInput, DualSlots } from './characterSlotPrompt.ts';
 
 export type CoupleVariant =
@@ -34,13 +39,23 @@ export function isCoupleVariant(x: unknown): x is CoupleVariant {
   return typeof x === 'string' && (COUPLE_VARIANTS as readonly string[]).includes(x);
 }
 
-function describe(member: CharacterSlotPipelineInput['cast'][number]): {
+function describe(
+  member: CharacterSlotPipelineInput['cast'][number],
+  ageFidelity = false
+): {
   desc: string;
   gender: 'man' | 'woman' | 'person';
 } {
   const r = resolveIdentity(member);
+  // AGE FIDELITY (AGE_FIDELITY_PLAN.md): a real senior (55+) leads with "an older white-haired White man in his late
+  // seventies" — the 09-02 position-1 senior echo lived only in the old dual gender lock, which this composer never used.
+  const years = ageYearsOf(r.age);
+  const senior =
+    ageFidelity && years !== null && years >= AGE_FIDELITY_SENIOR_MIN && r.gender !== 'person';
   const parts = [
-    `a ${r.ethnicity ? `${r.ethnicity} ` : ''}${r.gender}`,
+    senior
+      ? seniorPersonLead(r.identity, years as number, r.ethnicity, r.gender as 'man' | 'woman')
+      : `a ${r.ethnicity ? `${r.ethnicity} ` : ''}${r.gender}`,
     r.age,
     r.build,
     r.skin,
@@ -74,8 +89,8 @@ export function composeExperimentalCouple(args: {
   const mood = clean(slots.mood);
   const props = clean(slots.props);
   const vibe = clean(input.vibeFragment);
-  const left = describe(input.cast[0]);
-  const right = describe(input.cast[1] ?? input.cast[0]);
+  const left = describe(input.cast[0], !!input.ageFidelity);
+  const right = describe(input.cast[1] ?? input.cast[0], !!input.ageFidelity);
   const her = left.gender === 'woman' ? 'her' : left.gender === 'man' ? 'his' : 'their';
   // EYE CONTACT (NIGHTLY_EYE_CONTACT_PLAN.md): the gaze follows each person's wardrobe. Same-seed screen, 23 real 5.5
   // couples: eyes on camera 72% → 91%, heads turned 19% → 2%; before the wardrobe 85%; in the closing faces line 72%
