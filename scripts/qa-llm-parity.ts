@@ -6,7 +6,7 @@
  * modules. Only the model differs: each arm is an LlmContext with a QA override (Sonnet jobs only, as in
  * production QA). Every Anthropic call is metered (scripts/lib/llmBenchMeter.ts) for latency, tokens and cost.
  *
- *   deno run -A scripts/qa-llm-parity.ts --out=DIR [--suites=a,b] [--arms=4.6,5.5@high,5.5@medium]
+ *   deno run -A scripts/qa-llm-parity.ts --out=DIR [--suites=a,b] [--arms=4.6,5.5@high,5.5@medium,5.0] [--overlays=k1,k2]
  *     [--n=60] [--concurrency=4] [--refresh]
  *
  * Suites:
@@ -25,7 +25,12 @@
  * real user prompts and cast descriptions: DIR belongs in a scratch directory, never the repo.
  */
 import { calls, costUsd, installMeter, quantile, withTag } from './lib/llmBenchMeter.ts';
-import { createLlmContext, type LlmContext } from '../supabase/functions/_shared/anthropic.ts';
+import {
+  createLlmContext,
+  parseLlmOverlays,
+  type LlmContext,
+  type LlmOverlay,
+} from '../supabase/functions/_shared/anthropic.ts';
 import { callSonnet } from '../supabase/functions/_shared/llm.ts';
 import {
   runCharacterSlotPipeline,
@@ -230,8 +235,32 @@ interface Row {
 }
 const rows: Row[] = [];
 
+// --overlays=key1,key2: QA prompt overlays from llm_prompt_overlays (mig 577), picked for every arm. An overlay only
+// applies to its own job + model, so the 4.6 arm is untouched (LLM_5_5_TUNING.md).
+const OVERLAY_KEYS = arg('overlays', '');
+let OVERLAYS: LlmOverlay[] = [];
+if (OVERLAY_KEYS) {
+  const res = await fetch(
+    `${env.EXPO_PUBLIC_SUPABASE_URL ?? 'https://jimftynwrinwenonjrlj.supabase.co'}/rest/v1/llm_prompt_overlays?select=*`,
+    {
+      headers: {
+        apikey: env.SUPABASE_SERVICE_ROLE_KEY,
+        Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+      },
+    }
+  );
+  OVERLAYS = parseLlmOverlays(await res.json());
+  for (const k of OVERLAY_KEYS.split(','))
+    if (!OVERLAYS.some((o) => o.key === k)) throw new Error(`unknown overlay ${k}`);
+}
+
 function ctxFor(arm: string, surface: 'create' | 'nightly' | 'cast', stamps: string[]): LlmContext {
-  return createLlmContext({ surface, override: ARM_OVERRIDE[arm], stamp: (s) => stamps.push(s) });
+  return createLlmContext({
+    surface,
+    override: ARM_OVERRIDE[arm],
+    stamp: (s) => stamps.push(s),
+    ...(OVERLAY_KEYS ? { overlays: OVERLAYS, overlayKeys: OVERLAY_KEYS } : {}),
+  });
 }
 const wordsOf = (s: string) => (s.trim() ? s.trim().split(/\s+/).length : 0);
 
