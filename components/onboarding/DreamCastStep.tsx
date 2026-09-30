@@ -748,7 +748,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
         settingsCopy ? 'Name Required' : "What's their name?",
         settingsCopy
           ? 'Give your +1 a name so you can cast them in a dream: "me and Ken at the beach".'
-          : 'When you make your own dreams later, just use their name to put them in, like “me and Ken in Paris.”',
+          : 'Your +1 needs a name so you can put them in dreams you create yourself later.',
         [
           { text: settingsCopy ? 'Name them' : 'Add their name', style: 'cancel' },
           {
