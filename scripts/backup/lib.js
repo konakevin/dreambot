@@ -34,6 +34,34 @@ const BLACKOUT_UTC_HOURS = [3, 4, 5, 6, 7, 8];
 // of dropped GitHub wakes on top.
 const STALE_ALARM_HOURS = DUE_AFTER_HOURS + BLACKOUT_UTC_HOURS.length + 1 + BACKUP_INTERVAL_HOURS;
 
+// Retention, enforced by the jobs themselves so the Privacy Policy's "up to 12 months" holds without any bucket
+// setting (locked by __tests__/lib/backupRetention.test.ts). Daily copies: 35 days, but never fewer than the newest 7
+// (if backups ever stop, the last good copies are not aged out). Monthly: the newest 12. Image trash: 30 days.
+const RETENTION = {
+  daily: { prefix: 'db/daily', maxAgeDays: 35, keepNewest: 7 },
+  monthly: { prefix: 'db/monthly', maxAgeDays: null, keepNewest: 12 },
+  trash: { prefix: 'storage/trash', maxAgeDays: 30, keepNewest: 0 },
+};
+
+/** A backup folder name as a UTC time: `2026-09-30T0937Z` (daily copy, trash run) or `2026-09` (monthly). */
+function parseStamp(name) {
+  let m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2})(\d{2})Z$/.exec(name);
+  if (m) return Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]);
+  m = /^(\d{4})-(\d{2})$/.exec(name);
+  if (m) return Date.UTC(+m[1], +m[2] - 1, 1);
+  return null;
+}
+
+/** Which folder names to delete: past maxAgeDays AND not among the newest keepNewest. Unreadable names never. */
+function selectExpired(names, { maxAgeDays = null, keepNewest = 0, now = Date.now() }) {
+  return names
+    .map((n) => ({ n, t: parseStamp(n) }))
+    .filter((x) => x.t != null)
+    .sort((a, b) => b.t - a.t)
+    .filter((x, i) => i >= keepNewest && (maxAgeDays == null || now - x.t > maxAgeDays * 86400000))
+    .map((x) => x.n);
+}
+
 /** Should a job whose last success was at `lastSuccessAt` (Date|null) run at `now`? */
 function isDue(lastSuccessAt, now = new Date()) {
   if (BLACKOUT_UTC_HOURS.includes(now.getUTCHours())) return { due: false, why: 'busy window' };
@@ -250,6 +278,22 @@ async function writeStatus(job, status) {
   if (r.code !== 0) throw new Error(`writing status/${job}.json failed: ${redact(r.stderr)}`);
 }
 
+/** Delete the expired folders under one RETENTION rule; returns how many went. Prints nothing itself. */
+async function prune(rule) {
+  const ls = await rclone(['lsf', `r2:${R2_BUCKET}/${rule.prefix}`, '--dirs-only']);
+  if (ls.code !== 0) throw new Error(`listing ${rule.prefix} failed: ${redact(ls.stderr)}`);
+  const names = ls.stdout
+    .split('\n')
+    .filter(Boolean)
+    .map((s) => s.replace(/\/$/, ''));
+  const expired = selectExpired(names, rule);
+  for (const n of expired) {
+    const r = await rclone(['purge', `r2:${R2_BUCKET}/${rule.prefix}/${n}`]);
+    if (r.code !== 0) throw new Error(`deleting ${rule.prefix}/${n} failed: ${redact(r.stderr)}`);
+  }
+  return expired.length;
+}
+
 function elapsed(t0) {
   const s = Math.round((Date.now() - t0) / 1000);
   return s >= 60 ? `${Math.floor(s / 60)}m${String(s % 60).padStart(2, '0')}s` : `${s}s`;
@@ -266,6 +310,10 @@ module.exports = {
   DUE_AFTER_HOURS,
   BLACKOUT_UTC_HOURS,
   STALE_ALARM_HOURS,
+  RETENTION,
+  parseStamp,
+  selectExpired,
+  prune,
   isDue,
   readStatus,
   writeStatus,

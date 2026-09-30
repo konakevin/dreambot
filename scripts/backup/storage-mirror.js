@@ -28,6 +28,8 @@ const {
   redact,
   writeStatus,
   elapsed,
+  RETENTION,
+  prune,
 } = require('./lib');
 
 const MAX_MOVES = 1000;
@@ -209,6 +211,10 @@ async function mirrorTotals(bucket) {
     durationSec: Math.round((Date.now() - t0) / 1000),
   });
   if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, 'backed_up=true\n');
+  // Retention (lib.RETENTION): trash runs older than 30 days are erased, which also completes account deletions.
+  const retired = await prune(RETENTION.trash);
+  if (retired)
+    console.log(`retired ${retired} trash run(s) older than ${RETENTION.trash.maxAgeDays} days`);
 })().catch((e) => {
   console.error(`mirror FAILED: ${redact(e.message)}`);
   process.exit(1);

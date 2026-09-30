@@ -27,6 +27,8 @@ const {
   SCHEMAS,
   EXCLUDED_DATA,
   countSchemaObjects,
+  RETENTION,
+  prune,
   isDue,
   readStatus,
   writeStatus,
@@ -291,6 +293,16 @@ function lostRows(prev, now) {
       durationSec: Math.round((Date.now() - t0) / 1000),
       lostRowsAlarm: drops,
     });
+    // Retention (lib.RETENTION): only after a successful copy, so a failing backup never ages out good ones.
+    let prunedNote = '';
+    try {
+      const daily = await prune(RETENTION.daily);
+      const monthly = await prune(RETENTION.monthly);
+      if (daily || monthly) prunedNote = `; retired ${daily} daily + ${monthly} monthly old copies`;
+    } catch (e) {
+      console.error(`retention cleanup FAILED (the new copy is fine): ${redact(e.message)}`);
+      process.exitCode = 1;
+    }
     if (KEEP_DIR) {
       fs.mkdirSync(KEEP_DIR, { recursive: true });
       fs.copyFileSync(dumpPath, path.join(KEEP_DIR, 'dreambot.dump'));
@@ -299,7 +311,7 @@ function lostRows(prev, now) {
 
     console.log(
       `backed up: ${Object.keys(snap.manifestTables).length} tables (${dataSections} with data), dump ${mb(dumpBytes)} ` +
-        `from a ${mb(snap.server.dbBytes)} database, ${snap.cronJobs.length} cron jobs, in ${elapsed(t0)}${monthlyNote}`
+        `from a ${mb(snap.server.dbBytes)} database, ${snap.cronJobs.length} cron jobs, in ${elapsed(t0)}${monthlyNote}${prunedNote}`
     );
     // The workflow's stale alarm keys on this, not on the exit code: a "pool tight" skip also exits 0.
     if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, 'backed_up=true\n');
