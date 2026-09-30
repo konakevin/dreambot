@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * announce-locations.js — the "Where to tonight?" announcement for the Locations rework (1.11.0): the picker
+ * announce-locations.js — the "Locations, refreshed" announcement for the Locations rework (1.11.0): the picker
  * grouped by mood, the new tiles (Romantic Escapes places, Dreamscapes, Just for Fun, Game On) and nightly dreams
  * scoped to the places a dreamer picked (SCENARIO_LOCATION_SCOPE.md).
  *
@@ -38,15 +38,15 @@ async function upsert() {
     .upsert(
       {
         id: ID,
-        // A question the dreamer answers by tapping the button, and it names both halves of the change: places
-        // (where) and nightly dreams (tonight). 17 characters, so it stays on one line (the sheet's gradient title
-        // wraps past ~23). The map emoji sits outside the gradient (AnnouncementSheet splitTitle).
-        title: 'Where to tonight? 🗺️',
-        // What changed for them first (their dreams follow their picks now, so nothing arrives from a place they
-        // never chose), then what's new to pick, named with the exact tile titles they'll see after the tap.
-        body: 'Your nightly dreams now only go where you choose, and there are new places to pick: Romantic Escapes, Dreamscapes, Game On and more.',
+        // A light nudge, not a feature pitch (Kevin 2026-09-30: "hey, the locations screen has changed, and there
+        // are a few new locations to check out"). The title is about the screen; the hero's own label already says
+        // "new places to dream", so the two don't repeat. No emoji (Kevin: "ditch the icon on the right of the
+        // title"). 20 characters, one line (the gradient title wraps past ~23).
+        title: 'Locations, refreshed',
+        // Two tile names they'll recognise after the tap, not the full list: "a few new places" is the point.
+        body: 'The Locations screen has a new look, plus a few new places to check out, like Dreamscapes and Game On.',
         image_url: HERO,
-        cta_label: 'Pick your places',
+        cta_label: 'Take a look',
         cta_route: '/settings/locations',
         style: 'sheet',
         // Places only shape NIGHTLY dreams (rollDream runs in nightly-dreams and first-dream-render only), and

@@ -115,19 +115,19 @@ Just for Fun stays its own tile (decided). Everything server-side is built and Q
 1. **Release 1.11.0.** The DB-driven picker (`lib/pickerSections.ts`, commit 8002d1a2) and the at-least-one-place rule
    (f01159c1) are on main but not in 1.10.0, which still groups by `picker_category` (old 12 tiles).
 2. **Done early (mig 612, Kevin: "it's all backend"):** the partial-tile backfill (237 picks) and the scope switch.
-3. **Once 1.11.0 is Ready for Sale, the HARD app gate:**
+3. **Once 1.11.0 is Ready for Sale, the HARD app gate** (Kevin 2026-09-30: "yes, do the hard gate at go-live"):
    `UPDATE public.engine_config SET min_app_version = '1.11.0', latest_app_version = '1.11.0';`
    Why hard, not the soft nudge: 1.10.0 rounds a partly-picked section up to the whole section on open and saves it.
    After step 4, `gardens and romance` (category `high_life`, tile Romantic Escapes) shows in 1.10.0's Jet Set section,
    so a Jet Set picker on 1.10.0 would get it added, and 1.11.0 then completes the Romantic Escapes tile around it:
    romance dreams nobody chose. The other five cards in old categories (winter wonderland, champions, the three era
    cards) match their 1.11.0 tiles. Moving the card's category instead would change the engine's scenario scope
-   (`placeScope` reads it). Tell Kevin first: the gate has no admin exemption.
+   (`placeScope` reads it). Update Kevin's own phone to 1.11.0 first: the gate has no admin exemption.
 4. **Show the new places:** `node scripts/apply-migration.mjs 628` (`admin_only = false` on the 20 new cards and the
    tiles surreal_dreams / just_for_fun / game_on; expect `0 | 0`). Nightly already renders them for the users who hold
    them; this only shows them in the picker.
-5. **The announcement:** `node scripts/announce-locations.js --golive`. Row `locations-launch` ("Where to tonight? 🗺️",
-   CTA "Pick your places" to `/settings/locations`, hero from `scripts/gen-locations-announcement-hero.js`), already in
+5. **The announcement:** `node scripts/announce-locations.js --golive`. Row `locations-launch` ("Locations, refreshed",
+   CTA "Take a look" to `/settings/locations`, hero from `scripts/gen-locations-announcement-hero.js`), already in
    production DARK, gated `min_app_version 1.11.0`, audience `pro` (places only shape nightly dreams),
    `existing_users_only`. The script refuses to run before step 4, stops if a non-admin has seen it, activates it
    (replacing dream-cast-launch, resetting `starts_at`) and clears Kevin's own preview seen row.
