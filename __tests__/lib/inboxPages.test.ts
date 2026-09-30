@@ -89,6 +89,28 @@ describe('buildInboxPages', () => {
     expect(startIndexFor(pages, 'nope')).toBe(0);
     expect(positionLabel(6, pages.length)).toBe('Inbox · 7 of 10');
   });
+
+  // 2026-09-29 (Kevin): tapping "sunnysteph sent you a post", whose thumbnail was her newest share,
+  // opened the batch's OLDEST post (an EarthBot beach) because the batch keeps the order sent.
+  it('opens a share batch on the post its row pictures, keeping the order sent', () => {
+    const pages = buildInboxPages(INBOX);
+    // The row's thumbnail is the newest share, 'e' (4th of the batch that starts at page 2).
+    expect(startIndexFor(pages, 'share:alice:2026-09-18', 'e')).toBe(5);
+    const opened = pages[5];
+    expect(opened.kind === 'post' ? opened.uploadId : '').toBe('e');
+    // Older shares stay in front of it, in the order sent.
+    expect(pages.slice(2, 6).map((p) => (p.kind === 'post' ? p.uploadId : ''))).toEqual([
+      'b',
+      'c',
+      'd',
+      'e',
+    ]);
+    // A pictured post that isn't in the batch, or none at all, falls back to the batch's first page.
+    expect(startIndexFor(pages, 'share:alice:2026-09-18', 'zzz')).toBe(2);
+    expect(startIndexFor(pages, 'share:alice:2026-09-18', null)).toBe(2);
+    // The pictured id only counts inside the tapped row, never another row that shows the same post.
+    expect(startIndexFor(pages, 'nope', 'e')).toBe(0);
+  });
 });
 
 describe('pageContext', () => {

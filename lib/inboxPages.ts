@@ -114,8 +114,25 @@ export function buildInboxPages(
   return pages;
 }
 
-/** The page a tap on this row opens: its first page, else 0. */
-export function startIndexFor(pages: readonly InboxPage[], groupKey: string): number {
+/**
+ * The page a tap on this row opens: the page showing the post the row PICTURES (its thumbnail,
+ * `pictured`) when that post is in the row's batch, else the row's first page, else 0.
+ *
+ * Why the pictured post (2026-09-29, Kevin: "i got this recent post from EarthBot instead"): a share
+ * batch keeps a sender's posts in the order they were sent, but the row's thumbnail is the NEWEST
+ * share, so opening on the first page showed an older post and the pictured one sat four swipes in.
+ */
+export function startIndexFor(
+  pages: readonly InboxPage[],
+  groupKey: string,
+  pictured?: string | null
+): number {
+  if (pictured) {
+    const hit = pages.findIndex(
+      (p) => p.groupKey === groupKey && p.kind === 'post' && p.uploadId === pictured
+    );
+    if (hit >= 0) return hit;
+  }
   const i = pages.findIndex((p) => p.groupKey === groupKey);
   return i < 0 ? 0 : i;
 }

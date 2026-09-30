@@ -9,7 +9,7 @@
  * visible. A one-time "Swipe up for the next one" hint teaches the gesture (first-run flag 'inboxStrip').
  */
 import { useMemo, useCallback, useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { GestureDetector, type GestureType } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
@@ -49,8 +49,6 @@ import {
   type InboxPage,
   type PageGroupInput,
 } from '@/lib/inboxPages';
-
-const FALLBACK_HEIGHT = 800;
 
 /** Groups whose members must be fetched (a sender's share batch, a day's pooled dreams). */
 function needsMembers(g: InboxGroup): boolean {
@@ -156,10 +154,19 @@ export default function InboxFeedScreen() {
 
   // ── Pager state ─────────────────────────────────────────────────────────────────────────────────────────
   const pagerRef = useRef<VerticalPagerHandle>(null);
-  const initialIndex = useMemo(() => startIndexFor(pages, start ?? ''), [pages, start]);
+  // Open on the post the tapped row pictures (its thumbnail), not just the batch's first page.
+  const initialIndex = useMemo(
+    () => startIndexFor(pages, start ?? '', groupByKey.get(start ?? '')?.uploadId ?? null),
+    [pages, start, groupByKey]
+  );
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [containerHeight, setContainerHeight] = useState(FALLBACK_HEIGHT);
-  const pageHeight = containerHeight > 0 ? containerHeight : FALLBACK_HEIGHT;
+  // Until onLayout measures the pager, size pages to the window: this is a headerless full-screen card, so the
+  // two match and the pager mounts at its real size. A made-up stand-in (it was 800) re-laid every page when the
+  // measurement landed while the strip's offset caught up a frame later, flashing the neighbouring post on each
+  // open, worse the further down the inbox (Kevin 2026-09-29: "the pictures sort of flicker in and out").
+  const { height: windowHeight } = useWindowDimensions();
+  const [measuredHeight, setMeasuredHeight] = useState<number | null>(null);
+  const pageHeight = measuredHeight ?? windowHeight;
   const bottomPadding = 16 + insets.bottom;
 
   // ── Seen marking: every row is marked seen as its page becomes visible ───────────────────────────────────
@@ -403,7 +410,7 @@ export default function InboxFeedScreen() {
           style={s.pagerWrap}
           onLayout={(e) => {
             const h = Math.round(e.nativeEvent.layout.height);
-            if (h > 0 && Math.abs(h - containerHeight) > 1) setContainerHeight(h);
+            if (h > 0 && Math.abs(h - pageHeight) > 1) setMeasuredHeight(h);
           }}
         >
           {ready ? (
