@@ -18,6 +18,7 @@ import { OnboardingFooter } from './OnboardingFooter';
 import { showAlert } from '@/components/CustomAlert';
 import { supabase } from '@/lib/supabase';
 import { hasRequiredPlaces } from '@/lib/placeRequirement';
+import { buildPickerSections, type PickerSection } from '@/lib/pickerSections';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const TILE_GAP = 10;
@@ -29,146 +30,6 @@ const CAT_CARD_HEIGHT = verticalScale(118);
 // Neutral dark gradient used as a tile placeholder when a location has no
 // thumbnail URL.
 const PLACEHOLDER_GRADIENT: [string, string] = [colors.surface, colors.background];
-
-interface LocationItem {
-  key: string;
-  label: string;
-  adminOnly?: boolean;
-}
-
-type LocationTier = 'real' | 'imagined';
-
-interface LocationSection {
-  id: string;
-  title: string;
-  icon: keyof typeof Ionicons.glyphMap;
-  description: string;
-  tier: LocationTier;
-  items: LocationItem[];
-}
-
-// Section metadata (icons / titles / descriptions / order) lives in code
-// since it's pure UI presentation. The LIST OF LOCATIONS in each section
-// comes from location_cards.picker_category in the DB. Adding a new
-// location = INSERT a row with picker_category set; appears here on next
-// app load. No code change.
-interface SectionMeta {
-  id: string;
-  title: string;
-  icon: keyof typeof Ionicons.glyphMap;
-  description: string;
-  tier: LocationTier;
-  /** picker_category values this fat section aggregates (2026-08-25 Kevin: 12
-   *  fine-grained categories folded into 8 broad ones — 4 per tab — so browsing
-   *  is a quick scan, not a wall of menus. The DB picker_category stays granular;
-   *  this UI just groups them). */
-  categories: string[];
-}
-// Section presentation + grouping lives in code; the LIST of locations is DB-driven
-// (location_cards.picker_category). A section with no cards simply doesn't render.
-// 12 sections rendered on ONE page under two labeled worlds (no tabs) — 6 Real,
-// 6 Dream. Most map 1:1 to a picker_category; "Around the World" fuses cities +
-// countries + the single World Wonders card. See LOCATION_REORG_PLAN.md.
-const SECTION_META: SectionMeta[] = [
-  // ── Real World (6) ───────────────────────────────────────────
-  {
-    id: 'around_the_world',
-    title: 'World Traveler',
-    icon: 'earth-outline',
-    description: 'Cities, countries, coasts, and the world’s great wonders',
-    tier: 'real',
-    categories: ['iconic_cities', 'countries_cultures', 'landmarks_wonders', 'coastal_escapes'],
-  },
-  {
-    id: 'tropical_escapes',
-    title: 'Tropical Escapes',
-    icon: 'sunny-outline',
-    description: 'Turquoise lagoons and island paradise',
-    tier: 'real',
-    categories: ['tropical'],
-  },
-  {
-    id: 'beach_towns',
-    title: 'Beach Towns',
-    icon: 'umbrella-outline',
-    description: 'Boardwalks, beach houses, and sunset shores',
-    tier: 'real',
-    categories: ['beach_towns'],
-  },
-  {
-    id: 'nature',
-    title: 'Nature & Wild',
-    icon: 'leaf-outline',
-    description: 'Mountains, canyons, and wild landscapes',
-    tier: 'real',
-    categories: ['epic_nature'],
-  },
-  {
-    id: 'through_time',
-    title: 'Through Time',
-    icon: 'hourglass-outline',
-    description: 'Ancient empires and bygone eras',
-    tier: 'real',
-    categories: ['through_time'],
-  },
-  {
-    id: 'high_life',
-    title: 'Jet Set',
-    icon: 'diamond-outline',
-    description: 'Superyachts, penthouses, red carpets, and champagne',
-    tier: 'real',
-    categories: ['high_life'],
-  },
-  // ── Dream Worlds (6) ─────────────────────────────────────────
-  {
-    id: 'fantasy',
-    title: 'Fantasy',
-    icon: 'sparkles-outline',
-    description: 'Elven cities, dragon keeps, and candlelit castles',
-    tier: 'imagined',
-    categories: ['high_fantasy'],
-  },
-  {
-    id: 'gothic',
-    title: 'Gothic & Haunted',
-    icon: 'moon-outline',
-    description: 'Vampire castles, foggy graveyards, haunted halls',
-    tier: 'imagined',
-    categories: ['gothic_haunted'],
-  },
-  {
-    id: 'whimsical',
-    title: 'Whimsical',
-    icon: 'flower-outline',
-    description: 'Fairy-tale castles, candy lands, and sweet escapes',
-    tier: 'imagined',
-    categories: ['whimsical_fun'],
-  },
-  {
-    id: 'scifi',
-    title: 'Sci-Fi & Space',
-    icon: 'planet-outline',
-    description: 'Neon megacities, alien worlds, and the stars',
-    tier: 'imagined',
-    categories: ['scifi_space'],
-  },
-  {
-    id: 'wild_west',
-    title: 'Wild West',
-    icon: 'flame-outline',
-    description: 'Frontier towns, saloons, and desert standoffs',
-    tier: 'imagined',
-    categories: ['wild_west'],
-  },
-  {
-    id: 'heroes',
-    title: 'Heroes',
-    icon: 'flash-outline',
-    description: 'Rooftops, spy lairs, and daring feats',
-    tier: 'imagined',
-    categories: ['heroes_adventure'],
-  },
-];
 
 interface Props {
   onNext: () => void;
@@ -190,7 +51,7 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
     // Dark-launch gate (mig 444): admins see admin_only cards for QA; regular users don't.
     const isAdmin = useAuthStore((st) => st.isAdmin);
     const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
-    const [sections, setSections] = useState<LocationSection[]>([]);
+    const [sections, setSections] = useState<PickerSection[]>([]);
 
     // A host header's back chevron routes through here. At least one place is REQUIRED (Kevin
     // 2026-09-30: every nightly is set in a place the user chose, so zero means no dreams to set):
@@ -222,47 +83,49 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
       (sec) => sec.items.length > 0 && sec.items.every((i) => places.includes(i.key))
     ).length;
 
-    // Load locations from DB (location_cards). Group by picker_category,
-    // sort by picker_sort_order. Section icons + titles + descriptions
-    // come from SECTION_META; the location list itself is fully DB-driven.
+    // Load the tiles (picker_tiles, mig 592) and the cards (location_cards.picker_tile), then group them
+    // (lib/pickerSections.ts). Tiles come from the DB so a new one needs no release; if the tile table can't be
+    // read, the picker falls back to the tiles this app used to hard-code, grouped by picker_category.
     useEffect(() => {
-      let query = supabase
-        .from('location_cards')
-        .select('name, display_name, picker_category, picker_sort_order, thumbnail_url, admin_only')
-        // is_approved removed 2026-06-06 (Architect audit): vestigial column.
-        // picker_category NOT NULL is the real visibility gate.
-        .not('picker_category', 'is', null);
-      // Dark launch (mig 444): non-admins never see admin_only cards; admins see all.
-      if (!isAdmin) query = query.eq('admin_only', false);
-      query.order('picker_sort_order').then(({ data }) => {
-        if (!data) return;
-        const thumbMap = new Map<string, string>();
-        const byCategory = new Map<string, LocationItem[]>();
-        for (const row of data) {
-          if (row.thumbnail_url) thumbMap.set(row.name, row.thumbnail_url);
-          if (!row.picker_category) continue;
-          const items = byCategory.get(row.picker_category) ?? [];
-          items.push({
-            key: row.name,
-            label: row.display_name ?? row.name,
-            adminOnly: !!row.admin_only,
-          });
-          byCategory.set(row.picker_category, items);
+      let live = true;
+      const load = async () => {
+        let cardsQuery = supabase
+          .from('location_cards')
+          .select(
+            'name, display_name, picker_category, picker_tile, picker_sort_order, thumbnail_url, admin_only'
+          )
+          // is_approved removed 2026-06-06 (Architect audit): vestigial column.
+          // picker_category NOT NULL is the real visibility gate.
+          .not('picker_category', 'is', null);
+        // Dark launch (mig 444): non-admins never see admin_only cards; admins see all.
+        if (!isAdmin) cardsQuery = cardsQuery.eq('admin_only', false);
+        const [cardsRes, tilesRes] = await Promise.all([
+          cardsQuery.order('picker_sort_order'),
+          supabase
+            .from('picker_tiles')
+            .select('key, title, description, icon, tier, sort_order, admin_only')
+            .eq('is_active', true),
+        ]);
+        if (!live || !cardsRes.data) {
+          if (__DEV__ && cardsRes.error)
+            console.warn('[LocationPicker] cards load failed', cardsRes.error.message);
+          return;
         }
-        // Each fat section aggregates the cards from all its picker_categories
-        // (2026-08-25: 12 categories folded into 8 broad ones). Within a section,
-        // cards keep their per-category order (concatenated in `categories` order).
-        const built: LocationSection[] = SECTION_META.map((m) => ({
-          id: m.id,
-          title: m.title,
-          icon: m.icon,
-          description: m.description,
-          tier: m.tier,
-          items: m.categories.flatMap((c) => byCategory.get(c) ?? []),
-        })).filter((sec) => sec.items.length > 0);
-        setSections(built);
+        if (__DEV__ && tilesRes.error)
+          console.warn(
+            '[LocationPicker] tiles load failed, using built-in tiles',
+            tilesRes.error.message
+          );
+        const thumbMap = new Map<string, string>();
+        for (const row of cardsRes.data)
+          if (row.thumbnail_url) thumbMap.set(row.name, row.thumbnail_url);
+        setSections(buildPickerSections(cardsRes.data, tilesRes.data ?? null, isAdmin));
         setThumbnails(thumbMap);
-      });
+      };
+      void load();
+      return () => {
+        live = false;
+      };
     }, [isAdmin]);
 
     // MIGRATION to the tile = WHOLE-SECTION paradigm (2026-08-31, Kevin). Legacy users
@@ -271,7 +134,7 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
     // PARTIALLY-selected section (some but not all of its cards selected) up to the full
     // section, so the tile reads selected and nightly draws the whole category. The
     // store auto-save persists it. This is the single source of truth for the migration:
-    // it reuses the picker's own SECTION_META + live card list, so it can NEVER disagree
+    // it reuses the picker's own tiles + live card list, so it can NEVER disagree
     // with what lights up a tile. Self-idempotent — a full section has nothing to round
     // up and the UI can't create new partials, so it no-ops on every later view. Only
     // touches LIVE sections (non-admins only load admin_only=false cards), so it respects
@@ -388,7 +251,7 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
     // drill-in. Selected = every location in the category is picked; shown with a
     // teal-green highlighted border + a check badge. Title only — no subtitle
     // (the title is descriptive enough, Kevin 2026-08-29).
-    const renderCategoryCard = (section: LocationSection) => {
+    const renderCategoryCard = (section: PickerSection) => {
       const repThumb = section.items.map((i) => thumbnails.get(i.key)).find(Boolean);
       const sectionKeys = section.items.map((i) => i.key);
       const selected = sectionKeys.length > 0 && sectionKeys.every((k) => places.includes(k));

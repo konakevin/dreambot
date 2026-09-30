@@ -2689,6 +2689,7 @@ export type Database = {
           name: string;
           picker_category: string | null;
           picker_sort_order: number | null;
+          picker_tile: string | null;
           prompt_version: number;
           sub_regions: string[] | null;
           tags: string[];
@@ -2715,6 +2716,7 @@ export type Database = {
           name: string;
           picker_category?: string | null;
           picker_sort_order?: number | null;
+          picker_tile?: string | null;
           prompt_version?: number;
           sub_regions?: string[] | null;
           tags?: string[];
@@ -2741,6 +2743,7 @@ export type Database = {
           name?: string;
           picker_category?: string | null;
           picker_sort_order?: number | null;
+          picker_tile?: string | null;
           prompt_version?: number;
           sub_regions?: string[] | null;
           tags?: string[];
@@ -2749,7 +2752,15 @@ export type Database = {
           updated_at?: string;
           visual_palette?: string[];
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'location_cards_picker_tile_fkey';
+            columns: ['picker_tile'];
+            isOneToOne: false;
+            referencedRelation: 'picker_tiles';
+            referencedColumns: ['key'];
+          },
+        ];
       };
       location_iconic_spots: {
         Row: {
@@ -3225,6 +3236,42 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      picker_tiles: {
+        Row: {
+          admin_only: boolean;
+          created_at: string;
+          description: string;
+          icon: string;
+          is_active: boolean;
+          key: string;
+          sort_order: number;
+          tier: string;
+          title: string;
+        };
+        Insert: {
+          admin_only?: boolean;
+          created_at?: string;
+          description: string;
+          icon: string;
+          is_active?: boolean;
+          key: string;
+          sort_order: number;
+          tier: string;
+          title: string;
+        };
+        Update: {
+          admin_only?: boolean;
+          created_at?: string;
+          description?: string;
+          icon?: string;
+          is_active?: boolean;
+          key?: string;
+          sort_order?: number;
+          tier?: string;
+          title?: string;
+        };
+        Relationships: [];
       };
       pool_pick_history: {
         Row: {

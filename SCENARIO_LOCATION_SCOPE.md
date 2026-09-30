@@ -89,12 +89,15 @@ Dry run as Kevin, switch forced on: couple goofy 50 / elegant 17 / active 718 ma
 | At least one place required | `lib/placeRequirement.ts`, `LocationPickerStep.tsx`, `useAutoSaveProfile({ requirePlace })`, `settings/locations.tsx`, `placeRequirement.test.ts` | Code done, ships with the next app build |
 | Tags + switch | mig 591 (applied), loaders, `scenarioScope.ts`, `nightly-dreams`, `scenarioScope.test.ts` | Deployed with the switch OFF; dry runs: default unchanged, forced-on with no tags → 0 matches → place |
 | Tags written | 14,008 rows, 8,553 placed | Verified by count; dry run sees them (above) |
+| Tiles in the database + World Traveler split | mig 592 (applied): `picker_tiles` (19 rows: 15 live, 4 new admin-only and empty), `location_cards.picker_tile`; `lib/pickerSections.ts`, `LocationPickerStep.tsx`, `pickerSections.test.ts` | DB live (old apps unaffected: they group by `picker_category`); the picker change ships with the next build. Anonymous read OK, anonymous write 401 |
 
 ## Next
 
-1. Tile list in the database (`picker_tiles` + `location_cards.picker_tile`), app reads it with the code list as
-   fallback; old app versions keep their 12 tiles because `picker_category` is unchanged.
-2. World Traveler regional split (tiles only; the engine and the tags keep using `picker_category`).
+1. Regional wonders cards (Europe / Asia & Pacific / The Americas / Middle East & Africa) with region-filtered
+   `sub_regions` / `must_include` and World Wonders' spots copied by region. World Wonders itself left the picker
+   (`picker_tile` NULL) but stays valid for saved picks. At go-live, add the four new cards to the 41 users who have
+   World Traveler saved (Kevin: "set them to have all the new locations"); the other 42 places need nothing, since
+   picks are saved by name and every one of those users has all 43.
 3. Scenario-backed cards for the tone/venue groups (the card's content IS its tagged scenarios), then point each
    group's `proposed_location` rows at the new card's `location_keys`.
 4. Surreal Dreams cards from the good `nightly_seeds` (rewritten to the spot contract), the rest retired.
