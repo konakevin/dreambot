@@ -8,6 +8,7 @@
  * Results → <out>/results.json (resumable: finished pairs are skipped). Build the blind vote from it.
  *
  *   node scripts/lab-llm-scene-pairs.js --out=DIR [--pure=12] [--holiday=fall:4,halloween:4] [--arm55=claude-sonnet-5-5@high]
+ *     [--c-overlays=k1,k2]   (a third side on the same pinned roll; resume on the same --out)
  */
 const fs = require('fs');
 const path = require('path');
@@ -33,6 +34,9 @@ const HOLIDAY = arg('holiday', 'fall:4,halloween:4')
     return Array.from({ length: Number(n || 1) }, () => k);
   });
 const ARM55 = arg('arm55', 'claude-sonnet-5-5@high');
+// --c-overlays=k1,k2: a third side C = B's exact flags + these QA overlays (force_llm_overlays), added to pairs that
+// already have A and B (resume on the same --out). Tests one 5.5 prompt change against the same pinned roll.
+const C_OVERLAYS = arg('c-overlays', '');
 if (!OUT) throw new Error('--out=DIR is required');
 fs.mkdirSync(OUT, { recursive: true });
 const RESULTS = path.join(OUT, 'results.json');
@@ -127,13 +131,15 @@ async function render(body) {
     [0, 1].map(async () => {
       while (next < plan.length) {
         const it = plan[next++];
-        if (done.pairs[it.key] && done.pairs[it.key].b && done.pairs[it.key].b.uploadId) continue;
+        const prev = done.pairs[it.key];
+        if (prev && prev.b && prev.b.uploadId && (!C_OVERLAYS || (prev.c && prev.c.uploadId)))
+          continue;
         const flags = {
           force_pure_scene: true,
           force_place: it.place,
           ...(it.holiday ? { force_holiday_scene: it.holiday } : {}),
         };
-        const a = (done.pairs[it.key] && done.pairs[it.key].a) || (await render(flags));
+        const a = (prev && prev.a) || (await render(flags));
         done.pairs[it.key] = { ...it, a };
         save();
         if (!a.uploadId) {
@@ -152,16 +158,29 @@ async function render(body) {
           ...(a.model ? { force_model: a.model } : {}),
           force_llm_model: ARM55,
         };
-        let b = null;
-        const discarded = [];
-        for (let t = 0; t < 3; t++) {
-          b = await render(bFlags);
-          if (!b.uploadId || b.engine === a.engine) break;
-          discarded.push(b.uploadId);
-        }
-        if (discarded.length) b.discarded = discarded;
+        const renderMatching = async (f) => {
+          let r = null;
+          const discarded = [];
+          for (let t = 0; t < 3; t++) {
+            r = await render(f);
+            if (!r.uploadId || r.engine === a.engine) break;
+            discarded.push(r.uploadId);
+          }
+          if (discarded.length) r.discarded = discarded;
+          return r;
+        };
+        const b = prev && prev.b && prev.b.uploadId ? prev.b : await renderMatching(bFlags);
         done.pairs[it.key] = { ...it, a, b };
         save();
+        if (C_OVERLAYS && b.uploadId) {
+          const c = await renderMatching({ ...bFlags, force_llm_overlays: C_OVERLAYS });
+          c.overlays = C_OVERLAYS;
+          done.pairs[it.key] = { ...it, a, b, c };
+          save();
+          console.log(
+            `  ${it.key} C ${c.uploadId ? `${c.engine} ${c.words}w ${c.llm.join(' ')}` : 'ERROR ' + c.error}`
+          );
+        }
         const tag = (r) =>
           r.uploadId
             ? `${r.engine} ${r.look} ${r.model && r.model.split('/')[1]} ${r.words}w${r.truncated ? ' TRUNCATED' : ''}${r.failed ? ' FAILED' : ''} ${r.llm.join(' ')}`

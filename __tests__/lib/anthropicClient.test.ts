@@ -153,11 +153,11 @@ describe('4.6 and Haiku bodies are byte-identical to the pre-client call sites',
 });
 
 describe('Sonnet 5 profile (the cast race read, LLM_5_5_TUNING.md 2.1)', () => {
-  it('thinking disabled, no effort, max_tokens scaled 1.35x (ceil), nothing else added', () => {
+  it('thinking disabled, no effort, max_tokens scaled 1.6x (ceil), nothing else added', () => {
     const b = buildRequestBody(SONNET_5, { content: 'x', maxTokens: 30 }, 'high');
     expect(b).toEqual({
       model: SONNET_5,
-      max_tokens: 41,
+      max_tokens: 48,
       messages: [{ role: 'user', content: 'x' }],
       thinking: { type: 'disabled' },
     });
@@ -172,11 +172,11 @@ describe('Sonnet 5 profile (the cast race read, LLM_5_5_TUNING.md 2.1)', () => {
 });
 
 describe('Sonnet 5.5 profile', () => {
-  it('thinking between_tools + effort, max_tokens scaled 1.35x (ceil), nothing else added', () => {
+  it('thinking between_tools + effort, max_tokens scaled 1.6x (ceil), nothing else added', () => {
     const b = buildRequestBody(SONNET_5_5, { content: 'x', maxTokens: 900 }, 'medium');
     expect(b).toEqual({
       model: SONNET_5_5,
-      max_tokens: 1215,
+      max_tokens: 1440,
       messages: [{ role: 'user', content: 'x' }],
       thinking: { type: 'between_tools' },
       output_config: { effort: 'medium' },

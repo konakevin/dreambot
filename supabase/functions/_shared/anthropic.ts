@@ -17,9 +17,10 @@
  *     against max_tokens. `thinking: {type: 'between_tools'}` keeps upfront thinking off (we send no tools, so
  *     the reply is text only);
  *   - `output_config.effort` is set per job (default high);
- *   - its tokenizer counts the same text ~1.35x (our nightly brief: 2342 vs 1738 tokens), so max_tokens scales
+ *   - its tokenizer counts the same text more: ~1.35x on our brief INPUT (2342 vs 1738 tokens) and 1.44-1.62x
+ *     (median 1.54) on the comma-heavy prompts it WRITES (LLM_5_5_TUNING.md 3.2), so max_tokens (an output budget) scales
  *     by the profile's tokenScale or every word budget quietly shrinks.
- * Sonnet 5 (one job, the cast race read) shares 5.5's tokenizer (tokenScale 1.35) but rejects `between_tools`, so
+ * Sonnet 5 (one job, the cast race read) shares 5.5's tokenizer (tokenScale 1.6) but rejects `between_tools`, so
  * its profile sends `thinking: {type: 'disabled'}`: no hidden thinking can eat a 30-token reply.
  * No profile ever sends an assistant prefill or temperature / top_p / top_k: 5.5 rejects each, and 4.6 already
  * rejects the prefill (essenceCards.ts wrote no card from 2026-05-11 because of it).
@@ -63,14 +64,14 @@ export const MODEL_PROFILES: Readonly<Record<string, ModelProfile>> = {
   [SONNET]: { tokenScale: 1, extraBody: () => ({}) },
   [HAIKU]: { tokenScale: 1, extraBody: () => ({}) },
   [SONNET_5_5]: {
-    tokenScale: 1.35,
+    tokenScale: 1.6,
     extraBody: (effort) => ({
       thinking: { type: 'between_tools' },
       output_config: { effort },
     }),
   },
   // Sonnet 5: 5.5's tokenizer (count_tokens 5039 vs 4.6's 3752 on the same text); rejects between_tools.
-  [SONNET_5]: { tokenScale: 1.35, extraBody: () => ({ thinking: { type: 'disabled' } }) },
+  [SONNET_5]: { tokenScale: 1.6, extraBody: () => ({ thinking: { type: 'disabled' } }) },
 };
 
 export function isKnownModel(model: string): boolean {

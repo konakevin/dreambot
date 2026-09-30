@@ -167,7 +167,7 @@ describe('Node client', () => {
       maxTokens: 2000,
     });
     expect(r.model).toBe(SONNET_5_5);
-    expect(JSON.parse(bodies[0]).max_tokens).toBe(2700);
+    expect(JSON.parse(bodies[0]).max_tokens).toBe(3200); // 2000 × 5.5's tokenScale 1.6
     expect(llm.stamps()).toEqual(['llm_preview', `llm:bot_prompt:${SONNET_5_5}`]);
     expect(stamps).toEqual(llm.stamps());
   });

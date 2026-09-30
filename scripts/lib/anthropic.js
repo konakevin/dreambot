@@ -15,7 +15,7 @@
  *
  * Sonnet 4.6 and Haiku get exactly the body the call sites sent before. Sonnet 5.5 gets
  * `thinking: {type: 'between_tools'}` (it thinks by default otherwise, and the text arrives after the thinking
- * blocks), `output_config.effort`, and max_tokens x1.35 (its tokenizer). Never a prefill or temperature/top_p/top_k.
+ * blocks), `output_config.effort`, and max_tokens x1.6 (its tokenizer counts its own prompt output 1.44-1.62x 4.6's). Never a prefill or temperature/top_p/top_k.
  * Replies are every text block joined, never content[0]. A refusal, an empty reply, or one under minChars fails
  * that model and the chain moves on: routed → the job's default → its fallbacks.
  *
@@ -37,14 +37,14 @@ const MODEL_PROFILES = {
   [SONNET]: { tokenScale: 1, extraBody: () => ({}) },
   [HAIKU]: { tokenScale: 1, extraBody: () => ({}) },
   [SONNET_5_5]: {
-    tokenScale: 1.35,
+    tokenScale: 1.6,
     extraBody: (effort) => ({
       thinking: { type: 'between_tools' },
       output_config: { effort },
     }),
   },
   // Sonnet 5 (the cast race read only): 5.5's tokenizer; rejects between_tools, so thinking is disabled.
-  [SONNET_5]: { tokenScale: 1.35, extraBody: () => ({ thinking: { type: 'disabled' } }) },
+  [SONNET_5]: { tokenScale: 1.6, extraBody: () => ({ thinking: { type: 'disabled' } }) },
 };
 
 function isKnownModel(model) {
