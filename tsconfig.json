@@ -149,6 +149,7 @@
     "__tests__/lib/anthropicClient.test.ts",
     "__tests__/lib/anthropicClientParity.test.ts",
     "__tests__/lib/llmTuningGuards.test.ts",
+    "__tests__/lib/styleFingerprintTrim.test.ts",
     "__tests__/lib/slotJsonLenient.test.ts",
     "__tests__/lib/halloweenPoolsParity.test.ts",
     "scripts/eval-quality-gate.ts"

@@ -174,7 +174,9 @@ FLUX PROMPT: "${promptLine}"`;
       key: anthropicKey,
       system: SYSTEM_PROMPT,
       content: userMessage,
-      maxTokens: 150,
+      // 300, not 150 (2026-09-30): Haiku writes past the asked 45 words, so at 150 half the replies were cut off
+      // mid-sentence (llm_truncated:bot_style_distill on 98/196 bot runs).
+      maxTokens: FINGERPRINT_MAX_TOKENS,
       retryDelaysMs: RETRY_DELAYS_MS,
       retryNetworkErrors: true,
     });
@@ -182,12 +184,33 @@ FLUX PROMPT: "${promptLine}"`;
     if (text === 'NO_STYLE_SIGNAL' || text.startsWith('NO_STYLE_SIGNAL')) {
       return null;
     }
-    // Cap at 400 chars to fit the format clause + style anchors (45-word budget).
-    return text.length > 400 ? text.slice(0, 400) : text;
+    return trimFingerprint(text);
   } catch (err) {
     console.warn(`[styleDistiller] failed: ${(err as Error).message}`);
     return null;
   }
+}
+
+/** Reply budget for the fingerprint read (mirrored in scripts/lib/styleDistiller.js). */
+export const FINGERPRINT_MAX_TOKENS = 300;
+/** Longest stored fingerprint: the format clause + style anchors. */
+export const FINGERPRINT_MAX_CHARS = 400;
+
+/**
+ * Fit a fingerprint into FINGERPRINT_MAX_CHARS at a CLAUSE boundary. It used to be a blind 400-char slice, and Haiku's
+ * replies run longer than 400 chars, so 99% of stored fingerprints (user and bot posts, 2026-09-30) ended mid-word
+ * ("…violet pompo", "…sun-war"), feeding a broken fragment into Dream Like This. The front of the list carries the
+ * most (the FORMAT clause leads), so cut at the last comma inside the cap; with no comma in the back half, the last
+ * space. Mirrored exactly in scripts/lib/styleDistiller.js (a parity test locks both).
+ */
+export function trimFingerprint(text: string, max: number = FINGERPRINT_MAX_CHARS): string {
+  const t = text.replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  const head = t.slice(0, max);
+  const comma = head.lastIndexOf(',');
+  const space = head.lastIndexOf(' ');
+  const cut = comma >= max / 2 ? comma : space > 0 ? space : max;
+  return head.slice(0, cut).replace(/[\s,;:.\-]+$/, '');
 }
 
 /**

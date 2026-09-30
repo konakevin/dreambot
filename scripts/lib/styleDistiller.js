@@ -28,6 +28,20 @@
 
 const { callClaude } = require('./anthropic');
 const RETRY_DELAYS_MS = [1000, 3000, 8000];
+// Mirrors supabase/functions/_shared/styleDistiller.ts (a parity test locks both).
+const FINGERPRINT_MAX_TOKENS = 300;
+const FINGERPRINT_MAX_CHARS = 400;
+
+/** Fit a fingerprint into FINGERPRINT_MAX_CHARS at a clause boundary (see the Edge twin for the why). */
+function trimFingerprint(text, max = FINGERPRINT_MAX_CHARS) {
+  const t = text.replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  const head = t.slice(0, max);
+  const comma = head.lastIndexOf(',');
+  const space = head.lastIndexOf(' ');
+  const cut = comma >= max / 2 ? comma : space > 0 ? space : max;
+  return head.slice(0, cut).replace(/[\s,;:.\-]+$/, '');
+}
 
 const SYSTEM_PROMPT = `You synthesize a unified style fingerprint from three sources that together defined a rendered image: a MEDIUM (art style identity), a VIBE (mood identity), and the final FLUX PROMPT used by the image model.
 
@@ -165,17 +179,17 @@ async function distillStyle(input, anthropicKey, supabase, llm = null) {
       key: anthropicKey,
       system: SYSTEM_PROMPT,
       content: userMessage,
-      maxTokens: 150,
+      // 300, not 150 (2026-09-30): Haiku writes past the asked 45 words; at 150 half the bot replies were cut off.
+      maxTokens: FINGERPRINT_MAX_TOKENS,
       retryDelaysMs: RETRY_DELAYS_MS,
       retryNetworkErrors: true,
     });
     const text = r.text;
     if (text === 'NO_STYLE_SIGNAL' || text.startsWith('NO_STYLE_SIGNAL')) return null;
-    // Cap at 400 chars to fit the format clause + style anchors (45-word budget).
-    return text.length > 400 ? text.slice(0, 400) : text;
+    return trimFingerprint(text);
   } catch (_err) {
     return null;
   }
 }
 
-module.exports = { distillStyle };
+module.exports = { distillStyle, trimFingerprint, FINGERPRINT_MAX_TOKENS, FINGERPRINT_MAX_CHARS };
