@@ -47,6 +47,39 @@ export const ARMS = {
     let n = 0;
     return p.replace(/, wearing /g, (m) => (n++ < 2 ? ', looking into the camera, wearing ' : m));
   },
+  // Couples, round 3 (c2 cost scenery: paired median 14.6 → 12.8): no camera word, same place.
+  c3: (p) => {
+    let n = 0;
+    return p.replace(/, wearing /g, (m) => (n++ < 2 ? ', looking out at the viewer, wearing ' : m));
+  },
+  // Couples, round 3: the gaze AFTER each person's wardrobe (later in the sentence than c2).
+  c4: (p) => {
+    const m = p.match(
+      /(In the foreground, on the left, [^;]*?, wearing )([^;]+)(; to (?:her|his|their) right, with a clear gap between their heads, [^.]*?, wearing )([^.]+)(\.)/
+    );
+    if (!m) return p;
+    return p.replace(
+      m[0],
+      `${m[1]}${m[2]}, looking into the camera${m[3]}${m[4]}, looking into the camera${m[5]}`
+    );
+  },
+  // Round 4 (c2-c4 still cost scenery: "looking into the camera" reads as a posed portrait): candid wording.
+  c6: (p) => {
+    const m = p.match(
+      /(In the foreground, on the left, [^;]*?, wearing )([^;]+)(; to (?:her|his|their) right, with a clear gap between their heads, [^.]*?, wearing )([^.]+)(\.)/
+    );
+    if (!m) return p;
+    return p.replace(
+      m[0],
+      `${m[1]}${m[2]}, glancing at the camera${m[3]}${m[4]}, glancing at the camera${m[5]}`
+    );
+  },
+  // Round 4: one gaze line right after the beat, before "Behind and around them".
+  c8: (p) =>
+    p.replace(
+      / Behind and around them/,
+      ' Both glance at the camera mid-moment. Behind and around them'
+    ),
   // Solos: eyes to the camera, no "gently off", no three-quarter head.
   s1: (p) =>
     p

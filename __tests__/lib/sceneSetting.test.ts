@@ -99,6 +99,11 @@ describe('settingFromPlaceName (nightly: the landmark says snow or beach)', () =
     ['1950s americana', 'Carlsbad Caverns Natural Entrance mouth New Mexico', 'outdoors'],
     ['1950s americana', 'Santa Fe Plaza central square New Mexico', null],
     ['1950s americana', 'Multnomah Falls twin-tiered basalt cascade Oregon', 'outdoors'],
+    // Phase 2 (2026-09-30): a tropical card's jungle landmark dressed a man in poolside swim shorts.
+    ['yucatan', 'Cobá Nohoch Mul pyramid rising above jungle canopy', 'outdoors'],
+    ['malibu', 'Malibu Creek gorge basalt columns and swimming hole', 'outdoors'],
+    ['kauai', 'Waimea Canyon red ridges', 'outdoors'],
+    ['maui', 'Kaanapali Beach at sunset', 'beach'],
   ])('%s + %s → %s', (place, anchor, setting) => {
     expect(settingFromPlaceName(place, anchor)).toBe(setting);
   });
@@ -136,5 +141,24 @@ describe('SETTING_DRESS', () => {
       expect(line).not.toMatch(PLAIN_CLOTHES);
       expect(line).not.toMatch(OCCLUDER);
     }
+  });
+});
+
+describe('new place words (phase 2): Halloween / Fall rows stop falling to unknown', () => {
+  it.each([
+    ['Brick firehouse garage, converted hearse parked inside', 'indoor'],
+    ['Grand monster hotel lobby with coffin luggage carts', 'indoor'],
+    ['Cul-de-sac blanketed in fog, abandoned bicycles near glowing jack-o-lanterns', 'city'],
+    ['Porch steps crowded with carved pumpkins', 'city'],
+    ['A corn maze at dusk with hay bales', 'outdoors'],
+    ['Moonlit graveyard with leaning headstones', 'outdoors'],
+  ])('%s → %s', (text, setting) => {
+    expect(settingFromText(text)).toBe(setting);
+  });
+
+  it('the stronger dress codes still win (priority order unchanged)', () => {
+    expect(settingFromText('a beach hotel lobby')).toBe('beach');
+    expect(settingFromText('a ski chalet hallway')).toBe('snow');
+    expect(settingFromText('a gala in the hotel ballroom')).toBe('evening');
   });
 });

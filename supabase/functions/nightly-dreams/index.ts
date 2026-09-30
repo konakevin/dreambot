@@ -3415,8 +3415,10 @@ Deno.serve(async (req) => {
           // dresses for the snow, a city card's beach landmark (Miami Beach, Cannon Beach) for the beach. Not on
           // a `luxury` card: Kevin (2026-09-28) is happy with luxury outfits there even in the snow ("if biome
           // says luxury, i have no problem with luxury outfits in different scenarios").
-          // A wild landmark (a canyon, a cave, a waterfall) only overrides a card filed as a city: a themed
-          // "1950s americana" card rolls Zion and Carlsbad Caverns, and got a leather jacket in the canyon.
+          // A wild landmark (a canyon, a cave, a waterfall, a jungle) overrides a card filed as a city, a beach or
+          // nothing: a themed "1950s americana" card rolls Zion and Carlsbad Caverns (a leather jacket in the canyon),
+          // and a tropical card (beach) rolls Cobá's jungle pyramid (1970s poolside swim shorts in the jungle,
+          // NIGHTLY_OUTFIT_VARIETY_PLAN.md phase 2). Never a snow card (a canyon in winter is still snow).
           const locSetting = settingFromLocation({
             biome: biomeKey,
             tags: locationCard ? locationCard.tags : null,
@@ -3427,7 +3429,11 @@ Deno.serve(async (req) => {
               ? settingFromPlaceName(userPlace, iconicAnchor)
               : null;
           const byName =
-            nameSetting === 'outdoors' ? (locSetting === 'city' ? 'outdoors' : null) : nameSetting;
+            nameSetting === 'outdoors'
+              ? locSetting === 'city' || locSetting === 'beach' || locSetting === 'unknown'
+                ? 'outdoors'
+                : null
+              : nameSetting;
           nightlySetting = fromRow ?? byName ?? locSetting;
           fallbackReasons.push(
             `outfit_scene_fit:${nightlySceneFit.looks && nightlySceneFit.brief ? 'all' : nightlySceneFit.looks ? 'looks' : nightlySceneFit.brief ? 'brief' : 'trim'}`,
