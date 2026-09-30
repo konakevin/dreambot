@@ -2633,6 +2633,77 @@ Deno.serve(async (req) => {
         }
       }
     }
+    // HOLIDAY ROLL FOR DREAM ART (embodied) nightlies (Kevin 2026-09-29). Every other nightly type can land on an
+    // in-season holiday; Dream Art never did, because its scene comes from the location spot pick above and the
+    // holiday rolls live in the face-swap and scene-only branches. Same odds as a solo/couple face swap
+    // (combineHolidayPct over the seasons that have rows, so Fall alone = its pct and October stacks under the cap),
+    // same pools (a single-cast row for one person, a couple row for two) and the same unseen shuffle-bag. On a hit
+    // the holiday row's PLACE replaces the location spot as the backdrop and its outfit dresses the character; the
+    // character-dominant embodied brief is otherwise untouched. Day-of never reaches here (it pins a face-swap cast).
+    let embodiedHolidayAttire: string | null = null;
+    if (
+      composition === 'character' &&
+      isEmbodiedMedium &&
+      activeHolidays.length > 0 &&
+      !force_place &&
+      !dayOfApplied &&
+      (selectedCast.length === 1 || selectedCast.length === 2)
+    ) {
+      try {
+        const isDualEmbodied = selectedCast.length === 2;
+        const g = castGender === 'male' || castGender === 'female' ? castGender : 'any';
+        const embPools: {
+          h: ActiveHoliday;
+          rows: { scene: string; attire: string; subTheme?: string | null }[];
+        }[] = await Promise.all(
+          activeHolidays.map(async (h) => ({
+            h,
+            rows: isDualEmbodied
+              ? await loadHolidayDual(supabase, h.key, force_holiday_sub_theme)
+              : holidaySingleCandidates(
+                  await loadHolidaySingle(supabase, h.key, force_holiday_sub_theme),
+                  g
+                ),
+          }))
+        );
+        const usableEmb = embPools.filter((x) => x.rows.length > 0).map((x) => x.h);
+        const embStackCap = (await fetchEngineConfig(supabase)).holidayStackCapPct;
+        const embPct = combineHolidayPct(usableEmb, embStackCap);
+        const embRoll = Math.random() * 100;
+        fallbackReasons.push(
+          `holiday_roll:embodied:pct=${embPct}:roll=${embRoll.toFixed(0)}:pools=${
+            embPools.map((x) => `${x.h.key}:${x.rows.length}`).join('+') || 'none'
+          }`
+        );
+        if (usableEmb.length > 0 && embRoll < embPct) {
+          const chosen = pickWeightedHoliday(usableEmb, Math.random());
+          const rows = embPools.find((x) => x.h.key === chosen.key)!.rows;
+          const unseen = await filterUnseen(
+            supabase,
+            userId,
+            `holiday:${chosen.key}`,
+            rows,
+            (x) => x.scene
+          );
+          const row = pickHoliday(unseen.length ? unseen : rows);
+          iconicAnchor = row.scene;
+          // Couple rows are written "She in …, he in …": use that outfit line only for a woman + man couple.
+          const castGenders = selectedCast.map((c) => resolveCastGender(c as DreamCastMember));
+          const mixedCouple = castGenders.includes('female') && castGenders.includes('male');
+          embodiedHolidayAttire =
+            row.attire && (!isDualEmbodied || mixedCouple) ? row.attire : null;
+          holidayCategory = chosen.key;
+          holidaySubTheme = row.subTheme ?? null;
+          fallbackReasons.push(`holiday:${chosen.key}`, `holiday_embodied:${chosen.key}`);
+          recordPick(supabase, userId, `holiday:${chosen.key}`, row.scene);
+        }
+      } catch (embHolErr) {
+        // Never a broken render: a failed roll keeps the location spot.
+        fallbackReasons.push(
+          `holiday_roll:embodied:error:${String((embHolErr as Error)?.message ?? embHolErr).slice(0, 60)}`
+        );
+      }
+    }
     // Scenario-forced medium (migration 354): photo-genre parody seeds (80s
     // glamour shots, decade eras) force 'photography' so the joke reads as an
     // actual photo instead of the rolled art medium. Re-resolve the medium the
@@ -3800,7 +3871,7 @@ STRUCTURE — follow this order EXACTLY:
 CHARACTER${isDualCast ? 'S' : ''} TO DRAW:
 ${castDescBlock}
 ${castInstruction}
-${singleAction ? `\nBODY POSE (use the verbs, keep it a close/medium shot):\n"${singleAction}"\n` : ''}${dualAction ? `\nBODY POSE (both characters):\n"${dualAction}"\n` : ''}
+${embodiedHolidayAttire ? `\nOUTFIT (a ${holidayCategory} outfit — dress ${isDualCast ? 'them' : 'the character'} in this):\n"${embodiedHolidayAttire}"\n` : ''}${singleAction ? `\nBODY POSE (use the verbs, keep it a close/medium shot):\n"${singleAction}"\n` : ''}${dualAction ? `\nBODY POSE (both characters):\n"${dualAction}"\n` : ''}
 CAST RULES — NON-NEGOTIABLE:
 - PRESERVE every identifying trait: age, gender, hair color and length, beard/no beard, glasses, build, complexion. This is how the user recognizes ${isDualCast ? 'themselves and their loved one' : 'themselves'}.
 - Be SPECIFIC, never "a man" / "a woman".

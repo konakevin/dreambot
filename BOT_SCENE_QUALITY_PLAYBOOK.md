@@ -237,8 +237,10 @@ Check in this order before touching a pool or template:
   inside a brief gets paraphrased.
 
 ### 3.3 Safety flags (E005 / NSFW false positives)
-- Count "safety-filter" lines per ATTEMPT, never `bot_run_log` rows: the engine retries a flag 2× then re-rolls picks up
-  to 3×, which hides flags. Flagged text is not logged (open tooling gap).
+- The engine retries a flagged prompt 2× then re-rolls picks up to 3×, which hides flags from the final result. Since
+  2026-09-30 every flagged roll leaves a `bot_run_log` row (`status = 'skipped'`, `error_stage = 'safety_flag'`, the full
+  flagged prompt in `prompt_preview`, the model in `model`), so start from
+  `select * from bot_run_log where error_stage = 'safety_flag'`.
 - REPLAY the exact prompt once per model with no retry (splits MODEL from CONTENT), then BISECT: halves →
   leave-one-out → 3× confirm the culprit alone and the prompt without it. Never blanket-soften a pool: the culprit is
   rarely the socially obvious word ("double-breasted", "short-waisted", "at his hip" were false positives).
@@ -404,7 +406,11 @@ Proven on YumBot, MangaBot, ChibiBot, BloomBot, SteamBot, FarmBot, GothBot, Pixe
 
 ### 4.8 Seasonal paths
 `seasonalPaths[holidayKey]` (e.g. `fall`, `halloween`) are never in `paths[]`. During a holiday window the engine gates
-on `engine_config.bots_seasonal_pct` and draws from a separate shuffle-bag `${bot}::seasonal::${key}`. A seasonal path
+on `engine_config.bots_seasonal_pct` (50 since migration 581, 2026-09-29) and draws from a separate shuffle-bag
+`${bot}::seasonal::${key}`; with two holidays in season (October) a second roll picks one by calendar weight. A path
+can sit under two holidays (the pumpkin patches are Fall AND Halloween); each has its own bag. Year-round paths whose
+content is seasonal belong in `seasonalPaths`, not `paths[]`. Fall sets (2026-09-29): ChibiBot, TinyBot, BloomBot,
+FarmBot. A seasonal path
 renders on demand with `--mode`. Hard-lock the season inside EACH entry of the pool that builds the place:
 season-neutral entries ("a barn") drift to other seasons.
 
@@ -986,7 +992,7 @@ Live paths are `paths[]` in each `index.js`; don't trust a list here over the co
   species in its PRIOR colour, so a colour claim needs a species whose prior matches. Art Nouveau is banned as a look.
   Per-path hero-mandate branches exist (`HANGING_FLOWERS_MANDATE`, `FLOWER_FRIENDS_MANDATE`) because the bot-wide "pack
   the frame" mandate spams composed paths. flower-friends / flower-humming-birds: the entry is the only flower source; the
-  pollinator or bird is named first. Halloween seasonal ×4.
+  pollinator or bird is named first. Seasonal: Fall ×1 (overgrown-pumpkin-blooms), Halloween ×4.
 - **BrickBot**: AFOL-convention LEGO MOC diorama PHOTOGRAPHY where everything in frame is brick; tilt-shift is its
   "everything is LEGO" signal (wide paths get deep focus). No look register. Pop-culture IP allowed; hard-SF photoreal
   registers (Mass Effect, Expanse, cyberpunk-space) banned; registers ~80% iconic LEGO heritage / 15% retro-fantasy / 5%
@@ -1001,8 +1007,8 @@ Live paths are `paths[]` in each `index.js`; don't trust a list here over the co
   generator `scripts/gen-seeds/chibibot/gen-cute-creatures-unified.js` bans humans). creature-* outing family off one
   archetype (amusement-park, beach-day, camping, snow-day, county-fair, birthday-party, autumn-day, lantern-festival,
   school). Templates carry one-line HARD RULES + STORY BEAT blocks. Gotchas: outings drop to one hero unless entries are
-  trio-forced; season drift unless the detail pool locks it; sky-village grounds ~2/6. Ban-exempt (gpt-2 + banana). Halloween
-  seasonal ×5, no `fall` key.
+  trio-forced; season drift unless the detail pool locks it; sky-village grounds ~2/6. Ban-exempt (gpt-2 + banana). Seasonal:
+  Fall ×2 (creature-autumn-day, chibi-pumpkin-patch), Halloween ×5.
 - **DinoBot**: photoreal prehistoric wildlife documentary. Standing cattle-lexicon purge (adult/juvenile/feeding,
   fern-plain/araucaria/cycad; never bull/calf/grazing/savanna/acacia/baobab); `SPECIES_ANCHOR` anchors obscure genera.
   `bannedPhrases` blocks human/hunter/explorer/tourist words: audit pools against it. The PALEO_LANDSCAPE template
@@ -1032,8 +1038,8 @@ Live paths are `paths[]` in each `index.js`; don't trust a list here over the co
   star-charting are pro-only (documented). mushroom-apothecary is the interior reference. fae-cottage built but
   deactivated.
 - **FarmBot**: cozy farm life; rebuilt 2026-09; animals get EQUAL spotlight with people. Function-form paths; look
-  register over `FARMBOT_COZY_NEUTRAL`; look entries carry no time-of-day/weather words. flux-2-flex only. Seasonal: fall ×4,
-  halloween ×5. Prompt length (2026-09-30): the medium was cut from 276 to 45 words and every brief now ends with
+  register over `FARMBOT_COZY_NEUTRAL`; look entries carry no time-of-day/weather words. flux-2-flex only. Seasonal: Fall ×6
+  (incl. autumn-village-market + harvest-festival, moved out of `paths[]` 2026-09-29), Halloween ×5. Prompt length (2026-09-30): the medium was cut from 276 to 45 words and every brief now ends with
   `FARMBOT_LENGTH_RULE` (120-160 words, style → subject → setting); emitted prompts fell from a median ~770 words to
   ~236. AlphaBot's FarmBot-destined candidates append the same rule. The costume parade rolls 1-3 costumed kids again
   (its 2-human cap was a workaround for the fixed truncation bug; removed 2026-09-30).
@@ -1075,7 +1081,7 @@ Live paths are `paths[]` in each `index.js`; don't trust a list here over the co
   distant. Chaos skipped on steampunk-labs, steampunk-spectacle, brass-glasshouse.
 - **TinyBot**: tiny whimsy SCENES (not macro zoom on one object), strict NO humans (cute critters only; cute-bug
   allow-list, spider words banned; `TINY_CREATURES` is shared by ~8 paths). snow-globe-world (moved from ToyBot) is the
-  CONCRETE-BUT-CROPPED reference. Halloween seasonal ×4.
+  CONCRETE-BUT-CROPPED reference. Seasonal: Fall ×1 (tiny-pumpkin-patch), Halloween ×4.
 - **ToyBot**: NOT a no-humans bot (peg-people, tin soldiers, dolls are on-brand). Shallow depth of field is on-register.
   Material-tradition paths name the tradition (Waldorf/Grimm's wood, Masudaya/Yonezawa litho tin). wooden-toy-land
   deactivated. ultra excluded from camera-height/condition paths. Halloween seasonal ×4.
@@ -1106,7 +1112,6 @@ Kevin's decisions and the work on these are tracked in `BOT_FOLLOWUPS_TRACKER.md
   fix on ONE path.
 - **Camera-framing sweep**: OceanBot's framing pools were purged of scene-dissolving entries; the same sweep on every other
   bot's `*_camera_framing` pools is unverified.
-- **Flagged Flux text is not logged** (`withNsfwRetry`), so a flag can only be diagnosed by replay + bisect.
 - **Fleet `vibeDirective.slice(0, 250)`**: only YumBot was cut to 150; not a fleet rule, noted in case length work resumes.
 - **Decided 2026-09-29, leave alone** (tracker D): the AUTHORITY wording in five bots' look blocks (0 refusal-style
   prompts in ~3,000 bot renders over 30 days), the fleet "no text, no watermarks" suffix (inconclusive A/B; revisit
