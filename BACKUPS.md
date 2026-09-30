@@ -48,7 +48,7 @@ restore rewinds the whole database and takes the app offline; no restore has eve
       overnight drop in a table's rows emails Kevin.
 - [ ] **D5.** The database copies can't be deleted for 30 days (bucket lock), and old copies clean themselves up
       (lifecycle rules).
-- [ ] **D6.** "How to restore" below covers every disaster step by step, including one full rehearsal of a
+- [x] **D6.** "How to restore" below covers every disaster step by step, including one full rehearsal of a
       single-table restore.
 
 ## Design
@@ -247,13 +247,14 @@ Each phase ends with its proof, and a commit + push (the workflows only run once
 
 ### Phase 6: Runbook and handover
 
-- [ ] Fill in "How to restore" below, with exact commands
-- [ ] The secrets inventory (below) filled in, with where each value lives
-- [ ] One CLAUDE.md index line pointing here; a memory note
+- [x] Fill in "How to restore" below, with exact commands
+- [x] The secrets inventory (below) filled in, with where each value lives
+- [x] One CLAUDE.md index line pointing here; a memory note
 - **Pass bar:**
-  - Kevin has read the runbook;
-  - a real single-table restore rehearsal has been done: yesterday's `bot_seeds` restored into a scratch schema,
-    compared, and the scratch schema dropped.
+  - [ ] Kevin has read the runbook;
+  - [x] a real single-table restore rehearsal has been done (2026-09-30, Kevin's go): the newest copy's
+        `bot_seeds` restored into `restore_scratch` in production, 861/861 rows identical column for column
+        (`except` both ways = 0), 10 s, scratch schema dropped (0 left).
 
 ## Decisions for Kevin
 
@@ -287,26 +288,138 @@ Each phase ends with its proof, and a commit + push (the workflows only run once
   originals would still be in Supabase. The database copies are locked.
 - **Public logs:** jobs print counts, sizes and durations only.
 
-## How to restore (filled in during Phase 6)
+## How to restore
 
-- **One table lost or damaged** (a bad delete or migration): restore that table from last night's copy into a
-  scratch schema in production, compare, copy the rows back, drop the scratch schema. The app stays up.
-- **Images deleted:** copy them back from `storage/current/` or `storage/trash/<date>/`.
-- **Whole database corrupted:** Supabase's own nightly restore (Dashboard → Database → Backups; it rewinds
-  everything and takes the app offline), or restore our copy into a new project.
-- **Supabase project or account lost:**
-  - create a new project and restore our copy (structure, then data);
-  - copy the images back;
-  - redeploy the edge functions from git;
-  - re-enter the secrets (inventory below) and repoint the app, website, Fly services and webhooks.
-- Supabase's "Restore to a new project" (Dashboard → Database → Backups) works today as a stopgap: it clones last
-  night's database into a separate project to pull tables from.
+All commands run from the repo root on Kevin's Mac (Postgres 17 client + rclone are installed; credentials come
+from `.env.local`). Nothing here runs by itself.
 
-## Secrets inventory (filled in during Phase 6; locations only, never values)
+### First: what do we have, and how fresh is it?
 
-Supabase edge function secrets; GitHub Actions secrets; Fly secrets (`face-swap-dual`, `image-ops`); RevenueCat
-webhook secret; Apple keys (`~/Vault`); OAuth providers in Supabase Auth (Google, Apple, Facebook); the Vault secret
-`dream_queue_worker_token`; `.env.local`.
+```bash
+node scripts/backup/restore-drill.js --check        # age of the newest database copy, image mirror and drill
+node -e "require('./scripts/backup/lib').rclone(['lsf','r2:dreambot-backups/db/daily/']).then(r=>console.log(r.stdout))"
+node -e "require('./scripts/backup/lib').rclone(['lsf','r2:dreambot-backups/db/monthly/']).then(r=>console.log(r.stdout))"
+```
+
+Each copy is `db/daily/<stamp>/` (stamp = UTC snapshot time, e.g. `2026-09-30T0937Z`). Pick the newest copy taken
+BEFORE the damage happened.
+
+### A. One table lost or damaged (a bad delete, a bad migration, a bad script). The app stays up.
+
+1. Stop whatever did the damage (pause the bot or cron, fix the script) so it doesn't happen again mid-restore.
+2. Load the backup's rows next to the live table (live table untouched):
+   ```bash
+   node scripts/backup/restore-table.js public.<table> --db prod                          # newest copy
+   node scripts/backup/restore-table.js public.<table> --db prod --from 2026-09-30T0937Z  # a specific copy
+   ```
+   It prints the rows in the backup, the rows live now, and by primary key how many exist only in the backup (lost
+   since) and only live (added since), plus the SQL to put missing rows back.
+3. Look before copying back. The printed `insert ... where (id) not in (...)` restores DELETED rows. Rows that were
+   CHANGED need an `update ... from restore_scratch.<table>` written for the case. Triggers on the live table fire on
+   the insert (for `uploads`/`notifications` that means counters, realtime and pushes).
+4. Run the copy-back and the cleanup through the Management API (the Supabase MCP tool is read-only):
+   ```bash
+   # write the SQL into a file named NNN_something.sql outside the repo, then:
+   node scripts/apply-migration.mjs /path/000_restore_bot_seeds.sql --no-record
+   # last statement of the file: drop schema restore_scratch cascade;
+   ```
+
+- If a migration DROPPED the table: re-run the migration that creates it (it's in `supabase/migrations/`), then
+  step 2.
+- Rehearsed for real 2026-09-30: `public.bot_seeds` from the newest copy, 861/861 rows, identical column for column,
+  10 s; scratch schema dropped. The weekly drill repeats it against a throwaway database.
+
+### B. Images deleted or overwritten
+
+The mirror keeps everything that was in Supabase at its last run in `storage/current/<bucket>/...`, and every file
+deleted or replaced since in `storage/trash/<run stamp>/<bucket>/...` for 30 days. Copying a file back through the
+S3 endpoint also recreates its `storage.objects` row. (If the matching `uploads` rows were deleted too, restore them
+with A.)
+
+```bash
+# everything one mirror run moved to the trash (e.g. after a mass delete):
+node -e "require('./scripts/backup/lib').rclone(['copy','r2:dreambot-backups/storage/trash/<stamp>','sb:','--size-only','--transfers','8'],{quiet:false}).then(r=>console.log('exit',r.code))"
+# one bucket from the mirror:
+node -e "require('./scripts/backup/lib').rclone(['copy','r2:dreambot-backups/storage/current/uploads','sb:uploads','--size-only','--transfers','8'],{quiet:false}).then(r=>console.log('exit',r.code))"
+```
+
+If the mirror ever stops with **SAFETY BRAKE** (more than 1,000 files vanished since its last run), don't re-run it
+until you know why: the files are still in `storage/current/`.
+
+### C. The whole database is badly damaged, but the project still exists
+
+- **Fastest, loses everything since ~04:00 UTC:** Supabase Dashboard → Database → Backups → restore last night's
+  backup. It rewinds EVERY table and the app is offline while it runs.
+- **Surgical:** restore the damaged tables one by one with A. Or Dashboard → Database → Backups → "Restore to a new
+  project" clones a Supabase nightly backup into a separate project to pull tables from (costs a second project
+  while it exists).
+
+### D. The Supabase project or account is gone: rebuild from R2
+
+Expect hours, not minutes, and a new App Store build: the app has the Supabase URL and anon key built in. The drill
+proves the copy holds every row and every structure object, but it does NOT rehearse this exact sequence onto a real
+new Supabase project. Follow it carefully and check each step.
+
+1. Create a new Supabase project (Pro, Small compute, us-east-2). Note its ref and database connection string.
+2. BEFORE restoring:
+   - Database → Webhooks → enable (creates `supabase_functions`; the push trigger needs it);
+   - enable the extensions listed in the copy's `manifest.json` → `extensions` (pg_cron, pg_net, pg_trgm, pgcrypto,
+     uuid-ossp, pg_stat_statements).
+3. Download the copy:
+   `node -e "require('./scripts/backup/lib').rclone(['copy','r2:dreambot-backups/db/daily/<stamp>','./restore']).then(r=>console.log('exit',r.code))"`
+4. Split it into structure and data (Supabase's documented restore shape; `auth` and `storage` tables already exist
+   in a new project, so they get data only):
+   ```bash
+   B=/opt/homebrew/opt/postgresql@17/bin
+   $B/pg_restore --schema-only --schema=public --schema=supabase_migrations -f restore/schema.sql restore/dreambot.dump
+   $B/pg_restore --data-only --schema=public --schema=supabase_migrations --schema=auth --schema=storage \
+     -f restore/data.sql restore/dreambot.dump
+   ```
+5. In `restore/schema.sql`, replace the OLD project URL (`jimftynwrinwenonjrlj.supabase.co`) with the new one. It
+   appears in the `send-push-on-notification` trigger and in any function that calls an edge function.
+6. Load it (the `SET` stops triggers firing during the data load):
+   ```bash
+   $B/psql "$NEW_DB_URL" -v ON_ERROR_STOP=1 -f restore/schema.sql
+   $B/psql "$NEW_DB_URL" -v ON_ERROR_STOP=1 -c 'SET session_replication_role = replica' -f restore/data.sql
+   ```
+   A newer Auth or Storage version may have added columns (they take their defaults) or dropped some (that COPY
+   fails; edit it by hand).
+7. After loading:
+   - re-add each table in `manifest.json` → `realtimeTables` to the `supabase_realtime` publication;
+   - recreate the pg_cron jobs from `cron-jobs.json`, with the new project URL;
+   - recreate the Vault secret `dream_queue_worker_token`.
+8. Images: in the new project, create the buckets (`uploads`, `avatars` and `location-thumbnails` public;
+   `cast-photos` private), make an S3 key, then copy `storage/current/<bucket>` into each (same command as B, pointed
+   at the new project's S3 endpoint).
+9. Edge functions: `supabase link --project-ref <new>`, then deploy all 16 with `--no-verify-jwt` (list in
+   CLAUDE.md), and set every secret in the inventory below.
+10. Auth:
+    - set up Google, Apple and Facebook sign-in, redirect URLs and SMTP;
+    - the signing keys differ, so every user has to sign in again.
+11. Repoint everything else at the new project:
+    - the app (`EXPO_PUBLIC_SUPABASE_URL` + anon key → new build);
+    - the website on Vercel;
+    - the Fly services' `SUPABASE_URL` + service role key;
+    - the RevenueCat webhook URL;
+    - GitHub Actions secrets.
+12. Check: row counts per table against `manifest.json`, as the drill does.
+
+## Secrets inventory (locations and names only, never values)
+
+| Where                               | What                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `.env.local` on Kevin's Mac         | Most of the values below. **Keep a copy in the password manager (K6).**                                                                                                                                                                                                                                                                                                                                                                                                  |
+| Supabase → Edge Functions → Secrets | ANTHROPIC*API_KEY, DEVICECHECK_KEY_ID, DEVICECHECK_KEY_P8, DEVICECHECK_TEAM_ID, DREAM_QUEUE_WORKER_TOKEN, DUAL_SWAP_FLY_TOKEN, DUAL_SWAP_FLY_URL, FAL_API_KEY, GEMINI_API_KEY, IDENTITY_MIN_SIM, IMAGE_OPS_FLY_TOKEN, IMAGE_OPS_FLY_URL, OPENAI_API_KEY, POSTHOG_PROJECT_KEY, REPLICATE_API_TOKEN, REVENUECAT_WEBHOOK_SECRET, SENTRY_EDGE_DSN, SIGHTENGINE_API_SECRET, SIGHTENGINE_API_USER, SOLO_PROBE_ENGINE, XAI_API_KEY (the `SUPABASE*\*` ones are set by Supabase) |
+| Supabase Vault                      | `dream_queue_worker_token` (same value as DREAM_QUEUE_WORKER_TOKEN)                                                                                                                                                                                                                                                                                                                                                                                                      |
+| Supabase → Auth                     | Google / Apple / Facebook client IDs + secrets, redirect URLs, SMTP settings                                                                                                                                                                                                                                                                                                                                                                                             |
+| GitHub → Actions secrets            | ANTHROPIC_API_KEY, BOT_PASSWORD_PREFIX, DREAM_QUEUE_WORKER_TOKEN, GEMINI_API_KEY, OPENAI_API_KEY, REPLICATE_API_TOKEN, SUPABASE_ACCESS_TOKEN, SUPABASE_SERVICE_ROLE_KEY, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_ENDPOINT, SUPABASE_S3_ACCESS_KEY_ID, SUPABASE_S3_SECRET_ACCESS_KEY                                                                                                                                                                                   |
+| Fly `dreambot-face-swap-dual`       | REPLICATE_API_TOKEN, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_URL, FLY_AUTH_TOKEN (+ settings DUAL_SWAP_DYNAMIC_SPLIT, IDENTITY_VERIFY)                                                                                                                                                                                                                                                                                                                                       |
+| Fly `dreambot-image-ops`            | SUPABASE_SERVICE_ROLE_KEY, SUPABASE_URL, FLY_AUTH_TOKEN                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| Vercel `dreambot-web`               | Supabase URL + anon key (reads the public feed)                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| RevenueCat                          | Webhook URL (points at the `revenuecat-webhook` edge function) + REVENUECAT_WEBHOOK_SECRET                                                                                                                                                                                                                                                                                                                                                                               |
+| App build (`eas.json` / env)        | EXPO_PUBLIC_SUPABASE_URL + anon key, baked into every build                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `~/Vault` + App Store Connect       | Apple .p8 keys (memory: reference_apple_keys_vault)                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| Cloudflare R2                       | Bucket `dreambot-backups`; the backup token (R2\_\* above)                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 ## How to resume
 
@@ -332,3 +445,6 @@ last. Nothing in this plan changes app behaviour; everything runs outside the ap
     start the mirror until a first copy has been started by hand (`is-due.js`: storage with no status is never
     due unless forced, and doesn't alarm). To start it: Actions → Backup → Run workflow → only `storage`, force on,
     transfers `8`.
+  - Phase 6: runbook + secrets inventory written; production single-table rehearsal passed (see Phase 6).
+    Remaining: the first image copy (Kevin picks the time), the bucket lock + lifecycle rules (Kevin, Cloudflare),
+    Kevin reading the runbook.
