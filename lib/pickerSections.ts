@@ -145,9 +145,9 @@ export const FALLBACK_SECTIONS: readonly FallbackSection[] = [
   },
   {
     id: 'heroes',
-    title: 'Heroes',
+    title: 'Action & Adventure',
     icon: 'flash-outline',
-    description: 'Rooftops, spy lairs, and daring feats',
+    description: 'Superheroes, spies, summits, and stadium glory',
     tier: 'imagined',
     categories: ['heroes_adventure'],
   },
