@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import { useState, useEffect, useMemo, useRef, forwardRef, useImperativeHandle } from 'react';
 import { View, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,7 +12,6 @@ import { verticalScale, horizontalScale, fontScale } from '@/lib/responsive';
 import { onboardingStyles as shared } from './sharedStyles';
 import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { displayFontFamily } from '@/constants/fonts';
-import { TitleText } from '@/components/TitleText';
 import { OnboardingFooter } from './OnboardingFooter';
 import { showAlert } from '@/components/CustomAlert';
 import { supabase } from '@/lib/supabase';
@@ -39,6 +38,8 @@ const PLACEHOLDER_GRADIENT: [string, string] = [colors.surface, colors.backgroun
 interface Props {
   onNext: () => void;
   onBack: () => void;
+  /** Settings puts Select all in its nav bar: the picker reports whether it applies and which way it points. */
+  onSelectAllChange?: (state: { available: boolean; allSelected: boolean }) => void;
 }
 
 /** Imperative handle so a host header's back chevron routes through the picker. */
@@ -46,10 +47,12 @@ export interface LocationPickerHandle {
   /** Handle a host back-press. With ZERO places selected it stays put and asks for one
    *  (every dream is set in a place the user chose); otherwise runs onLeave immediately. */
   handleBack: (onLeave: () => void) => void;
+  /** Select every place, or none when all are already selected (the host's Select all button). */
+  toggleAll: () => void;
 }
 
 export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
-  function LocationPickerStep({ onNext, onBack }: Props, ref) {
+  function LocationPickerStep({ onNext, onBack, onSelectAllChange }: Props, ref) {
     const places = useOnboardingStore((st) => st.profile.dream_seeds.places);
     const toggleAllLocations = useOnboardingStore((st) => st.toggleAllLocations);
     const isEditing = useOnboardingStore((st) => st.isEditing);
@@ -57,6 +60,12 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
     const isAdmin = useAuthStore((st) => st.isAdmin);
     const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
     const [sections, setSections] = useState<PickerSection[]>([]);
+    // Every place on the page, and whether all of them are picked (the Select all / none toggle).
+    const allKeys = useMemo(
+      () => sections.flatMap((sec) => sec.items.map((i) => i.key)),
+      [sections]
+    );
+    const allSelected = allKeys.length > 0 && allKeys.every((k) => places.includes(k));
 
     // A host header's back chevron routes through here. At least one place is REQUIRED (Kevin
     // 2026-09-30: every nightly is set in a place the user chose, so zero means no dreams to set):
@@ -75,9 +84,17 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
           }
           onLeave();
         },
+        toggleAll: () => {
+          if (!allKeys.length) return;
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          toggleAllLocations(allKeys);
+        },
       }),
-      [places]
+      [places, allKeys, toggleAllLocations]
     );
+    useEffect(() => {
+      onSelectAllChange?.({ available: allKeys.length > 0, allSelected });
+    }, [onSelectAllChange, allKeys.length, allSelected]);
 
     const canProceed = hasRequiredPlaces(places);
     // Count SELECTED CATEGORIES, not individual places (2026-08-29 Kevin): a tap
@@ -178,31 +195,31 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
     // binary). A group with an odd count gives its last tile the full width instead of a hole.
     const renderBrowse = () => {
       const groups = groupPickerSections(sections);
-      // One toggle covers both bulk cases (Kevin 2026-08-29): when everything is
-      // picked it says "Select none" and clears; otherwise "Select all" and fills.
-      // toggleAllLocations(allKeys) already does both directions in one call.
-      const allKeys = sections.flatMap((sec) => sec.items.map((i) => i.key));
-      const allSelected = allKeys.length > 0 && allKeys.every((k) => places.includes(k));
       return (
         <View style={s.browse}>
-          {/* Select all/none toggle, right-aligned. No running count (Kevin 2026-09-30: "7 categories
-              selected" was redundant with the checked tiles); onboarding's footer keeps its own count. */}
-          <View style={s.summaryBar}>
-            <View />
-            {allKeys.length > 0 && (
-              <TouchableOpacity
-                style={s.resetBtn}
-                onPress={() => {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  toggleAllLocations(allKeys);
-                }}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                activeOpacity={0.8}
-              >
-                <Text style={s.resetBtnText}>{allSelected ? 'Select none' : 'Select all'}</Text>
-              </TouchableOpacity>
-            )}
-          </View>
+          {/* Onboarding: the hint and Select all share one row (Kevin 2026-09-30: a first-time user can't tell a tile
+              picks every place inside it). Settings shows neither: its nav bar carries Select all (onSelectAllChange +
+              toggleAll), so the tiles start right under the header. */}
+          {!isEditing && (
+            <View style={s.summaryBar}>
+              <Text style={s.hint} numberOfLines={2}>
+                Tap a tile to add every place in it
+              </Text>
+              {allKeys.length > 0 && (
+                <TouchableOpacity
+                  style={s.resetBtn}
+                  onPress={() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    toggleAllLocations(allKeys);
+                  }}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  activeOpacity={0.8}
+                >
+                  <Text style={s.resetBtnText}>{allSelected ? 'Select none' : 'Select all'}</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
 
           <ScrollView
             contentContainerStyle={[
@@ -251,7 +268,7 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
               source={{ uri: repThumb }}
               // Selected tiles read brighter, unselected recede — the CONTRAST (not a
               // loud border) draws the eye, so a screen full of picks stays calm.
-              style={[StyleSheet.absoluteFillObject, { opacity: selected ? 0.92 : 0.5 }]}
+              style={[StyleSheet.absoluteFillObject, { opacity: selected ? 0.92 : 0.72 }]}
               contentFit="cover"
               transition={200}
             />
@@ -285,39 +302,23 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
 
     return (
       <View style={shared.root}>
-        {/* Sticky header — sits outside the ScrollView so the grid scrolls under it. */}
-        <View style={s.stickyHeader}>
-          {/* In Settings the gradient wordmark is the nav-bar title, so demote this to
-            plain text; onboarding keeps the gradient hero. */}
-          {isEditing ? (
-            <TitleText
-              size={18}
-              color={colors.bodyOnDark}
-              numberOfLines={2}
-              align="center"
-              style={{
-                marginBottom: verticalScale(6),
-                maxWidth: SCREEN_WIDTH - TILE_PADDING * 2,
-              }}
-            >
-              Where do you want to dream?
-            </TitleText>
-          ) : (
+        {/* Sticky header (onboarding only) — sits outside the ScrollView so the grid scrolls under it. Left-aligned to
+            the grid's edge (Kevin 2026-09-30). Settings has its own "Locations" nav title, so it shows none. */}
+        {!isEditing && (
+          <View style={s.stickyHeader}>
             <GradientTitle
               size={TITLE_SIZE.page}
               numberOfLines={2}
-              align="center"
+              align="left"
               maxWidth={SCREEN_WIDTH - TILE_PADDING * 2}
               style={{ marginBottom: verticalScale(6) }}
             >
               Where do you want to dream?
             </GradientTitle>
-          )}
-          {/* Onboarding-only gentle intro under the title (Kevin 2026-08-29). */}
-          {!isEditing && (
+            {/* Gentle intro under the title (Kevin 2026-08-29). */}
             <Text style={s.headerSubtitle}>Pick the places you’d love your dreams to take you</Text>
-          )}
-        </View>
+          </View>
+        )}
 
         {renderBrowse()}
 
@@ -354,8 +355,15 @@ const s = StyleSheet.create({
     fontSize: fontScale(14),
     lineHeight: fontScale(20),
     color: colors.subtleOnDark,
-    textAlign: 'center',
+    textAlign: 'left',
     marginTop: verticalScale(2),
+  },
+  hint: {
+    flex: 1,
+    marginRight: horizontalScale(12),
+    fontSize: fontScale(13),
+    lineHeight: fontScale(18),
+    color: colors.textSecondary,
   },
 
   browse: { flex: 1 },
