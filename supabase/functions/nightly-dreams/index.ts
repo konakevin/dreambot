@@ -607,6 +607,8 @@ Deno.serve(async (req) => {
   // computed ABOVE the chaos pre-roll (2026-09-04) so the day-of HERO can force a
   // cast render; the scenario roll + Path 2 read it later.
   let activeHolidays: ActiveHoliday[] = [];
+  // Why the season list is what it is (logged as holiday_active:…); see the resolve block.
+  let holidayResolveNote = '';
   // Day-of HERO (HOLIDAY_DREAMS_PLAN.md §13, mig 457): the holiday peaking TODAY (or
   // force_day_of), its authored recipes, the user's local year (hero seed), and whether
   // this render became a hero (reaches the response + the postcard step).
@@ -863,6 +865,7 @@ Deno.serve(async (req) => {
         }
       } else {
         const holCfg = await fetchEngineConfig(supabase);
+        if (!holCfg.holidaysEnabled) holidayResolveNote = 'disabled';
         if (holCfg.holidaysEnabled) {
           const { data: tzRow } = await supabase
             .from('users')
@@ -880,15 +883,31 @@ Deno.serve(async (req) => {
           if (catRows && catRows.length) {
             const catalog = catRows.map((r) => mapHolidayCatalogRow(r as Record<string, unknown>));
             const optouts = new Set(holidayOptouts);
-            activeHolidays = resolveActiveHolidays(localDate, catalog).filter(
-              (h) => !optouts.has(h.key)
-            );
+            const inSeason = resolveActiveHolidays(localDate, catalog);
+            activeHolidays = inSeason.filter((h) => !optouts.has(h.key));
+            const optedOut = inSeason.filter((h) => optouts.has(h.key)).map((h) => h.key);
+            holidayResolveNote =
+              `date=${localDate.year}-${localDate.month}-${localDate.day}` +
+              (optedOut.length ? `:optout=${optedOut.join('+')}` : '');
+          } else {
+            holidayResolveNote = 'no_catalog';
           }
         }
       }
-    } catch (_holErr) {
+    } catch (holErr) {
       activeHolidays = []; // fail to a normal nightly, never a broken render (N2)
+      // …but never silently: a thrown resolve used to look exactly like "no holiday".
+      holidayResolveNote = `error:${String((holErr as Error)?.message ?? holErr).slice(0, 80)}`;
     }
+    // Observability (2026-09-29, Fall rolling well under its configured %): which seasons this
+    // render saw and at what level, plus why none if none.
+    fallbackReasons.push(
+      `holiday_active:${
+        activeHolidays.length
+          ? activeHolidays.map((h) => `${h.key}=${h.holidayPct}`).join(',')
+          : 'none'
+      }${holidayResolveNote ? `:${holidayResolveNote}` : ''}`
+    );
     // DAY-OF (HOLIDAY_DAY_OF_PLAN.md §3.3): the holiday whose peak is the date this render is FOR and
     // whose catalog row has day_of_enabled. Never via force_holiday_scene (it fakes daysUntilPeak=0 too).
     // On the day every eligible nightly draws 100% from the holiday's reserved <key>_day_of pool
@@ -2260,6 +2279,12 @@ Deno.serve(async (req) => {
         const stackCap = (await fetchEngineConfig(supabase)).holidayStackCapPct;
         const pct =
           dayOfSel && dayOfSel.rows.length > 0 ? 100 : combineHolidayPct(usable, stackCap);
+        const holSceneRoll = Math.random() * 100;
+        fallbackReasons.push(
+          `holiday_roll:scene:pct=${pct}:roll=${holSceneRoll.toFixed(0)}:pools=${
+            holScenePools.map((x) => `${x.h.key}:${x.rows.length}`).join('+') || 'none'
+          }`
+        );
         if (dayOfSel && dayOfSel.rows.length > 0) {
           holidayScene = pickHoliday(dayOfSel.rows);
           holidayCategory = dayOfKey as string;
@@ -2267,7 +2292,7 @@ Deno.serve(async (req) => {
           fallbackReasons.push(
             `holiday_day_of:${dayOfKey}:${dayOfSel.source}:${holidayScene.subTheme ?? 'unsorted'}`
           );
-        } else if (usable.length > 0 && Math.random() * 100 < pct) {
+        } else if (usable.length > 0 && holSceneRoll < pct) {
           const chosen = pickWeightedHoliday(usable, Math.random());
           holidayScene = pickHoliday(holScenePools.find((x) => x.h.key === chosen.key)!.rows);
           holidayCategory = chosen.key;
@@ -2460,6 +2485,11 @@ Deno.serve(async (req) => {
           { activeEnabled: pools.active.length >= 10, holidayPct }
         );
         const roll = force_plain_location ? 2 : Math.random(); // 2 > every cut → location
+        fallbackReasons.push(
+          `holiday_roll:couple:pct=${holidayPct}:cut=${holidayCut.toFixed(2)}:roll=${roll.toFixed(2)}:pools=${
+            holDualPools.map((x) => `${x.h.key}:${x.rows.length}`).join('+') || 'none'
+          }`
+        );
         // Shuffle-bag (mig 349): filter each pool to this user's UNSEEN
         // entries before picking; record what was served. Fail-open.
         if (
@@ -2543,6 +2573,11 @@ Deno.serve(async (req) => {
           }
         );
         const roll = force_plain_location ? 2 : Math.random(); // 2 > every cut → location
+        fallbackReasons.push(
+          `holiday_roll:solo:pct=${holidayPct}:cut=${holidayCut.toFixed(2)}:roll=${roll.toFixed(2)}:pools=${
+            holSinglePools.map((x) => `${x.h.key}:${x.rows.length}`).join('+') || 'none'
+          }`
+        );
         const pickSolo = async (pool: 'goofy' | 'elegant' | 'active') => {
           const candidates = await filterUnseen(
             supabase,

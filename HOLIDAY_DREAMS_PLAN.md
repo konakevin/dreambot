@@ -889,3 +889,26 @@ the register-driven beats now carry the theme those seeds lacked yesterday. Stil
 gothic_greenhouse, gothic_glam_editorial, ghost_hotel_1920s (elegant; the hotel reads noir-glam, not Halloween),
 afterlife_waiting_room, striped_suit_haunting (goofy; the miniature-town couple has no Halloween in it).
 Taxonomy: 13 pools / 49 subs; gothic_manor 6 subs, halloween_town_square 2.
+
+## 2026-09-29 — Fall roll audit + FOLLOW-UP: Fall paths for more bots
+
+**What was found (Kevin: "only FarmBot has fall pools for bots?").** The Sept 7 "go ham" Fall build (13 pools /
+58 subs above) is for NIGHTLY dreams and is live (922 cast rows, 1,817 scene rows). For BOT posts, Halloween
+seasonal paths were built for 7 bots (2026-09-07) but Fall seasonal paths only for FarmBot (2026-09-09). Other
+bots' autumn content sat outside the Fall season: ChibiBot `creature-autumn-day`, FarmBot `autumn-village-market` /
+`harvest-festival` (year-round normal paths) and ChibiBot / TinyBot pumpkin patch + BloomBot pumpkin blooms
+(Halloween only). (FaeBot `autumn-seed-gathering` was among the 18 paths cut 2026-09-23.)
+
+**Nightly engine, done 2026-09-29:** a failed holiday-pool read was cached as EMPTY per isolate (silently switching
+the holiday roll off for later renders); fixed, and every nightly now logs `holiday_active:` +
+`holiday_roll:<path>:pct=…:roll=…:pools=…` in `ai_generation_log`.
+
+**Bots + Dream Art, approved 2026-09-29, tracked in `BOT_FOLLOWUPS_TRACKER.md`:** B7 re-tags those existing paths
+into each bot's `seasonalPaths.fall` (pumpkin paths keep Halloween too) and raises `engine_config.bots_seasonal_pct`
+30 → 50; B9 adds the holiday roll to Dream Art ("embodied") nightlies, which never roll one today.
+
+**FOLLOW-UP (deferred by Kevin 2026-09-29, tracker B8): real Fall seasonal paths for more bots.** Candidates with a natural Fall register:
+PixelBot, MangaBot, ToyBot, TinyBot, BloomBot, ChibiBot, EarthBot (foliage/seasonal-shift), DinoBot, FaeBot.
+Process per CLAUDE.md + BOT_SCENE_QUALITY_PLAYBOOK.md: read the playbook in full, build on AlphaBot, seed 25 →
+QA matrix → shadow → Kevin sign-off → scale, then add to `seasonalPaths.fall` (never to `paths`). Fall window
+runs to Thanksgiving (Nov 26), so paths must land by mid-October to matter this season.

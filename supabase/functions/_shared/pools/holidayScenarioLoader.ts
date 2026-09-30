@@ -66,6 +66,18 @@ async function fetchAll(
   return { rows, error: null };
 }
 
+/** A failed read must never be cached: an empty pool cached for the life of the isolate made every
+ *  later nightly in that isolate skip the holiday roll silently (2026-09-29: Fall rolled ~20% live
+ *  against a configured 50%, while fresh-isolate dry runs rolled ~50%). Cache only a successful,
+ *  non-empty load; log a failed one. */
+function logLoadFailure(table: string, key: string, err: unknown): void {
+  const msg =
+    err && typeof err === 'object' && 'message' in err
+      ? String((err as { message: unknown }).message)
+      : String(err);
+  console.error(`[holidayScenarioLoader] ${table} "${key}" load failed (not cached): ${msg}`);
+}
+
 /** Cast dual holiday rows for the active holiday `category`. `subTheme` (QA only)
  *  restricts to one archetype. Empty = caller falls through. */
 export async function loadHolidayDual(
@@ -88,6 +100,8 @@ async function loadHolidayDualRaw(
   const cached = dualCache.get(cacheKey);
   if (cached) return cached;
   let rows: Record<string, unknown>[] = [];
+  let loaded = false;
+  let lastErr: unknown = null;
   for (const select of [
     'scene,attire,pose_pool,medium_key,medium_ban,sub_theme',
     'scene,attire,pose_pool,medium_key,medium_ban',
@@ -101,9 +115,12 @@ async function loadHolidayDualRaw(
     });
     if (!res.error) {
       rows = res.rows;
+      loaded = true;
       break;
     }
+    lastErr = res.error;
   }
+  if (!loaded) logLoadFailure('dual_scenarios', cacheKey, lastErr);
   const out: HolidayDualScenario[] = rows.map((r) => ({
     scene: r.scene as string,
     attire: r.attire as string,
@@ -112,7 +129,7 @@ async function loadHolidayDualRaw(
     mediumBan: (r.medium_ban as string | null | undefined) ?? null,
     subTheme: (r.sub_theme as string | null | undefined) ?? null,
   }));
-  dualCache.set(cacheKey, out);
+  if (loaded && out.length > 0) dualCache.set(cacheKey, out);
   return out;
 }
 
@@ -142,6 +159,8 @@ async function loadHolidaySingleRaw(
   const cached = singleCache.get(cacheKey);
   if (cached) return cached;
   let rows: Record<string, unknown>[] = [];
+  let loaded = false;
+  let lastErr: unknown = null;
   for (const select of [
     'scene,attire,gender,pose_pool,medium_key,medium_ban,sub_theme',
     'scene,attire,gender,pose_pool,medium_key,medium_ban',
@@ -155,9 +174,12 @@ async function loadHolidaySingleRaw(
     });
     if (!res.error) {
       rows = res.rows;
+      loaded = true;
       break;
     }
+    lastErr = res.error;
   }
+  if (!loaded) logLoadFailure('single_scenarios', cacheKey, lastErr);
   const pools: HolidaySinglePools = { any: [], male: [], female: [] };
   for (const r of rows) {
     const gender = (r.gender as 'any' | 'male' | 'female' | null) ?? 'any';
@@ -172,7 +194,7 @@ async function loadHolidaySingleRaw(
     };
     (pools[gender] ?? pools.any).push(row);
   }
-  singleCache.set(cacheKey, pools);
+  if (loaded && rows.length > 0) singleCache.set(cacheKey, pools);
   return pools;
 }
 
@@ -206,6 +228,8 @@ async function loadHolidaySceneRaw(
   const cached = sceneCache.get(cacheKey);
   if (cached) return cached;
   let rows: Record<string, unknown>[] = [];
+  let loaded = false;
+  let lastErr: unknown = null;
   for (const select of [
     'scene,tone,medium_key,medium_ban,sub_theme',
     'scene,tone,medium_key,medium_ban',
@@ -218,9 +242,12 @@ async function loadHolidaySceneRaw(
     });
     if (!res.error) {
       rows = res.rows;
+      loaded = true;
       break;
     }
+    lastErr = res.error;
   }
+  if (!loaded) logLoadFailure('holiday_scenes', cacheKey, lastErr);
   const out: HolidayScene[] = rows.map((r) => ({
     scene: r.scene as string,
     subTheme: (r.sub_theme as string | null | undefined) ?? null,
@@ -228,7 +255,7 @@ async function loadHolidaySceneRaw(
     mediumKey: (r.medium_key as string | null | undefined) ?? null,
     mediumBan: (r.medium_ban as string | null | undefined) ?? null,
   }));
-  sceneCache.set(cacheKey, out);
+  if (loaded && out.length > 0) sceneCache.set(cacheKey, out);
   return out;
 }
 

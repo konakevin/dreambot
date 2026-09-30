@@ -21,7 +21,7 @@ Status key: ☐ todo · ◐ in progress · ☑ done · ⏸ deferred · ✋ decid
 
 | # | Item | Status | Test / evidence | Commit |
 |---|---|---|---|---|
-| A1 | **Ship the FarmBot prompt trim.** Medium 276 → 45 words; every brief ends with `FARMBOT_LENGTH_RULE` (120-160 words, style → subject → setting); AlphaBot's FarmBot-destined candidates append the same rule. | ☑ | 24 shadow posts on FarmBot 2026-09-30 ~02:45-02:54 UTC: 8 baseline (median ~770 words), 8 first try (characters drew older; fixed), 8 final (~236 words, cute characters back). All 43 FarmBot briefs dry-built with the new ending. | (next) |
+| A1 | **Ship the FarmBot prompt trim.** Medium 276 → 45 words; every brief ends with `FARMBOT_LENGTH_RULE` (120-160 words, style → subject → setting); AlphaBot's FarmBot-destined candidates append the same rule. | ☑ | 24 shadow posts on FarmBot 2026-09-30 ~02:45-02:54 UTC: 8 baseline (median ~770 words), 8 first try (characters drew older; fixed), 8 final (~236 words, cute characters back). All 43 FarmBot briefs dry-built with the new ending. | e5eae801 (pushed) |
 | A2 | **FarmBot window camera shots 11 → 3** of 98 camera entries (they render as literal window frames now that prompts are short). | ☐ | | |
 | A3 | **HTML matrix posts hidden (shadow).** `qa-bot-model-matrix.js` adds `--shadow`; old June/July public matrix posts stay as they are. Update CLAUDE.md, the playbook §2.7 and the matrix memory. | ☐ | | |
 | A4 | **Keep `BOT_SCENE_QUALITY_PLAYBOOK_ARCHIVE.md`** (old 6,007-line playbook, verbatim, byte-checked). | ☑ | Body md5 = the pre-rewrite file's (0d9d7788…). | 3cd8ecff |
@@ -31,7 +31,7 @@ Status key: ☐ todo · ◐ in progress · ☑ done · ⏸ deferred · ✋ decid
 
 | # | Item | Status | Test / evidence | Commit |
 |---|---|---|---|---|
-| B6 | **Nightly Fall fix: commit + confirm.** Loader no longer caches an empty pool after a failed read; `holiday_active` / `holiday_roll` reasons logged. Deployed 2026-09-29, uncommitted. Then check the next 08:00 UTC nightly: Fall should land ≈50% of rolled face-swap/scene nightlies. | ☐ | 57 dry runs 2026-09-29: 49% Fall, no losses after the roll. `__tests__/lib/holidayLoaderNoEmptyCache.test.ts`. | |
+| B6 | **Nightly Fall fix: commit + confirm.** Loader no longer caches an empty pool after a failed read; `holiday_active` / `holiday_roll` reasons logged. Deployed 2026-09-29, uncommitted. Then check the next 08:00 UTC nightly: Fall should land ≈50% of rolled face-swap/scene nightlies. | ◐ committed; confirm after the 2026-09-30 08:00 UTC nightly | 57 dry runs 2026-09-29: 49% Fall, no losses after the roll. `__tests__/lib/holidayLoaderNoEmptyCache.test.ts` + holiday season/parity tests (23 pass). | (next) |
 | B7 | **Fall for the bots.** Add existing autumn/pumpkin paths to `seasonalPaths.fall`: ChibiBot creature-autumn-day (move out of `paths[]`) + chibi-pumpkin-patch (also Halloween); TinyBot tiny-pumpkin-patch (also Halloween); BloomBot overgrown-pumpkin-blooms (also Halloween); FarmBot autumn-village-market + harvest-festival (move out of `paths[]`). FaeBot autumn-seed-gathering is gone (deleted 2026-09-23). Raise `engine_config.bots_seasonal_pct` 30 → 50 (next free migration). | ☐ | | |
 | B8 | **New Fall paths for more bots.** | ⏸ | Deferred by Kevin 2026-09-29 until the rest is done. | |
 | B9 | **Holiday roll for Dream Art (embodied) nightlies.** They never roll Fall/Halloween today. Production nightly engine change, approved by Kevin 2026-09-29. | ☐ | | |

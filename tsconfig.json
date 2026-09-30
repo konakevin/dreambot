@@ -64,6 +64,7 @@
     "__tests__/lib/minimalEngineWiring.test.ts",
     "__tests__/lib/legacyMediumBans.test.ts",
     "__tests__/lib/holidaySeason2026.test.ts",
+    "__tests__/lib/holidayLoaderNoEmptyCache.test.ts",
     "__tests__/lib/eyeColour.test.ts",
     "__tests__/lib/relationshipGate.test.ts",
     "__tests__/lib/partnerRoll.test.ts",
