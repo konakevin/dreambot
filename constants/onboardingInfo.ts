@@ -38,7 +38,7 @@ export const CAST_INFO: InfoStepConfig = {
   // Says WHY the selfie is needed rather than how nice the result will be (Kevin, 2026-09-20: the old line
   // "Just a selfie and you're in! … a quiet little surprise waiting when you wake" was "too fluffy").
   body: 'We need a selfie of you and your +1, so DreamBot knows what you look like when it places you in your dreams.',
-  footnote: 'Up next: upload a selfie of you and a dream partner',
+  footnote: 'Up next: upload a selfie of you and a +1',
 };
 
 export const MOOD_INFO: InfoStepConfig = {
