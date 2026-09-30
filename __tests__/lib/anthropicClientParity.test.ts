@@ -14,6 +14,7 @@ const node = require('../../scripts/lib/anthropic');
 
 const SONNET = 'claude-sonnet-4-6';
 const SONNET_5_5 = 'claude-sonnet-5-5';
+const SONNET_5 = 'claude-sonnet-5';
 const HAIKU = 'claude-haiku-4-5-20251001';
 
 describe('Edge ↔ Node client parity', () => {
@@ -34,7 +35,7 @@ describe('Edge ↔ Node client parity', () => {
       maxTokens: 7,
     },
   ];
-  for (const model of [SONNET, HAIKU, SONNET_5_5]) {
+  for (const model of [SONNET, HAIKU, SONNET_5_5, SONNET_5]) {
     for (const effort of ['low', 'medium', 'high'] as const) {
       it(`${model} @${effort}: byte-identical request bodies`, () => {
         for (const req of requests) {

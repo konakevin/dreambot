@@ -19,6 +19,8 @@
  *   - `output_config.effort` is set per job (default high);
  *   - its tokenizer counts the same text ~1.35x (our nightly brief: 2342 vs 1738 tokens), so max_tokens scales
  *     by the profile's tokenScale or every word budget quietly shrinks.
+ * Sonnet 5 (one job, the cast race read) shares 5.5's tokenizer (tokenScale 1.35) but rejects `between_tools`, so
+ * its profile sends `thinking: {type: 'disabled'}`: no hidden thinking can eat a 30-token reply.
  * No profile ever sends an assistant prefill or temperature / top_p / top_k: 5.5 rejects each, and 4.6 already
  * rejects the prefill (essenceCards.ts wrote no card from 2026-05-11 because of it).
  *
@@ -37,7 +39,7 @@
  * The context is passed as a parameter, never held in module state: one isolate serves concurrent requests.
  */
 
-import { SONNET, SONNET_5_5, HAIKU } from './models.ts';
+import { SONNET, SONNET_5_5, SONNET_5, HAIKU } from './models.ts';
 import { jitter } from './jitter.ts';
 
 // ── Retry ladder (shared with the vision path) ─────────────────────────
@@ -67,6 +69,8 @@ export const MODEL_PROFILES: Readonly<Record<string, ModelProfile>> = {
       output_config: { effort },
     }),
   },
+  // Sonnet 5: 5.5's tokenizer (count_tokens 5039 vs 4.6's 3752 on the same text); rejects between_tools.
+  [SONNET_5]: { tokenScale: 1.35, extraBody: () => ({ thinking: { type: 'disabled' } }) },
 };
 
 export function isKnownModel(model: string): boolean {

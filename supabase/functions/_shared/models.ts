@@ -10,3 +10,6 @@ export const HAIKU = 'claude-haiku-4-5-20251001';
 /** Sonnet 5.5. Nothing defaults to it: a job moves by engine_config.llm_models (anthropic.ts, LLM_MIGRATION.md).
  *  SONNET stays 4.6 until the migration's cleanup step. */
 export const SONNET_5_5 = 'claude-sonnet-5-5';
+/** Sonnet 5, for ONE job: the cast race read (cast_ethnicity), which 5.5 declines. Kevin's pick 2026-09-29
+ *  (LLM_5_5_TUNING.md 2.1: 63/63 on the labelled photos, the same as 4.6). */
+export const SONNET_5 = 'claude-sonnet-5';

@@ -29,6 +29,7 @@ import { assessRenderQuality, assessSceneFallbackPeople } from '@engine/qualityG
 
 const SONNET = 'claude-sonnet-4-6';
 const SONNET_5_5 = 'claude-sonnet-5-5';
+const SONNET_5 = 'claude-sonnet-5';
 const HAIKU = 'claude-haiku-4-5-20251001';
 
 type Reply = { status: number; body: unknown };
@@ -148,6 +149,25 @@ describe('4.6 and Haiku bodies are byte-identical to the pre-client call sites',
       const b = buildRequestBody(model, { content: 'x', system: 's', maxTokens: 100 });
       expect(Object.keys(b)).toEqual(['model', 'max_tokens', 'system', 'messages']);
     }
+  });
+});
+
+describe('Sonnet 5 profile (the cast race read, LLM_5_5_TUNING.md 2.1)', () => {
+  it('thinking disabled, no effort, max_tokens scaled 1.35x (ceil), nothing else added', () => {
+    const b = buildRequestBody(SONNET_5, { content: 'x', maxTokens: 30 }, 'high');
+    expect(b).toEqual({
+      model: SONNET_5,
+      max_tokens: 41,
+      messages: [{ role: 'user', content: 'x' }],
+      thinking: { type: 'disabled' },
+    });
+  });
+  it('never sends a prefill, temperature, top_p or top_k', () => {
+    const s = JSON.stringify(buildRequestBody(SONNET_5, { content: 'x', maxTokens: 10 }));
+    expect(s).not.toMatch(/"role":"assistant"|temperature|top_p|top_k|budget_tokens|between_tools/);
+  });
+  it('a race read routed to Sonnet 5 falls back to the job default (4.6), nothing after it', () => {
+    expect(modelChain('cast_ethnicity', SONNET_5)).toEqual([SONNET_5, SONNET]);
   });
 });
 

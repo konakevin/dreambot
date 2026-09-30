@@ -96,6 +96,8 @@ const ARM_OVERRIDE: Record<string, string | undefined> = {
   '5.5@high': 'claude-sonnet-5-5@high',
   '5.5@medium': 'claude-sonnet-5-5@medium',
   '5.5@low': 'claude-sonnet-5-5@low',
+  // Sonnet 5: the cast race read replacement (LLM_5_5_TUNING.md 2.1).
+  '5.0': 'claude-sonnet-5',
 };
 for (const a of ARM_NAMES) if (!(a in ARM_OVERRIDE)) throw new Error(`unknown arm ${a}`);
 

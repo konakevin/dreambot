@@ -24,7 +24,7 @@
  *   llm_truncated:<job>:<model> · llm_failed:<job>:<kind> · llm_config_invalid:<job>:<value>
  */
 
-const { SONNET, HAIKU, SONNET_5_5 } = require('./models');
+const { SONNET, HAIKU, SONNET_5_5, SONNET_5 } = require('./models');
 
 const RETRY_DELAYS_MS = [1000, 3000, 10000, 30000];
 const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504, 529]);
@@ -43,6 +43,8 @@ const MODEL_PROFILES = {
       output_config: { effort },
     }),
   },
+  // Sonnet 5 (the cast race read only): 5.5's tokenizer; rejects between_tools, so thinking is disabled.
+  [SONNET_5]: { tokenScale: 1.35, extraBody: () => ({ thinking: { type: 'disabled' } }) },
 };
 
 function isKnownModel(model) {
