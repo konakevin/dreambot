@@ -6,15 +6,18 @@ until at least 2027-02-17.
 
 ## Status
 
-**Next work: tuning the engine for 5.5 so every job can move. Tracker: `LLM_5_5_TUNING.md`.**
+**CUT OVER 2026-09-30 05:23 UTC (mig 584): every Sonnet job runs on 5.5@high for everyone; the cast race read on
+Sonnet 5.** The tuning that got there (overlays, the budget fix, Kevin's blind votes) is in `LLM_5_5_TUNING.md`, the
+tracker. 4.6 stays in every fallback chain and is the one-row rollback (`UPDATE engine_config SET llm_models = '{}'
+WHERE id = 1;`) through the 2-week live watch (to ~2026-10-14); Kevin decides on removing it after that.
 
-| Step | State |
-|---|---|
-| 0. One client per runtime, every production call on it, still 4.6 | **Deployed 2026-09-29 ~03:45 UTC** (mig 574). The 48h production smoke is running. |
-| 1. Text parity bench (QA override only) | **Done 2026-09-29**: 12 of 15 Sonnet jobs pass; the 3 cast reads stay on 4.6. Report: https://claude.ai/artifact/DTXKmn83nBpvBG9DFF3rPn |
-| 2. Render parity + blind A/B | **Done 2026-09-29**: 5.5 picked in 55/117 pairs (47%); it wins single-subject prompts and loses couples. |
-| 3. Staged rollout by config | **3.1 canary LIVE 2026-09-29 ~16:55 UTC** (mig 576): Kevin only, create_brief + restyle_brief on 5.5@high. |
-| 4. Cleanup (defaults → 5.5, offline scripts) | Not started |
+| Step                                                              | State                                                                                                                                                                   |
+| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0. One client per runtime, every production call on it, still 4.6 | **Deployed 2026-09-29 ~03:45 UTC** (mig 574). The 48h production smoke is running.                                                                                      |
+| 1. Text parity bench (QA override only)                           | **Done 2026-09-29**: 12 of 15 Sonnet jobs pass; the 3 cast reads stay on 4.6. Report: https://claude.ai/artifact/DTXKmn83nBpvBG9DFF3rPn                                 |
+| 2. Render parity + blind A/B                                      | **Done 2026-09-29**: 5.5 picked in 55/117 pairs (47%); it wins single-subject prompts and loses couples.                                                                |
+| 3. Staged rollout by config                                       | **DONE 2026-09-30.** Canaries: Kevin (migs 576, 579, 580, 582, 583) + BloomBot (583). Cutover for everyone: mig 584 (15 jobs; race read on Sonnet 5; kept overlays on). |
+| 4. Cleanup (defaults → 5.5, offline scripts)                      | Waits for the 2-week watch + Kevin's call (4.6 is the rollback until then)                                                                                              |
 
 ## How switching works
 
@@ -54,18 +57,18 @@ A configured model the client has no profile for is ignored (the default runs) a
 
 ## Jobs
 
-| Job | Default | Fallback | Where |
-|---|---|---|---|
-| `create_brief` | 4.6 | Haiku | generate-dream: description / new scene / dual / solo / text |
-| `create_slots` / `nightly_slots` | 4.6 | Haiku | characterSlotPrompt, picked by surface |
-| `nightly_brief` | 4.6 | Haiku | nightly-dreams legacy brief |
-| `outfit_reader`, `scene_split`, `location_beat`, `restyle_brief` | 4.6 | Haiku | outfitSpec, promptSceneSplit, locationActionBeat, restyle-photo |
-| `essence_card` | 4.6 | none | essenceCards (behind `essence_card_generation`, off) |
-| `quality_gate`, `scene_people` | 4.6 | none | qualityGate (fail-open) |
-| `cast_describe`, `cast_ethnicity`, `cast_hair` | 4.6 | none | describe-photo |
-| `pet_describe`, `photo_describe`, `photo_classify`, `probe_genders`, `probe_wardrobe`, `style_distill`, `style_extract`, `inbox_title`, `prompt_enhance` | Haiku | none | not migrating |
-| Node `bot_prompt` | 4.6 | Haiku | botEngine brief |
-| Node `bot_polish`, `bot_nudity`, `bot_style_distill` | Haiku | (polish → 4.6) | botEngine two-pass, nudityCheck, styleDistiller |
+| Job                                                                                                                                                      | Default | Fallback       | Where                                                           |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | -------------- | --------------------------------------------------------------- |
+| `create_brief`                                                                                                                                           | 4.6     | Haiku          | generate-dream: description / new scene / dual / solo / text    |
+| `create_slots` / `nightly_slots`                                                                                                                         | 4.6     | Haiku          | characterSlotPrompt, picked by surface                          |
+| `nightly_brief`                                                                                                                                          | 4.6     | Haiku          | nightly-dreams legacy brief                                     |
+| `outfit_reader`, `scene_split`, `location_beat`, `restyle_brief`                                                                                         | 4.6     | Haiku          | outfitSpec, promptSceneSplit, locationActionBeat, restyle-photo |
+| `essence_card`                                                                                                                                           | 4.6     | none           | essenceCards (behind `essence_card_generation`, off)            |
+| `quality_gate`, `scene_people`                                                                                                                           | 4.6     | none           | qualityGate (fail-open)                                         |
+| `cast_describe`, `cast_ethnicity`, `cast_hair`                                                                                                           | 4.6     | none           | describe-photo                                                  |
+| `pet_describe`, `photo_describe`, `photo_classify`, `probe_genders`, `probe_wardrobe`, `style_distill`, `style_extract`, `inbox_title`, `prompt_enhance` | Haiku   | none           | not migrating                                                   |
+| Node `bot_prompt`                                                                                                                                        | 4.6     | Haiku          | botEngine brief                                                 |
+| Node `bot_polish`, `bot_nudity`, `bot_style_distill`                                                                                                     | Haiku   | (polish → 4.6) | botEngine two-pass, nudityCheck, styleDistiller                 |
 
 `style_extract` and `inbox_title` have no request context, so only their code default applies.
 
@@ -109,23 +112,24 @@ and 5.5@medium: `scripts/qa-llm-parity.ts`, `scripts/qa-llm-parity-bots.js`, and
 About 1,900 calls, about $20. 5.5@high and @medium cost and time the same, and high was slightly more complete, so
 **high is the setting to roll out**.
 
-| Job | 4.6 | 5.5@high | Verdict |
-|---|---|---|---|
-| create_brief | required finish 94.9%, p50 8.4 s | 100%, 3.1 s | move |
-| create_slots / outfit_reader / scene_split | outfit harness: garments 74/74, misfit 0/34, plain retries 4 | 74/74, 0/34, 2 | move |
-| nightly_slots (120 replays) | clean first try 93.3%, 1 fallback, 5.9 s | 94.2%, 1 fallback, 3.0 s | move (Kevin's word) |
-| nightly_brief | **cut off 26.7%**, 161 words (asks 50-75) | 0%, 97 words | move (Kevin's word) |
-| location_beat | passes filters 95%, 14 words | 95%, 19 words (18% over the 20 asked) | move (watch in renders) |
-| quality_gate | 0 false alarms, broken 10/12 | 0, 12/12 | move |
-| scene_people | 73.8% (misses people 26%) | 100% | move |
-| bot_prompt | 60/60, p50 9.3 s | 60/60, 3.8 s | move |
-| essence_card | 20/20 (after the budget fix) | 20/20 | stays off |
-| cast_ethnicity | 100% | **0%: 5.5 declines to infer race** | keep 4.6 |
-| cast_hair | 100%, 0 grey false positives | 84.6%, 1 | keep 4.6 |
-| cast_describe | age ±5y 88.9% | 81.5% | keep 4.6 |
+| Job                                        | 4.6                                                          | 5.5@high                              | Verdict                 |
+| ------------------------------------------ | ------------------------------------------------------------ | ------------------------------------- | ----------------------- |
+| create_brief                               | required finish 94.9%, p50 8.4 s                             | 100%, 3.1 s                           | move                    |
+| create_slots / outfit_reader / scene_split | outfit harness: garments 74/74, misfit 0/34, plain retries 4 | 74/74, 0/34, 2                        | move                    |
+| nightly_slots (120 replays)                | clean first try 93.3%, 1 fallback, 5.9 s                     | 94.2%, 1 fallback, 3.0 s              | move (Kevin's word)     |
+| nightly_brief                              | **cut off 26.7%**, 161 words (asks 50-75)                    | 0%, 97 words                          | move (Kevin's word)     |
+| location_beat                              | passes filters 95%, 14 words                                 | 95%, 19 words (18% over the 20 asked) | move (watch in renders) |
+| quality_gate                               | 0 false alarms, broken 10/12                                 | 0, 12/12                              | move                    |
+| scene_people                               | 73.8% (misses people 26%)                                    | 100%                                  | move                    |
+| bot_prompt                                 | 60/60, p50 9.3 s                                             | 60/60, 3.8 s                          | move                    |
+| essence_card                               | 20/20 (after the budget fix)                                 | 20/20                                 | stays off               |
+| cast_ethnicity                             | 100%                                                         | **0%: 5.5 declines to infer race**    | keep 4.6                |
+| cast_hair                                  | 100%, 0 grey false positives                                 | 84.6%, 1                              | keep 4.6                |
+| cast_describe                              | age ±5y 88.9%                                                | 81.5%                                 | keep 4.6                |
 
 Edgy Create requests (lingerie, bikinis, gore, a bloodied gladiator, a demon throne and so on) were written on
 every arm with the element kept, 24 of 24. Fixes the bench drove, all shipped in 739182a9:
+
 - **Text-refusal guard:** 5.5 answered a real intimate-couple Create prompt with "I'll pass on this one". On a
   text-out job that sentence would have gone to Flux as the prompt. Now it fails the model and the chain falls
   back to 4.6. 0 false positives on 851 real outputs.
@@ -142,13 +146,13 @@ the bot posts are hidden.
 
 The 3 Fly face-swap HTTP 500s (the service's normal 2-7% rate) are left out:
 
-| Surface | 4.6 | 5.5@high | Gate |
-|---|---|---|---|
-| Nightly couples, first-try hold | 38/40 (95%) | 33/38 (86.8%) | **fail** (88%) |
-| Nightly couples, still a couple / degraded | 38/40 / 2 | 37/38 / 1 | pass |
-| Create couples, first-try hold | 20/20 | 18/19 (94.7%) | pass |
-| Solos (nightly + Create) | 23/23 | 23/23 | pass |
-| Bots rendered + posted | 35/36 (1 Replicate timeout) | 36/36 | pass |
+| Surface                                    | 4.6                         | 5.5@high      | Gate           |
+| ------------------------------------------ | --------------------------- | ------------- | -------------- |
+| Nightly couples, first-try hold            | 38/40 (95%)                 | 33/38 (86.8%) | **fail** (88%) |
+| Nightly couples, still a couple / degraded | 38/40 / 2                   | 37/38 / 1     | pass           |
+| Create couples, first-try hold             | 20/20                       | 18/19 (94.7%) | pass           |
+| Solos (nightly + Create)                   | 23/23                       | 23/23         | pass           |
+| Bots rendered + posted                     | 35/36 (1 Replicate timeout) | 36/36         | pass           |
 
 **Why nightly couples fail on 5.5:** it writes physical actions that turn faces away. For example, "One person
 crouches to set a glowing lantern beside the stone path, the other stands with arms folded" names no face, head or
@@ -158,6 +162,7 @@ eyes, so it passes every direction filter, yet both people look down and the ide
 which belongs to a later prompt-tuning round. Until then nightly stays on 4.6.
 
 **Next (step 3):** wait for Kevin's blind vote; the bar is 5.5 winning in at least 45% of pairs. If it clears:
+
 1. Canary on Kevin only: `llm_preview_user_ids = {Kevin}`, with `llm_preview_models` = the Create jobs +
    restyle_brief at `claude-sonnet-5-5@high`, for 48 h.
 2. Create for everyone.
@@ -174,17 +179,18 @@ most bot posts (`llm_truncated:bot_style_distill` on 25 of 36). This is pre-exis
 The page was https://claude.ai/artifact/DBFPCRe5tyosfzjkAgFtaK (collection `ab`). The arm map was kept off the page;
 Kevin's paste matched the saved picks exactly.
 
-| Surface | 5.5 picked | Bar (45%) |
-|---|---|---|
-| All pairs | 55/117 (47%) | pass |
-| Bots | 18/35 (51%) | pass |
-| Create solos | 8/10 (80%) | pass |
-| Create couples | 7/20 (35%) | fail |
-| Nightly couples | 16/39 (41%) | fail |
-| Nightly solos | 6/13 (46%) | about even |
+| Surface         | 5.5 picked   | Bar (45%)  |
+| --------------- | ------------ | ---------- |
+| All pairs       | 55/117 (47%) | pass       |
+| Bots            | 18/35 (51%)  | pass       |
+| Create solos    | 8/10 (80%)   | pass       |
+| Create couples  | 7/20 (35%)   | fail       |
+| Nightly couples | 16/39 (41%)  | fail       |
+| Nightly solos   | 6/13 (46%)   | about even |
 
 Taste and swap hold agree: **5.5 writes worse couples** and equal or better single-subject prompts. So only the jobs
 that won move:
+
 - **Moving:** `create_brief` (solo and text Create prompts), `restyle_brief` (same shape), then `quality_gate` +
   `scene_people` (more accurate on labelled images; no visual output to vote on), then `bot_prompt`.
 - **Staying on 4.6:** `create_slots`, `nightly_slots`, `scene_split`, `outfit_reader` (the couple pipeline), every
@@ -201,6 +207,7 @@ that won move:
 - Rollback: `UPDATE engine_config SET llm_preview_models = '{}' WHERE id = 1;`
 
 Remaining steps, each for 48 h and each gated on the report:
+
 1. **3.2, Create for everyone:** `llm_models = {create_brief, restyle_brief → 5.5@high}`.
 2. **3.3, the judges:** add `quality_gate` and `scene_people`.
 3. **3.4, bots:** add `bot_prompt`.
