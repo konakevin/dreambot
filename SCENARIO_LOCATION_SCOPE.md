@@ -89,15 +89,15 @@ Dry run as Kevin, switch forced on: couple goofy 50 / elegant 17 / active 718 ma
 | At least one place required | `lib/placeRequirement.ts`, `LocationPickerStep.tsx`, `useAutoSaveProfile({ requirePlace })`, `settings/locations.tsx`, `placeRequirement.test.ts` | Code done, ships with the next app build |
 | Tags + switch | mig 591 (applied), loaders, `scenarioScope.ts`, `nightly-dreams`, `scenarioScope.test.ts` | Deployed with the switch OFF; dry runs: default unchanged, forced-on with no tags → 0 matches → place |
 | Tags written | 14,008 rows, 8,553 placed | Verified by count; dry run sees them (above) |
+| Regional wonders | mig 593 (applied): 4 cards (`wonders_regional`, admin-only), region-filtered sub_regions / must_include / TIME / WEATHER / PHENOMENA / SUBJECT_RULE, site-naming BANS dropped; 259 of World Wonders' 309 spots copied by region (EU 70, Asia 62, Americas 55, ME&A 72; 50 placeless stay behind). 44 of the 62 World Wonders scenario rows re-tagged with their regional card (the 18 no-site fantasy rows stay on World Wonders) | Dry runs: Asia scene → Ahu Tongariki moai; Europe solo → Skara Brae with the new Orkney squall weather; the colossal-face spot filter still applies |
 | Tiles in the database + World Traveler split | mig 592 (applied): `picker_tiles` (19 rows: 15 live, 4 new admin-only and empty), `location_cards.picker_tile`; `lib/pickerSections.ts`, `LocationPickerStep.tsx`, `pickerSections.test.ts` | DB live (old apps unaffected: they group by `picker_category`); the picker change ships with the next build. Anonymous read OK, anonymous write 401 |
 
 ## Next
 
-1. Regional wonders cards (Europe / Asia & Pacific / The Americas / Middle East & Africa) with region-filtered
-   `sub_regions` / `must_include` and World Wonders' spots copied by region. World Wonders itself left the picker
-   (`picker_tile` NULL) but stays valid for saved picks. At go-live, add the four new cards to the 41 users who have
-   World Traveler saved (Kevin: "set them to have all the new locations"); the other 42 places need nothing, since
-   picks are saved by name and every one of those users has all 43.
+1. **Go-live of the tiles (with the app build):** flip the 4 regional wonders cards `admin_only = false` and add them to
+   the 41 users who have World Traveler saved (Kevin: "set them to have all the new locations"); the other 42 places
+   need nothing, since picks are saved by name and every one of those users has all 43. World Wonders stays in their
+   lists so the current app version keeps rendering it.
 3. Scenario-backed cards for the tone/venue groups (the card's content IS its tagged scenarios), then point each
    group's `proposed_location` rows at the new card's `location_keys`.
 4. Surreal Dreams cards from the good `nightly_seeds` (rewritten to the spot contract), the rest retired.
