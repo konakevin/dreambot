@@ -46,7 +46,7 @@ restore rewinds the whole database and takes the app offline; no restore has eve
       sampled images are all present.
 - [x] **D4.** A failed backup, a stale backup (> 51 h, derived from the schedule in `scripts/backup/lib.js`), or a big
       overnight drop in a table's rows emails Kevin.
-- [ ] **D5.** The database copies can't be deleted for 30 days (bucket lock), and old copies clean themselves up
+- [x] **D5.** The database copies can't be deleted for 30 days (bucket lock), and old copies clean themselves up
       (lifecycle rules).
 - [x] **D6.** "How to restore" below covers every disaster step by step, including one full rehearsal of a
       single-table restore.
@@ -238,12 +238,16 @@ Each phase ends with its proof, and a commit + push (the workflows only run once
 
 ### Phase 5: Lock it down (Kevin, Cloudflare dashboard; exact values given at the time)
 
-- [ ] Bucket lock: prefix `db/`, retain 30 days
-- [ ] Lifecycle rules:
-  - `db/daily/`: delete after 35 days;
-  - `db/monthly/`: delete after 400 days (see decision K3);
-  - `storage/trash/`: delete after 30 days.
-- **Pass bar:** deleting a `db/` file with the backup key is refused.
+- [x] Bucket lock: rule `db-copies-30d`, prefix `db/`, 30 days (2026-09-30, `npx wrangler r2 bucket lock add
+    dreambot-backups db-copies-30d db/ --retention-days 30` after Kevin's `wrangler login`; the backup token can't
+      change bucket settings). Check: `npx wrangler r2 bucket lock list dreambot-backups`.
+- [x] ~~Lifecycle rules~~ replaced by retention the jobs enforce themselves (`lib.RETENTION`, 2026-09-30): daily copies
+      35 days (never fewer than the newest 7), the newest 12 monthly copies, image trash 30 days. Only folders
+      whose names parse as backup dates are touched; `__tests__/lib/backupRetention.test.ts` locks it. This makes the
+      Privacy Policy's "up to 12 months" true without any bucket setting.
+- **Pass bar:** ✅ with the backup key, a new file under `db/` can be written, but overwriting or deleting it is
+  refused. The probe `db/_lock-probe-2026-09-30/probe.txt` (a few bytes) stays locked until 2026-10-30; retention
+  ignores it (not under `db/daily/` or `db/monthly/`), so delete it by hand any time after that.
 
 ### Phase 6: Runbook and handover
 
@@ -448,3 +452,7 @@ last. Nothing in this plan changes app behaviour; everything runs outside the ap
   - Phase 6: runbook + secrets inventory written; production single-table rehearsal passed (see Phase 6).
     Remaining: the first image copy (Kevin picks the time), the bucket lock + lifecycle rules (Kevin, Cloudflare),
     Kevin reading the runbook.
+  - Kevin: "use your best judgement" on the open items. First image copy started 16:34 UTC (run 36745197482,
+    8 transfers, 60/90 connections free), watched from this session. Retention moved into the jobs (no lifecycle
+    rules needed). K4 done: dreambotapp.com/privacy now discloses Cloudflare (encrypted backups) and "up to 12
+    months" (dreambot-web 7f41557, live). The bucket lock still needs Kevin's Cloudflare login.
