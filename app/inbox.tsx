@@ -1,5 +1,5 @@
 import { showAlert } from '@/components/CustomAlert';
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect, type ReactNode } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
@@ -14,7 +14,12 @@ import { Text } from '@/components/AppText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withDelay,
+  withTiming,
+} from 'react-native-reanimated';
 import ReanimatedSwipeable, {
   type SwipeableMethods,
 } from 'react-native-gesture-handler/ReanimatedSwipeable';
@@ -56,6 +61,25 @@ const MASCOTS = [
 // the avatar on SYSTEM notifications (isDreamBotSystemNotification) so the row
 // reads as an official message from DreamBot rather than from the user.
 const DREAMBOT_MASCOT = require('@/assets/images/onboarding/mascot-welcome.png');
+
+// A row's soft fade + slide-down on its own mount. A value animation, NOT a Reanimated `entering` layout
+// animation (FadeInDown, which this replaced). Rows from the open-time refetch mount while the screen is still
+// sliding in and the list re-renders two or three times in half a second (mark-viewed rewrites every group, then
+// refetches), and an `entering` animation interrupted there can leave the row at its starting state: full height
+// laid out, opacity 0. Those were the "phantom" black rows between the title and the older rows (Kevin
+// 2026-09-30). A shared value driven from the row's own mount effect always finishes at 1.
+const ROW_RISE = verticalScale(25);
+function FadeInRow({ delay, children }: { delay: number; children: ReactNode }) {
+  const progress = useSharedValue(0);
+  useEffect(() => {
+    progress.value = withDelay(delay, withTiming(1, { duration: 220 }));
+  }, [delay, progress]);
+  const style = useAnimatedStyle(() => ({
+    opacity: progress.value,
+    transform: [{ translateY: (progress.value - 1) * ROW_RISE }],
+  }));
+  return <Animated.View style={style}>{children}</Animated.View>;
+}
 
 function FollowRequestActions({ actorId }: { actorId: string }) {
   const { mutate: approve, isPending: approving } = useApproveFollowRequest();
@@ -526,11 +550,10 @@ export default function InboxScreen() {
         renderItem={({ item, index }) => (
           // Soft fade+slide entrance — staggers the first ~10 rows so the
           // inbox feels like it's gently arriving rather than snapping in.
-          // FadeInDown only fires on mount, so existing rows don't re-animate
-          // on FlatList recycling; a NEW notification that lands while the
-          // inbox is open animates in by itself, which feels like a tiny
-          // gift each time.
-          <Animated.View entering={FadeInDown.duration(220).delay(Math.min(index * 25, 250))}>
+          // It runs on mount only, so existing rows don't re-animate on a
+          // re-render; a NEW notification that lands while the inbox is open
+          // animates in by itself, which feels like a tiny gift each time.
+          <FadeInRow delay={Math.min(index * 25, 250)}>
             <GroupRow
               group={item}
               onPress={() => handleTap(item)}
@@ -541,7 +564,7 @@ export default function InboxScreen() {
               isSelected={selected.has(item.groupKey)}
               onToggleSelect={() => toggleSelect(item.groupKey)}
             />
-          </Animated.View>
+          </FadeInRow>
         )}
         onEndReached={() => {
           if (hasNextPage && !isFetchingNextPage) fetchNextPage();
