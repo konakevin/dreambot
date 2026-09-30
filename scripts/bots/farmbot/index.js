@@ -283,7 +283,8 @@ module.exports = {
     if (typeof builder !== 'function') {
       throw new Error(`FarmBot: path "${path}" has invalid export shape`);
     }
-    return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    // Every path's brief ends with the shared word count (shared-blocks.js).
+    return builder({ sharedDNA, vibeDirective, vibeKey, picker }) + blocks.FARMBOT_LENGTH_RULE;
   },
 
   caption({ path }) {

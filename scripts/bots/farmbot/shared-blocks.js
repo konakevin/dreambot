@@ -85,9 +85,27 @@
  * green, or violet scene should be exactly as richly saturated as an amber
  * one. Let hue follow the scene/weather/look freely; only saturation and
  * richness are the fixed rule.
+ *
+ * TRIMMED 276 → 45 WORDS (2026-09-30, Kevin: "clean up farmbot's prompt
+ * length"). This fragment sits at word 4 of EVERY render, so the old rules
+ * block pushed the rolled look to ~word 280 and the scene's subject to ~word
+ * 320, and prompts ran 514-908 words; details past ~word 600 (a quilt, a
+ * rocking chair) never rendered. Flux can't follow instructions ("render
+ * exactly what it names… nothing beyond it", "the look register above sets
+ * the style"), so those sentences only spent the front of the prompt. What
+ * each old sentence was FOR is kept: the tone + handcrafted world + saturated
+ * scene-led colour + one continuous frame + cute characters stay here as
+ * picture words; the two writer instructions (complete cast list,
+ * interior-with-a-window as one shot) moved to lookOverride() below, where
+ * Sonnet actually obeys them. The character line is load-bearing: a first
+ * trim without it drew mature bishonen adults on 4 of 6 character renders
+ * (the 2026-09-09 defect above), because the look register's "cute
+ * proportions" alone doesn't hold it. "photograph-like" was dropped (a photo
+ * prior on an illustration bot). See BOT_SCENE_QUALITY_PLAYBOOK.md §5.1
+ * (position) and §5.2 (length).
  */
 const FARMBOT_COZY_NEUTRAL =
-  'OVERARCHING RULE (applies to every single render regardless of scene): this is a cute, adorable, pretty, cozy, peaceful, happy, fun, gentle, storybook-charming farm-life illustration — a small, idyllic, handcrafted countryside world where every tool, structure, and object is charming, old-fashioned, and personal in scale. Color stays vibrant and richly saturated throughout, in whatever hues the scene and light actually call for — golden and amber where the scene is sunlit, but just as often deep blues, greens, violets, or silvery greys where the scene calls for it; never washed out or desaturated, and never locked to one palette. Even the least remarkable render from this bot must still read as nice and wholesome. Every render is always ONE single, continuously-composed photograph-like frame with a natural sense of depth — if the scene includes both an interior and something visible beyond a window or doorway, that outside world is glimpsed through the opening as part of the very same unbroken shot, the same way a real camera captures a room with a view, never as a separately divided section of the image. Any character in the frame is drawn just as cute and adorable as the world around them — a round-cheeked face, big joyful sparkling eyes, a playful cheerful expression, like a beloved character from a gentle children\'s picture book. The scene described below is the complete cast list for the frame — render exactly what it names, in exactly the proportions and character-design language the look register above sets, and nothing beyond it. The animation style, rendering medium, finish, and palette are set entirely by the look-register tokens that lead the prompt.';
+  "cute storybook farm-life illustration, a small handcrafted old-fashioned countryside world, vibrant richly saturated color in the scene's own hues, one continuous scene with natural depth, every character cute and round-cheeked with big joyful sparkling eyes and a cheerful expression, like a gentle children's picture book";
 
 /**
  * Prepend the ART STYLE block to a path's own scene text. `look` is one
@@ -124,7 +142,26 @@ written — just describe everything using this style's linework, shading,
 and color treatment. Start the Flux prompt with these style words so they
 set the visual tone from the very first line.
 
+The sections below are the complete cast: include only the people and
+animals they name. If the scene is indoors with a window or doorway, write
+it as one continuous room with the outside seen softly through the opening.
+
 `;
 }
 
-module.exports = { FARMBOT_COZY_NEUTRAL, lookOverride };
+/**
+ * Appended to EVERY FarmBot brief by index.js buildBrief (2026-09-30). FarmBot
+ * was the only bot whose briefs stated no word count, so Sonnet wrote 500-900
+ * words and Flux only reliably renders what sits early in the prompt (playbook
+ * §5.1-5.2). Most bots say "110-140 WORDS, COUNT THEM"; FarmBot's briefs carry
+ * more sections (food, animal, character, activity, setting, camera), so a
+ * little more room. The order line puts the subject right after the style
+ * words, where it renders most reliably.
+ */
+const FARMBOT_LENGTH_RULE = `
+
+Write the Flux prompt as ONE flowing paragraph of 120-160 WORDS, COUNT THEM.
+Begin with the art-style words, then the main subject and what is happening,
+then the setting, light and camera. Describe only what IS in the picture.`;
+
+module.exports = { FARMBOT_COZY_NEUTRAL, FARMBOT_LENGTH_RULE, lookOverride };

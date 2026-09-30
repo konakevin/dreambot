@@ -539,6 +539,11 @@ module.exports = {
     } else {
       throw new Error(`AlphaBot: path "${path}" has invalid export shape`);
     }
+    // FarmBot-destined candidates end with FarmBot's own word-count rule, exactly
+    // as farmbot/index.js buildBrief appends it (portability contract).
+    if (FARMBOT_DESTINED_PATHS.includes(path) && typeof result === 'string') {
+      return result + farmbotBlocks.FARMBOT_LENGTH_RULE;
+    }
     // Byte-identical DreamBot post-processing (chibibot_render count-block +
     // the pixar/neutral shared-block swaps) so dormant heritage paths render
     // exactly as they did before the split.
