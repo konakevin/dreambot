@@ -166,6 +166,15 @@ async function runDrill() {
         )
         .catch(() => {}); // unavailable in the image: any object needing it surfaces as a restore error
     }
+    // The push trigger `send-push-on-notification` on public.notifications is a Supabase Database Webhook: it
+    // calls supabase_functions.http_request, which exists only once Database Webhooks are enabled (a real
+    // rebuild enables them BEFORE restoring and repoints the URL; BACKUPS.md). A do-nothing stand-in lets the
+    // trigger restore here so the structure counts can match exactly. Found by the first drill, 2026-09-30.
+    await client.query(
+      'create schema if not exists supabase_functions; ' +
+        'create or replace function supabase_functions.http_request() returns trigger ' +
+        'language plpgsql as $$ begin return new; end $$;'
+    );
 
     const restored = await run(
       pgBin('pg_restore'),
