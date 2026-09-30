@@ -15,8 +15,22 @@
  *      beats), ~10% mood/establishing.
  */
 
+// Trimmed 45 → 26 words 2026-09-30 (prompt-length clean-up, BOT_FOLLOWUPS_TRACKER.md C10a): every cue
+// kept (all-brick, studs, plastic texture + seams, minifig scale, the piece types); "realistic brick
+// geometry" and the "intricate … details using" padding went. "professional LEGO MOC showcase photography"
+// moved into BRICK_PHOTO_MEDIUM so it isn't said twice.
 const PROMPT_PREFIX =
-  'highly detailed LEGO diorama scene, built entirely from real LEGO bricks, studs clearly visible, authentic LEGO plastic texture, molded seams and connection points, realistic brick geometry, accurate minifigure scale, intricate brick-built details using slopes tiles plates and transparent pieces, professional LEGO MOC showcase photography';
+  'highly detailed LEGO diorama built entirely from real LEGO bricks, studs clearly visible, authentic plastic texture and molded seams, accurate minifigure scale, slopes tiles plates and transparent pieces';
+
+// BrickBot's own photography fragment (2026-09-30), set via mediumStyles.photography in index.js so it
+// replaces the SHARED DB `photography` flux_fragment for this bot only (nightly/Create keep theirs). The
+// shared one is 27 words of generic photo cruft that sat at words ~46-72 of every BrickBot render and
+// fought the all-brick look: "accurate skin tones", "photographic realism", "modern digital camera
+// quality", "ultra high resolution". Its one load-bearing cue was "natural bokeh", the tabletop
+// miniature signal that keeps backgrounds reading as LEGO on paths without a deep-focus prefix
+// (fantasy, per the playbook's tilt-shift rule); "tabletop miniature depth of field" carries it.
+const BRICK_PHOTO_MEDIUM =
+  'professional LEGO MOC showcase photography, tabletop miniature depth of field, beautiful lighting';
 
 // 2026-06-02 cruft-audit strip — was a 13-item `no X` negation chain
 // (no human hands / no human fingers / no human skin / no real people /
@@ -58,6 +72,7 @@ const GPT_CLEAN =
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
+  BRICK_PHOTO_MEDIUM,
   EVERYTHING_IS_BRICK_BLOCK,
   TOY_PHOTOGRAPHY_BLOCK,
   BRICK_DETAIL_BLOCK,

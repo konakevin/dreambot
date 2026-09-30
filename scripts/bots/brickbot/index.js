@@ -79,6 +79,8 @@ module.exports = {
   promptSuffix: blocks.PROMPT_SUFFIX,
 
   mediumStyles: {
+    // BrickBot-only override of the shared DB `photography` fragment (see shared-blocks.js).
+    photography: blocks.BRICK_PHOTO_MEDIUM,
     brickbot_gpt_clean: blocks.GPT_CLEAN,
     brickbot_dig:
       'every element brick-built with visible studs and plate seams, moulded plastic, minifigure scale, tabletop convention display',

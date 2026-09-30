@@ -86,7 +86,7 @@ ${palette}
 ${vibeDirective.slice(0, 200)}
 
 ━━━ OUTPUT SPEC ━━━
-Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the narrative concept + dramatic beat + centerpiece subject + camera framing, weave in the build technique + story figures + finale-reveal lighting + palette + dramatic effect (if fired). End with one phrase reinforcing a LEGO-Masters-finale-winning theatrically-lit showcase brick build. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+Write 100-140 words. Single paragraph. Comma-separated phrase string. Lead with the narrative concept + dramatic beat + centerpiece subject + camera framing, weave in the build technique + story figures + finale-reveal lighting + palette + dramatic effect (if fired). End with one phrase reinforcing a LEGO-Masters-finale-winning theatrically-lit showcase brick build. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
   BRICKBOT_GIRLY: ({ slots, vibeDirective }) => {
@@ -177,7 +177,7 @@ ${palette}
 ${vibeDirective.slice(0, 200)}
 
 ━━━ OUTPUT SPEC ━━━
-Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig/mini-doll action + camera framing, weave in the build technique + register + props + lighting + palette + sparkle phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC pastel-whimsy diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+Write 100-140 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig/mini-doll action + camera framing, weave in the build technique + register + props + lighting + palette + sparkle phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC pastel-whimsy diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
   // BRICKBOT_CRAZY_ISLANDS — the fun/crazy tropical-island SCENE path (2026-05-27).
@@ -322,7 +322,7 @@ ${palette}
 ${vibeDirective.slice(0, 200)}
 
 ━━━ OUTPUT SPEC ━━━
-Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the diorama-theme + build-scope + signature centerpiece + camera framing, weave in the life-density + baseplate-edge + lighting + palette + easter-egg (if fired). End with one phrase reinforcing AFOL convention-Best-of-Show complete-diorama LEGO MOC photography, DEEP-FOCUS edge-to-edge sharp (NOT tilt-shift). NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+Write 100-140 words. Single paragraph. Comma-separated phrase string. Lead with the diorama-theme + build-scope + signature centerpiece + camera framing, weave in the life-density + baseplate-edge + lighting + palette + easter-egg (if fired). End with one phrase reinforcing AFOL convention-Best-of-Show complete-diorama LEGO MOC photography, DEEP-FOCUS edge-to-edge sharp (NOT tilt-shift). NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
   BRICKBOT_MECH: ({ slots, vibeDirective }) => {
@@ -418,7 +418,7 @@ ${palette}
 ${vibeDirective.slice(0, 200)}
 
 ━━━ OUTPUT SPEC ━━━
-Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the mech-class + action + camera framing, weave in the build technique + setting + register + props + lighting + palette + mech phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC mech diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+Write 100-140 words. Single paragraph. Comma-separated phrase string. Lead with the mech-class + action + camera framing, weave in the build technique + setting + register + props + lighting + palette + mech phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC mech diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
   BRICKBOT_WESTERN: ({ slots, vibeDirective }) => {
@@ -515,7 +515,7 @@ ${palette}
 ${vibeDirective.slice(0, 200)}
 
 ━━━ OUTPUT SPEC ━━━
-Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig action + camera framing, weave in the build technique + register + props + lighting + palette + western phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC western diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+Write 100-140 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig action + camera framing, weave in the build technique + register + props + lighting + palette + western phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC western diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
   BRICKBOT_THEME_PARK: ({ slots, vibeDirective }) => {
@@ -603,7 +603,7 @@ ${palette}
 ${vibeDirective.slice(0, 200)}
 
 ━━━ OUTPUT SPEC ━━━
-Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the attraction + crowd action + camera framing, weave in the build technique + register + scene-life + lighting + palette + spectacle (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC fairground photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+Write 100-140 words. Single paragraph. Comma-separated phrase string. Lead with the attraction + crowd action + camera framing, weave in the build technique + register + scene-life + lighting + palette + spectacle (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC fairground photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
   BRICKBOT_LANDSCAPE: ({ slots, vibeDirective }) => {
@@ -691,7 +691,7 @@ ${phenomenonSection}
 ${vibeDirective.slice(0, 200)}
 
 ━━━ OUTPUT SPEC ━━━
-Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the biome vista + terrain build technique + camera framing, weave in the scale provers (tiny) + flora + atmosphere + lighting + palette + natural phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier all-brick landscape MOC photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+Write 100-140 words. Single paragraph. Comma-separated phrase string. Lead with the biome vista + terrain build technique + camera framing, weave in the scale provers (tiny) + flora + atmosphere + lighting + palette + natural phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier all-brick landscape MOC photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
   BRICKBOT_WINTER: ({ slots, vibeDirective }) => {
@@ -788,7 +788,7 @@ ${palette}
 ${vibeDirective.slice(0, 200)}
 
 ━━━ OUTPUT SPEC ━━━
-Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig action + camera framing, weave in the snow/ice build technique + register + props + lighting + palette + winter phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+Write 100-140 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig action + camera framing, weave in the snow/ice build technique + register + props + lighting + palette + winter phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
   BRICKBOT_AQUATIC: ({ slots, vibeDirective }) => {
@@ -898,7 +898,7 @@ ${palette}
 ${vibeDirective.slice(0, 200)}
 
 ━━━ OUTPUT SPEC ━━━
-Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig action + camera framing, weave in the water-build technique + register + marine life + prop + lighting + palette + aquatic phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+Write 100-140 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig action + camera framing, weave in the water-build technique + register + marine life + prop + lighting + palette + aquatic phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
   BRICKBOT_FANTASY: ({ slots, vibeDirective }) => {
@@ -1017,7 +1017,7 @@ ${palette}
 ${vibeDirective.slice(0, 200)}
 
 ━━━ OUTPUT SPEC ━━━
-Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig action + camera framing, weave in the build technique + register + props + lighting + palette + magical phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+Write 100-140 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig action + camera framing, weave in the build technique + register + props + lighting + palette + magical phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
   BRICKBOT_FOREST: ({ slots, vibeDirective }) => {
@@ -1126,7 +1126,7 @@ ${palette}
 ${vibeDirective.slice(0, 200)}
 
 ━━━ OUTPUT SPEC ━━━
-Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig action + camera framing, weave in the build technique + register + props + lighting + palette + woodland phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+Write 100-140 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig action + camera framing, weave in the build technique + register + props + lighting + palette + woodland phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
   BRICKBOT_LEGO_CITY: ({ slots, vibeDirective }) => {
@@ -1468,7 +1468,7 @@ ${palette}
 ${vibeDirective.slice(0, 200)}
 
 ━━━ OUTPUT SPEC ━━━
-Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the vehicle-class + scene + minifig action + camera framing, weave in the build technique + register + props + lighting + palette + cosmic phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+Write 100-140 words. Single paragraph. Comma-separated phrase string. Lead with the vehicle-class + scene + minifig action + camera framing, weave in the build technique + register + props + lighting + palette + cosmic phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
   BRICKBOT_PIRATES: ({ slots, vibeDirective }) => {
@@ -1556,7 +1556,7 @@ ${palette}
 ${vibeDirective.slice(0, 200)}
 
 ━━━ OUTPUT SPEC ━━━
-Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the ship-class + scene + minifig action + camera framing, weave in the build technique + register + props + lighting + palette + weather (if fired). End with one phrase reinforcing AFOL convention-tier diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
+Write 100-140 words. Single paragraph. Comma-separated phrase string. Lead with the ship-class + scene + minifig action + camera framing, weave in the build technique + register + props + lighting + palette + weather (if fired). End with one phrase reinforcing AFOL convention-tier diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
   BRICKBOT_AIRFIELD_BIPLANES: ({ slots, vibeDirective }) => {
     const {

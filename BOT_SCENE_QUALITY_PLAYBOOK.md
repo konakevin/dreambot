@@ -997,7 +997,9 @@ Live paths are `paths[]` in each `index.js`; don't trust a list here over the co
   "everything is LEGO" signal (wide paths get deep focus). No look register. Pop-culture IP allowed; hard-SF photoreal
   registers (Mass Effect, Expanse, cyberpunk-space) banned; registers ~80% iconic LEGO heritage / 15% retro-fantasy / 5%
   specialty. ~54% vehicle / 46% no-vehicle with mid-X tension; nature paths carry a `*_build_technique` axis as the
-  anti-photoreal guard. Paths come from `pools.PATHS` (go-live trap: `SKIP_LEGACY_PER_PATH`, §2.5). balloon-festival
+  anti-photoreal guard. Paths come from `pools.PATHS` (go-live trap: `SKIP_LEGACY_PER_PATH`, §2.5). Wrapper (2026-09-30): a 28-word prefix +
+  its own 12-word `mediumStyles.photography` (the shared DB photo fragment carried "accurate skin tones, photographic
+  realism"); templates ask 100-140 words; prompts ~257 words. balloon-festival
   says "balloon", never "envelope". airfield-biplanes: no register axis, hand-authored camera pool.
 - **ChibiBot**: adorable CRITTERS only (real + fantasy creatures), villages and cozy scenes; NO humans of any kind,
   children included; cultural diversity lives on mythic creatures. Polished 3D designer-collectible register, chibi
