@@ -155,10 +155,12 @@ loss such as a cropped dome), write the numbers next to the pin, and add the pat
 `DOCUMENTED_PRO_ONLY` in `__tests__/lib/proOnlyPinGuard.test.ts` (CI fails an undocumented pro-only pin).
 
 > **STOP — before ANY bot work** (config, paths, pools, seeds, archetypes, briefs, or even answering how a
-> bot works): re-read **`BOT_SCENE_QUALITY_PLAYBOOK.md` IN FULL** first — the canonical brain (the 10/10
-> bar, the 8 components of a memorable scene, per-bot iteration logs, the failure-mode catalog). Prior
-> session context is NOT a substitute. **Update the playbook with every new lesson the moment you learn
-> it.** When Kevin says "run an HTML matrix on `<bot>`", just run `node scripts/qa-bot-model-matrix.js
+> bot works): re-read **`BOT_SCENE_QUALITY_PLAYBOOK.md` IN FULL** first — the canonical brain (the bar + the
+> 8 components of a memorable scene, the path pipeline, prompt-craft laws, the failure-mode catalogue, current
+> per-bot profiles, open items). Prior session context is NOT a substitute. **Update the playbook with every new
+> lesson the moment you learn it — as ONE bullet in the right section, editing (not contradicting) older bullets;
+> narratives and round logs go to `BOT_SCENE_QUALITY_PLAYBOOK_ARCHIVE.md`** (the frozen pre-2026-09-29 playbook,
+> which old "playbook lesson N" code comments cite). When Kevin says "run an HTML matrix on `<bot>`", just run `node scripts/qa-bot-model-matrix.js
 --bot <name>` (defaults: 1×/(path×model), `--post` on).
 
 ---
@@ -380,7 +382,7 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
 
 - **Procedures (read-when-relevant):** `ENGINEERING_NOTES.md` (after-change checklists, admin-config
   catalog, bot module internals, onboarding flow).
-- **Bots:** `BOT_SCENE_QUALITY_PLAYBOOK.md` (canonical brain), `BOTS.md`, `BOT_MODEL_TALLY.md`,
+- **Bots:** `BOT_SCENE_QUALITY_PLAYBOOK.md` (canonical brain; history in `BOT_SCENE_QUALITY_PLAYBOOK_ARCHIVE.md`), `BOTS.md`, `BOT_MODEL_TALLY.md`,
   `BOT_AXIS_REFACTOR_PLAN.md`, `BOT_PREFIX_NEED_TO_REVIEW_AND_FIX.md`. **Seed-pool reseed program**
   (repairing subject pools so scenes actually vary, one pool at a time): `/reseed` skill = the runbook,
   `RESEED_STATUS.md` = status of record + queue (update it in the same commit as the work).
