@@ -264,6 +264,10 @@ const REGENCY = /\b(regency|bridgerton|jane austen|austen|georgian)\b/i;
 // Not the word "gothic" itself: it names architecture (a "late-Gothic city gate" rolled a corset gown).
 const GOTHIC = /\b(vampires?|haunted|dracula|victorian (mansion|manor))\b/i;
 const SAFARI = /\b(safari|serengeti|savann?ah?|kenya|tanzania|botswana|african bush)\b/i;
+/** Phase 10: autumn looks unlock only when the scene names autumn (a Fall scenario row, an orchard, a hayride), the
+ *  way nautical needs a harbour. Not the bare word "fall" (waterfalls, Niagara Falls). */
+const AUTUMN =
+  /\b(autumn(al)?|fall (foliage|leaves|colou?rs?|festival|fair)|harvest|pumpkins?|orchards?|cider|hay ?rides?|corn ?maze|maple|leaf[- ]peeping|thanksgiving|october|sweater weather|foliage)\b/i;
 /** The rocker look's own world. Kevin (2026-09-28): "i see leather jackets in all the recent test renders -
  *  even on a beach". Leather jackets were 1% of production outfits before the phase 8 looks and 8% after,
  *  because rocker was allowed in every city, indoor and evening place. Now: city only, favoured where the
@@ -540,6 +544,38 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     sceneFitOnly: true,
   },
   {
+    key: 'autumn_knits',
+    text: 'autumn knits: a chunky cable cardigan, a pleated wool skirt, knee-high boots',
+    families: ['skirt', 'dress'],
+    settings: ['outdoors', 'city', 'indoor'],
+    requires: AUTUMN,
+    sceneFitOnly: true,
+  },
+  {
+    key: 'cosy_layers',
+    text: 'cosy autumn layers: a blanket scarf, a belted wool coat, suede ankle boots',
+    families: ['coat_over_dress', 'trousers', 'skirt'],
+    settings: ['outdoors', 'city', 'indoor'],
+    requires: AUTUMN,
+    sceneFitOnly: true,
+  },
+  {
+    key: 'suede_seventies',
+    text: '1970s suede: a fringed suede jacket, a flowing midi, knee-high boots',
+    families: ['dress', 'skirt'],
+    settings: ['outdoors', 'city'],
+    requires: AUTUMN,
+    sceneFitOnly: true,
+  },
+  {
+    key: 'harvest_romance',
+    text: 'harvest romance: a puff-sleeve knit, a tiered midi skirt, lace-up ankle boots',
+    families: ['skirt', 'dress'],
+    settings: ['outdoors', 'indoor'],
+    requires: AUTUMN,
+    sceneFitOnly: true,
+  },
+  {
     key: 'apres_ski',
     text: 'après-ski glamour: a shearling-trimmed jacket, a chunky knit, fluffy snow boots',
     families: ['trousers', 'jumpsuit', 'skirt'],
@@ -795,6 +831,34 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
     key: 'mermaid',
     text: 'ocean-myth shimmer: an iridescent scale-textured jacket, a shell pendant, a flowing sash',
     settings: ['fantasy'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'autumn_knits',
+    text: 'autumn knits: a shawl-collar cardigan, corduroy trousers, suede chukka boots',
+    settings: ['outdoors', 'city', 'indoor'],
+    requires: AUTUMN,
+    sceneFitOnly: true,
+  },
+  {
+    key: 'cosy_layers',
+    text: 'cosy autumn layers: a wool overshirt, a knitted scarf, leather lace-up boots',
+    settings: ['outdoors', 'city', 'indoor'],
+    requires: AUTUMN,
+    sceneFitOnly: true,
+  },
+  {
+    key: 'suede_seventies',
+    text: '1970s suede: a suede trucker jacket, a ribbed roll-neck, leather boots',
+    settings: ['outdoors', 'city'],
+    requires: AUTUMN,
+    sceneFitOnly: true,
+  },
+  {
+    key: 'harvest_romance',
+    text: 'harvest romance: a waffle-knit shirt, a quilted vest, high-waisted cords',
+    settings: ['outdoors', 'indoor'],
+    requires: AUTUMN,
     sceneFitOnly: true,
   },
   {

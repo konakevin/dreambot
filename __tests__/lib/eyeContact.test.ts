@@ -1,7 +1,7 @@
 /**
  * EYE CONTACT (NIGHTLY_EYE_CONTACT_PLAN.md, mig 587). Kevin 2026-09-30: "our faces and eyes are looking randomly off
  * camera" and "weird side angle renders". The fix that measured (same-seed screen): "looking into the camera" on each
- * person's own description, right before the wardrobe. Locks: where the words go, that the switch off leaves both
+ * person (a couple: after each wardrobe; a solo: after the medium, before the wardrobe). Locks: where the words go, that the switch off leaves both
  * composers byte-identical, the config default, and the QA flag.
  */
 import fs from 'fs';
@@ -62,15 +62,19 @@ const soloSlots = {
 
 describe('eye contact on couples (narrative_fg + narrative_fg_beat)', () => {
   for (const variant of ['narrative_fg', 'narrative_fg_beat'] as const) {
-    it(`${variant}: the gaze rides each person, right before their wardrobe`, () => {
+    it(`${variant}: the gaze follows each person's wardrobe`, () => {
       const p = composeExperimentalCouple({
         slots: coupleSlots,
         input: couple({ eyeContact: true }),
         variant,
       });
-      expect(p.split(', looking into the camera, wearing ').length - 1).toBe(2);
-      expect(p).toContain('looking into the camera, wearing a plum silk midi skirt');
-      expect(p).toContain('looking into the camera, wearing an ochre linen camp-collar shirt');
+      expect(p.split(', looking into the camera').length - 1).toBe(2);
+      expect(p).toContain(
+        'wearing a plum silk midi skirt, a satin wrap top, looking into the camera; to her right'
+      );
+      expect(p).toContain(
+        'wearing an ochre linen camp-collar shirt, tailored shorts, looking into the camera.'
+      );
       // The closing faces line is unchanged (moving it or adding to it did nothing, and faces-first shrinks scenery).
       expect(p).toContain('their faces turned toward the camera, clearly visible and unobstructed');
     });

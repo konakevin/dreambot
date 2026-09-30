@@ -80,6 +80,33 @@ export const ARMS = {
       / Behind and around them/,
       ' Both glance at the camera mid-moment. Behind and around them'
     ),
+  // Round 5 nulls: does ANY edit lower scenery on these seeds, or only gaze words?
+  n1: (p) => p.replace('A three-quarter length two-shot.', 'A three-quarter-length two-shot.'),
+  n2: (p) => {
+    const m = p.match(
+      /(In the foreground, on the left, [^;]*?, wearing )([^;]+)(; to (?:her|his|their) right, with a clear gap between their heads, [^.]*?, wearing )([^.]+)(\.)/
+    );
+    if (!m) return p;
+    return p.replace(m[0], `${m[1]}${m[2]}, in the moment${m[3]}${m[4]}, in the moment${m[5]}`);
+  },
+  // Round 6: c4 with the closing line's own face words trimmed (the gaze now rides each person), so the prompt keeps
+  // its length and the face emphasis does not double.
+  c9: (p) =>
+    ARMS.c4(p).replace(
+      'Both are shown from the knees up, side by side, their faces turned toward the camera, clearly visible and unobstructed, lifelike adult faces with realistic proportions.',
+      'Both are shown from the knees up, side by side, clearly visible and unobstructed, lifelike adult faces with realistic proportions.'
+    ),
+  // Round 6: c4 whose gaze names where they stand ("from within the scene"), re-anchoring the frame to the place.
+  c10: (p) => {
+    const m = p.match(
+      /(In the foreground, on the left, [^;]*?, wearing )([^;]+)(; to (?:her|his|their) right, with a clear gap between their heads, [^.]*?, wearing )([^.]+)(\.)/
+    );
+    if (!m) return p;
+    return p.replace(
+      m[0],
+      `${m[1]}${m[2]}, looking into the camera${m[3]}${m[4]}, looking into the camera from within the scene${m[5]}`
+    );
+  },
   // Solos: eyes to the camera, no "gently off", no three-quarter head.
   s1: (p) =>
     p

@@ -154,10 +154,10 @@ export interface CharacterSlotPipelineInput {
    *  shipped order (wardrobe at the end of the CHARACTER block, ~char 1,100-1,400) rendered the outfit 0/12; right
    *  after the medium 12/12 (ballet dress, old-money polo, two regency dresses). Unset → byte-identical. */
   soloOutfitEarly?: boolean;
-  /** EYE CONTACT (NIGHTLY_EYE_CONTACT_PLAN.md, 2026-09-30): "looking into the camera" rides each person's own
-   *  description, right before their wardrobe. Kevin: "our faces and eyes are looking randomly off camera" and "weird
-   *  side angle renders". Same-seed flux-1.1-pro screen, 23 real 5.5 couples: eyes on camera 72% → 85%, heads turned
-   *  19% → 2%, faces median 13.3% → 14.5% of the frame; the same words in the closing faces line did nothing (72%).
+  /** EYE CONTACT (NIGHTLY_EYE_CONTACT_PLAN.md, 2026-09-30): "looking into the camera" rides each person — a couple
+   *  after each wardrobe (coupleComposerX), a solo right after the medium, before the wardrobe. Kevin: "our faces and
+   *  eyes are looking randomly off camera" and "weird side angle renders". Same-seed flux-1.1-pro screen, 23 real 5.5
+   *  couples: eyes on camera 72% → 91%, heads turned 19% → 2%; the same words in the closing faces line did nothing.
    *  Solos (16): 71% → 81%. Unset → byte-identical. */
   eyeContact?: boolean;
   /** Whether the location is a REAL-WORLD place (not a fantasy/imagined dream

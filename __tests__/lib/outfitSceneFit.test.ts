@@ -632,3 +632,47 @@ describe('phase 10: more looks where the pools were thin (NIGHTLY_OUTFIT_VARIETY
     }
   });
 });
+
+describe('phase 10: autumn looks unlock only in autumn scenes', () => {
+  const AUTUMN_KEYS = ['autumn_knits', 'cosy_layers', 'suede_seventies', 'harvest_romance'];
+  const keys = (setting: Setting, text: string) => {
+    const out = new Set<string>();
+    for (let i = 0; i < 1500; i++) {
+      for (const p of rollFashion(COUPLE, GENDERS, undefined, seeded(i), { setting, text })) {
+        out.add(p!.look.key);
+      }
+    }
+    return out;
+  };
+
+  it('a pumpkin patch or an orchard rolls them, often but not always', () => {
+    const k = keys('outdoors', 'hayride through a pumpkin patch at golden hour');
+    for (const a of AUTUMN_KEYS.filter((x) => x !== 'suede_seventies')) expect(k.has(a)).toBe(true);
+    let hit = 0;
+    for (let i = 0; i < 1000; i++) {
+      // Production's favoured rate (engine_config.outfit_favoured_look_pct = 30), not the legacy 85.
+      const [her] = rollFashion(
+        COUPLE,
+        GENDERS,
+        undefined,
+        seeded(i),
+        { setting: 'outdoors', text: 'apple orchard with cider barrels' },
+        { favouredPct: 30 }
+      );
+      if (AUTUMN_KEYS.includes(her!.look.key)) hit++;
+    }
+    expect(hit / 1000).toBeGreaterThan(0.25);
+    expect(hit / 1000).toBeLessThan(0.75);
+  });
+
+  it('never outside autumn, and never from the bare word "falls"', () => {
+    for (const [s, t] of [
+      ['outdoors', 'Multnomah Falls twin-tiered basalt cascade'],
+      ['beach', 'Key West beach at sunset'],
+      ['city', 'Times Square at night'],
+    ] as [Setting, string][]) {
+      const k = keys(s, t);
+      for (const a of AUTUMN_KEYS) expect(k.has(a)).toBe(false);
+    }
+  });
+});
