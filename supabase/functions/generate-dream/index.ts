@@ -114,7 +114,7 @@ import { persistToStorage, buildDisplayVariant } from '../_shared/persistence.ts
 import { callSonnet } from '../_shared/llm.ts';
 import { callClaude, createLlmContext, type LlmContext } from '../_shared/anthropic.ts';
 import { fetchLlmOverlays } from '../_shared/llmOverlays.ts';
-import { distillStyle } from '../_shared/styleDistiller.ts';
+import { distillStyle, repairLegacyFingerprint } from '../_shared/styleDistiller.ts';
 import {
   getCostCents,
   getSparkleCost,
@@ -294,8 +294,13 @@ async function handleRequest(req: Request): Promise<Response> {
   if (typeof body.hint === 'string') body.hint = sanitizeUserText(body.hint, 'hint');
   if (typeof body.subject_description === 'string')
     body.subject_description = sanitizeUserText(body.subject_description, 'subject_description');
+  // A DLT style reference is usually the source post's style_summary; an old one ends in a word fragment
+  // (repairLegacyFingerprint). Repaired before sanitizing, which can shorten it.
   if (typeof body.style_prompt === 'string')
-    body.style_prompt = sanitizeUserText(body.style_prompt, 'style_prompt');
+    body.style_prompt = sanitizeUserText(
+      repairLegacyFingerprint(body.style_prompt),
+      'style_prompt'
+    );
   if (typeof body.description === 'string')
     body.description = sanitizeUserText(body.description, 'description');
 

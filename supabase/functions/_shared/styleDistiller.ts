@@ -214,6 +214,18 @@ export function trimFingerprint(text: string, max: number = FINGERPRINT_MAX_CHAR
 }
 
 /**
+ * Repair a fingerprint stored BEFORE trimFingerprint (2026-09-30), at read time: those were blind-cut at exactly
+ * FINGERPRINT_MAX_CHARS, nearly always mid-word, so drop the broken tail back to the last whole clause. A fingerprint
+ * written since ends on a clause and is almost never exactly 400 chars; anything else passes through untouched.
+ * Read-time on purpose: rewriting the stored rows would be a bulk uploads UPDATE (a realtime storm).
+ */
+export function repairLegacyFingerprint(text: string): string {
+  return text.length === FINGERPRINT_MAX_CHARS
+    ? trimFingerprint(text, FINGERPRINT_MAX_CHARS - 1)
+    : text;
+}
+
+/**
  * Trim a medium/vibe directive to a tight ~80-word summary so the
  * Haiku context stays small and focused. The directives can be 120-150
  * words; we don't need every detail — just the dominant style language.

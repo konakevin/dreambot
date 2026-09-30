@@ -10,6 +10,7 @@ import fs from 'fs';
 import path from 'path';
 import {
   trimFingerprint,
+  repairLegacyFingerprint,
   FINGERPRINT_MAX_CHARS,
   FINGERPRINT_MAX_TOKENS,
 } from '@engine/styleDistiller';
@@ -72,5 +73,25 @@ describe('trimFingerprint', () => {
       expect(src).toMatch(/return trimFingerprint\(text\);/);
       expect(src).not.toMatch(/text\.slice\(0, 400\)/);
     }
+  });
+
+  it('repairLegacyFingerprint: an old blind-cut 400-char fingerprint loses its broken tail; others pass through', () => {
+    const legacy = LONG.slice(0, FINGERPRINT_MAX_CHARS); // how rows were stored before the fix
+    expect(legacy.length).toBe(400);
+    const fixed = repairLegacyFingerprint(legacy);
+    expect(LONG.startsWith(fixed)).toBe(true);
+    expect(LONG.charAt(fixed.length)).toBe(',');
+    expect(repairLegacyFingerprint('oil painting, warm light')).toBe('oil painting, warm light');
+    const fresh = trimFingerprint(LONG);
+    expect(repairLegacyFingerprint(fresh)).toBe(fresh);
+  });
+  it('generate-dream repairs the DLT style reference before sanitizing it', () => {
+    const src = fs.readFileSync(
+      path.join(__dirname, '..', '..', 'supabase', 'functions', 'generate-dream', 'index.ts'),
+      'utf8'
+    );
+    expect(src).toMatch(
+      /sanitizeUserText\(\s*repairLegacyFingerprint\(body\.style_prompt\),\s*'style_prompt'\s*\)/
+    );
   });
 });
