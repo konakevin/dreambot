@@ -10,8 +10,7 @@ import { useAuthStore } from '@/store/auth';
 import { colors } from '@/constants/theme';
 import { verticalScale, horizontalScale, fontScale } from '@/lib/responsive';
 import { onboardingStyles as shared } from './sharedStyles';
-import MaskedView from '@react-native-masked-view/masked-view';
-import { GradientTitle, TITLE_SIZE, BRAND_GRADIENT } from '@/components/GradientTitle';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { displayFontFamily } from '@/constants/fonts';
 import { TitleText } from '@/components/TitleText';
 import { OnboardingFooter } from './OnboardingFooter';
@@ -159,32 +158,18 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
       }
     }, [sections, toggleAllLocations]);
 
-    // Section eyebrow — a CENTERED "———— REAL WORLD ————" divider where ONE brand
-    // gradient sweeps continuously across the left rule, the text, and the right rule
-    // as a single unit (Kevin 2026-08-29). Done with a MaskedView: the gradient fills
-    // the full row and shows through the mask (two flex lines + the label glyphs).
+    // Group label (Kevin 2026-09-30: the gradient banners were "so loud that they almost drown out" the tiles): small
+    // grey caps, left-aligned like a list label, no gradient and no rules. Spacing between groups does the separating;
+    // the tiles and their images carry the colour.
     const renderSectionHeader = (label: string, later: boolean) => (
-      <View key={`h-${label}`} style={[s.sectionHeader, later && s.sectionHeaderLater]}>
-        <MaskedView
-          style={s.sectionMask}
-          maskElement={
-            <View style={s.sectionMaskRow}>
-              <View style={s.sectionMaskLine} />
-              <Text style={s.sectionMaskLabel} numberOfLines={1}>
-                {label}
-              </Text>
-              <View style={s.sectionMaskLine} />
-            </View>
-          }
-        >
-          <LinearGradient
-            colors={BRAND_GRADIENT}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={StyleSheet.absoluteFill}
-          />
-        </MaskedView>
-      </View>
+      <Text
+        key={`h-${label}`}
+        style={[s.groupLabel, later && s.groupLabelLater]}
+        numberOfLines={1}
+        accessibilityRole="header"
+      >
+        {label}
+      </Text>
     );
 
     // Level 1 — the whole picker on ONE page (no tabs): a global running total, then the
@@ -409,30 +394,17 @@ const s = StyleSheet.create({
   },
   resetBtnText: { fontSize: fontScale(12.5), fontWeight: '700', color: colors.bodyOnDark },
 
-  // Level 1 — group eyebrow header (one per mood group). An uppercase letter-spaced
-  // label + a brand-gradient rule; every group after the first gets extra top space.
-  // No marginHorizontal — the header lives inside the ScrollView's already-padded
-  // content (scrollContent), so it aligns with the grid; a second margin would
-  // double-inset it and push the fixed-width mask off-center.
-  sectionHeader: {
-    marginTop: verticalScale(4),
-    marginBottom: verticalScale(12),
-  },
-  sectionHeaderLater: { marginTop: verticalScale(24) },
-  // Centered "——— LABEL ———" divider — one gradient (behind) shows through this
-  // mask (two flex rules + the label glyphs), so it reads as a single unit. Fills
-  // the padded content width so the two lines stay symmetric and the label centers.
-  sectionMask: { width: '100%', height: fontScale(24) },
-  sectionMaskRow: { flex: 1, flexDirection: 'row', alignItems: 'center' },
-  sectionMaskLine: { flex: 1, height: 2, borderRadius: 999, backgroundColor: '#FFFFFF' },
-  sectionMaskLabel: {
-    color: '#FFFFFF',
-    fontFamily: displayFontFamily(800),
-    fontSize: fontScale(13.5),
-    letterSpacing: 1.8,
+  // Level 1 — group label (one per mood group): quiet, so the tiles lead.
+  groupLabel: {
+    color: colors.textSecondary,
+    fontFamily: displayFontFamily(700),
+    fontSize: fontScale(11.5),
+    letterSpacing: 1.4,
     textTransform: 'uppercase',
-    marginHorizontal: horizontalScale(12),
+    marginTop: verticalScale(2),
+    marginBottom: verticalScale(8),
   },
+  groupLabelLater: { marginTop: verticalScale(18) },
 
   // Level 2 — category cards.
   catGrid: {
