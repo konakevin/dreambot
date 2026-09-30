@@ -16,11 +16,11 @@ with good variety and high quality seeds all around" → "can we plan that out a
 
 ## The pools (live counts 2026-09-30)
 
-| Pool | Rows | Unit judged | Tool |
-|---|---|---|---|
-| Location spots (`location_iconic_spots`) | 26,210 active across 175 picker place cards | one card's whole pool (50-300) | `scripts/dedupe-location-spots.js` |
-| Shared scenes (`dual_scenarios`, `single_scenarios`; goofy / elegant / active) | 13,168 live | per card or category tag, chunked | phase 3 tool (to build) |
-| Holiday scenes (holiday pool rows) | ~5,840 | per holiday pool | phase 5, after the Fall / Halloween window |
+| Pool                                                                           | Rows                                        | Unit judged                       | Tool                                       |
+| ------------------------------------------------------------------------------ | ------------------------------------------- | --------------------------------- | ------------------------------------------ |
+| Location spots (`location_iconic_spots`)                                       | 26,210 active across 175 picker place cards | one card's whole pool (50-300)    | `scripts/dedupe-location-spots.js`         |
+| Shared scenes (`dual_scenarios`, `single_scenarios`; goofy / elegant / active) | 13,168 live                                 | per card or category tag, chunked | phase 3 tool (to build)                    |
+| Holiday scenes (holiday pool rows)                                             | ~5,840                                      | per holiday pool                  | phase 5, after the Fall / Halloween window |
 
 ## Method (location spots)
 
@@ -42,13 +42,13 @@ the cabinet of glass planets) and one rewrite that landed next to an existing id
 
 ## Phases
 
-| # | Phase | State |
-|---|---|---|
-| 1 | Audit location spots, every picker place card (read-only): duplicates per card | running |
-| 2 | Clean location spots: batches by duplication rate, highest first; migrations + health check + QA sample | next |
-| 3 | Shared scene pools: lexical prefilter shortlists within each pool, LLM judge inside the shortlists, rewrite, verify | to build |
-| 4 | Quality pass: grade entries (S / A / B) against their pool, rewrite the B's with the same rules | after 2-3 |
-| 5 | Holiday pools: same method, after the Fall / Halloween window closes | later |
+| #   | Phase                                                                                                               | State                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| --- | ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Audit location spots, every picker place card (read-only): duplicates per card                                      | **done**: 174 of 175 cards (Tahiti's judge reply failed to parse; redone in phase 2), 24,085 spots, **3,695 duplicates (15.3%)**, a floor (a second read finds more). Median card 15.2%; 59 cards over 20%, 64 at 10-20%, 51 under 10%, none at 0. Worst: Catacombs 44%, Ancient Rome 42%, Haleiwa 40%, Sahara Dunes 37%, Newport 36%, Victorian London 36%, Renaissance Venice 35%. Spot-checked: real duplicates ("Arch of Titus carved relief passageway on Via Sacra" vs "Arch of Titus relief-carved passage on Sacred Way"; five Port-Mahon reliefs in Catacombs), not over-calls |
+| 2   | Clean location spots: batches by duplication rate, highest first; migrations + health check + QA sample             | batch 1 (20 worst cards) running                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| 3   | Shared scene pools: lexical prefilter shortlists within each pool, LLM judge inside the shortlists, rewrite, verify | to build                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| 4   | Quality pass: grade entries (S / A / B) against their pool, rewrite the B's with the same rules                     | after 2-3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| 5   | Holiday pools: same method, after the Fall / Halloween window closes                                                | later                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 
 ## Safety
 

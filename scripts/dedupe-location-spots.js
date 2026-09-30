@@ -50,7 +50,23 @@ const BASIS_REAL =
 const BASIS_IMAGINED =
   "Two spots are the SAME IDEA when their renders would show the same main subject arranged the same way, so a viewer would call them the same picture with small changes (a ringed planet low over a terrace vs a ringed planet low over a gazebo). Sharing the world's signature element is not sameness when the main subject or arrangement differs (a ringed planet over a meadow vs a glass observatory under a nebula).";
 
-const parse = (raw) => JSON.parse(raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1));
+/** The first balanced JSON array in a reply (a model sometimes adds a note after it, which broke Tahiti's audit). */
+function parse(raw) {
+  const start = raw.indexOf('[');
+  if (start < 0) throw new Error('no JSON array in reply');
+  let depth = 0;
+  let inStr = false;
+  for (let i = start; i < raw.length; i++) {
+    const ch = raw[i];
+    if (inStr) {
+      if (ch === '\\') i++;
+      else if (ch === '"') inStr = false;
+    } else if (ch === '"') inStr = true;
+    else if (ch === '[') depth++;
+    else if (ch === ']' && --depth === 0) return JSON.parse(raw.slice(start, i + 1));
+  }
+  throw new Error('unbalanced JSON array in reply');
+}
 async function ask(system, content, maxTokens = 6000) {
   for (let a = 0; a < 3; a++) {
     try {
