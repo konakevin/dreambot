@@ -43,8 +43,11 @@ async function upsert() {
         // "new places to dream", so the two don't repeat. No emoji (Kevin: "ditch the icon on the right of the
         // title"). 20 characters, one line (the gradient title wraps past ~23).
         title: 'Locations, refreshed',
-        // Two tile names they'll recognise after the tap, not the full list: "a few new places" is the point.
-        body: 'The Locations screen has a new look, plus a few new places to check out, like Dreamscapes and Game On.',
+        // Paragraph 1 is the nudge. Paragraph 2 is the one behaviour change a dreamer can notice: nightly used to
+        // draw some scenes from shared pools regardless of their picks (SCENARIO_LOCATION_SCOPE.md), and now every
+        // nightly stays in their places (holidays aside). "No more surprise detours" names the old behaviour
+        // gently, without explaining pools. The sheet's body Text renders the blank line as a paragraph break.
+        body: "The Locations screen has a new look, plus a few new places to check out.\n\nNightly dreams now stay in the places you've picked, so no more surprise detours.",
         image_url: HERO,
         cta_label: 'Take a look',
         cta_route: '/settings/locations',
