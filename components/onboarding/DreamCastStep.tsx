@@ -712,6 +712,9 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
    * A cast that has both needs no confirm. The prompt fires once per tap, never on a loop: choosing
    * Continue advances immediately.
    */
+  // Drives the footer: the upload is the primary action until the user's own photo is in.
+  const hasSelfPhoto = dreamCast.some((m) => m.role === 'self');
+
   function handleNext() {
     const hasSelf = dreamCast.some((m) => m.role === 'self');
     const plusOne = dreamCast.find((m) => m.role === 'plus_one');
@@ -915,9 +918,17 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
 
       {!isEditing && (
         <OnboardingFooter
-          onNext={handleNext}
+          // Until there's a selfie, the primary button is the upload and skipping is a quiet link (Kevin 2026-09-30:
+          // "Skip" as the big purple button steered 55% of new users past the selfie, and they dream a fifth as much).
+          onNext={hasSelfPhoto ? handleNext : () => handleUpload('self')}
           onBack={onBack}
-          nextLabel={dreamCast.length === 0 ? 'Skip' : 'Next'}
+          nextLabel={hasSelfPhoto ? 'Next' : 'Add my selfie'}
+          nextIcon={hasSelfPhoto ? undefined : 'camera'}
+          secondaryAction={
+            hasSelfPhoto
+              ? undefined
+              : { label: 'Not now', onPress: handleNext, disabled: uploading !== null }
+          }
           // While a cast photo is uploading/describing, lock BOTH buttons —
           // advancing (or backing out) mid-process aborts the in-flight
           // upload + describe-photo call and leaves a half-broken cast member.

@@ -27,6 +27,11 @@ interface Props {
   /** Disable the Back button (e.g. while a photo is being analyzed — leaving the
    *  step mid-process can corrupt the upload/describe pipeline). */
   backDisabled?: boolean;
+  /** Icon on the primary button in place of the forward arrow (e.g. a camera when the primary action uploads). */
+  nextIcon?: keyof typeof Ionicons.glyphMap;
+  /** A quiet text link under the buttons for the lesser choice (e.g. "Not now" beside an upload), so the step's
+   *  primary button can be the action we want rather than the escape. */
+  secondaryAction?: { label: string; onPress: () => void; disabled?: boolean };
 }
 
 /**
@@ -49,6 +54,8 @@ export function OnboardingFooter({
   nextVariant = 'default',
   hideBack = false,
   backDisabled = false,
+  nextIcon,
+  secondaryAction,
 }: Props) {
   const insets = useSafeAreaInsets();
   const bottomPad = Math.max(insets.bottom, verticalScale(16));
@@ -91,7 +98,7 @@ export function OnboardingFooter({
           {nextVariant === 'gradient' ? (
             <GradientButton
               label={buttonLabel}
-              icon={isPrompt ? undefined : 'arrow-forward'}
+              icon={isPrompt ? undefined : (nextIcon ?? 'arrow-forward')}
               disabled={disabled}
               onPress={handleNext}
               style={{ flex: 1 }}
@@ -108,7 +115,7 @@ export function OnboardingFooter({
               </Text>
               {!isPrompt && (
                 <Ionicons
-                  name="arrow-forward"
+                  name={nextIcon ?? 'arrow-forward'}
                   size={18}
                   color={disabled ? colors.textSecondary : '#FFFFFF'}
                 />
@@ -116,6 +123,17 @@ export function OnboardingFooter({
             </TouchableOpacity>
           )}
         </View>
+        {secondaryAction && (
+          <TouchableOpacity
+            style={[shared.secondaryLink, secondaryAction.disabled && { opacity: 0.4 }]}
+            onPress={secondaryAction.onPress}
+            disabled={secondaryAction.disabled}
+            hitSlop={{ top: 8, bottom: 8, left: 16, right: 16 }}
+            accessibilityRole="button"
+          >
+            <Text style={shared.secondaryLinkText}>{secondaryAction.label}</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </ResponsiveContainer>
   );

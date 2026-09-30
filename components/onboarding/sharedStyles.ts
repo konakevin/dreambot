@@ -44,6 +44,8 @@ export const onboardingStyles = StyleSheet.create({
     borderTopColor: colors.border,
   },
   footerButtons: { flexDirection: 'row', gap: verticalScale(12) },
+  secondaryLink: { alignSelf: 'center', paddingVertical: verticalScale(4) },
+  secondaryLinkText: { fontSize: fontScale(14), fontWeight: '600', color: colors.textSecondary },
   counterRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   backBtn: {
     flex: 1,
