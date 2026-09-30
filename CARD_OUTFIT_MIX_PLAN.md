@@ -87,8 +87,8 @@ string; a content test that 611's mixes parse clean), `types/database.ts`.
 | Amalfi solo, unpinned                    | `outfit_setting:beach:card_mix`                                           | linen camp shirt, board shorts                                           |
 | Paris solo, no mix (control)             | `outfit_setting:city:location`                                            | unchanged                                                                |
 
-Open: the evening side draws every evening look, including mod, disco, glam rock and K-pop, so "formal snowy" is
-sometimes a night-out look rather than a gown. A stricter formal side would be its own setting (gowns, velvet,
-couture, old money, deco). The Winter Wonderland couple's scene came out autumnal with no autumn words in the prompt
+Decided: the evening side draws every evening look, including mod, disco, glam rock and K-pop, so "formal snowy" is
+sometimes a night-out look rather than a gown. Kevin (2026-09-30): "i like the variety in outfits, so leave it". Do
+not narrow it to a strict formal set. The Winter Wonderland couple's scene came out autumnal with no autumn words in the prompt
 (the stained-glass vibe's ruby and amber light plus a burnt-orange suit): the known couple scene under-render, not
 the mix.
