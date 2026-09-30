@@ -712,8 +712,15 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
    * A cast that has both needs no confirm. The prompt fires once per tap, never on a loop: choosing
    * Continue advances immediately.
    */
-  // Drives the footer: the upload is the primary action until the user's own photo is in.
+  // Drives the footer: the next photo to add is the primary action (your selfie, then your +1), with "Not now"
+  // as the quiet way past; once both are in it is plain Next (Kevin 2026-09-30).
   const hasSelfPhoto = dreamCast.some((m) => m.role === 'self');
+  const hasPlusOnePhoto = dreamCast.some((m) => m.role === 'plus_one');
+  const nextPhotoRole: CastRole | null = !hasSelfPhoto
+    ? 'self'
+    : !hasPlusOnePhoto
+      ? 'plus_one'
+      : null;
 
   function handleNext() {
     const hasSelf = dreamCast.some((m) => m.role === 'self');
@@ -918,16 +925,22 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
 
       {!isEditing && (
         <OnboardingFooter
-          // Until there's a selfie, the primary button is the upload and skipping is a quiet link (Kevin 2026-09-30:
-          // "Skip" as the big purple button steered 55% of new users past the selfie, and they dream a fifth as much).
-          onNext={hasSelfPhoto ? handleNext : () => handleUpload('self')}
+          // The next photo to add is the primary button and skipping is a quiet link (Kevin 2026-09-30: "Skip" as the
+          // big purple button steered 55% of new users past the selfie, and they dream a fifth as much).
+          onNext={nextPhotoRole ? () => handleUpload(nextPhotoRole) : handleNext}
           onBack={onBack}
-          nextLabel={hasSelfPhoto ? 'Next' : 'Add my selfie'}
-          nextIcon={hasSelfPhoto ? undefined : 'camera'}
+          nextLabel={
+            nextPhotoRole === 'self'
+              ? 'Add my selfie'
+              : nextPhotoRole === 'plus_one'
+                ? 'Add a +1'
+                : 'Next'
+          }
+          nextIcon={nextPhotoRole ? 'camera' : undefined}
           secondaryAction={
-            hasSelfPhoto
-              ? undefined
-              : { label: 'Not now', onPress: handleNext, disabled: uploading !== null }
+            nextPhotoRole
+              ? { label: 'Not now', onPress: handleNext, disabled: uploading !== null }
+              : undefined
           }
           // While a cast photo is uploading/describing, lock BOTH buttons —
           // advancing (or backing out) mid-process aborts the in-flight
