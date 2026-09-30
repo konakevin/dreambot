@@ -2692,6 +2692,7 @@ export type Database = {
           model_version: string;
           must_include: string[] | null;
           name: string;
+          outfit_mix: Json | null;
           picker_category: string | null;
           picker_sort_order: number | null;
           picker_tile: string | null;
@@ -2722,6 +2723,7 @@ export type Database = {
           model_version?: string;
           must_include?: string[] | null;
           name: string;
+          outfit_mix?: Json | null;
           picker_category?: string | null;
           picker_sort_order?: number | null;
           picker_tile?: string | null;
@@ -2752,6 +2754,7 @@ export type Database = {
           model_version?: string;
           must_include?: string[] | null;
           name?: string;
+          outfit_mix?: Json | null;
           picker_category?: string | null;
           picker_sort_order?: number | null;
           picker_tile?: string | null;

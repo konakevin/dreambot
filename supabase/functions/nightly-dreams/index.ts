@@ -204,6 +204,9 @@ import {
   settingFromCategory,
   settingFromLocation,
   settingFromPlaceName,
+  parseOutfitMix,
+  resolveNightlySetting,
+  type OutfitMix,
   settingFromText,
   type Setting,
 } from '../_shared/sceneSetting.ts';
@@ -505,6 +508,7 @@ Deno.serve(async (req) => {
     force_couple_hair_anchor,
     force_scenario_scope,
     force_no_holiday,
+    force_outfit_mix,
     force_solo_outfit_early,
     force_outfit_scene_fit,
     force_llm_model,
@@ -1573,9 +1577,16 @@ Deno.serve(async (req) => {
     // user. Cheap (~160-row set, cast/scene rolls hit the DB anyway).
     const { data: validCardRows } = await supabase
       .from('location_cards')
-      .select('name, picker_category, content_kind, couples_ok')
+      .select('name, picker_category, content_kind, couples_ok, outfit_mix')
       .not('picker_category', 'is', null);
     const validCardNames = new Set((validCardRows ?? []).map((c: { name: string }) => c.name));
+    // CARD OUTFIT MIX (mig 611, CARD_OUTFIT_MIX_PLAN.md): a card's dress codes with weights; each nightly rolls one.
+    const outfitMixByCard = new Map<string, OutfitMix | null>(
+      (validCardRows ?? []).map((c: { name: string; outfit_mix: unknown }) => [
+        c.name,
+        parseOutfitMix(c.outfit_mix),
+      ])
+    );
     // SCENARIO CARDS (mig 594): cards whose content is their tagged scenarios, not a place (Just for Fun, …).
     const scenarioCards = new Set(
       (validCardRows ?? [])
@@ -3642,6 +3653,7 @@ Deno.serve(async (req) => {
               ? sceneFitFrom(true)
               : null;
         let nightlySetting: Setting | null = null;
+        let mixCold = false;
         if (nightlySceneFit && fashionRollable && (garmentRollOn || outfitPlanEligible)) {
           const fromRow = dualSpecialScene
             ? (settingFromCategory(dualSceneCategory) ??
@@ -3664,22 +3676,30 @@ Deno.serve(async (req) => {
             !fromRow && biomeKey !== 'luxury'
               ? settingFromPlaceName(userPlace, iconicAnchor)
               : null;
-          const byName =
-            nameSetting === 'outdoors'
-              ? locSetting === 'city' || locSetting === 'beach' || locSetting === 'unknown'
-                ? 'outdoors'
-                : null
-              : nameSetting;
-          nightlySetting = fromRow ?? byName ?? locSetting;
+          // CARD OUTFIT MIX (mig 611): a card with a mix rolls one of its dress codes in place of the biome; a row
+          // and the spot's own words still win (on a snowy mix only ski / sled / skate words force snow gear).
+          const resolvedSetting = resolveNightlySetting({
+            fromRow,
+            nameSetting,
+            nameText: [userPlace, iconicAnchor].filter(Boolean).join(' '),
+            locSetting,
+            mix: userPlace ? (outfitMixByCard.get(userPlace) ?? null) : null,
+            forcePick: force_outfit_mix,
+            rng: Math.random,
+          });
+          nightlySetting = resolvedSetting.setting;
+          mixCold = resolvedSetting.cold;
           fallbackReasons.push(
             `outfit_scene_fit:${nightlySceneFit.looks && nightlySceneFit.brief ? 'all' : nightlySceneFit.looks ? 'looks' : nightlySceneFit.brief ? 'brief' : 'trim'}`,
-            `outfit_setting:${nightlySetting}:${fromRow ? 'row' : byName ? 'place_name' : 'location'}`
+            `outfit_setting:${nightlySetting}:${resolvedSetting.source}`
           );
+          if (resolvedSetting.rolled) fallbackReasons.push(`outfit_mix:${resolvedSetting.rolled}`);
         }
         // COLD SEASON (NIGHTLY_OUTFIT_VARIETY_PLAN.md phase 2): a Fall / Halloween / winter-holiday row dresses for the
         // season: no warm-only looks (a mushroom-circle Fall row rolled 1960s Riviera halters and shorts), fewer
         // shorts, and the autumn looks unlock on the autumn holidays (their `requires` reads the word "autumn").
-        const coldSeason = !!holidayCategory && COLD_HOLIDAYS.has(holidayCategory);
+        // A snowy card's mix that rolled a non-snow side (formal snowy) dresses cold too.
+        const coldSeason = (!!holidayCategory && COLD_HOLIDAYS.has(holidayCategory)) || mixCold;
         const autumnSeason = !!holidayCategory && AUTUMN_HOLIDAYS.has(holidayCategory);
         const sceneText = [
           userPlace,

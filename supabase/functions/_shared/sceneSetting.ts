@@ -243,3 +243,105 @@ export const SETTING_DRESS: Readonly<Record<Setting, string | null>> = {
     'on a romantic escape people dress up to be admired: a flowing or slinky dress, a silk slip dress, a sundress cinched at the waist, a linen or silk suit worn open at the collar, a silk shirt, espadrilles, strappy sandals or polished loafers',
   unknown: null,
 };
+
+// ── CARD OUTFIT MIX (mig 611, CARD_OUTFIT_MIX_PLAN.md, Kevin 2026-09-30) ─────────────────────────────────────────
+// A card can name more than one dress code with weights (Santorini: beach 50 / romantic 50). Each nightly rolls ONE,
+// so every picture is coherent and the card shows both sides over a week. No mix = the biome, exactly as before.
+
+export type MixSetting = Exclude<Setting, 'unknown'>;
+/** location_cards.outfit_mix, cleaned: real settings only, weights > 0. */
+export type OutfitMix = Partial<Record<MixSetting, number>>;
+
+function isMixSetting(x: string): x is MixSetting {
+  return x !== 'unknown' && (SETTINGS as readonly string[]).includes(x);
+}
+
+/** A mix side from untrusted input (a QA flag), or null. */
+export function asMixSetting(x: unknown): MixSetting | null {
+  return typeof x === 'string' && isMixSetting(x) ? x : null;
+}
+
+/** Raw jsonb → a clean mix. Unknown keys and non-positive or non-numeric weights are dropped; nothing left → null. */
+export function parseOutfitMix(raw: unknown): OutfitMix | null {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const out: OutfitMix = {};
+  let any = false;
+  for (const [k, v] of Object.entries(raw as Record<string, unknown>)) {
+    if (!isMixSetting(k) || typeof v !== 'number' || !Number.isFinite(v) || v <= 0) continue;
+    out[k] = v;
+    any = true;
+  }
+  return any ? out : null;
+}
+
+/** One weighted pick from a mix (SETTINGS order, so a seeded rng is reproducible). */
+export function rollOutfitMix(mix: OutfitMix, rng: () => number): MixSetting {
+  const entries = SETTINGS.filter(isMixSetting)
+    .map((s) => [s, mix[s] ?? 0] as const)
+    .filter(([, w]) => w > 0);
+  const total = entries.reduce((a, [, w]) => a + w, 0);
+  let r = rng() * total;
+  for (const [s, w] of entries) {
+    if (r < w) return s;
+    r -= w;
+  }
+  return entries[entries.length - 1][0];
+}
+
+/** Snow ACTIVITY words: on a card whose mix already includes snow, only these force snow gear. Scenery words (snow,
+ *  snowy, igloo, chalet, blizzard) leave the roll alone: 23 of Winter Wonderland's 44 cast spots say "snow" or
+ *  "snowy", and letting them force gear would hide the card's formal side. */
+const SNOW_ACTIVITY =
+  /\b(ski(s|ing|er|ers)?|snowboard(s|ing|er|ers)?|apr[eè]s[- ]ski|ice[- ]skat(e|es|ing)|sledd?(e|ing)|toboggan(ing)?)\b/i;
+
+export type SettingSource = 'row' | 'place_name' | 'location' | 'card_mix';
+export interface NightlySettingInput {
+  /** A scenario row's own setting (category or scene text); wins outright. */
+  fromRow: Setting | null;
+  /** settingFromPlaceName(place, anchor); the caller passes null where names are skipped (a row, a luxury card). */
+  nameSetting: 'snow' | 'beach' | 'outdoors' | null;
+  /** The place + anchor text nameSetting was read from. */
+  nameText: string;
+  /** The card's biome setting (settingFromLocation). */
+  locSetting: Setting;
+  /** The card's outfit mix, or null. */
+  mix: OutfitMix | null;
+  /** QA (force_outfit_mix): the side to use instead of the roll, when the card has a mix. */
+  forcePick?: MixSetting | null;
+  rng: () => number;
+}
+export interface NightlySetting {
+  setting: Setting;
+  source: SettingSource;
+  /** The mix's pick (null without a mix or on a row), stamped so the delivered split can be measured. */
+  rolled: MixSetting | null;
+  /** A snowy card dressed for a non-snow side: roll with the cold-season flag (no warm-only looks). */
+  cold: boolean;
+}
+
+/** The nightly outfit setting: a row, else the spot's own words, else the card's mix roll, else its biome. */
+export function resolveNightlySetting(i: NightlySettingInput): NightlySetting {
+  if (i.fromRow) return { setting: i.fromRow, source: 'row', rolled: null, cold: false };
+  const rolled = i.mix ? (i.forcePick ?? rollOutfitMix(i.mix, i.rng)) : null;
+  const base: Setting = rolled ?? i.locSetting;
+  const mixHasSnow = !!i.mix && (i.mix.snow ?? 0) > 0;
+  const name =
+    i.nameSetting === 'snow' && mixHasSnow && !SNOW_ACTIVITY.test(i.nameText)
+      ? null
+      : i.nameSetting;
+  // A wild landmark (a canyon, falls, a ridge) overrides only a city / beach / unknown base, as before.
+  const byName =
+    name === 'outdoors'
+      ? base === 'city' || base === 'beach' || base === 'unknown'
+        ? 'outdoors'
+        : null
+      : name;
+  const setting = byName ?? base;
+  const source: SettingSource = byName ? 'place_name' : rolled ? 'card_mix' : 'location';
+  return {
+    setting,
+    source,
+    rolled,
+    cold: source === 'card_mix' && mixHasSnow && setting !== 'snow',
+  };
+}

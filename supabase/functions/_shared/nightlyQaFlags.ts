@@ -10,6 +10,7 @@
  * `queue_job_id` and `force_place` are also set by the production first-dream / queue paths.
  */
 import type { MoodAxes } from './vibeProfile.ts';
+import { asMixSetting, type MixSetting } from './sceneSetting.ts';
 import type { CharacterSlotPipelineInput, DualSlots, SingleSlots } from './characterSlotPrompt.ts';
 
 export interface NightlyQaFlags {
@@ -132,6 +133,8 @@ export interface NightlyQaFlags {
   /** QA: resolve no holidays for this render, as a first dream does, so a location QA shows the location and not the
    *  in-season holiday (Fall rolls 50% in its window). qa-location.js sends it by default. */
   force_no_holiday: boolean;
+  /** QA (CARD_OUTFIT_MIX_PLAN.md): on a card with an outfit mix, use this side instead of the roll. */
+  force_outfit_mix: MixSetting | null;
   /** SOLO OUTFIT EARLY (mig 565): true names a solo's wardrobe right after the medium, false the old order;
    *  null = engine_config.nightly_solo_outfit_early. */
   force_solo_outfit_early: boolean | null;
@@ -333,6 +336,7 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
           ? false
           : null,
     force_no_holiday: body.force_no_holiday === true,
+    force_outfit_mix: asMixSetting(body.force_outfit_mix),
     force_scenario_scope:
       body.force_scenario_scope === true
         ? true

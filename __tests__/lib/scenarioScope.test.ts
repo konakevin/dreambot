@@ -166,7 +166,9 @@ describe('nightly-dreams scenario-card wiring', () => {
     expect(coupleAt).toBeGreaterThan(0);
     expect(cardAt).toBeGreaterThan(coupleAt);
     expect(SRC).toMatch(/couple_place_replaced:/);
-    expect(SRC).toMatch(/\.select\('name, picker_category, content_kind, couples_ok'\)/);
+    expect(SRC).toMatch(
+      /\.select\('name, picker_category, content_kind, couples_ok, outfit_mix'\)/
+    );
   });
   it('the zero-pick catalogue fallback never hands out a scenario card as a place', () => {
     expect(SRC).toMatch(/\.eq\('admin_only', false\)\s*\.eq\('content_kind', 'place'\);/);

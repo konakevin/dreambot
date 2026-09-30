@@ -38,6 +38,8 @@ const WITH_HOLIDAY = process.argv.includes('--with-holiday');
 // Optional: pin the render model (nightly-dreams force_model). Used to reproduce
 // a specific model's failure (e.g. --model black-forest-labs/flux-1.1-pro-ultra).
 const FORCE_MODEL = arg('model');
+// Optional: pin a card's outfit-mix side (CARD_OUTFIT_MIX_PLAN.md), e.g. --outfit-mix romantic.
+const OUTFIT_MIX = arg('outfit-mix');
 if (!LOC) {
   console.error('--location required');
   process.exit(1);
@@ -64,6 +66,7 @@ async function render(role, medium, pureScene, label) {
     force_medium: medium,
   };
   if (FORCE_MODEL) body.force_model = FORCE_MODEL;
+  if (OUTFIT_MIX) body.force_outfit_mix = OUTFIT_MIX;
   if (!WITH_HOLIDAY) body.force_no_holiday = true;
   if (pureScene) {
     body.force_pure_scene = true;

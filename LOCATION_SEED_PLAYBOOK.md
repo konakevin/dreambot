@@ -49,6 +49,9 @@ seductress, beach glamour, outlaw grit). See [[feedback_dream_shoot_set_dresser_
   `mediterranean_coastal` dressed inland Tuscany and Provence for the beach. Inland villas, vineyards and flower
   fields use **`romantic_countryside`** (romantic outfits, wine-and-lavender actions; mig 610). Check a new card's
   outfit with one QA render's `outfit_setting:` stamp.
+- **`outfit_mix`** (jsonb, mig 611, `CARD_OUTFIT_MIX_PLAN.md`) → more than one dress code for a card, with weights
+  (`{"beach": 50, "romantic": 50}`); each nightly rolls one in place of the biome's. A spot's own words still win (on a
+  snowy mix only ski / sled / skate words force gear). NULL = the biome.
 - **`season_lock`** (spring / summer / autumn / winter, mig 610) → a card DEFINED by one season (Cherry Blossoms =
   spring, Lavender Fields / Tuscan Villa = summer) always gets that season's scene-only signal; NULL follows the
   calendar, which in autumn puts maples and russet leaves into a blossom card.

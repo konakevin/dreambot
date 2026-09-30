@@ -3,13 +3,19 @@
  * into the kind of place the outfit has to fit. The table cases include michele's feed that exposed the bug
  * (2026-09-28): a beach, a golf tournament, Chinatown, a movie theater.
  */
+import * as fs from 'fs';
+import * as path from 'path';
 import {
   SETTINGS,
   SETTING_DRESS,
+  parseOutfitMix,
+  resolveNightlySetting,
+  rollOutfitMix,
   settingFromCategory,
   settingFromLocation,
   settingFromPlaceName,
   settingFromText,
+  type Setting,
 } from '@engine/sceneSetting';
 import { PLAIN_CLOTHES } from '@engine/characterSlotPrompt';
 
@@ -172,5 +178,166 @@ describe('new place words (phase 2): Halloween / Fall rows stop falling to unkno
     expect(settingFromText('a beach hotel lobby')).toBe('beach');
     expect(settingFromText('a ski chalet hallway')).toBe('snow');
     expect(settingFromText('a gala in the hotel ballroom')).toBe('evening');
+  });
+});
+
+describe('card outfit mix (mig 611, CARD_OUTFIT_MIX_PLAN.md)', () => {
+  const seeded = (seed: number) => {
+    let t = seed >>> 0;
+    return () => {
+      t = (t + 0x6d2b79f5) >>> 0;
+      let r = Math.imul(t ^ (t >>> 15), 1 | t);
+      r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  };
+  const never = () => {
+    throw new Error('rng used without a mix');
+  };
+
+  it('parseOutfitMix keeps real settings with positive weights and drops the rest', () => {
+    expect(parseOutfitMix({ beach: 50, romantic: 50 })).toEqual({ beach: 50, romantic: 50 });
+    expect(
+      parseOutfitMix({ beach: 50, beech: 50, unknown: 10, snow: 0, city: -5, evening: 'x' })
+    ).toEqual({ beach: 50 });
+    for (const bad of [null, undefined, [], 'beach', 42, {}, { nope: 1 }, { beach: Number.NaN }]) {
+      expect(parseOutfitMix(bad)).toBeNull();
+    }
+  });
+
+  it('rollOutfitMix delivers the configured split', () => {
+    const rng = seeded(7);
+    const n = 20000;
+    const counts: Record<string, number> = {};
+    for (let i = 0; i < n; i++) {
+      const s = rollOutfitMix({ snow: 60, evening: 40 }, rng);
+      counts[s] = (counts[s] ?? 0) + 1;
+    }
+    expect(counts.snow / n).toBeCloseTo(0.6, 1);
+    expect(counts.evening / n).toBeCloseTo(0.4, 1);
+    expect(Object.keys(counts).sort()).toEqual(['evening', 'snow']);
+  });
+
+  it('without a mix the resolver is exactly the old inline rule, and never rolls', () => {
+    const old = (
+      fromRow: Setting | null,
+      name: 'snow' | 'beach' | 'outdoors' | null,
+      loc: Setting
+    ) => {
+      const byName =
+        name === 'outdoors'
+          ? loc === 'city' || loc === 'beach' || loc === 'unknown'
+            ? 'outdoors'
+            : null
+          : name;
+      return {
+        setting: fromRow ?? byName ?? loc,
+        source: fromRow ? 'row' : byName ? 'place_name' : 'location',
+      };
+    };
+    for (const fromRow of [null, 'evening', 'beach'] as (Setting | null)[]) {
+      for (const name of [null, 'snow', 'beach', 'outdoors'] as const) {
+        for (const loc of SETTINGS) {
+          const r = resolveNightlySetting({
+            fromRow,
+            nameSetting: fromRow ? null : name,
+            nameText: 'a snowy ski run by the beach',
+            locSetting: loc,
+            mix: null,
+            rng: never,
+          });
+          const o = old(fromRow, fromRow ? null : name, loc);
+          expect({ setting: r.setting, source: r.source }).toEqual(o);
+          expect(r.rolled).toBeNull();
+          expect(r.cold).toBe(false);
+        }
+      }
+    }
+  });
+
+  const SANTORINI = { beach: 50, romantic: 50 };
+  const WINTER = { snow: 60, evening: 40 };
+  const resolve = (
+    mix: Record<string, number>,
+    forcePick: 'beach' | 'romantic' | 'snow' | 'evening' | 'city',
+    anchor: string,
+    locSetting: Setting = 'beach'
+  ) =>
+    resolveNightlySetting({
+      fromRow: null,
+      nameSetting: settingFromPlaceName('card', anchor),
+      nameText: `card ${anchor}`,
+      locSetting,
+      mix: parseOutfitMix(mix),
+      forcePick,
+      rng: seeded(1),
+    });
+
+  it('a romantic roll stays romantic at a viewpoint; a beach roll there goes outdoors, as before', () => {
+    expect(resolve(SANTORINI, 'romantic', 'Oia caldera lookout at sunset')).toMatchObject({
+      setting: 'romantic',
+      source: 'card_mix',
+      rolled: 'romantic',
+    });
+    expect(resolve(SANTORINI, 'beach', 'Oia caldera lookout at sunset')).toMatchObject({
+      setting: 'outdoors',
+      source: 'place_name',
+      rolled: 'beach',
+    });
+  });
+
+  it('a spot that names the beach is beachwear whatever the roll', () => {
+    expect(resolve(SANTORINI, 'romantic', 'Perissa black-sand beach')).toMatchObject({
+      setting: 'beach',
+      source: 'place_name',
+    });
+  });
+
+  it('formal snowy: scenery snow words keep the formal side and dress it cold; ski words force the gear', () => {
+    const formal = resolve(WINTER, 'evening', 'snowy village square with ice lanterns', 'snow');
+    expect(formal).toMatchObject({ setting: 'evening', source: 'card_mix', cold: true });
+    const ski = resolve(WINTER, 'evening', 'ski slopes above the village', 'snow');
+    expect(ski).toMatchObject({ setting: 'snow', source: 'place_name', cold: false });
+    expect(resolve(WINTER, 'snow', 'snowy village square', 'snow')).toMatchObject({
+      setting: 'snow',
+      cold: false,
+    });
+  });
+
+  it('a card without snow in its mix keeps the old snow-word rule, and a row always wins', () => {
+    expect(resolve(SANTORINI, 'romantic', 'a snowy mountain chapel')).toMatchObject({
+      setting: 'snow',
+      source: 'place_name',
+    });
+    const row = resolveNightlySetting({
+      fromRow: 'evening',
+      nameSetting: null,
+      nameText: '',
+      locSetting: 'beach',
+      mix: parseOutfitMix(SANTORINI),
+      rng: never,
+    });
+    expect(row).toEqual({ setting: 'evening', source: 'row', rolled: null, cold: false });
+  });
+
+  it("migration 611's mixes are all real settings (a typo would be dropped silently at runtime)", () => {
+    const sql = fs.readFileSync(
+      path.join(__dirname, '..', '..', 'supabase', 'migrations', '611_card_outfit_mix.sql'),
+      'utf8'
+    );
+    const mixes = [...sql.matchAll(/\('[^']+',\s*'(\{[^']+\})'\)/g)].map((m) => JSON.parse(m[1]));
+    expect(mixes).toHaveLength(11);
+    for (const m of mixes) expect(parseOutfitMix(m)).toEqual(m);
+  });
+
+  it('nightly-dreams loads the mix with the picker cards and lets the resolver decide', () => {
+    const src = fs.readFileSync(
+      path.join(__dirname, '..', '..', 'supabase', 'functions', 'nightly-dreams', 'index.ts'),
+      'utf8'
+    );
+    expect(src).toMatch(/content_kind, couples_ok, outfit_mix'\)/);
+    expect(src).toMatch(/resolveNightlySetting\(\{/);
+    expect(src).toMatch(/outfit_mix:\$\{resolvedSetting\.rolled\}/);
+    expect(src).toMatch(/COLD_HOLIDAYS\.has\(holidayCategory\)\) \|\| mixCold/);
   });
 });
