@@ -48,7 +48,15 @@ const spec = (s: Partial<UserOutfitSpec>): UserOutfitSpec => ({
 });
 const COUPLE = ['plus_one', 'self'];
 const GENDERS = { plus_one: 'female', self: 'male' } as const;
-const LOOK_SETTINGS: Setting[] = ['beach', 'city', 'evening', 'indoor', 'outdoors', 'fantasy'];
+const LOOK_SETTINGS: Setting[] = [
+  'beach',
+  'city',
+  'evening',
+  'indoor',
+  'outdoors',
+  'fantasy',
+  'snow',
+];
 
 describe('fix 1: looks fit the place', () => {
   it('every look is tagged with real settings', () => {
@@ -246,13 +254,11 @@ describe('fix 1: looks fit the place', () => {
     }
   });
 
-  it('a sport or snow place rolls no look: the activity dresses them', () => {
-    for (const s of ['sport', 'snow'] as Setting[]) {
-      expect(rollFashion(COUPLE, GENDERS, undefined, seeded(3), { setting: s })).toEqual([
-        null,
-        null,
-      ]);
-    }
+  it('a sport place rolls no look: the activity dresses them', () => {
+    expect(rollFashion(COUPLE, GENDERS, undefined, seeded(3), { setting: 'sport' })).toEqual([
+      null,
+      null,
+    ]);
   });
 
   it('an unclassified place takes the city looks, never an occasion costume', () => {
@@ -545,3 +551,84 @@ function nightlyInput(extra: Partial<CharacterSlotPipelineInput> = {}): Characte
     ...extra,
   };
 }
+
+describe('phase 10: more looks where the pools were thin (NIGHTLY_OUTFIT_VARIETY_PLAN.md phase 2)', () => {
+  const fitting = (pool: typeof MEN_FASHION_LOOKS, s: Setting) =>
+    pool.filter((l) => lookFits(l, s)).map((l) => l.key);
+
+  it('men have a real choice at a beach and outdoors (was 3 each), and in the snow', () => {
+    expect(fitting(MEN_FASHION_LOOKS, 'beach').length).toBeGreaterThanOrEqual(7);
+    expect(fitting(MEN_FASHION_LOOKS, 'outdoors').length).toBeGreaterThanOrEqual(7);
+    expect(fitting(MEN_FASHION_LOOKS, 'evening').length).toBeGreaterThanOrEqual(8);
+    expect(fitting(MEN_FASHION_LOOKS, 'fantasy').length).toBeGreaterThanOrEqual(6);
+    expect(fitting(MEN_FASHION_LOOKS, 'snow').length).toBeGreaterThanOrEqual(4);
+  });
+
+  it('a beach now rolls trousers and jumpsuits for women too, and the outdoors rolls jumpsuits', () => {
+    const beach = garmentWeightsFor('beach');
+    expect(beach.trousers).toBeGreaterThan(0);
+    expect(beach.jumpsuit).toBeGreaterThan(0);
+    expect(beach.coat_over_dress).toBe(0);
+    expect(garmentWeightsFor('outdoors').jumpsuit).toBeGreaterThan(0);
+  });
+
+  it('men at a beach are no longer mostly one camp-collar shirt and shorts', () => {
+    const c: Record<string, number> = {};
+    const N = 2000;
+    for (let i = 0; i < N; i++) {
+      const [, him] = rollFashion(COUPLE, GENDERS, undefined, seeded(i), { setting: 'beach' });
+      c[him!.look.key] = (c[him!.look.key] ?? 0) + 1;
+    }
+    const campCollar = ((c.resort ?? 0) + (c.surf ?? 0)) / N;
+    expect(campCollar).toBeLessThan(0.35);
+    expect(Object.keys(c).length).toBeGreaterThanOrEqual(7);
+  });
+
+  it('snow rolls only snow looks, never shorts or a bare dress', () => {
+    for (let i = 0; i < 1500; i++) {
+      const [her, him] = rollFashion(COUPLE, GENDERS, undefined, seeded(i), { setting: 'snow' });
+      expect(her!.look.settings).toContain('snow');
+      expect(him!.look.settings).toContain('snow');
+      expect(['shorts', 'dress']).not.toContain(her!.family!.key);
+    }
+  });
+
+  it('a snow look never lands anywhere else, and no new look reaches a place it is not tagged for', () => {
+    for (const s of ['beach', 'city', 'evening', 'indoor', 'outdoors', 'fantasy'] as Setting[]) {
+      for (let i = 0; i < 400; i++) {
+        for (const p of rollFashion(COUPLE, GENDERS, undefined, seeded(i * 3 + 2), {
+          setting: s,
+          text: 'a quiet place',
+        })) {
+          expect(p!.look.settings).not.toEqual(['snow']);
+          expect(lookFits(p!.look, s)).toBe(true);
+        }
+      }
+    }
+  });
+
+  it('a couple can match on the new shared looks (boho or riviera at a beach, apres-ski in the snow)', () => {
+    const matched = new Set<string>();
+    for (const s of ['beach', 'snow', 'outdoors'] as Setting[]) {
+      for (let i = 0; i < 2000; i++) {
+        const [her, him] = rollFashion(COUPLE, GENDERS, undefined, seeded(i), { setting: s });
+        if (her!.look.key === him!.look.key) matched.add(`${s}:${her!.look.key}`);
+      }
+    }
+    expect(matched.has('beach:riviera') || matched.has('beach:boho')).toBe(true);
+    expect(matched.has('snow:apres_ski') || matched.has('snow:lodge')).toBe(true);
+    expect(matched.has('outdoors:explorer') || matched.has('outdoors:equestrian')).toBe(true);
+  });
+
+  it('with scene fit off, no phase 10 look ever rolls (the phase 8 pool is unchanged)', () => {
+    const phase8 = new Set([
+      ...WOMEN_FASHION_LOOKS.filter((l) => !l.sceneFitOnly).map((l) => `w:${l.key}`),
+      ...MEN_FASHION_LOOKS.filter((l) => !l.sceneFitOnly).map((l) => `m:${l.key}`),
+    ]);
+    for (let i = 0; i < 1500; i++) {
+      const [her, him] = rollFashion(COUPLE, GENDERS, undefined, seeded(i));
+      expect(phase8.has(`w:${her!.look.key}`)).toBe(true);
+      expect(phase8.has(`m:${him!.look.key}`)).toBe(true);
+    }
+  });
+});

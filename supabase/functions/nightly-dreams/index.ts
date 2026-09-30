@@ -477,6 +477,7 @@ Deno.serve(async (req) => {
     force_honest_looks,
     force_garment_roll,
     force_outfit_plan,
+    force_eye_contact,
     force_solo_outfit_early,
     force_outfit_scene_fit,
     force_llm_model,
@@ -3517,6 +3518,9 @@ Deno.serve(async (req) => {
           resolvedCast.length === 1 &&
           (force_solo_outfit_early ?? engineCfg0.nightlySoloOutfitEarly);
         if (soloOutfitEarly) fallbackReasons.push('solo_outfit_early');
+        // EYE CONTACT (mig 587, NIGHTLY_EYE_CONTACT_PLAN.md): the gaze on each person's own description.
+        const eyeContact = force_eye_contact ?? engineCfg0.nightlyEyeContact;
+        if (eyeContact) fallbackReasons.push('eye_contact');
         const slotInput: CharacterSlotPipelineInput = {
           ...(nightlyOutfitPlan ? { outfitPlan: nightlyOutfitPlan } : {}),
           ...(nightlyFashion ? { fashionLooks: nightlyFashion } : {}),
@@ -3524,6 +3528,7 @@ Deno.serve(async (req) => {
             ? { wardrobeSceneFit: { setting: nightlySetting } }
             : {}),
           ...(soloOutfitEarly ? { soloOutfitEarly: true } : {}),
+          ...(eyeContact ? { eyeContact: true } : {}),
           cast: resolvedCast.map((rc, i) => ({
             role: rc.role,
             promptDesc: rc.promptDesc,

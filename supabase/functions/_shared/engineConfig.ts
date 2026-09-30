@@ -227,6 +227,9 @@ export interface EngineConfig {
   /** % a look the scene names (a pier → nautical) wins over the place's other looks; both surfaces. 85 was the
    *  old constant and locked outfits (NIGHTLY_OUTFIT_VARIETY_PLAN.md). */
   outfitFavouredLookPct: number;
+  /** EYE CONTACT (mig 587, NIGHTLY_EYE_CONTACT_PLAN.md): the gaze rides each person's description ("…, looking into
+   *  the camera, wearing …") instead of only the closing faces line. QA: force_eye_contact. */
+  nightlyEyeContact: boolean;
   /** Nightly: skip the looks of this many recent nightlies per role (0 = off). */
   nightlyOutfitRecentLooks: number;
   /** SWAP CAPACITY GATE (mig 549, NIGHTLY_ROBUSTNESS_PLAN.md): dual swaps wait for a free Fly slot. */
@@ -351,6 +354,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   createOutfitSceneFit: false,
   nightlyOutfitSceneFit: false,
   nightlyOutfitPlan: false,
+  nightlyEyeContact: false,
   outfitFavouredLookPct: DEFAULT_FAVOURED_LOOK_PCT,
   nightlyOutfitRecentLooks: 5,
   swapGateEnabled: false,
@@ -542,6 +546,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     createOutfitSceneFit: data.create_outfit_scene_fit === true,
     nightlyOutfitSceneFit: data.nightly_outfit_scene_fit === true,
     nightlyOutfitPlan: data.nightly_outfit_plan === true,
+    nightlyEyeContact: data.nightly_eye_contact === true,
     outfitFavouredLookPct: clampPct(data.outfit_favoured_look_pct, DEFAULT_FAVOURED_LOOK_PCT),
     nightlyOutfitRecentLooks: Number.isFinite(Number(data.nightly_outfit_recent_looks))
       ? Math.max(0, Math.min(7, Math.round(Number(data.nightly_outfit_recent_looks))))

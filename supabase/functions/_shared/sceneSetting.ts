@@ -66,7 +66,7 @@ const SETTING_WORDS: readonly (readonly [Exclude<Setting, 'unknown'>, RegExp])[]
   ],
   [
     'outdoors',
-    /\b(hik(e|es|ing|er|ers)|trails?|trailhead|camp(ing|site|sites|fire|fires)|forests?|woods|woodlands?|jungles?|rainforests?|mountains?|peaks?|summit|alpine|canyons?|caves?|caverns?|waterfalls?|deserts?|dunes?|meadows?|prairie|savann?ah?|safari|national park|yosemite|yellowstone|grand canyon|zion|countryside|vineyards?|farms?|ranch|wilderness|swamp|marsh|river(side)?|lake(side|shore)?|fishing|kayak(ing)?|canoe(ing)?|horseback|rodeo|picnic|orchard|pumpkin patch|glamping)\b/i,
+    /\b(hik(e|es|ing|er|ers)|trails?|trailhead|camp(ing|site|sites|fire|fires)|forests?|woods|woodlands?|jungles?|rainforests?|mountains?|peaks?|summit|alpine|canyons?|caves?|caverns?|waterfalls?|deserts?|dunes?|meadows?|prairie|savann?ah?|safari|national park|yosemite|yellowstone|grand canyon|zion|countryside|vineyards?|farms?|ranch|wilderness|swamp|marsh|river(side)?|lake(side|shore)?|fishing|kayak(ing)?|canoe(ing)?|horseback|rodeo|picnic|orchard|pumpkin patch|glamping|corn ?maze|hay ?rides?|hay ?bales?|barns?|graveyards?|cemeter(y|ies)|bonfires?)\b/i,
   ],
   [
     'evening',
@@ -74,11 +74,11 @@ const SETTING_WORDS: readonly (readonly [Exclude<Setting, 'unknown'>, RegExp])[]
   ],
   [
     'indoor',
-    /\b(movie theat(er|re)s?|cinemas?|the movies|bowling|arcade|museums?|galler(y|ies)|librar(y|ies)|bookshops?|bookstores?|caf[eé]s?|coffee shops?|bakery|kitchen|living room|bedroom|at home|office|classroom|bars?|pubs?|brewery|karaoke|escape room|aquarium|spa|piano bar|dueling pianos|game night|sleepover)\b/i,
+    /\b(movie theat(er|re)s?|cinemas?|the movies|bowling|arcade|museums?|galler(y|ies)|librar(y|ies)|bookshops?|bookstores?|caf[eé]s?|coffee shops?|bakery|kitchen|living room|bedroom|at home|office|classroom|bars?|pubs?|brewery|karaoke|escape room|aquarium|spa|piano bar|dueling pianos|game night|sleepover|lobb(y|ies)|foyers?|atri(um|ums)|hotels?|mansions?|manors?|parlou?rs?|attics?|basements?|cellars?|garages?|firehouses?|corridors?|hallways?|staircases?|chapels?|crypts?|diners?)\b/i,
   ],
   [
     'city',
-    /\b(city|downtown|streets?|avenue|boulevard|shopping|shops|boutiques?|markets?|bazaar|chinatown|little italy|times square|broadway|soho|neighbou?rhood|plaza|piazza|town square|landmarks?|skyline|rooftop|sightseeing|touring|new york|nyc|paris|london|tokyo|rome|barcelona|san francisco|chicago|los angeles|hollywood|nashville|new orleans|amsterdam|venice)\b/i,
+    /\b(city|downtown|streets?|avenue|boulevard|shopping|shops|boutiques?|markets?|bazaar|chinatown|little italy|times square|broadway|soho|neighbou?rhood|plaza|piazza|town square|landmarks?|skyline|rooftop|sightseeing|touring|new york|nyc|paris|london|tokyo|rome|barcelona|san francisco|chicago|los angeles|hollywood|nashville|new orleans|amsterdam|venice|sidewalks?|driveways?|cul-de-sacs?|porch(es)?|front yards?|suburb(s|an|ia)?|lawns?|mailbox(es)?|alley(way)?s?|carnivals?|fairgrounds?|funhouses?)\b/i,
   ],
 ];
 
@@ -219,12 +219,12 @@ export function settingFromCategory(category: string | null | undefined): Settin
  */
 export const SETTING_DRESS: Readonly<Record<Setting, string | null>> = {
   beach:
-    'at the beach people wear swimwear, a sarong or a sheer cover-up, a sundress or a flowing maxi dress, linen shirts, tailored shorts and sandals',
+    'at the beach people wear swimwear, a sarong or a sheer cover-up, a sundress or a flowing maxi dress, a breezy resort shirt or a knitted polo, linen trousers or tailored shorts, sandals or espadrilles',
   sport:
     "at a sports venue people wear the sport's own smart kit or stylish spectator clothes (golf: a polo or fine knit with a pleated skirt or tailored shorts; tennis whites; the team's colours at a game)",
-  snow: 'in the snow people wear real snow gear made beautiful: a fitted ski suit or a shell jacket with snow trousers, a knit beanie worn high on the head, insulated boots',
+  snow: 'in the snow people wear real snow gear made beautiful: a fitted ski suit, a shearling or quilted jacket with snow trousers, a chunky knit, a knit beanie worn high on the head, insulated boots',
   outdoors:
-    'outdoors people wear real outdoor clothes made beautiful: a field jacket or light layers, sturdy trousers or shorts, boots or trail shoes',
+    'outdoors people wear real outdoor clothes made beautiful: a field jacket, a gilet or light linen layers, sturdy trousers, breeches or shorts, boots or trail shoes',
   evening:
     'for an evening out people dress up: a cocktail dress or a gown, a sharp suit or a dinner jacket, heels or polished shoes',
   city: 'in the city people wear smart, stylish clothes made for walking around: a great dress or skirt, tailored trousers, a statement jacket, good shoes',

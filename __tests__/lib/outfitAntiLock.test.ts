@@ -10,6 +10,8 @@ import fs from 'fs';
 import path from 'path';
 import {
   rollFashion,
+  lookFits,
+  MEN_FASHION_LOOKS,
   planOutfits,
   recentLooksFromStamps,
   DEFAULT_FAVOURED_LOOK_PCT,
@@ -30,6 +32,10 @@ function seeded(seed: number): () => number {
 }
 
 const PIER = { setting: 'beach' as const, text: 'Myrtle Beach boardwalk pier' };
+/** Every men's look that fits the pier (from the catalog, so adding beach looks never breaks these counts). */
+const PIER_MEN = MEN_FASHION_LOOKS.filter((l) => lookFits(l, PIER.setting, PIER.text)).map(
+  (l) => l.key
+);
 const manLook = (tuning: Parameters<typeof rollFashion>[5], seed: number): string | null => {
   const r = rollFashion(['self'], { self: 'male' }, undefined, seeded(seed), PIER, tuning);
   return r[0] ? r[0].look.key : null;
@@ -49,7 +55,7 @@ describe('favoured-look rate', () => {
     expect(share({ favouredPct: 100 }, 'nautical')).toBe(1);
     const zero = share({ favouredPct: 0 }, 'nautical');
     expect(zero).toBeGreaterThan(0.1);
-    expect(zero).toBeLessThan(0.4); // one of the beach's 4 men's looks
+    expect(zero).toBeLessThan(0.4); // one of the pier's men's looks
   });
   it('30 takes it far less often than the legacy 85', () => {
     const at30 = share({ favouredPct: 30 }, 'nautical');
@@ -61,16 +67,14 @@ describe('favoured-look rate', () => {
 
 describe('recent looks', () => {
   it('a recent look is skipped', () => {
-    const recent = { self: ['nautical', 'surf', 'resort'] };
+    const recent = { self: PIER_MEN.filter((k) => k !== 'coastal') };
     for (let s = 1; s <= 50; s++)
       expect(manLook({ favouredPct: 100, recentLooks: recent }, s)).toBe('coastal');
   });
   it('never empties the pool: all recent → the full fitting pool again', () => {
-    const recent = { self: ['nautical', 'surf', 'resort', 'coastal'] };
+    const recent = { self: PIER_MEN };
     for (let s = 1; s <= 50; s++) {
-      expect(['nautical', 'surf', 'resort', 'coastal']).toContain(
-        manLook({ recentLooks: recent }, s)
-      );
+      expect(PIER_MEN).toContain(manLook({ recentLooks: recent }, s));
     }
   });
   it('a woman is never FORCED into a recent favoured look', () => {

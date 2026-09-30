@@ -100,10 +100,67 @@ variety the model is told to use, not less of it.
 Rollback: `UPDATE engine_config SET nightly_outfit_plan = false` (and `outfit_favoured_look_pct = 85` for the old
 favoured rate), no deploy.
 
-## Later (not in this change)
+## Phase 2: more looks where the pools are thin (2026-09-30)
 
-More men's beach / outdoor looks (3-4 today), and several variants inside a look (nautical as a Breton-stripe top, a
-captain's blazer, a rope-belted linen set).
+Kevin, after the switch-on batch: "look into any other wardrobe pools that might also benefit from expansion similar to
+beach and outdoor looks. we want dreams to look really good, with lots of cool outfits".
+
+**Where nightlies happen** (21 days of nightly renders): unclassified places 32% (they take the city looks), outdoors
+25%, beach 19%, city 11%, evening 5%, indoor 4%, snow 3%, imagined worlds 1%.
+
+**Looks that fit each place today** (not counting looks a named place unlocks, like nautical or western):
+
+| Place    | Men                                                             | Women                                                                               |
+| -------- | --------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| city     | 11                                                              | 15                                                                                  |
+| beach    | **3** (resort, coastal, surf: two of them camp-collar + shorts) | 6, but only dresses, skirts and shorts roll (trousers and jumpsuits have < 2 looks) |
+| outdoors | **3** (safari, coastal, explorer)                               | **5**, jumpsuits never roll                                                         |
+| evening  | 5                                                               | 7                                                                                   |
+| indoor   | 7                                                               | 12                                                                                  |
+| imagined | **3**                                                           | 7                                                                                   |
+| snow     | **0** (kit rule: no look at all)                                | **0**                                                                               |
+
+The beach and outdoors cells cover 44% of nightlies with 3 men's looks each, which is why men at the beach kept coming
+back in a camp-collar shirt and shorts.
+
+**New looks** (authored, same rules as every look: signature pieces only, no colour words, no basics, no face
+coverings, nothing traditional or ethnic; all `sceneFitOnly`, so the scene-fit-off pool is unchanged). A shared key
+lets a couple match (the existing 50% themed roll):
+
+| Place    | Men (new)                                                                                                                      | Women (new)                                                                                         |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| beach    | riviera (knitted polo, rolled trousers), poolside (1970s terry-cloth shirt), barefoot tailoring (linen suit), co-ord set, boho | riviera (halter), co-ord set, tropicana (knotted waist, shell earrings) → trousers + jumpsuits roll |
+| outdoors | boho, equestrian, country estate, desert wanderer, cottagecore                                                                 | equestrian, field explorer, prairie, utility boiler suit, desert wanderer, country estate           |
+| evening  | film noir, velvet evening, runway couture, barefoot tailoring                                                                  | film-noir glamour, velvet evening                                                                   |
+| imagined | cottagecore, runway couture, woodland fae, ocean-myth shimmer                                                                  | (7 already)                                                                                         |
+| snow     | après-ski, 1970s ski, ski-lodge cosy, alpine mountaineer                                                                       | après-ski glamour, 1970s ski chic, chalet chic, ski-lodge cosy, winter romance                      |
+
+After: men's beach 8, outdoors 8, evening 9, imagined 7, snow 4; women's beach 9 (all but coats roll), outdoors 11
+(jumpsuits roll), snow 5.
+
+**Snow stops being a kit setting.** Today a snowy place gets no look and the model writes its one default (a fitted
+ski suit or shell, a beanie). Snow now rolls snow-only looks, which are all real snow wear made stylish, and the
+brief's "gear the activity needs wins" line still covers someone mid-run on the slopes. Garment nudges in snow: no
+shorts, no bare dress, more jumpsuits (ski suits), trousers and coats over dresses. **Sport stays kit** (a golf course
+dresses golfers).
+
+**Corner cases**
+
+- Hot vs cold outdoors: the brief already says "dress for the place first … leave out any part of the look that would
+  look out of place here", and the outdoors pool keeps warm-weather looks in the majority. The probe checks a desert
+  and a jungle for a jacket misfit.
+- Create uses the same catalog with scene fit on, so Create gets the new looks too (checked in the dry run).
+- A look with its own pattern (stripes, Fair Isle) would clash with the pattern roll: left out on purpose.
+- Nothing that hides the hair (headscarves): cast hair is part of the likeness.
+
+**Tests:** the existing catalog guards (colour-free, basics-free, occluder-free, families real, ≥ 2 looks per rolled
+family, every look setting has a choice) cover the new entries; new tests: men ≥ 6 looks at beach and outdoors, snow
+rolls only snow looks and never shorts or a bare dress, sport still rolls nothing, shared-key couples can match at a
+beach, and a scene-fit-off roll never returns a new look.
+
+**Rollout:** unit tests → nightly dry-run probe with the plan forced (Key West, Myrtle Beach, Zion, a jungle, a ski
+village, an evening city; 8 each: distinct men's garment types, misfits) → render check (8 couples at beach, outdoors
+and snow places, first-try hold) → deploy (no switch: the catalog is code; rollback = revert the commit).
 
 ## Ledger
 

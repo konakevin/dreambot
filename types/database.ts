@@ -1788,6 +1788,7 @@ export type Database = {
           nightly_enabled: boolean;
           nightly_enqueue_max_spread_min: number;
           nightly_enqueue_spacing_s: number;
+          nightly_eye_contact: boolean;
           nightly_flux_couple_honest_looks: boolean;
           nightly_garment_roll: boolean;
           nightly_legacy_look_pct: number;
@@ -1934,6 +1935,7 @@ export type Database = {
           nightly_enabled?: boolean;
           nightly_enqueue_max_spread_min?: number;
           nightly_enqueue_spacing_s?: number;
+          nightly_eye_contact?: boolean;
           nightly_flux_couple_honest_looks?: boolean;
           nightly_garment_roll?: boolean;
           nightly_legacy_look_pct?: number;
@@ -2080,6 +2082,7 @@ export type Database = {
           nightly_enabled?: boolean;
           nightly_enqueue_max_spread_min?: number;
           nightly_enqueue_spacing_s?: number;
+          nightly_eye_contact?: boolean;
           nightly_flux_couple_honest_looks?: boolean;
           nightly_garment_roll?: boolean;
           nightly_legacy_look_pct?: number;

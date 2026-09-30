@@ -77,6 +77,9 @@ export function composeExperimentalCouple(args: {
   const left = describe(input.cast[0]);
   const right = describe(input.cast[1] ?? input.cast[0]);
   const her = left.gender === 'woman' ? 'her' : left.gender === 'man' ? 'his' : 'their';
+  // EYE CONTACT (NIGHTLY_EYE_CONTACT_PLAN.md): the gaze rides each person's own description (the same words in the
+  // closing faces line changed nothing in the same-seed screen). Unset → byte-identical.
+  const gaze = input.eyeContact ? ', looking into the camera' : '';
   const leftWardrobe = clean(slots.left_wardrobe);
   const rightWardrobe = clean(slots.right_wardrobe);
   const leftWear =
@@ -127,7 +130,7 @@ export function composeExperimentalCouple(args: {
       .map((b) => `${b.charAt(0).toUpperCase()}${b.slice(1)}.`)
       .join(' ');
     const behind = scenarioLike ? scene : `${place ? `${place}` : ''}${scene ? `: ${scene}` : ''}`;
-    const fgS = `${medium ? `${medium}. ` : ''}A three-quarter length two-shot. In the foreground, on the left, ${left.desc}, wearing ${leftWardrobe}; to ${her} right, with a clear gap between their heads, ${right.desc}, wearing ${rightWardrobe}. ${beatText ? `${beatText} ` : ''}Behind and around them${behind ? `, ${behind}` : ''}. Both are shown from the knees up, side by side, their faces turned toward the camera, clearly visible and unobstructed, lifelike adult faces with realistic proportions.`;
+    const fgS = `${medium ? `${medium}. ` : ''}A three-quarter length two-shot. In the foreground, on the left, ${left.desc}${gaze}, wearing ${leftWardrobe}; to ${her} right, with a clear gap between their heads, ${right.desc}${gaze}, wearing ${rightWardrobe}. ${beatText ? `${beatText} ` : ''}Behind and around them${behind ? `, ${behind}` : ''}. Both are shown from the knees up, side by side, their faces turned toward the camera, clearly visible and unobstructed, lifelike adult faces with realistic proportions.`;
     const extrasB = [props, mood, vibe]
       .filter(Boolean)
       .map((z) => `${z.charAt(0).toUpperCase()}${z.slice(1)}.`)
@@ -135,7 +138,7 @@ export function composeExperimentalCouple(args: {
     return `${fgS} ${extrasB} ${tail}`.replace(/\s+/g, ' ').trim();
   }
   if (variant === 'narrative_fg') {
-    const fgS = `${medium ? `${medium}. ` : ''}A three-quarter length two-shot. In the foreground, on the left, ${left.desc}, wearing ${leftWardrobe}; to ${her} right, with a clear gap between their heads, ${right.desc}, wearing ${rightWardrobe}. ${beat ? `${beat.charAt(0).toUpperCase()}${beat.slice(1)}. ` : ''}Behind and around them${place ? `, ${place}` : ''}${scene ? `: ${scene}` : ''}. Both are shown from the knees up, side by side, their faces turned toward the camera, clearly visible and unobstructed, lifelike adult faces with realistic proportions.`;
+    const fgS = `${medium ? `${medium}. ` : ''}A three-quarter length two-shot. In the foreground, on the left, ${left.desc}${gaze}, wearing ${leftWardrobe}; to ${her} right, with a clear gap between their heads, ${right.desc}${gaze}, wearing ${rightWardrobe}. ${beat ? `${beat.charAt(0).toUpperCase()}${beat.slice(1)}. ` : ''}Behind and around them${place ? `, ${place}` : ''}${scene ? `: ${scene}` : ''}. Both are shown from the knees up, side by side, their faces turned toward the camera, clearly visible and unobstructed, lifelike adult faces with realistic proportions.`;
     const extrasFg = [props, mood, vibe]
       .filter(Boolean)
       .map((x) => `${x.charAt(0).toUpperCase()}${x.slice(1)}.`)

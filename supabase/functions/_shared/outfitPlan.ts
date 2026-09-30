@@ -458,6 +458,122 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     families: ['dress', 'skirt'],
     settings: ['fantasy'],
   },
+  // Phase 10 (NIGHTLY_OUTFIT_VARIETY_PLAN.md phase 2, 2026-09-30): the thin places. Kevin: "we want dreams to look
+  // really good, with lots of cool outfits". A beach rolled only dresses, skirts and shorts (trousers and jumpsuits had
+  // under two looks there), the outdoors never a jumpsuit, snow nothing at all. Scene-fit only, so the phase 8 pool is
+  // unchanged. No look carries its own print (it would fight the pattern roll) or covers the hair (the likeness).
+  {
+    key: 'riviera',
+    text: '1960s Riviera: a halter neckline, a skinny belt, woven raffia sandals',
+    families: ['jumpsuit', 'dress', 'trousers', 'shorts'],
+    settings: ['beach', 'city'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'coord',
+    text: 'co-ord set: a matching cropped shirt and bottoms, woven slides, a raffia tote',
+    families: ['shorts', 'trousers', 'skirt'],
+    settings: ['beach'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'tropicana',
+    text: 'tropicana glamour: a knotted waist, oversized shell earrings, platform espadrilles',
+    families: ['dress', 'jumpsuit', 'shorts', 'skirt'],
+    settings: ['beach'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'equestrian',
+    text: 'equestrian: a fitted riding jacket, a slim belt, tall leather riding boots',
+    families: ['trousers', 'skirt'],
+    settings: ['outdoors'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'explorer',
+    text: 'field explorer: a waxed-canvas jacket, a silk neck scarf, lace-up leather boots',
+    families: ['trousers', 'shorts', 'jumpsuit'],
+    settings: ['outdoors'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'prairie',
+    text: 'prairie romance: a ruffled high neckline, tiered layers, lace-up boots',
+    families: ['dress', 'skirt'],
+    settings: ['outdoors', 'indoor'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'utility',
+    text: 'utility chic: a belted boiler suit, rolled sleeves, lace-up boots',
+    families: ['jumpsuit'],
+    settings: ['outdoors', 'city'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'desert_wanderer',
+    text: 'desert wanderer: a loose linen layer, a knotted neckerchief, suede desert boots',
+    families: ['trousers', 'shorts', 'dress'],
+    settings: ['outdoors'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'country_estate',
+    text: 'country estate: a quilted field jacket, a silk neck scarf, tall leather boots',
+    families: ['trousers', 'skirt'],
+    settings: ['outdoors'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'noir',
+    text: 'film-noir glamour: a bias-cut silhouette, satin evening gloves, a jewelled hair clip',
+    families: ['dress', 'coat_over_dress'],
+    settings: ['evening'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'velvet',
+    text: 'velvet evening: a velvet bodice, a sculpted shoulder, drop earrings',
+    families: ['dress', 'jumpsuit', 'coat_over_dress'],
+    settings: ['evening', 'indoor'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'apres_ski',
+    text: 'après-ski glamour: a shearling-trimmed jacket, a chunky knit, fluffy snow boots',
+    families: ['trousers', 'jumpsuit', 'skirt'],
+    settings: ['snow'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'retro_ski',
+    text: '1970s ski chic: a belted one-piece ski suit, a faux-fur collar, a knitted headband',
+    families: ['jumpsuit'],
+    settings: ['snow'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'chalet',
+    text: 'chalet chic: a long quilted coat, a cable-knit roll-neck, lace-up snow boots',
+    families: ['coat_over_dress', 'trousers', 'skirt'],
+    settings: ['snow'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'lodge',
+    text: 'ski-lodge cosy: a chunky cable knit, shearling-lined boots, a pom-pom hat',
+    families: ['trousers', 'skirt'],
+    settings: ['snow'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'winter_romance',
+    text: 'winter romance: a faux-fur collar, a velvet ribbon, knee-high boots',
+    families: ['coat_over_dress', 'skirt', 'dress'],
+    settings: ['snow'],
+    sceneFitOnly: true,
+  },
 ];
 export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
   {
@@ -594,6 +710,117 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
     settings: ['outdoors'],
     sceneFitOnly: true,
   },
+  // Phase 10 (NIGHTLY_OUTFIT_VARIETY_PLAN.md phase 2): men had 3 looks at a beach (two of them a camp-collar shirt
+  // and shorts) and 3 outdoors, the places of 44% of nightlies, and none in the snow. A key shared with the women's
+  // pool (boho, riviera, coord, explorer, …) lets a couple match.
+  {
+    key: 'riviera',
+    text: '1960s Riviera: a knitted short-sleeve polo, slim trousers rolled at the ankle, suede driving shoes',
+    settings: ['beach', 'city'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'poolside',
+    text: '1970s poolside: a terry-cloth resort shirt, short retro swim shorts, a slim chain necklace',
+    settings: ['beach'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'barefoot_tailoring',
+    text: 'barefoot tailoring: an unstructured linen suit, an open-collar shirt, rolled trouser hems',
+    settings: ['beach', 'evening'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'coord',
+    text: 'co-ord set: a matching short-sleeve shirt and shorts, woven leather slides',
+    settings: ['beach'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'boho',
+    text: 'boho: a crochet-knit shirt, layered beaded necklaces, suede sandals',
+    settings: ['beach', 'outdoors'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'equestrian',
+    text: 'equestrian: a tweed hacking jacket, riding breeches, tall leather boots',
+    settings: ['outdoors'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'country_estate',
+    text: 'country estate: a quilted field jacket with a corduroy collar, a knitted tie, leather brogue boots',
+    settings: ['outdoors'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'desert_wanderer',
+    text: 'desert wanderer: a loose linen overshirt, a knotted neckerchief, suede desert boots',
+    settings: ['outdoors'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'cottagecore',
+    text: 'cottagecore: a billowy linen shirt, a knitted vest, high-waisted trousers with a rope belt',
+    settings: ['outdoors', 'indoor', 'fantasy'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'noir',
+    text: 'film noir: a belted trench coat, a fedora, a narrow tie',
+    settings: ['evening', 'city'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'velvet',
+    text: 'velvet evening: a velvet smoking jacket, a silk scarf at the collar, patent loafers',
+    settings: ['evening', 'indoor'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'couture',
+    text: 'runway couture: a sculptural oversized blazer, dramatic lapels, sleek boots',
+    settings: ['evening', 'fantasy'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'fairycore',
+    text: 'woodland fae: a leaf-embroidered vest, loose billowing sleeves, a woven cord belt',
+    settings: ['fantasy'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'mermaid',
+    text: 'ocean-myth shimmer: an iridescent scale-textured jacket, a shell pendant, a flowing sash',
+    settings: ['fantasy'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'apres_ski',
+    text: 'après-ski: a shearling-collared jacket, a chunky roll-neck knit, suede snow boots',
+    settings: ['snow'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'retro_ski',
+    text: '1970s ski: a quilted ski jacket over a zip-neck knit, a knitted headband',
+    settings: ['snow'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'lodge',
+    text: 'ski-lodge cosy: a chunky cable knit, a quilted gilet, shearling-lined boots',
+    settings: ['snow'],
+    sceneFitOnly: true,
+  },
+  {
+    key: 'mountaineer',
+    text: 'alpine mountaineer: a heritage down parka, a wool scarf, leather mountaineering boots',
+    settings: ['snow'],
+    sceneFitOnly: true,
+  },
 ];
 
 /** What the fashion roll gives one person: a woman gets a garment family AND a look; a man, a look. */
@@ -623,8 +850,9 @@ export interface LookRollTuning {
 }
 
 /** Settings whose dress code is the activity's own kit: nobody gets a rolled look there (a golf course dresses
- *  golfers, the slopes dress skiers). */
-const KIT_SETTINGS: ReadonlySet<Setting> = new Set<Setting>(['sport', 'snow']);
+ *  golfers). Snow left this set in phase 10: it has its own snow-only looks (après-ski, chalet, 1970s ski), all real
+ *  snow wear, and the brief's GARMENT_GEAR_WINS line still dresses someone mid-run on the slopes. */
+const KIT_SETTINGS: ReadonlySet<Setting> = new Set<Setting>(['sport']);
 
 /** A look fits a setting when it is tagged for it. An unclassified scene takes the city looks: the broad,
  *  wear-anywhere set, never an occasion costume. */
@@ -685,6 +913,8 @@ const SETTING_GARMENT_FACTORS: Partial<Record<Setting, Readonly<Record<string, n
   beach: { coat_over_dress: 0, shorts: 2, dress: 1.2, trousers: 0.6 },
   evening: { shorts: 0, trousers: 0.4, dress: 1.6, jumpsuit: 1.5, coat_over_dress: 0.5 },
   outdoors: { coat_over_dress: 0, shorts: 2, trousers: 1.6, dress: 0.6 },
+  // Snow (phase 10): no shorts, no bare dress; ski suits (jumpsuit), trousers and a coat over a dress.
+  snow: { shorts: 0, dress: 0, skirt: 0.6, jumpsuit: 2, trousers: 1.5, coat_over_dress: 1.5 },
 };
 
 /** A family is only rolled in a setting when at least this many of its looks fit there (so the look pick
@@ -735,7 +965,7 @@ function rollGarmentFamilyIn(
  * one THEME half the time when both pools have that look. Pure and rng-injected.
  *
  * Phase 9: with `opts.setting` the looks and families are the ones that fit that place, and a kit setting
- * (sport, snow) rolls no look at all. Without `opts` the roll (and its rng sequence) is phase 8 exactly.
+ * (sport) rolls no look at all. Without `opts` the roll (and its rng sequence) is phase 8 exactly.
  */
 export function rollFashion(
   roles: readonly string[],
@@ -930,7 +1160,7 @@ export interface OutfitRollConfig {
 /**
  * SCENE FIT (phase 9, 2026-09-28) — three independent fixes so each can be measured alone (Kevin's one-variable
  * rule), all on together in production:
- *   looks — the fashion roll picks only looks that fit the setting; sport and snow roll none.
+ *   looks — the fashion roll picks only looks that fit the setting; sport rolls none (snow has its own looks).
  *   trim  — our colours never land as a trim or cuff: the second colour goes on ONE accessory, a pattern is a
  *           print on a whole garment or nothing, no rolled pattern over a user's colour, the V3 cuts.
  *   brief — the wardrobe brief dresses for the place first (SETTING_DRESS), then elevates.
