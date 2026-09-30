@@ -3,6 +3,7 @@
 import {
   buildPickerSections,
   FALLBACK_SECTIONS,
+  groupPickerSections,
   type PickerCardRow,
   type PickerTileRow,
 } from '@/lib/pickerSections';
@@ -78,5 +79,66 @@ describe('buildPickerSections', () => {
       expect(s.map((x) => x.id)).toEqual(['around_the_world', 'tropical_escapes']);
     }
     expect(FALLBACK_SECTIONS).toHaveLength(12);
+  });
+});
+
+describe('groupPickerSections (mig 621: mood groups instead of Real World / Dream Worlds)', () => {
+  const grouped = (
+    key: string,
+    sort_order: number,
+    section: string | null,
+    tier = 'real'
+  ): PickerTileRow => ({
+    ...tile(key, sort_order, false, tier),
+    section,
+  });
+  const cards: PickerCardRow[] = [
+    card('paris', 'iconic_cities', 'europe'),
+    card('tokyo', 'iconic_cities', 'asia_pacific'),
+    card('hawaii', 'tropical', 'tropical_escapes'),
+    card('dragons keep', 'high_fantasy', 'fantasy'),
+    card('mars colony', 'scifi_space', 'scifi'),
+  ];
+
+  it('puts each tile under its group, groups in the order of their first tile, tiles in their own order', () => {
+    const sections = buildPickerSections(
+      cards,
+      [
+        grouped('scifi', 160, 'Magic & Wonder', 'imagined'),
+        grouped('europe', 10, 'Around the World'),
+        grouped('tropical_escapes', 50, 'Sun & Sea'),
+        grouped('asia_pacific', 20, 'Around the World'),
+        grouped('fantasy', 130, 'Magic & Wonder', 'imagined'),
+      ],
+      false
+    );
+    expect(sections.map((s) => s.group)).toEqual([
+      'Around the World',
+      'Around the World',
+      'Sun & Sea',
+      'Magic & Wonder',
+      'Magic & Wonder',
+    ]);
+    expect(
+      groupPickerSections(sections).map((g) => [g.title, g.sections.map((s) => s.id)])
+    ).toEqual([
+      ['Around the World', ['europe', 'asia_pacific']],
+      ['Sun & Sea', ['tropical_escapes']],
+      ['Magic & Wonder', ['fantasy', 'scifi']],
+    ]);
+  });
+
+  it('a tile with no group sits under its tier, and the fallback tiles keep the old two headers', () => {
+    const sections = buildPickerSections(
+      cards,
+      [grouped('europe', 10, 'Around the World'), grouped('fantasy', 20, null, 'imagined')],
+      false
+    );
+    expect(groupPickerSections(sections).map((g) => g.title)).toEqual([
+      'Around the World',
+      'Dream Worlds',
+    ]);
+    const fallback = groupPickerSections(buildPickerSections(cards, null, false));
+    expect(fallback.map((g) => g.title)).toEqual(['Real World', 'Dream Worlds']);
   });
 });

@@ -18,7 +18,7 @@ import { OnboardingFooter } from './OnboardingFooter';
 import { showAlert } from '@/components/CustomAlert';
 import { supabase } from '@/lib/supabase';
 import { hasRequiredPlaces } from '@/lib/placeRequirement';
-import { buildPickerSections, type PickerSection } from '@/lib/pickerSections';
+import { buildPickerSections, groupPickerSections, type PickerSection } from '@/lib/pickerSections';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const TILE_GAP = 10;
@@ -103,7 +103,7 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
           cardsQuery.order('picker_sort_order'),
           supabase
             .from('picker_tiles')
-            .select('key, title, description, icon, tier, sort_order, admin_only')
+            .select('key, title, description, icon, tier, sort_order, admin_only, section')
             .eq('is_active', true),
         ]);
         if (!live || !cardsRes.data) {
@@ -157,8 +157,8 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
     // gradient sweeps continuously across the left rule, the text, and the right rule
     // as a single unit (Kevin 2026-08-29). Done with a MaskedView: the gradient fills
     // the full row and shows through the mask (two flex lines + the label glyphs).
-    const renderSectionHeader = (label: string, dream: boolean) => (
-      <View style={[s.sectionHeader, dream && s.sectionHeaderDream]}>
+    const renderSectionHeader = (label: string, later: boolean) => (
+      <View key={`h-${label}`} style={[s.sectionHeader, later && s.sectionHeaderLater]}>
         <MaskedView
           style={s.sectionMask}
           maskElement={
@@ -181,12 +181,12 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
       </View>
     );
 
-    // Level 1 — the whole picker on ONE page (no tabs): a global running total, then
-    // two labeled sections (Real World / Dream Worlds) stacked in a single scroll, so
-    // the second world can't be missed and the total is obviously global.
+    // Level 1 — the whole picker on ONE page (no tabs): a global running total, then the
+    // tiles under short mood headers (Around the World, Sun & Sea, Magic & Wonder...;
+    // picker_tiles.section, mig 621; Kevin 2026-09-30 retired the Real World / Dream Worlds
+    // binary). A group with an odd count gives its last tile the full width instead of a hole.
     const renderBrowse = () => {
-      const realSections = sections.filter((sec) => sec.tier === 'real');
-      const dreamSections = sections.filter((sec) => sec.tier === 'imagined');
+      const groups = groupPickerSections(sections);
       // One toggle covers both bulk cases (Kevin 2026-08-29): when everything is
       // picked it says "Select none" and clears; otherwise "Select all" and fills.
       // toggleAllLocations(allKeys) already does both directions in one call.
@@ -229,18 +229,19 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
             ]}
             showsVerticalScrollIndicator={false}
           >
-            {realSections.length > 0 && (
-              <>
-                {renderSectionHeader('REAL WORLD', false)}
-                <View style={s.catGrid}>{realSections.map(renderCategoryCard)}</View>
-              </>
-            )}
-            {dreamSections.length > 0 && (
-              <>
-                {renderSectionHeader('DREAM WORLDS', true)}
-                <View style={s.catGrid}>{dreamSections.map(renderCategoryCard)}</View>
-              </>
-            )}
+            {groups.map((g, gi) => (
+              <View key={g.title}>
+                {renderSectionHeader(g.title, gi > 0)}
+                <View style={s.catGrid}>
+                  {g.sections.map((sec, i) =>
+                    renderCategoryCard(
+                      sec,
+                      g.sections.length % 2 === 1 && i === g.sections.length - 1
+                    )
+                  )}
+                </View>
+              </View>
+            ))}
           </ScrollView>
         </View>
       );
@@ -251,14 +252,14 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
     // drill-in. Selected = every location in the category is picked; shown with a
     // teal-green highlighted border + a check badge. Title only — no subtitle
     // (the title is descriptive enough, Kevin 2026-08-29).
-    const renderCategoryCard = (section: PickerSection) => {
+    const renderCategoryCard = (section: PickerSection, wide = false) => {
       const repThumb = section.items.map((i) => thumbnails.get(i.key)).find(Boolean);
       const sectionKeys = section.items.map((i) => i.key);
       const selected = sectionKeys.length > 0 && sectionKeys.every((k) => places.includes(k));
       return (
         <TouchableOpacity
           key={section.id}
-          style={[s.catCard, selected && s.catCardSelected]}
+          style={[s.catCard, wide && s.catCardWide, selected && s.catCardSelected]}
           activeOpacity={0.85}
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -294,7 +295,7 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
           )}
 
           <View style={s.catBody}>
-            <Text style={s.catTitle} numberOfLines={1}>
+            <Text style={s.catTitle} numberOfLines={2}>
               {section.title}
             </Text>
           </View>
@@ -404,9 +405,8 @@ const s = StyleSheet.create({
   },
   resetBtnText: { fontSize: fontScale(12.5), fontWeight: '700', color: colors.bodyOnDark },
 
-  // Level 1 — section eyebrow header. An uppercase letter-spaced label + a rule
-  // that runs to the edge. Real World = neutral; Dream Worlds = brand-gradient rule
-  // + brighter label, with extra top space, so the two worlds read as distinct.
+  // Level 1 — group eyebrow header (one per mood group). An uppercase letter-spaced
+  // label + a brand-gradient rule; every group after the first gets extra top space.
   // No marginHorizontal — the header lives inside the ScrollView's already-padded
   // content (scrollContent), so it aligns with the grid; a second margin would
   // double-inset it and push the fixed-width mask off-center.
@@ -414,7 +414,7 @@ const s = StyleSheet.create({
     marginTop: verticalScale(4),
     marginBottom: verticalScale(12),
   },
-  sectionHeaderDream: { marginTop: verticalScale(24) },
+  sectionHeaderLater: { marginTop: verticalScale(24) },
   // Centered "——— LABEL ———" divider — one gradient (behind) shows through this
   // mask (two flex rules + the label glyphs), so it reads as a single unit. Fills
   // the padded content width so the two lines stay symmetric and the label centers.
@@ -436,6 +436,8 @@ const s = StyleSheet.create({
     flexWrap: 'wrap',
     gap: TILE_GAP,
   },
+  // The last tile of an odd-sized group spans the row (no empty cell).
+  catCardWide: { width: TILE_WIDTH * 2 + TILE_GAP },
   catCard: {
     width: TILE_WIDTH,
     height: CAT_CARD_HEIGHT,

@@ -17,6 +17,8 @@ export interface PickerTileRow {
   tier: string;
   sort_order: number;
   admin_only: boolean;
+  /** The group header the tile sits under (mig 621); null = its tier. */
+  section?: string | null;
 }
 
 export interface PickerCardRow {
@@ -40,7 +42,15 @@ export interface PickerSection {
   icon: string;
   description: string;
   tier: LocationTier;
+  /** The group header (picker_tiles.section); null = grouped by tier. */
+  group: string | null;
   items: PickerItem[];
+}
+
+/** One header on the page and the tiles under it. */
+export interface PickerGroup {
+  title: string;
+  sections: PickerSection[];
 }
 
 interface FallbackSection {
@@ -179,6 +189,7 @@ export function buildPickerSections(
         icon: t.icon,
         description: t.description,
         tier: t.tier === 'imagined' ? ('imagined' as const) : ('real' as const),
+        group: t.section ?? null,
         items: cards.filter((c) => c.picker_tile === t.key).map(toItem),
       }))
       .filter((s) => s.items.length > 0);
@@ -189,8 +200,25 @@ export function buildPickerSections(
     icon: m.icon,
     description: m.description,
     tier: m.tier,
+    group: null,
     items: m.categories.flatMap((cat) =>
       cards.filter((c) => c.picker_category === cat).map(toItem)
     ),
   })).filter((s) => s.items.length > 0);
+}
+
+/**
+ * The page's headers (Kevin 2026-09-30: mood groups instead of "Real World / Dream Worlds"). Each tile sits under its
+ * `group`; a tile without one sits under its tier's header, so the fallback tiles and any new tile added without a
+ * section still land somewhere sensible. Groups appear in the order of their first tile; tiles keep their order.
+ */
+export function groupPickerSections(sections: readonly PickerSection[]): PickerGroup[] {
+  const groups = new Map<string, PickerSection[]>();
+  for (const sec of sections) {
+    const title = sec.group ?? (sec.tier === 'imagined' ? 'Dream Worlds' : 'Real World');
+    const list = groups.get(title);
+    if (list) list.push(sec);
+    else groups.set(title, [sec]);
+  }
+  return [...groups.entries()].map(([title, secs]) => ({ title, sections: secs }));
 }

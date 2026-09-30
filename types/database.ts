@@ -3260,6 +3260,7 @@ export type Database = {
           icon: string;
           is_active: boolean;
           key: string;
+          section: string | null;
           sort_order: number;
           tier: string;
           title: string;
@@ -3271,6 +3272,7 @@ export type Database = {
           icon: string;
           is_active?: boolean;
           key: string;
+          section?: string | null;
           sort_order: number;
           tier: string;
           title: string;
@@ -3282,6 +3284,7 @@ export type Database = {
           icon?: string;
           is_active?: boolean;
           key?: string;
+          section?: string | null;
           sort_order?: number;
           tier?: string;
           title?: string;
