@@ -107,6 +107,8 @@ export const ARMS = {
       `${m[1]}${m[2]}, looking into the camera${m[3]}${m[4]}, looking into the camera from within the scene${m[5]}`
     );
   },
+  // Solos, round 6: the shipped solo gaze (c2 on a solo = after the medium) plus s1's two removals.
+  s2: (p) => ARMS.s1(ARMS.c2(p)),
   // Solos: eyes to the camera, no "gently off", no three-quarter head.
   s1: (p) =>
     p

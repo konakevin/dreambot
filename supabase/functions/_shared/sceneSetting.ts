@@ -102,7 +102,7 @@ const BEACH_BY_NAME =
   /\b(beach(es)?|seaside|shoreline|boardwalk|surf(ing)?|oceanfront|sand dunes)\b/i;
 /** Wild landmarks a city-filed card can roll (1950s Americana's Zion Canyon, Carlsbad Caverns, Havasu Falls). */
 const WILDS_BY_NAME =
-  /\b(national park|canyons?|caverns?|caves?|waterfalls?|falls|cascades?|geysers?|narrows|travertine|sandstone|hot springs?|volcano(es)?|sinkholes?|jungles?|rainforests?|gorges?|pyramids?|ruins|groves?)\b/i;
+  /\b(national park|canyons?|caverns?|caves?|waterfalls?|falls|cascades?|geysers?|narrows|travertine|sandstone|hot springs?|volcano(es)?|sinkholes?|jungles?|rainforests?|gorges?|pyramids?|ruins|groves?|valleys?|lookouts?|overlooks?|ridges?)\b/i;
 export function settingFromPlaceName(
   ...texts: (string | null | undefined)[]
 ): 'snow' | 'beach' | 'outdoors' | null {

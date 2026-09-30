@@ -103,6 +103,7 @@ describe('settingFromPlaceName (nightly: the landmark says snow or beach)', () =
     ['yucatan', 'Cobá Nohoch Mul pyramid rising above jungle canopy', 'outdoors'],
     ['malibu', 'Malibu Creek gorge basalt columns and swimming hole', 'outdoors'],
     ['kauai', 'Waimea Canyon red ridges', 'outdoors'],
+    ['kauai', 'Kalalau Valley from lookout', 'outdoors'],
     ['maui', 'Kaanapali Beach at sunset', 'beach'],
   ])('%s + %s → %s', (place, anchor, setting) => {
     expect(settingFromPlaceName(place, anchor)).toBe(setting);

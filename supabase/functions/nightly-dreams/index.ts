@@ -226,6 +226,18 @@ import { enabledPartners, rollPartner, mirrorPartnerIntoCast } from '../_shared/
 // Models nightly must never render. flux-2-dev over-smooths under the nightly
 // slot pipeline (banned 2026-06-01). Module-scoped so BOTH the DreamSmart pool
 // pick (face-swap + scene) and the downstream ban-gate backstop share one list.
+/** Holidays whose scenario rows dress for cold weather (NIGHTLY_OUTFIT_VARIETY_PLAN.md phase 2): no warm-only looks. */
+const COLD_HOLIDAYS: ReadonlySet<string> = new Set([
+  'fall',
+  'halloween',
+  'thanksgiving',
+  'christmas',
+  'new_years',
+  'valentines',
+  'st_patricks',
+]);
+/** The autumn holidays: their rows unlock the autumn looks. */
+const AUTUMN_HOLIDAYS: ReadonlySet<string> = new Set(['fall', 'halloween', 'thanksgiving']);
 const NIGHTLY_BANNED_MODELS: ReadonlySet<string> = new Set([
   'black-forest-labs/flux-2-dev',
   // PERMANENTLY banned from nightly. Disabled 2026-08-25 (Kevin) because gpt-image-2 renders WIDE images
@@ -3440,7 +3452,20 @@ Deno.serve(async (req) => {
             `outfit_setting:${nightlySetting}:${fromRow ? 'row' : byName ? 'place_name' : 'location'}`
           );
         }
-        const sceneText = [userPlace, iconicAnchor, dualSpecialScene].filter(Boolean).join(' ');
+        // COLD SEASON (NIGHTLY_OUTFIT_VARIETY_PLAN.md phase 2): a Fall / Halloween / winter-holiday row dresses for the
+        // season: no warm-only looks (a mushroom-circle Fall row rolled 1960s Riviera halters and shorts), fewer
+        // shorts, and the autumn looks unlock on the autumn holidays (their `requires` reads the word "autumn").
+        const coldSeason = !!holidayCategory && COLD_HOLIDAYS.has(holidayCategory);
+        const autumnSeason = !!holidayCategory && AUTUMN_HOLIDAYS.has(holidayCategory);
+        const sceneText = [
+          userPlace,
+          iconicAnchor,
+          dualSpecialScene,
+          autumnSeason ? 'autumn' : null,
+        ]
+          .filter(Boolean)
+          .join(' ');
+        if (coldSeason) fallbackReasons.push(`outfit_season:cold${autumnSeason ? ':autumn' : ''}`);
         const castGenders = Object.fromEntries(
           resolvedCast.map((rc, i) => [
             rc.role,
@@ -3464,6 +3489,7 @@ Deno.serve(async (req) => {
                 ...(nightlySceneFit && nightlySetting
                   ? { sceneFit: nightlySceneFit, setting: nightlySetting, sceneText }
                   : {}),
+                ...(coldSeason ? { cold: true } : {}),
                 ...lookTuning,
               },
               {}
@@ -3504,7 +3530,8 @@ Deno.serve(async (req) => {
                 nightlySceneFit && nightlySceneFit.looks && nightlySetting
                   ? {
                       setting: nightlySetting,
-                      text: [userPlace, iconicAnchor, dualSpecialScene].filter(Boolean).join(' '),
+                      text: sceneText,
+                      ...(coldSeason ? { cold: true } : {}),
                     }
                   : undefined,
                 lookTuning

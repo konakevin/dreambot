@@ -9,6 +9,8 @@
  */
 jest.mock('@engine/llm', () => ({ callSonnet: jest.fn() }));
 
+import fs from 'fs';
+import path from 'path';
 import {
   MEN_FASHION_LOOKS,
   OUTFIT_SILHOUETTES_V3,
@@ -674,5 +676,58 @@ describe('phase 10: autumn looks unlock only in autumn scenes', () => {
       const k = keys(s, t);
       for (const a of AUTUMN_KEYS) expect(k.has(a)).toBe(false);
     }
+  });
+});
+
+describe('phase 10: a cold-season scene never rolls warm-only looks', () => {
+  const WARM_W = new Set(WOMEN_FASHION_LOOKS.filter((l) => l.warmOnly).map((l) => l.key));
+  const WARM_M = new Set(MEN_FASHION_LOOKS.filter((l) => l.warmOnly).map((l) => l.key));
+  const WARM = new Set([...WARM_W, ...WARM_M]);
+
+  it('warm-only covers the swim-shorts, halter and linen looks', () => {
+    for (const k of ['resort', 'surf', 'poolside', 'riviera', 'coord', 'tropicana', 'coastal']) {
+      expect(WARM.has(k)).toBe(true);
+    }
+  });
+
+  it('cold: no warm-only look in any setting, and shorts get rarer', () => {
+    for (const s of ['city', 'unknown', 'outdoors', 'beach', 'indoor'] as Setting[]) {
+      for (let i = 0; i < 600; i++) {
+        const [her, him] = rollFashion(COUPLE, GENDERS, undefined, seeded(i), {
+          setting: s,
+          text: 'Circle of towering glowing mushroom caps autumn',
+          cold: true,
+        });
+        expect(WARM_W.has(her!.look.key)).toBe(false);
+        expect(WARM_M.has(him!.look.key)).toBe(false);
+      }
+    }
+    expect(garmentWeightsFor('city', undefined, null, true).shorts).toBeLessThan(
+      garmentWeightsFor('city').shorts
+    );
+  });
+
+  it('without cold nothing changes (same picks, same sequence)', () => {
+    for (let i = 0; i < 100; i++) {
+      expect(
+        rollFashion(COUPLE, GENDERS, undefined, seeded(i), { setting: 'beach', text: 'x' })
+      ).toEqual(
+        rollFashion(COUPLE, GENDERS, undefined, seeded(i), {
+          setting: 'beach',
+          text: 'x',
+          cold: false,
+        })
+      );
+    }
+  });
+
+  it('nightly marks the cold holidays and unlocks autumn on the autumn ones', () => {
+    const src = fs.readFileSync(
+      path.join(__dirname, '..', '..', 'supabase', 'functions', 'nightly-dreams', 'index.ts'),
+      'utf8'
+    );
+    expect(src).toMatch(/const COLD_HOLIDAYS[^;]*'fall'[^;]*'halloween'/s);
+    expect(src).toContain("autumnSeason ? 'autumn' : null");
+    expect(src.split('...(coldSeason ? { cold: true } : {}),').length - 1).toBe(2);
   });
 });

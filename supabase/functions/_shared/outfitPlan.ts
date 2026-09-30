@@ -251,6 +251,9 @@ export interface FashionLook {
   affinity?: RegExp;
   /** Phase 9: rolled only when scene fit is on (so the phase 8 pool, and its rng sequence, is unchanged). */
   sceneFitOnly?: boolean;
+  /** Phase 10: a hot-weather look (swim shorts, a halter, sandals, linen): never rolled in a cold-season scene (a Fall
+   *  or Halloween row put a couple in 1960s Riviera halters and shorts among glowing mushroom caps). */
+  warmOnly?: boolean;
 }
 // Phase 9 theme words: a scene that names one of these calls for the look (see FashionLook.affinity). Dress
 // themes only, never architecture: "Art Deco" (Miami's Ocean Drive rolled 1920s braces into a 1950s dream)
@@ -349,6 +352,7 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     text: 'resort glamour: a wide-brim hat, statement earrings, strappy sandals',
     families: ['dress', 'jumpsuit', 'shorts', 'skirt'],
     settings: ['beach', 'city'],
+    warmOnly: true,
   },
   {
     key: 'pinup',
@@ -428,6 +432,7 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     text: 'coastal elegance: soft linen layers, a straw hat, espadrilles',
     families: ['dress', 'trousers', 'skirt'],
     settings: ['beach', 'city', 'outdoors'],
+    warmOnly: true,
   },
   {
     key: 'kpop',
@@ -472,6 +477,7 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     families: ['jumpsuit', 'dress', 'trousers', 'shorts'],
     settings: ['beach', 'city'],
     sceneFitOnly: true,
+    warmOnly: true,
   },
   {
     key: 'coord',
@@ -479,6 +485,7 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     families: ['shorts', 'trousers', 'skirt'],
     settings: ['beach'],
     sceneFitOnly: true,
+    warmOnly: true,
   },
   {
     key: 'tropicana',
@@ -486,6 +493,7 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     families: ['dress', 'jumpsuit', 'shorts', 'skirt'],
     settings: ['beach'],
     sceneFitOnly: true,
+    warmOnly: true,
   },
   {
     key: 'equestrian',
@@ -652,6 +660,7 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
     key: 'resort',
     text: 'resort style: a camp-collar shirt, tailored shorts, loafers',
     settings: ['beach', 'city'],
+    warmOnly: true,
   },
   {
     key: 'dark_academia',
@@ -708,6 +717,7 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
     key: 'coastal',
     text: 'coastal: soft linen layers, a straw hat, espadrilles',
     settings: ['beach', 'city', 'outdoors'],
+    warmOnly: true,
   },
   {
     key: 'parisian',
@@ -731,6 +741,7 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
     text: 'surf-shack cool: an open camp-collar shirt, tailored board shorts, leather sandals',
     settings: ['beach'],
     sceneFitOnly: true,
+    warmOnly: true,
   },
   {
     // The 1950s had two men's looks, not one: a greaser jacket alone put leather on 11 of 15 1950s dreams.
@@ -754,30 +765,35 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
     text: '1960s Riviera: a knitted short-sleeve polo, slim trousers rolled at the ankle, suede driving shoes',
     settings: ['beach', 'city'],
     sceneFitOnly: true,
+    warmOnly: true,
   },
   {
     key: 'poolside',
     text: '1970s poolside: a terry-cloth resort shirt, short retro swim shorts, a slim chain necklace',
     settings: ['beach'],
     sceneFitOnly: true,
+    warmOnly: true,
   },
   {
     key: 'barefoot_tailoring',
     text: 'barefoot tailoring: an unstructured linen suit, an open-collar shirt, rolled trouser hems',
     settings: ['beach', 'evening'],
     sceneFitOnly: true,
+    warmOnly: true,
   },
   {
     key: 'coord',
     text: 'co-ord set: a matching short-sleeve shirt and shorts, woven leather slides',
     settings: ['beach'],
     sceneFitOnly: true,
+    warmOnly: true,
   },
   {
     key: 'boho',
     text: 'boho: a crochet-knit shirt, layered beaded necklaces, suede sandals',
     settings: ['beach', 'outdoors'],
     sceneFitOnly: true,
+    warmOnly: true,
   },
   {
     key: 'equestrian',
@@ -898,6 +914,8 @@ export interface FashionRollOptions {
   setting: Setting;
   /** The scene's own words (the prompt, the place): a regional look (Parisian, western) needs its place named. */
   text?: string | null;
+  /** Phase 10: a cold-season scene (a Fall / Halloween / winter holiday row): no warm-only looks, fewer shorts. */
+  cold?: boolean;
 }
 
 /**
@@ -990,16 +1008,21 @@ const MIN_LOOKS_PER_FAMILY = 2;
 export function garmentWeightsFor(
   setting: Setting,
   weights: Readonly<Record<string, number>> = DEFAULT_GARMENT_WEIGHTS,
-  text?: string | null
+  text?: string | null,
+  cold = false
 ): Record<string, number> {
   const base = normalizeGarmentWeights(weights);
   const factors = SETTING_GARMENT_FACTORS[setting] ?? {};
   const out: Record<string, number> = {};
   for (const f of WOMEN_GARMENT_FAMILIES) {
     const fitting = WOMEN_FASHION_LOOKS.filter(
-      (l) => (!l.families || l.families.includes(f.key)) && lookFits(l, setting, text)
+      (l) =>
+        (!l.families || l.families.includes(f.key)) &&
+        lookFits(l, setting, text) &&
+        !(cold && l.warmOnly)
     ).length;
-    const factor = factors[f.key] ?? 1;
+    // A cold-season scene keeps shorts rare (shorts with tights still happen), never zero.
+    const factor = (factors[f.key] ?? 1) * (cold && f.key === 'shorts' ? 0.3 : 1);
     out[f.key] = fitting >= MIN_LOOKS_PER_FAMILY ? (base[f.key] ?? 0) * factor : 0;
   }
   return out;
@@ -1010,9 +1033,10 @@ function rollGarmentFamilyIn(
   setting: Setting,
   weights: Readonly<Record<string, number>>,
   rng: () => number,
-  text?: string | null
+  text?: string | null,
+  cold = false
 ): GarmentFamily {
-  const w = garmentWeightsFor(setting, weights, text);
+  const w = garmentWeightsFor(setting, weights, text, cold);
   const total = WOMEN_GARMENT_FAMILIES.reduce((sum, f) => sum + (w[f.key] ?? 0), 0);
   if (total <= 0) return rollGarmentFamily(weights, rng);
   let at = rng() * total;
@@ -1052,8 +1076,9 @@ export function rollFashion(
     return left.length ? left : pool;
   };
   // Off (no opts): the phase 8 pools exactly, scene-fit-only looks excluded.
+  const cold = !!opts && !!opts.cold;
   const fits = (l: FashionLook): boolean =>
-    opts ? lookFits(l, opts.setting, opts.text) : !l.sceneFitOnly;
+    opts ? lookFits(l, opts.setting, opts.text) && !(cold && l.warmOnly) : !l.sceneFitOnly;
   const favoured = (l: FashionLook): boolean => !!opts && lookFavoured(l, opts.text);
   let family: GarmentFamily | null = null;
   let firstKey: string | null = null;
@@ -1073,7 +1098,7 @@ export function rollFashion(
         );
         if (fav.length && rng() < affinity) {
           forcedWomanLook = pick(fav, rng);
-          const w = garmentWeightsFor(opts.setting, weights, opts.text);
+          const w = garmentWeightsFor(opts.setting, weights, opts.text, !!opts.cold);
           const keys = (
             forcedWomanLook.families ?? WOMEN_GARMENT_FAMILIES.map((f) => f.key)
           ).filter((k) => (w[k] ?? 0) > 0);
@@ -1085,20 +1110,25 @@ export function rollFashion(
       family =
         family ??
         (opts
-          ? rollGarmentFamilyIn(opts.setting, weights, rng, opts.text)
+          ? rollGarmentFamilyIn(opts.setting, weights, rng, opts.text, !!opts.cold)
           : rollGarmentFamily(weights, rng));
       fam = family;
       pool = WOMEN_FASHION_LOOKS.filter(
         (l) => (!l.families || l.families.includes(fam!.key)) && fits(l)
       );
-      // A family with no look for this place (the fallback roll above) keeps its unfiltered looks.
+      // A family with no look for this place (the fallback roll above) keeps its unfiltered looks (still never a
+      // warm-only look in a cold-season scene).
       if (!pool.length)
         pool = WOMEN_FASHION_LOOKS.filter(
-          (l) => (!l.families || l.families.includes(fam!.key)) && !l.sceneFitOnly
+          (l) =>
+            (!l.families || l.families.includes(fam!.key)) &&
+            !l.sceneFitOnly &&
+            !(cold && l.warmOnly)
         );
     } else {
       pool = MEN_FASHION_LOOKS.filter(fits);
-      if (!pool.length) pool = MEN_FASHION_LOOKS.filter((l) => !l.sceneFitOnly);
+      if (!pool.length)
+        pool = MEN_FASHION_LOOKS.filter((l) => !l.sceneFitOnly && !(cold && l.warmOnly));
     }
     pool = fresh(pool, role);
     // A matching couple theme never overrides the place's own theme (a 1950s diner rolled resort for both).
@@ -1216,6 +1246,8 @@ export interface OutfitRollConfig {
   sceneFit?: SceneFit;
   /** Phase 9: the scene's own words, for regional looks (sceneSetting's input, joined). */
   sceneText?: string | null;
+  /** Phase 10: a cold-season scene (no warm-only looks, fewer shorts). */
+  cold?: boolean;
   /** Anti-lock (NIGHTLY_OUTFIT_VARIETY_PLAN.md): the favoured-look rate and the looks to skip per role. */
   favouredPct?: number;
   recentLooks?: Readonly<Record<string, readonly string[]>>;
@@ -1394,7 +1426,11 @@ export function planOutfits(
         cfg.garmentWeights ?? DEFAULT_GARMENT_WEIGHTS,
         rng,
         cfg.sceneFit && cfg.sceneFit.looks
-          ? { setting: cfg.setting ?? 'unknown', text: cfg.sceneText ?? null }
+          ? {
+              setting: cfg.setting ?? 'unknown',
+              text: cfg.sceneText ?? null,
+              ...(cfg.cold ? { cold: true } : {}),
+            }
           : undefined,
         { favouredPct: cfg.favouredPct, recentLooks: cfg.recentLooks }
       );
