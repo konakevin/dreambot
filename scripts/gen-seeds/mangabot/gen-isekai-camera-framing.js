@@ -33,7 +33,7 @@ DO write:
 - Anime close-up character framing, cel-shaded tears on hero's face during emotional reunion moment
 - Profile side-on composition, mage crosses frame mid-cast, staff trailing motion, face visible in profile
 - Anime dutch-angle combat-tension framing, figure angled toward viewer mid-strike
-- Forward three-quarter, hero angled toward viewer, status-window holograms flickering, face engaged
+- Forward three-quarter, hero angled toward viewer, mana-light flickering, face engaged
 - Through-glowing-rune foreground framing, looking past magic circle AT the mage's face mid-cast
 - Magic-circle-framed composition, hero inside glowing rune-ring mid-cast, face dominant
 - Tight medium-shot, hero chest-up mid-cast, face dominant, mana-glow lighting features

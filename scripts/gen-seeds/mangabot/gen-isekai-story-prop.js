@@ -23,7 +23,6 @@ ANIME ISEKAI PROP CATEGORIES:
 - TAVERN-MEAL (anime fantasy steaming-plate of food)
 - PARTY-CAMPFIRE (anime party-camping campfire with pot)
 - BROKEN-ENEMY-WEAPON (anime defeated monster's weapon on ground)
-- LEVEL-UP STATUS BOX (anime floating SAO-style game-window)
 - KEY ITEM (anime quest-key with glowing rune)
 - TRAVELLING-BAG (anime party-pack with map sticking out)
 - FANTASY-CURRENCY (anime gold-coin pile)

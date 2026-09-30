@@ -16,14 +16,13 @@ Each 8-16 words. Framing + character orientation + composition cue.
 DISTRIBUTION:
 - 24% TIGHT MEDIUM (waist-up at mid-occult-action, face dominant in cursed-glow light)
 - 18% FORWARD THREE-QUARTER (3/4 forward at mid-occult-engaged-action with prop raised)
-- 14% CLOSE-UP CURSED-EYE (face fills frame with one cursed-amber/sigil-glowing eye)
+- 5% CLOSE-UP CURSED-EYE (face fills frame with one cursed-amber/sigil-glowing eye) (capped at 5% 2026-09-30, Kevin: face-fills-frame close-ups lose the scene)
 - 12% LOW-ANGLE HERO (camera below; face haloed by ofuda/sigil-glow overhead, body engaged)
-- 8% MEDIUM-FULL-BODY (35-50% frame with occult-prop in foreground, urban-Tokyo as backdrop)
+- 19% MEDIUM-FULL-BODY (35-50% frame with occult-prop in foreground, urban-Tokyo as backdrop)
 - 8% PROFILE-ENGAGED (side-on mid-occult-action with sigil-prop, face in profile not staring at distance)
 - 6% DUTCH-ANGLE-CURSED (tilted-frame at mid-occult-action toward viewer, urgent energy)
 - 4% HIGH-ANGLE FROM-ABOVE (camera elevated; character face turned up at viewer with sigil-glow)
 - 4% OVER-SHOULDER-TOWARD-WHAT-THEY-SEE (camera at-shoulder TOWARD off-frame target, character's face visible in three-quarter profile)
-- 2% EXTREME CLOSE-UP (face fills with cursed-aura, breath visible)
 
 DO write:
 - Tight medium-shot, character waist-up mid-ofuda-throw, face dominant in pale-cyan sigil-glow

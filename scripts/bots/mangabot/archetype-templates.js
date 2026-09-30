@@ -332,7 +332,7 @@ ${blocks.NO_GENERIC_POSE_BLOCK}
 
 ━━━ ⚠ HARD RULE #1: STRICT ANIME ISEKAI REGISTER ━━━
 
-Strict anime isekai register — Frieren / Re:Zero / SAO / Konosuba painterly cel-shaded keyframe. Saturated anime palette, RPG-coded elements (floating status-windows, level-up effects, mana-glow), anime-coded fantasy creatures (slimes / fairy companions / cute dragons), heroine archetypes (sword-girl / mage / cleric), modern protagonist often dropped into the fantasy world (school uniform / hoodie / jersey).
+Strict anime isekai register — Frieren / Re:Zero / SAO / Konosuba painterly cel-shaded keyframe. Saturated anime palette, RPG-coded elements (level-up light bursts, mana-glow), anime-coded fantasy creatures (slimes / fairy companions / cute dragons), heroine archetypes (sword-girl / mage / cleric), modern protagonist often dropped into the fantasy world (school uniform / hoodie / jersey).
 
 ━━━ ⚠ HARD RULE #2: COMPLETE SCENE COHERENCE ━━━
 
@@ -353,7 +353,7 @@ ${character_role}
 ━━━ ACTION MOMENT (candid mid-beat) ━━━
 ${action_moment}
 
-━━━ MAGIC EFFECT (isekai-bespoke signature — runes / status-windows / mana-glow / summon-circles) ━━━
+━━━ MAGIC EFFECT (isekai-bespoke signature — runes / mana-glow / summon-circles) ━━━
 ${magic_effect}
 
 ━━━ FANTASY CREATURE (slime / dragon / fairy / familiar / beast-folk) ━━━
@@ -1515,7 +1515,7 @@ This is the anime world wrapping AROUND her, not a distant vista she's looking o
 ${dramaSection}━━━ SURPRISE ELEMENT — anime secondary subject adding story ━━━
 ${surprise_element}
 
-Place at midground or background — a small anime detail implying the wider world (drifting talisman / floating petal cluster / paper lantern reflection / yokai familiar peeking / status-window flicker). NEVER foreground or competing with her for attention.
+Place at midground or background — a small anime detail implying the wider world (drifting talisman / floating petal cluster / paper lantern reflection / yokai familiar peeking). NEVER foreground or competing with her for attention.
 
 ━━━ CAMERA FRAMING ━━━
 ${camera_framing}

@@ -16,14 +16,13 @@ Each 8-16 words. Framing + character orientation + composition cue.
 DISTRIBUTION:
 - 24% TIGHT MEDIUM (waist-up at rooftop mid-action, face dominant in sunset light)
 - 18% FORWARD THREE-QUARTER (3/4 forward at rooftop mid-engaged-action)
-- 14% CLOSE-UP SUNSET (face fills frame with sunset rim-light catching cheek)
+- 5% CLOSE-UP SUNSET (face fills frame with sunset rim-light catching cheek) (capped at 5% 2026-09-30, Kevin: face-fills-frame close-ups lose the scene)
 - 12% LOW-ANGLE WARM (camera below; face haloed by sunset overhead, body engaged)
-- 8% MEDIUM-FULL-BODY (35-50% frame with rooftop-prop in foreground, city as backdrop)
+- 19% MEDIUM-FULL-BODY (35-50% frame with rooftop-prop in foreground, city as backdrop)
 - 8% PROFILE-ENGAGED (side-on mid-action with rooftop-prop, face in profile not staring at horizon)
 - 6% DUTCH-ANGLE-ROOFTOP (tilted-frame at rooftop mid-action toward viewer)
 - 4% HIGH-ANGLE FROM-ABOVE (camera elevated; character face turned up at viewer)
 - 4% PROP-FOREGROUND (rooftop-prop close to lens, character's face mid-distance focused on prop)
-- 2% EXTREME CLOSE-UP (face fills with sunset glow)
 
 DO write:
 - Tight medium-shot, character waist-up mid-eat-bento at rooftop, face dominant in sunset glow

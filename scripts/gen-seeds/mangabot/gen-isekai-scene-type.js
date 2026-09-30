@@ -13,7 +13,7 @@ Each entry: 14-28 words. ONE anime-isekai composition concept.
 
 DISTRIBUTION (anime-isekai keyframe variety):
 - 16% ADVENTURER PARTY MID-QUEST (3-4 anime adventurers walking through fantasy world)
-- 14% MAGIC-CAST MOMENT (mage mid-spell with anime mana-glow + status-window)
+- 14% MAGIC-CAST MOMENT (mage mid-spell with anime mana-glow + rune-circle)
 - 12% MONSTER ENCOUNTER (party meeting slime / dragon / fantasy creature)
 - 11% COZY ISEKAI MOMENT (tavern / shop / slow-life Restaurant-of-Another-World vibe)
 - 10% MID-COMBAT ACTION (sword-slash / spell-cast with anime motion-blur)

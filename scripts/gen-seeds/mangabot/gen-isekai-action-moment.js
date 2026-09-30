@@ -17,7 +17,7 @@ VARIETY across these isekai actions:
 - PARTY-WALKING (mid-stride traveling through fantasy world)
 - TAVERN-SHARING (mid-laugh / mid-toast / mid-meal in cozy isekai)
 - MONSTER-PETTING (interacting with slime / fairy / dragon-pet)
-- LEVEL-UP MOMENT (status-window appearing, character pausing in awe)
+- LEVEL-UP MOMENT (golden light bursting around the character, pausing in awe)
 - GUILD QUEST-PICK (looking at quest-board, deciding mission)
 - POTION DRINKING (anime mid-drink of magic potion)
 - SUMMON-CIRCLE (kneeling mid-summon, magic-circle glowing)
@@ -39,7 +39,7 @@ DO write:
 - Anime adventurer party mid-stride walking through fantasy world, party-banter energy
 - Mid-tavern-toast with anime party laughing, tankards raised, cozy isekai energy
 - Anime hero mid-pet of smiling blue slime, gentle reaching gesture
-- Level-up status-window appearing mid-air, character pausing in awe, glowing UI text
+- Level-up burst of golden light mid-air, character pausing in awe, rune-sparks spiraling
 - Mid-quest-pick at adventurer's guild quest-board, hero pointing at a notice
 - Anime mid-drink of glowing magic potion, character tilting bottle back
 - Kneeling mid-summon with anime magic-circle glowing on ground, hands lowered

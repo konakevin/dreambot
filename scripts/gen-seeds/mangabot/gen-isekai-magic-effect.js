@@ -7,16 +7,17 @@ generatePool({
   append: true,
   metaPrompt: (
     n
-  ) => `Write ${n} MAGIC-EFFECT entries for a MangaBot ANIME ISEKAI keyframe. SIGNATURE anime isekai visual magic — runes, status-windows, mana-glow, summon-circles, level-up effects. RPG-game-coded.
+  ) => `Write ${n} MAGIC-EFFECT entries for a MangaBot ANIME ISEKAI keyframe. SIGNATURE anime isekai visual magic — runes, mana-glow, summon-circles, level-up effects. RPG-game-coded.
 
 Each entry: 10-22 words. ONE specific anime-isekai magic visual.
 
+NEVER a floating game window, status panel, HP/MP bar, skill-tree, menu, banner or any on-screen UI (Kevin 2026-09-30: Flux renders their text as gibberish).
+
 ANIME ISEKAI MAGIC VARIETY:
 - FLOATING RUNE-CIRCLE (anime magic-circle hovering mid-air with glowing runes)
-- STATUS WINDOW UI (Sword Art Online-style floating game-status display with kanji + level numbers)
 - MANA-GLOW HAND (character's hand emanating colored mana energy)
 - SUMMON-CIRCLE GROUND (large pentagram glowing on floor with anime magic energy)
-- LEVEL-UP BURST (anime particle-effect burst with golden light + status-text)
+- LEVEL-UP BURST (anime particle-effect burst with golden light + rune-sparks)
 - ENERGY-SWORD GLOW (anime sword with glowing magic-blade)
 - FAIRY-LIGHT MOTES (small magical lights floating around character)
 - HEALING-CIRCLE WARM (anime cleric's warm green/gold healing-glow)
@@ -35,10 +36,9 @@ ANIME ISEKAI MAGIC VARIETY:
 
 DO write:
 - Floating anime magic-circle hovering mid-air with glowing kanji-runes and concentric rings
-- Sword Art Online-style floating game-status window with kanji labels + HP/MP bars
 - Anime mana-glow streaming from character's outstretched palm, cyan-purple energy
 - Large anime pentagram summon-circle glowing on the floor with arcane symbols
-- Anime level-up particle-burst with golden light and floating LEVEL UP! kanji text
+- Anime level-up particle-burst with golden light and spiraling rune-sparks
 - Anime energy-sword with bright glowing magic-blade trailing motion-blur
 - Small fairy-light motes drifting around the character in anime-style sparkle
 - Anime warm-green healing-circle glowing around an injured ally

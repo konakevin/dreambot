@@ -16,10 +16,10 @@ Each 8-16 words. Framing + character orientation + composition cue.
 DISTRIBUTION:
 - 24% TIGHT MEDIUM (waist-up mid-scavenge-action, face dominant in dust-amber light)
 - 18% FORWARD THREE-QUARTER (3/4 forward facing camera mid-engaged-action with ruin-prop)
-- 14% CLOSE-UP DUSTY (face fills frame with dust-streak on cheek, low-amber rim-light)
+- 5% CLOSE-UP DUSTY (face fills frame with dust-streak on cheek, low-amber rim-light) (capped at 5% 2026-09-30, Kevin: face-fills-frame close-ups lose the scene)
 - 12% LOW-ANGLE HEROIC (camera below, face haloed by sky-shaft overhead, body engaged at prop)
 - 10% OVER-THE-SHOULDER TOWARD-PROP (camera behind-AND-ABOVE wanderer looking DOWN at what they're examining — face mostly visible)
-- 8% MEDIUM-FULL-BODY (35-50% frame with ruin-prop in foreground, wanderer ENGAGED, vista as backdrop NOT focus)
+- 17% MEDIUM-FULL-BODY (35-50% frame with ruin-prop in foreground, wanderer ENGAGED, vista as backdrop NOT focus)
 - 6% PROFILE-ENGAGED (side-on mid-action with ruin-prop, face in profile NOT looking at horizon)
 - 4% DUTCH-ANGLE-RUIN (tilted-frame at wanderer mid-action toward viewer)
 - 2% HIGH-ANGLE FROM-ABOVE (camera elevated; wanderer's face turned up at viewer)

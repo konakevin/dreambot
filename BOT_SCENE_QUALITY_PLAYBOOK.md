@@ -1054,8 +1054,8 @@ Live paths are `paths[]` in each `index.js`; don't trust a list here over the co
   polish skipped. mecha-hangars keeps its anti-T-pose crouch + anti-Mt-Fuji container. night-touge drifts ~1/3 to modern
   supercars (cars by silhouette/era, never a make). game-center-arcade: crop to shrink arcade text; "schoolgirl" flags.
   Halloween seasonal ×4. Length (2026-09-30): `ANIME_NEUTRAL` is 20 words and briefs end with `MANGABOT_LENGTH_RULE`
-  (110-150); prompts ~230 words. Isekai's template names status windows as a signature, so short prompts render them
-  (with pseudo-text).
+  (110-150); prompts ~230 words. Isekai no longer uses game status windows or any on-screen UI (Kevin 2026-09-30: they
+  render as gibberish text); scene-leaning camera pools cap face-fills-frame close-ups at ~5%.
 - **OceanBot**: every seed has a hero (animal or monumental formation); bioluminescence = lighting, aurora = backdrop;
   active behaviour over passive cruising; tiny subjects ≤20%; named iconic coasts. deep-wonder pins `oceanbot_deep_glow`
   with its own `vibesByPath`. Framing pools were hand-purged of scene-dissolving entries (any regen needs the framing sweep
@@ -1115,10 +1115,6 @@ Kevin's decisions and the work on these are tracked in `BOT_FOLLOWUPS_TRACKER.md
 - **Bot-wide wrapper defects still live**: FaeBot's suffix "dreamy dappled light … no text, no watermarks" (warm cast +
   watermark leak); BloomBot `shared-blocks.js` "lush abundant blooms filling the frame" frame-packing mandate. Pilot any
   fix on ONE path.
-- **Camera-framing sweep (run 2026-09-30, tracker C14)**: ToyBot's shared `camera_angles.json` holds 11 texture-only
-  abstract macros; MangaBot's rooftop-sunsets / occult-tokyo / post-apocalyptic / neo-tokyo pools are 13-18% face-fills-
-  frame close-ups; FarmBot, MangaBot-village and BrickBot carry near-duplicate vanishing-point corridor framings; BrickBot
-  macro-display ~15 top-down plan views; YumBot candy-fantasy 3 "standing figure" framings. Awaiting Kevin's calls.
 - **Fleet `vibeDirective.slice(0, 250)`**: only YumBot was cut to 150; not a fleet rule, noted in case length work resumes.
 - **Decided 2026-09-29, leave alone** (tracker D): the AUTHORITY wording in five bots' look blocks (0 refusal-style
   prompts in ~3,000 bot renders over 30 days), the fleet "no text, no watermarks" suffix (inconclusive A/B; revisit
