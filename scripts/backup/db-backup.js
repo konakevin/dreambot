@@ -287,6 +287,8 @@ function lostRows(prev, now) {
       `backed up: ${Object.keys(snap.manifestTables).length} tables (${dataSections} with data), dump ${mb(dumpBytes)} ` +
         `from a ${mb(snap.server.dbBytes)} database, ${snap.cronJobs.length} cron jobs, in ${elapsed(t0)}${monthlyNote}`
     );
+    // The workflow's stale alarm keys on this, not on the exit code: a "pool tight" skip also exits 0.
+    if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, 'backed_up=true\n');
     if (drops.length) {
       console.error(
         `LOST ROWS since the previous copy (${prevManifest.snapshotAt}): ${drops.join('; ')}`

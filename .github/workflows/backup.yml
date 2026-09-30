@@ -1,0 +1,87 @@
+name: Backup
+
+# Daily off-site copy of the database to Cloudflare R2 (BACKUPS.md; the image mirror joins in Phase 4).
+#
+# GitHub fires this repo's scheduled runs only ~1 time in 4 (memory: project_gh_actions_scheduled_workflow_dropout),
+# so this WAKES every hour and backs up only when the last success is old enough and the hour is outside the busy
+# 03:00-08:59 UTC window (scripts/backup/lib.js isDue). Other wakes exit after the first step, in seconds.
+#
+# Fails (→ GitHub failure email) when: the backup fails; a watched table lost half its rows since the previous
+# copy (the copy is still stored); or the last success is older than STALE_ALARM_HOURS and this run didn't fix it.
+# The repo is PUBLIC: the scripts print counts, sizes and durations only.
+
+on:
+  schedule:
+    - cron: '37 * * * *' # hourly at :37, clear of the top-of-hour cron burst
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Back up now even if not due'
+        type: boolean
+        default: false
+
+concurrency:
+  group: backup-db
+  cancel-in-progress: false # never kill a backup mid-upload
+
+jobs:
+  database:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+      SUPABASE_S3_ACCESS_KEY_ID: ${{ secrets.SUPABASE_S3_ACCESS_KEY_ID }}
+      SUPABASE_S3_SECRET_ACCESS_KEY: ${{ secrets.SUPABASE_S3_SECRET_ACCESS_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install rclone (pinned, checksum-verified)
+        run: |
+          curl -fsSLo /tmp/rclone.zip https://downloads.rclone.org/v1.75.1/rclone-v1.75.1-linux-amd64.zip
+          echo "982b5aa772841168f8e380f139e9e787b2a105403e32b94da8676a0e1c0a13ab  /tmp/rclone.zip" | sha256sum -c --quiet
+          unzip -qj /tmp/rclone.zip '*/rclone' -d /tmp/rclone && sudo install /tmp/rclone/rclone /usr/local/bin/
+
+      - name: Due?
+        id: due
+        env:
+          BACKUP_FORCE: ${{ inputs.force }}
+        run: node scripts/backup/is-due.js db
+
+      - uses: actions/setup-node@v4
+        if: steps.due.outputs.due == 'true'
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: steps.due.outputs.due == 'true'
+        run: npm ci --ignore-scripts
+
+      - name: Install pg_dump 17 (must be at least the server's major version)
+        if: steps.due.outputs.due == 'true'
+        run: |
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl -fsSL -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" \
+            | sudo tee /etc/apt/sources.list.d/pgdg.list >/dev/null
+          sudo apt-get update -qq >/dev/null
+          sudo apt-get install -y -qq postgresql-client-17 >/dev/null
+          echo "/usr/lib/postgresql/17/bin" >> "$GITHUB_PATH"
+
+      - name: Back up the database
+        id: backup
+        if: steps.due.outputs.due == 'true'
+        run: |
+          pg_dump --version
+          node scripts/backup/db-backup.js
+
+      - name: Alarm if backups are stale
+        if: always() && steps.due.outputs.stale == 'true' && steps.backup.outputs.backed_up != 'true'
+        run: |
+          echo "::error::The last successful database backup is older than the alarm threshold. See BACKUPS.md."
+          exit 1
