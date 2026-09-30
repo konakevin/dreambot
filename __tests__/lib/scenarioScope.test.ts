@@ -158,6 +158,16 @@ describe('nightly-dreams scenario-card wiring', () => {
     ).toHaveLength(2);
     expect(SRC).toMatch(/if \(force_place && scenarioCardPlace\) await applyScenarioCard\(\);/);
   });
+  it('a couple never lands on a couples_ok = false card (Surreal Dreams), and that runs before the scenario-card step', () => {
+    const coupleAt = SRC.indexOf(
+      'if (isDualFaceSwap && userPlace && noCoupleCards.has(userPlace))'
+    );
+    const cardAt = SRC.indexOf('let scenarioCardCands:');
+    expect(coupleAt).toBeGreaterThan(0);
+    expect(cardAt).toBeGreaterThan(coupleAt);
+    expect(SRC).toMatch(/couple_place_replaced:/);
+    expect(SRC).toMatch(/\.select\('name, picker_category, content_kind, couples_ok'\)/);
+  });
   it('the zero-pick catalogue fallback never hands out a scenario card as a place', () => {
     expect(SRC).toMatch(/\.eq\('admin_only', false\)\s*\.eq\('content_kind', 'place'\);/);
   });

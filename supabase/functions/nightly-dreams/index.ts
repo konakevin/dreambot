@@ -1573,13 +1573,19 @@ Deno.serve(async (req) => {
     // user. Cheap (~160-row set, cast/scene rolls hit the DB anyway).
     const { data: validCardRows } = await supabase
       .from('location_cards')
-      .select('name, picker_category, content_kind')
+      .select('name, picker_category, content_kind, couples_ok')
       .not('picker_category', 'is', null);
     const validCardNames = new Set((validCardRows ?? []).map((c: { name: string }) => c.name));
     // SCENARIO CARDS (mig 594): cards whose content is their tagged scenarios, not a place (Just for Fun, …).
     const scenarioCards = new Set(
       (validCardRows ?? [])
         .filter((c: { content_kind?: string | null }) => c.content_kind === 'scenarios')
+        .map((c: { name: string }) => c.name)
+    );
+    // SOLO-AND-SCENE-ONLY CARDS (mig 606): a couple dream never lands on these (Surreal Dreams).
+    const noCoupleCards = new Set(
+      (validCardRows ?? [])
+        .filter((c: { couples_ok?: boolean | null }) => c.couples_ok === false)
         .map((c: { name: string }) => c.name)
     );
     let placePool: string[] = (seeds.places ?? [])
@@ -1687,6 +1693,33 @@ Deno.serve(async (req) => {
     // slot pipeline + share the model rotation + override library.
     const isFaceSwapCharacter = isDualFaceSwap || isSingleHumanFaceSwap;
     isFaceSwapCharacterOuter = isFaceSwapCharacter;
+
+    // SOLO-AND-SCENE-ONLY CARDS (mig 606; Kevin 2026-09-30 on Surreal Dreams: "single and scene only"): a couple dream
+    // whose place roll lands on a couples_ok = false card re-rolls to another of the dreamer's places, else the
+    // catalogue. Runs before the scenario-card step so a re-rolled scenario card is still handled there.
+    if (isDualFaceSwap && userPlace && noCoupleCards.has(userPlace)) {
+      const from = userPlace;
+      const coupleOk = placePool.filter((p: string) => !noCoupleCards.has(p));
+      let next: string | undefined =
+        coupleOk.length > 0 ? coupleOk[Math.floor(Math.random() * coupleOk.length)] : undefined;
+      if (!next) {
+        const { data: catalogue } = await supabase
+          .from('location_cards')
+          .select('name')
+          .not('picker_category', 'is', null)
+          .eq('admin_only', false)
+          .eq('content_kind', 'place')
+          .eq('couples_ok', true);
+        const names = (catalogue ?? [])
+          .map((c: { name: string }) => c.name)
+          .filter((n: string) => n && !isBannedLocationName(n));
+        next = names.length > 0 ? names[Math.floor(Math.random() * names.length)] : undefined;
+      }
+      fallbackReasons.push(`couple_place_replaced:${from}:${next ?? 'none'}`);
+      userPlace = next;
+      scenarioCardPlace = userPlace && scenarioCards.has(userPlace) ? userPlace : null;
+      locationCard = userPlace && !scenarioCardPlace ? await fetchLocationCard(userPlace) : null;
+    }
 
     // SCENARIO CARD (mig 594): a face-swap cast dream on a scenario card draws one of the card's tagged scenarios in
     // the roll below, wherever a real place would have stayed the place (so holidays and the goofy/elegant/active
