@@ -4213,10 +4213,16 @@ Output ONLY the prompt.`;
     // rendered East Asian in a China scene). The slot prompt already carries the
     // SPECIFIC spot ("Tianzifang shikumen alleyway art district") for scene fidelity —
     // a place name, far weaker as a race prior than the bare country noun.
+    //
+    // HOLIDAY SCENES skip it too (2026-09-30, Kevin: "holiday scene · costa rica is halloween scenes with
+    // skeletons?"). The holiday_scenes row IS the locked subject and its brief bans real place names ("do not
+    // swap in a different place … NO real brand or place names"), so a leading "set in costa rica," contradicted
+    // the brief and gave an unrelated place the first-noun slot (all 15 holiday scenes in the 5.5 tuning pairs had it).
     if (
       includeLocation &&
       effectiveUserPlace &&
       !isEmbodiedMedium &&
+      !holidayScene &&
       resolvedComposition !== 'character' &&
       !finalPrompt.toLowerCase().includes(effectiveUserPlace.toLowerCase())
     ) {
