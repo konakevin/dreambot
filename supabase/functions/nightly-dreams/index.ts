@@ -166,18 +166,22 @@ import {
   loadDualScenarios,
   pickDualScenario,
   scenariosForRelationship,
+  type DualScenario,
 } from '../_shared/pools/dualScenarioLoader.ts';
 import {
   loadSingleScenarios,
   pickSingleScenario,
   scopeSinglePools,
   singleScenarioCandidates,
+  type SingleScenario,
 } from '../_shared/pools/singleScenarioLoader.ts';
 import {
+  cardScenarios,
   MIN_SCOPED_POOL,
   placeScope,
   scopeScenarios,
   scopedPct,
+  type KindedScenario,
 } from '../_shared/scenarioScope.ts';
 import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
 import {
@@ -1566,9 +1570,15 @@ Deno.serve(async (req) => {
     // user. Cheap (~160-row set, cast/scene rolls hit the DB anyway).
     const { data: validCardRows } = await supabase
       .from('location_cards')
-      .select('name, picker_category')
+      .select('name, picker_category, content_kind')
       .not('picker_category', 'is', null);
     const validCardNames = new Set((validCardRows ?? []).map((c: { name: string }) => c.name));
+    // SCENARIO CARDS (mig 594): cards whose content is their tagged scenarios, not a place (Just for Fun, …).
+    const scenarioCards = new Set(
+      (validCardRows ?? [])
+        .filter((c: { content_kind?: string | null }) => c.content_kind === 'scenarios')
+        .map((c: { name: string }) => c.name)
+    );
     let placePool: string[] = (seeds.places ?? [])
       .map((p: string) => sanitizeUserText(String(p), 'subject_description'))
       .filter((p: string) => p && !isBannedLocationName(p) && validCardNames.has(p));
@@ -1593,7 +1603,8 @@ Deno.serve(async (req) => {
         .from('location_cards')
         .select('name')
         .not('picker_category', 'is', null)
-        .eq('admin_only', false);
+        .eq('admin_only', false)
+        .eq('content_kind', 'place');
       placePool = (allCards ?? [])
         .map((c: { name: string }) => c.name)
         .filter((n: string) => n && !isBannedLocationName(n));
@@ -1607,27 +1618,35 @@ Deno.serve(async (req) => {
       // Keep filtered pool only if it has something; otherwise full list
       if (filtered.length >= 1) placePool = filtered;
     }
-    const userPlace = force_place
+    let userPlace = force_place
       ? // Mandated first-dream location — use the user's just-picked place
         // exactly (sanitized like any pool place), never the random roll.
         sanitizeUserText(String(force_place), 'subject_description')
       : includeLocation && placePool.length > 0
         ? placePool[Math.floor(Math.random() * placePool.length)]
         : undefined;
+    // SCENARIO CARD (mig 594): the place roll can land on a card whose content is its tagged scenarios. Resolved
+    // below, once the dream type is known: a face-swap cast dream draws one of its scenarios, anything else re-rolls
+    // to a real place.
+    let scenarioCardPlace: string | null =
+      userPlace && scenarioCards.has(userPlace) ? userPlace : null;
 
-    // Fetch location essence card (lazy-generates on first encounter)
-    let locationCard: LocationCard | null = null;
-    if (userPlace && ANTHROPIC_KEY) {
+    // Fetch location essence card (lazy-generates on first encounter). A scenario card has none: it isn't a place.
+    const fetchLocationCard = async (place: string): Promise<LocationCard | null> => {
+      if (!ANTHROPIC_KEY) return null;
       try {
-        locationCard = await getLocationCard(userPlace, ANTHROPIC_KEY, {
+        return await getLocationCard(place, ANTHROPIC_KEY, {
           generate: engineCfg0.essenceCardGeneration,
           llm,
         });
       } catch (err) {
         console.warn('[nightly-dreams] Location card failed:', (err as Error).message);
         fallbackReasons.push(`location_card_failed:${(err as Error).message}`);
+        return null;
       }
-    }
+    };
+    let locationCard: LocationCard | null =
+      userPlace && !scenarioCardPlace ? await fetchLocationCard(userPlace) : null;
 
     // (Object roll + object-location compat filter removed 2026-06-02 with
     // the whole objects feature. See project_objects_removed_2026-06-02.)
@@ -1665,6 +1684,59 @@ Deno.serve(async (req) => {
     // slot pipeline + share the model rotation + override library.
     const isFaceSwapCharacter = isDualFaceSwap || isSingleHumanFaceSwap;
     isFaceSwapCharacterOuter = isFaceSwapCharacter;
+
+    // SCENARIO CARD (mig 594): a face-swap cast dream on a scenario card draws one of the card's tagged scenarios in
+    // the roll below, wherever a real place would have stayed the place (so holidays and the goofy/elegant/active
+    // shares still roll first). Anything else (scene-only, Dream Art, a pet) or a card with too few scenarios for
+    // this cast (under MIN_SCOPED_POOL, which would repeat the same few) re-rolls to one of the dreamer's real
+    // places, else the live catalogue.
+    let scenarioCardCands: KindedScenario<DualScenario | SingleScenario>[] = [];
+    if (scenarioCardPlace && isDualFaceSwap) {
+      const loaded = await loadDualScenarios(supabase);
+      const rel = selectedCast.find((c) => c.role === 'plus_one')?.relationship ?? null;
+      scenarioCardCands = cardScenarios(
+        {
+          goofy: scenariosForRelationship(loaded.goofy, rel),
+          elegant: scenariosForRelationship(loaded.elegant, rel),
+          active: scenariosForRelationship(loaded.active, rel),
+        },
+        scenarioCardPlace
+      );
+    } else if (scenarioCardPlace && isSingleHumanFaceSwap) {
+      const loaded = await loadSingleScenarios(supabase);
+      const gg = castGender === 'male' || castGender === 'female' ? castGender : null;
+      scenarioCardCands = cardScenarios(
+        {
+          goofy: singleScenarioCandidates(loaded, 'goofy', gg),
+          elegant: singleScenarioCandidates(loaded, 'elegant', gg),
+          active: singleScenarioCandidates(loaded, 'active', gg),
+        },
+        scenarioCardPlace
+      );
+    }
+    if (scenarioCardPlace && scenarioCardCands.length < MIN_SCOPED_POOL) {
+      const why = isFaceSwapCharacter ? `thin:${scenarioCardCands.length}` : 'not_face_swap';
+      const realPicks = placePool.filter((p: string) => !scenarioCards.has(p));
+      let next: string | undefined =
+        realPicks.length > 0 ? realPicks[Math.floor(Math.random() * realPicks.length)] : undefined;
+      if (!next) {
+        const { data: catalogue } = await supabase
+          .from('location_cards')
+          .select('name')
+          .not('picker_category', 'is', null)
+          .eq('admin_only', false)
+          .eq('content_kind', 'place');
+        const names = (catalogue ?? [])
+          .map((c: { name: string }) => c.name)
+          .filter((n: string) => n && !isBannedLocationName(n));
+        next = names.length > 0 ? names[Math.floor(Math.random() * names.length)] : undefined;
+      }
+      fallbackReasons.push(`scenario_card_replaced:${scenarioCardPlace}:${why}:${next ?? 'none'}`);
+      userPlace = next;
+      scenarioCardPlace = null;
+      scenarioCardCands = [];
+      if (userPlace) locationCard = await fetchLocationCard(userPlace);
+    }
 
     // Override flux fragment + directive for stylized mediums during face
     // swap — front-loads "realistic human face" so cdingram's swap doesn't
@@ -2292,6 +2364,29 @@ Deno.serve(async (req) => {
     // instead of a rolled pose (a playful thumbs-up would fight the go-kart).
     let dualActiveScene = false;
     let soloActiveScene = false;
+    // SCENARIO CARD draw (mig 594, see scenarioCardPlace): one of the card's tagged scenarios, shuffle-bagged per card.
+    const applyScenarioCard = async (): Promise<boolean> => {
+      if (!scenarioCardPlace || scenarioCardCands.length === 0) return false;
+      const bag = `card:${scenarioCardPlace}`;
+      const unseen = await filterUnseen(
+        supabase,
+        userId,
+        bag,
+        scenarioCardCands,
+        (x) => x.row.scene
+      );
+      const from = unseen.length > 0 ? unseen : scenarioCardCands; // fail-open once every one has been seen
+      const c = from[Math.floor(Math.random() * from.length)];
+      applySceneRow(c.row, c.kind);
+      if (c.kind === 'active') {
+        if (isDualFaceSwap) dualActiveScene = true;
+        else soloActiveScene = true;
+        fallbackReasons.push(isDualFaceSwap ? 'active_scenario' : 'active_scenario_solo');
+      }
+      fallbackReasons.push(`scenario_card:${scenarioCardPlace}:${c.kind}`);
+      recordPick(supabase, userId, bag, c.row.scene);
+      return true;
+    };
     // ── Holiday Dreams (HOLIDAY_DREAMS_PLAN.md) — the season(s) active for THIS
     // user's LOCAL date (H2), gated by the master switch + per-user opt-out.
     // Several can be active at once (Fall + Halloween overlap in early Oct); the
@@ -2606,6 +2701,9 @@ Deno.serve(async (req) => {
           dualActiveScene = true;
           fallbackReasons.push('active_scenario');
           recordPick(supabase, userId, 'dual_scn_active', s.scene);
+        } else if (scenarioCardPlace) {
+          // The roll landed on "stay at the place", and the place is a scenario card.
+          await applyScenarioCard();
         }
       } else if (isSingleHumanFaceSwap) {
         const loadedSolo = await loadSingleScenarios(supabase);
@@ -2734,9 +2832,14 @@ Deno.serve(async (req) => {
             soloActiveScene = true;
             fallbackReasons.push('active_scenario_solo');
           }
+        } else if (scenarioCardPlace) {
+          // The roll landed on "stay at the place", and the place is a scenario card.
+          await applyScenarioCard();
         }
       }
     }
+    // A first dream (force_place) skips the rolls above; if its forced place is a scenario card, draw from it here.
+    if (force_place && scenarioCardPlace) await applyScenarioCard();
     // HOLIDAY ROLL FOR DREAM ART (embodied) nightlies (Kevin 2026-09-29). Every other nightly type can land on an
     // in-season holiday; Dream Art never did, because its scene comes from the location spot pick above and the
     // holiday rolls live in the face-swap and scene-only branches. Same odds as a solo/couple face swap

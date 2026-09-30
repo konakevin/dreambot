@@ -2678,6 +2678,7 @@ export type Database = {
           biome: string | null;
           biome_config: Json | null;
           cinematic_phrases: string[];
+          content_kind: string;
           created_at: string;
           display_name: string | null;
           fusion_settings: Json;
@@ -2705,6 +2706,7 @@ export type Database = {
           biome?: string | null;
           biome_config?: Json | null;
           cinematic_phrases?: string[];
+          content_kind?: string;
           created_at?: string;
           display_name?: string | null;
           fusion_settings?: Json;
@@ -2732,6 +2734,7 @@ export type Database = {
           biome?: string | null;
           biome_config?: Json | null;
           cinematic_phrases?: string[];
+          content_kind?: string;
           created_at?: string;
           display_name?: string | null;
           fusion_settings?: Json;

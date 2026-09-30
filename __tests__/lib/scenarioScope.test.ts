@@ -2,7 +2,13 @@
 // picked a place it is tagged with. Untagged rows reach nobody, and a kind with too few matches gets no share.
 import * as fs from 'fs';
 import * as path from 'path';
-import { MIN_SCOPED_POOL, placeScope, scopeScenarios, scopedPct } from '@engine/scenarioScope';
+import {
+  cardScenarios,
+  MIN_SCOPED_POOL,
+  placeScope,
+  scopeScenarios,
+  scopedPct,
+} from '@engine/scenarioScope';
 import { scopeSinglePools, singleScenarioCandidates } from '@engine/pools/singleScenarioLoader';
 import { adaptiveScenePcts, sceneTypeCuts, rollSceneType } from '@engine/sceneTypeRoll';
 
@@ -115,5 +121,44 @@ describe('nightly-dreams wiring', () => {
     const backupAt = SRC.indexOf('if (placePool.length === 0 && includeLocation && !force_place)');
     expect(scopeAt).toBeGreaterThan(0);
     expect(backupAt).toBeGreaterThan(scopeAt);
+  });
+});
+
+describe('cardScenarios (scenario cards, mig 594)', () => {
+  it('collects every row of any kind tagged with the card, with its kind', () => {
+    const pools = {
+      goofy: [row('duck', ['just for fun']), row('paris picnic', ['paris', 'just for fun'])],
+      elegant: [row('gala', ['stage and spotlight'])],
+      active: [row('go-karts', ['just for fun']), row('untagged', null)],
+    };
+    expect(cardScenarios(pools, 'just for fun').map((c) => `${c.kind}:${c.row.scene}`)).toEqual([
+      'goofy:duck',
+      'goofy:paris picnic',
+      'active:go-karts',
+    ]);
+    expect(cardScenarios(pools, 'nothing here')).toEqual([]);
+  });
+});
+
+describe('nightly-dreams scenario-card wiring', () => {
+  const SRC = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'supabase', 'functions', 'nightly-dreams', 'index.ts'),
+    'utf8'
+  );
+  it('a scenario card never gets an essence card, and too few scenarios re-rolls to a real place', () => {
+    expect(SRC).toMatch(/userPlace && !scenarioCardPlace \? await fetchLocationCard\(userPlace\)/);
+    expect(SRC).toMatch(/scenarioCardCands\.length < MIN_SCOPED_POOL/);
+    expect(SRC).toMatch(/scenario_card_replaced:/);
+  });
+  it('draws on the "stay at the place" outcome of both rolls, and for a forced first-dream place', () => {
+    expect(
+      SRC.match(
+        /\} else if \(scenarioCardPlace\) \{\s*\/\/[^\n]*\n\s*await applyScenarioCard\(\);/g
+      )
+    ).toHaveLength(2);
+    expect(SRC).toMatch(/if \(force_place && scenarioCardPlace\) await applyScenarioCard\(\);/);
+  });
+  it('the zero-pick catalogue fallback never hands out a scenario card as a place', () => {
+    expect(SRC).toMatch(/\.eq\('admin_only', false\)\s*\.eq\('content_kind', 'place'\);/);
   });
 });

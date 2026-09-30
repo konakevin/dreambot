@@ -48,3 +48,27 @@ export function scopeScenarios<T extends ScopedScenario>(
 export function scopedPct(pct: number, matchingRows: number): number {
   return matchingRows >= MIN_SCOPED_POOL ? pct : 0;
 }
+
+export type ScenarioKind = 'goofy' | 'elegant' | 'active';
+
+export interface KindedScenario<T> {
+  row: T;
+  kind: ScenarioKind;
+}
+
+/**
+ * The rows a SCENARIO CARD holds (mig 594): every row of any kind tagged with the card. A scenario card is a location
+ * card whose content is its tagged scenarios rather than a place (Just for Fun, Sports & Arenas, Regency England, …);
+ * when the place roll lands on one, a face-swap cast dream draws from these.
+ */
+export function cardScenarios<T extends ScopedScenario>(
+  pools: Readonly<Record<ScenarioKind, readonly T[]>>,
+  card: string
+): KindedScenario<T>[] {
+  const out: KindedScenario<T>[] = [];
+  for (const kind of ['goofy', 'elegant', 'active'] as const) {
+    for (const row of pools[kind])
+      if ((row.locationKeys ?? []).includes(card)) out.push({ row, kind });
+  }
+  return out;
+}
