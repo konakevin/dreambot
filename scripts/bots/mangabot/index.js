@@ -169,7 +169,16 @@ module.exports = {
   // Per-path vibe curation (2026-07-03 audit): coquette belongs on the cute
   // path only; nightshade belongs on the dark-occult path only.
   vibesByPath: {
-    'game-center-arcade': ['cinematic', 'voltage', 'shimmer', 'nostalgic', 'whimsical', 'cozy', 'enchanted', 'dark'],
+    'game-center-arcade': [
+      'cinematic',
+      'voltage',
+      'shimmer',
+      'nostalgic',
+      'whimsical',
+      'cozy',
+      'enchanted',
+      'dark',
+    ],
     kawaii: [
       'cozy',
       'peaceful',
@@ -360,7 +369,6 @@ module.exports = {
     preservePhrasesByPath: {},
   },
 
-
   // NEW BLOCK, 2026-09-23. An UNSTATED figure in a hot spring renders NUDE: flux-1.1-pro
   // back-filled 2-4 bare-backed bathers into pools whose brief named none. That is the onsen form
   // of the documented "unstated figure renders as a modern tourist" law. The covering rule is on
@@ -440,22 +448,30 @@ module.exports = {
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`MangaBot: unknown path "${path}"`);
+    let result;
     // Axis-system path — declarative { archetype, pools }
     if (builder && typeof builder === 'object' && builder.archetype) {
       const { composeBrief } = require('../../lib/brief-composer');
-      return composeBrief({
+      result = composeBrief({
         bot: module.exports,
         pathConfig: builder,
         sharedDNA,
         vibeDirective,
         picker,
       });
+    } else if (typeof builder === 'function') {
+      // Legacy inline-builder path
+      result = builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    } else {
+      throw new Error(`MangaBot: path "${path}" has invalid export shape`);
     }
-    // Legacy inline-builder path
-    if (typeof builder === 'function') {
-      return builder({ sharedDNA, vibeDirective, vibeKey, picker });
-    }
-    throw new Error(`MangaBot: path "${path}" has invalid export shape`);
+    // Every brief ends with a word count unless its template already states one (2026-09-30).
+    const withLength = (b) =>
+      /\d+\s*[-–]\s*\d+\s*words/i.test(b) ? b : b + blocks.MANGABOT_LENGTH_RULE;
+    if (typeof result === 'string') return withLength(result);
+    if (result && typeof result.brief === 'string')
+      return { ...result, brief: withLength(result.brief) };
+    return result;
   },
 
   caption({ path }) {

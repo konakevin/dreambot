@@ -141,12 +141,26 @@ const GPT_CLEAN =
 // (ghibli-countryside / ghibli-painterly / slice-of-life / samurai-era) keep the
 // original 'anime' medium + PROMPT_PREFIX. Pattern mirrors YumBot's
 // YUMBOT_FOOD_NEUTRAL (playbook: "Medium Looks" architecture).
+// Trimmed 55 → 20 words 2026-09-30 (prompt-length clean-up, BOT_FOLLOWUPS_TRACKER.md C10b). This text is
+// concatenated straight into the Flux prompt BEFORE the rolled look, so it kept the look past word ~57 and
+// carried three Flux-side negations ("never photoreal, never 3D CGI, never Western cartoon": CLIP reads the
+// nouns) plus a sentence Flux can't act on ("set by the look-register tokens that lead the prompt"). Kept as
+// picture words: 2D hand-drawn anime, and characters + creatures + environments ALL in anime linework with
+// painted backgrounds (the no-mixed-media lock).
 const ANIME_NEUTRAL =
-  'The entire scene is rendered as 2D hand-drawn Japanese anime/manga art — characters, creatures, and environments all in authentic anime illustration with drawn linework and painted backgrounds, never photoreal, never 3D CGI, never Western cartoon. The specific art-style era, linework weight, shading method, and color treatment are set by the look-register tokens that lead the prompt.';
+  '2D hand-drawn Japanese anime illustration, characters, creatures and environments all drawn in anime linework with painted anime backgrounds';
+
+// Appended to every MangaBot brief that doesn't already state a word count (index.js buildBrief,
+// 2026-09-30). Only game-center-arcade stated one, so Sonnet wrote 300-400 words and FLUX.1 reads ~380.
+const MANGABOT_LENGTH_RULE = `
+
+Write the Flux prompt as ONE flowing paragraph of 110-150 WORDS, COUNT THEM. Begin with the art-style
+words, then the main subject and what is happening, then the setting, light and camera.`;
 
 module.exports = {
   GPT_CLEAN,
   ANIME_NEUTRAL,
+  MANGABOT_LENGTH_RULE,
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   KEYFRAME_COMPOSITION_BLOCK,

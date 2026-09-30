@@ -1053,7 +1053,9 @@ Live paths are `paths[]` in each `index.js`; don't trust a list here over the co
   Look scene paths use `CAMERA_FRAMING_MANDATORY_BLOCK`, `NO_NAMED_CHARACTERS`, `NO_GENERIC_POSE`, `CULTURAL_RESPECT`;
   polish skipped. mecha-hangars keeps its anti-T-pose crouch + anti-Mt-Fuji container. night-touge drifts ~1/3 to modern
   supercars (cars by silhouette/era, never a make). game-center-arcade: crop to shrink arcade text; "schoolgirl" flags.
-  Halloween seasonal ×4.
+  Halloween seasonal ×4. Length (2026-09-30): `ANIME_NEUTRAL` is 20 words and briefs end with `MANGABOT_LENGTH_RULE`
+  (110-150); prompts ~230 words. Isekai's template names status windows as a signature, so short prompts render them
+  (with pseudo-text).
 - **OceanBot**: every seed has a hero (animal or monumental formation); bioluminescence = lighting, aurora = backdrop;
   active behaviour over passive cruising; tiny subjects ≤20%; named iconic coasts. deep-wonder pins `oceanbot_deep_glow`
   with its own `vibesByPath`. Framing pools were hand-purged of scene-dissolving entries (any regen needs the framing sweep
