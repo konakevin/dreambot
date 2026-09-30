@@ -190,6 +190,9 @@ NOT by eyeballing the image.**
 - A colossal-object spot must name ONE instantly recognisable object first ("a teacup the size of a lake"); a
   process description ("a corkscrew drilling through bedrock, helical tunnels spiraling") renders as generic
   spiral architecture.
+- Always read the generated BANS / WEATHER against the card's own spots before QA: `gen-location-biome.js` keeps
+  writing bans that forbid what the spots are (Celestial banned the flowers and fog its spots name; Impossible
+  Architecture banned glass and colour; mig 617, and the romance trim, mig 607).
 - Even then, Flux draws the object and drops the impossible part: scale ("a gong as wide as a lake" → person-sized)
   and inverted physics ("a river flowing uphill", "flames burning downward", "tables drifting weightless" → normal).
   Round 2 of Land of Giants and Gravity's Off: 6 of 6 spots reached the prompt, 1 of 6 read. A world whose whole
