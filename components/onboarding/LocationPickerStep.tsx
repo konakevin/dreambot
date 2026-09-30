@@ -185,19 +185,10 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
       const allSelected = allKeys.length > 0 && allKeys.every((k) => places.includes(k));
       return (
         <View style={s.browse}>
-          {/* Running total + Select all/none toggle. In onboarding the footer already
-              shows "N selected", so hide the count here (Kevin 2026-08-29) — an empty
-              spacer keeps the toggle right-aligned. Settings has no footer, so it keeps
-              the count. */}
+          {/* Select all/none toggle, right-aligned. No running count (Kevin 2026-09-30: "7 categories
+              selected" was redundant with the checked tiles); onboarding's footer keeps its own count. */}
           <View style={s.summaryBar}>
-            {isEditing ? (
-              <Text style={s.summaryText}>
-                <Text style={s.summaryCount}>{selectedCategoryCount}</Text>{' '}
-                {selectedCategoryCount === 1 ? 'category' : 'categories'} selected
-              </Text>
-            ) : (
-              <View />
-            )}
+            <View />
             {allKeys.length > 0 && (
               <TouchableOpacity
                 style={s.resetBtn}
@@ -221,7 +212,7 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
             showsVerticalScrollIndicator={false}
           >
             {groups.map((g, gi) => (
-              <View key={g.title}>
+              <View key={g.title} style={gi > 0 ? s.groupBlockLater : undefined}>
                 {renderSectionHeader(g.title, gi > 0)}
                 <View style={s.catGrid}>
                   {g.sections.map((sec, i) =>
@@ -381,8 +372,6 @@ const s = StyleSheet.create({
   },
   // Summary — bigger + brighter so the running total reads clearly (Kevin 2026-08-29:
   // the old dim grey "hid up there"). The count is a bold teal focal number.
-  summaryText: { fontSize: fontScale(15.5), fontWeight: '600', color: colors.bodyOnDark },
-  summaryCount: { fontSize: fontScale(17), color: '#5EEAD4', fontWeight: '900' },
   // Reset — a real (muted) button so it doesn't blend into the background.
   resetBtn: {
     paddingHorizontal: horizontalScale(14),
@@ -396,7 +385,7 @@ const s = StyleSheet.create({
 
   // Level 1 — group label (one per mood group): quiet, so the tiles lead.
   groupLabel: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontFamily: displayFontFamily(700),
     fontSize: fontScale(11.5),
     letterSpacing: 1.4,
@@ -404,7 +393,15 @@ const s = StyleSheet.create({
     marginTop: verticalScale(2),
     marginBottom: verticalScale(8),
   },
-  groupLabelLater: { marginTop: verticalScale(18) },
+  groupLabelLater: { marginTop: 0 },
+  // Groups need clearly more air than the rows inside them (10pt), plus a faint rule, to read as groups without
+  // a loud header (Kevin 2026-09-30: after the quiet labels "the sections don't really feel separate enough").
+  groupBlockLater: {
+    marginTop: verticalScale(26),
+    paddingTop: verticalScale(18),
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+  },
 
   // Level 2 — category cards.
   catGrid: {
