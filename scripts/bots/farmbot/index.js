@@ -162,13 +162,13 @@ module.exports = {
   // path(s) from farmbot") — same pattern: path builder + bespoke pools
   // (incl. today's machete/knife-over-representation fix) stay untouched and
   // still required in pathBuilders above; restore by moving it back here.
+  // 'autumn-village-market' + 'harvest-festival' moved to seasonalPaths.fall 2026-09-29
+  // (Kevin): autumn content posts in the Fall window, not year-round. Config unchanged.
   paths: [
     'animal-feeding-time',
     'cozy-bakery-afternoon',
-    'autumn-village-market',
     'quiet-sunset-on-the-porch',
     'summer-evening-by-the-pond',
-    'harvest-festival',
     'spring-planting-day',
     'rainy-farmhouse-morning',
     'flower-field-wandering',
@@ -225,6 +225,9 @@ module.exports = {
   // FARMBOT_PATH_BUILD_STATE.md for the full build/QA status of each path.
   seasonalPaths: {
     fall: [
+      // The bot's two year-round autumn paths joined the Fall set 2026-09-29.
+      'autumn-village-market',
+      'harvest-festival',
       'farmbot-fall-hayride',
       'farmbot-fall-corn-maze',
       'farmbot-fall-campfire-evening',

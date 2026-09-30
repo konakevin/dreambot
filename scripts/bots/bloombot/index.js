@@ -244,6 +244,9 @@ module.exports = {
   // fire them year-round, exactly what this mechanism exists to prevent).
   // Promoted from AlphaBot 2026-09-07 (Kevin-approved QA matrix).
   seasonalPaths: {
+    // Fall (2026-09-29, Kevin): the pumpkin blooms read as Fall as much as Halloween, so they
+    // draw in both windows (each holiday has its own shuffle-bag).
+    fall: ['overgrown-pumpkin-blooms'],
     halloween: [
       'moonlit-flower-garden',
       'overgrown-pumpkin-blooms',

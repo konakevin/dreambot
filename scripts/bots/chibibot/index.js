@@ -247,7 +247,9 @@ module.exports = {
     // faithful xerox — CHIBI_SHADOW_PATHS const KEPT so these stay in
     // allowSubjectChaosPaths + twoPassPolish.skipPaths; look/medium/model derived
     // from pathBuilders membership, all preserved).
-    'creature-autumn-day',
+    // 'creature-autumn-day' moved to seasonalPaths.fall 2026-09-29 (Kevin): autumn content
+    // posts in the Fall window, not year-round. Config unchanged (still in
+    // CHIBI_SHADOW_PATHS for chaos-allow + polish-skip, modelByPath, looks).
     'creature-lantern-festival',
     'creature-school',
     'sky-village',
@@ -263,6 +265,9 @@ module.exports = {
   // list a seasonal path in `paths` above — that fires it year-round, exactly
   // what this mechanism exists to prevent.
   seasonalPaths: {
+    // Fall (2026-09-29, Kevin): the bot's existing autumn content. chibi-pumpkin-patch is
+    // listed under BOTH holidays; each holiday draws from its own shuffle-bag.
+    fall: ['creature-autumn-day', 'chibi-pumpkin-patch'],
     halloween: [
       'chibi-halloween-village',
       'chibi-halloween-cozy',

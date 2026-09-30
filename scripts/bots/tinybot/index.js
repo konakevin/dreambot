@@ -123,6 +123,9 @@ module.exports = {
   // approved by Kevin); master switch defaults OFF so this changes nothing
   // live until Kevin flips it for the season.
   seasonalPaths: {
+    // Fall (2026-09-29, Kevin): the pumpkin patch reads as Fall as much as Halloween, so it
+    // draws in both windows (each holiday has its own shuffle-bag).
+    fall: ['tiny-pumpkin-patch'],
     halloween: [
       'tiny-halloween-village',
       'tiny-halloween-hideaway',
