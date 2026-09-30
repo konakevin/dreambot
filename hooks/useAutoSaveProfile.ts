@@ -21,10 +21,16 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useOnboardingStore } from '@/store/onboarding';
 import { isVibeProfile } from '@/types/vibeProfile';
+import { hasRequiredPlaces } from '@/lib/placeRequirement';
 
 const DEBOUNCE_MS = 1500;
 
-export function useAutoSaveProfile() {
+/**
+ * `requirePlace` (the Locations screen): never save a profile with no places, so clearing every place
+ * mid-edit leaves the last real list in the database (lib/placeRequirement.ts). Other screens leave it off,
+ * so a legacy zero-place user's mood or cast edits still save.
+ */
+export function useAutoSaveProfile(opts: { requirePlace?: boolean } = {}) {
   const user = useAuthStore((s) => s.user);
   const isEditing = useOnboardingStore((s) => s.isEditing);
   const isHydrated = useOnboardingStore((s) => s.isHydrated);
@@ -40,6 +46,10 @@ export function useAutoSaveProfile() {
   isHydratedRef.current = isHydrated;
   const userRef = useRef(user);
   userRef.current = user;
+  const requirePlaceRef = useRef(opts.requirePlace === true);
+  requirePlaceRef.current = opts.requirePlace === true;
+  const mayPersist = () =>
+    !requirePlaceRef.current || hasRequiredPlaces(latestProfile.current.dream_seeds.places);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Ensure the store is hydrated before any save can fire. Loads the user's
@@ -79,6 +89,7 @@ export function useAutoSaveProfile() {
 
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(async () => {
+      if (!mayPersist()) return;
       await supabase.from('user_recipes').upsert(
         {
           user_id: user.id,
@@ -101,6 +112,7 @@ export function useAutoSaveProfile() {
   useEffect(() => {
     return () => {
       if (!isEditingRef.current || !userRef.current || !isHydratedRef.current) return;
+      if (!mayPersist()) return;
       supabase.from('user_recipes').upsert(
         {
           user_id: userRef.current.id,

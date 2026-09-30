@@ -15,10 +15,10 @@ import { GradientTitle, TITLE_SIZE, BRAND_GRADIENT } from '@/components/Gradient
 import { displayFontFamily } from '@/constants/fonts';
 import { TitleText } from '@/components/TitleText';
 import { OnboardingFooter } from './OnboardingFooter';
-import { ConfirmDialog } from '@/components/ConfirmDialog';
+import { showAlert } from '@/components/CustomAlert';
 import { supabase } from '@/lib/supabase';
+import { hasRequiredPlaces } from '@/lib/placeRequirement';
 
-const MIN_REQUIRED = 1;
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const TILE_GAP = 10;
 const TILE_PADDING = 20;
@@ -177,8 +177,8 @@ interface Props {
 
 /** Imperative handle so a host header's back chevron routes through the picker. */
 export interface LocationPickerHandle {
-  /** Handle a host back-press. If leaving with ZERO places selected, shows a gentle
-   *  confirm and only runs onLeave if confirmed; otherwise runs onLeave immediately. */
+  /** Handle a host back-press. With ZERO places selected it stays put and asks for one
+   *  (every dream is set in a place the user chose); otherwise runs onLeave immediately. */
   handleBack: (onLeave: () => void) => void;
 }
 
@@ -191,30 +191,29 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
     const isAdmin = useAuthStore((st) => st.isAdmin);
     const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
     const [sections, setSections] = useState<LocationSection[]>([]);
-    // Gentle "leaving with nothing picked?" confirm — stashes the host's leave
-    // action until they confirm.
-    const [leaveVisible, setLeaveVisible] = useState(false);
-    const leaveActionRef = useRef<(() => void) | null>(null);
 
-    // A host header's back chevron routes through here: if they're leaving with
-    // ZERO places, nudge before letting them go; else leave straight away. (No more
-    // drill-in to pop — the picker is a single tile grid now.)
+    // A host header's back chevron routes through here. At least one place is REQUIRED (Kevin
+    // 2026-09-30: every nightly is set in a place the user chose, so zero means no dreams to set):
+    // with none picked they stay here, the same rule onboarding's disabled Continue enforces.
     useImperativeHandle(
       ref,
       () => ({
         handleBack: (onLeave) => {
-          if (places.length === 0) {
-            leaveActionRef.current = onLeave;
-            setLeaveVisible(true);
+          if (!hasRequiredPlaces(places)) {
+            showAlert(
+              'Pick at least one place',
+              'Your dreams are set in the places you choose, so keep at least one.',
+              [{ text: 'Keep choosing' }]
+            );
             return;
           }
           onLeave();
         },
       }),
-      [places.length]
+      [places]
     );
 
-    const canProceed = places.length >= MIN_REQUIRED;
+    const canProceed = hasRequiredPlaces(places);
     // Count SELECTED CATEGORIES, not individual places (2026-08-29 Kevin): a tap
     // selects a whole category, so "91 places" read as confusing — "4 categories"
     // matches what the user actually did. A category counts when every location in
@@ -489,21 +488,6 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
             counterMet={canProceed}
           />
         )}
-
-        <ConfirmDialog
-          visible={leaveVisible}
-          title="Leave without any favorites?"
-          message="Your dreams are more fun with some of your favorite locations as the setting!"
-          confirmLabel="Leave anyway"
-          cancelLabel="Keep choosing"
-          onConfirm={() => {
-            setLeaveVisible(false);
-            const go = leaveActionRef.current;
-            leaveActionRef.current = null;
-            go?.();
-          }}
-          onCancel={() => setLeaveVisible(false)}
-        />
       </View>
     );
   }

@@ -18,9 +18,10 @@ export default function LocationPickerStepSettings() {
   useEffect(() => {
     useOnboardingStore.getState().setIsEditing(true);
   }, []);
-  useAutoSaveProfile();
+  // Never saves an empty list (at least one place is required).
+  useAutoSaveProfile({ requirePlace: true });
 
-  // The leave-nudge (zero places selected) is wired to the header chevron, but the
+  // The zero-places block (at least one place is required) is wired to the header chevron, but the
   // swipe-back would pop past it. Disabling ONLY this screen's gesture isn't enough:
   // the settings group is a root MODAL_SWIPEABLE card, so with the inner gesture off
   // the parent's full-screen swipe takes over and dismisses to the feed (the same
@@ -42,8 +43,8 @@ export default function LocationPickerStepSettings() {
   }, [placeCount, navigation]);
 
   // ONE back chevron (consistent with every other settings sub-page). Routed
-  // through the picker: it pops the drill-in category first, and nudges if the
-  // user is leaving with zero places selected, before running router.back().
+  // through the picker: with zero places selected it keeps the user here and asks for
+  // one; otherwise it runs router.back().
   const handleBack = () => {
     const picker = pickerRef.current;
     if (picker) picker.handleBack(() => router.back());
