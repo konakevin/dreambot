@@ -1918,6 +1918,33 @@ async function runBot(opts) {
         const isNsfw =
           err && err.message && /NSFW|sensitive|flagged|safety|E005/i.test(err.message);
         if (isNsfw && nsfwRecoveryAttempt < MAX_NSFW_RECOVERY) {
+          // Keep the flagged text (2026-09-30). This prompt already failed flux()'s own
+          // same-prompt retries; the re-roll below replaces it, and when the re-roll
+          // succeeds nothing recorded what tripped the filter, so a flag could only be
+          // diagnosed by replaying + bisecting. One run-log row per flagged roll:
+          // status 'skipped' (not a failed post) + error_stage 'safety_flag' (query key),
+          // full text in prompt_preview (a text column). No LLM stamps on this row: this
+          // roll's LLM calls are stamped once on the render's final row.
+          const flagMsg = err && err.message ? err.message : String(err);
+          console.warn(
+            `  🚩 safety flag on ${renderModel} (re-roll ${nsfwRecoveryAttempt + 1}/${MAX_NSFW_RECOVERY}); flagged prompt: ${finalPrompt}`
+          );
+          if (!dryRun) {
+            await writeRunLog(sb, {
+              bot_name: bot.username,
+              path: resolvedPath,
+              vibe: vibeKey,
+              medium,
+              model: renderModel,
+              status: 'skipped',
+              source,
+              error: flagMsg.slice(0, 2000),
+              error_stage: 'safety_flag',
+              duration_ms: Date.now() - startedAt,
+              prompt_preview: finalPrompt.slice(0, 8000),
+              prompt_words: countPromptWords(finalPrompt),
+            });
+          }
           nsfwRecoveryAttempt++;
           continue; // back to top of while — re-creates picker + re-rolls
         }
