@@ -50,6 +50,7 @@
     "__tests__/lib/sanitizeUserText.test.ts",
     "__tests__/lib/dreamAlgorithm.test.ts",
     "__tests__/lib/sceneTypeRoll.test.ts",
+    "__tests__/lib/scenarioScope.test.ts",
     "__tests__/lib/modelWeightDeterminism.test.ts",
     "__tests__/lib/qaRequest.test.ts",
     "__tests__/lib/nightlySceneDistribution.test.ts",

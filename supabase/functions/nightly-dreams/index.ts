@@ -170,8 +170,15 @@ import {
 import {
   loadSingleScenarios,
   pickSingleScenario,
+  scopeSinglePools,
   singleScenarioCandidates,
 } from '../_shared/pools/singleScenarioLoader.ts';
+import {
+  MIN_SCOPED_POOL,
+  placeScope,
+  scopeScenarios,
+  scopedPct,
+} from '../_shared/scenarioScope.ts';
 import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
 import {
   runCharacterSlotPipeline,
@@ -491,6 +498,7 @@ Deno.serve(async (req) => {
     force_outfit_plan,
     force_eye_contact,
     force_age_fidelity,
+    force_scenario_scope,
     force_solo_outfit_early,
     force_outfit_scene_fit,
     force_llm_model,
@@ -889,7 +897,12 @@ Deno.serve(async (req) => {
       } else {
         const holCfg = await fetchEngineConfig(supabase);
         if (!holCfg.holidaysEnabled) holidayResolveNote = 'disabled';
-        if (holCfg.holidaysEnabled) {
+        // A FIRST DREAM never rolls a holiday (Kevin 2026-09-30: "first dream always honors a location from
+        // the user's onboarding"). Its place is forced, but the scene-only holiday postcard ignored that, so a
+        // first dream that fell to the scene tier in a holiday window could land on a festive scene instead.
+        // Resolving no holidays here turns off every holiday branch (scene, cast roll, day-of) at once.
+        else if (isFirstDream) holidayResolveNote = 'first_dream';
+        if (holCfg.holidaysEnabled && !isFirstDream) {
           const { data: tzRow } = await supabase
             .from('users')
             .select('timezone')
@@ -1553,12 +1566,23 @@ Deno.serve(async (req) => {
     // user. Cheap (~160-row set, cast/scene rolls hit the DB anyway).
     const { data: validCardRows } = await supabase
       .from('location_cards')
-      .select('name')
+      .select('name, picker_category')
       .not('picker_category', 'is', null);
     const validCardNames = new Set((validCardRows ?? []).map((c: { name: string }) => c.name));
     let placePool: string[] = (seeds.places ?? [])
       .map((p: string) => sanitizeUserText(String(p), 'subject_description'))
       .filter((p: string) => p && !isBannedLocationName(p) && validCardNames.has(p));
+    // SCENARIO SCOPE (mig 591): the places this dreamer actually CHOSE (before the zero-pick backup below), plus
+    // their picker categories. With the scope on, a goofy/elegant/active scenario must be tagged with one of them.
+    const scenarioPlaceScope = placeScope(
+      placePool,
+      new Map(
+        (validCardRows ?? []).map((c: { name: string; picker_category: string | null }) => [
+          c.name,
+          c.picker_category,
+        ])
+      )
+    );
     // BACKUP (2026-08-25): onboarding still requires ≥1 place, so the only way to
     // reach zero is deliberately unselecting all in Settings. When that happens,
     // fall back to the FULL live location catalog so the dreamer still gets varied
@@ -2470,7 +2494,7 @@ Deno.serve(async (req) => {
         // already, by pickDualAction. This is the layer no prompt wording can cover — the prefix probe that same
         // day rendered "TWO FRIENDS" and "PARTNERS" identically.
         const plusOneRel = selectedCast.find((c) => c.role === 'plus_one')?.relationship ?? null;
-        const pools = {
+        const relPools = {
           goofy: scenariosForRelationship(loadedPools.goofy, plusOneRel),
           elegant: scenariosForRelationship(loadedPools.elegant, plusOneRel),
           active: scenariosForRelationship(loadedPools.active, plusOneRel),
@@ -2479,10 +2503,36 @@ Deno.serve(async (req) => {
           loadedPools.goofy.length +
           loadedPools.elegant.length +
           loadedPools.active.length -
-          (pools.goofy.length + pools.elegant.length + pools.active.length);
+          (relPools.goofy.length + relPools.elegant.length + relPools.active.length);
         if (gatedOut > 0)
           fallbackReasons.push(`relationship_gate:${plusOneRel ?? 'unknown'}:${gatedOut}`);
         const splitCfg = await fetchEngineConfig(supabase);
+        // SCENARIO SCOPE (mig 591, Kevin 2026-09-30: every dream intentional from the dreamer's chosen places): only
+        // rows tagged with one of their places; a kind with too few matches gets no share (it goes to the place).
+        // A QA pool pin (force_playful/elegant/active) keeps the whole pool.
+        const dualScoped =
+          (force_scenario_scope ?? splitCfg.nightlyScenariosLocationScoped) &&
+          !force_playful &&
+          !force_elegant &&
+          !force_active;
+        const pools = dualScoped
+          ? {
+              goofy: scopeScenarios(relPools.goofy, scenarioPlaceScope),
+              elegant: scopeScenarios(relPools.elegant, scenarioPlaceScope),
+              active: scopeScenarios(relPools.active, scenarioPlaceScope),
+            }
+          : relPools;
+        if (dualScoped)
+          fallbackReasons.push(
+            `scenario_scope:couple:goofy=${pools.goofy.length}:elegant=${pools.elegant.length}:active=${pools.active.length}`
+          );
+        const dualBasePcts = looksPath
+          ? LOOKS_SCENE_PCTS
+          : {
+              goofy: splitCfg.dualSceneGoofyPct,
+              elegant: splitCfg.dualSceneElegantPct,
+              active: splitCfg.dualSceneActivePct,
+            };
         // Holiday (HOLIDAY_DREAMS_PLAN.md §3.4 Path 1): load each active season's
         // dual pool; only seasons with >=1 usable row contribute (N2 empty-pool
         // fall-through). The combined pct feeds the renormalized cut (§3.3a).
@@ -2496,13 +2546,13 @@ Deno.serve(async (req) => {
         const holidayPct = combineHolidayPct(usableHol, splitCfg.holidayStackCapPct);
         const { holidayCut, goofyCut, elegantCut, activeCut } = sceneTypeCuts(
           adaptiveScenePcts(
-            looksPath
-              ? LOOKS_SCENE_PCTS
-              : {
-                  goofy: splitCfg.dualSceneGoofyPct,
-                  elegant: splitCfg.dualSceneElegantPct,
-                  active: splitCfg.dualSceneActivePct,
-                },
+            dualScoped
+              ? {
+                  goofy: scopedPct(dualBasePcts.goofy, pools.goofy.length),
+                  elegant: scopedPct(dualBasePcts.elegant, pools.elegant.length),
+                  active: scopedPct(dualBasePcts.active, pools.active.length),
+                }
+              : dualBasePcts,
             pickedCount
           ),
           { activeEnabled: pools.active.length >= 10, holidayPct }
@@ -2558,9 +2608,32 @@ Deno.serve(async (req) => {
           recordPick(supabase, userId, 'dual_scn_active', s.scene);
         }
       } else if (isSingleHumanFaceSwap) {
-        const pools = await loadSingleScenarios(supabase);
+        const loadedSolo = await loadSingleScenarios(supabase);
         const g = castGender === 'male' || castGender === 'female' ? castGender : null;
         const splitCfg = await fetchEngineConfig(supabase);
+        // SCENARIO SCOPE (mig 591): as for couples, only rows tagged with the dreamer's chosen places.
+        const soloScoped =
+          (force_scenario_scope ?? splitCfg.nightlyScenariosLocationScoped) &&
+          !force_single_playful &&
+          !force_single_elegant &&
+          !force_single_active;
+        const pools = soloScoped ? scopeSinglePools(loadedSolo, scenarioPlaceScope) : loadedSolo;
+        const soloMatches = {
+          goofy: singleScenarioCandidates(pools, 'goofy', g).length,
+          elegant: singleScenarioCandidates(pools, 'elegant', g).length,
+          active: singleScenarioCandidates(pools, 'active', g).length,
+        };
+        if (soloScoped)
+          fallbackReasons.push(
+            `scenario_scope:solo:goofy=${soloMatches.goofy}:elegant=${soloMatches.elegant}:active=${soloMatches.active}`
+          );
+        const soloBasePcts = looksPath
+          ? LOOKS_SCENE_PCTS
+          : {
+              goofy: splitCfg.singleSceneGoofyPct,
+              elegant: splitCfg.singleSceneElegantPct,
+              active: splitCfg.singleSceneActivePct,
+            };
         // Gendered-solo lean (Operation Sweet Dreams): when > 0, a solo dream of
         // a KNOWN gender widens elegant + active (half the boost each) at the
         // expense of plain. Currently 0 (Kevin, 2026-08-13) → solos roll the SAME
@@ -2580,18 +2653,26 @@ Deno.serve(async (req) => {
         const holidayPct = combineHolidayPct(usableHolSolo, splitCfg.holidayStackCapPct);
         const { holidayCut, goofyCut, elegantCut, activeCut } = sceneTypeCuts(
           adaptiveScenePcts(
-            looksPath
-              ? LOOKS_SCENE_PCTS
-              : {
-                  goofy: splitCfg.singleSceneGoofyPct,
-                  elegant: splitCfg.singleSceneElegantPct,
-                  active: splitCfg.singleSceneActivePct,
-                },
+            soloScoped
+              ? {
+                  goofy: scopedPct(soloBasePcts.goofy, soloMatches.goofy),
+                  elegant: scopedPct(soloBasePcts.elegant, soloMatches.elegant),
+                  active: scopedPct(soloBasePcts.active, soloMatches.active),
+                }
+              : soloBasePcts,
             pickedCount
           ),
           {
-            genderedBoostPct: g ? splitCfg.singleGenderedBoostPct : 0,
-            activeEnabled: pools.active.any.length >= 10,
+            // The gendered lean widens elegant + active; with the scope on it only applies when both have matches.
+            genderedBoostPct:
+              g &&
+              (!soloScoped ||
+                (soloMatches.elegant >= MIN_SCOPED_POOL && soloMatches.active >= MIN_SCOPED_POOL))
+                ? splitCfg.singleGenderedBoostPct
+                : 0,
+            activeEnabled: soloScoped
+              ? soloMatches.active >= MIN_SCOPED_POOL
+              : pools.active.any.length >= 10,
             holidayPct,
           }
         );

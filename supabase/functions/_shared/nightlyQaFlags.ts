@@ -123,6 +123,9 @@ export interface NightlyQaFlags {
   /** AGE FIDELITY (AGE_FIDELITY_PLAN.md): true puts a 55+ cast member's real age up front, false forces it off;
    *  null = engine_config.nightly_age_fidelity. */
   force_age_fidelity: boolean | null;
+  /** SCENARIO SCOPE (SCENARIO_LOCATION_SCOPE.md): true draws only scenarios tagged with the dreamer's chosen places,
+   *  false the whole pools; null = engine_config.nightly_scenarios_location_scoped. */
+  force_scenario_scope: boolean | null;
   /** SOLO OUTFIT EARLY (mig 565): true names a solo's wardrobe right after the medium, false the old order;
    *  null = engine_config.nightly_solo_outfit_early. */
   force_solo_outfit_early: boolean | null;
@@ -317,6 +320,12 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
       body.force_eye_contact === true ? true : body.force_eye_contact === false ? false : null,
     force_age_fidelity:
       body.force_age_fidelity === true ? true : body.force_age_fidelity === false ? false : null,
+    force_scenario_scope:
+      body.force_scenario_scope === true
+        ? true
+        : body.force_scenario_scope === false
+          ? false
+          : null,
     force_solo_outfit_early:
       body.force_solo_outfit_early === true
         ? true

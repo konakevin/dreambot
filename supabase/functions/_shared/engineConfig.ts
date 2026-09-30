@@ -233,6 +233,9 @@ export interface EngineConfig {
   /** AGE FIDELITY (mig 589, AGE_FIDELITY_PLAN.md): a 55+ cast member's real age, hair and clean-shaven lead the solo
    *  opener and the couple description. QA: force_age_fidelity. */
   nightlyAgeFidelity: boolean;
+  /** SCENARIO SCOPE (mig 591, SCENARIO_LOCATION_SCOPE.md): a goofy/elegant/active scenario reaches only dreamers who
+   *  picked a place it is tagged with; untagged rows never do. Holidays exempt. QA: force_scenario_scope. */
+  nightlyScenariosLocationScoped: boolean;
   /** Nightly: skip the looks of this many recent nightlies per role (0 = off). */
   nightlyOutfitRecentLooks: number;
   /** SWAP CAPACITY GATE (mig 549, NIGHTLY_ROBUSTNESS_PLAN.md): dual swaps wait for a free Fly slot. */
@@ -359,6 +362,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   nightlyOutfitPlan: false,
   nightlyEyeContact: false,
   nightlyAgeFidelity: false,
+  nightlyScenariosLocationScoped: false,
   outfitFavouredLookPct: DEFAULT_FAVOURED_LOOK_PCT,
   nightlyOutfitRecentLooks: 5,
   swapGateEnabled: false,
@@ -552,6 +556,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     nightlyOutfitPlan: data.nightly_outfit_plan === true,
     nightlyEyeContact: data.nightly_eye_contact === true,
     nightlyAgeFidelity: data.nightly_age_fidelity === true,
+    nightlyScenariosLocationScoped: data.nightly_scenarios_location_scoped === true,
     outfitFavouredLookPct: clampPct(data.outfit_favoured_look_pct, DEFAULT_FAVOURED_LOOK_PCT),
     nightlyOutfitRecentLooks: Number.isFinite(Number(data.nightly_outfit_recent_looks))
       ? Math.max(0, Math.min(7, Math.round(Number(data.nightly_outfit_recent_looks))))

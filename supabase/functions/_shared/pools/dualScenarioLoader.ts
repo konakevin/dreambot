@@ -11,8 +11,9 @@
  */
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { DUAL_SCENARIOS_PLAYFUL, DUAL_SCENARIOS_ELEGANT } from './dual_scenarios.ts';
+import type { ScopedScenario } from '../scenarioScope.ts';
 
-export interface DualScenario {
+export interface DualScenario extends ScopedScenario {
   scene: string;
   attire: string;
   /** The people clause split out of `scene` (mig 516). The engine feeds this to the ACTION slot; without it an
@@ -106,6 +107,8 @@ async function fetchPool(supabase: SupabaseClient, pool: string): Promise<DualSc
   // fallback. Each rung pages through the full pool (fetchAllRows).
   let rows: Record<string, unknown>[] = [];
   for (const select of [
+    // + the location tags (mig 591): which chosen places may draw this row (scenarioScope.ts).
+    'scene,attire,action,pose_pool,medium_key,medium_ban,category,relationship_scope,location_keys,location_categories',
     'scene,attire,action,pose_pool,medium_key,medium_ban,category,relationship_scope',
     'scene,attire,action,pose_pool,medium_key,medium_ban,category',
     'scene,attire,pose_pool,medium_key,medium_ban,category',
@@ -128,6 +131,8 @@ async function fetchPool(supabase: SupabaseClient, pool: string): Promise<DualSc
     mediumKey: (r.medium_key as string | null | undefined) ?? null,
     mediumBan: (r.medium_ban as string | null | undefined) ?? null,
     relationshipScope: (r.relationship_scope as 'any' | 'partner_only' | null | undefined) ?? null,
+    locationKeys: (r.location_keys as string[] | null | undefined) ?? null,
+    locationCategories: (r.location_categories as string[] | null | undefined) ?? null,
   }));
 }
 

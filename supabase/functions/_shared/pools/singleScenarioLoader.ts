@@ -11,8 +11,9 @@
  * enrichment, and a normal location dream is the graceful default).
  */
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
+import { scopeScenarios, type PlaceScope, type ScopedScenario } from '../scenarioScope.ts';
 
-export interface SingleScenario {
+export interface SingleScenario extends ScopedScenario {
   /** Seed category (victorian_f / guy_fun / …) → the genre action register (actionRegisters.ts). */
   category?: string | null;
   scene: string;
@@ -30,7 +31,7 @@ export interface SingleScenario {
   mediumBan?: string | null;
 }
 
-interface Loaded {
+export interface Loaded {
   goofy: { any: SingleScenario[]; male: SingleScenario[]; female: SingleScenario[] };
   elegant: { any: SingleScenario[]; male: SingleScenario[]; female: SingleScenario[] };
   /** ACTIVE solo scenarios (Phase B) — action scenes, mostly gender='any'. */
@@ -53,6 +54,8 @@ async function fetchPoolRows(
 ): Promise<Record<string, unknown>[]> {
   const PAGE = 1000;
   for (const select of [
+    // + the location tags (mig 591): which chosen places may draw this row (scenarioScope.ts).
+    'scene,attire,gender,pose_pool,medium_key,medium_ban,category,location_keys,location_categories',
     'scene,attire,gender,pose_pool,medium_key,medium_ban,category',
     'scene,attire,gender,pose_pool,medium_key,medium_ban',
     'scene,attire,gender,pose_pool',
@@ -99,6 +102,8 @@ export async function loadSingleScenarios(supabase: SupabaseClient): Promise<Loa
           category: (r.category as string | null | undefined) ?? null,
           mediumKey: (r.medium_key as string | null | undefined) ?? null,
           mediumBan: (r.medium_ban as string | null | undefined) ?? null,
+          locationKeys: (r.location_keys as string[] | null | undefined) ?? null,
+          locationCategories: (r.location_categories as string[] | null | undefined) ?? null,
         });
       }
     }
@@ -107,6 +112,16 @@ export async function loadSingleScenarios(supabase: SupabaseClient): Promise<Loa
   }
   cache = out;
   return cache;
+}
+
+/** The pools narrowed to rows tagged with one of the dreamer's chosen places (mig 591, scenarioScope.ts). */
+export function scopeSinglePools(loaded: Loaded, scope: PlaceScope): Loaded {
+  const one = (p: Loaded['goofy']): Loaded['goofy'] => ({
+    any: scopeScenarios(p.any, scope),
+    male: scopeScenarios(p.male, scope),
+    female: scopeScenarios(p.female, scope),
+  });
+  return { goofy: one(loaded.goofy), elegant: one(loaded.elegant), active: one(loaded.active) };
 }
 
 /**
