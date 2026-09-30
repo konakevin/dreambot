@@ -219,3 +219,63 @@ describe('switch plumbing', () => {
     expect(src).toContain('if (swapUnusable && !strict_face_swap && persist) {');
   });
 });
+
+describe('couple hair anchor (mig 595): a couple person under 55 names their base hair colour first', () => {
+  const on = (cast: Member[]) =>
+    composeExperimentalCouple({
+      slots: COUPLE,
+      input: input(cast, { coupleHairAnchor: true, ageFidelity: true }),
+      variant: 'narrative_fg',
+    });
+
+  it('"ash-brown hair with silver highlights" anchors as brown, chestnut as chestnut brown', () => {
+    const p = on([WOMAN_38, MAN_43]);
+    expect(p).toContain('a White woman with a full head of chestnut brown hair, 38 years old');
+    expect(p).toContain('a White man with a full head of brown hair, 43 years old');
+  });
+
+  it('a real senior keeps the senior lead (no second hair clause)', () => {
+    const p = on([WOMAN_38, OLD_MAN]);
+    expect(p).toContain('an older white-haired White man in his late seventies, 78 years old');
+    expect(p).not.toContain('man with a full head of white hair, 78');
+  });
+
+  it('never on a bald cast member', () => {
+    const bald: Member = {
+      ...MAN_43,
+      physicalSummary: 'bald head, full brown beard, warm light skin, average build.',
+    };
+    expect(on([WOMAN_38, bald])).toContain('a White man, 43 years old');
+  });
+
+  it('switch off is byte-identical', () => {
+    const off = composeExperimentalCouple({
+      slots: COUPLE,
+      input: input([WOMAN_38, MAN_43]),
+      variant: 'narrative_fg',
+    });
+    expect(
+      composeExperimentalCouple({
+        slots: COUPLE,
+        input: input([WOMAN_38, MAN_43], { coupleHairAnchor: false }),
+        variant: 'narrative_fg',
+      })
+    ).toBe(off);
+    expect(off).not.toContain('with a full head of');
+  });
+
+  it('config default off, QA flag tri-state, nightly wires it for couples only', () => {
+    expect(DEFAULT_ENGINE_CONFIG.nightlyCoupleHairAnchor).toBe(false);
+    expect(parseQaFlags({}).force_couple_hair_anchor).toBeNull();
+    expect(parseQaFlags({ force_couple_hair_anchor: true }).force_couple_hair_anchor).toBe(true);
+    expect(parseQaFlags({ force_couple_hair_anchor: false }).force_couple_hair_anchor).toBe(false);
+    const src = fs.readFileSync(
+      path.join(__dirname, '..', '..', 'supabase', 'functions', 'nightly-dreams', 'index.ts'),
+      'utf8'
+    );
+    expect(src).toMatch(
+      /resolvedCast\.length === 2 &&\s*\(force_couple_hair_anchor \?\? engineCfg0\.nightlyCoupleHairAnchor\)/
+    );
+    expect(src).toContain('...(coupleHairAnchor ? { coupleHairAnchor: true } : {}),');
+  });
+});

@@ -166,6 +166,12 @@ export interface CharacterSlotPipelineInput {
    *  nothing changes. Same-seed screen on production prompts the audit judged 10+ years too young: solo 55+ −43 → −10
    *  years, couple 55+ −18 → −9. Unset → byte-identical. */
   ageFidelity?: boolean;
+  /** COUPLE HAIR ANCHOR (AGE_FIDELITY_PLAN.md, 2026-09-30): a couple person under 55 names their base hair colour
+   *  first ("a White man with a full head of brown hair, 43 years old, …"), the anchor the solo identity block already
+   *  carries. Kevin: "my nightlys … make me more gray than usual". His cast hair reads "Short ash-brown hair with
+   *  silver highlights" and flux turned the silver into grey hair: same-seed, 28 couples, half-grey or more 86% → 29%,
+   *  median age 45 → 38 (true 43). Unset → byte-identical. */
+  coupleHairAnchor?: boolean;
   /** Whether the location is a REAL-WORLD place (not a fantasy/imagined dream
    * world). Drives the TRAVELER wardrobe rule: on real places the cast are
    * VISITORS and must wear contemporary travel clothes, never the traditional/

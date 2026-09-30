@@ -1795,6 +1795,7 @@ export type Database = {
           nightly_age_fidelity: boolean;
           nightly_couple_engine: string;
           nightly_couple_eye_lock: boolean;
+          nightly_couple_hair_anchor: boolean;
           nightly_enabled: boolean;
           nightly_enqueue_max_spread_min: number;
           nightly_enqueue_spacing_s: number;
@@ -1944,6 +1945,7 @@ export type Database = {
           nightly_age_fidelity?: boolean;
           nightly_couple_engine?: string;
           nightly_couple_eye_lock?: boolean;
+          nightly_couple_hair_anchor?: boolean;
           nightly_enabled?: boolean;
           nightly_enqueue_max_spread_min?: number;
           nightly_enqueue_spacing_s?: number;
@@ -2093,6 +2095,7 @@ export type Database = {
           nightly_age_fidelity?: boolean;
           nightly_couple_engine?: string;
           nightly_couple_eye_lock?: boolean;
+          nightly_couple_hair_anchor?: boolean;
           nightly_enabled?: boolean;
           nightly_enqueue_max_spread_min?: number;
           nightly_enqueue_spacing_s?: number;

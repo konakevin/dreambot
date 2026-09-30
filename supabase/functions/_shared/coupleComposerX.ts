@@ -14,9 +14,12 @@
 import {
   AGE_FIDELITY_SENIOR_MIN,
   ageYearsOf,
+  extractHairColor,
   resolveIdentity,
   seniorPersonLead,
 } from './characterSlotPrompt.ts';
+
+const BALD = /\b(bald|balding|shaved head|hairless|receding)\b/i;
 import type { CharacterSlotPipelineInput, DualSlots } from './characterSlotPrompt.ts';
 
 export type CoupleVariant =
@@ -41,7 +44,8 @@ export function isCoupleVariant(x: unknown): x is CoupleVariant {
 
 function describe(
   member: CharacterSlotPipelineInput['cast'][number],
-  ageFidelity = false
+  ageFidelity = false,
+  hairAnchor = false
 ): {
   desc: string;
   gender: 'man' | 'woman' | 'person';
@@ -52,10 +56,13 @@ function describe(
   const years = ageYearsOf(r.age);
   const senior =
     ageFidelity && years !== null && years >= AGE_FIDELITY_SENIOR_MIN && r.gender !== 'person';
+  // COUPLE HAIR ANCHOR (AGE_FIDELITY_PLAN.md): under 55, the base hair colour first ("with a full head of brown
+  // hair"), as the solo identity block does, so "…hair with silver highlights" stays highlights. Never on a bald cast.
+  const hc = hairAnchor && !senior && !BALD.test(r.identity) ? extractHairColor(r.identity) : null;
   const parts = [
     senior
       ? seniorPersonLead(r.identity, years as number, r.ethnicity, r.gender as 'man' | 'woman')
-      : `a ${r.ethnicity ? `${r.ethnicity} ` : ''}${r.gender}`,
+      : `a ${r.ethnicity ? `${r.ethnicity} ` : ''}${r.gender}${hc ? ` with a full head of ${hc} hair` : ''}`,
     r.age,
     r.build,
     r.skin,
@@ -89,8 +96,12 @@ export function composeExperimentalCouple(args: {
   const mood = clean(slots.mood);
   const props = clean(slots.props);
   const vibe = clean(input.vibeFragment);
-  const left = describe(input.cast[0], !!input.ageFidelity);
-  const right = describe(input.cast[1] ?? input.cast[0], !!input.ageFidelity);
+  const left = describe(input.cast[0], !!input.ageFidelity, !!input.coupleHairAnchor);
+  const right = describe(
+    input.cast[1] ?? input.cast[0],
+    !!input.ageFidelity,
+    !!input.coupleHairAnchor
+  );
   const her = left.gender === 'woman' ? 'her' : left.gender === 'man' ? 'his' : 'their';
   // EYE CONTACT (NIGHTLY_EYE_CONTACT_PLAN.md): the gaze follows each person's wardrobe. Same-seed screen, 23 real 5.5
   // couples: eyes on camera 72% → 91%, heads turned 19% → 2%; before the wardrobe 85%; in the closing faces line 72%

@@ -109,6 +109,20 @@ export const ARMS = {
   },
   // Solos, round 6: the shipped solo gaze (c2 on a solo = after the medium) plus s1's two removals.
   s2: (p) => ARMS.s1(ARMS.c2(p)),
+  // Grey check (AGE_FIDELITY_PLAN.md): a couple person under 55 gets the solo's base-colour anchor ("with a full head
+  // of brown hair") before their hair clause, so "…hair with silver highlights" stays highlights.
+  k2: (p) =>
+    p.replace(
+      /\b(an? (?:[A-Z][\w-]* )*(?:man|woman)), (\d{1,2}) years old,([^;]*?)(?=, wearing )/g,
+      (all, head, ageS, rest) => {
+        if (Number(ageS) >= 55) return all;
+        const m = rest.match(
+          /\b(jet[- ]?black|salt[- ]and[- ]pepper|dark brown|light brown|dirty blonde|strawberry blonde|ash blonde|platinum blonde|chestnut(?:[- ]brown)?|auburn|mahogany|copper|ginger|brunette|blonde|blond|brown|red|black|sandy|honey|caramel|raven|golden)\b/i
+        );
+        if (!m || /\bhair\b/.test(head)) return all;
+        return `${head} with a full head of ${m[1].toLowerCase()} hair, ${ageS} years old,${rest}`;
+      }
+    ),
   // Solos, round 8: the gaze AFTER the early wardrobe (the couple winner's place), and s3 without the three-quarter head.
   s3: (p) => p.replace(/(, wearing [^—]*?)(, set at )/, '$1, looking into the camera$2'),
   s4: (p) => ARMS.s3(p).replace(SOLO_ANGLE, 'turned naturally toward the viewer'),

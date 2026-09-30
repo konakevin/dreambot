@@ -123,6 +123,9 @@ export interface NightlyQaFlags {
   /** AGE FIDELITY (AGE_FIDELITY_PLAN.md): true puts a 55+ cast member's real age up front, false forces it off;
    *  null = engine_config.nightly_age_fidelity. */
   force_age_fidelity: boolean | null;
+  /** COUPLE HAIR ANCHOR (AGE_FIDELITY_PLAN.md): true names a couple person's base hair colour first, false forces it
+   *  off; null = engine_config.nightly_couple_hair_anchor. */
+  force_couple_hair_anchor: boolean | null;
   /** SCENARIO SCOPE (SCENARIO_LOCATION_SCOPE.md): true draws only scenarios tagged with the dreamer's chosen places,
    *  false the whole pools; null = engine_config.nightly_scenarios_location_scoped. */
   force_scenario_scope: boolean | null;
@@ -320,6 +323,12 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
       body.force_eye_contact === true ? true : body.force_eye_contact === false ? false : null,
     force_age_fidelity:
       body.force_age_fidelity === true ? true : body.force_age_fidelity === false ? false : null,
+    force_couple_hair_anchor:
+      body.force_couple_hair_anchor === true
+        ? true
+        : body.force_couple_hair_anchor === false
+          ? false
+          : null,
     force_scenario_scope:
       body.force_scenario_scope === true
         ? true

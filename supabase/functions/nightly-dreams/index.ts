@@ -502,6 +502,7 @@ Deno.serve(async (req) => {
     force_outfit_plan,
     force_eye_contact,
     force_age_fidelity,
+    force_couple_hair_anchor,
     force_scenario_scope,
     force_solo_outfit_early,
     force_outfit_scene_fit,
@@ -3742,6 +3743,11 @@ Deno.serve(async (req) => {
         // AGE FIDELITY (mig 589, AGE_FIDELITY_PLAN.md): a 55+ cast member's real age up front.
         const ageFidelity = force_age_fidelity ?? engineCfg0.nightlyAgeFidelity;
         if (ageFidelity) fallbackReasons.push('age_fidelity');
+        // COUPLE HAIR ANCHOR (mig 595, AGE_FIDELITY_PLAN.md): a couple person's base hair colour first.
+        const coupleHairAnchor =
+          resolvedCast.length === 2 &&
+          (force_couple_hair_anchor ?? engineCfg0.nightlyCoupleHairAnchor);
+        if (coupleHairAnchor) fallbackReasons.push('couple_hair_anchor');
         const slotInput: CharacterSlotPipelineInput = {
           ...(nightlyOutfitPlan ? { outfitPlan: nightlyOutfitPlan } : {}),
           ...(nightlyFashion ? { fashionLooks: nightlyFashion } : {}),
@@ -3751,6 +3757,7 @@ Deno.serve(async (req) => {
           ...(soloOutfitEarly ? { soloOutfitEarly: true } : {}),
           ...(eyeContact ? { eyeContact: true } : {}),
           ...(ageFidelity ? { ageFidelity: true } : {}),
+          ...(coupleHairAnchor ? { coupleHairAnchor: true } : {}),
           cast: resolvedCast.map((rc, i) => ({
             role: rc.role,
             promptDesc: rc.promptDesc,
