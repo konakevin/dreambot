@@ -58,6 +58,7 @@ const LOOK_SETTINGS: Setting[] = [
   'outdoors',
   'fantasy',
   'snow',
+  'romantic',
 ];
 
 describe('fix 1: looks fit the place', () => {
@@ -103,6 +104,31 @@ describe('fix 1: looks fit the place', () => {
       for (let i = 0; i < 300; i++) {
         const picks = rollFashion(COUPLE, GENDERS, undefined, seeded(i * 7 + 1), { setting: s });
         for (const p of picks) expect(lookFits(p!.look, s)).toBe(true);
+      }
+    }
+  });
+
+  it('a romantic escape dresses up, never down: no swimwear, snow gear, costume or city streetwear (Kevin 2026-09-30)', () => {
+    for (let i = 0; i < 2000; i++) {
+      for (const p of rollFashion(COUPLE, GENDERS, undefined, seeded(i), { setting: 'romantic' })) {
+        expect(p!.look.settings).toContain('romantic');
+        expect([
+          'poolside',
+          'surf',
+          'tropicana',
+          'coord',
+          'street',
+          'sporty',
+          'rocker',
+          'disco',
+          'kpop',
+          'noir',
+          'gothic',
+          'regency',
+          'mermaid',
+          'retro_ski',
+          'apres_ski',
+        ]).not.toContain(p!.look.key);
       }
     }
   });

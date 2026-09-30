@@ -969,6 +969,24 @@ export const ACTION_REGISTERS: Record<string, ActionRegister> = {
       'sitting on the rowboat gunwale with a mug',
     ]
   ),
+  // Inland romantic countryside (romantic_countryside biome: Tuscan villas, lavender fields; Kevin 2026-09-30).
+  romantic_countryside: R(
+    [
+      'holding a glass of red wine at a linen-draped table',
+      'carrying a woven basket of cut lavender at the hip',
+      'holding a bunch of just-picked grapes at chest height',
+      'pouring wine from a carafe at the garden table',
+      'holding a single garden rose at chest height',
+      'trailing one hand along the tops of the flower rows',
+      'resting a hand on the sun-warmed stone balustrade',
+      'holding a bouquet of wildflowers at the waist',
+    ],
+    [
+      'standing on the loggia with a wine glass at chest height',
+      'sitting on a stone garden bench with a basket of flowers',
+      'leaning on the stone balustrade with a glass of wine',
+    ]
+  ),
   mediterranean_coastal: R(
     [
       'holding a glass of wine on the terrace',

@@ -24,6 +24,7 @@ export type Setting =
   | 'snow'
   | 'sport'
   | 'fantasy'
+  | 'romantic'
   | 'unknown';
 
 export const SETTINGS: readonly Setting[] = [
@@ -35,6 +36,7 @@ export const SETTINGS: readonly Setting[] = [
   'snow',
   'sport',
   'fantasy',
+  'romantic',
   'unknown',
 ];
 
@@ -48,9 +50,11 @@ export const SETTINGS: readonly Setting[] = [
  * beach where they would misfire ("a magical evening in Paris").
  */
 const SETTING_WORDS: readonly (readonly [Exclude<Setting, 'unknown'>, RegExp])[] = [
+  // No bare "slopes": vineyards, temples and lavender hillsides have slopes too (a Hvar lavender spot dressed a
+  // dreamer in a 1970s ski jacket, 2026-09-30). "ski slopes" and "snowy slopes" still match on their first word.
   [
     'snow',
-    /\b(ski(s|ing|er|ers)?|snowboard(s|ing|er|ers)?|snow(y|fall|man|men|ball|balls|shoe|shoes)?|slopes?|apr[eè]s[- ]ski|igloos?|ice[- ]skat(e|es|ing)|sledd?(e|ing)|toboggan(ing)?|blizzard|chalets?)\b/i,
+    /\b(ski(s|ing|er|ers)?|snowboard(s|ing|er|ers)?|snow(y|fall|man|men|ball|balls|shoe|shoes)?|apr[eè]s[- ]ski|igloos?|ice[- ]skat(e|es|ing)|sledd?(e|ing)|toboggan(ing)?|blizzard|chalets?)\b/i,
   ],
   [
     'sport',
@@ -124,6 +128,10 @@ const BIOME_SETTING: Readonly<Record<string, Setting>> = {
   temperate_coastal: 'beach',
   tropical_coastal: 'beach',
   mediterranean_coastal: 'beach',
+  // Inland romantic countryside (Tuscan villas, lavender fields; Kevin 2026-09-30): under mediterranean_coastal they
+  // dressed for the beach, and no other biome's looks fit a villa or a lavender row (evening brings disco and noir,
+  // city brings streetwear).
+  romantic_countryside: 'romantic',
   tropical_island: 'beach',
   tropical_caribbean: 'beach',
   tropical: 'beach',
@@ -231,5 +239,7 @@ export const SETTING_DRESS: Readonly<Record<Setting, string | null>> = {
   indoor:
     'indoors people wear relaxed but put-together clothes that suit the room: a pretty dress, a fine-knit top, tailored trousers, clean shoes',
   fantasy: 'in an imagined world people wear costume true to that world',
+  romantic:
+    'on a romantic escape people dress up to be admired: a flowing or slinky dress, a silk slip dress, a sundress cinched at the waist, a linen or silk suit worn open at the collar, a silk shirt, espadrilles, strappy sandals or polished loafers',
   unknown: null,
 };

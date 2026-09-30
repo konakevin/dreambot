@@ -124,7 +124,7 @@ import { nightlyModelPool, pickFromPool } from '../_shared/nightlyModelPool.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
 import { applyVibeGenderModifier, moodAtmosphere } from '../_shared/promptCompiler.ts';
 import { rollSceneAweBeat } from '../_shared/sceneAweBeat.ts';
-import { sceneSeasonSignal, seasonForMonth } from '../_shared/sceneSeason.ts';
+import { sceneSeasonSignal, seasonForMonth, seasonMonthFor } from '../_shared/sceneSeason.ts';
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import { generateImage } from '../_shared/generateImage.ts';
@@ -2127,6 +2127,8 @@ Deno.serve(async (req) => {
     let iconicAnchor: string | null = null;
     let iconicAnchorScale: 'wide' | 'medium' | 'intimate' | null = null;
     let biomeKey: string | null = null;
+    // location_cards.season_lock (mig 610): a one-season card's scene-only season signal ignores the calendar.
+    let seasonLock: string | null = null;
     // Per-location bespoke biome (migration 170). When set, it OVERRIDES
     // the shared biomeAxes lookup so atmospheres feel recognizable to
     // travelers who have been to that specific place.
@@ -2186,7 +2188,7 @@ Deno.serve(async (req) => {
         spotsQ,
         supabase
           .from('location_cards')
-          .select('biome, biome_config')
+          .select('biome, biome_config, season_lock')
           .eq('name', userPlace)
           .maybeSingle(),
       ]);
@@ -2233,6 +2235,7 @@ Deno.serve(async (req) => {
         }
       }
       biomeKey = locCard?.biome ?? null;
+      seasonLock = locCard?.season_lock ?? null;
       // Per-location biome_config override — validated by the single shared gate
       // (isValidBiomeConfig). Valid → used as the bespoke biome; malformed →
       // falls back to the shared class config (getBiomeConfig) below.
@@ -4430,7 +4433,10 @@ Output ONLY the prompt.`;
       // gated by biome; northern-hemisphere month mapping). Always-on for a
       // seasonal biome (not rolled). Holidays take their own brief branch above,
       // so this only colors an ordinary postcard. force_season_month is QA-only.
-      const seasonMonth = force_season_month ?? parseInt(today.slice(5, 7), 10);
+      const seasonMonth =
+        force_season_month ?? seasonMonthFor(seasonLock, parseInt(today.slice(5, 7), 10));
+      if (seasonLock && force_season_month == null)
+        fallbackReasons.push(`season_lock:${seasonLock}`);
       const seasonSignal = sceneSeasonSignal(biomeKey, seasonMonth);
       const seasonLine = seasonSignal
         ? `\n\nSEASON — render the LOCKED SUBJECT in this season; foliage, ground cover, and seasonal color reflect it, while WEATHER stays the source of sky and precipitation: ${seasonSignal}`

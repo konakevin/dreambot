@@ -22,9 +22,30 @@
  * spots are northern. Southern-hemisphere temperate places (Patagonia, NZ) will
  * occasionally read a season off by six months; the climate gate still prevents
  * anything absurd. TODO: add a hemisphere signal if we ever store location lat.
+ *
+ * SEASON LOCK (mig 610, Kevin 2026-09-30): a card defined by one season (Cherry Blossoms, Lavender Fields, Tuscan
+ * Villa) sets `location_cards.season_lock`, and the signal always reads that season instead of the calendar's.
+ * Without it the autumn signal put maples and russet leaves into the cherry blossoms and a lavender field.
  */
 
 export type Season = 'spring' | 'summer' | 'autumn' | 'winter';
+
+/** A mid-season month for each lock value, fed to sceneSeasonSignal in place of the calendar month. */
+const LOCK_MONTH: Readonly<Record<Season, number>> = {
+  spring: 4,
+  summer: 7,
+  autumn: 10,
+  winter: 1,
+};
+
+/** The month to use for a card's season: its lock's month, else the calendar month. An unknown lock is ignored. */
+export function seasonMonthFor(lock: string | null | undefined, calendarMonth: number): number {
+  return lock && isSeason(lock) ? LOCK_MONTH[lock] : calendarMonth;
+}
+
+function isSeason(x: string): x is Season {
+  return Object.prototype.hasOwnProperty.call(LOCK_MONTH, x);
+}
 
 /** Biomes whose scenes visibly change with the calendar. */
 const SEASONAL_BIOMES = new Set([
@@ -37,6 +58,7 @@ const SEASONAL_BIOMES = new Set([
   'gothic_historic',
   'grassland_savanna',
   'mediterranean_coastal',
+  'romantic_countryside',
 ]);
 
 /** Of the seasonal biomes, the cold ones that actually get SNOW in deep winter. */

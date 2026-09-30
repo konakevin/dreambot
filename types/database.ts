@@ -2682,6 +2682,7 @@ export type Database = {
           biome_config: Json | null;
           cinematic_phrases: string[];
           content_kind: string;
+          couples_ok: boolean;
           created_at: string;
           display_name: string | null;
           fusion_settings: Json;
@@ -2695,6 +2696,7 @@ export type Database = {
           picker_sort_order: number | null;
           picker_tile: string | null;
           prompt_version: number;
+          season_lock: string | null;
           sub_regions: string[] | null;
           tags: string[];
           texture_details: string[];
@@ -2710,6 +2712,7 @@ export type Database = {
           biome_config?: Json | null;
           cinematic_phrases?: string[];
           content_kind?: string;
+          couples_ok?: boolean;
           created_at?: string;
           display_name?: string | null;
           fusion_settings?: Json;
@@ -2723,6 +2726,7 @@ export type Database = {
           picker_sort_order?: number | null;
           picker_tile?: string | null;
           prompt_version?: number;
+          season_lock?: string | null;
           sub_regions?: string[] | null;
           tags?: string[];
           texture_details?: string[];
@@ -2738,6 +2742,7 @@ export type Database = {
           biome_config?: Json | null;
           cinematic_phrases?: string[];
           content_kind?: string;
+          couples_ok?: boolean;
           created_at?: string;
           display_name?: string | null;
           fusion_settings?: Json;
@@ -2751,6 +2756,7 @@ export type Database = {
           picker_sort_order?: number | null;
           picker_tile?: string | null;
           prompt_version?: number;
+          season_lock?: string | null;
           sub_regions?: string[] | null;
           tags?: string[];
           texture_details?: string[];

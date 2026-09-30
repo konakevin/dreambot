@@ -43,6 +43,15 @@ seductress, beach glamour, outlaw grit). See [[feedback_dream_shoot_set_dresser_
   scifi_cosmic, fantasy_imagined, gothic_historic, desert_arid, temperate_forest, alpine_mountain,
   grassland_savanna, wetland_jungle, urban_city, interior_intimate, aquatic_underwater, red_rock_canyon,
   volcanic_geothermal, fjord_coastal, mediterranean_coastal, temperate_coastal, zen_garden.
+  The biome ALSO decides what the cast WEARS (`sceneSetting.ts` BIOME_SETTING: beach / city / outdoors / evening /
+  snow / indoor / fantasy / romantic), the ACTION register (`actionRegisters.ts`) and whether the scene-only brief
+  gets a calendar season (`sceneSeason.ts`). Pick it by what people wear and do there, not only by the landscape:
+  `mediterranean_coastal` dressed inland Tuscany and Provence for the beach. Inland villas, vineyards and flower
+  fields use **`romantic_countryside`** (romantic outfits, wine-and-lavender actions; mig 610). Check a new card's
+  outfit with one QA render's `outfit_setting:` stamp.
+- **`season_lock`** (spring / summer / autumn / winter, mig 610) → a card DEFINED by one season (Cherry Blossoms =
+  spring, Lavender Fields / Tuscan Villa = summer) always gets that season's scene-only signal; NULL follows the
+  calendar, which in autumn puts maples and russet leaves into a blossom card.
 - **`biome_config` (jsonb)** → the per-location BESPOKE override: TIME/WEATHER/CAMERA/PHENOMENA +
   SUBJECT_RULE + BANS + **WARDROBE** pool. Must pass `isValidBiomeConfig` (needs TIME, WEATHER, CAMERA,
   PHENOMENA, BANS arrays + SUBJECT_RULE string) or it's silently ignored and wardrobe falls to AI-default

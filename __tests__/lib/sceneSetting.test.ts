@@ -36,6 +36,8 @@ describe('settingFromText', () => {
     ['at the opera in Vienna', 'evening'],
     ['at a museum', 'indoor'],
     ['a cozy alpine chalet', 'snow'],
+    ['a run down the ski slopes', 'snow'],
+    ['snowy slopes above the village', 'snow'],
   ])('%s → %s', (text, setting) => {
     expect(settingFromText(text)).toBe(setting);
   });
@@ -70,6 +72,7 @@ describe('settingFromLocation (nightly)', () => {
     [{ biome: 'temperate_forest' }, 'outdoors'],
     [{ biome: 'wild_west' }, 'outdoors'],
     [{ biome: 'scifi_cosmic' }, 'fantasy'],
+    [{ biome: 'romantic_countryside' }, 'romantic'],
   ])('%o → %s', (loc, setting) => {
     expect(settingFromLocation(loc)).toBe(setting);
   });
@@ -105,6 +108,14 @@ describe('settingFromPlaceName (nightly: the landmark says snow or beach)', () =
     ['kauai', 'Waimea Canyon red ridges', 'outdoors'],
     ['kauai', 'Kalalau Valley from lookout', 'outdoors'],
     ['maui', 'Kaanapali Beach at sunset', 'beach'],
+    // A bare "slopes" is not snow (2026-09-30: a Hvar lavender spot dressed a dreamer in a 1970s ski jacket).
+    [
+      'lavender fields',
+      'Hvar town fortress, lavender-covered slopes and ancient stone ramparts',
+      null,
+    ],
+    ['bali', 'Pura Besakih mother temple complex ascending Mount Agung slopes', null],
+    ['tokyo', 'Roppongi Sakurazaka cherry tree slope', null],
   ])('%s + %s → %s', (place, anchor, setting) => {
     expect(settingFromPlaceName(place, anchor)).toBe(setting);
   });

@@ -6,7 +6,9 @@
  * snowy winter (no snow on the Amalfi coast).
  */
 
-import { sceneSeasonSignal, seasonForMonth } from '@engine/sceneSeason';
+import * as fs from 'fs';
+import * as path from 'path';
+import { sceneSeasonSignal, seasonForMonth, seasonMonthFor } from '@engine/sceneSeason';
 
 describe('seasonForMonth (northern hemisphere)', () => {
   it('maps months to the right season', () => {
@@ -57,5 +59,38 @@ describe('sceneSeasonSignal', () => {
   it('zen_garden gets its iconic blossoms in spring and maples in autumn', () => {
     expect(sceneSeasonSignal('zen_garden', 4)).toMatch(/blossom/i);
     expect(sceneSeasonSignal('zen_garden', 10)).toMatch(/maple/i);
+  });
+});
+
+describe('season lock (mig 610): a one-season card ignores the calendar', () => {
+  it('a lock reads its own season in any month; no lock or an unknown one follows the calendar', () => {
+    for (const m of [1, 4, 7, 10, 12]) {
+      expect(seasonForMonth(seasonMonthFor('spring', m))).toBe('spring');
+      expect(seasonForMonth(seasonMonthFor('summer', m))).toBe('summer');
+      expect(seasonMonthFor(null, m)).toBe(m);
+      expect(seasonMonthFor('toString', m)).toBe(m);
+    }
+  });
+
+  it('cherry blossoms locked to spring stay in bloom in October; no maples', () => {
+    const sig = sceneSeasonSignal('zen_garden', seasonMonthFor('spring', 10));
+    expect(sig).toMatch(/blossoms in full bloom/);
+    expect(sig).not.toMatch(/maple|fallen leaves/);
+  });
+
+  it('romantic_countryside is seasonal, so its summer lock reads lush high summer, never bare branches', () => {
+    expect(sceneSeasonSignal('romantic_countryside', seasonMonthFor('summer', 1))).toMatch(
+      /high summer/
+    );
+    expect(sceneSeasonSignal('romantic_countryside', 10)).toMatch(/^autumn/);
+  });
+
+  it('nightly-dreams reads the lock from the card and applies it unless QA forces a month', () => {
+    const src = fs.readFileSync(
+      path.join(__dirname, '..', '..', 'supabase', 'functions', 'nightly-dreams', 'index.ts'),
+      'utf8'
+    );
+    expect(src).toMatch(/\.select\('biome, biome_config, season_lock'\)/);
+    expect(src).toMatch(/force_season_month \?\? seasonMonthFor\(seasonLock,/);
   });
 });

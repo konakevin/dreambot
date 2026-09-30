@@ -286,7 +286,7 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     key: 'boho',
     text: 'boho: embroidery, a little fringe or crochet, layered bangles and rings',
     families: ['dress', 'skirt', 'shorts'],
-    settings: ['beach', 'city', 'outdoors', 'indoor'],
+    settings: ['beach', 'city', 'outdoors', 'indoor', 'romantic'],
   },
   {
     key: 'mod',
@@ -312,7 +312,7 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     key: 'old_money',
     text: 'old-money elegance: a fine-knit twinset, a pearl necklace, polished loafers',
     families: ['skirt', 'trousers', 'coat_over_dress'],
-    settings: ['city', 'evening', 'indoor'],
+    settings: ['city', 'evening', 'indoor', 'romantic'],
   },
   {
     key: 'parisian',
@@ -325,7 +325,7 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     key: 'cottagecore',
     text: 'cottagecore: puff sleeves, lace trim, a woven basket bag',
     families: ['dress', 'skirt'],
-    settings: ['outdoors', 'indoor', 'fantasy'],
+    settings: ['outdoors', 'indoor', 'fantasy', 'romantic'],
   },
   {
     key: 'dark_academia',
@@ -345,13 +345,13 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     key: 'balletcore',
     text: 'balletcore: a wrap top, soft tulle, satin ribbon ties',
     families: ['skirt', 'dress'],
-    settings: ['city', 'indoor', 'evening'],
+    settings: ['city', 'indoor', 'evening', 'romantic'],
   },
   {
     key: 'resort',
     text: 'resort glamour: a wide-brim hat, statement earrings, strappy sandals',
     families: ['dress', 'jumpsuit', 'shorts', 'skirt'],
-    settings: ['beach', 'city'],
+    settings: ['beach', 'city', 'romantic'],
     warmOnly: true,
   },
   {
@@ -425,13 +425,13 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     key: 'couture',
     text: 'haute couture: one sculptural statement piece, dramatic volume in one place',
     families: ['dress', 'jumpsuit', 'coat_over_dress'],
-    settings: ['evening', 'fantasy'],
+    settings: ['evening', 'fantasy', 'romantic'],
   },
   {
     key: 'coastal',
     text: 'coastal elegance: soft linen layers, a straw hat, espadrilles',
     families: ['dress', 'trousers', 'skirt'],
-    settings: ['beach', 'city', 'outdoors'],
+    settings: ['beach', 'city', 'outdoors', 'romantic'],
     warmOnly: true,
   },
   {
@@ -475,7 +475,7 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     key: 'riviera',
     text: '1960s Riviera: a halter neckline, a skinny belt, woven raffia sandals',
     families: ['jumpsuit', 'dress', 'trousers', 'shorts'],
-    settings: ['beach', 'city'],
+    settings: ['beach', 'city', 'romantic'],
     sceneFitOnly: true,
     warmOnly: true,
   },
@@ -548,7 +548,7 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     key: 'velvet',
     text: 'velvet evening: a velvet bodice, a sculpted shoulder, drop earrings',
     families: ['dress', 'jumpsuit', 'coat_over_dress'],
-    settings: ['evening', 'indoor'],
+    settings: ['evening', 'indoor', 'romantic'],
     sceneFitOnly: true,
   },
   {
@@ -579,7 +579,7 @@ export const WOMEN_FASHION_LOOKS: readonly FashionLook[] = [
     key: 'harvest_romance',
     text: 'harvest romance: a puff-sleeve knit, a tiered midi skirt, lace-up ankle boots',
     families: ['skirt', 'dress'],
-    settings: ['outdoors', 'indoor'],
+    settings: ['outdoors', 'indoor', 'romantic'],
     requires: AUTUMN,
     sceneFitOnly: true,
   },
@@ -623,7 +623,7 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
   {
     key: 'old_money',
     text: 'old-money: a fine-knit polo, tailored trousers, polished loafers',
-    settings: ['city', 'evening', 'indoor'],
+    settings: ['city', 'evening', 'indoor', 'romantic'],
   },
   {
     key: 'disco',
@@ -659,7 +659,7 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
   {
     key: 'resort',
     text: 'resort style: a camp-collar shirt, tailored shorts, loafers',
-    settings: ['beach', 'city'],
+    settings: ['beach', 'city', 'romantic'],
     warmOnly: true,
   },
   {
@@ -716,7 +716,7 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
   {
     key: 'coastal',
     text: 'coastal: soft linen layers, a straw hat, espadrilles',
-    settings: ['beach', 'city', 'outdoors'],
+    settings: ['beach', 'city', 'outdoors', 'romantic'],
     warmOnly: true,
   },
   {
@@ -763,7 +763,7 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
   {
     key: 'riviera',
     text: '1960s Riviera: a knitted short-sleeve polo, slim trousers rolled at the ankle, suede driving shoes',
-    settings: ['beach', 'city'],
+    settings: ['beach', 'city', 'romantic'],
     sceneFitOnly: true,
     warmOnly: true,
   },
@@ -777,7 +777,7 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
   {
     key: 'barefoot_tailoring',
     text: 'barefoot tailoring: an unstructured linen suit, an open-collar shirt, rolled trouser hems',
-    settings: ['beach', 'evening'],
+    settings: ['beach', 'evening', 'romantic'],
     sceneFitOnly: true,
     warmOnly: true,
   },
@@ -791,7 +791,7 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
   {
     key: 'boho',
     text: 'boho: a crochet-knit shirt, layered beaded necklaces, suede sandals',
-    settings: ['beach', 'outdoors'],
+    settings: ['beach', 'outdoors', 'romantic'],
     sceneFitOnly: true,
     warmOnly: true,
   },
@@ -816,7 +816,7 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
   {
     key: 'cottagecore',
     text: 'cottagecore: a billowy linen shirt, a knitted vest, high-waisted trousers with a rope belt',
-    settings: ['outdoors', 'indoor', 'fantasy'],
+    settings: ['outdoors', 'indoor', 'fantasy', 'romantic'],
     sceneFitOnly: true,
   },
   {
@@ -828,13 +828,13 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
   {
     key: 'velvet',
     text: 'velvet evening: a velvet smoking jacket, a silk scarf at the collar, patent loafers',
-    settings: ['evening', 'indoor'],
+    settings: ['evening', 'indoor', 'romantic'],
     sceneFitOnly: true,
   },
   {
     key: 'couture',
     text: 'runway couture: a sculptural oversized blazer, dramatic lapels, sleek boots',
-    settings: ['evening', 'fantasy'],
+    settings: ['evening', 'fantasy', 'romantic'],
     sceneFitOnly: true,
   },
   {
@@ -873,7 +873,7 @@ export const MEN_FASHION_LOOKS: readonly FashionLook[] = [
   {
     key: 'harvest_romance',
     text: 'harvest romance: a waffle-knit shirt, a quilted vest, high-waisted cords',
-    settings: ['outdoors', 'indoor'],
+    settings: ['outdoors', 'indoor', 'romantic'],
     requires: AUTUMN,
     sceneFitOnly: true,
   },
@@ -997,6 +997,15 @@ const SETTING_GARMENT_FACTORS: Partial<Record<Setting, Readonly<Record<string, n
   outdoors: { coat_over_dress: 0, shorts: 2, trousers: 1.6, dress: 0.6 },
   // Snow (phase 10): no shorts, no bare dress; ski suits (jumpsuit), trousers and a coat over a dress.
   snow: { shorts: 0, dress: 0, skirt: 0.6, jumpsuit: 2, trousers: 1.5, coat_over_dress: 1.5 },
+  // Romantic escapes (villas, lavender fields; Kevin 2026-09-30 "rather have them daring"): dresses first.
+  romantic: {
+    dress: 1.8,
+    skirt: 1.2,
+    jumpsuit: 1,
+    shorts: 0.4,
+    trousers: 0.6,
+    coat_over_dress: 0.4,
+  },
 };
 
 /** A family is only rolled in a setting when at least this many of its looks fit there (so the look pick

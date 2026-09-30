@@ -42,6 +42,11 @@ describe('action registers — coverage parity', () => {
   it('every location biome has a register', () => {
     for (const biome of Object.keys(BIOME_AXES)) expect(getActionRegister(biome)).not.toBeNull();
   });
+  it('biomes that live only on location_cards (no BIOME_AXES class) still resolve: romantic_countryside, luxury, mediterranean', () => {
+    for (const b of ['romantic_countryside', 'luxury', 'mediterranean', 'temperate_varied']) {
+      expect(getActionRegister(b)).not.toBeNull();
+    }
+  });
   it('every alias points at a real register', () => {
     for (const [alias, target] of Object.entries(REGISTER_ALIASES)) {
       expect(ACTION_REGISTERS[target]).toBeDefined();
