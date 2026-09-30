@@ -52,7 +52,10 @@ const SURFACES = [
   ['plus_one', CAST_MEDIUM, false, 'plus1'],
   ['dual', CAST_MEDIUM, false, 'couple'],
   [null, SCENE_MEDIUM, true, 'scene'],
-].filter(([, , pure]) => !(NO_SCENE && pure));
+]
+  .filter(([, , pure]) => !(NO_SCENE && pure))
+  // --only self|plus1|couple|scene (comma list): re-render just those surfaces.
+  .filter(([, , , label]) => !arg('only') || arg('only').split(',').includes(label));
 
 async function render(role, medium, pureScene, label) {
   const body = {
