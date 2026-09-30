@@ -1035,8 +1035,8 @@ Live paths are `paths[]` in each `index.js`; don't trust a list here over the co
   register over `FARMBOT_COZY_NEUTRAL`; look entries carry no time-of-day/weather words. flux-2-flex only. Seasonal: fall ×4,
   halloween ×5. Prompt length (2026-09-30): the medium was cut from 276 to 45 words and every brief now ends with
   `FARMBOT_LENGTH_RULE` (120-160 words, style → subject → setting); emitted prompts fell from a median ~770 words to
-  ~236. AlphaBot's FarmBot-destined candidates append the same rule. The costume parade still caps its cast at 2 humans
-  (a workaround for the fixed truncation bug; could be reverted).
+  ~236. AlphaBot's FarmBot-destined candidates append the same rule. The costume parade rolls 1-3 costumed kids again
+  (its 2-human cap was a workaround for the fixed truncation bug; removed 2026-09-30).
 - **GothBot**: Castlevania / Bloodborne / Crimson Peak / Berserk / Burton; romantic-melancholy, never horror or decay-porn.
   8 render-style looks via `GOTHBOT_LOOK_OVERRIDE`. gothic-architecture = structure-as-hero. Familiars: ravens, crows,
   owls, cats, wolves, hounds, serpents only.

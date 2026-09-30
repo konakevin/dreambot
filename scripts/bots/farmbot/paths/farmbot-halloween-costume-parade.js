@@ -165,25 +165,17 @@ Doing: ${action}`;
 module.exports = ({ sharedDNA, picker }) => {
   // ── HEADCOUNT ROLL — see header note. Never a literal figure-free parade.
   //
-  // HUMAN CAP = 2, NOT 3 (round-1 QA finding, 2026-09-09): a 3-human cast
-  // packs 3 full paragraphs (appearance + costume + action, each already a
-  // full sentence) into one brief, and Sonnet's fixed maxTokens:400 output
-  // budget on the shared botEngine.js callClaude() call truncated mid-
-  // sentence before finishing figure 3 — the rendered image showed only the
-  // FIRST figure actually wearing its costume, the other two in plain
-  // clothes (the same cross-cutting "content late in a dense brief gets
-  // thinned/dropped" mechanism documented in FARMBOT_PATH_BUILD_STATE.md,
-  // here triggered by density rather than ordering — THE CAST is already
-  // first). autumn-village-market's proven-safe precedent caps at 2 full
-  // character picks; this path adds a THIRD per-figure content line
-  // (costume+action vs. just archetype+hair/eye/skin) on top of that, so
-  // capping at 2 humans (with an optional bonus animal for "little group"
-  // energy — a short entry, not a full appearance block) keeps every cast
-  // still within budget while keeping the group feel the brief asked for.
+  // UP TO 3 HUMANS again (2026-09-30). From 2026-09-09 this was capped at 2: a 3-human
+  // cast truncated mid-sentence under the old shared maxTokens:400 brief budget, so only
+  // figure 1 wore its costume. That budget is now BRIEF_MAX_TOKENS = 2000 (botEngine.js)
+  // and FarmBot briefs end with a 120-160 word count, so the workaround went. Tested with
+  // the roll forced to 3 humans: 3 of 3 shadow renders showed three kids, each in their
+  // own costume. Bias stays toward 2 ("a parade reads better with a little group").
   const includeHuman = Math.random() < 0.6;
   let humanCount = 0;
   if (includeHuman) {
-    humanCount = Math.random() < 0.45 ? 1 : 2;
+    const r = Math.random();
+    humanCount = r < 0.3 ? 1 : r < 0.75 ? 2 : 3;
   }
   let animalCount;
   if (includeHuman) {
