@@ -40,14 +40,14 @@ restore rewinds the whole database and takes the app offline; no restore has eve
 ## Done when (all true)
 
 - [x] **D1.** A database copy lands in R2 every day, and the most we can lose is about 1 day.
-- [ ] **D2.** Every image in all 4 buckets has a copy in R2 within a day of being created, and a file deleted in
+- [x] **D2.** Every image in all 4 buckets has a copy in R2 within a day of being created, and a file deleted in
       Supabase can still be recovered for 30 days.
-- [ ] **D3.** A weekly automatic restore drill passes: the full restore matches the live row counts exactly and
+- [x] **D3.** A weekly automatic restore drill passes: the full restore matches the live row counts exactly and
       sampled images are all present.
 - [x] **D4.** A failed backup, a stale backup (> 51 h, derived from the schedule in `scripts/backup/lib.js`), or a big
       overnight drop in a table's rows emails Kevin.
 - [x] **D5.** The database copies can't be deleted for 30 days (bucket lock), and old copies clean themselves up
-      (lifecycle rules).
+      (retention enforced by the jobs, `lib.RETENTION`).
 - [x] **D6.** "How to restore" below covers every disaster step by step, including one full rehearsal of a
       single-table restore.
 
@@ -229,17 +229,22 @@ Each phase ends with its proof, and a commit + push (the workflows only run once
       on GitHub with `transfers=8`; an unfinished copy resumes on the next due wake (files already there are skipped)
 - [x] Safety brake verified on an R2 scratch prefix: `--max-delete` also counts moves to the trash (limit 1 with 2
       vanished files: 1 moved, then stop with exit 7)
-- [ ] Supervised first copy by manual dispatch at a quiet hour; watch `db_health_log` and the app while it runs
-- [ ] Then nightly incremental through the same hourly wake + guard
+- [x] Supervised first copy (Kevin's go): run 36745197482, started 16:34 UTC with 8 transfers, `db_health_log`
+      sampled every 2 min from the session (alert at ≥ 75 connections or ≥ 5 lock waiters: never fired)
+- [ ] Then nightly incremental through the same hourly wake + guard (first one due ~09:37 UTC 2026-10-01)
 - **Pass bar:**
-  - file count and total bytes per bucket in R2 equal `storage.objects`;
-  - a nightly run takes under 15 minutes;
-  - no rise in connections during the first copy.
+  - ✅ every bucket's mirror holds every file that existed when the listing began: `avatars` 37/37, `cast-photos`
+    75/75, `location-thumbnails` 160 (+16 created during the copy), `uploads` 153,669 (+282 created during the
+    copy); 153,744 files / 75.26 GB copied, 0 errors, 3h38m;
+  - ✅ no rise in connections during the first copy (~30-34 of 90 throughout, 0 lock waiters);
+  - ✅ the drill right after (run 36771460353): 50/50 sampled files present with the right size, plus 121/121
+    tables exact and the rehearsal;
+  - [ ] a nightly incremental run takes under 15 minutes (first one tomorrow).
 
 ### Phase 5: Lock it down (Kevin, Cloudflare dashboard; exact values given at the time)
 
 - [x] Bucket lock: rule `db-copies-30d`, prefix `db/`, 30 days (2026-09-30, `npx wrangler r2 bucket lock add
-    dreambot-backups db-copies-30d db/ --retention-days 30` after Kevin's `wrangler login`; the backup token can't
+  dreambot-backups db-copies-30d db/ --retention-days 30` after Kevin's `wrangler login`; the backup token can't
       change bucket settings). Check: `npx wrangler r2 bucket lock list dreambot-backups`.
 - [x] ~~Lifecycle rules~~ replaced by retention the jobs enforce themselves (`lib.RETENTION`, 2026-09-30): daily copies
       35 days (never fewer than the newest 7), the newest 12 monthly copies, image trash 30 days. Only folders
@@ -456,3 +461,8 @@ last. Nothing in this plan changes app behaviour; everything runs outside the ap
     8 transfers, 60/90 connections free), watched from this session. Retention moved into the jobs (no lifecycle
     rules needed). K4 done: dreambotapp.com/privacy now discloses Cloudflare (encrypted backups) and "up to 12
     months" (dreambot-web 7f41557, live). The bucket lock still needs Kevin's Cloudflare login.
+  - Bucket lock set and proven after Kevin's `wrangler login` (Phase 5). First image copy finished 20:15 UTC: 153,744
+    files / 75.26 GB, 0 errors, 3h38m, no database impact; completeness check passed per bucket. The drill right
+    after passed with the image sample (50/50). All six "Done when" items are met; left: the first nightly
+    incremental mirror run (expected ~09:37 UTC 2026-10-01, should take minutes), and Kevin's own items (read this
+    runbook, `.env.local` in the password manager).
