@@ -4266,6 +4266,7 @@ export type Database = {
           is_public: boolean;
           last_active_at: string | null;
           last_dreams_view_at: string;
+          last_following_view_at: string;
           last_inbox_view_at: string | null;
           pro_mode_flux_model: string;
           pro_subscription: boolean;
@@ -4310,6 +4311,7 @@ export type Database = {
           is_public?: boolean;
           last_active_at?: string | null;
           last_dreams_view_at?: string;
+          last_following_view_at?: string;
           last_inbox_view_at?: string | null;
           pro_mode_flux_model?: string;
           pro_subscription?: boolean;
@@ -4354,6 +4356,7 @@ export type Database = {
           is_public?: boolean;
           last_active_at?: string | null;
           last_dreams_view_at?: string;
+          last_following_view_at?: string;
           last_inbox_view_at?: string | null;
           pro_mode_flux_model?: string;
           pro_subscription?: boolean;
@@ -4929,6 +4932,7 @@ export type Database = {
           width: number;
         }[];
       };
+      get_following_new_count: { Args: never; Returns: number };
       get_game_activity: {
         Args: { p_game_id: string; p_limit?: number };
         Returns: Json;
@@ -5317,6 +5321,7 @@ export type Database = {
       mark_bot_visited: { Args: { p_bot_id: string }; Returns: undefined };
       mark_dream_seen: { Args: { p_upload_id: string }; Returns: undefined };
       mark_dreams_viewed: { Args: { p_user_id: string }; Returns: string };
+      mark_following_viewed: { Args: never; Returns: undefined };
       mark_group_seen: {
         Args: { p_group_key: string; p_user_id: string };
         Returns: undefined;

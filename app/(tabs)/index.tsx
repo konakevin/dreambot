@@ -34,9 +34,19 @@ import { OverlayPill, OVERLAY_PILL_ACTIVE_BG } from '@/components/OverlayPill';
 import { useBotUsers } from '@/hooks/useBotUsers';
 import { useAnnouncement } from '@/hooks/useAnnouncement';
 import { AnnouncementSheet } from '@/components/AnnouncementSheet';
+import { useFollowingNewCount } from '@/hooks/useFollowingNewCount';
+import { followingBadgeLabel } from '@/lib/followingBadge';
 type FeedTab = 'forYou' | 'following';
 
-function FeedTabs({ active, onChange }: { active: FeedTab; onChange: (tab: FeedTab) => void }) {
+function FeedTabs({
+  active,
+  onChange,
+  followingBadge,
+}: {
+  active: FeedTab;
+  onChange: (tab: FeedTab) => void;
+  followingBadge: string | null;
+}) {
   const tabs: { key: FeedTab; label: string }[] = [
     { key: 'following', label: 'Following' },
     { key: 'forYou', label: 'Explore' },
@@ -49,6 +59,7 @@ function FeedTabs({ active, onChange }: { active: FeedTab; onChange: (tab: FeedT
           key={tab.key}
           label={tab.label}
           active={active === tab.key}
+          badge={tab.key === 'following' ? followingBadge : null}
           onPress={() => {
             trackFeedTabSelected({ tab: tab.key === 'forYou' ? 'explore' : 'following' });
             onChange(tab.key);
@@ -115,6 +126,11 @@ export default function HomeScreen() {
   const browseSeed = useFeedStore((s) => s.browseSeed);
   const setFeedSeed = useFeedStore((s) => s.setFeedSeed);
   const [activeTab, setActiveTab] = useState<FeedTab>('forYou');
+  const {
+    count: followingNewCount,
+    markViewed: markFollowingViewed,
+    refresh: refreshFollowingCount,
+  } = useFollowingNewCount();
   const { data: botUsers } = useBotUsers();
 
   // (The post-feed FeedIntroGate was removed 2026-06-18 — bot selection moved into
@@ -328,6 +344,8 @@ export default function HomeScreen() {
 
   function handleTabChange(tab: FeedTab) {
     setActiveTab(tab);
+    // Viewing Following clears its new-post number (Kevin 2026-09-30).
+    if (tab === 'following') markFollowingViewed();
     listRef.current?.scrollToOffset(0, false);
     if (pinnedPost) setPinnedPost(null);
   }
@@ -401,6 +419,10 @@ export default function HomeScreen() {
               setPinnedPost(null);
               setFeedSeed(newSeed);
             }
+            // The new seed reloads BOTH Home feeds, so the Following number is read again (or, on Following
+            // itself, the refreshed tab is the view).
+            if (activeTab === 'following') markFollowingViewed();
+            else refreshFollowingCount();
           };
           // Re-tap path (deferSwap): hand the swap back to FullScreenFeed so it
           // fires only after the prefetch resolved. Pull path: commit now — the
@@ -441,7 +463,11 @@ export default function HomeScreen() {
       >
         <View style={s.topRow}>
           <View style={{ flex: 1, minWidth: 42 }} />
-          <FeedTabs active={activeTab} onChange={handleTabChange} />
+          <FeedTabs
+            active={activeTab}
+            onChange={handleTabChange}
+            followingBadge={followingBadgeLabel(followingNewCount)}
+          />
           <View style={{ flex: 1, minWidth: 42 }} />
         </View>
       </Animated.View>

@@ -3,9 +3,10 @@
  * Used for feed tabs, category chips, and any overlay selectors.
  */
 
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet, View } from 'react-native';
 import { Text } from '@/components/AppText';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { colors } from '@/constants/theme';
+import { verticalScale, fontScale, horizontalScale } from '@/lib/responsive';
 import * as Haptics from 'expo-haptics';
 
 /** Selected-pill background — the dark translucent chip used for the active
@@ -17,9 +18,11 @@ interface Props {
   label: string;
   active: boolean;
   onPress: () => void;
+  /** A small count beside the label (the Home "Following" new-post number, lib/followingBadge.ts); null hides it. */
+  badge?: string | null;
 }
 
-export function OverlayPill({ label, active, onPress }: Props) {
+export function OverlayPill({ label, active, onPress, badge }: Props) {
   return (
     <TouchableOpacity
       onPress={() => {
@@ -37,12 +40,19 @@ export function OverlayPill({ label, active, onPress }: Props) {
       style={[s.pill, active && s.pillActive]}
     >
       <Text style={[s.text, active && s.textActive]}>{label}</Text>
+      {badge ? (
+        <View style={s.badge}>
+          <Text style={s.badgeText}>{badge}</Text>
+        </View>
+      ) : null}
     </TouchableOpacity>
   );
 }
 
 const s = StyleSheet.create({
   pill: {
+    flexDirection: 'row',
+    gap: horizontalScale(6),
     paddingVertical: verticalScale(6),
     borderRadius: 16,
     backgroundColor: 'rgba(0,0,0,0.35)',
@@ -61,4 +71,22 @@ const s = StyleSheet.create({
     includeFontPadding: false,
   },
   textActive: { color: '#FFFFFF', fontWeight: '700' },
+  // Brand purple, not the red alert badge (the Bots tab's red counts were removed in 1.10.0): news, not a warning.
+  // Sized to sit inside the pill's own 16pt line so the pill keeps its height.
+  badge: {
+    minWidth: fontScale(16),
+    height: fontScale(16),
+    borderRadius: fontScale(8),
+    paddingHorizontal: horizontalScale(4),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.accent,
+  },
+  badgeText: {
+    color: '#140A2E',
+    fontSize: fontScale(10.5),
+    fontWeight: '800',
+    lineHeight: fontScale(13),
+    includeFontPadding: false,
+  },
 });
