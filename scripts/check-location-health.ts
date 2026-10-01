@@ -163,11 +163,23 @@ report(
 report(
   'ERROR',
   'no-wardrobe',
-  'biome_config with no WARDROBE (outfits fall to the AI default)',
+  'imagined or costume card with no WARDROBE (its cast fall to the AI default; a costume flag does nothing)',
+  // Only these cards dress from WARDROBE (_shared/costumeWardrobe.ts). A real place (Paris, Zion) never reads it: its
+  // cast get the outfit plan, so a missing list there is not a defect (it was the standing "10 cards" error).
   places
     .filter((c) => {
-      const w = (c.biome_config as { WARDROBE?: unknown } | null)?.WARDROBE;
-      return !Array.isArray(w) || w.length === 0;
+      const bc = c.biome_config as {
+        WARDROBE?: unknown;
+        imagined?: unknown;
+        costume?: unknown;
+      } | null;
+      const dressesFromWardrobe =
+        !!bc &&
+        (bc.imagined === true ||
+          bc.costume === true ||
+          ['fantasy_imagined', 'scifi_cosmic', 'aquatic_underwater'].includes(String(c.biome)));
+      const w = bc ? bc.WARDROBE : undefined;
+      return dressesFromWardrobe && (!Array.isArray(w) || w.length === 0);
     })
     .map((c) => String(c.name))
 );
