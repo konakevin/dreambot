@@ -1,26 +1,32 @@
 #!/usr/bin/env node
 /**
- * clean-location-pools.js — the nightly location spot pools, cleaned in two passes (NIGHTLY_POOL_CLEANUP_PLAN.md).
- * Kevin 2026-09-30: "scan originals first, deactivate dupes in packed pools, but also we should backfill any pools that
- * are severely culled ... first deactivate, 2nd analyze pool size and quality and backfill as necessary", and "do not
- * let weak seeds or drift".
+ * clean-location-pools.js — the nightly location spot pools, cleaned (NIGHTLY_POOL_CLEANUP_PLAN.md).
  *
- *   --pass cull      Grade every active spot against the CARD's own concept (name, sub-regions, architecture, palette),
- *                    not against its pool, which can have drifted itself (Gladiator Arena's was mostly general Rome).
- *                    Off-card, non-setting and weak spots fail; then an LLM reads the survivors for duplicates
- *                    (SEED_DIVERSITY_CHARTER.md §5b: judged, never by word overlap) and every member of a group but its
- *                    best fails too. Failures are DEACTIVATED (is_active = false: reversible, nothing deleted).
- *                    Writes <out>/cards/<card>.cull.json.
- *   --pass backfill  Reads the cull files. Where a pool fell below its target (TARGET_SHARE of the original's on-card part, at least
- *                    FLOOR, never above the original) it writes new spots at the scales the pool lost, then puts every
- *                    candidate through the same grade and a duplicate read against the kept pool. Only S and A
- *                    survivors are used: a pool stays short rather than take a weak spot. Writes <card>.fill.json.
- *   --sql <file>     (with --pass backfill) one migration from both passes: guarded deactivations + inserts, flags by
- *                    the playbook rule (cast = non-wide, scene-only = non-intimate). Nothing touches the database
- *                    until that file is applied, so the live pools never sit culled without their backfill.
+ * Kevin 2026-09-30 agreed four steps, after a first version that auto-culled "weak" and "off-card" spots made wrong
+ * calls (St. Vitus Cathedral "weak", the Wanaka lavender farms he added "off-card"):
+ *   1. DUPLICATES are deactivated automatically, keeping the best of each group. The judge is reliable here.
+ *   2. OBJECT spots (a macro texture, a single object, text) are a REVIEW list, never automatic: "let's be careful on
+ *      this one, i don't want to just blindly deactivate all closeup seeds". Small and enclosed PLACES always stay.
+ *   3. Drift is never auto-culled: each card gets an off-card share so flagrant ones (Gladiator Arena: mostly general
+ *      Rome) are fixed case by case.
+ *   4. BACKFILL only pools that end up under FLOOR spots.
+ * Nothing is deleted: a culled spot is is_active = false, reversible.
  *
- *   node scripts/clean-location-pools.js --pass cull --cards "gladiator arena,monte carlo" --out <dir>
- *   node scripts/clean-location-pools.js --pass backfill --cards "gladiator arena,monte carlo" --out <dir> --sql <file>
+ * Only spots the engine can DRAW are considered (nightly + surprise scenes filter on pure_scene_eligible /
+ * character_eligible). ~1,677 unnamed landscapes failed the 2026-08-23 "postcard of THIS place" re-audit and were never
+ * in the cast pool, so they are retired in practice and would only inflate the counts.
+ *
+ *   --pass cull      Per card: duplicates (auto), object flags (review), off-card share (report).
+ *                    Writes <out>/cards/<card>.cull.json and <out>/summary.json.
+ *   --pass backfill  Per card: kept = drawable − duplicates − the object flags not rescued in --keep <file> (a JSON array
+ *                    of spot ids reviewed and KEPT). A pool under FLOOR (or its original size, if smaller) is refilled at
+ *                    the scales it lost; every candidate must grade S/A against the card and pass a duplicate read.
+ *                    A pool stays short rather than take a weak spot. Writes <card>.fill.json.
+ *   --sql <file>     (with --pass backfill) one migration: guarded deactivations + inserts, flags by the playbook rule
+ *                    (cast = non-wide, scene-only = non-intimate). Nothing touches the database until it is applied.
+ *
+ *   node scripts/clean-location-pools.js --pass cull --cards "prague,yellowstone" --out <dir>
+ *   node scripts/clean-location-pools.js --pass backfill --cards "prague,yellowstone" --out <dir> --keep <ids.json> --sql <file>
  */
 require('dotenv').config({ path: '.env.local' });
 const fs = require('fs');
@@ -47,11 +53,11 @@ const RESUME = process.argv.includes('--resume'); // skip cards that already hav
 const CONC = Math.max(1, Math.min(4, Number(arg('concurrency', '3'))));
 const OUT = arg('out', '.');
 const SQL = arg('sql', null);
+const KEEP_FILE = arg('keep', null);
 
 const SCALES = ['wide', 'medium', 'intimate'];
-const TARGET_SHARE = 0.7; // a culled pool is refilled to 70% of its original size...
-const FLOOR = 60; // ...and never left under 60 (or under its original, if it started smaller)
-const GRADE_CHUNK = 60; // spots per grading call
+const FLOOR = 60; // a pool that ends up under 60 (or under its original size, if smaller) is refilled to it
+const CHUNK = 60; // spots per flagging / grading call
 const FILL_ROUNDS = 2;
 const IMAGINED_BIOMES = new Set(['fantasy_imagined', 'scifi_cosmic', 'aquatic_underwater']);
 
@@ -113,7 +119,7 @@ async function loadCard(name) {
   const { data: card, error } = await sb
     .from('location_cards')
     .select(
-      'name, display_name, biome, biome_config, sub_regions, must_include, architecture, visual_palette, picker_tile'
+      'name, display_name, biome, biome_config, sub_regions, must_include, architecture, picker_tile'
     )
     .eq('name', name)
     .maybeSingle();
@@ -122,74 +128,84 @@ async function loadCard(name) {
     (card.biome_config && card.biome_config.imagined === true) || IMAGINED_BIOMES.has(card.biome);
   const label = card.display_name || name;
   const list = (v, n) => (Array.isArray(v) ? v.slice(0, n) : []);
+  const subs = Array.isArray(card.sub_regions) ? card.sub_regions : [];
   const concept = [
     `"${label}"${imagined ? ', an imagined world' : ''}`,
-    list(card.sub_regions, 12).length
-      ? `sub-regions: ${list(card.sub_regions, 12).join('; ')}`
-      : '',
+    // EVERY sub-region: a 12-item cap hid Wanaka from Lavender Fields and its farms read as off-card.
+    subs.length ? `sub-regions: ${subs.join('; ')}` : '',
     list(card.must_include, 8).length
       ? `must include: ${list(card.must_include, 8).join('; ')}`
       : '',
-    // Examples of the look, NOT a boundary: the first cull test read Race Track Garage's interior-only architecture
-    // list as the scope and culled every named circuit's garage.
+    // Examples of the look, NOT a boundary: an early test read Race Track Garage's interior-only list as its scope.
     list(card.architecture, 6).length
       ? `examples of its look (not a complete list): ${list(card.architecture, 6).join('; ')}`
       : '',
   ]
     .filter(Boolean)
     .join('\n');
-  return {
-    name,
-    label,
-    imagined,
-    concept,
-    romance: card.picker_tile === 'romance',
-    subs: card.sub_regions || [],
-  };
+  return { name, label, imagined, concept, romance: card.picker_tile === 'romance', subs };
 }
 
-async function activePool(name) {
+async function drawablePool(name) {
   const { data, error } = await sb
     .from('location_iconic_spots')
     .select('id, spot_text, spot_kind, quality_tier')
     .eq('location_key', name)
     .eq('is_active', true)
+    .or('pure_scene_eligible.eq.true,character_eligible.eq.true')
     .order('id')
     .limit(1000);
   if (error) throw new Error(error.message);
-  return data.map((r) => ({
-    id: r.id,
-    text: r.spot_text,
-    scale: r.spot_kind,
-    tier: r.quality_tier,
-  }));
+  return data.map((r) => ({ id: r.id, text: r.spot_text, scale: r.spot_kind }));
 }
 
-/** Grade spots against the card's concept. Returns one grade per spot: 'S' | 'A' | 'off_card' | 'not_setting' |
- *  'weak'. A spot the reply skips counts as a pass (the grader is told to be fair; a miss must not cull). */
-async function grade(ctx, texts) {
-  const system = `You grade backdrop spots for "${ctx.label}", a location in a dream app. Each spot is where a dream is set, rendered as one image, with the dreamer in it or as a scene.
+/** Step 2 + 3 flags. Returns Map(index → 'object' | 'off_card'); unflagged spots are absent. Deliberately narrow:
+ *  only a thing or surface instead of a place is 'object', and when unsure the spot is kept. */
+async function flag(ctx, texts) {
+  const system = `You check backdrop spots for "${ctx.label}", a location in a dream app. Each spot is where a dream is set: a place the dreamer is pictured in, or a scene.
 The location:
 ${ctx.concept}
-A spot FAILS for one of these reasons:
-- "off_card": clearly a DIFFERENT destination or theme than a person who picked "${ctx.label}" wants: another city, country or region the location doesn't cover, a general landmark of the wider area that isn't this place, or something outside the location's theme${ctx.imagined ? ' or world' : ' or period'}. Judge scope the way that traveller would, not by the literal name: the neighbouring quarters and sights of the same place are ON the card, and for a themed location every real example of the theme is on it (any circuit's garage for a race track garage, any Roman amphitheatre for a gladiator arena).
-- "not_setting": not a place a person could stand in and be pictured: a close-up of an object, carving, relief, capital, plaque or inscription, or a spot whose subject is text, a sign or lettering. An enclosed or intimate place (an alcove, a grotto, a walled garden) IS a setting.
-- "weak": vague or generic (it could be almost anywhere), garbled, not renderable from its words, or a camera direction or shot description instead of a place.
-Otherwise it PASSES: "S" when it is specific, vivid and memorable, "A" when it is good.
-Be fair: most spots in a well-made pool pass.
-Reply ONLY a JSON array with one entry per spot, in order: [{"n": <n>, "g": "S"|"A"|"off_card"|"not_setting"|"weak"}]`;
-  const out = new Array(texts.length).fill('A');
-  for (let off = 0; off < texts.length; off += GRADE_CHUNK) {
-    const chunk = texts.slice(off, off + GRADE_CHUNK);
-    const res = await ask(system, chunk.map((t, i) => `${i + 1}. ${t}`).join('\n'), 4000);
-    for (const r of res) {
-      if (!r || !Number.isInteger(r.n) || r.n < 1 || r.n > chunk.length) continue;
-      if (['S', 'A', 'off_card', 'not_setting', 'weak'].includes(r.g)) out[off + r.n - 1] = r.g;
-    }
+Flag a spot "object" ONLY when its subject is a THING or a SURFACE rather than a place:
+- a macro or texture close-up (crystals, frost on a puddle, moss on a rock, a microbial mat, bark, a parquet pattern)
+- a single object shown on its own (a clock face, a crystal ball, a cabinet of trinkets, a carved relief panel, a statue detail)
+- text as the subject (a plaque, an inscription, a sign, lettering)
+Every PLACE stays, however small or enclosed: an alcove, a grotto, a walled garden, a nook, a cell, a corridor, a fireside corner, a grave or a row of tombstones. A place that contains an object is a place. A monument, statue, obelisk, column or sculpture that stands in a public place and is big enough to stand beside (Prague's Metronome, an obelisk in a piazza, a column in a forum) is a LANDMARK, not an object.
+Separately, flag "off_card" when the spot is clearly a DIFFERENT destination or theme than a person who picked "${ctx.label}" wants: another city, country or region the location doesn't cover, or, for a themed location (an arena, a garage, a haunted house, a castle), a general sight of the surrounding city or region that isn't that theme (a Roman bath or a Tiber bridge for a gladiator arena). Neighbouring quarters and sights of a place, every listed sub-region, and every real example of a themed location are ON the card.
+When unsure, do not flag. Most spots should not be flagged.
+Reply ONLY a JSON array of the flagged spots (empty if none): [{"n": <n>, "f": "object"|"off_card"}]`;
+  const out = new Map();
+  for (let off = 0; off < texts.length; off += CHUNK) {
+    const chunk = texts.slice(off, off + CHUNK);
+    const res = await ask(system, chunk.map((t, i) => `${i + 1}. ${t}`).join('\n'), 3000);
+    for (const r of res)
+      if (r && Number.isInteger(r.n) && r.n >= 1 && r.n <= chunk.length)
+        if (r.f === 'object' || r.f === 'off_card') out.set(off + r.n - 1, r.f);
   }
   return out;
 }
-const passes = (g) => g === 'S' || g === 'A';
+
+/** Backfill candidates only: 'S' | 'A' | 'off_card' | 'not_setting' | 'weak'. New spots must clear a strict bar; this
+ *  grader is NOT used on existing spots (it over-calls "weak" on famous landmarks). */
+async function gradeNew(ctx, texts) {
+  const system = `You grade NEW backdrop spots for "${ctx.label}", a location in a dream app. Each spot is where a dream is set, rendered as one image, with the dreamer in it or as a scene.
+The location:
+${ctx.concept}
+A spot FAILS for one of these reasons:
+- "off_card": a different destination or theme than a person who picked "${ctx.label}" wants (another city, country or region the location doesn't cover, or outside its theme${ctx.imagined ? ' or world' : ' or period'}).
+- "not_setting": a thing or surface rather than a place (a texture close-up, a single object, text). An enclosed or intimate place IS a setting.
+- "weak": vague, garbled, not renderable from its words, or a camera direction instead of a place. For a natural landscape location its own characteristic scenery is not weak even unnamed; for a city, town, cultural or themed location an unnamed landscape that could be anywhere is weak.
+Otherwise it PASSES: "S" when specific, vivid and memorable, "A" when good.
+Reply ONLY a JSON array with one entry per spot, in order: [{"n": <n>, "g": "S"|"A"|"off_card"|"not_setting"|"weak"}]`;
+  const out = new Array(texts.length).fill('weak'); // a skipped candidate is not used
+  for (let off = 0; off < texts.length; off += CHUNK) {
+    const chunk = texts.slice(off, off + CHUNK);
+    const res = await ask(system, chunk.map((t, i) => `${i + 1}. ${t}`).join('\n'), 4000);
+    for (const r of res)
+      if (r && Number.isInteger(r.n) && r.n >= 1 && r.n <= chunk.length)
+        if (['S', 'A', 'off_card', 'not_setting', 'weak'].includes(r.g)) out[off + r.n - 1] = r.g;
+  }
+  return out;
+}
 
 /** Groups of same-idea spots: [{keep, same:[...], why}] as indices into `texts`. */
 async function judge(ctx, texts) {
@@ -217,42 +233,69 @@ Reply ONLY a JSON array (empty if none): [{"keep": <n>, "same": [<n>, ...], "why
   return out;
 }
 
+/** Second, pair-by-pair check of every duplicate the judge named; only pairs both checks call the same picture are
+ *  culled. The group read alone was wrong about 1 in 10 (it paired the Arch of Constantine with the Arch of Janus). */
+async function confirmPairs(ctx, pairs) {
+  const system = `Each line pairs two backdrop spots of "${ctx.label}", a dream location in a dream app. A line is "same" only when a render of each would show the same place or feature from the same kind of view, so a viewer would call the two pictures the same. The same landmark from the same kind of view in different words IS the same (Old Faithful's eruption plume vs its eruption column; the Colosseum's outer arcade vs its arcaded facade). Two DIFFERENT monuments, buildings or features are never the same even when they look alike (the Arch of Constantine and the Arch of Janus), and genuinely different views of one landmark are different (St. Peter's dome from the river vs its nave interior).
+Reply ONLY a JSON array of the line numbers that are the same (empty if none): [<n>, ...]`;
+  const ok = new Set();
+  for (let off = 0; off < pairs.length; off += CHUNK) {
+    const chunk = pairs.slice(off, off + CHUNK);
+    const res = await ask(
+      system,
+      chunk.map((p, i) => `${i + 1}. "${p.a}" | "${p.b}"`).join('\n'),
+      1500
+    );
+    for (const n of res)
+      if (Number.isInteger(n) && n >= 1 && n <= chunk.length) ok.add(off + n - 1);
+  }
+  return ok;
+}
+
+const byScale = (rows) =>
+  Object.fromEntries(SCALES.map((k) => [k, rows.filter((r) => r.scale === k).length]));
+
 async function cull(name) {
   const ctx = await loadCard(name);
-  const pool = await activePool(name);
-  const grades = await grade(
+  const pool = await drawablePool(name);
+  const groups = await judge(
     ctx,
     pool.map((s) => s.text)
   );
-  const culled = [];
-  const survivors = [];
-  pool.forEach((s, i) =>
-    passes(grades[i]) ? survivors.push(s) : culled.push({ ...s, reason: grades[i] })
-  );
-  const groups = await judge(
+  const pairs = groups.flatMap((g) => g.same.map((i) => ({ i, keep: g.keep })));
+  const confirmed = await confirmPairs(
     ctx,
-    survivors.map((s) => s.text)
+    pairs.map((p) => ({ a: pool[p.i].text, b: pool[p.keep].text }))
   );
   const dupIdx = new Set();
-  for (const g of groups)
-    for (const i of g.same) {
-      dupIdx.add(i);
-      culled.push({ ...survivors[i], reason: 'duplicate', of: survivors[g.keep].text });
-    }
-  const kept = survivors.filter((_, i) => !dupIdx.has(i));
-  const byScale = (rows) =>
-    Object.fromEntries(SCALES.map((k) => [k, rows.filter((r) => r.scale === k).length]));
-  const reasons = {};
-  for (const c of culled) reasons[c.reason] = (reasons[c.reason] || 0) + 1;
+  const duplicates = [];
+  const unconfirmed = [];
+  pairs.forEach((p, k) => {
+    if (confirmed.has(k)) {
+      dupIdx.add(p.i);
+      duplicates.push({ ...pool[p.i], of: pool[p.keep].text });
+    } else unconfirmed.push({ text: pool[p.i].text, of: pool[p.keep].text });
+  });
+  const flags = await flag(
+    ctx,
+    pool.map((s) => s.text)
+  );
+  const review = [];
+  const offCard = [];
+  flags.forEach((f, i) => {
+    if (f === 'object' && !dupIdx.has(i)) review.push(pool[i]);
+    if (f === 'off_card') offCard.push(pool[i].text);
+  });
   return {
     card: name,
     original: pool.length,
     originalByScale: byScale(pool),
-    culledCount: culled.length,
-    reasons,
-    culled,
-    kept,
-    keptByScale: byScale(kept),
+    duplicates,
+    unconfirmed, // the group read called these duplicates, the pair check didn't: kept
+    review,
+    offCardCount: offCard.length,
+    offCardShare: pool.length ? Math.round((100 * offCard.length) / pool.length) : 0,
+    offCardExamples: offCard.slice(0, 8),
   };
 }
 
@@ -269,7 +312,7 @@ ${ctx.concept}
 Rules for every spot:
 ${rules}
 - inside this location as described: never another town, city or region, never a general landmark of the wider area, never outside its theme
-- a whole setting a person could stand in and be pictured in: never a close-up of an object, carving, plaque or inscription, never text, signs or lettering
+- a place a person could stand in and be pictured in: never a texture close-up, a single object or text
 - specific and vivid: a viewer can picture exactly this place
 - spread across many different subjects: at most two new spots on any one landmark or building, and never one formula repeated with a different place name
 Scales: wide (vast vista), medium (one feature fills much of the frame, with ground in front to stand on), intimate (close or enclosed, still a place to be in).
@@ -289,34 +332,37 @@ Reply ONLY [{"scale": "wide"|"medium"|"intimate", "spot": "..."}]`;
     .filter((r) => r.text && r.text.split(/\s+/).length <= 12);
 }
 
-async function backfill(name, c) {
+/** The rows a card loses: every duplicate, plus every reviewed object flag not rescued in --keep. */
+function culledRows(c, keepIds) {
+  return [
+    ...c.duplicates.map((s) => ({ ...s, reason: 'duplicate' })),
+    ...c.review.filter((s) => !keepIds.has(s.id)).map((s) => ({ ...s, reason: 'object' })),
+  ];
+}
+
+async function backfill(name, c, keepIds) {
   const ctx = await loadCard(name);
-  // Sized from the ON-CARD part of the original pool: a pool that had drifted (Gladiator Arena was mostly general Rome)
-  // is refilled to a healthy size, not to its inflated count, which would only buy weak spots.
-  const onCard = c.original - (c.reasons.off_card || 0);
-  const target = Math.min(c.original, Math.max(FLOOR, Math.ceil(onCard * TARGET_SHARE)));
+  const offIds = new Set(culledRows(c, keepIds).map((s) => s.id));
+  const pool = (await drawablePool(name)).filter((s) => !offIds.has(s.id));
+  const target = Math.min(c.original, FLOOR);
   const result = {
     card: name,
     original: c.original,
-    kept: c.kept.length,
+    kept: pool.length,
     target,
     added: [],
     short: 0,
   };
-  // Only a SEVERELY culled pool is refilled (Kevin: "backfill any pools that are severely culled"): under FLOOR, or under
-  // half of its on-card size. A packed pool that lost its repeats is already healthy, and topping it up only buys
-  // near-copies (the first test gave Race Track Garage 28 "single open garage bay" lines at different circuits).
-  if (c.kept.length >= target || (c.kept.length >= FLOOR && c.kept.length >= onCard / 2))
-    return result;
+  if (pool.length >= target) return result;
   // Refill the scales the pool lost, in the original pool's proportions (cast needs non-wide, scene-only non-intimate).
+  const kept = byScale(pool);
   const need = {};
   for (const k of SCALES)
     need[k] = Math.max(
       0,
-      Math.round((target * (c.originalByScale[k] || 0)) / Math.max(1, c.original)) -
-        (c.keptByScale[k] || 0)
+      Math.round((target * (c.originalByScale[k] || 0)) / Math.max(1, c.original)) - kept[k]
     );
-  let deficit = target - c.kept.length;
+  let deficit = target - pool.length;
   const sum = () => SCALES.reduce((a, k) => a + need[k], 0);
   while (sum() > deficit) need[SCALES.reduce((a, k) => (need[k] > need[a] ? k : a))]--;
   while (sum() < deficit)
@@ -324,25 +370,26 @@ async function backfill(name, c) {
       SCALES.reduce((a, k) => ((c.originalByScale[k] || 0) > (c.originalByScale[a] || 0) ? k : a))
     ]++;
 
-  const pool = c.kept.map((s) => ({ text: s.text, scale: s.scale }));
   for (let round = 1; round <= FILL_ROUNDS && deficit > 0; round++) {
     const want = Object.fromEntries(
       SCALES.map((k) => [k, need[k] > 0 ? Math.ceil(need[k] * 1.5) : 0])
     );
-    let cands = await generate(ctx, [...pool, ...result.added], want);
-    // Free lexical prefilter first (charter §5b: the tripwire, not the judge), then the grade, then the judge.
     const all = () => [...pool, ...result.added];
+    let cands = await generate(ctx, all(), want);
+    // Free lexical prefilter first (charter §5b: the tripwire, not the judge), then the grade, then the judge.
     cands = cands.filter(
       (cd, i) =>
         !all().some(
           (o) => o.text.toLowerCase() === cd.text.toLowerCase() || isSameIdea(o.text, cd.text)
         ) && !cands.slice(0, i).some((o) => isSameIdea(o.text, cd.text))
     );
-    const g = await grade(
+    const g = await gradeNew(
       ctx,
       cands.map((cd) => cd.text)
     );
-    cands = cands.map((cd, i) => ({ ...cd, tier: g[i] })).filter((cd) => passes(cd.tier));
+    cands = cands
+      .map((cd, i) => ({ ...cd, tier: g[i] }))
+      .filter((cd) => cd.tier === 'S' || cd.tier === 'A');
     const base = all();
     const groups = await judge(ctx, [...base.map((s) => s.text), ...cands.map((cd) => cd.text)]);
     const clash = new Set();
@@ -390,6 +437,7 @@ async function backfill(name, c) {
     console.error('--cards "<name>,<name>" or --all-places required');
     process.exit(1);
   }
+  const keepIds = new Set(KEEP_FILE ? JSON.parse(fs.readFileSync(KEEP_FILE, 'utf8')) : []);
   const file = (name, kind) =>
     path.join(OUT, 'cards', `${name.replace(/[^a-z0-9]+/gi, '-')}.${kind}.json`);
   const kind = PASS === 'cull' ? 'cull' : 'fill';
@@ -402,20 +450,17 @@ async function backfill(name, c) {
         if (PASS === 'cull') {
           const r = await cull(name);
           fs.writeFileSync(file(name, 'cull'), JSON.stringify(r, null, 1));
-          const why = Object.entries(r.reasons)
-            .map(([k, v]) => `${k} ${v}`)
-            .join(', ');
           console.log(
-            `${name}: ${r.original} → ${r.kept.length} kept · culled ${r.culledCount}${why ? ` (${why})` : ''}`
+            `${name}: ${r.original} drawable · ${r.duplicates.length} duplicates · ${r.review.length} object flags to review · off-card ${r.offCardShare}%`
           );
         } else {
           if (!fs.existsSync(file(name, 'cull')))
             throw new Error('no cull file; run --pass cull first');
           const c = JSON.parse(fs.readFileSync(file(name, 'cull'), 'utf8'));
-          const r = await backfill(name, c);
+          const r = await backfill(name, c, keepIds);
           fs.writeFileSync(file(name, 'fill'), JSON.stringify(r, null, 1));
           console.log(
-            `${name}: kept ${r.kept} / target ${r.target} · added ${r.added.length}${r.short ? ` · SHORT ${r.short}` : ''}`
+            `${name}: ${r.kept} kept / floor ${r.target} · added ${r.added.length}${r.short ? ` · SHORT ${r.short}` : ''}`
           );
         }
       } catch (e) {
@@ -425,21 +470,39 @@ async function backfill(name, c) {
   }
   await Promise.all(Array.from({ length: CONC }, worker));
 
+  const culls = CARDS.filter((n) => fs.existsSync(file(n, 'cull'))).map((n) =>
+    JSON.parse(fs.readFileSync(file(n, 'cull'), 'utf8'))
+  );
+  if (PASS === 'cull') {
+    const tot = (k) => culls.reduce((a, c) => a + (Array.isArray(c[k]) ? c[k].length : c[k]), 0);
+    const summary = {
+      cards: culls.length,
+      drawable: tot('original'),
+      duplicates: tot('duplicates'),
+      objectFlags: tot('review'),
+      // Step 3: flagrant drift for a case-by-case look, never an automatic cull.
+      driftCards: culls
+        .filter((c) => c.offCardShare >= 40)
+        .map((c) => ({ card: c.card, offCardShare: c.offCardShare, examples: c.offCardExamples })),
+    };
+    fs.writeFileSync(path.join(OUT, 'summary.json'), JSON.stringify(summary, null, 1));
+    console.log(
+      `\n${summary.cards} cards · ${summary.drawable} drawable · ${summary.duplicates} duplicates · ${summary.objectFlags} object flags · ${summary.driftCards.length} cards ≥40% off-card`
+    );
+  }
+
   if (PASS === 'backfill' && SQL) {
     const q = (v) => `'${String(v).replace(/'/g, "''")}'`;
-    const done = CARDS.filter(
-      (n) => fs.existsSync(file(n, 'cull')) && fs.existsSync(file(n, 'fill'))
-    );
-    const culls = done.map((n) => JSON.parse(fs.readFileSync(file(n, 'cull'), 'utf8')));
-    const fills = done.map((n) => JSON.parse(fs.readFileSync(file(n, 'fill'), 'utf8')));
-    const offs = culls.flatMap((c) => c.culled.map((s) => ({ card: c.card, ...s })));
+    const done = culls.filter((c) => fs.existsSync(file(c.card, 'fill')));
+    const fills = done.map((c) => JSON.parse(fs.readFileSync(file(c.card, 'fill'), 'utf8')));
+    const offs = done.flatMap((c) => culledRows(c, keepIds).map((s) => ({ card: c.card, ...s })));
     const adds = fills.flatMap((f) => f.added.map((s) => ({ card: f.card, ...s })));
     const header = `-- ${path.basename(SQL, '.sql')}: location spot pool cleanup (NIGHTLY_POOL_CLEANUP_PLAN.md, scripts/clean-location-pools.js).
--- Kevin 2026-09-30: "scan originals first, deactivate dupes ... backfill any pools that are severely culled", "do not let
--- weak seeds or drift". Pass 1 graded every active spot against its card's concept (off-card, not a setting, weak) and
--- judged the survivors for same-idea duplicates; those rows are DEACTIVATED (reversible, nothing deleted). Pass 2
--- refilled pools that fell under ${Math.round(TARGET_SHARE * 100)}% of their size (at least ${FLOOR}) with new spots that passed the same grade (S/A) and
--- a duplicate read. Flags: cast = non-wide, scene-only = non-intimate. ${done.length} cards, ${offs.length} deactivated, ${adds.length} added. Re-runnable.\n\n`;
+-- Kevin 2026-09-30, four steps: same-idea DUPLICATES deactivated automatically (best of each group kept); OBJECT spots
+-- (a texture close-up, a single object, text) deactivated only after review ("let's be careful on this one"); drift is
+-- never auto-culled; pools left under ${FLOOR} refilled with new spots that grade S/A and pass a duplicate read.
+-- Deactivated = is_active false (reversible, nothing deleted). Flags: cast = non-wide, scene-only = non-intimate.
+-- ${done.length} cards, ${offs.length} deactivated (${offs.filter((s) => s.reason === 'duplicate').length} duplicates, ${offs.filter((s) => s.reason === 'object').length} objects), ${adds.length} added. Re-runnable.\n\n`;
     const upd = offs.map(
       (s) =>
         `UPDATE public.location_iconic_spots SET is_active = false WHERE id = ${q(s.id)} AND is_active;`

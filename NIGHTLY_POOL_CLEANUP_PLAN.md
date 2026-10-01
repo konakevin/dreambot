@@ -22,36 +22,32 @@ with good variety and high quality seeds all around" → "can we plan that out a
 | Shared scenes (`dual_scenarios`, `single_scenarios`; goofy / elegant / active) | 13,168 live                                 | per card or category tag, chunked | phase 3 tool (to build)                    |
 | Holiday scenes (holiday pool rows)                                             | ~5,840                                      | per holiday pool                  | phase 5, after the Fall / Halloween window |
 
-## Method (location spots): two passes, `scripts/clean-location-pools.js`
+## Method (location spots): `scripts/clean-location-pools.js`, four steps (Kevin, 2026-09-30)
 
-Kevin 2026-09-30, after batch 1's rewrites drifted: "scan originals first, deactivate dupes in packed pools, but also
-we should backfill any pools that are severely culled ... first deactivate, 2nd analyze pool size and quality and
-backfill as necessary"; "do not let weak seeds or drift". The rewrite-in-place method (and its tool) is retired.
+A first version auto-culled "weak" and "off-card" spots and made wrong calls (St. Vitus Cathedral "weak", the Wanaka
+lavender farms he added "off-card"). Kevin then agreed four steps; only DRAWABLE spots are considered (pure_scene or
+cast eligible; ~1,677 unnamed landscapes already failed the 2026-08-23 "postcard of THIS place" re-audit and are
+retired in practice: city cards lost all 50, nature cards kept most, the retired ones there are macro close-ups).
 
-1. **Cull (`--pass cull`).** Sonnet (job `reseed`) grades every active spot against the CARD's concept (name,
-   sub-regions, must-include, architecture as examples), never against the pool, which can have drifted itself:
-   `off_card` (a different destination or theme than someone who picked the card wants; neighbouring quarters of the
-   same place and every real example of a themed card are ON it), `not_setting` (a close-up of an object, carving,
-   plaque or inscription, or text), `weak` (generic, garbled, unrenderable, or a camera direction instead of a place).
-   Then the judge groups same-idea spots among the survivors; "naming a different place doesn't make a different idea
-   when the renders look the same". Every failure and every group member but the best is DEACTIVATED
-   (`is_active = false`; reversible).
-2. **Backfill (`--pass backfill`).** Only a severely culled pool (under 60, or under half its on-card size) is refilled,
-   to 70% of its on-card size (at least 60), at the scales it lost, spread across subjects (at most two per landmark).
-   Every candidate passes the same grade (S/A only) and a duplicate read against the kept pool; a pool stays short
-   rather than take a weak spot.
-3. **Apply.** One migration per batch carries both passes (guarded deactivations + inserts, flags cast = non-wide,
-   scene-only = non-intimate), so a pool is never live culled without its backfill; then
-   `scripts/check-location-health.ts` and QA renders on the most-changed cards.
+1. **Duplicates, automatic.** The judge groups same-idea spots ("naming a different place doesn't make a different
+   idea when the renders look the same"), then a SECOND pair-by-pair check must agree before a spot goes; the group read
+   alone was wrong about 1 in 10 (it paired the Arch of Constantine with the Arch of Janus). Conservative by design:
+   pairs the second check doesn't confirm stay. Audit: 40 of 40 random confirmed pairs were real repeats.
+2. **Object spots, reviewed.** Only a thing or surface instead of a place is flagged (a texture macro, a single object,
+   text); every place stays however small (alcoves, grottoes, graves, corridors), and a monument big enough to stand
+   beside is a landmark. Kevin: "let's be careful on this one, i don't want to just blindly deactivate all closeup
+   seeds". Every flag is reviewed by hand; the rescued ones go in a `--keep` file. Test (7 cards): 33 flags, 27 culled,
+   6 kept (Trajan's Column, two graves, a garden well, an armillary sphere, a sinter shelf).
+3. **Drift, never automatic.** Each card gets an off-card share; cards over 40% (Gladiator Arena: 60%, general Rome)
+   are fixed case by case with Kevin.
+4. **Backfill** only pools that end up under 60, with new spots that grade S/A against the card and pass a duplicate
+   read; a pool stays short rather than take a weak spot.
 
-Calibration (3 test cards, 2026-09-30): the first grader read names literally (culled Monaco's own gardens from Monte
-Carlo, every named circuit's garage from Race Track Garage); after the traveller rule: Monte Carlo 90 → 36 kept + 24
-added, Race Track Garage 303 → 159 kept, no backfill (it was only near-copies), Gladiator Arena 222 → 10 kept (204 were
-general Rome, not arenas) + 48 arena spots across El Djem, Pompeii, Arles, Capua, Pula, Verona, Nîmes and the Colosseum.
+Apply: one migration per batch (guarded deactivations + inserts, flags cast = non-wide, scene-only = non-intimate),
+then `scripts/check-location-health.ts`. Deactivated = `is_active = false`, reversible.
 
-**Open (Kevin's call):** ~2,500 active spots are the June generic biome landscapes (`gen-landscape-spots.js`, ~50 per
-card on 48 real cards, unnamed by design, for scene-only variety). The grader culls them as weak; deactivating them is
-the recommendation (a Prague dream should show Prague), pending Kevin.
+Follow-up found on the way: the romance top-up (mig 614) added Tihany, Wanaka, Sequim and Furano lavender spots without
+adding them to Lavender Fields' `sub_regions`, so the card's own definition lags its pool.
 
 Pilot (Celestial, 53 spots): the first read found 3 groups / 6 duplicates (ringed planet mirrored in a lake; ringed
 planet low over a terrace or gazebo; Jupiter's storm eye from an observatory); a second read found 2 more (the orrery vs
