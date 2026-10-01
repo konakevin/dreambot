@@ -60,6 +60,13 @@ seductress, beach glamour, outlaw grit). See [[feedback_dream_shoot_set_dresser_
   PHENOMENA, BANS arrays + SUBJECT_RULE string) or it's silently ignored and wardrobe falls to AI-default
   (burgundy). `biome_config.imagined=true` → bans photo mediums (painterly-only). **Set imagined=true for
   fantasy/sci-fi/kawaii; leave FALSE for historical/real (photography is fine there).**
+- **`biome_config.costume`** (2026-09-30, `_shared/costumeWardrobe.ts`) → a real-place card whose theme IS a costume (a
+  period or genre: the Wild West, Rome, a pirate cove, a spy lair, the gothic cards) dresses the cast from its own
+  WARDROBE, as imagined worlds do; otherwise a real place's WARDROBE is never read (the race-swap guard) and the cast
+  get the generic outfit roll for the setting (a utility jumpsuit in a frontier rail town). Wardrobe only: the medium
+  ban stays on `imagined`. **Never set it on a real culture** (Feudal Japan, Ancient Egypt, Silk Road, China): that list
+  is national dress. Regenerate a frumpy list first (`gen-location-wardrobe.js --force`). 35 cards flagged (migs 636,
+  637); A/B: https://claude.ai/artifact/CZjpYyJZuNbnFurWsbk6F7.
 - **`tags`** → biome FALLBACK at runtime if `biome` unset (prevents the beach-everywhere bug).
 - **`sub_regions`, `must_include`** → NOT render inputs; authoring HINTS that force the spot generator to
   spread geographically + cover feature categories. **Never leave them empty** (2026-09-30): five name-only cards
