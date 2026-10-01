@@ -35,3 +35,51 @@ export function locationWardrobeMode(i: WardrobeModeInput): WardrobeMode {
   const inWorldAttire = i.imagined || costume;
   return { useLocationWardrobe: inWorldAttire && i.hasWardrobe, inWorldAttire, costume };
 }
+
+/**
+ * GENDERED WARDROBES (Kevin 2026-10-01, CARD_WARDROBE_GENDER_PLAN.md): the shared WARDROBE lists were written "for
+ * both genders" and leaned feminine, so a man drew "a floor-length translucent organza robe over a jeweled bodysuit"
+ * and rendered in a sheer robe. A man draws from WARDROBE_MEN and a woman from WARDROBE_WOMEN, each falling back to
+ * WARDROBE when the card has no list of its own; anyone else (a pet, an unknown gender) draws from WARDROBE.
+ */
+export interface GenderedWardrobeLists {
+  WARDROBE?: unknown;
+  WARDROBE_MEN?: unknown;
+  WARDROBE_WOMEN?: unknown;
+}
+export type WardrobeGender = 'male' | 'female' | null;
+
+function entries(v: unknown): string[] {
+  return Array.isArray(v)
+    ? v.filter((x): x is string => typeof x === 'string' && x.trim().length > 0)
+    : [];
+}
+
+export function wardrobeListFor(cfg: GenderedWardrobeLists, gender: WardrobeGender): string[] {
+  const shared = entries(cfg.WARDROBE);
+  const own =
+    gender === 'male'
+      ? entries(cfg.WARDROBE_MEN)
+      : gender === 'female'
+        ? entries(cfg.WARDROBE_WOMEN)
+        : [];
+  return own.length ? own : shared;
+}
+
+/** One anchor per person, each from their own list; two people drawing from one list get different entries. */
+export function pickWardrobeAnchors(
+  cfg: GenderedWardrobeLists,
+  genders: ReadonlyArray<WardrobeGender>,
+  rng: () => number = Math.random
+): Array<string | null> {
+  const taken: string[] = [];
+  return genders.map((g) => {
+    const list = wardrobeListFor(cfg, g);
+    if (!list.length) return null;
+    const free = list.filter((x) => !taken.includes(x));
+    const pool = free.length ? free : list;
+    const pick = pool[Math.min(pool.length - 1, Math.floor(rng() * pool.length))];
+    taken.push(pick);
+    return pick;
+  });
+}

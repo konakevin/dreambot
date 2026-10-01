@@ -216,6 +216,9 @@ export interface EngineConfig {
   nightlyGarmentRoll: boolean;
   /** Nightly SOLO outfit early (mig 565): the wardrobe right after the medium fragment in single-cast prompts. */
   nightlySoloOutfitEarly: boolean;
+  /** GENDERED WARDROBES (mig 647, CARD_WARDROBE_GENDER_PLAN.md): a card's outfit anchor drawn per person from
+   *  WARDROBE_MEN / WARDROBE_WOMEN (fallback WARDROBE). Off until Kevin flips it; QA `force_gendered_wardrobe`. */
+  nightlyGenderedWardrobe: boolean;
   /** SCENE FIT (mig 572, CREATE_OUTFIT_PLAN.md phase 9): outfits fit the place. Looks filtered by setting, no
    *  colour trims or cuffs, the brief dresses for the place first. Create also applies it to preview users. */
   createOutfitSceneFit: boolean;
@@ -360,6 +363,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   outfitGarmentWeights: { ...DEFAULT_GARMENT_WEIGHTS },
   nightlyGarmentRoll: false,
   nightlySoloOutfitEarly: false,
+  nightlyGenderedWardrobe: false,
   createOutfitSceneFit: false,
   nightlyOutfitSceneFit: false,
   nightlyOutfitPlan: false,
@@ -555,6 +559,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     outfitGarmentWeights: normalizeGarmentWeights(data.outfit_garment_weights),
     nightlyGarmentRoll: data.nightly_garment_roll === true,
     nightlySoloOutfitEarly: data.nightly_solo_outfit_early === true,
+    nightlyGenderedWardrobe: data.nightly_gendered_wardrobe === true,
     createOutfitSceneFit: data.create_outfit_scene_fit === true,
     nightlyOutfitSceneFit: data.nightly_outfit_scene_fit === true,
     nightlyOutfitPlan: data.nightly_outfit_plan === true,

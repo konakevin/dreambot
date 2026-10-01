@@ -28,6 +28,9 @@ export interface BiomeConfig {
   BANS: string[];
   /** Optional — bespoke per-location overrides only carry this; wardrobe options. */
   WARDROBE?: string[];
+  /** Optional men's / women's lists (mig 646, CARD_WARDROBE_GENDER_PLAN.md); WARDROBE is the fallback for both. */
+  WARDROBE_MEN?: string[];
+  WARDROBE_WOMEN?: string[];
 }
 
 const SHARED_CAMERA = [

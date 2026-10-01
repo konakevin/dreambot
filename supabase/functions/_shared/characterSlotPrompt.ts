@@ -113,6 +113,10 @@ export interface CharacterSlotPipelineInput {
    * characters render in on-location attire (fairy-tale tunics at Fairy Cottage,
    * yukata at Tokyo, etc.). If null, falls back to the generic mood randomizer. */
   wardrobeAnchor?: string | null;
+  /** GENDERED WARDROBES (mig 647, CARD_WARDROBE_GENDER_PLAN.md): a couple's anchors, one per person in cast order,
+   *  each drawn from that person's own list (_shared/costumeWardrobe.ts pickWardrobeAnchors). With two, the brief
+   *  names whose inspiration is whose instead of handing both people one shared (and often women's) outfit. */
+  wardrobeAnchorsBySide?: ReadonlyArray<string | null> | null;
   /** CREATE-ONLY (2026-09-21). Anchor the wardrobe to what the cast is DOING rather
    *  than to a rolled aesthetic register.
    *
@@ -967,6 +971,17 @@ ${
 `;
 }
 
+/** A couple's per-person anchors, labelled LEFT / RIGHT, when every person has one (gendered wardrobes); else null and
+ *  the brief keeps the single shared anchor, byte-identical. */
+function sideAnchorList(input: CharacterSlotPipelineInput): string | null {
+  const by = input.wardrobeAnchorsBySide;
+  if (!by || input.cast.length < 2 || by.length !== input.cast.length || by.some((a) => !a))
+    return null;
+  return outfitSidesFor(input)
+    .map((side, i) => `${side.label} "${by[i]}"`)
+    .join('; ');
+}
+
 /** Cast in slot order, labelled the way the brief names them (LEFT / RIGHT, or the one person). */
 function outfitSidesFor(input: CharacterSlotPipelineInput): OutfitSide[] {
   const labels = input.cast.length === 2 ? ['LEFT', 'RIGHT'] : ['THE PERSON'];
@@ -992,9 +1007,12 @@ function buildFashionGuidance(
     .join('\n');
   // A holiday row's attire is 63% trousers ("charcoal wool trousers", "She in … wool trousers"): the first cut
   // said "inspiration for colours, textures and accessories only" and Sonnet still copied the trousers 2/18.
-  const anchor = input.wardrobeAnchor
-    ? ` On-location inspiration: "${input.wardrobeAnchor}". Borrow only its colours, textures and accessories, never its garments: each person's garment and look below decide what they wear.`
-    : '';
+  const sides = sideAnchorList(input);
+  const anchor = sides
+    ? ` On-location inspiration, one per person: ${sides}. Borrow only their colours, textures and accessories, never their garments: each person's garment and look below decide what they wear.`
+    : input.wardrobeAnchor
+      ? ` On-location inspiration: "${input.wardrobeAnchor}". Borrow only its colours, textures and accessories, never its garments: each person's garment and look below decide what they wear.`
+      : '';
   const lead = input.wardrobeSceneFit
     ? `WARDROBE — you are the COSTUME DESIGNER for a dream shoot at "${location}". ${sceneTrueWardrobe(input.wardrobeSceneFit.setting)}${anchor}`
     : `WARDROBE — you are the COSTUME DESIGNER dressing ${dual ? 'both people' : 'the person'} in a film shot at "${location}". Each look below was chosen for this render: build it for this exact place and its weather, make it flattering and eye-catching, and name real garments, colours and materials.${anchor}`;
@@ -1096,7 +1114,11 @@ export function buildSlotBrief(input: CharacterSlotPipelineInput): string {
               : `The character wears EXACTLY: "${costumeLock[0]}".`
           } The exact costume text is applied by code, so write the wardrobe field(s) as a SHORT reference only (3-6 words, e.g. "the vampire countess costume") and spend your words on the scene and the action. Let the scene, mood, props and action play off the costumes — the cape catching the lantern light, the hat brim in the fog. The costume is clothing, headwear and props only; the face stays fully clear by code.`
         : (input.wardrobeAnchor
-            ? `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: flattering, cool, and distinctive, in pieces true to the period / setting / cultural register of "${location}". One on-location inspiration to draw from: "${input.wardrobeAnchor}". Adapt it into something bold and attractive for each character — flattering silhouette, rich materials, standout details, styled hair — or invent something equally on-location and eye-catching. NEVER plain, dowdy, mundane, frumpy, drab, or merely "historically accurate" — this is a DREAM, so make the outfit sing while staying true to the setting. Avoid generic "linen shirt + chinos" defaults.${
+            ? `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: flattering, cool, and distinctive, in pieces true to the period / setting / cultural register of "${location}". ${
+                sideAnchorList(input)
+                  ? `On-location inspiration, one per person and written for them: ${sideAnchorList(input)}. Adapt each into something bold and attractive for that person, keeping a man in a man's cut and a woman in a woman's`
+                  : `One on-location inspiration to draw from: "${input.wardrobeAnchor}". Adapt it into something bold and attractive for each character`
+              } — flattering silhouette, rich materials, standout details, styled hair — or invent something equally on-location and eye-catching. NEVER plain, dowdy, mundane, frumpy, drab, or merely "historically accurate" — this is a DREAM, so make the outfit sing while staying true to the setting. Avoid generic "linen shirt + chinos" defaults.${
                 input.periodDress
                   ? ` Everything each character wears and carries belongs to the ${input.periodDress} era: nothing from a later one.`
                   : ''

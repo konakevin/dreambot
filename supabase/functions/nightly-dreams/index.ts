@@ -13,7 +13,7 @@
  * Authorization: Bearer <user JWT>
  */
 
-import { locationWardrobeMode } from '../_shared/costumeWardrobe.ts';
+import { locationWardrobeMode, pickWardrobeAnchors } from '../_shared/costumeWardrobe.ts';
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import {
@@ -512,6 +512,7 @@ Deno.serve(async (req) => {
     force_no_holiday,
     force_outfit_mix,
     force_solo_outfit_early,
+    force_gendered_wardrobe,
     force_outfit_scene_fit,
     force_llm_model,
     force_llm_overlays,
@@ -3818,6 +3819,27 @@ Deno.serve(async (req) => {
           resolvedCast.length === 1 &&
           (force_solo_outfit_early ?? engineCfg0.nightlySoloOutfitEarly);
         if (soloOutfitEarly) fallbackReasons.push('solo_outfit_early');
+        // GENDERED WARDROBES (mig 647, CARD_WARDROBE_GENDER_PLAN.md): on a card that dresses its cast from its own
+        // list, each person draws from their gender's list (WARDROBE_MEN / WARDROBE_WOMEN, fallback WARDROBE), so a man
+        // is never handed the shared list's organza robe. Off = the one shared pick below, unchanged.
+        const genderedAnchors =
+          (force_gendered_wardrobe ?? engineCfg0.nightlyGenderedWardrobe) &&
+          !dualSpecialScene &&
+          locationWardrobe &&
+          bespokeBiome &&
+          bespokeBiome.WARDROBE
+            ? pickWardrobeAnchors(
+                bespokeBiome,
+                resolvedCast.map((rc, i) =>
+                  resolveCastGender({
+                    role: rc.role,
+                    promptDesc: rc.promptDesc,
+                    gender: (selectedCast[i] as DreamCastMember).gender ?? null,
+                  })
+                )
+              )
+            : null;
+        if (genderedAnchors) fallbackReasons.push('gendered_wardrobe');
         // EYE CONTACT (mig 587, NIGHTLY_EYE_CONTACT_PLAN.md): the gaze on each person's own description.
         const eyeContact = force_eye_contact ?? engineCfg0.nightlyEyeContact;
         if (eyeContact) fallbackReasons.push('eye_contact');
@@ -3879,9 +3901,14 @@ Deno.serve(async (req) => {
             ? nightlyFashion && genericAttire
               ? null
               : dualSpecialWardrobe
-            : locationWardrobe && bespokeBiome && bespokeBiome.WARDROBE
-              ? pickAxis(bespokeBiome.WARDROBE)
-              : null,
+            : genderedAnchors
+              ? genderedAnchors[0]
+              : locationWardrobe && bespokeBiome && bespokeBiome.WARDROBE
+                ? pickAxis(bespokeBiome.WARDROBE)
+                : null,
+          ...(genderedAnchors && genderedAnchors.length > 1
+            ? { wardrobeAnchorsBySide: genderedAnchors }
+            : {}),
           // Real-world → traveler wardrobe rule ON (no ethnic dress); fantasy/
           // imagined dream world → OFF (keep in-world attire). A SPECIAL SCENE
           // (goofy/elegant/active/holiday) replaces the location with an authored

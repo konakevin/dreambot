@@ -141,6 +141,9 @@ export interface NightlyQaFlags {
   /** SOLO OUTFIT EARLY (mig 565): true names a solo's wardrobe right after the medium, false the old order;
    *  null = engine_config.nightly_solo_outfit_early. */
   force_solo_outfit_early: boolean | null;
+  /** GENDERED WARDROBES (mig 647): true draws each person's card outfit from their own gender's list, false the
+   *  shared WARDROBE; null = engine_config.nightly_gendered_wardrobe. */
+  force_gendered_wardrobe: boolean | null;
   /** SCENE FIT (mig 572): true = all fixes (looks + brief on nightly), 'looks' / 'brief' = one fix alone (the
    *  one-variable QA), false = off; null = engine_config.nightly_outfit_scene_fit. */
   force_outfit_scene_fit: boolean | 'looks' | 'trim' | 'brief' | null;
@@ -351,6 +354,12 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
       body.force_solo_outfit_early === true
         ? true
         : body.force_solo_outfit_early === false
+          ? false
+          : null,
+    force_gendered_wardrobe:
+      body.force_gendered_wardrobe === true
+        ? true
+        : body.force_gendered_wardrobe === false
           ? false
           : null,
     force_outfit_scene_fit:
