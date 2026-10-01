@@ -211,7 +211,7 @@ Read: the rebuild path is fixed (6/6 vs "63% tight, 3 of 4 headshots"); the aver
   remain and pass the calibration; the lever for those is the model steer, which is OFF by Kevin's call.
 - The 1.1-pro override fragment still applies to the MAIN couple render (only the rebuild dropped it).
 
-## 12. OPEN FOLLOW-UP: couples on a plain backdrop (flagged 2026-09-30, Kevin: "let's not forget about it")
+## 12. CLOSED FOLLOW-UP: couples on a plain backdrop (flagged 2026-09-30, Kevin: "let's not forget about it")
 
 Seen in the location QA of 2026-09-30 (drift-card repair + costume A/B, Kevin's album "🌍 <card> — couple"): roughly 3-4
 of every 10 couple renders showed almost no setting. The Vampire Castle couple on plain white, the Gladiator Arena
@@ -227,3 +227,19 @@ read of the couple renders, plus `ai_generation_log` stamps: look, model, dual_e
 on one variable at a time (e.g. the look fragment, the `behind` clause in coupleComposerX, spot scale for couples),
 grading backdrop presence AND first-try dual-swap hold (the 09-18 baseline: 92%). Never trade swap reliability for
 backdrop.
+
+
+**CLOSED 2026-10-01: measured, accepted as a look/model limitation** (Kevin: "i don't mind an occasional more simplistic
+render ... if after a few rounds of tweaking you can't get it to work, just accept it"; up to 5 rounds allowed, 2 used).
+- Production, last 7 days: 41 nightly couples (6 users). Fully plain backdrop 4/41 (~10%), all four in the watercolour /
+  ink family (lineless watercolour, watercolour-ink, ink illustration); 6 more weak (a wall or a door). Every other look:
+  0 fully plain. About half the week's couples were fall / Halloween holiday rolls, whose scenes replace the location by
+  design (a bookshop cafe, a Victorian palmhouse), so "the place is not the card's place" there is not a defect.
+- Round 1 (fixed seeds, 8 production prompts x 3 seeds, 48 flux-1.1-pro renders): the paper words in the watercolour
+  fragments ("granulating pigment on cold-press paper, luminous paper-white highlights") swapped for an edge-to-edge
+  setting cue. No measurable change: both arms showed a backdrop on all 48, the shipped prompts included.
+- Round 2 (the four plain couples' shipped prompts at 8 random seeds each, 32 renders): about 3 of 32 came out washed
+  out, matching the production rate. The engine's request equals the probe's (9:16, no upsampling).
+- Conclusion: the couple prompt carries its scene; a plain couple is a seed draw in looks whose own style is a vignette
+  on white paper. Reducing it further means changing those looks (losing their character), so it stays as is. Probes:
+  scratchpad scripts `probe-fullbleed.js` / `probe-r2.js` (offline: production prompts, no face swap, no account writes).

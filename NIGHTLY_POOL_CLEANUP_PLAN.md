@@ -72,7 +72,8 @@ Done first: **gendered card wardrobes**, LIVE 2026-10-01 (`CARD_WARDROBE_GENDER_
 2. ~~Cattle Ranch rule~~ done 2026-10-01 (mig 652): its SUBJECT_RULE named a modern ranch (steel squeeze chutes,
    caliche roads), and Monument Valley's said "Navajo Tribal Park"; both rewritten to the 1880s frontier, renders checked.
 3. Phase 5: holiday pools, after the Fall / Halloween window.
-4. Couple plain-backdrop follow-up (`NIGHTLY_NO_PLAIN_RENDERS_PLAN.md` §12), not started.
+4. ~~Couple plain-backdrop follow-up~~ closed 2026-10-01: ~1 in 10 production couples, all in watercolour / ink looks;
+   seed luck in a paper-vignette style, not the engine; accepted per Kevin (`NIGHTLY_NO_PLAIN_RENDERS_PLAN.md` §12).
 5. 1.11.0 go-live steps (`SCENARIO_LOCATION_SCOPE.md` runbook) once Kevin says the build is live.
 6. Selfie skip-rate re-measure around 2026-10-14.
 
