@@ -65,11 +65,10 @@ the cabinet of glass planets) and one rewrite that landed next to an existing id
 
 ## Open items (tracker, 2026-10-01; resume here)
 
-In progress first: **gendered card wardrobes** (`CARD_WARDROBE_GENDER_PLAN.md`): the card outfit lists were written
-"for both genders" and lean feminine, so men on fantasy and costume cards got sheer robes and bodysuits. Then:
+Done first: **gendered card wardrobes**, LIVE 2026-10-01 (`CARD_WARDROBE_GENDER_PLAN.md`, migs 646-649). Then:
 
-1. Pool leftovers: Alpine Chalet 48 and Private Jet 34 under the 60 floor (the writer ran out of new ideas); Robot City
-   23 and Haunted Cathedral 46 were outside the phase 4 sweep; 5 camera-direction openers remain.
+1. Pool leftovers: Alpine Chalet 48 and Private Jet 34 under the 60 floor (the writer ran out of new ideas); (Robot City 23 and
+   Haunted Cathedral 46 have no picker tile, so no user can pick them: not a leftover); 5 camera-direction openers remain.
 2. Cattle Ranch's own SUBJECT_RULE names modern ranch items (steel squeeze chutes, caliche roads, corrugated barns)
    that render on a card held to the 1880s; reword the rule (render input, so A/B it).
 3. Phase 5: holiday pools, after the Fall / Halloween window.
