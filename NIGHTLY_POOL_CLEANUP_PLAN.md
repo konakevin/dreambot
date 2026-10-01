@@ -67,10 +67,10 @@ the cabinet of glass planets) and one rewrite that landed next to an existing id
 
 Done first: **gendered card wardrobes**, LIVE 2026-10-01 (`CARD_WARDROBE_GENDER_PLAN.md`, migs 646-649). Then:
 
-1. Pool leftovers: Alpine Chalet 48 and Private Jet 34 under the 60 floor (the writer ran out of new ideas); (Robot City 23 and
-   Haunted Cathedral 46 have no picker tile, so no user can pick them: not a leftover); 5 camera-direction openers remain.
-2. Cattle Ranch's own SUBJECT_RULE names modern ranch items (steel squeeze chutes, caliche roads, corrugated barns)
-   that render on a card held to the 1880s; reword the rule (render input, so A/B it).
+1. ~~Pool leftovers~~ done 2026-10-01: Alpine Chalet 48 -> 55 and Private Jet 34 -> 42 (mig 650; both single small
+   spaces, kept short rather than padded with props); the last 7 camera-direction spots reworded (mig 651).
+2. ~~Cattle Ranch rule~~ done 2026-10-01 (mig 652): its SUBJECT_RULE named a modern ranch (steel squeeze chutes,
+   caliche roads), and Monument Valley's said "Navajo Tribal Park"; both rewritten to the 1880s frontier, renders checked.
 3. Phase 5: holiday pools, after the Fall / Halloween window.
 4. Couple plain-backdrop follow-up (`NIGHTLY_NO_PLAIN_RENDERS_PLAN.md` §12), not started.
 5. 1.11.0 go-live steps (`SCENARIO_LOCATION_SCOPE.md` runbook) once Kevin says the build is live.
