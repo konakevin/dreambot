@@ -15,6 +15,10 @@
  *
  *   node scripts/qa-holiday-renders.js --mode day-of --season halloween --per 2
  *   node scripts/qa-holiday-renders.js --mode window --season both --per 1
+ *   node scripts/qa-holiday-renders.js --mode window --season halloween --sub-theme swamp_witch_bayou --surfaces dual-cast
+ *
+ * --sub-theme <name> draws from that one sub-theme (force_holiday_sub_theme), to check a theme after a pool repair; the
+ * page then shows the drawn scene and the final prompt so the outfit on each person can be read against the render.
  *
  * Renders are REAL dreams on Kevin's account (review them in the app). Serial, and gated on Postgres connection
  * headroom before every render — a direct nightly-dreams call holds a connection for 20-150 s (CLAUDE.md).
@@ -41,6 +45,7 @@ const SEASON = arg('season', 'both');
 const MODE = arg('mode', 'window');
 const TAG = arg('tag', MODE);
 const DAY_OF_LOOK = arg('day-of-look', null);
+const SUB_THEME = arg('sub-theme', null);
 const seasons = SEASON === 'both' ? ['halloween', 'fall'] : SEASON.split(',');
 const ALL_SURFACES = [
   { label: 'dual-cast', cast: 'dual' },
@@ -75,7 +80,7 @@ async function logFor(uploadId) {
   for (let i = 0; i < 8; i++) {
     const { data } = await sb
       .from('ai_generation_log')
-      .select('model_used,fallback_reasons,rolled_axes')
+      .select('model_used,fallback_reasons,rolled_axes,enhanced_prompt')
       .eq('upload_id', uploadId)
       .limit(1);
     if (data && data[0]) return data[0];
@@ -116,6 +121,7 @@ async function logFor(uploadId) {
           // --day-of-look=<key>: pin ONE of the holiday's curated looks instead of rolling among them, so a
           // specific look (e.g. halloween_digital_painting, the only one that excludes flux-1.1-pro) can be tested.
           ...(DAY_OF_LOOK ? { force_day_of_look: DAY_OF_LOOK } : {}),
+          ...(SUB_THEME ? { force_holiday_sub_theme: SUB_THEME } : {}),
         };
         const t0 = Date.now();
         let data;
@@ -187,6 +193,13 @@ async function logFor(uploadId) {
           postcard_pending: up ? up.postcard_pending : null,
           holiday: data.holiday || null,
           stamps: watched,
+          ...(SUB_THEME
+            ? {
+                sub_theme: SUB_THEME,
+                seed: (log && log.rolled_axes && log.rolled_axes.seedSource) || null,
+                prompt: (log && log.enhanced_prompt) || null,
+              }
+            : {}),
         });
       }
     }
@@ -202,7 +215,11 @@ async function logFor(uploadId) {
         <div>vibe <code>${r.vibe || '?'}</code></div>
         <div>model <code>${(r.model || '?').split('/').pop()}</code> · swap <code>${r.face_swap_mode || '-'}</code></div>
         <div>postcard <code>${r.postcard || '-'}</code>${r.postcard_pending ? ' <b style="color:#b00">PENDING</b>' : ''}</div>
-        <div class="s">${(r.stamps || []).join(' · ')}</div>
+        <div class="s">${(r.stamps || []).join(' · ')}</div>${
+          r.sub_theme
+            ? `<div class="s"><b>${r.sub_theme}</b> · ${(r.seed && (r.seed.scene || r.seed.location)) || ''}</div><div class="s">${r.prompt || ''}</div>`
+            : ''
+        }
       </div>
     </div>`;
   fs.writeFileSync(

@@ -5,8 +5,8 @@
  *
  * Kevin 2026-09-30 agreed the method on the location pools: DUPLICATES go automatically, judged by an LLM on the whole
  * group and then confirmed pair by pair (the group read alone was wrong ~1 in 10), keeping the best of each group.
- * Nothing is deleted: a duplicate is `disabled = true`, reversible. Holiday rows (pool 'holiday') are phase 5, after
- * the Fall / Halloween window, and are never touched here.
+ * Nothing is deleted: a duplicate is `disabled = true`, reversible. Holiday rows (pool 'holiday') are read only with
+ * --holidays (phase 5): then ONLY those holidays' rows, grouped by sub-theme, plus their holiday_scenes.
  *
  * Groups: table × pool × category. A category over MAX_GROUP rows is split by its first location key, the card a
  * dreamer draws it through (with the scope on, a dreamer only ever draws from their own cards' rows), so the judge
@@ -14,6 +14,7 @@
  * same dream.
  *
  *   node scripts/clean-scenario-pools.js --out <dir> [--tables dual,single] [--pools goofy,elegant,active] [--resume]
+ *   node scripts/clean-scenario-pools.js --out <dir> --holidays fall,halloween [--tables dual,single,scenes]
  *   node scripts/clean-scenario-pools.js --out <dir> --sql <file>   # write the migration from the group files
  */
 require('dotenv').config({ path: '.env.local' });
@@ -32,21 +33,28 @@ const arg = (n, d) => {
 };
 const OUT = arg('out', '.');
 const SQL = arg('sql', null);
-const TABLES = String(arg('tables', 'dual,single'))
+// --holidays fall,halloween: phase 5, the holiday rows (pool 'holiday', one category per holiday), grouped by sub-theme,
+// plus the scene-only table holiday_scenes (--tables dual,single,scenes).
+const HOLIDAYS = String(arg('holidays', ''))
   .split(',')
-  .map((t) => `${t.trim()}_scenarios`);
+  .map((h) => h.trim())
+  .filter(Boolean);
+const TABLES = String(arg('tables', HOLIDAYS.length ? 'dual,single,scenes' : 'dual,single'))
+  .split(',')
+  .map((t) => (t.trim() === 'scenes' ? 'holiday_scenes' : `${t.trim()}_scenarios`));
 const POOLS = String(arg('pools', 'goofy,elegant,active'))
   .split(',')
   .map((p) => p.trim())
   .filter((p) => p && p !== 'holiday');
+if (HOLIDAYS.length) POOLS.splice(0, POOLS.length, 'holiday');
 const RESUME = process.argv.includes('--resume');
 const CONC = Math.max(1, Math.min(4, Number(arg('concurrency', '3'))));
 const MAX_GROUP = 250;
 
 const judgePrompt = (
   g
-) => `You find duplicate scenarios in a pool of dream scenes for a dream app: each line is a scene a dreamer is placed in (the "${g.pool}" pool, category "${g.category}"${g.bucket ? `, drawn through "${g.bucket}"` : ''}).
-Two scenarios are the SAME IDEA when renders of each would show the same situation: the same kind of place with the same activity, moment or joke, so a viewer would call the two dreams the same. A different place, a different activity, or a genuinely different twist is a different idea, even when the wording is close. Sharing the category's theme is never sameness on its own.
+) => `You find duplicate scenarios in a pool of dream scenes for a dream app: each line is a scene a dreamer is placed in (the "${g.pool}" pool, category "${g.category}"${g.bucket ? `, ${HOLIDAYS.length ? 'sub-theme' : 'drawn through'} "${g.bucket}"` : ''}).
+Two scenarios are the SAME IDEA when renders of each would show the same situation: the same kind of place with the same activity, moment or joke, so a viewer would call the two dreams the same. A different place, a different activity, or a genuinely different twist is a different idea, even when the wording is close. Sharing the category's theme${HOLIDAYS.length ? ' or the sub-theme (every line here is one sub-theme, by design)' : ''} is never sameness on its own${HOLIDAYS.length ? ': two scenes of one sub-theme are the same only when they would render as the same picture' : ''}.
 Be conservative: group only scenes a viewer would genuinely call the same dream. Most scenes should be in no group.
 For each group, "keep" is the strongest, most specific, most vivid member; "same" lists the others.
 Reply ONLY a JSON array (empty if none): [{"keep": <n>, "same": [<n>, ...], "why": "<5-12 words>"}]. Numbers are the list numbers; each number appears at most once in the whole reply.`;
@@ -56,14 +64,41 @@ Reply ONLY a JSON array of the line numbers that are the same (empty if none): [
 
 async function loadRows(table) {
   let rows = [];
+  if (table === 'holiday_scenes') {
+    for (let f = 0; ; f += 1000) {
+      const { data, error } = await sb
+        .from(table)
+        .select('id, holiday, sub_theme, scene')
+        .eq('disabled', false)
+        .in('holiday', HOLIDAYS)
+        .order('id')
+        .range(f, f + 999);
+      if (error) throw new Error(`${table}: ${error.message}`);
+      rows = rows.concat(
+        data.map((r) => ({
+          id: r.id,
+          pool: 'holiday',
+          category: r.holiday,
+          sub_theme: r.sub_theme,
+          scene: r.scene,
+        }))
+      );
+      if (data.length < 1000) break;
+    }
+    return rows;
+  }
   for (let f = 0; ; f += 1000) {
-    const { data, error } = await sb
+    let q = sb
       .from(table)
-      .select('id, pool, category, scene, location_keys')
+      .select(
+        HOLIDAYS.length
+          ? 'id, pool, category, sub_theme, scene'
+          : 'id, pool, category, scene, location_keys'
+      )
       .eq('disabled', false)
-      .in('pool', POOLS)
-      .order('id')
-      .range(f, f + 999);
+      .in('pool', POOLS);
+    if (HOLIDAYS.length) q = q.in('category', HOLIDAYS);
+    const { data, error } = await q.order('id').range(f, f + 999);
     if (error) throw new Error(`${table}: ${error.message}`);
     rows = rows.concat(data);
     if (data.length < 1000) break;
@@ -72,6 +107,18 @@ async function loadRows(table) {
 }
 
 function groupsOf(table, rows) {
+  if (HOLIDAYS.length) {
+    const byTheme = new Map();
+    for (const r of rows) {
+      const k = `${r.category}|${r.sub_theme || 'unsorted'}`;
+      if (!byTheme.has(k)) byTheme.set(k, []);
+      byTheme.get(k).push(r);
+    }
+    return [...byTheme].map(([k, list]) => {
+      const [category, theme] = k.split('|');
+      return { table, pool: 'holiday', category, bucket: theme, rows: list };
+    });
+  }
   const byCat = new Map();
   for (const r of rows) {
     const k = `${r.pool}|${r.category || 'none'}`;
@@ -184,7 +231,7 @@ async function cleanGroup(g) {
     const header = `-- ${path.basename(SQL, '.sql')}: shared scene pools deduplicated (NIGHTLY_POOL_CLEANUP_PLAN.md phase 3,
 -- scripts/clean-scenario-pools.js). Same method as the location spots (mig 633): an LLM grouped same-idea scenes per
 -- table / pool / category (big categories split by their card), and only pairs a second pair-by-pair check confirmed are
--- disabled, keeping the best of each group. Holiday rows are untouched (phase 5). ${lines.length} rows disabled
+-- disabled, keeping the best of each group. ${HOLIDAYS.length ? `Holiday rows only: ${HOLIDAYS.join(', ')}, per sub-theme.` : 'Holiday rows are untouched (phase 5).'} ${lines.length} rows disabled
 -- (reversible: disabled = false). Re-runnable.\n\n`;
     fs.writeFileSync(SQL, header + lines.join('\n') + '\n');
     console.log(`wrote ${SQL} (${lines.length} updates)`);
