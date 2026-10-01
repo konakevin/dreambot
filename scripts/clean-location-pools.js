@@ -54,6 +54,8 @@ const CONC = Math.max(1, Math.min(4, Number(arg('concurrency', '3'))));
 const OUT = arg('out', '.');
 const SQL = arg('sql', null);
 const KEEP_FILE = arg('keep', null);
+// Repair runs (--pass drift cards) refill to this size instead of FLOOR (and regardless of the original size).
+const TARGET = Number(arg('target', '0')) || null;
 
 const SCALES = ['wide', 'medium', 'intimate'];
 const FLOOR = 60; // a pool that ends up under 60 (or under its original size, if smaller) is refilled to it
@@ -180,6 +182,24 @@ Reply ONLY a JSON array of the flagged spots (empty if none): [{"n": <n>, "f": "
     for (const r of res)
       if (r && Number.isInteger(r.n) && r.n >= 1 && r.n <= chunk.length)
         if (r.f === 'object' || r.f === 'off_card') out.set(off + r.n - 1, r.f);
+  }
+  return out;
+}
+
+/** Drift pass: spots that are off the card's concept, for review. Leans on the card's sub_regions + must_include (which
+ *  a drifted card must have before this runs: mig 632 wrote them for the five drift cards). */
+async function flagDrift(ctx, texts) {
+  const system = `You check backdrop spots for "${ctx.label}", a location in a dream app. Each spot is where a dream is set.
+The location, as defined by its creator:
+${ctx.concept}
+Flag a spot "off_card" when a person who picked "${ctx.label}" would NOT recognise it as this location: a different destination, a general sight of the surrounding region, bare scenery with nothing of the location's theme in it, or a place from a film, game or book. Every listed sub-region and every real example of the theme is ON the card. When unsure, do not flag.
+Reply ONLY a JSON array of the flagged spot numbers (empty if none): [<n>, ...]`;
+  const out = new Set();
+  for (let off = 0; off < texts.length; off += CHUNK) {
+    const chunk = texts.slice(off, off + CHUNK);
+    const res = await ask(system, chunk.map((t, i) => `${i + 1}. ${t}`).join('\n'), 2000);
+    for (const n of res)
+      if (Number.isInteger(n) && n >= 1 && n <= chunk.length) out.add(off + n - 1);
   }
   return out;
 }
@@ -337,6 +357,8 @@ function culledRows(c, keepIds) {
   return [
     ...c.duplicates.map((s) => ({ ...s, reason: 'duplicate' })),
     ...c.review.filter((s) => !keepIds.has(s.id)).map((s) => ({ ...s, reason: 'object' })),
+    // --pass drift flags, reviewed like the object flags (rescued ids go in --keep).
+    ...(c.drift || []).filter((s) => !keepIds.has(s.id)).map((s) => ({ ...s, reason: 'off_card' })),
   ];
 }
 
@@ -344,7 +366,7 @@ async function backfill(name, c, keepIds) {
   const ctx = await loadCard(name);
   const offIds = new Set(culledRows(c, keepIds).map((s) => s.id));
   const pool = (await drawablePool(name)).filter((s) => !offIds.has(s.id));
-  const target = Math.min(c.original, FLOOR);
+  const target = TARGET || Math.min(c.original, FLOOR);
   const result = {
     card: name,
     original: c.original,
@@ -417,8 +439,8 @@ async function backfill(name, c, keepIds) {
 }
 
 (async () => {
-  if (PASS !== 'cull' && PASS !== 'backfill') {
-    console.error('--pass cull|backfill required');
+  if (PASS !== 'cull' && PASS !== 'backfill' && PASS !== 'drift') {
+    console.error('--pass cull|drift|backfill required');
     process.exit(1);
   }
   fs.mkdirSync(path.join(OUT, 'cards'), { recursive: true });
@@ -440,14 +462,35 @@ async function backfill(name, c, keepIds) {
   const keepIds = new Set(KEEP_FILE ? JSON.parse(fs.readFileSync(KEEP_FILE, 'utf8')) : []);
   const file = (name, kind) =>
     path.join(OUT, 'cards', `${name.replace(/[^a-z0-9]+/gi, '-')}.${kind}.json`);
-  const kind = PASS === 'cull' ? 'cull' : 'fill';
+  const kind = PASS === 'backfill' ? 'fill' : PASS === 'cull' ? 'cull' : 'drift';
   const queue = CARDS.filter((n) => !(RESUME && fs.existsSync(file(n, kind))));
   let next = 0;
   async function worker() {
     while (next < queue.length) {
       const name = queue[next++];
       try {
-        if (PASS === 'cull') {
+        if (PASS === 'drift') {
+          // Adds `drift` (off-concept flags) to the card's cull file; the backfill then treats the unrescued ones as off.
+          if (!fs.existsSync(file(name, 'cull')))
+            throw new Error('no cull file; run --pass cull first');
+          const c = JSON.parse(fs.readFileSync(file(name, 'cull'), 'utf8'));
+          const ctx = await loadCard(name);
+          const gone = new Set(culledRows({ ...c, drift: [] }, keepIds).map((s) => s.id));
+          const pool = (await drawablePool(name)).filter((s) => !gone.has(s.id));
+          const flagged = await flagDrift(
+            ctx,
+            pool.map((s) => s.text)
+          );
+          c.drift = pool.filter((_, i) => flagged.has(i));
+          fs.writeFileSync(file(name, 'cull'), JSON.stringify(c, null, 1));
+          fs.writeFileSync(
+            file(name, 'drift'),
+            JSON.stringify({ card: name, flagged: c.drift.length })
+          );
+          console.log(
+            `${name}: ${pool.length} after cleanup · ${c.drift.length} off-concept flags to review`
+          );
+        } else if (PASS === 'cull') {
           const r = await cull(name);
           fs.writeFileSync(file(name, 'cull'), JSON.stringify(r, null, 1));
           console.log(
@@ -502,7 +545,7 @@ async function backfill(name, c, keepIds) {
 -- (a texture close-up, a single object, text) deactivated only after review ("let's be careful on this one"); drift is
 -- never auto-culled; pools left under ${FLOOR} refilled with new spots that grade S/A and pass a duplicate read.
 -- Deactivated = is_active false (reversible, nothing deleted). Flags: cast = non-wide, scene-only = non-intimate.
--- ${done.length} cards, ${offs.length} deactivated (${offs.filter((s) => s.reason === 'duplicate').length} duplicates, ${offs.filter((s) => s.reason === 'object').length} objects), ${adds.length} added. Re-runnable.\n\n`;
+-- ${done.length} cards, ${offs.length} deactivated (${offs.filter((s) => s.reason === 'duplicate').length} duplicates, ${offs.filter((s) => s.reason === 'object').length} objects, ${offs.filter((s) => s.reason === 'off_card').length} off-concept), ${adds.length} added. Re-runnable.\n\n`;
     const upd = offs.map(
       (s) =>
         `UPDATE public.location_iconic_spots SET is_active = false WHERE id = ${q(s.id)} AND is_active;`
