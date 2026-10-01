@@ -40,6 +40,9 @@ const WITH_HOLIDAY = process.argv.includes('--with-holiday');
 const FORCE_MODEL = arg('model');
 // Optional: pin a card's outfit-mix side (CARD_OUTFIT_MIX_PLAN.md), e.g. --outfit-mix romantic.
 const OUTFIT_MIX = arg('outfit-mix');
+// Optional: --costume on|off forces the costume-card wardrobe path (_shared/costumeWardrobe.ts) for an A/B; omitted
+// follows the card's biome_config.costume. The caption says which side a render is.
+const COSTUME = arg('costume');
 if (!LOC) {
   console.error('--location required');
   process.exit(1);
@@ -67,6 +70,8 @@ async function render(role, medium, pureScene, label) {
   };
   if (FORCE_MODEL) body.force_model = FORCE_MODEL;
   if (OUTFIT_MIX) body.force_outfit_mix = OUTFIT_MIX;
+  if (COSTUME === 'on') body.force_costume = true;
+  else if (COSTUME === 'off') body.force_costume = false;
   if (!WITH_HOLIDAY) body.force_no_holiday = true;
   if (pureScene) {
     body.force_pure_scene = true;
@@ -97,7 +102,9 @@ async function render(role, medium, pureScene, label) {
     if (d && d.upload_id) {
       await sb
         .from('uploads')
-        .update({ caption: `🌍 ${LOC} — ${label} [${medium}]` })
+        .update({
+          caption: `🌍 ${LOC} — ${label}${COSTUME ? ` · costume ${COSTUME}` : ''} [${medium}]`,
+        })
         .eq('id', d.upload_id);
       console.log(`  ${label} [${medium}]: ${d.image_url}`);
       return d.image_url;
