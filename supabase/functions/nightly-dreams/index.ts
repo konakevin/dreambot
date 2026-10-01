@@ -4156,12 +4156,19 @@ Deno.serve(async (req) => {
           ? 'active'
           : (dualSceneKind ?? (dualSpecialScene ? 'scenario' : 'location')),
       // The scenario seed text (truncated) — the per-seed identifier for grouping.
-      scene: dualSpecialScene ? dualSpecialScene.slice(0, 160) : null,
+      scene: dualSpecialScene
+        ? dualSpecialScene.slice(0, 160)
+        : holidayScene
+          ? holidayScene.scene.slice(0, 160)
+          : null,
       // The pose pool (the seed-pool-level pose identifier); the exact pose text
       // stays recoverable from enhanced_prompt + fallback_reasons.
       posePool: dualScenePosePool,
       sceneAction: sceneActionText,
-      location: iconicAnchor ?? userPlace ?? null,
+      // The place's spot is picked BEFORE the scene-type roll, so when a scene wins (holiday / active / goofy /
+      // elegant / scenario) the spot goes unused. Record no location then, never that unused spot: it made a Hong
+      // Kong couple rendered in a fall café read as a broken location (Kevin 2026-10-01).
+      location: dualSpecialScene || holidayScene ? null : (iconicAnchor ?? userPlace ?? null),
       biome: biomeKey,
       category: dualSceneCategory,
       subTheme: holidaySubTheme,

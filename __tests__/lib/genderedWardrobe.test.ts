@@ -125,3 +125,16 @@ describe('switch + wiring', () => {
     expect(mig).toMatch(/nightly_gendered_wardrobe boolean NOT NULL DEFAULT false/);
   });
 });
+
+describe('seedSource logs the setting actually used', () => {
+  const src = fs.readFileSync(
+    path.join(__dirname, '../../supabase/functions/nightly-dreams/index.ts'),
+    'utf8'
+  );
+  it('a won scene clears the unused spot from location and records the scene', () => {
+    expect(src).toMatch(
+      /location: dualSpecialScene \|\| holidayScene \? null : \(iconicAnchor \?\? userPlace \?\? null\),/
+    );
+    expect(src).toMatch(/: holidayScene\s*\? holidayScene\.scene\.slice\(0, 160\)/);
+  });
+});
