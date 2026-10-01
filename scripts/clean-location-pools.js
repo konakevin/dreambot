@@ -18,10 +18,14 @@
  *
  *   --pass cull      Per card: duplicates (auto), object flags (review), off-card share (report).
  *                    Writes <out>/cards/<card>.cull.json and <out>/summary.json.
+ *   --pass drift     Per card: off-concept flags against the card's sub_regions + must_include, for review (adds `drift`
+ *                    to the cull file; with no cull file it starts from the pool as it stands).
+ *   --pass drift-confirm  A second, keep-by-default read of each drift flag; only flags both reads call off stay.
  *   --pass backfill  Per card: kept = drawable − duplicates − the object flags not rescued in --keep <file> (a JSON array
  *                    of spot ids reviewed and KEPT). A pool under FLOOR (or its original size, if smaller) is refilled at
  *                    the scales it lost; every candidate must grade S/A against the card and pass a duplicate read.
  *                    A pool stays short rather than take a weak spot. Writes <card>.fill.json.
+ *   --themed         (with --pass backfill) genre/era cards refill with kinds of places, not named landmarks.
  *   --sql <file>     (with --pass backfill) one migration: guarded deactivations + inserts, flags by the playbook rule
  *                    (cast = non-wide, scene-only = non-intimate). Nothing touches the database until it is applied.
  *
@@ -56,11 +60,17 @@ const SQL = arg('sql', null);
 const KEEP_FILE = arg('keep', null);
 // Repair runs (--pass drift cards) refill to this size instead of FLOOR (and regardless of the original size).
 const TARGET = Number(arg('target', '0')) || null;
+// Genre and era cards (a ranch, a chalet, a red carpet, the age of dinosaurs) refill with KINDS of places, not named
+// landmarks: "a SPECIFIC NAMED real place" is how Cattle Ranch filled with named canyons and Prehistoric with Stone Age
+// monuments (phase 4 drift review, 2026-09-30).
+const THEMED = process.argv.includes('--themed');
 
 const SCALES = ['wide', 'medium', 'intimate'];
+const CAMERA_WORDS =
+  /\b(view|views|viewed|seen|looking|aerial|vantage|panorama|panoramic|close-up|closeup|shot|angle)\b/i;
 const FLOOR = 60; // a pool that ends up under 60 (or under its original size, if smaller) is refilled to it
 const CHUNK = 60; // spots per flagging / grading call
-const FILL_ROUNDS = 2;
+const FILL_ROUNDS = Math.max(1, Number(arg('rounds', '2'))); // more rounds for a rebuilt pool
 const IMAGINED_BIOMES = new Set(['fantasy_imagined', 'scifi_cosmic', 'aquatic_underwater']);
 
 const BASIS_REAL =
@@ -143,8 +153,26 @@ async function flagDrift(ctx, texts) {
   const system = `You check backdrop spots for "${ctx.label}", a location in a dream app. Each spot is where a dream is set.
 The location, as defined by its creator:
 ${ctx.concept}
-Flag a spot "off_card" when a person who picked "${ctx.label}" would NOT recognise it as this location: a different destination, a general sight of the surrounding region, bare scenery with nothing of the location's theme in it, or a place from a film, game or book. Every listed sub-region and every real example of the theme is ON the card. When unsure, do not flag.
+Flag a spot "off_card" when a person who picked "${ctx.label}" would NOT recognise it as this location: a different destination, a general sight of the surrounding region, bare scenery with nothing of the location's theme in it, a place from a film, game or book, or, for a period, era or battle location, a present-day memorial, cemetery, museum, monument park or visitor site standing in for the world as it was. Every listed sub-region and every real example of the theme is ON the card. When unsure, do not flag.
 Reply ONLY a JSON array of the flagged spot numbers (empty if none): [<n>, ...]`;
+  const out = new Set();
+  for (let off = 0; off < texts.length; off += CHUNK) {
+    const chunk = texts.slice(off, off + CHUNK);
+    const res = await ask(system, chunk.map((t, i) => `${i + 1}. ${t}`).join('\n'), 2000);
+    for (const n of res)
+      if (Number.isInteger(n) && n >= 1 && n <= chunk.length) out.add(off + n - 1);
+  }
+  return out;
+}
+
+/** Second, keep-by-default read of each drift flag; only flags both reads agree on reach review. The single read
+ *  over-flags against a narrow sub-region list (African Safari: Tsavo's elephants and Samburu flagged as off-card). */
+async function confirmDrift(ctx, texts) {
+  const system = `You double-check spots flagged as off-card for "${ctx.label}", a location in a dream app. Each spot is where a dream is set.
+The location, as defined by its creator:
+${ctx.concept}
+The sub-regions are EXAMPLES, not a boundary: other real places, parks, towns, sights, wildlife and scenery of the same destination or theme are ON the card. A spot is OFF only when a person who picked "${ctx.label}" would clearly not see it as this location: a different destination, a different theme, a general sight of the wider region with nothing of the location in it, or, for a period, era or battle location, a present-day memorial, cemetery, museum or visitor site. When in doubt it is ON.
+Reply ONLY a JSON array of the line numbers that are clearly OFF (empty if none): [<n>, ...]`;
   const out = new Set();
   for (let off = 0; off < texts.length; off += CHUNK) {
     const chunk = texts.slice(off, off + CHUNK);
@@ -164,7 +192,7 @@ ${ctx.concept}
 A spot FAILS for one of these reasons:
 - "off_card": a different destination or theme than a person who picked "${ctx.label}" wants (another city, country or region the location doesn't cover, or outside its theme${ctx.imagined ? ' or world' : ' or period'}).
 - "not_setting": a thing or surface rather than a place (a texture close-up, a single object, text). An enclosed or intimate place IS a setting.
-- "weak": vague, garbled, not renderable from its words, or a camera direction instead of a place. For a natural landscape location its own characteristic scenery is not weak even unnamed; for a city, town, cultural or themed location an unnamed landscape that could be anywhere is weak.
+- "weak": vague, garbled, not renderable from its words, or a camera direction instead of a place. For a natural landscape location its own characteristic scenery is not weak even unnamed; for a city, town, cultural or themed location an unnamed landscape that could be anywhere is weak. A kind of place true to a genre or era location's theme (a ranch's branding pens, a chalet's fireside lounge, a premiere's red carpet) is not weak unnamed.
 Otherwise it PASSES: "S" when specific, vivid and memorable, "A" when good.
 Reply ONLY a JSON array with one entry per spot, in order: [{"n": <n>, "g": "S"|"A"|"off_card"|"not_setting"|"weak"}]`;
   const out = new Array(texts.length).fill('weak'); // a skipped candidate is not used
@@ -249,7 +277,11 @@ async function generate(ctx, pool, want) {
   const rules = ctx.imagined
     ? `- 4-10 words; the PLACE only: no people, no actions, no time of day, no weather
 - the wonder is VISIBLE in the thing itself, named first; never size comparisons, motion or physics, sounds, written text`
-    : `- a SPECIFIC NAMED real place or feature, recognisable${ctx.subs.length ? `, within these sub-regions: ${ctx.subs.join('; ')}` : ''}
+    : THEMED
+      ? `- a specific KIND of place inside this location as described${ctx.subs.length ? `, drawn from these areas: ${ctx.subs.join('; ')}` : ''}; name a real place only when the location itself is that place
+- for a period or era location, its world as it was then: never today's ruins, parks, monuments, museums or visitor sites
+- 4-12 words; the place only: no people, no actions, no time of day, no weather`
+      : `- a SPECIFIC NAMED real place or feature, recognisable${ctx.subs.length ? `, within these sub-regions: ${ctx.subs.join('; ')}` : ''}
 - 4-12 words; the place only: no people, no actions, no time of day, no weather
 ${ctx.romance ? '- keep the named place first, then one or two lush, romantic, classy details that genuinely belong there' : ''}`;
   const system = `You write NEW backdrop spots for "${ctx.label}", a location in a dream app. Each spot is where a dream is set, rendered as one image.
@@ -259,6 +291,7 @@ Rules for every spot:
 ${rules}
 - inside this location as described: never another town, city or region, never a general landmark of the wider area, never outside its theme
 - a place a person could stand in and be pictured in: never a texture close-up, a single object or text
+- written as the place itself, never as a view of it: no "view from", "seen through", "looking out", "panorama of"
 - specific and vivid: a viewer can picture exactly this place
 - spread across many different subjects: at most two new spots on any one landmark or building, and never one formula repeated with a different place name
 Scales: wide (vast vista), medium (one feature fills much of the frame, with ground in front to stand on), intimate (close or enclosed, still a place to be in).
@@ -272,10 +305,20 @@ Reply ONLY [{"scale": "wide"|"medium"|"intimate", "spot": "..."}]`;
     `Pool (do not repeat any of these ideas):\n${pool.map((s) => '- ' + s.text).join('\n')}\n\nWrite: ${ask_}.`,
     6000
   );
-  return res
-    .filter((r) => r && typeof r.spot === 'string' && SCALES.includes(r.scale))
-    .map((r) => ({ text: r.spot.trim(), scale: r.scale }))
-    .filter((r) => r.text && r.text.split(/\s+/).length <= 12);
+  if (process.env.POOL_DEBUG)
+    console.log(
+      `  [generate ${ctx.name}] want ${ask_} · ${res.length} raw: ${JSON.stringify(res).slice(0, 400)}`
+    );
+  return (
+    res
+      .filter((r) => r && typeof r.spot === 'string' && SCALES.includes(r.scale))
+      .map((r) => ({ text: r.spot.trim(), scale: r.scale }))
+      // A spot is the place, never a view of it (phase 4 step 3 reworded 222 camera lines; don't write new ones).
+      .filter((r) => !CAMERA_WORDS.test(r.text))
+      // The prompt asks for 4-12 words; 16 is the hard stop (a long-lined pool, Prehistoric's, made every reply 13-20
+      // words and the refill silently added nothing).
+      .filter((r) => r.text && r.text.split(/\s+/).length <= 16)
+  );
 }
 
 /** The rows a card loses: every duplicate, plus every reviewed object flag not rescued in --keep. */
@@ -335,6 +378,8 @@ async function backfill(name, c, keepIds) {
       ctx,
       cands.map((cd) => cd.text)
     );
+    if (process.env.POOL_DEBUG)
+      cands.forEach((cd, i) => console.log(`  [${name}] ${g[i]} ${cd.scale}: ${cd.text}`));
     cands = cands
       .map((cd, i) => ({ ...cd, tier: g[i] }))
       .filter((cd) => cd.tier === 'S' || cd.tier === 'A');
@@ -365,8 +410,8 @@ async function backfill(name, c, keepIds) {
 }
 
 (async () => {
-  if (PASS !== 'cull' && PASS !== 'backfill' && PASS !== 'drift') {
-    console.error('--pass cull|drift|backfill required');
+  if (!['cull', 'backfill', 'drift', 'drift-confirm'].includes(PASS)) {
+    console.error('--pass cull|drift|drift-confirm|backfill required');
     process.exit(1);
   }
   fs.mkdirSync(path.join(OUT, 'cards'), { recursive: true });
@@ -388,18 +433,58 @@ async function backfill(name, c, keepIds) {
   const keepIds = new Set(KEEP_FILE ? JSON.parse(fs.readFileSync(KEEP_FILE, 'utf8')) : []);
   const file = (name, kind) =>
     path.join(OUT, 'cards', `${name.replace(/[^a-z0-9]+/gi, '-')}.${kind}.json`);
-  const kind = PASS === 'backfill' ? 'fill' : PASS === 'cull' ? 'cull' : 'drift';
+  const kind =
+    PASS === 'backfill'
+      ? 'fill'
+      : PASS === 'cull'
+        ? 'cull'
+        : PASS === 'drift'
+          ? 'drift'
+          : 'confirm';
   const queue = CARDS.filter((n) => !(RESUME && fs.existsSync(file(n, kind))));
   let next = 0;
   async function worker() {
     while (next < queue.length) {
       const name = queue[next++];
       try {
-        if (PASS === 'drift') {
-          // Adds `drift` (off-concept flags) to the card's cull file; the backfill then treats the unrescued ones as off.
-          if (!fs.existsSync(file(name, 'cull')))
-            throw new Error('no cull file; run --pass cull first');
+        if (PASS === 'drift-confirm') {
+          // Keeps only the drift flags a second read also calls off; the rest move to driftUnconfirmed (kept).
           const c = JSON.parse(fs.readFileSync(file(name, 'cull'), 'utf8'));
+          const flagged = c.driftAll || c.drift || [];
+          const ctx = await loadCard(name);
+          const ok = await confirmDrift(
+            ctx,
+            flagged.map((s) => s.text)
+          );
+          c.driftAll = flagged;
+          c.drift = flagged.filter((_, i) => ok.has(i));
+          c.driftUnconfirmed = flagged.filter((_, i) => !ok.has(i));
+          fs.writeFileSync(file(name, 'cull'), JSON.stringify(c, null, 1));
+          fs.writeFileSync(
+            file(name, 'confirm'),
+            JSON.stringify({ card: name, confirmed: c.drift.length })
+          );
+          console.log(
+            `${name}: ${flagged.length} flags · ${c.drift.length} confirmed off · ${c.driftUnconfirmed.length} kept by the second read`
+          );
+        } else if (PASS === 'drift') {
+          // Adds `drift` (off-concept flags) to the card's cull file; the backfill then treats the unrescued ones as off.
+          // Without a cull file the drift check runs on the pool as it stands (phase 4: the pools were already
+          // deduplicated in mig 633).
+          let c;
+          if (fs.existsSync(file(name, 'cull')))
+            c = JSON.parse(fs.readFileSync(file(name, 'cull'), 'utf8'));
+          else {
+            const now = await drawablePool(name);
+            c = {
+              card: name,
+              original: now.length,
+              originalByScale: byScale(now),
+              duplicates: [],
+              unconfirmed: [],
+              review: [],
+            };
+          }
           const ctx = await loadCard(name);
           const gone = new Set(culledRows({ ...c, drift: [] }, keepIds).map((s) => s.id));
           const pool = (await drawablePool(name)).filter((s) => !gone.has(s.id));

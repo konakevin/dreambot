@@ -214,6 +214,21 @@ NOT by eyeballing the image.**
   identity is scale or physics cannot be carried by wording; pick concepts whose look is the thing itself (glowing
   elements, whimsical objects), which rendered well.
 
+## Genre and era cards: kinds of places, defined by the card's rule (2026-10-01, pool cleanup phase 4)
+
+- A card's `sub_regions` / `must_include` come from what the card IS (its `biome_config.SUBJECT_RULE`, name, tile, era),
+  never from its spot pool: a drifted pool writes its drift into the definition. `scripts/gen-card-concepts.js`
+  drafts them; read every draft (it copies people and clothing lines and modern items from old example lists).
+- A genre or era card (a ranch, a chalet, a red carpet, a battlefield, the age of dinosaurs) is filled with KINDS of
+  places ("branding pens in a pole corral"), not named landmarks: asking for "a specific named real place" is how
+  Cattle Ranch filled with red-rock national parks and Prehistoric with today's Stone Age monuments
+  (`clean-location-pools.js --pass backfill --themed`).
+- An interior card stays interior: Enchanted Toy Shop's rule says INTERIOR and its pool had grown into a whole toy town.
+- Drift checks: a single LLM read over-flags against a narrow definition (it flagged Tsavo's elephants on African
+  Safari); a keep-by-default second read cleared ~60% of flags, and a hand review of the rest is still required. A
+  spot that borrows the card's words can slip both reads (Crystal Caverns' "citadel ramparts" of quartz): render-test
+  the repaired cards and read the drawn spot (`ai_generation_log.rolled_axes.seedSource.location`).
+
 ## Themed / imagined worlds — depth + real-place hygiene (2026-09-08)
 - **Top up** a thin imagined world's pure-scene pool with `node scripts/gen-themed-postcard-spots.mjs
   --locations "<a>,<b>" --to 50` — the rubric authors against the location card's own bible (atmosphere /
