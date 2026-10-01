@@ -32,7 +32,7 @@ require('dotenv').config({ path: '.env.local' });
 const fs = require('fs');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
-const { callClaude } = require('./lib/anthropic');
+const { ask, judgeGroups, confirmPairs: confirmPairsWith } = require('./lib/poolJudge');
 const { isSameIdea } = require('./lib/ideaSimilarity');
 
 const sb = createClient(
@@ -67,55 +67,6 @@ const BASIS_REAL =
   "Two spots are the SAME IDEA when a render of each would show the same place or feature as its main subject from the same kind of view, so a viewer would call the two pictures the same shot. Different features or viewpoints of one landmark are DIFFERENT ideas (a pagoda vs its garden pond vs the lantern avenue). Sharing the card's theme (blossoms, lavender, cypress) is never sameness on its own. Naming a different place does NOT make a different idea when the renders would look the same (the same garage bay at two circuits, the same arcade bay on two storeys of one building).";
 const BASIS_IMAGINED =
   "Two spots are the SAME IDEA when their renders would show the same main subject arranged the same way, so a viewer would call them the same picture with small changes (a ringed planet low over a terrace vs a ringed planet low over a gazebo). Sharing the world's signature element is not sameness when the main subject or arrangement differs (a ringed planet over a meadow vs a glass observatory under a nebula).";
-
-/** Index of the bracket closing the array that opens at `start`, or -1. */
-function arrayEnd(raw, start) {
-  let depth = 0;
-  let inStr = false;
-  for (let i = start; i < raw.length; i++) {
-    const ch = raw[i];
-    if (inStr) {
-      if (ch === '\\') i++;
-      else if (ch === '"') inStr = false;
-    } else if (ch === '"') inStr = true;
-    else if (ch === '[') depth++;
-    else if (ch === ']' && --depth === 0) return i;
-  }
-  return -1;
-}
-/** The first balanced JSON array in a reply that parses. A model sometimes adds a note after the array or a bracket in
- *  prose before it (both broke the first audit), so every '[' is tried in turn. */
-function parse(raw) {
-  for (let start = raw.indexOf('['); start >= 0; start = raw.indexOf('[', start + 1)) {
-    const end = arrayEnd(raw, start);
-    if (end < 0) continue;
-    try {
-      const v = JSON.parse(raw.slice(start, end + 1));
-      if (Array.isArray(v)) return v;
-    } catch {
-      // not the array; try the next bracket
-    }
-  }
-  throw new Error('no parseable JSON array in reply');
-}
-async function ask(system, content, maxTokens = 6000) {
-  for (let a = 0; a < 3; a++) {
-    try {
-      const r = await callClaude({
-        job: 'reseed',
-        system,
-        content,
-        maxTokens,
-        retryDelaysMs: [2000, 8000, 20000],
-        timeoutMs: 180000,
-      });
-      return parse(r.raw);
-    } catch (e) {
-      if (a === 2) throw e;
-    }
-  }
-  return [];
-}
 
 async function loadCard(name) {
   const { data: card, error } = await sb
@@ -229,28 +180,14 @@ Reply ONLY a JSON array with one entry per spot, in order: [{"n": <n>, "g": "S"|
 
 /** Groups of same-idea spots: [{keep, same:[...], why}] as indices into `texts`. */
 async function judge(ctx, texts) {
-  if (texts.length < 2) return [];
-  const system = `You find duplicate ideas in the backdrop spots of "${ctx.label}", a dream location in a dream app.
+  return judgeGroups(
+    `You find duplicate ideas in the backdrop spots of "${ctx.label}", a dream location in a dream app.
 ${ctx.imagined ? BASIS_IMAGINED : BASIS_REAL}
 Be conservative: group only spots a viewer would genuinely call the same picture. Most spots should be in no group.
 For each group, "keep" is the strongest, most specific member; "same" lists the others.
-Reply ONLY a JSON array (empty if none): [{"keep": <n>, "same": [<n>, ...], "why": "<5-12 words>"}]. Numbers are the list numbers; each number appears at most once in the whole reply.`;
-  const groups = await ask(system, texts.map((t, i) => `${i + 1}. ${t}`).join('\n'), 4000);
-  const seen = new Set();
-  const out = [];
-  for (const g of groups) {
-    const members = [g && g.keep, ...(g && Array.isArray(g.same) ? g.same : [])].filter(
-      (n) => Number.isInteger(n) && n >= 1 && n <= texts.length
-    );
-    if (members.length < 2 || members.some((n) => seen.has(n))) continue;
-    members.forEach((n) => seen.add(n));
-    out.push({
-      keep: members[0] - 1,
-      same: members.slice(1).map((n) => n - 1),
-      why: String(g.why || ''),
-    });
-  }
-  return out;
+Reply ONLY a JSON array (empty if none): [{"keep": <n>, "same": [<n>, ...], "why": "<5-12 words>"}]. Numbers are the list numbers; each number appears at most once in the whole reply.`,
+    texts
+  );
 }
 
 /** Second, pair-by-pair check of every duplicate the judge named; only pairs both checks call the same picture are
@@ -258,18 +195,7 @@ Reply ONLY a JSON array (empty if none): [{"keep": <n>, "same": [<n>, ...], "why
 async function confirmPairs(ctx, pairs) {
   const system = `Each line pairs two backdrop spots of "${ctx.label}", a dream location in a dream app. A line is "same" only when a render of each would show the same place or feature from the same kind of view, so a viewer would call the two pictures the same. The same landmark from the same kind of view in different words IS the same (Old Faithful's eruption plume vs its eruption column; the Colosseum's outer arcade vs its arcaded facade). Two DIFFERENT monuments, buildings or features are never the same even when they look alike (the Arch of Constantine and the Arch of Janus), and genuinely different views of one landmark are different (St. Peter's dome from the river vs its nave interior).
 Reply ONLY a JSON array of the line numbers that are the same (empty if none): [<n>, ...]`;
-  const ok = new Set();
-  for (let off = 0; off < pairs.length; off += CHUNK) {
-    const chunk = pairs.slice(off, off + CHUNK);
-    const res = await ask(
-      system,
-      chunk.map((p, i) => `${i + 1}. "${p.a}" | "${p.b}"`).join('\n'),
-      1500
-    );
-    for (const n of res)
-      if (Number.isInteger(n) && n >= 1 && n <= chunk.length) ok.add(off + n - 1);
-  }
-  return ok;
+  return confirmPairsWith(system, pairs);
 }
 
 const byScale = (rows) =>
