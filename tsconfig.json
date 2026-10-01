@@ -27,6 +27,7 @@
     "__tests__/lib/outfitSceneFit.test.ts",
     "__tests__/lib/sceneSetting.test.ts",
     "__tests__/lib/costumeWardrobe.test.ts",
+    "__tests__/lib/periodDress.test.ts",
     "__tests__/lib/swapCapacityGate.test.ts",
     "__tests__/lib/swapDispatchGate.test.ts",
     "__tests__/lib/nightlySwapHealth.test.ts",

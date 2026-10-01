@@ -82,6 +82,16 @@ describe('nightly-dreams wiring', () => {
   it('the medium ban stays keyed to imagined, not costume', () => {
     expect(src).toMatch(/const imaginedBiome = imaginedLocation;/);
   });
+  it('passes the period only on the costume path, never on a special scene', () => {
+    expect(src).toMatch(
+      /\.\.\.\(wardrobeMode\.costume && periodDress && !dualSpecialScene \? \{ periodDress \} : \{\}\)/
+    );
+  });
+  it('the couple-degrade solo rebuild names the outfit early, like a nightly solo', () => {
+    expect(src).toMatch(
+      /outfitEarly:\s*force_solo_outfit_early \?\? engineCfg0\.nightlySoloOutfitEarly/
+    );
+  });
   it('stamps costume_wardrobe', () => {
     expect(src).toMatch(
       /if \(wardrobeMode\.costume\) fallbackReasons\.push\('costume_wardrobe'\);/

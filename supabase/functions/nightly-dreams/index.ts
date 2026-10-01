@@ -2159,6 +2159,8 @@ Deno.serve(async (req) => {
     let imaginedLocation = false;
     // COSTUME CARDS (_shared/costumeWardrobe.ts): biome_config.costume, read with the imagined marker below.
     let costumeFlag: unknown = undefined;
+    // PERIOD DRESS (costume cards): biome_config.period, the era each wardrobe line ends on.
+    let periodDress: string | null = null;
     if (userPlace) {
       // pure_scene quality filter (2026-06-04): the location_iconic_spots
       // pool was originally curated for "real recognizable landmark" — which
@@ -2270,6 +2272,8 @@ Deno.serve(async (req) => {
       if (cfg && typeof cfg === 'object' && !Array.isArray(cfg)) {
         imaginedLocation = (cfg as Record<string, unknown>).imagined === true;
         costumeFlag = (cfg as Record<string, unknown>).costume;
+        const p = (cfg as Record<string, unknown>).period;
+        periodDress = typeof p === 'string' && p.trim() ? p.trim() : null;
       }
       imaginedLocation =
         imaginedLocation ||
@@ -3887,6 +3891,8 @@ Deno.serve(async (req) => {
           // (2026-09-04 QA: victorian_f/victorian_m solos rendered modern; the
           // dual path keeps attire verbatim and was unaffected).
           realWorldLocation: dualSpecialScene ? false : !wardrobeMode.inWorldAttire,
+          // Only on the costume path, never on a special scene (goofy / elegant / holiday attire is its own).
+          ...(wardrobeMode.costume && periodDress && !dualSpecialScene ? { periodDress } : {}),
           mediumFluxFragment: baseMedium.fluxFragment,
           // Prefer the vibe's FACE-SWAP directive on the swap path (realistic
           // human face despite a stylized scene — the kawaii big-eyes fix);
@@ -5249,7 +5255,10 @@ Output ONLY the prompt.`;
                     ? assembleSoloFallbackFromDual(
                         soloFallbackCtx.dualSlots,
                         soloRebuildInput(soloFallbackCtx.input, rebuildFragment),
-                        soloFallbackCtx.selfIndex
+                        soloFallbackCtx.selfIndex,
+                        {
+                          outfitEarly: force_solo_outfit_early ?? engineCfg0.nightlySoloOutfitEarly,
+                        }
                       )
                     : `exactly one person, a solo portrait of a single ${soloNoun} alone, ${finalPrompt}`;
                   fallbackReasons.push(

@@ -154,6 +154,11 @@ export interface CharacterSlotPipelineInput {
    *  shipped order (wardrobe at the end of the CHARACTER block, ~char 1,100-1,400) rendered the outfit 0/12; right
    *  after the medium 12/12 (ballet dress, old-money polo, two regency dresses). Unset → byte-identical. */
   soloOutfitEarly?: boolean;
+  /** PERIOD DRESS (costume cards, _shared/costumeWardrobe.ts, 2026-09-30): the era a costume card's cast belong to
+   *  ("1880s American frontier"). The brief keeps every garment and prop in it, and each wardrobe line ends with
+   *  ", authentic <period> dress": a POSITIVE era cue, because Flux adds modern things on its own (a wristwatch on a
+   *  cowboy at a saloon bar whose prompt never named one) and a "no wristwatch" line would leak the watch in. */
+  periodDress?: string | null;
   /** EYE CONTACT (NIGHTLY_EYE_CONTACT_PLAN.md, 2026-09-30): "looking into the camera" rides each person — a couple
    *  after each wardrobe (coupleComposerX), a solo right after the medium, before the wardrobe. Kevin: "our faces and
    *  eyes are looking randomly off camera" and "weird side angle renders". Same-seed flux-1.1-pro screen, 23 real 5.5
@@ -1091,7 +1096,11 @@ export function buildSlotBrief(input: CharacterSlotPipelineInput): string {
               : `The character wears EXACTLY: "${costumeLock[0]}".`
           } The exact costume text is applied by code, so write the wardrobe field(s) as a SHORT reference only (3-6 words, e.g. "the vampire countess costume") and spend your words on the scene and the action. Let the scene, mood, props and action play off the costumes — the cape catching the lantern light, the hat brim in the fog. The costume is clothing, headwear and props only; the face stays fully clear by code.`
         : (input.wardrobeAnchor
-            ? `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: flattering, cool, and distinctive, in pieces true to the period / setting / cultural register of "${location}". One on-location inspiration to draw from: "${input.wardrobeAnchor}". Adapt it into something bold and attractive for each character — flattering silhouette, rich materials, standout details, styled hair — or invent something equally on-location and eye-catching. NEVER plain, dowdy, mundane, frumpy, drab, or merely "historically accurate" — this is a DREAM, so make the outfit sing while staying true to the setting. Avoid generic "linen shirt + chinos" defaults.`
+            ? `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: flattering, cool, and distinctive, in pieces true to the period / setting / cultural register of "${location}". One on-location inspiration to draw from: "${input.wardrobeAnchor}". Adapt it into something bold and attractive for each character — flattering silhouette, rich materials, standout details, styled hair — or invent something equally on-location and eye-catching. NEVER plain, dowdy, mundane, frumpy, drab, or merely "historically accurate" — this is a DREAM, so make the outfit sing while staying true to the setting. Avoid generic "linen shirt + chinos" defaults.${
+                input.periodDress
+                  ? ` Everything each character wears and carries belongs to the ${input.periodDress} era: nothing from a later one.`
+                  : ''
+              }`
             : `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: tailored to this exact place, its climate and its register, and built to STAND OUT — a signature piece, a flattering silhouette, named colours and materials, styled hair. A tropical reef, an alpine village, a desert ruin, a modern city and an arctic glacier each call for a different costume. ${
                 input.activityWardrobe
                   ? // ACTIVITY-ANCHORED (Create). The sentence this replaces named an unrelated
@@ -2144,7 +2153,12 @@ export function soloRebuildInput(
 export function assembleSoloFallbackFromDual(
   dualSlots: DualSlots,
   dualInput: CharacterSlotPipelineInput,
-  selfIndex: 0 | 1
+  selfIndex: 0 | 1,
+  /** outfitEarly: name the wardrobe right after the medium, as a nightly solo does (engine_config
+   *  .nightly_solo_outfit_early). The rebuild spreads the COUPLE's input, which never carries soloOutfitEarly, so a
+   *  rebuilt solo buried its outfit ~1,100 characters in and rendered in modern clothes (2026-09-30, a Victorian
+   *  London couple rebuilt as a man in a black jacket). Unset keeps Create's rebuild byte-identical. */
+  opts: { outfitEarly?: boolean } = {}
 ): string {
   const selfMember = dualInput.cast[selfIndex];
   if (!selfMember) {
@@ -2176,6 +2190,7 @@ export function assembleSoloFallbackFromDual(
     // intact. The rebuild spreads the COUPLE's input, which never carries this flag, so it is set here
     // explicitly. Solo only by construction (cast is [selfMember]); couples keep their own anchor untouched.
     framingInAnchor: true,
+    ...(opts.outfitEarly ? { soloOutfitEarly: true } : {}),
   });
 }
 
@@ -2303,6 +2318,24 @@ export async function runCharacterSlotPipeline(
   if (input.costumeLock && input.costumeLock.length === castCount) {
     slots = applyCostumeLock(slots, input.costumeLock);
     fallbackReasons.push('costume_lock');
+  }
+
+  // PERIOD DRESS (costume cards): each wardrobe line ends on its era, by code, so the cue reaches every composer
+  // (solo, couple, and the couple-degrade solo rebuild, which reuses these slots). A holiday costume is left alone.
+  const period = input.periodDress ? input.periodDress.trim() : '';
+  if (period && !(input.costumeLock && input.costumeLock.length === castCount)) {
+    outfitSidesFor(input).forEach((_side, i) => {
+      if (!slots) return;
+      const field = fieldOf(i);
+      const text = wardrobeOf(slots, field);
+      if (!text || text.toLowerCase().includes(period.toLowerCase())) return;
+      slots = withWardrobe(
+        slots,
+        field,
+        `${text.replace(/[\s.,;]+$/, '')}, authentic ${period} dress`
+      );
+    });
+    fallbackReasons.push('period_dress');
   }
 
   // OUTFIT PLAN: stamp the rolls, then guarantee the user's own words. A side that still dropped them after
