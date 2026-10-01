@@ -140,3 +140,12 @@ describe('force_outfit_plan (NIGHTLY_OUTFIT_VARIETY_PLAN.md)', () => {
     expect(parseQaFlags({ force_outfit_plan: 'yes' }).force_outfit_plan).toBeNull();
   });
 });
+
+describe('force_costume (_shared/costumeWardrobe.ts)', () => {
+  it('true / false override the card; anything else follows biome_config.costume', () => {
+    expect(parseQaFlags({ force_costume: true }).force_costume).toBe(true);
+    expect(parseQaFlags({ force_costume: false }).force_costume).toBe(false);
+    expect(parseQaFlags({}).force_costume).toBeNull();
+    expect(parseQaFlags({ force_costume: 'yes' }).force_costume).toBeNull();
+  });
+});

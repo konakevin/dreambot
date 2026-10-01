@@ -135,6 +135,9 @@ export interface NightlyQaFlags {
   force_no_holiday: boolean;
   /** QA (CARD_OUTFIT_MIX_PLAN.md): on a card with an outfit mix, use this side instead of the roll. */
   force_outfit_mix: MixSetting | null;
+  /** COSTUME CARDS (_shared/costumeWardrobe.ts): true dresses a real-place card from its own WARDROBE as if it had
+   *  biome_config.costume, false forces the traveler path; null follows the card. */
+  force_costume: boolean | null;
   /** SOLO OUTFIT EARLY (mig 565): true names a solo's wardrobe right after the medium, false the old order;
    *  null = engine_config.nightly_solo_outfit_early. */
   force_solo_outfit_early: boolean | null;
@@ -337,6 +340,7 @@ export function parseQaFlags(body: Record<string, unknown>): NightlyQaFlags {
           : null,
     force_no_holiday: body.force_no_holiday === true,
     force_outfit_mix: asMixSetting(body.force_outfit_mix),
+    force_costume: body.force_costume === true ? true : body.force_costume === false ? false : null,
     force_scenario_scope:
       body.force_scenario_scope === true
         ? true

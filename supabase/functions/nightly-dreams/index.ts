@@ -13,6 +13,7 @@
  * Authorization: Bearer <user JWT>
  */
 
+import { locationWardrobeMode } from '../_shared/costumeWardrobe.ts';
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import {
@@ -502,6 +503,7 @@ Deno.serve(async (req) => {
     force_couple_variant,
     force_honest_looks,
     force_garment_roll,
+    force_costume,
     force_outfit_plan,
     force_eye_contact,
     force_age_fidelity,
@@ -2155,6 +2157,8 @@ Deno.serve(async (req) => {
     // mediums (see the ban block below). Real locations — even those sharing a
     // biome like gothic_historic (Prague/London) — are NOT marked and keep photography.
     let imaginedLocation = false;
+    // COSTUME CARDS (_shared/costumeWardrobe.ts): biome_config.costume, read with the imagined marker below.
+    let costumeFlag: unknown = undefined;
     if (userPlace) {
       // pure_scene quality filter (2026-06-04): the location_iconic_spots
       // pool was originally curated for "real recognizable landmark" — which
@@ -2265,6 +2269,7 @@ Deno.serve(async (req) => {
       // them) also count, so a new imagined card is covered even before it's marked.
       if (cfg && typeof cfg === 'object' && !Array.isArray(cfg)) {
         imaginedLocation = (cfg as Record<string, unknown>).imagined === true;
+        costumeFlag = (cfg as Record<string, unknown>).costume;
       }
       imaginedLocation =
         imaginedLocation ||
@@ -3625,11 +3630,19 @@ Deno.serve(async (req) => {
           /\b(normal|everyday|casual|regular|ordinary|comfortable|scene[- ]appropriate)\b[^.]{0,40}\b(clothes|clothing|outfits?|attire|wear)\b/i.test(
             dualSpecialWardrobe
           );
-        const locationWardrobe =
-          imaginedLocation &&
-          !!bespokeBiome &&
-          Array.isArray(bespokeBiome.WARDROBE) &&
-          bespokeBiome.WARDROBE.length > 0;
+        // Imagined worlds, and COSTUME cards (a period or genre, not a culture: _shared/costumeWardrobe.ts), dress the
+        // cast from the card's own WARDROBE; every other real place keeps the traveler rule.
+        const wardrobeMode = locationWardrobeMode({
+          imagined: imaginedLocation,
+          costumeFlag,
+          forceCostume: force_costume,
+          hasWardrobe:
+            !!bespokeBiome &&
+            Array.isArray(bespokeBiome.WARDROBE) &&
+            bespokeBiome.WARDROBE.length > 0,
+        });
+        if (wardrobeMode.costume) fallbackReasons.push('costume_wardrobe');
+        const locationWardrobe = wardrobeMode.useLocationWardrobe;
         const fashionRollable =
           !costumePicks &&
           (dualSpecialScene ? !!holidayCategory || genericAttire : !locationWardrobe);
@@ -3862,10 +3875,7 @@ Deno.serve(async (req) => {
             ? nightlyFashion && genericAttire
               ? null
               : dualSpecialWardrobe
-            : imaginedLocation &&
-                bespokeBiome &&
-                Array.isArray(bespokeBiome.WARDROBE) &&
-                bespokeBiome.WARDROBE.length > 0
+            : locationWardrobe && bespokeBiome && bespokeBiome.WARDROBE
               ? pickAxis(bespokeBiome.WARDROBE)
               : null,
           // Real-world → traveler wardrobe rule ON (no ethnic dress); fantasy/
@@ -3876,7 +3886,7 @@ Deno.serve(async (req) => {
           // bustle gown as mere "inspiration", and shipped a modern blazer
           // (2026-09-04 QA: victorian_f/victorian_m solos rendered modern; the
           // dual path keeps attire verbatim and was unaffected).
-          realWorldLocation: dualSpecialScene ? false : !imaginedLocation,
+          realWorldLocation: dualSpecialScene ? false : !wardrobeMode.inWorldAttire,
           mediumFluxFragment: baseMedium.fluxFragment,
           // Prefer the vibe's FACE-SWAP directive on the swap path (realistic
           // human face despite a stylized scene — the kawaii big-eyes fix);
