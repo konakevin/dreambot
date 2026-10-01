@@ -62,7 +62,11 @@ seductress, beach glamour, outlaw grit). See [[feedback_dream_shoot_set_dresser_
   fantasy/sci-fi/kawaii; leave FALSE for historical/real (photography is fine there).**
 - **`tags`** → biome FALLBACK at runtime if `biome` unset (prevents the beach-everywhere bug).
 - **`sub_regions`, `must_include`** → NOT render inputs; authoring HINTS that force the spot generator to
-  spread geographically + cover feature categories.
+  spread geographically + cover feature categories. **Never leave them empty** (2026-09-30): five name-only cards
+  drifted almost wholesale (Vineyard Estate filled with Martha's Vineyard beaches, Railroad Town with Utah peaks,
+  Gladiator Arena with general Rome, Space Station with Mass Effect planets; concepts mig 632, rebuild mig 634). End
+  `must_include` with the card's "never ..." line, and list every region the pool actually uses (the romance top-up
+  outran its own lists, migs 630/631).
 - **`picker_category`** = live-visibility gate. **`admin_only`** = dark-launch gate.
 
 ### `location_iconic_spots` (the anchor pool — drives nightly)
@@ -97,6 +101,10 @@ Secondary/legacy "things here / things to do" pool. Not the primary nightly anch
    (speakeasy) lean on `intimate` + interior_intimate biome instead.
 5. **No hallucination** for real places; **canon is truth** for fictional worlds.
 6. **4-10 words, full dedup, spread across sub_regions + must_include.**
+7. **No modern labels on a historical or frontier spot** (National Park, State Historic Park, historic district,
+   replica, museum, Highway, Route 66): they pull signage, railings and tourists into the render. Name the place as it
+   was ("Delicate Arch red sandstone span", not "Arches National Park Delicate Arch"; mig 635, Wild West = 1860s-1890s).
+8. **No authoring words in the text** ("Invented gothic keep ..."): spot_text lands verbatim in the brief.
 
 ## The eligibility model — the make-or-break curation
 - **Character-eligible subset MUST skew `medium`/`intimate` with a CLEAR FOREGROUND.** A wide vista + cast
