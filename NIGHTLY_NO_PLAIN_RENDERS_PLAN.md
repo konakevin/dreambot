@@ -210,3 +210,20 @@ Read: the rebuild path is fixed (6/6 vs "63% tight, 3 of 4 headshots"); the aver
 - flux-1.1-pro stays for couples (Kevin 2026-09-06). Its tight-but-legible two-head crops (~25% of couples)
   remain and pass the calibration; the lever for those is the model steer, which is OFF by Kevin's call.
 - The 1.1-pro override fragment still applies to the MAIN couple render (only the rebuild dropped it).
+
+## 12. OPEN FOLLOW-UP: couples on a plain backdrop (flagged 2026-09-30, Kevin: "let's not forget about it")
+
+Seen in the location QA of 2026-09-30 (drift-card repair + costume A/B, Kevin's album "🌍 <card> — couple"): roughly 3-4
+of every 10 couple renders showed almost no setting. The Vampire Castle couple on plain white, the Gladiator Arena
+couple on a blank wall, the Space Station couple against a pink sky, the Railroad Town couple on a dark ground. The pair
+reads well; the place does not. Solos and scene-only renders on the same cards showed their settings.
+
+Why it was left alone: the couple engine frames face-first with big faces because the dual swap needs two large,
+separated faces, and that framing is the 09-18 restore point ("no change without Kevin's word"). Weighting the scene up
+on a face-swap prompt broke dual swaps within minutes once (CLAUDE.md hard rule, commit 7a1092ff reverted in d29c2ddb).
+
+How to approach it (not started): measure first. Count plain-backdrop couples on recent production nightlies (a vision
+read of the couple renders, plus `ai_generation_log` stamps: look, model, dual_engine, no_dual_split). Then same-seed A/B
+on one variable at a time (e.g. the look fragment, the `behind` clause in coupleComposerX, spot scale for couples),
+grading backdrop presence AND first-try dual-swap hold (the 09-18 baseline: 92%). Never trade swap reliability for
+backdrop.
