@@ -29,6 +29,7 @@ import { trackBotViewed } from '@/lib/analytics';
 import { BotsHorizontalPager } from '@/components/BotsHorizontalPager';
 import { BotPillRow } from '@/components/BotPillRow';
 import { prefetchDreamFeed, pruneStaleFeedCaches } from '@/hooks/useDreamFeed';
+import { PILL_ROW_DROP } from '@/components/OverlayPill';
 
 /** Per-bot feed prewarm concurrency (bots warmed in pager order, this many at a time). */
 const BOT_PREWARM_BATCH = 3;
@@ -162,7 +163,10 @@ export default function BotsScreen() {
       <Animated.View style={[s.topOverlayWrap, overlayStyle]}>
         <LinearGradient
           colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0.2)', 'transparent']}
-          style={[s.topOverlay, { paddingTop: insets.top, paddingBottom: verticalScale(28) }]}
+          style={[
+            s.topOverlay,
+            { paddingTop: insets.top + PILL_ROW_DROP, paddingBottom: verticalScale(28) },
+          ]}
           pointerEvents="box-none"
         >
           {botUsers && botUsers.length > 0 && (

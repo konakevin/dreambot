@@ -30,7 +30,7 @@ import { FullScreenFeed } from '@/components/FullScreenFeed';
 import { UsernameNudge } from '@/components/UsernameNudge';
 import { useUsernameStatus } from '@/hooks/useUsernameStatus';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { OverlayPill, OVERLAY_PILL_ACTIVE_BG } from '@/components/OverlayPill';
+import { OverlayPill, OVERLAY_PILL_ACTIVE_BG, PILL_ROW_DROP } from '@/components/OverlayPill';
 import { useBotUsers } from '@/hooks/useBotUsers';
 import { useAnnouncement } from '@/hooks/useAnnouncement';
 import { AnnouncementSheet } from '@/components/AnnouncementSheet';
@@ -456,7 +456,7 @@ export default function HomeScreen() {
       <Animated.View
         style={[
           s.topOverlayWrap,
-          { paddingTop: insets.top, paddingBottom: verticalScale(20) },
+          { paddingTop: insets.top + PILL_ROW_DROP, paddingBottom: verticalScale(20) },
           overlayStyle,
         ]}
         pointerEvents="box-none"

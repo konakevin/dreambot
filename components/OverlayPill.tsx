@@ -14,6 +14,10 @@ import * as Haptics from 'expo-haptics';
  *  overlays (e.g. the gallery edge chevrons) match it from one source. */
 export const OVERLAY_PILL_ACTIVE_BG = 'rgba(0,0,0,0.6)';
 
+/** How far the Home and Bots pill rows sit below the safe-area top. Shared so the pills don't jump between the two
+ *  tabs. Clears the Following count badge (which floats above its pill) off the Dynamic Island (Kevin 2026-09-30). */
+export const PILL_ROW_DROP = verticalScale(8);
+
 interface Props {
   label: string;
   active: boolean;
