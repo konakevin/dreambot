@@ -51,8 +51,6 @@ export function OverlayPill({ label, active, onPress, badge }: Props) {
 
 const s = StyleSheet.create({
   pill: {
-    flexDirection: 'row',
-    gap: horizontalScale(6),
     paddingVertical: verticalScale(6),
     borderRadius: 16,
     backgroundColor: 'rgba(0,0,0,0.35)',
@@ -71,19 +69,25 @@ const s = StyleSheet.create({
     includeFontPadding: false,
   },
   textActive: { color: '#FFFFFF', fontWeight: '700' },
-  // Brand purple, not the red alert badge (the Bots tab's red counts were removed in 1.10.0): news, not a warning.
-  // Sized to sit inside the pill's own 16pt line so the pill keeps its height.
+  // A red count floating off the pill's top-right corner, apart from the label (Kevin 2026-09-30: "overlaid over
+  // the top right of the pill, somewhat disjoint from it ... it should be red"). Absolute, so the pill keeps its size
+  // and its neighbours don't shift; the dark ring separates it from the pill and whatever art sits behind.
   badge: {
-    minWidth: fontScale(16),
-    height: fontScale(16),
-    borderRadius: fontScale(8),
+    position: 'absolute',
+    top: -verticalScale(7),
+    right: -horizontalScale(7),
+    minWidth: fontScale(18),
+    height: fontScale(18),
+    borderRadius: fontScale(9),
     paddingHorizontal: horizontalScale(4),
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.accent,
+    backgroundColor: colors.error,
+    borderWidth: 1.5,
+    borderColor: 'rgba(0,0,0,0.55)',
   },
   badgeText: {
-    color: '#140A2E',
+    color: '#FFFFFF',
     fontSize: fontScale(10.5),
     fontWeight: '800',
     lineHeight: fontScale(13),
