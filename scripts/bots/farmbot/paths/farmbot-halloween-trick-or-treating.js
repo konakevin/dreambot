@@ -75,7 +75,16 @@
  *     ANIMAL_COMPANIONS pick or an AMBIENT_LIFE pick) so the fully-empty
  *     branch is never a bare, lifeless doorway.
  *
- * Camera: pools.CAMERA_COMPOSITION manually filtered to drop any residual
+ * ⭐ 2026-10-02 FIX (Kevin's bookmark: a free-standing red door on a deck in an open cornfield, upload
+ * 9b9f4d13): three draws stacked. (1) 18 of 120 doorway entries named a door that "stands" with no house
+ * around it (rewritten to open with the house, the door set into its wall; the gen recipe now requires it);
+ * (2) a vista camera ("Low wide angle, the land rising gently ahead, the sky enormous and luminous above") put
+ * open land and sky behind it; (3) the no-character branch's 35% ambient-life fallback (fireflies) left the
+ * door as the only subject. Now: a hand-authored DOORSTEP_CAMERA list (house front always in frame) replaces
+ * the filtered shared pool, and the no-character branch is always a costumed animal. The notes below describe
+ * the pre-fix design.
+ *
+ * Camera (pre-fix): pools.CAMERA_COMPOSITION manually filtered to drop any residual
  * dwarfing/scale-dissolving entries (11 of 109 still carry "tiny within a
  * sweeping landscape"-style language predating the source-level fix
  * documented in FARMBOT_PATH_BUILD_STATE.md's "back-turned character" +
@@ -165,24 +174,32 @@ const ATMOSPHERE = [
   'Gentle overcast dusk, soft diffused light with a cool blue-grey cast, warm lights glowing cheerfully against the muted evening color.',
 ];
 
-// CAMERA_COMPOSITION manually filtered — drop residual dwarfing/scale-
-// dissolving entries (see header comment). The over-the-shoulder/rear-view
-// entries are already fully removed at the shared-pool source, so this
-// filter is a defensive top-up, not a duplicate of that fix.
-const CAMERA_SAFE = pools.CAMERA_COMPOSITION.filter(
-  (c) => !/tiny|dwarf|expansive|endlessly|shoulder|rear view|from behind|back turned|facing away/i.test(c)
-);
+// Hand-authored DOORSTEP framings (2026-10-02). The filtered shared CAMERA_COMPOSITION pool let 16 vista /
+// big-sky framings through ("Low wide angle, the land rising gently ahead, the sky enormous and luminous above"),
+// and paired with a doorway entry that never named its house it rendered a free-standing red door on a deck in
+// an open cornfield (Kevin's bookmark, upload 9b9f4d13). The shared pool's "framed through a barn doorway" and
+// "looking through a farmhouse window" entries render as literal frames, and its interior / rooftop framings lose
+// the doorstep. Every framing here keeps the house front in the picture; camera position only.
+const DOORSTEP_CAMERA = [
+  'Eye-level medium shot of the doorstep, the house front filling the frame behind the steps.',
+  'Medium framing from the front walk, the porch steps, the door and a lit front window all in view.',
+  'Slightly low angle from the foot of the porch steps, the house front rising warmly behind.',
+  'Three-quarter view of the porch from the garden path, the house wall and roofline in frame.',
+  'Close medium shot at the top step, the door and its glowing jack-o-lanterns close behind.',
+  'Eye-level view from the front gate, the little house front and its porch centered softly.',
+  'Medium-wide framing from the yard, the house front and porch lights filling most of the frame, a thin strip of dusk sky above the roof.',
+  'Intimate close framing at the doorstep, shallow depth of field, the lit doorway soft behind.',
+  'Low eye-level view along the porch boards toward the door, the railing lights leading the eye.',
+  'Gentle three-quarter angle from beside the steps, the house wall and front door to one side.',
+  'Low lane-level perspective along the path, cottages with lit windows close on either side.',
+  'Eye-level medium shot on the path between the houses, porch lights and lit windows framing both sides.',
+];
 
 module.exports = ({ sharedDNA, picker }) => {
   const includeCharacter = Math.random() < 0.6;
 
   let castBlock = null;
   let momentLine;
-  // Only the ambient (no human, no costumed animal) branch sets this — the
-  // guaranteed pickPureSceneLife() content, repeated verbatim in the closing
-  // paragraph so it survives even if THE CAST section itself gets trimmed
-  // (papaya-guava-orchard fix — a front-loaded mention alone isn't enough).
-  let guaranteedLifeRepeat = '';
 
   if (includeCharacter) {
     const figure = picker.pickWithRecency(FIGURE, 'tot_figure');
@@ -212,32 +229,19 @@ Skin: ${skinTone}
 Eyes: ${eyeColor}
 Hair (a few wisps visible at the edge of the costume hood): ${hairColor}${petLine}`;
 
-    momentLine = `${figure} in a playful Halloween costume, holding a treat container, arriving at a warmly decorated doorway glowing with a jack-o-lantern and string lights — the joyful, classic moment of trick-or-treating.`;
+    momentLine = `${figure} in a playful Halloween costume, holding a treat container, arriving at the warmly decorated front door of a farmhouse glowing with a jack-o-lantern and string lights — the joyful, classic moment of trick-or-treating.`;
   } else {
-    const costumedAnimalChance = 0.65;
-    if (Math.random() < costumedAnimalChance) {
-      const species = picker.pickWithRecency(ANIMAL_SPECIES, 'tot_animal_species');
-      const animalCostume = picker.pickWithRecency(COSTUME, 'tot_animal_costume');
-      castBlock = `${species} trotting right up to the doorway on its own, wearing this Halloween costume layered over its own fur, its own ears, paws, and tail clearly visible: ${animalCostume}
-No human figure anywhere in the frame.`;
-      momentLine = `${species} in a playful Halloween costume trotting right up to a warmly decorated doorway glowing with a jack-o-lantern and string lights — a charming trick-or-treating moment, no human figure anywhere in the frame.`;
-    } else {
-      const life = pools.pickPureSceneLife(picker, {
-        animalPool: pools.byTags(pools.ANIMAL_COMPANIONS, ['low']),
-        animalChance: 0.5,
-        ambientTags: ['outdoor'],
-        axisPrefix: 'tot',
-      });
-      castBlock = `${life}
-This is REQUIRED, concrete, clearly-visible content, not just background mood — it must actually appear in the render. No human figure anywhere in the frame.`;
-      momentLine = `A warmly decorated doorway glowing with a jack-o-lantern and string lights, no human figure anywhere in the frame — instead: ${life}`;
-      guaranteedLifeRepeat = ` The scene is enlivened by this, clearly and prominently visible, not just implied: ${life}`;
-    }
+    // Always a costumed animal trick-or-treater (2026-10-02). The former 35% ambient-life fallback (fireflies,
+    // birds) left the doorway itself as the only subject, which is how a bare free-standing door became the hero.
+    const species = picker.pickWithRecency(ANIMAL_SPECIES, 'tot_animal_species');
+    const animalCostume = picker.pickWithRecency(COSTUME, 'tot_animal_costume');
+    castBlock = `${species} trotting right up to the doorway on its own, wearing this Halloween costume layered over its own fur, its own ears, paws, and tail clearly visible: ${animalCostume}`;
+    momentLine = `${species} in a playful Halloween costume trotting right up to the warmly decorated front door of a farmhouse glowing with a jack-o-lantern and string lights, a charming trick-or-treating moment.`;
   }
 
   const doorway = picker.pickWithRecency(DOORWAY, 'tot_doorway');
   const atmosphere = picker.pickWithRecency(ATMOSPHERE, 'tot_atmosphere');
-  const camera = picker.pickWithRecency(CAMERA_SAFE, 'tot_camera');
+  const camera = picker.pickWithRecency(DOORSTEP_CAMERA, 'tot_doorstep_camera');
 
   return `${lookOverride(sharedDNA && sharedDNA.lookRegister)}You are writing a HALLOWEEN "trick-or-treating" scene for FarmBot's cozy countryside world — the classic warm, joyful moment of a costumed trick-or-treater collecting candy at a decorated doorway (or walking a decorated path between farm buildings). PLAYFUL, FAMILY-FRIENDLY HALLOWEEN ONLY: grinning jack-o-lanterns, warm porch glow, candy, cute costumes — never real horror, gore, or anything genuinely scary or unsettling.
 
@@ -257,5 +261,5 @@ ${atmosphere}
 ${camera}
 The trick-or-treater (human or animal) is captured facing toward the camera — arriving at, standing at, or turned to happily show off their costume and treat haul — as if seen from the doorway's own point of view. NEVER shown from behind, over-the-shoulder, walking away, or with their back to the viewer.
 
-Render a warm, joyful trick-or-treating moment — the decorated doorway (or path) and whoever is collecting treats there rendered with equal loving richness, never a bare backdrop.${guaranteedLifeRepeat} No welcome sign, banner, doormat message, or any readable text or lettering anywhere in the frame. Every face in the shot, human and animal alike, stays clearly separate and fully legible, with a visible gap of open air between any two faces. no text, no words, no watermarks, gallery quality`;
+Render a warm, joyful trick-or-treating moment — the decorated doorway (or path) and whoever is collecting treats there rendered with equal loving richness, never a bare backdrop. The door is always set into the front wall of its farmhouse or cottage, the house itself clearly in the picture. No welcome sign, banner, doormat message, or any readable text or lettering anywhere in the frame. Every face in the shot, human and animal alike, stays clearly separate and fully legible, with a visible gap of open air between any two faces. no text, no words, no watermarks, gallery quality`;
 };

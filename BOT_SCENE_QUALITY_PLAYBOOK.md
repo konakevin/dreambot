@@ -799,6 +799,15 @@ with `--target`. When regen adds 0 after dedup, the theme is exhausted: author t
   say where in frame it sits, give the crop ("glass arcing across the top corners and running off its edges"), keep
   base/stand/shelf out of every layer (9/9; an abstraction renders nothing). Open every detached mass with its attachment
   (welded to bark, half-buried).
+- **A free-standing door on a deck in an open field** → three draws stacked: a doorway entry that names the door
+  ("A plump round-topped cottage door ... stands between two carved pumpkins") but no house, a vista camera ("the
+  land rising gently ahead, the sky enormous"), and a branch with no subject (ambient fireflies) → open every door,
+  porch or gate entry with what it belongs to ("a little stone cottage, its door set into the front wall"), give
+  threshold paths a hand-authored camera list that keeps the house front in frame (no vista, no "framed through a
+  doorway/window"), and never leave a threshold scene without its subject. Measure with `building`-word scans that
+  don't count a "window" in the door itself. 31 of 120 entries rewritten, 6/6 forced shadow renders attached
+  (FarmBot trick-or-treating, 2026-10-02). Nightly probes of bare-doorway seeds rendered 0/8 floating: the
+  composer's medium framing puts the door into a wall.
 - **Container with a standard viewing height** (tub, tank, cot) → only a HEIGHT-EXCLUSIVE surface buys the camera (hulls
   cut by the waterline with a meniscus).
 - **Glass display case / aquarium** → a transparent volume with its own edges → bury the thing deep inside the room's own

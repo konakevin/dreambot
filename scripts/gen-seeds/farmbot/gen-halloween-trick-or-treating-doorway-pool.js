@@ -64,8 +64,8 @@ const RECIPES = [
     banHumanLanguage: true,
     metaPrompt: (n) => `Generate ${n} distinct descriptions of a DECORATED HALLOWEEN DOORWAY/PORCH or
 a DECORATED GARDEN PATH BETWEEN FARM BUILDINGS, for a cozy countryside anime farm bot's playful
-"trick-or-treating" scene. The doorway/porch (or path) is ALWAYS the grammatical subject named FIRST
-in the sentence — this is the HERO of the shot, described alone with NO people in it at all (the
+"trick-or-treating" scene. The HOUSE with its decorated doorway/porch (or the path) is ALWAYS named FIRST
+in the sentence — this is the HERO of the shot, described with NO people in it at all (the
 trick-or-treater is added separately, later, by the calling code — never mention a homeowner, a
 door-answerer, a visitor, or any person).
 
@@ -85,6 +85,13 @@ glowing jack-o-lanterns set on the ground or low fence posts, strings of warm li
 between porch posts or along a fence, warm lit windows glowing here and there in the farmhouse walls
 further down the path, fallen autumn leaves scattered underfoot. This is the between-houses route a
 trick-or-treater walks along.
+
+CRITICAL — the DOOR always belongs to its HOUSE. Every door/porch entry names the farmhouse or cottage
+itself (its clapboard, stone or whitewashed wall, its porch roof or eaves, a lit front window) and puts
+the door SET INTO that wall ("a little stone cottage, its round-topped door painted plum set into the
+front wall"). Never a door that simply "stands" with no house around it, and never a porch described
+without the house it belongs to: a door named on its own renders as a free-standing door frame in an
+empty field (FarmBot 2026-10-02).
 
 CRITICAL — every jack-o-lantern is warm, cheerful, and FRIENDLY: a big round grinning or gently
 smiling carved face, never a menacing, angry, fanged, or scary expression. This is a playful, joyful
@@ -123,10 +130,10 @@ object/state left in place) — do not describe anyone having just set it there 
 Output ONLY a JSON array of ${n} strings, no preamble, no numbering. 25-40 words each.
 
 Examples:
-["A round-topped cottage door painted a cheerful cranberry red stands flanked by two grinning
-jack-o-lanterns glowing warm amber from within, strings of soft bulb lights looped along the porch
-railing, a wicker bowl brimming with colorful wrapped candies waiting on the top step in the fading
-dusky light.", "A winding garden path connects one cozy farmhouse to the next, lined on both sides
+["A little white cottage with warm light in its front window, its round-topped door painted a
+cheerful cranberry red set into the clapboard wall, flanked by two grinning jack-o-lanterns glowing warm
+amber, strings of soft bulb lights looped along the porch railing, a wicker bowl brimming with colorful
+wrapped candies on the top step in the fading dusky light.", "A winding garden path connects one cozy farmhouse to the next, lined on both sides
 with a row of small glowing jack-o-lanterns set along low fence posts, strings of warm lights strung
 overhead between them, fallen golden leaves scattered underfoot as the sky deepens toward violet
 overhead."]
@@ -134,7 +141,7 @@ overhead."]
 🚫 STRICT BANS: NO named people/characters, NO implied people (figures/crowd/homeowner/visitor/
 hands/footprints), NO readable text/signage/welcome-mat-message/banner/nameplate/plaque of any kind,
 NO brand names, NO photographer/camera-brand names, NO menacing/angry/scary jack-o-lantern
-expressions, NO real horror/gore/genuinely-scary imagery of any kind, NO bare/undecorated door or
+expressions, NO real horror/gore/genuinely-scary imagery of any kind, NO door or porch without its house, NO bare/undecorated door or
 path lacking jack-o-lantern/light/candy-bowl detail, NO metaphorical light-as-object language, NO
 per-object personification within a cluster of similar items, NO pairing of dark/darkness/shadow
 with a light-implying word describing the same thing.
