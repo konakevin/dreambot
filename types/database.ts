@@ -1802,6 +1802,7 @@ export type Database = {
           nightly_eye_contact: boolean;
           nightly_flux_couple_honest_looks: boolean;
           nightly_garment_roll: boolean;
+          nightly_gendered_wardrobe: boolean;
           nightly_legacy_look_pct: number;
           nightly_look_recency: number;
           nightly_looks_allowlist: string[];
@@ -1814,6 +1815,7 @@ export type Database = {
           nightly_require_ai_enabled: boolean;
           nightly_require_onboarding: boolean;
           nightly_scenarios_location_scoped: boolean;
+          nightly_solo_action_early: boolean;
           nightly_solo_outfit_early: boolean;
           nightly_swap_capacity_retries: number;
           outfit_favoured_look_pct: number;
@@ -1952,6 +1954,7 @@ export type Database = {
           nightly_eye_contact?: boolean;
           nightly_flux_couple_honest_looks?: boolean;
           nightly_garment_roll?: boolean;
+          nightly_gendered_wardrobe?: boolean;
           nightly_legacy_look_pct?: number;
           nightly_look_recency?: number;
           nightly_looks_allowlist?: string[];
@@ -1964,6 +1967,7 @@ export type Database = {
           nightly_require_ai_enabled?: boolean;
           nightly_require_onboarding?: boolean;
           nightly_scenarios_location_scoped?: boolean;
+          nightly_solo_action_early?: boolean;
           nightly_solo_outfit_early?: boolean;
           nightly_swap_capacity_retries?: number;
           outfit_favoured_look_pct?: number;
@@ -2102,6 +2106,7 @@ export type Database = {
           nightly_eye_contact?: boolean;
           nightly_flux_couple_honest_looks?: boolean;
           nightly_garment_roll?: boolean;
+          nightly_gendered_wardrobe?: boolean;
           nightly_legacy_look_pct?: number;
           nightly_look_recency?: number;
           nightly_looks_allowlist?: string[];
@@ -2114,6 +2119,7 @@ export type Database = {
           nightly_require_ai_enabled?: boolean;
           nightly_require_onboarding?: boolean;
           nightly_scenarios_location_scoped?: boolean;
+          nightly_solo_action_early?: boolean;
           nightly_solo_outfit_early?: boolean;
           nightly_swap_capacity_retries?: number;
           outfit_favoured_look_pct?: number;

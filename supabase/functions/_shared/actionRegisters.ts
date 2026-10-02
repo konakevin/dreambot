@@ -14,6 +14,9 @@
  * __tests__/lib/actionRegisters.test.ts, which also fails if a Halloween pool or a biome has no register.
  * Rules of thumb for authoring: no face / eye / camera words, no pronouns, no "reading / studying / admiring",
  * no "arms raised / overhead", no walking-into-each-other proximity, nothing above the head.
+ * Holiday registers put the person AT a spot (a rail, a fountain, a boulder, a barrel stack), never ON a route
+ * (path, trail, avenue, rows, aisle, boardwalk, switchback): a route beat renders the same "person centred on a
+ * receding path" shot every time (2026-10-02, the fall / Halloween nightlies Kevin flagged). Locked by the test.
  */
 import type { DualStance } from './dualStances.ts';
 
@@ -140,7 +143,7 @@ export const ACTION_REGISTERS: Record<string, ActionRegister> = {
     ],
     [
       'leaning on the wagon rail under the harvest moon, hands loose',
-      'standing between the pumpkin rows with a lantern held at hip height',
+      'standing beside a pumpkin pile with a lantern held at hip height',
     ]
   ),
   witch_cottage: R(
@@ -199,7 +202,7 @@ export const ACTION_REGISTERS: Record<string, ActionRegister> = {
       'setting a lit pumpkin on the fountain rim',
       'holding a bat-shaped kite by its string in the square',
       'tossing candy corn to a pumpkin-headed scarecrow',
-      'sweeping the spiral hill path with a crooked broom',
+      'sweeping the town fountain steps with a crooked broom',
       'holding up a lantern beneath the enormous moon',
     ],
     [
@@ -273,7 +276,7 @@ export const ACTION_REGISTERS: Record<string, ActionRegister> = {
   ),
   ghost_hunting_crew: R(
     [
-      'aiming a glowing gadget wand down the library aisle',
+      'aiming a glowing gadget wand at a rattling library shelf',
       'checking a beeping meter held at chest height',
       'lifting a ghost trap by its handle off the marble floor',
       'wiping green slime off a coverall sleeve',
@@ -1037,12 +1040,12 @@ export const ACTION_REGISTERS: Record<string, ActionRegister> = {
     [
       'catching a drifting maple leaf in one open palm at waist height',
       'brushing fallen leaves off a split-rail fence with one hand',
-      'holding a paper cup of cider with both hands on the covered-bridge walkway',
+      'holding a paper cup of cider with both hands at the covered-bridge rail',
       'tying a boot lace with one foot up on a fallen log',
       'pulling a wool scarf snug with both hands at the collar',
       'scooping a small pile of red leaves and letting it spill from one hand',
       'resting a forearm on the dock post beside a tied canoe',
-      'buttoning a wool coat while leaves drift across the trail',
+      'buttoning a wool coat while leaves drift past a split-rail fence',
     ],
     [
       'leaning against a maple trunk with hands in coat pockets, one ankle crossed',
@@ -1062,7 +1065,7 @@ export const ACTION_REGISTERS: Record<string, ActionRegister> = {
     ],
     [
       'leaning on the farm-stand counter beside crates of apples, a tin cup at hand',
-      'standing between vineyard rows with a basket resting on one hip',
+      'standing by a stack of wine barrels with a basket resting on one hip',
     ]
   ),
   cozy_hearth: R(
@@ -1115,14 +1118,14 @@ export const ACTION_REGISTERS: Record<string, ActionRegister> = {
   ),
   autumn_adventure: R(
     [
-      'adjusting a daypack strap on the canyon trail',
+      'adjusting a daypack strap at a canyon lookout rock',
       'refilling a steel bottle at the edge of the alpine lake',
       'dragging a wooden kayak up the pebble shore by its bow handle',
-      "holding a horse's lead rope loosely at the trail edge",
+      "holding a horse's lead rope loosely beside a split-rail fence",
       'stepping onto a flat stone at the river crossing, arms out for balance',
       'brushing bracken off wellies at the stone wall',
       'zipping a fleece vest at the trailhead',
-      'planting a trekking pole on the switchback',
+      'planting a trekking pole beside a stone cairn',
     ],
     [
       'leaning on a trekking pole at the canyon rim, a river far below',
@@ -1153,7 +1156,7 @@ export const ACTION_REGISTERS: Record<string, ActionRegister> = {
       'catching a floating golden leaf in one palm at waist height',
       'steadying a lantern on the pier post beside the mirror lake',
       'tying off a balloon mooring rope at the basket',
-      'pushing open a treehouse door onto the lantern-lit walkway',
+      'pushing open a treehouse door onto the lantern-lit balcony',
       'holding a paper cup of cider at the end of the pier',
     ],
     [
@@ -1166,26 +1169,26 @@ export const ACTION_REGISTERS: Record<string, ActionRegister> = {
     [
       'brushing one hand along a curtain of amber chrysanthemums',
       'holding a single giant dahlia bloom at waist height',
-      'stepping over a petal-drifted root on the path',
+      'stepping over a petal-drifted root beside a bloom-heavy arbor',
       'catching a drifting petal in one open palm',
       'resting a forearm on the footbridge rail above the marigolds',
       'gathering a few fallen petals into a basket held at the hip',
-      'parting a cascade of blooms with one hand at the walkway',
+      'parting a cascade of blooms with one hand beneath the arbor',
       'setting a lantern on the terrace balustrade',
     ],
     [
-      'standing on the petal-carpeted path with hands in coat pockets',
+      'standing on a petal-carpeted terrace with hands in coat pockets',
       'leaning against a colossal dahlia stem with one ankle crossed',
     ]
   ),
   enchanted_gold_forest: R(
     [
-      'holding a lantern at hip height on the mossy path',
+      'holding a lantern at hip height beside a mossy boulder',
       'cupping a firefly in one loosely closed hand at waist height',
       'brushing a hand along a glowing mushroom cap',
       'catching a suspended golden leaf in one palm',
       'resting a hand on a white birch trunk',
-      'stepping up the mossy stone stairway with a lantern at the side',
+      'resting one boot on a mossy stone step with a lantern at the side',
       'trailing fingertips through drifting seeds in a sunbeam',
       'pulling a scarf snug at the collar in the moonlight',
     ],
@@ -1228,7 +1231,7 @@ export const ACTION_REGISTERS: Record<string, ActionRegister> = {
   ),
   high_peaks_fall: R(
     [
-      'adjusting a daypack strap on the switchback',
+      'adjusting a daypack strap beside a summit cairn',
       'planting both trekking poles at the ridge crest',
       'refilling a steel bottle at the glacier stream',
       'holding a steaming mug on the hut bench',
@@ -1249,7 +1252,7 @@ export const ACTION_REGISTERS: Record<string, ActionRegister> = {
       'resting one hand on the carved back of a throne chair',
       'setting a gilded oak-leaf crown on the table beside a candelabra',
       'trailing one hand along the black-rose trellis',
-      'holding a lantern at hip height on the garden path',
+      'holding a lantern at hip height beside the garden fountain',
       'lifting a bunch of grapes from a silver platter',
       'brushing petals off a velvet sleeve',
       'placing a candle on the cracked fountain rim',

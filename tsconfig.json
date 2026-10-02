@@ -24,6 +24,7 @@
     "__tests__/lib/outfitPlanBrief.test.ts",
     "__tests__/lib/outfitSolo.test.ts",
     "__tests__/lib/outfitPhase8Engine.test.ts",
+    "__tests__/lib/soloActionEarly.test.ts",
     "__tests__/lib/outfitSceneFit.test.ts",
     "__tests__/lib/sceneSetting.test.ts",
     "__tests__/lib/costumeWardrobe.test.ts",

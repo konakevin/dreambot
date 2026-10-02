@@ -512,6 +512,7 @@ Deno.serve(async (req) => {
     force_no_holiday,
     force_outfit_mix,
     force_solo_outfit_early,
+    force_solo_action_early,
     force_gendered_wardrobe,
     force_outfit_scene_fit,
     force_llm_model,
@@ -3819,6 +3820,11 @@ Deno.serve(async (req) => {
           resolvedCast.length === 1 &&
           (force_solo_outfit_early ?? engineCfg0.nightlySoloOutfitEarly);
         if (soloOutfitEarly) fallbackReasons.push('solo_outfit_early');
+        // SOLO ACTION EARLY (mig 656): single-cast prompts place the action right after "set at".
+        const soloActionEarly =
+          resolvedCast.length === 1 &&
+          (force_solo_action_early ?? engineCfg0.nightlySoloActionEarly);
+        if (soloActionEarly) fallbackReasons.push('solo_action_early');
         // GENDERED WARDROBES (mig 647, CARD_WARDROBE_GENDER_PLAN.md): on a card that dresses its cast from its own
         // list, each person draws from their gender's list (WARDROBE_MEN / WARDROBE_WOMEN, fallback WARDROBE), so a man
         // is never handed the shared list's organza robe. Off = the one shared pick below, unchanged.
@@ -3858,6 +3864,7 @@ Deno.serve(async (req) => {
             ? { wardrobeSceneFit: { setting: nightlySetting } }
             : {}),
           ...(soloOutfitEarly ? { soloOutfitEarly: true } : {}),
+          ...(soloActionEarly ? { soloActionEarly: true } : {}),
           ...(eyeContact ? { eyeContact: true } : {}),
           ...(ageFidelity ? { ageFidelity: true } : {}),
           ...(coupleHairAnchor ? { coupleHairAnchor: true } : {}),

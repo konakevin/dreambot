@@ -158,6 +158,14 @@ export interface CharacterSlotPipelineInput {
    *  shipped order (wardrobe at the end of the CHARACTER block, ~char 1,100-1,400) rendered the outfit 0/12; right
    *  after the medium 12/12 (ballet dress, old-money polo, two regency dresses). Unset → byte-identical. */
   soloOutfitEarly?: boolean;
+  /** SOLO ACTION EARLY (mig 656, nightly): the single-cast prompt places the action right after "set at" instead of
+   *  after the anchor. Same-seed flux-1.1-pro probe (2026-10-02, the fall/Halloween "woman on a path" nightlies):
+   *  an action using a scene object (hand on the fountain rim, a jack-o-lantern on the porch step) rendered 0/12 in
+   *  the shipped order, 12/12 moved next to the place (two rounds); the corridor shot went 20/24 → 12/24 (0/24 with
+   *  the seed repair, mig 657). A leading role noun ("Viking merchant lifts ...") can pull its prior along (1 male
+   *  body in 4 seeds on that prompt); the solo swap guard reads the render's gender and re-renders.
+   *  Unset → byte-identical. */
+  soloActionEarly?: boolean;
   /** PERIOD DRESS (costume cards, _shared/costumeWardrobe.ts, 2026-09-30): the era a costume card's cast belong to
    *  ("1880s American frontier"). The brief keeps every garment and prop in it, and each wardrobe line ends with
    *  ", authentic <period> dress": a POSITIVE era cue, because Flux adds modern things on its own (a wristwatch on a
@@ -1877,15 +1885,20 @@ export function assembleCharacterPrompt(
     const wardrobeTail = `, wearing ${wardrobe}`;
     const outfitEarly =
       !!input.soloOutfitEarly && !!wardrobe && identityBlock.endsWith(wardrobeTail);
+    // SOLO ACTION EARLY (mig 656): the action rides right after "set at", next to the place it uses, instead of
+    // after the ~60-word anchor. Same words, only the order moves.
+    const soloAction = slots.action || input.action || '';
+    const actionEarly = !!input.soloActionEarly && !!soloAction;
     const parts = [
       genderLock,
       mediumSignal,
       input.eyeContact ? 'looking into the camera' : '',
       outfitEarly ? `wearing ${wardrobe.replace(/[\s.]+$/, '')}` : '',
       setAt,
+      actionEarly ? soloAction.replace(/[\s.]+$/, '') : '',
       vibeEarly,
       singleAnchor,
-      slots.action || input.action || '',
+      actionEarly ? '' : soloAction,
       outfitEarly ? identityBlock.slice(0, -wardrobeTail.length) : identityBlock,
       slots.scene_description,
       vibeAfterScene,

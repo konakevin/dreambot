@@ -82,6 +82,21 @@ Done first: **gendered card wardrobes**, LIVE 2026-10-01 (`CARD_WARDROBE_GENDER_
    he in ..." row would put one person in the other's outfit. With the roll on (live) the row's attire is only colour /
    texture inspiration ("never its garments", seen in the 2026-10-01 QA brief) and the embodied path already passes it
    to a woman + man couple only (nightly-dreams ~2965), so nothing to do now.
+8. ~~Corridor sameness, fall + Halloween solos~~ done 2026-10-02 (migs 656-659). Kevin: three users' nightlies "all look
+   like a woman walking forward or positioned in a path". Measured 7 of 19 holiday solos since 09-26 (women 6/9) vs 2
+   of 20 year-round. Causes: (a) the solo "set at" line is the seed's first comma-clause and flux stages the person on
+   it, so a route there (avenue, trail, rows, aisle, dock, covered-bridge deck) or even mid-seed ("a luminous path")
+   renders her centred on it; ~25-30% of holiday solo seeds did; (b) the action sat after the ~60-word anchor and flux
+   dropped it. Fixes: 505 solo seeds open on a spot instead (657: 410 + 68 light edits, 658: 27 from a wider word list;
+   `scripts/fix-holiday-corridor-seeds.js`, every row read, `--rollback`); 17 holiday register examples reworded off
+   routes + a test; `engine_config.nightly_solo_action_early` (656, LIVE via 659) moves the action next to "set at" in
+   every solo nightly. Same-seed probe: corridor 20/24 -> 0/24, scene-object actions 0/12 -> 12/12. Render test on
+   Kevin's account (real nightly-dreams, 12 corridor-prone sub-themes x2): 16/24 -> 5/24 (2 of the 5 drew rows 658
+   then fixed). Couples untouched.
+9. Next, pending Kevin's go: a composition audit of ALL nightly pools (year-round scenarios, location spots, holiday
+   couples) measured from DELIVERED renders (tag each production nightly's composition, group by pool), then fix only
+   the pools that cluster. Text exposure today: solo year-round 8-13% of rows name a route, character-eligible location
+   spots 11% of 14,365, holiday couples 20%.
 
 ## Safety
 

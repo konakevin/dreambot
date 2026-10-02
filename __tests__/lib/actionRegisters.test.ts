@@ -29,6 +29,20 @@ describe('action registers — every entry is swap-safe verbatim', () => {
   });
 });
 
+describe('holiday registers stage the person at a spot, never on a route (2026-10-02)', () => {
+  // A route beat ("standing on the mossy path", "between vineyard rows") renders the same picture every time: the
+  // person centred on a path receding behind them. Same-seed probe: 20/24 corridor shots on route seeds.
+  const ROUTE =
+    /\b(path|paths|trail|trails|avenue|lane|road|walkway|promenade|aisle|aisles|rows|boardwalk|street|alley|switchback|switchbacks)\b/i;
+  const holidayEntries = entries.filter(
+    ([key]) => FALL_POOLS.includes(key) || HALLOWEEN_POOLS.includes(key)
+  );
+  it('covers the holiday registers', () => expect(holidayEntries.length).toBeGreaterThan(100));
+  it.each(holidayEntries)('%s: "%s"', (_key, text) => {
+    expect(text).not.toMatch(ROUTE);
+  });
+});
+
 describe('action registers — coverage parity', () => {
   it('every Halloween pool has a register', () => {
     for (const pool of HALLOWEEN_POOLS) {

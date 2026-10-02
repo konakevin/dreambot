@@ -211,6 +211,13 @@ From the couple face-swap work and Halloween. Ideas that bend a rule carry a `ri
 9. **Secular unless Kevin says otherwise** (§8 decision 2).
 10. **The motto** (`feedback_dreambot_motto_whimsy_delight_bar`): playful, vivid, clever, one charm detail. A plain
     "couple stands in front of a tree" is a miss; give every row a moment.
+11. **A solo row opens on a SPOT, never a route** (migs 657/658, 2026-10-02). The early "set at" line is the row's
+    first comma-clause, and flux stages the person on what it names: "Snowy village lane lined with lanterns" renders
+    the same woman centred on a receding lane every time (fall + Halloween: 16 of 24 real nightlies did). Open on a
+    noun phrase for a spot ("Lantern-hung gate of a snowy cottage", "Bench beside the skating pond"), and keep paths,
+    lanes, streets, rows, aisles and markets-as-corridors out of the text or once after the first clause ("beside
+    the market lane"). After seeding, run `node scripts/fix-holiday-corridor-seeds.js --holidays christmas --out
+    <dir>` and read what it flags.
 
 ---
 
