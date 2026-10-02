@@ -407,6 +407,9 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
 - **Backups + disaster recovery:** `BACKUPS.md` (status of record + the restore runbook): daily off-site copy of the
   database and every Storage bucket to Cloudflare R2 (`.github/workflows/backup.yml`), weekly restore drill
   (`backup-drill.yml`); one damaged table comes back with `node scripts/backup/restore-table.js public.<t> --db prod`.
+- **Nightly seed pools (READ BEFORE writing, rewriting or auditing any holiday / year-round / location seed):**
+  `NIGHTLY_POOL_PLAYBOOK.md` (how a seed becomes a picture, the writing rules, the measure -> rewrite -> render-test ->
+  guarded-migration loop, the tools). Add every new lesson there as one bullet.
 - **Engine + scaling:** `QUEUE_WORKERS_REFACTOR.md` (queue status of record + Fly scale runbook),
   `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_IMPRESS_PLAN.md` (always-impress backlog: quality gate, legendary dreams, holidays, weather, pets, taste, arcs — each handoff-ready), `NIGHTLY_SEED_POOL_QA.md`, `NIGHTLY_FUN_SCENARIOS_PLAN.md` (fun/fantasy
   scenario buckets + Option B location-fit actions — LIVE, playbook for adding/scaling/tuning),
