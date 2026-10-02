@@ -92,8 +92,12 @@ Done first: **gendered card wardrobes**, LIVE 2026-10-01 (`CARD_WARDROBE_GENDER_
    routes + a test; `engine_config.nightly_solo_action_early` (656, LIVE via 659) moves the action next to "set at" in
    every solo nightly. Same-seed probe: corridor 20/24 -> 0/24, scene-object actions 0/12 -> 12/12. Render test on
    Kevin's account (real nightly-dreams, 12 corridor-prone sub-themes x2): 16/24 -> 5/24 (2 of the 5 drew rows 658
-   then fixed). Couples untouched.
-9. Next, pending Kevin's go: a composition audit of ALL nightly pools (year-round scenarios, location spots, holiday
+   then fixed). After the switch went live: 10/10 more (4 holiday, 6 year-round) swapped, identity 0.65-0.76.
+   Year-round A/B, switch forced off vs live on, 12 each (8 +1, 4 Kevin): 12/12 swaps both arms, identity median
+   0.689 vs 0.688, no re-renders; corridor-like shots ~5/12 off vs ~1/12 on, and the on arm's poses varied (seated,
+   leaning on a balustrade, feeding a tiny dragon) where off was mostly "standing, one hand resting on ...".
+   Unpaired rolls, small n. Couples untouched.
+9. Next, pending Kevin's go (`NIGHTLY_COMPOSITION_AUDIT_PLAN.md`): a composition audit of ALL nightly pools (year-round scenarios, location spots, holiday
    couples) measured from DELIVERED renders (tag each production nightly's composition, group by pool), then fix only
    the pools that cluster. Text exposure today: solo year-round 8-13% of rows name a route, character-eligible location
    spots 11% of 14,365, holiday couples 20%.

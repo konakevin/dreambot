@@ -1,0 +1,51 @@
+# Nightly composition audit: find and fix pools whose dreams look alike
+
+Status: **plan, awaiting Kevin's go** (2026-10-02). Kevin: "we should do an entire audit of all nightly seed pools to
+diagnose and fix similar issues with other pools?"
+
+## Why
+
+The fall / Halloween fix (migs 656-659, `NIGHTLY_POOL_CLEANUP_PLAN.md` open item 8) found one way a pool makes every
+dream the same picture: a route in the seed's first clause stages the person centred on it, walking toward camera.
+It was found because three users got the same shot on one night. Other pools may converge in ways nobody has noticed
+yet, and the corridor is only one shape: the 2026-10-02 render test also showed plain "standing centred, facing camera,
+arms down" shots on year-round seeds, a different sameness.
+
+Text exposure to the corridor cause today (route word anywhere in the row): year-round solo pools 8-13%,
+character-eligible location spots 11% of 14,365, holiday couples 20%. The fall / Halloween solo pools were 25-30%
+before the fix.
+
+## Method: measure delivered renders first, fix second
+
+Measuring what was picked has misled us before (`feedback_measure_delivered_not_picked_one_variable`). So the audit
+starts from the images.
+
+1. **Tag every production nightly from the last 30 days** (3,416 rows on 2026-10-02: 381 solo, 1,676 couple, the rest
+   scene-only; split out Kevin's parity rounds, which are not marked `is_qa`). A vision read per image, one fixed
+   rubric:
+   - staging: centred on a receding route / at a spot or prop / seated / doing something with an object / standing
+     with nothing to do
+   - pose: walking toward camera / standing arms down / hands in pockets / leaning / seated / active
+   - framing: head-and-shoulders / waist / knees / full figure; background: detailed / plain / vignette
+   Join each tag to `rolled_axes` (pool, sub-theme, location key, look, model, vibe, cast type).
+2. **Rank clusters against the base rate**, the way `/mine-posts` normalises: a pool is flagged when one tag is
+   over-represented in it (e.g. 40% "walking toward camera" where the base is 10%), with a minimum count so a 3-render
+   pool cannot flag.
+3. **Diagnose each flagged pool from its seeds**: route-staged first clauses, seeds with nothing for the hands, pose
+   words in the seed, a template mandate that overrides the pool.
+4. **Fix the same way as 657**: judge read, rewrite that keeps each row's place and theme, every row read, 25 first
+   with a render test on Kevin's account, then the rest as guarded migrations with a rollback.
+5. **Re-measure** the flagged pools on the next two weeks of production renders.
+
+## Kevin's calls before any write
+
+- **Couples** are the 2026-09-18 restore point. No couple pool is rewritten without Kevin's word, and the dual-swap
+  proximity scan (`scripts/scan-dual-faceswap-proximity.js`, CLAUDE.md hard rule) runs after any couple change.
+- **Location spots where the street IS the place** (the Champs-Elysees, a canal promenade): keep the street and give
+  it a spot ("a cafe table on the Champs-Elysees"), or leave those alone.
+- The vision model for step 1 (Haiku refuses some vision probes, `project_haiku_refuses_justified_vision_probes`).
+
+## Cost and safety
+
+Step 1 is read-only: about 3,400 vision reads. Writes are guarded migrations, before-state kept. Render tests on
+Kevin's account only, headroom-gated, concurrency 3, never on another user's account.
