@@ -1,7 +1,8 @@
 # Nightly composition audit: find and fix pools whose dreams look alike
 
-Status: **plan, awaiting Kevin's go** (2026-10-02). Kevin: "we should do an entire audit of all nightly seed pools to
-diagnose and fix similar issues with other pools?"
+Status: **run 2026-10-02; two fixes applied (migs 660, 661), see Results.** Kevin: "we should do an entire audit of all
+nightly seed pools to diagnose and fix similar issues with other pools?", then "go with your judgement, try to fix any
+problem pools you find" and "don't make blanket changes unless tested and confirmed with render tests".
 
 ## Why
 
@@ -49,3 +50,43 @@ starts from the images.
 
 Step 1 is read-only: about 3,400 vision reads. Writes are guarded migrations, before-state kept. Render tests on
 Kevin's account only, headroom-gated, concurrency 3, never on another user's account.
+
+## Results (2026-10-02)
+
+Tool: `scripts/audit-nightly-composition.js` (`pull` / `calibrate` / `tag` / `report`). 2,346 natural nightlies from the
+last 30 days (real users + Kevin's unforced), tagged by Sonnet 4.6 (`script` job) on the fixed rubric after a
+calibration set. Cast type comes from `castRoles` / `isDual` (`rolled_axes.dreamType` is unreliable: the first pull
+used it and mis-sorted ~540 solos as scene-only).
+
+**One cause stands out everywhere: a route word in the seed's set-at text.** Route-staged share, route word in the
+first clause vs none: solo 41% vs 11% (n 135 / 751), couple 50% vs 13% (192 / 925), scene-only 14% vs 6% (35 / 178).
+No other pool / look / vibe cluster survived a minimum count: the flagged look and vibe sub-pools were n 8-22 with
+0-5 distinct users each, i.e. noise; nothing was changed for them.
+
+**Fixed, each render-tested on Kevin's account first** (real nightly-dreams, `force_slot_input` replay of the same
+template with the original vs reworded seed, tagged with the same rubric; `scratchpad` harness `replay.js`):
+
+| Pool | Test before any write | Applied | Post-apply check |
+|---|---|---|---|
+| Fall + Halloween couple seeds (`dual_scenarios`) | route-staged 11/40 -> 3/40, swap health equal | mig 660, 352 rows (docks, corn maze, switchbacks excluded: no gain or a loss) | 12/12 swaps, route 1/12 |
+| Cast location spots (`location_iconic_spots`) | round 1: 12/20 -> 4/20; round 2: 18/24 -> 0/24 by tag (2-3 by eye), swaps 44/44 both arms | mig 661, 923 spots (race-track-garage card excluded: rewrites collapsed into one "pit wall" opening) | 6 live renders (`force_place` on 6 repaired cards, Kevin): 6/6 swapped, identity 0.60-0.76; the 1 that drew a new spot (Roppongi bench) put him at the bench, the street still running beside him |
+
+Location spots shared with postcards were split (original row stays postcard-only, a new cast-only row carries the
+rewrite) so scene-only postcards are untouched. `scripts/check-location-health.ts` after 661: no errors, no new
+warnings. Couples barely react to spot text (the couple composer frames the pair, not the place), so 661 is a solo fix.
+
+**Seen, NOT changed (the couple engine is Kevin's 2026-09-18 restore point):** couples standing arms-down 28%
+(location couples 36%); "active" couple dreams show an activity in only 18%; couples close/touching 39%. These are
+composer behaviour, not pool text. Raise with Kevin before any work.
+
+**Follow-ups:**
+- The route judge passed some Western "main street" spots it flagged elsewhere (Bodie / Eureka / Silverton Main
+  Street, Deadwood main street): 37 judge-passed spots name a main/front street, most of them a building ON it (fine),
+  ~10-15 the street itself. Same tool, same method, a small batch with its own render test.
+- 357 judge-passed cast spots still name a generic route noun after the spot (fine by the tests so far); re-measure
+  location solos on two weeks of production before touching them.
+- Corridors with no route word: 58 cast spots make a creek or river "winding / receding / stretching" (the post-661
+  redwood render, "a redwood stand reflected in a still tannic creek winding through the grove", came out centred on
+  the creek). The prefilter only looks for route nouns, so these were never judged. Same tool with a wider prefilter.
+- Re-measure all three repaired pools on production nightlies ~2026-10-16 (`audit-nightly-composition.js pull` +
+  `tag` + `report`, same rubric).

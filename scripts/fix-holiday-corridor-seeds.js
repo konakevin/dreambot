@@ -51,6 +51,18 @@ const EXCLUDE = new Set(
     : []
 );
 const CONC = 3;
+// --table dual: the COUPLE holiday rows (dual_scenarios). Same defect, measured 2026-10-02 in the composition audit
+// (NIGHTLY_COMPOSITION_AUDIT_PLAN.md): couples on route-word seeds were route-staged 53-55% vs 12-16% without.
+const TABLE = arg('table', 'single') === 'dual' ? 'dual_scenarios' : 'single_scenarios';
+const COUPLE = TABLE === 'dual_scenarios';
+const WHO = COUPLE ? 'TWO people (a couple)' : 'ONE person';
+const WHO_SHORT = COUPLE ? 'the couple' : 'the person';
+const SPOT_FOR = COUPLE
+  ? 'where two people would naturally be side by side at the same height (never a spot that puts one higher, lower or behind the other, and never a narrow one that squeezes them together: no doorway, window seat, single chair, ladder or staircase)'
+  : 'where a lone person would naturally be';
+const SPOT_LIST = COUPLE
+  ? 'a long bench, a wide gate, a fountain rim, a low stone wall, a fence rail, a balcony or terrace balustrade, the side rail of a footbridge, a long harvest table, a hearth, stacked wine barrels, a row of hay bales, a broad boulder. Good: "Long iron bench beneath arching maples", "Wide wrought-iron gate of a decorated manor", "Stone balustrade above a moonlit garden".'
+  : 'a bench, a gate, a fountain rim, porch steps, a stone wall, a fence rail, a boulder, a footbridge\'s side rail, a lamp post, a wine barrel, a potting table, a doorway, a balcony, a hearth, a cider press, a hay bale, a mossy root, a well, a lookout rock. Good: "Wrought-iron gate beneath arching maples", "Stone front steps of a decorated Victorian home", "Hay bale at a torchlit corn maze clearing".';
 
 /** Words that make a route or a receding run of things. Broad on purpose: the judge decides. */
 const ROUTE_RE =
@@ -96,8 +108,12 @@ async function liveRows() {
   for (const holiday of HOLIDAYS) {
     for (let from = 0; ; from += 1000) {
       let q = sb
-        .from('single_scenarios')
-        .select('id, category, sub_theme, gender, scene, attire')
+        .from(TABLE)
+        .select(
+          COUPLE
+            ? 'id, category, sub_theme, scene, attire'
+            : 'id, category, sub_theme, gender, scene, attire'
+        )
         .eq('pool', 'holiday')
         .eq('category', holiday)
         .eq('disabled', false)
@@ -113,7 +129,7 @@ async function liveRows() {
   return rows;
 }
 
-const FLAG_SYSTEM = `You review seeds for an AI dream-image engine. Each seed is a short scene for ONE person, rendered tall (9:16) with the person shown from the knees up, facing the viewer. The image model stages the person on whatever the seed's first words name.
+const FLAG_SYSTEM = `You review seeds for an AI dream-image engine. Each seed is a short scene for ${WHO}, rendered tall (9:16) and shown from the knees up, facing the viewer. The image model stages ${WHO_SHORT} on whatever the seed's first words name.
 
 The defect: a seed that stages the person ON A ROUTE renders the same picture every time: the person centred on a path, trail, avenue, street, lane, boardwalk, dock, bridge deck, aisle, hallway or between rows (vines, pumpkins, corn, trees, shelves), with the route receding behind them to a vanishing point. Flag a seed when a route or a run of rows is its stage or a prominent feature the person would naturally stand on: it is named in the first clause, OR the seed describes it winding, leading, vanishing or stretching away, OR the place itself is a corridor (a greenhouse aisle, a vineyard, an orchard row, a corn maze, a covered bridge, a train platform, a dock).
 
@@ -121,11 +137,11 @@ Do NOT flag a seed whose route is only a small incidental detail far from the pe
 
 Reply with ONLY a JSON array, one object per seed: {"n": <number>, "corridor": true|false, "why": "<5-12 words>"}.`;
 
-const REWRITE_SYSTEM = `You repair seeds for an AI dream-image engine. Each seed is a short scene for ONE person, rendered tall with the person knees-up, facing the viewer. These seeds stage the person on a route, so every render comes out as the same picture: the person centred on a path or between rows, the route receding behind. Rewrite each seed so the person has a SPOT to be at instead.
+const REWRITE_SYSTEM = `You repair seeds for an AI dream-image engine. Each seed is a short scene for ${WHO}, rendered tall and knees-up, facing the viewer. These seeds stage ${WHO_SHORT} on a route, so every render comes out as the same picture: the person centred on a path or between rows, the route receding behind. Rewrite each seed so the person has a SPOT to be at instead.
 
 Rules:
 1. Same place, same holiday theme, same mood and light, and keep every prop, creature and decoration the seed names (jack-o-lanterns, lanterns, leaves, fog, moon, barrels...). Keep what gives the place its character (arching maples over an avenue, decorated Victorian homes on a street, towering stalks in a corn maze, granite spires above a ridge): only the route's geometry goes. Never add people.
-2. The FIRST clause (before the first comma, at most 12 words) is a NOUN PHRASE naming ONE specific spot in that place, where a lone person would naturally be: a bench, a gate, a fountain rim, porch steps, a stone wall, a fence rail, a boulder, a footbridge's side rail, a lamp post, a wine barrel, a potting table, a doorway, a balcony, a hearth, a cider press, a hay bale, a mossy root, a well, a lookout rock. Good: "Wrought-iron gate beneath arching maples", "Stone front steps of a decorated Victorian home", "Hay bale at a torchlit corn maze clearing". Never start with a pose or a preposition (no "Leaning against", "Seated on", "Standing at", "Perched on", "Atop", "At the", "Beside") and never name a person in any way: the person and the pose are added later by other code.
+2. The FIRST clause (before the first comma, at most 12 words) is a NOUN PHRASE naming ONE specific spot in that place, ${SPOT_FOR}: ${SPOT_LIST} Never start with a pose or a preposition (no "Leaning against", "Seated on", "Standing at", "Perched on", "Atop", "At the", "Beside") and never name a person in any way: the person and the pose are added later by other code.
 3. The spot is off the route and does not look down it: a bench under the trees, not the middle of the avenue; the side rail of a bridge, not its entrance; a clearing in the maze, not a passage.
 4. No route anywhere as a stage: no path, trail, lane, avenue, road, boulevard, street, alley, walkway, promenade, boardwalk, footpath, aisle, rows, corridor, hallway, tunnel, colonnade, pier or jetty, and nothing winding, leading, vanishing, receding or stretching away. Only when the route IS the theme (a switchback hike, a horseback trail, a train platform, a trick-or-treat street, a leaf-storm avenue) may it appear ONCE, after the first clause, as something beside the spot ("beside the switchback trail"), never receding.
 5. Keep the seed's own voice and format: comma-separated scene phrases, no camera words, no "you", similar length (within 25% of the original word count).
@@ -135,7 +151,7 @@ Reply with ONLY a JSON array: {"n": <number>, "scene": "<rewritten seed>"}.`;
 /** --light: seeds the judge passed (their stage is already a spot) that still NAME a route or rows somewhere. The
  *  2026-10-02 porch seed ("jack-o-lanterns creating a luminous path") and the vineyard seed both rendered the
  *  corridor shot in production with the route only mid-seed, so the route phrase goes; the rest stays word for word. */
-const LIGHT_SYSTEM = `You repair seeds for an AI dream-image engine. Each seed is a short scene for ONE person, rendered tall with the person knees-up, facing the viewer. When a seed names a route anywhere (a path, trail, lane, walk, street, aisle, dock running out, or rows of vines, pumpkins or corn), the image model stages the person on it and every render becomes the same picture: the person centred on the route, which recedes behind them.
+const LIGHT_SYSTEM = `You repair seeds for an AI dream-image engine. Each seed is a short scene for ${WHO}, rendered tall and knees-up, facing the viewer. When a seed names a route anywhere (a path, trail, lane, walk, street, aisle, dock running out, or rows of vines, pumpkins or corn), the image model stages the person on it and every render becomes the same picture: the person centred on the route, which recedes behind them.
 
 Edit each seed as little as possible:
 1. Reword ONLY the phrase that names the route so it becomes a non-route detail of the same place (a luminous path of jack-o-lanterns -> jack-o-lanterns glowing along the porch rail; vineyard rows -> vines heavy on the trellis; a stone path through the garden -> stones mossy underfoot). Keep every other word, prop and the order.
@@ -303,7 +319,7 @@ function writeSql() {
   const back = process.argv.includes('--rollback');
   const lines = rows.map((r) => {
     const [to, from] = back ? [r.old, r.scene] : [r.scene, r.old];
-    return `UPDATE public.single_scenarios SET scene = ${lit(to)} WHERE id = ${lit(r.id)} AND pool = 'holiday' AND scene = ${lit(from)};`;
+    return `UPDATE public.${TABLE} SET scene = ${lit(to)} WHERE id = ${lit(r.id)} AND pool = 'holiday' AND scene = ${lit(from)};`;
   });
   fs.writeFileSync(SQL, lines.join('\n') + '\n');
   console.log(`${lines.length} guarded updates -> ${SQL}`);

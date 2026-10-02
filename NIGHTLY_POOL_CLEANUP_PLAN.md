@@ -97,10 +97,12 @@ Done first: **gendered card wardrobes**, LIVE 2026-10-01 (`CARD_WARDROBE_GENDER_
    0.689 vs 0.688, no re-renders; corridor-like shots ~5/12 off vs ~1/12 on, and the on arm's poses varied (seated,
    leaning on a balustrade, feeding a tiny dragon) where off was mostly "standing, one hand resting on ...".
    Unpaired rolls, small n. Couples untouched.
-9. Next, pending Kevin's go (`NIGHTLY_COMPOSITION_AUDIT_PLAN.md`): a composition audit of ALL nightly pools (year-round scenarios, location spots, holiday
-   couples) measured from DELIVERED renders (tag each production nightly's composition, group by pool), then fix only
-   the pools that cluster. Text exposure today: solo year-round 8-13% of rows name a route, character-eligible location
-   spots 11% of 14,365, holiday couples 20%.
+9. DONE 2026-10-02 (`NIGHTLY_COMPOSITION_AUDIT_PLAN.md` Results): composition audit of 2,346 delivered nightlies. A
+   route word in the set-at text is the one cause that holds across solo (41% route-staged vs 11%), couple (50% vs
+   13%) and scene-only. Fixed after render tests: 352 fall + Halloween couple seeds (mig 660, 11/40 -> 3/40) and 923
+   cast location spots (mig 661, 18/24 -> 0/24; postcard rows split off untouched). Look / vibe clusters were noise.
+   Couple pose sameness (arms-down 28%) is composer behaviour, left for Kevin (restore point). Follow-ups: Western
+   "main street" judge misses; re-measure ~2026-10-16.
 
 ## Safety
 
