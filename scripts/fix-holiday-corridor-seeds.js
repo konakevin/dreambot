@@ -16,6 +16,11 @@
  *
  *   node scripts/fix-holiday-corridor-seeds.js --holidays fall,halloween --out <dir> [--limit 25] [--sub <theme>]
  *   node scripts/fix-holiday-corridor-seeds.js --from <dir>/rewrites.json --sql <file> [--rollback]   (guarded UPDATEs)
+ *   --pools goofy,elegant,active   the YEAR-ROUND pools instead of holiday rows (composition audit 2026-10-02: their
+ *              route-first seeds rendered route-staged 36% solo / 43% couple vs 10% without). Those seeds carry their own
+ *              voice ("Person at...", "On a cobblestone alley in...") and often the action, and many are routes BY
+ *              DESIGN (a scooter race down a Roman street, a rope bridge over a gorge): the judge keeps those, the
+ *              rewrite keeps the seed's opening form, action and props and swaps only a route used as a mere stage.
  *
  * Output: <out>/flags.json (every judged row), <out>/rewrites.json (old -> new, checks), before-state included.
  */
@@ -35,6 +40,8 @@ const arg = (n, d) => {
   return i >= 0 ? process.argv[i + 1] : d;
 };
 const HOLIDAYS = String(arg('holidays', 'fall,halloween')).split(',');
+const POOLS = arg('pools', null) ? String(arg('pools')).split(',') : null;
+const YEAR_ROUND = !!POOLS;
 const OUT = arg('out', null);
 const LIMIT = arg('limit', null) ? Number(arg('limit')) : null;
 const SUB = arg('sub', null);
@@ -105,6 +112,27 @@ const firstClause = (scene) => ((String(scene).split(/[;.]/)[0] || '').split(','
 
 async function liveRows() {
   const rows = [];
+  if (YEAR_ROUND) {
+    for (const pool of POOLS) {
+      for (let from = 0; ; from += 1000) {
+        const { data, error } = await sb
+          .from(TABLE)
+          .select(
+            COUPLE
+              ? 'id, pool, category, sub_theme, scene, attire, action'
+              : 'id, pool, category, sub_theme, gender, scene, attire, action'
+          )
+          .eq('pool', pool)
+          .eq('disabled', false)
+          .order('id', { ascending: true })
+          .range(from, from + 999);
+        if (error) throw new Error(error.message);
+        rows.push(...data);
+        if (data.length < 1000) break;
+      }
+    }
+    return rows;
+  }
   for (const holiday of HOLIDAYS) {
     for (let from = 0; ; from += 1000) {
       let q = sb
@@ -137,6 +165,28 @@ Do NOT flag a seed whose route is only a small incidental detail far from the pe
 
 Reply with ONLY a JSON array, one object per seed: {"n": <number>, "corridor": true|false, "why": "<5-12 words>"}.`;
 
+const YR_FLAG_SYSTEM = `You review seeds for an AI dream-image engine. Each seed is a short scene for ${WHO}, rendered tall (9:16) and shown from the knees up, facing the viewer. The image model stages ${WHO_SHORT} on whatever the seed's first words name.
+
+The defect: a seed whose STAGE is a route renders the same picture every time: ${WHO_SHORT} standing centred on a street, alley, lane, path, avenue, boardwalk, garden walk, aisle or hallway, with the route receding behind to a vanishing point. Flag a seed when ${WHO_SHORT} would simply be standing or posing on the route: it is named in the first clause as where they are ("On a cobblestone alley in Notting Hill", "Flower-strewn parterre garden with gravel paths", "Rain-slick megacity back alley"), or the seed describes it winding, leading or stretching away from them.
+
+Do NOT flag:
+- a seed where the route IS the activity or the adventure: racing, riding, skating, chasing or parading along it, crossing a rope bridge over a gorge, a runway walk, a bobsled run, a scooter race down a street. That movement is the dream; it stays.
+- a seed where the word is not a route: "a lane apart", a bowling alley lane, rows of seats in a theatre, a ship's command bridge, rows of jars on a shelf, a street name used as an address while the stage is a shop, a room or a terrace.
+- a seed whose stage is clearly a spot that is not a route (a balcony, a table, a terrace, a fountain, a bench, a stage, a car roof).
+
+Reply with ONLY a JSON array, one object per seed: {"n": <number>, "corridor": true|false, "why": "<5-12 words>"}.`;
+
+const YR_REWRITE_SYSTEM = `You repair seeds for an AI dream-image engine. Each seed is a short scene for ${WHO}, rendered tall and knees-up, facing the viewer. These seeds put ${WHO_SHORT} on a route as a mere stage, so every render comes out as the same picture: centred on a street or path, the route receding behind. Rewrite each seed so ${WHO_SHORT} has a SPOT to be at in the same place instead.
+
+Rules:
+1. Same place, same mood and light, same category, and keep EVERY action, prop, outfit cue, creature and detail the seed names (a held lantern, a plasma rifle, a waving bigfoot, the bougainvillea). Keep what gives the place its character (pastel townhouses, neon signs, the machiya facades): only the route's geometry goes. Never add people, never add a new action.
+2. Keep the seed's OWN opening form: if it opens "Person at ...", keep "Person at ..."; if it opens "On a ..." or "In a ...", keep that preposition; if it opens with a bare noun phrase, keep a bare noun phrase. Only the route noun in that opening changes to ONE specific spot in the same place, ${SPOT_FOR}: ${SPOT_LIST.split(' Good:')[0]} Example: "On a cobblestone alley in Notting Hill, pastel townhouses..." -> "On a garden-wall bench in Notting Hill, pastel townhouses...".
+3. The spot is off the route and does not look down it: a bench at the edge, a doorstep, a fountain rim, a railing, a cafe table, not the middle of the street.
+4. No route anywhere as a stage (no path, lane, alley, street, avenue, walkway, boardwalk, aisle, corridor, hallway as where they are), and nothing winding, leading, vanishing, receding or stretching away. The street may stay once as scenery after the opening ("beside a lantern-lit Gion street"), never receding.
+5. Same voice and format, no camera words, no "you", similar length (within 25% of the original word count).
+
+Reply with ONLY a JSON array: {"n": <number>, "scene": "<rewritten seed>"}.`;
+
 const REWRITE_SYSTEM = `You repair seeds for an AI dream-image engine. Each seed is a short scene for ${WHO}, rendered tall and knees-up, facing the viewer. These seeds stage ${WHO_SHORT} on a route, so every render comes out as the same picture: the person centred on a path or between rows, the route receding behind. Rewrite each seed so the person has a SPOT to be at instead.
 
 Rules:
@@ -161,6 +211,8 @@ Edit each seed as little as possible:
 
 Reply with ONLY a JSON array: {"n": <number>, "scene": "<edited seed>"}.`;
 const LIGHT = process.argv.includes('--light');
+const rewriteSystem = () =>
+  LIGHT ? LIGHT_SYSTEM : YEAR_ROUND ? YR_REWRITE_SYSTEM : REWRITE_SYSTEM;
 
 const POSE_START_RE =
   /^(leaning|seated|sitting|standing|resting|perched|paused|kneeling|crouched|crouching|lounging|atop|on|at|in|by|beside|near|under|beneath|inside|against)\b/i;
@@ -171,11 +223,20 @@ function check(oldScene, scene) {
   const fc = firstClause(scene);
   const issues = [];
   if (!scene) issues.push('empty');
-  if (POSE_START_RE.test(fc))
+  // Year-round seeds carry their own voice ("Person at ...", "On a ..."): only a NEW pose or person is a defect.
+  const oldFc = firstClause(oldScene);
+  if (POSE_START_RE.test(fc) && !(YEAR_ROUND && POSE_START_RE.test(oldFc)))
     issues.push(`first clause opens with a pose/preposition: ${fc.split(/\s+/)[0]}`);
-  if (PERSON_RE.test(scene)) issues.push(`names a person: ${scene.match(PERSON_RE)[0]}`);
-  if (fc.split(/\s+/).length > 12) issues.push(`first clause ${fc.split(/\s+/).length} words`);
-  if (STAGE_RE.test(fc)) issues.push(`route in first clause: ${fc.match(STAGE_RE)[0]}`);
+  if (PERSON_RE.test(scene) && !(YEAR_ROUND && PERSON_RE.test(oldScene)))
+    issues.push(`names a person: ${scene.match(PERSON_RE)[0]}`);
+  // The solo/couple "set at" line is the first clause cut to 12 words (settingClauseOf). Year-round openings are often
+  // longer than 12 words by design, so there only a clause that GREW is flagged.
+  const fcWords = fc.split(/\s+/).length;
+  const oldFcWords = oldFc.split(/\s+/).length;
+  if (fcWords > (YEAR_ROUND ? Math.max(12, oldFcWords) : 12))
+    issues.push(`first clause ${fcWords} words`);
+  const setAt = fc.split(/\s+/).slice(0, 12).join(' ');
+  if (STAGE_RE.test(setAt)) issues.push(`route in first clause: ${setAt.match(STAGE_RE)[0]}`);
   if (RECEDE_RE.test(scene)) issues.push(`recede word: ${scene.match(RECEDE_RE)[0]}`);
   const stageHits = (scene.match(new RegExp(STAGE_RE.source, 'gi')) || []).length;
   if (stageHits > 1) issues.push(`${stageHits} route words`);
@@ -222,12 +283,20 @@ const chunks = (arr, n) =>
   Array.from({ length: Math.ceil(arr.length / n) }, (_, i) => arr.slice(i * n, i * n + n));
 
 async function main() {
+  if (FROM && process.argv.includes('--recheck')) {
+    // Re-run the code checks on a rewrites file (after a check changed or rows were edited by hand), no LLM call.
+    const rows = JSON.parse(fs.readFileSync(FROM, 'utf8'));
+    for (const r of rows) r.issues = check(r.old, r.scene);
+    fs.writeFileSync(FROM, JSON.stringify(rows, null, 1));
+    console.log(`rechecked ${rows.length}, failing ${rows.filter((r) => r.issues.length).length}`);
+    return;
+  }
   if (FROM && SQL) return writeSql();
   if (!OUT) throw new Error('--out <dir> is required');
   fs.mkdirSync(OUT, { recursive: true });
   const rows = await liveRows();
   let cands = rows.filter((r) => ROUTE_RE.test(r.scene) && !EXCLUDE.has(r.id));
-  console.log(`live solo rows ${rows.length}, prefilter ${cands.length}`);
+  console.log(`live ${TABLE} rows ${rows.length}, prefilter ${cands.length}`);
 
   // 1. Judge read, 40 per call (or a previous read, re-checked against the live text).
   const live = new Map(rows.map((r) => [r.id, r]));
@@ -238,7 +307,7 @@ async function main() {
     : (
         await pool(chunks(cands, 40), async (batch) => {
           const list = batch.map((r, i) => `${i + 1}. ${r.scene}`).join('\n');
-          const reply = await safeAsk(FLAG_SYSTEM, list, 4000);
+          const reply = await safeAsk(YEAR_ROUND ? YR_FLAG_SYSTEM : FLAG_SYSTEM, list, 4000);
           return batch.map((r, i) => {
             const v = reply.find((x) => x && x.n === i + 1);
             return { ...r, corridor: !!(v && v.corridor), why: (v && v.why) || '(no verdict)' };
@@ -263,14 +332,15 @@ async function main() {
   const rewrites = (
     await pool(chunks(flagged, 12), async (batch) => {
       const list = batch
-        .map((r, i) => `${i + 1}. [${r.category} / ${r.sub_theme}] ${r.scene}`)
+        .map((r, i) => `${i + 1}. [${r.category} / ${r.sub_theme || r.pool}] ${r.scene}`)
         .join('\n');
-      let reply = await safeAsk(LIGHT ? LIGHT_SYSTEM : REWRITE_SYSTEM, list, 8000);
+      let reply = await safeAsk(rewriteSystem(), list, 8000);
       const out = batch.map((r, i) => {
         const v = reply.find((x) => x && x.n === i + 1);
         const scene = v && typeof v.scene === 'string' ? v.scene.trim() : '';
         return {
           id: r.id,
+          pool: r.pool || 'holiday',
           category: r.category,
           sub_theme: r.sub_theme,
           gender: r.gender,
@@ -286,10 +356,10 @@ async function main() {
         const list2 = bad
           .map(
             (o, i) =>
-              `${i + 1}. [${o.category} / ${o.sub_theme}] ${o.old}\n   (your last try broke a rule: ${o.issues.join('; ')})`
+              `${i + 1}. [${o.category} / ${o.sub_theme || o.pool}] ${o.old}\n   (your last try broke a rule: ${o.issues.join('; ')})`
           )
           .join('\n');
-        reply = await safeAsk(LIGHT ? LIGHT_SYSTEM : REWRITE_SYSTEM, list2, 8000);
+        reply = await safeAsk(rewriteSystem(), list2, 8000);
         bad.forEach((o, i) => {
           const v = reply.find((x) => x && x.n === i + 1);
           const scene = v && typeof v.scene === 'string' ? v.scene.trim() : '';
@@ -319,7 +389,7 @@ function writeSql() {
   const back = process.argv.includes('--rollback');
   const lines = rows.map((r) => {
     const [to, from] = back ? [r.old, r.scene] : [r.scene, r.old];
-    return `UPDATE public.${TABLE} SET scene = ${lit(to)} WHERE id = ${lit(r.id)} AND pool = 'holiday' AND scene = ${lit(from)};`;
+    return `UPDATE public.${TABLE} SET scene = ${lit(to)} WHERE id = ${lit(r.id)} AND pool = ${lit(r.pool || 'holiday')} AND scene = ${lit(from)};`;
   });
   fs.writeFileSync(SQL, lines.join('\n') + '\n');
   console.log(`${lines.length} guarded updates -> ${SQL}`);

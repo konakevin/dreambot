@@ -90,5 +90,18 @@ composer behaviour, not pool text. Raise with Kevin before any work.
   prefilters on the running-away words (104 cast spots), judge flagged 58, 3 tunnels added by hand; render test 12
   spots x 2: route-staged 18/24 -> 4/24, swaps 24/24 both arms, identity mean 0.70 vs 0.67. 59 applied (48 split, 11
   in place); Times Square "canyon of LED billboards" excluded (2/2 route-staged both arms: the place is the canyon).
+- DONE (migs 663 / 664): the YEAR-ROUND pools (goofy / elegant / active). Not in the first pass because their pool-level
+  route rate sat at or below average, but per seed the defect is the same (route-first seeds 36% solo / 43% couple
+  route-staged vs 10%). `fix-holiday-corridor-seeds.js --pools` keeps each seed's own voice and action and leaves seeds
+  where the route IS the dream (wild rides, races, the chess-on-the-highway gag). Render tests on Kevin's own nightlies
+  of the same pool, 12 seeds x 2: solo 16/24 -> 3/24 route-staged, swaps 21/24 -> 24/24; couple 14/24 -> 3/24, identity
+  equal once one failing seed (excluded) and a Fly timeout are set aside. Applied 406 solo + 238 couple rows.
+  Lesson: an alley -> open courtyard swap that keeps "rain-soaked" FLOODS the scene (waist-deep water 2/2): 8 excluded.
+  Watch: the new arms sat more (solo 2 -> 10 of 24, couple 7 -> 13 of 24); about a third of the rewrites open on a
+  sit-able spot, on ~5% of each pool's rows.
+- Test hygiene: the replay templates are Kevin's older nightlies and carry THEIR look text through force_slot_input
+  (the stamped look is not what rendered). 6 of ~33 templates had looks now switched off (`nightly_enabled = false`:
+  technicolor, kodachrome, classical_oil, watercolor_portrait, painted_animation); Kevin's two "generic photograph"
+  hearts were a Technicolor template. Pick templates whose look is still enabled.
 - Re-measure all three repaired pools on production nightlies ~2026-10-16 (`audit-nightly-composition.js pull` +
   `tag` + `report`, same rubric).
