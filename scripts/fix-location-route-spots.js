@@ -17,6 +17,9 @@
  *
  *   node scripts/fix-location-route-spots.js --out <dir> [--limit N]            judge + rewrite -> <dir>/rewrites.json
  *   node scripts/fix-location-route-spots.js --from <dir>/rewrites.json --sql <file> [--rollback]
+ *   --linear   the same defect with no route word: a creek, river, gorge or tree tunnel described running away
+ *              ("a redwood stand reflected in a still tannic creek winding through the grove" rendered the person
+ *              centred on the creek after 661). Prefilters on the running-away words instead of route nouns.
  */
 require('dotenv').config({ path: '.env.local' });
 const fs = require('fs');
@@ -37,9 +40,13 @@ const FROM = arg('from', null);
 const SQL = arg('sql', null);
 const LIMIT = arg('limit', null) ? Number(arg('limit')) : null;
 const CONC = 3;
+const LINEAR = process.argv.includes('--linear');
 
 const ROUTE_RE =
   /\b(street|streets|streetscape|boardwalk|avenue|boulevard|promenade|colonnade|colonnaded|corridor|trail|lane|road|walkway|pathway|path|alley|esplanade|arcade)\b/i;
+/** --linear: words that make a natural feature run away from the viewer. */
+const LINEAR_RE =
+  /\b(winding|winds|meandering|meanders|snaking|snakes|receding|recedes|stretching|stretches|vanishing|curving|curves|flowing through|running through|tunnel of|tunnels)\b/i;
 const GENERIC_ROUTE_RE =
   /\b(main street|street|streets|streetscape|boardwalk|avenue|boulevard|promenade|colonnade|corridor|trail|lane|road|walkway|pathway|path|alley|esplanade|arcade|approach)\b/i;
 
@@ -60,6 +67,14 @@ Do NOT flag a spot whose route word is only an address or a name of something el
 
 Reply with ONLY a JSON array: {"n": <number>, "route": true|false, "why": "<5-12 words>"}.`;
 
+const LINEAR_FLAG_SYSTEM = `You review location spots for an AI dream-image engine. Each spot names a real or imagined place where a person is shown from the knees up, facing the viewer, in a tall image. The image model stages the person on whatever the spot names.
+
+The defect: a spot built around a LINEAR feature that runs away from the viewer renders the same picture every time: the person centred on it, the feature receding behind them to a vanishing point. Not only roads: a creek, river or stream winding through a forest or valley, a canal, a slot canyon, gorge or ravine, a tunnel of branches or blossoms, a row of trees, a cascade of terraces stepping away. Flag a spot when such a feature is its subject and the spot describes it winding, stretching, curving, snaking, flowing or receding.
+
+Do NOT flag a spot where the running-away word belongs to a distant backdrop beside a clear stage (a lookout above a river stretching to the horizon, a beach with the coast curving away, a summit with ridges receding), or where the feature runs ACROSS the view.
+
+Reply with ONLY a JSON array: {"n": <number>, "route": true|false, "why": "<5-12 words>"}.`;
+
 const REWRITE_SYSTEM = `You repair location spots for an AI dream-image engine. Each spot names a place where a person is shown knees-up, facing the viewer, in a tall image. These spots stage the person ON a route (a street, boardwalk, trail, avenue, promenade), so every render is the same picture: the person centred on it, the route receding behind. Rewrite each spot so the person has a SPOT BESIDE the route instead.
 
 Rules:
@@ -68,6 +83,17 @@ Rules:
 3. Generic route words that are not part of a name (main street, path, trail, avenue, lane, walkway, approach, boardwalk) do not appear in front. Either drop them or keep the place's character as scenery after the spot ("palm-lined", "thatched-roof cottages").
 4. Same voice as the original: a short noun phrase, 6 to 18 words, no camera words, no "you". Similar length.
 Examples of the shape (never copy them): "Clifftop boulder above the Aquinnah coast beside Moshup Trail"; "Stone bench beneath the royal palms of Royal Palm Way".
+
+Reply with ONLY a JSON array: {"n": <number>, "spot": "<rewritten spot>"}.`;
+
+const LINEAR_REWRITE_SYSTEM = `You repair location spots for an AI dream-image engine. Each spot names a place where a person is shown knees-up, facing the viewer, in a tall image. These spots are built around a feature that runs away from the viewer (a winding creek, a river snaking through a valley, a slot canyon, a tunnel of branches), so every render is the same picture: the person centred on it, the feature receding behind. Rewrite each spot so the person has a SPOT at the side of the feature instead, and the feature no longer runs away.
+
+Rules:
+1. Keep every proper name exactly as written and keep the place's character (the redwoods, the tannic water, the blossoms, the light): the spot must still be unmistakably that place.
+2. Start with a NOUN PHRASE naming one specific spot a person would stand at: a flat boulder at the creek's edge, a mossy log above a still pool, a fern-lined bank, a sandstone ledge, a footbridge's side rail, a stone bench beneath the blossoms, a tree's root seat. Never a pose, never a person.
+3. Drop every running-away word (winding, snaking, meandering, stretching, curving, receding, vanishing, flowing through, tunnel of). The water or canyon may stay as a still, local feature beside the spot ("a still pool", "the canyon wall rising behind").
+4. Same voice as the original: a short noun phrase, 6 to 18 words, no camera words, no "you". Similar length.
+Example of the shape (never copy it): "Mossy boulder at the edge of a still tannic pool beneath towering redwoods".
 
 Reply with ONLY a JSON array: {"n": <number>, "spot": "<rewritten spot>"}.`;
 
@@ -93,6 +119,8 @@ function check(oldSpot, spot) {
     issues.push('opens with a pose/preposition');
   if (/\b(torii|archway|arch|gate)\b/i.test(lead))
     issues.push('a gate/arch in front (may span the route)');
+  const runs = spot.match(LINEAR_RE);
+  if (runs) issues.push(`still runs away: ${runs[0]}`);
   return issues;
 }
 
@@ -131,12 +159,12 @@ async function main() {
     rows.push(...data);
     if (data.length < 1000) break;
   }
-  const cands = rows.filter((r) => ROUTE_RE.test(r.spot_text));
+  const cands = rows.filter((r) => (LINEAR ? LINEAR_RE : ROUTE_RE).test(r.spot_text));
   console.log(`cast-eligible spots ${rows.length}, prefilter ${cands.length}`);
   const judged = (
     await pool(chunks(cands, 50), async (batch) => {
       const reply = await safeAsk(
-        FLAG_SYSTEM,
+        LINEAR ? LINEAR_FLAG_SYSTEM : FLAG_SYSTEM,
         batch.map((r, i) => `${i + 1}. [${r.location_key}] ${r.spot_text}`).join('\n'),
         5000
       );
@@ -154,7 +182,7 @@ async function main() {
   const rewrites = (
     await pool(chunks(flagged, 15), async (batch) => {
       const list = batch.map((r, i) => `${i + 1}. [${r.location_key}] ${r.spot_text}`).join('\n');
-      const reply = await safeAsk(REWRITE_SYSTEM, list, 5000);
+      const reply = await safeAsk(LINEAR ? LINEAR_REWRITE_SYSTEM : REWRITE_SYSTEM, list, 5000);
       const out = batch.map((r, i) => {
         const v = reply.find((x) => x && x.n === i + 1);
         const spot = v && typeof v.spot === 'string' ? v.spot.trim().replace(/\.$/, '') : '';
@@ -168,7 +196,7 @@ async function main() {
               `${i + 1}. [${o.location_key}] ${o.old}\n   (your last try broke a rule: ${o.issues.join('; ')})`
           )
           .join('\n');
-        const reply2 = await safeAsk(REWRITE_SYSTEM, list2, 4000);
+        const reply2 = await safeAsk(LINEAR ? LINEAR_REWRITE_SYSTEM : REWRITE_SYSTEM, list2, 4000);
         bad.forEach((o, i) => {
           const v = reply2.find((x) => x && x.n === i + 1);
           const spot = v && typeof v.spot === 'string' ? v.spot.trim().replace(/\.$/, '') : '';

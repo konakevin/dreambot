@@ -85,8 +85,10 @@ composer behaviour, not pool text. Raise with Kevin before any work.
   ~10-15 the street itself. Same tool, same method, a small batch with its own render test.
 - 357 judge-passed cast spots still name a generic route noun after the spot (fine by the tests so far); re-measure
   location solos on two weeks of production before touching them.
-- Corridors with no route word: 58 cast spots make a creek or river "winding / receding / stretching" (the post-661
-  redwood render, "a redwood stand reflected in a still tannic creek winding through the grove", came out centred on
-  the creek). The prefilter only looks for route nouns, so these were never judged. Same tool with a wider prefilter.
+- DONE (mig 662): corridors with no route word. The post-661 live check drew "a redwood stand reflected in a still
+  tannic creek winding through the grove" and came out centred on the creek. `fix-location-route-spots.js --linear`
+  prefilters on the running-away words (104 cast spots), judge flagged 58, 3 tunnels added by hand; render test 12
+  spots x 2: route-staged 18/24 -> 4/24, swaps 24/24 both arms, identity mean 0.70 vs 0.67. 59 applied (48 split, 11
+  in place); Times Square "canyon of LED billboards" excluded (2/2 route-staged both arms: the place is the canyon).
 - Re-measure all three repaired pools on production nightlies ~2026-10-16 (`audit-nightly-composition.js pull` +
   `tag` + `report`, same rubric).
