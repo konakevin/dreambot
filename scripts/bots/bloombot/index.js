@@ -59,6 +59,9 @@ const pathBuilders = {
   'nightshade-forest-path': require('./paths/nightshade-forest-path'),
 };
 
+// Looks that hold a night scene (haunted-mansion-florals, 2026-10-02).
+const NIGHT_LOOK = /^(Hyperreal painterly fantasy|Dutch Golden Age|Japanese ukiyo-e|Thick impasto)/;
+
 module.exports = {
   username: 'bloombot',
   displayName: 'BloomBot',
@@ -89,6 +92,12 @@ module.exports = {
     // about half the apparent size, and pinning bought nothing over the split.
     // orchid-cloud-forest: both models 50/50 — ultra signed 0 of 21 renders here.
     'tropical-grove': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    // haunted-mansion-florals: REQUIRED for its code-only bloom_haunted_night medium (no dream_mediums row); the
+    // new-path default 50/50 pro / ultra.
+    'haunted-mansion-florals': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
     'flower-arrangement': [
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
@@ -109,6 +118,10 @@ module.exports = {
     // flower-humming-birds: same reason as its sister (reseed program, 2026-09-23).
     'flower-humming-birds':
       'render every named species as that exact species in its named color, no text, no words, no watermarks',
+    // haunted-mansion-florals: the bot suffix's "the sky clean and clear, every layer crisply rendered" is a
+    // daylight cue on a NIGHT path (Kevin 2026-10-02: the renders read as sunny daytime rose gardens).
+    'haunted-mansion-florals':
+      'render every named species as that exact species in its named color, deep shadow between the layers, no text, no words, no watermarks',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -145,6 +158,12 @@ module.exports = {
     // wall of pink peonies behind the bird (reseed program, 2026-09-23). Birds first, one cluster.
     'flower-humming-birds':
       'vibrant hummingbird garden vignette, a large iridescent hummingbird front-and-center over one composed cluster of flowers, open air around it',
+    // haunted-mansion-florals: the bot prefix opened every prompt with ~40 words of "breathtaking LUSH ... every
+    // petal jewel-saturated", and the night arrived only past word 100, so renders came out as bright daytime rose
+    // gardens (2026-10-02). A condition path states the condition first (playbook §5.1). Positive-only. No "moonlit":
+    // with it a big moon sat top-centre in 5 of 6 test renders; the moon now comes only from the path's light pick.
+    'haunted-mansion-florals':
+      'gothic estate garden at night, dark roses and ivy consuming old ironwork in deep indigo shadow and drifting fog',
   },
 
   // cleanMediumByModel: gpt-image-2 AND nano-banana both render the bot-only
@@ -164,7 +183,9 @@ module.exports = {
   // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
   // both now banned bot-wide (FLUX-only).
   cleanMediumByModel: {},
-  mediumByPath: {},
+  // haunted-mansion-florals: its own code-only night medium (the bot-wide BLOOM_NEUTRAL says "lush abundant blooms
+  // filling the frame ... every petal crisp and color-saturated", a daylight register on a night path).
+  mediumByPath: { 'haunted-mansion-florals': 'bloom_haunted_night' },
 
   mediumStyles: {
     // alpine-wildflower-meadow: LOAD-BEARING, not cosmetic. The bot-wide
@@ -194,6 +215,8 @@ module.exports = {
     // on as look #1 in bloom_look_register.json. See "Medium Looks" in
     // BOT_SCENE_QUALITY_PLAYBOOK.md.
     bloom_hyperreal_cgi: blocks.BLOOM_NEUTRAL,
+    bloom_haunted_night:
+      'deep jewel-dark flowers the hero, rich in shadow, a night palette of indigo, charcoal and near-black lit only by small pools of lantern and moon light; medium and finish set by the look tokens opening this prompt',
   },
   promptPrefixByMedium: {
     bloombot_gpt_clean: 'lush flower scene',
@@ -485,7 +508,14 @@ module.exports = {
       // per render. Consumed in buildBrief, injected at the TOP of the brief
       // so Sonnet opens its Flux prompt with these tokens (the medium leads
       // CLIP). Recency-aware so the same look never clusters back-to-back.
-      lookRegister: picker.pickWithRecency(pools.BLOOM_LOOK_REGISTER, 'look_register'),
+      // haunted-mansion-florals draws only the looks that hold a night scene (chiaroscuro oil, painterly fantasy,
+      // ukiyo-e, impasto); pop-art, chromolithograph, botanical watercolor and the rest pulled it into daylight.
+      lookRegister: picker.pickWithRecency(
+        path === 'haunted-mansion-florals'
+          ? pools.BLOOM_LOOK_REGISTER.filter((l) => NIGHT_LOOK.test(l))
+          : pools.BLOOM_LOOK_REGISTER,
+        'look_register'
+      ),
     };
   },
 

@@ -901,6 +901,15 @@ with `--target`. When regen adds 0 after dedup, the theme is exhausted: author t
   ONLY lights are the glowing windows"); ban lists make it worse.
 - **"Old fairytale building" misses** → three poles (tidy, moss-blob, derelict) → "old = weathered stone + moss + the
   forest's embrace, never decay, never tidiness".
+- **A night path renders as a sunny daytime scene** → the bot's bright wrapper outvotes the night: BloomBot's prefix
+  + neutral medium put ~80 words of "LUSH ... every petal jewel-saturated ... crisp and color-saturated" before the
+  first night word (past word 100), the suffix ends "the sky clean and clear", the bot-wide look roll lands pop-art /
+  chromolithograph, and pool entries asked for "overcast dusk ... diffuse silver-grey light with no hard shadows" →
+  give the path its own night-first `promptPrefixReplaceByPath`, its own code-only medium (`mediumByPath` +
+  `modelByPath`), its own `promptSuffixByPath`, a night-capable look filter in `rollSharedDNA`, and pool light that is
+  night with shadows. Also grep the COMPOSED brief for `undefined` after any AlphaBot clone: haunted-mansion-florals
+  read `sharedDNA.scenePalette` / `colorPalette`, which BloomBot never sets, so Sonnet got "undefined" for its palette
+  and light. Sunny rose wall → 9/9 moonlit gothic (BloomBot haunted-mansion-florals, 2026-10-02).
 - **Neon light on a nature path** → extreme light words ("electric-blue", "at eleven") → "the real best-light moment, light
   with a clear physical source" + de-cruft the seeds.
 - **Sci-fi turns ominous** → the genre prior → ban the tone by name in the first template block, carry it in every recipe,

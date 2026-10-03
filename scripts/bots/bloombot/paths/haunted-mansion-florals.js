@@ -68,7 +68,7 @@ const NO_PEOPLE_BLOCK = `━━━ NO PEOPLE — NON-NEGOTIABLE ━━━
 No humans, no faces, no figures, no silhouettes, no shadows of people anywhere in the frame. Wildlife (hummingbird, bee, butterfly, dragonfly, small lizard) is allowed only as peripheral accent — never the subject.`;
 
 const DENSITY_BLOCK = `━━━ DENSITY — NON-NEGOTIABLE ━━━
-Frame is FILLED edge-to-edge with blooms. Foreground, midground, background — every plane dense. No bare ground, no empty sky pockets, no negative-space rest. Petals overlap in thick carpets, vines cascade, climbing flowers consume vertical surfaces. Mix tiny microflowers with oversized statement blooms in the same frame for scale variety. Every entry must satisfy this rule, no matter the per-path scene.`;
+Frame is FILLED edge-to-edge with blooms. Foreground, midground, background — every plane dense. No bare ground; any sky that shows is deep night sky. Petals overlap in thick carpets, vines cascade, climbing flowers consume vertical surfaces. Mix tiny microflowers with oversized statement blooms in the same frame for scale variety. Every entry must satisfy this rule, no matter the per-path scene.`;
 
 const ARRANGEMENT_BLOCK = `━━━ ARRANGEMENT — CURATED, NOT RANDOM ━━━
 3-4 species, repeated and MASSED into thick clusters. Patchwork clumps of contrasting species, not uniform fields, not random salad. The selection is INTENTIONAL — picture a high-end florist's masterpiece blown up to landscape scale. The 4-5 colors of the palette are balanced across the frame so no single color dominates more than its share.`;
@@ -79,6 +79,24 @@ Balance warm with equal cool across the frame — orange/amber/coral is one acce
 // ─── This path's own core-identity mandate ───
 const CORE_MANDATE_BLOCK = `━━━ HAUNTED-MANSION-FLORALS CORE MANDATE (NON-NEGOTIABLE) ━━━
 This is BloomBot's Halloween-season gothic-romantic garden path. Wild, overgrown FLOWERING VINES — ivy, climbing dark roses, dried trailing vine — are the unmistakable HERO of every frame, consuming and cascading over an elegant old estate structure (a wrought-iron gate, a mansion facade, a garden wall). The architecture is a backdrop and canvas FOR the florals, never the reverse — the flowers still fill the frame as densely and richly as any other BloomBot scene. The register is ELEGANT and GOTHIC-ROMANTIC, like a lovingly wild moonlit estate garden time forgot — NOT derelict, NOT a haunted-house horror set, NOT a crime scene. NEVER include people, ghosts, skeletons, blood, cobweb-horror gore, jack-o'-lanterns, or costume-Halloween iconography of any kind — the seasonal mood comes ENTIRELY from atmosphere: dark florals, fog, dusk/moonlight, and old ironwork or stone. Light weathering (tarnish, patina, moss) is charming, not decay — never "crumbling", "ruined", or "rotting". THE SCENE MUST READ AS NIGHT OR DEEP DUSK, NEVER BRIGHT DAYLIGHT: the sky, background, and every shadowed plane stay dark (deep indigo, charcoal, near-black) — lantern light, candlelight, or moonlight exist ONLY as small warm or cool POOLS of light against that surrounding darkness, never brightening or paling the overall frame into an overcast-daylight look. Flower and foliage color skews deep, ink-saturated, and shadow-rich (near-black crimson, ink-wine burgundy, charcoal-plum, deep bottle-green) rather than bright, cheerful, saturated red or pink — jewel-DEEP, not jewel-BRIGHT.`;
+
+// ─── Night palette + night light (2026-10-02) ───
+// The template injected sharedDNA.scenePalette / colorPalette, which BloomBot's rollSharedDNA never sets (cloned from
+// AlphaBot), so Sonnet read "undefined" twice and fell back to bright rose colours. Colour and light words only.
+const NIGHT_PALETTES = [
+  'deep indigo and charcoal night, near-black crimson and ink-wine blooms, cold silver moonlight on the edges',
+  'blue-black dusk sky, bottle-green ivy, plum and burgundy roses, one warm amber lantern glow',
+  'charcoal fog and midnight blue, dusky mauve and black-red blooms, pale silver highlights',
+  'violet-black night, wine-dark roses, rust and copper vine, a soft candle-gold glow in the shadows',
+  'deep teal night, moonlit white roses glowing cold silver, black ironwork, dark emerald ivy',
+];
+const NIGHT_LIGHTS = [
+  'a single lantern throwing a warm amber pool, everything beyond it falling into deep shadow',
+  'moonlight from high behind, rim-lighting petals and ironwork in cold silver against the dark',
+  'a thin shaft of moonlight through the fog, the rest of the garden in velvet darkness',
+  'candlelight glowing in a far window of the house, faint warm reflections on wet leaves',
+  'the last violet dusk light low on the horizon, the garden itself already in deep blue shadow',
+];
 
 // ─── Small fixed-list axes — no generated pool needed (short, combinatorial) ───
 const FLORA_CASTS = [
@@ -125,6 +143,11 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const atmosphere = picker.pickWithRecency(ATMOSPHERES, 'haunted_mansion_florals_atmosphere');
   const floraCast = picker.pickWithRecency(FLORA_CASTS, 'haunted_mansion_florals_flora_cast');
   const framing = picker.pickWithRecency(FRAMINGS, 'haunted_mansion_florals_framing');
+  const nightPalette = picker.pickWithRecency(
+    NIGHT_PALETTES,
+    'haunted_mansion_florals_night_palette'
+  );
+  const nightLight = picker.pickWithRecency(NIGHT_LIGHTS, 'haunted_mansion_florals_night_light');
 
   // MONEY-SHOT axis — present roughly half the time, never mandatory, so
   // every render doesn't converge on "the same one rose" (per the codebase's
@@ -194,14 +217,14 @@ ${wildlifeBlock}
 ━━━ FRAMING ━━━
 ${framing}
 
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
+━━━ NIGHT PALETTE ━━━
+${nightPalette}
 
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
+━━━ THE ONE LIGHT SOURCE ━━━
+${nightLight}
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 150)}
 
-Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+Output ONLY the raw 80-110 word scene description. Right after the look tokens, open with the night itself (the dark sky and the one light source), then the structure and the flowers. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };
