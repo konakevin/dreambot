@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * replay-nightly-seed.js — render-test a seed rewrite BEFORE any pool row changes (NIGHTLY_POOL_PLAYBOOK.md, "Render
+ * replay-nightly-seed.js — render-test a seed rewrite BEFORE any pool row changes (NIGHTLY_RULE_BOOK.md, "Render
  * test"). Replays one of KEVIN's logged nightlies through the real nightly-dreams with its exact slot input
  * (force_slot_input), same model and cast role, with the seed text swapped in. Run the original text as arm "orig" and
  * the rewrite as arm "new" on the same template, and only the seed differs.

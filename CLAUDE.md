@@ -31,8 +31,8 @@ Sparkle currency (RevenueCat IAP) + a Pro subscription, and 18 image-gen bots po
   (briefs) + Haiku (vision/polish/bot messages) for text.
 
 Layout: `app/` (routes), `components/` (~116), `hooks/` (~60), `store/` (6 Zustand), `lib/` (~45 glue),
-`constants/`, `types/database.ts` (auto-gen) + `vibeProfile.ts`; `supabase/migrations/` (277 files,
-highest prefix 275) + `supabase/functions/` (15 edge fns + ~49 `_shared/`); `scripts/bots/<botname>/`
+`constants/`, `types/database.ts` (auto-gen) + `vibeProfile.ts`; `supabase/migrations/` (highest prefix:
+`ls supabase/migrations | tail -1`) + `supabase/functions/` (15 edge fns + ~49 `_shared/`); `scripts/bots/<botname>/`
 (18 public bots, plus `alphabot` the private proving ground and `outlawbot` a dark bot; RetroBot + MechBot
 removed 2026-09-24) + `scripts/lib/` (bot infra) + `scripts/*.js`; `__tests__/lib/,store/` (fast jest) +
 `__tests__/db/` (`*.dbspec.ts`).
@@ -55,20 +55,18 @@ render persists the upload and flips the `dream_queue` row → the client shows 
 Chaos / Cinematic / reimagine / DLT / custom) all flow through `generate-dream`. **DLT** = "Dream Like
 This" (re-render from an existing dream's style + the user's prompt).
 
-### 2. Nightly — automated, batch, Pro/trial-only
+### 2. Nightly — automated, batch (full detail: `NIGHTLY_RULE_BOOK.md`, the OFFICIAL rule book)
 
-GitHub Actions cron `0 8 * * *` UTC runs **`scripts/nightly-dreams.js`**, which ENQUEUES one `dream_queue`
-job per eligible Pro-or-in-trial user (bots excluded; **paginated** — PostgREST silently caps reads at
-1000 rows; per-user-per-day idempotent via `dedup_key`). The worker drains the backlog overnight at the
-heavy cap → **`nightly-dreams`** render edge fn → personalizes from `user_recipes.recipe` JSONB via the
-shared scene engine → Haiku bot message → dreamer notification. It also sends trial / paid-pro-cancel
-reminder pushes. Master kill-switch: `engine_config.nightly_enabled`. Each face-swap nightly rolls a
-scene TYPE (live `engine_config` pcts): goofy / elegant / **active** (fun/fantasy adventure buckets +
-legacy recreational, `dual/single_scenarios pool='active'`) / plain-location — and a plain-location dream
-gets a swap-safe **Option B** action fitting the exact place (`_shared/locationActionBeat.ts`, gated by
-`location_action_pct`). To add/scale/tune fun buckets or Option B → **`NIGHTLY_FUN_SCENARIOS_PLAN.md`**
-(playbook + gotchas: seed per-bucket sequentially, run the proximity scan, verify via
-`ai_generation_log.fallback_reasons`).
+Enqueued HOURLY, each user at local 04:00 (`scripts/nightly-dreams.js` via GitHub Actions `0 * * * *`, plus the
+pg_cron `nightly-enqueue-backstop` at :17, which does most of the work because GitHub crons fire only a few times a
+day). Eligible = Pro (paid or trial) OR Basic paid OR admin; bots excluded; paginated; one job per user per local day
+(`dedup_key`). The worker drains it at the heavy cap → **`nightly-dreams`**, and for nightly the WORKER owns the
+terminal state (5 attempts, then dead-letter + refund). Inside: holiday roll, cast type, look + model + vibe style
+contract (`LOOKS_MINIMAL` path), place / spot, scene-type roll (goofy / elegant / active scenarios scoped to the
+dreamer's places, or the plain location), wardrobe, Sonnet slots → code-assembled prompt, Fly face swap with a fallback
+ladder, quality gate, persist on Fly image-ops. Kill switch: `engine_config.nightly_enabled`.
+**Read `NIGHTLY_RULE_BOOK.md` in full before any nightly engine, seed, pool, location, holiday or QA work, and update
+it in the same commit as the work (hard rule).**
 
 **Onboarding first-dream** is its own queue source: `enqueue-dream` (first_dream branch) → `dream_queue` →
 **`first-dream-render`**, which runs a cascade (dual → single → scene face-swap) so the user is reliably
@@ -76,32 +74,21 @@ cast into one of their places. Free (no charge).
 
 ### ⭐ Nightly couples — RESTORE POINT 2026-09-18 ("the best it's ever been")
 
-Kevin graded the live engine on 2026-09-18 evening as the best it has ever been (composition, styles, placement, no
-huge faces, environment visible). The exact state is `nightly-states/v1.5-narrative.json` (commit + config + policy +
-enabled looks): couples compose through `_shared/coupleComposerX.ts` (`nightly_couple_engine = experimental`,
-default variant `narrative_fg` — one left-to-right paragraph, the couple named in the foreground before the scene,
-face words last), flux couples render the four 1.2.0 fragments, no eye colour on the couple lock, gate 0.35.
-Measured: flux first-try dual-swap hold 45% → 92% (37/40), faces median 11-14%. Ledger `FLUX_COUPLE_LAB.md`.
+Kevin graded the live engine on 2026-09-18 as the best it has ever been (composition, styles, placement, no huge
+faces). Couples compose through `_shared/coupleComposerX.ts` (`nightly_couple_engine = experimental`, variant
+`narrative_fg`: one left-to-right paragraph, the couple named in the foreground before the scene, faces last), flux
+couples render their rolled look's own fragment (`nightly_flux_couple_honest_looks = true`), no eye colour on couples,
+face gate 0.35; one re-render on the policy fallback roll (flex / gemini 50/50). Measured: flux first-try dual-swap hold
+45% → 92% (37/40). Snapshot `nightly-states/v1.5-narrative.json` (later switches are listed in the rule book).
 **Do not change the production nightly engine without Kevin's word; new work is opt-in behind request flags.**
-Since 2026-09-18 ~20:20 UTC flux couples also render their rolled look's OWN fragment
-(`engine_config.nightly_flux_couple_honest_looks = true`, mig 529; per-look approvals mig 528: 20 looks approved, classical_oil +
-colored_pencil rejected on flux couples) — the per-look probe held 93% first try / 98% delivered on the catalogue's own text.
-Rollback to the promotion state = that row back to `false` (album fragments), no deploy. The one re-render (couple AND single)
-is the policy row's fallback roll, `nightly_model_policy.fallback_weights` = [flux-2-flex, gemini-2-image] 50/50 (2026-09-18 ~20:40 UTC;
-100/0 restores gemini-only); flex mirrors gemini's look approvals (mig 530).
-**PER-LOOK MODEL PINS** (`nightly_look_model_pins`, mig 536): an active row for a (look × surface) IS that look's
-attempt-1 model — it REPLACES the policy pool, skipping the weighted roll and the ≤2✦ cost cap, and stamps
-`model_source:look_pin:<model>`. Live: `nightly_classical_oil` + `nightly_colored_pencil` on couples → Nano Banana
-Pro (`google/gemini-3-image-preview`, ~13¢), because those two reject flux (mig 528) and Kevin chose to absorb the
-cost rather than fall to gemini. `force_model` still wins, a banned pin is ignored (`look_pin_banned:`), attempt 2
-is untouched. Rollback = `active = false`, no deploy. Use a PIN for routing — never a 0 weight in `primary_models`
-(all-zero weights fall back to UNIFORM) and never `approved = false` (that is a face-swap quality grade).
+Route a look to a model with a `nightly_look_model_pins` row (none are active today), never a 0 weight in
+`primary_models` (all-zero falls back to UNIFORM) and never `approved = false` (that is a face-swap quality grade).
 
 ### Shared engine + worker reliability (status of record: `QUEUE_WORKERS_REFACTOR.md`)
 
-- **Scene engine** (shared by all paths): `dreamAlgorithm.ts:rollDream` → `recipeBuilder.ts`/
-  `sceneEngine.ts` build a Sonnet brief → Sonnet writes the Flux prompt (sanitized) → model picked
-  per-medium → optional face swap → persist (Storage, `uploads` row, `ai_generation_log`).
+- **Scene engine:** `dreamAlgorithm.ts:rollDream` → a Sonnet brief → the Flux prompt (sanitized) → model →
+  optional face swap → persist (Storage, `uploads` row, `ai_generation_log`). For NIGHTLY casts Sonnet writes JSON
+  slots and code assembles the prompt; the look contract picks the model (`NIGHTLY_RULE_BOOK.md` Part A).
 - **Renders run SYNCHRONOUSLY** — the worker holds the render's HTTP connection (an actively-awaited
   request keeps the isolate alive). It does NOT rely on `EdgeRuntime.waitUntil` for the render: the
   platform dropped `waitUntil` background tasks on 2026-06-17 and silently stalled the queue. The render
@@ -250,6 +237,12 @@ for the public feed + serves deep-link share targets.**
 
 ## Hard rules (no exceptions)
 
+- **EVERY nightly change writes back to `NIGHTLY_RULE_BOOK.md` in the SAME commit** (Kevin 2026-10-02). Any bug
+  fix, enhancement, experiment, seed / pool / location / holiday change, or QA finding on the nightly engine updates
+  the rule book: the current-state section it changed, plus each new lesson as ONE bullet in the right section
+  (edit the older bullet it refines; never leave two that contradict). A nightly commit without a rule-book hunk is
+  incomplete. The rule book holds only the TRUE, CURRENT state, checked against code and live config: when you find
+  it wrong, fix it. Read it in full before any nightly work.
 - **THROTTLE heavy render/seed workloads — the DB connection pool is the shared ceiling.** Producing
   renders (each edge-fn render holds a Postgres connection 20-150s) or bulk-seeding while the pool is tight
   takes the WHOLE APP non-responsive — a recurring incident (root cause + plan: `DB_CONNECTION_SATURATION_PLAN.md`).
@@ -350,8 +343,8 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
 
 ## CI, tests & monitoring
 
-- **Pre-commit (husky):** `./scripts/check-secrets.sh` then `npm run check` (prettier → lint → tsc →
-  typecheck:deno → jest). **Don't bypass with `--no-verify`** (every historical bypass broke CI).
+- **Pre-commit (husky):** `./scripts/check-secrets.sh` then `npm run check` (prettier → dual-proximity scan →
+  bot-seed-dupes scan → lint → tsc → typecheck:deno → jest; CI runs everything but the two scans). **Don't bypass with `--no-verify`** (every historical bypass broke CI).
   `npm run fix` auto-fixes; `npm run test` = fast jest.
 - **Two test lanes:** **fast jest** (`*.test.ts`, husky + CI `check`, pure logic; `_shared/*` via
   `@engine/*`, URL imports stubbed; `@engine/*` tests excluded from `tsc` → add to `tsconfig.json`
@@ -359,16 +352,15 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
   real DDL extracted from migration files via `__tests__/db/_support/pg.ts`). No local Postgres — validate
   dbspecs by pushing + `gh run watch` the `db-tests` job.
 - **GitHub Actions** (`.github/workflows/`, repo `konakevin/dreambot`, trunk `main`): `ci.yml` (every
-  push); `nightly-dreams.yml` (08:00 UTC enqueue); `bots-dispatcher.yml` (hourly); `dream-queue-sync.yml`
+  push); `nightly-dreams.yml` (hourly enqueue, local 04:00 per user; pg_cron backstop at :17); `bots-dispatcher.yml` (hourly); `dream-queue-sync.yml`
   (5 min reliability backstop — held-connection drain, though see `project_gh_actions_scheduled_workflow_dropout.md`
   for a caveat on how reliably GitHub actually fires this); `refund-stuck-jobs.yml` (5 min); upscale
   sweep/smoke. Cron secrets: `SUPABASE_SERVICE_ROLE_KEY`, `DREAM_QUEUE_WORKER_TOKEN`, `REPLICATE_API_TOKEN`,
   `ANTHROPIC_API_KEY`.
 - **Monitoring** (fail-loud → GitHub failure email): `dream-queue-monitor` (hourly — stuck/dead-letter +
   worker-liveness + Fly-saturation), `ai-failure-monitor` (6h), `push-failure-monitor` (6h),
-  `bot-health-monitor` (4h), and `queue-smoke-monitor` (hourly **synthetic canary** — enqueues a real
-  cheap dream + asserts it completes end-to-end, self-cleans; would catch a queue/`waitUntil` outage
-  within the hour). **Diagnose a failed dream:** every render stamps stage breadcrumbs
+  `bot-health-monitor` (4h), and `queue-smoke-monitor` (a synthetic Create canary, currently DISABLED; there is no nightly canary,
+  and scheduled GitHub monitors fire only a few times a day). **Diagnose a failed dream:** every render stamps stage breadcrumbs
   (`dream_queue.current_stage`, migration 272) + an `ai_generation_log` row; `node scripts/check-forensics.js
 [userId]` (or the `dream_forensics`/`dream_forensics_recent` RPCs) stitches a failure to its exact
   stage/model/error. Edge errors → Sentry (`_shared/sentry.ts`, gated on the `SENTRY_EDGE_DSN` secret).
@@ -386,19 +378,9 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
   `BOT_AXIS_REFACTOR_PLAN.md`, `BOT_PREFIX_NEED_TO_REVIEW_AND_FIX.md`. **Seed-pool reseed program**
   (repairing subject pools so scenes actually vary, one pool at a time): `/reseed` skill = the runbook,
   `RESEED_STATUS.md` = status of record + queue (update it in the same commit as the work).
-- **Looks (nightly now, Create's real-face mediums later):** `REAL_FACE_LOOKS_REGISTRY.md` (LIVE registry of
-  proven look × model × surface results; generated matrix), `NIGHTLY_LOOKS_REFACTOR_PLAN.md`, `NIGHTLY_LOOK_TALLY.md`.
-- **Couple swap reliability (1 in 5 couples loses the +1):** `COUPLE_SWAP_RELIABILITY_PLAN.md` — measured
-  on 105 production couples: 21% degrade to a solo, 86% of couples render on flux-1.1-pro which degrades
-  23%. ⚠️ The prompt CANNOT enforce head geometry on flux (probed 2026-09-14), so any plan whose mechanism
-  is "add or strengthen a geometry clause" is known to fail — a full day was spent rediscovering this.
-  Diagnosis needs `rolled_axes.observability.couplePrompt`, which only exists after `6f4a1c2a`.
-- **Look/vibe fidelity (READ BEFORE debugging why a nightly ignores its look or vibe):**
-  `NIGHTLY_LOOK_FIDELITY_INVESTIGATION.md` — measured 2026-09-16: the vibe fragment reached 0 of 50
-  nightlies, and a pinned look rendered correctly only 2 of 9 times because the framing boilerplate says
-  "photograph" 3× after naming the look. BOTH fixes already existed and were switched off by
-  `LOOKS_MINIMAL`. Five hypotheses tested, three rejected with renders — check the ledger before re-running
-  any of them.
+- **Looks:** `REAL_FACE_LOOKS_REGISTRY.md` (look × model × surface grades; its generated matrix predates migs 523-539,
+  the live `nightly_look_approvals` / `nightly_look_model_pins` tables win). Current look, vibe, model and couple rules:
+  `NIGHTLY_RULE_BOOK.md`. Couple experiment ledger: `FLUX_COUPLE_LAB.md`.
 - **LLM models (Sonnet 4.6 → 5.5):** `LLM_MIGRATION.md` (status of record): every Anthropic call names a JOB;
   the model per job is `engine_config.llm_models` (+ QA `qa_llm_model` / `force_llm_model` / `--llm-model`), clients
   `_shared/anthropic.ts` + `scripts/lib/anthropic.js`. Never call api.anthropic.com directly in production code.
@@ -407,15 +389,14 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
 - **Backups + disaster recovery:** `BACKUPS.md` (status of record + the restore runbook): daily off-site copy of the
   database and every Storage bucket to Cloudflare R2 (`.github/workflows/backup.yml`), weekly restore drill
   (`backup-drill.yml`); one damaged table comes back with `node scripts/backup/restore-table.js public.<t> --db prod`.
-- **Nightly seed pools (READ BEFORE writing, rewriting or auditing any holiday / year-round / location seed):**
-  `NIGHTLY_POOL_PLAYBOOK.md` (how a seed becomes a picture, the writing rules, the measure -> rewrite -> render-test ->
-  guarded-migration loop, the tools). Add every new lesson there as one bullet.
+- **⭐ Nightly rule book (OFFICIAL; read IN FULL before any nightly engine, seed, pool, location, holiday or QA work):**
+  `NIGHTLY_RULE_BOOK.md` — how the engine works today, every rule and measured lesson, how to seed / dedupe / fix pools
+  by hand, the render-test and shipping loop, the tools. Hard rule: every nightly change updates it.
 - **Engine + scaling:** `QUEUE_WORKERS_REFACTOR.md` (queue status of record + Fly scale runbook),
-  `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_IMPRESS_PLAN.md` (always-impress backlog: quality gate, legendary dreams, holidays, weather, pets, taste, arcs — each handoff-ready), `NIGHTLY_SEED_POOL_QA.md`, `NIGHTLY_FUN_SCENARIOS_PLAN.md` (fun/fantasy
-  scenario buckets + Option B location-fit actions — LIVE, playbook for adding/scaling/tuning),
-  `V4_HARDENING_PLAN.md`, `NIGHTLY_VIBES_AUDIT.md` (vibe axis: audit, proposals, matrix, contract design),
-  `NIGHTLY_PAIR_ROLL_PLAN.md` (model × look as ONE weighted pair roll — why a configured model weight is
-  not the delivered share when the approval matrix is sparse, and why day-of must not be a second path).
+  `NIGHTLY_IMPRESS_PLAN.md` (always-impress backlog), `NIGHTLY_PAIR_ROLL_PLAN.md` (unbuilt pair-roll spec),
+  `NIGHTLY_COMPOSITION_AUDIT_PLAN.md` (the 10-02 composition audit), `NIGHTLY_POOL_CLEANUP_PLAN.md` (pool cleanup).
+  **Retired nightly plans, investigations and ledgers** (the history behind the rule book's rules; never the current
+  state): `docs/archive/nightly/`.
 - **Services / money:** `SPARKLE_PAYMENTS_SETUP.md`, `PRO_SUBSCRIPTION_SETUP.md`,
   `SPARKLE_PRICING_STRATEGY.md`, `AUTH_PROVIDERS.md`, `BUNDLE_ID_MIGRATION.md`, `APP_STORE_LISTING.md`,
   `LAUNCH.md`. (Website specifics live in `../dreambot-web/CLAUDE.md`.)

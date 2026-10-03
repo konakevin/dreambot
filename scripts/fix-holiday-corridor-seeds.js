@@ -30,6 +30,7 @@ const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
 const { ask } = require('./lib/poolJudge');
 const { callClaude } = require('./lib/anthropic');
+const { splitScenario } = require('./lib/scenarioSplit');
 
 const sb = createClient(
   'https://jimftynwrinwenonjrlj.supabase.co',
@@ -387,12 +388,20 @@ function writeSql() {
   const lit = (s) => `'${String(s).replace(/'/g, "''")}'`;
   // --rollback writes the reverse (new -> old), guarded the same way.
   const back = process.argv.includes('--rollback');
-  const lines = rows.map((r) => {
+  const lines = rows.flatMap((r) => {
     const [to, from] = back ? [r.old, r.scene] : [r.scene, r.old];
-    return `UPDATE public.${TABLE} SET scene = ${lit(to)} WHERE id = ${lit(r.id)} AND pool = ${lit(r.pool || 'holiday')} AND scene = ${lit(from)};`;
+    // `action` (mig 516) is a VERBATIM slice of `scene`; rewording the scene orphans it, and the engine then renders
+    // the whole scene as the place AND the old action (mig 665 repaired 15 rows left that way by 660/663/664).
+    // Re-derive it from the new text with the column's own splitter; the guard only fires on a row that has an
+    // action which no longer fits, so rows without one are untouched. Run scan-scenario-actions.js after applying.
+    const split = splitScenario(to, { allowBare: COUPLE });
+    return [
+      `UPDATE public.${TABLE} SET scene = ${lit(to)} WHERE id = ${lit(r.id)} AND pool = ${lit(r.pool || 'holiday')} AND scene = ${lit(from)};`,
+      `UPDATE public.${TABLE} SET action = ${split ? lit(split.action) : 'NULL'} WHERE id = ${lit(r.id)} AND scene = ${lit(to)} AND action IS NOT NULL AND position(action in scene) = 0;`,
+    ];
   });
   fs.writeFileSync(SQL, lines.join('\n') + '\n');
-  console.log(`${lines.length} guarded updates -> ${SQL}`);
+  console.log(`${lines.length} guarded updates (scene + action re-split per row) -> ${SQL}`);
 }
 
 main().catch((e) => {
