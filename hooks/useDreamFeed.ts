@@ -72,7 +72,8 @@ async function fetchFeedPage(
   }));
   // Diversify PER-PAGE so each page is order-stable on its own.
   // (See HomeScreen comment for the cross-page-boundary trade-off.)
-  const rows: FeedRow[] = tab === 'bots' ? rawRows : (applyDiversity(rawRows) as FeedRow[]);
+  // Following is strictly newest first (migration 666), so like the Bots timeline it is never reordered here.
+  const rows: FeedRow[] = tab === 'forYou' ? (applyDiversity(rawRows) as FeedRow[]) : rawRows;
   const last = rawRows[rawRows.length - 1];
   // Terminate ONLY on a genuinely empty page. An undersized page (< PAGE_SIZE)
   // does NOT mean we're at the end — the server-side get_feed filter (blocked

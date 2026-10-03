@@ -8,7 +8,8 @@
  * future get_feed rewrite can lose it again:
  *   • forYou: seen posts rank below identical unseen posts (x0.55/x0.35/x0.20)
  *   • recovery: the penalty relaxes to 1.0 by 21 days since last_seen
- *   • following: gentler curve (x0.75 first view)
+ *   • following: strictly newest first since migration 666 (no seen penalty); with
+ *     feed_following_chronological = false the old gentler curve (x0.75 first view)
  *   • bots timeline: NO penalty
  *
  * Since migration 544 it also locks the fresher For You mix:
@@ -134,12 +135,14 @@ beforeAll(async () => {
   await db.query('CREATE TABLE public.engine_config (id integer PRIMARY KEY)');
   const sql544 = migrationSql('544_feed_fresh_first_throwback_turns.sql');
   await db.query(extract(sql544, 'ALTER TABLE public.engine_config', ';'));
+  const sql666 = migrationSql('666_following_feed_chronological.sql');
+  await db.query(extract(sql666, 'ALTER TABLE public.engine_config', ';'));
 
-  // The real, current definition (544 = 388 penalty + 389 jitter clamp + 390
+  // The real, current definition (666 = 388 penalty + 389 jitter clamp + 390
   // age-aware waiver + 391 windowing + 492 auth guard + 544 fresh/throwback
-  // mix), straight from the migration file. Test posts are 12h-10d old —
-  // inside the 60d window, so the windowing never filters them.
-  await db.query(extract(sql544, 'create or replace function public.get_feed', '$$;'));
+  // mix + 666 chronological Following), straight from the migration file. Test
+  // posts are 12h-10d old — inside the 60d window, so the windowing never filters them.
+  await db.query(extract(sql666, 'create or replace function public.get_feed', '$$;'));
 });
 
 afterAll(async () => {
@@ -215,7 +218,8 @@ it('forYou: the penalty RECOVERS — 30 days since last view scores like unseen 
   expect(scores.get(P_RECOVERED)!).toBeCloseTo(scores.get(P_UNSEEN)!, 6);
 });
 
-it('following: gentler penalty (x0.75 after one view)', async () => {
+it('following, ranked (feed_following_chronological = false): gentler penalty (x0.75 after one view)', async () => {
+  await setConfig('feed_following_chronological', false);
   await db.query(`INSERT INTO public.follows (follower_id, following_id) VALUES ($1, $2)`, [
     VIEWER,
     AUTHOR,
@@ -359,4 +363,50 @@ it('544: the fresh/throwback knobs never touch the Following tab', async () => {
   await setConfig('feed_older_turn_step', 0);
   const after = await feedScores('following');
   for (const id of [P_A1, P_A2]) expect(after.get(id)!).toBeCloseTo(before.get(id)!, 5);
+});
+
+// 666 (Kevin 2026-10-02: "can we fix it to be just chronological").
+it('666: Following is strictly newest first, whatever the engagement', async () => {
+  await db.query(
+    `INSERT INTO public.follows (follower_id, following_id) VALUES ($1, $2), ($1, $3)`,
+    [VIEWER, AUTHOR, AUTHOR2]
+  );
+  await insertPost(P_A1, AUTHOR, '2 days', 5000); // older and very popular
+  await insertPost(P_A2, AUTHOR2, '3 days', 0);
+  await insertPost(P_UNSEEN, AUTHOR2, '1 hour', 0); // newest, no likes
+  const { rows } = await db.query(
+    `SELECT id FROM public.get_feed($1, 50, 0, 0.0, 0.0, 'following', NULL, NULL, NULL, NULL, NULL)`,
+    [VIEWER]
+  );
+  expect(rows.map((r) => r.id)).toEqual([P_UNSEEN, P_A1, P_A2]);
+});
+
+it('666: a seen post keeps its place in Following (no seen penalty)', async () => {
+  await db.query(`INSERT INTO public.follows (follower_id, following_id) VALUES ($1, $2)`, [
+    VIEWER,
+    AUTHOR,
+  ]);
+  await insertIdenticalPosts([P_UNSEEN, P_SEEN1]);
+  await db.query(
+    `INSERT INTO public.post_impressions (user_id, upload_id, view_count, last_seen)
+     VALUES ($1, $2, 5, now())`,
+    [VIEWER, P_SEEN1]
+  );
+  const scores = await feedScores('following');
+  expect(scores.get(P_SEEN1)!).toBeCloseTo(scores.get(P_UNSEEN)!, 8);
+});
+
+it('666: the switch off restores the ranked Following formula', async () => {
+  await db.query(`INSERT INTO public.follows (follower_id, following_id) VALUES ($1, $2)`, [
+    VIEWER,
+    AUTHOR,
+  ]);
+  await insertPost(P_A1, AUTHOR, '2 days', 5000);
+  await insertPost(P_A2, AUTHOR, '1 hour', 0);
+  const chrono = await feedScores('following');
+  expect(chrono.get(P_A2)!).toBeGreaterThan(chrono.get(P_A1)!);
+  await setConfig('feed_following_chronological', false);
+  const ranked = await feedScores('following');
+  // Ranked: the under-24h boost (~1.0) dwarfs the epoch-scale chronological score.
+  expect(ranked.get(P_A2)!).toBeGreaterThan(0.9);
 });
