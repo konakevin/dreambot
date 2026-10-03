@@ -50,17 +50,19 @@ That's it for the "start" — `enqueue-dream` is deliberately fast and dumb. The
 
 ## Pipeline 2 — "Nightly" (the robot makes everyone a dream while they sleep)
 
-This is the automatic, free, batch path. Pro/trial members get one dream every night.
+This is the automatic, free, batch path. Pro (paid or trial) and Basic members get one dream every night.
+(Full, current detail: `NIGHTLY_RULE_BOOK.md`.)
 
-1. **A timer fires once a day** (a GitHub Actions cron at 8am UTC) and runs a script,
-   **`nightly-dreams.js`**.
-2. The script **finds every eligible member** (Pro or in-trial), in pages of 1,000 so nobody gets silently
-   skipped, and **skips anyone who already got tonight's dream** (so a re-run can't double up).
+1. **A timer fires every hour** (GitHub Actions `nightly-dreams.js`, plus a database backstop at :17) and picks up
+   each member when it is about 4am where they live.
+2. The script **finds every eligible member**, in pages of 1,000 so nobody gets silently skipped, and **skips anyone
+   who already got tonight's dream** (so a re-run can't double up).
 3. It **writes one dream onto the `dream_queue`** for each of them, all labeled "heavy" (nightly dreams use
    the user's saved cast, so they involve face swaps).
 4. From here it's the **same shared assembly line** — the only real difference is *where the prompt comes
-   from*: instead of a user's typed words, a nightly dream is **hydrated** from the member's saved
-   **recipe** (`user_recipes`) plus a random scene **template** from the `nightly_seeds` pool.
+   from*: instead of a user's typed words, a nightly dream is built from the member's saved **recipe**
+   (`user_recipes`: their places and cast) plus rolls for the holiday, the look, the vibe and a scene (one of
+   their place's spots, or a goofy / elegant / active scenario tied to their places).
 
 (There's a third tiny variant — the **onboarding "first dream"** — which goes through `first-dream-render`
 and tries a few fallback tiers, but it's the same engine underneath.)

@@ -308,5 +308,5 @@ and it is a geometry problem surfacing at the swap, not a swap problem.
 
 State what was **measured** vs **inferred**, every n, and every hypothesis tested AND REJECTED so nobody
 re-runs it. If a conclusion rests on your eye, say so and show the sheet. Ledgers:
-`NIGHTLY_LOOK_FIDELITY_INVESTIGATION.md`, `COUPLE_SWAP_RELIABILITY_PLAN.md`,
-`REAL_FACE_LOOKS_REGISTRY.md`.
+`NIGHTLY_RULE_BOOK.md` (current rules), `REAL_FACE_LOOKS_REGISTRY.md`, and the history in
+`docs/archive/nightly/` (`NIGHTLY_LOOK_FIDELITY_INVESTIGATION.md`, `COUPLE_SWAP_RELIABILITY_PLAN.md`).

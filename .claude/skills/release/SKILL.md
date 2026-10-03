@@ -158,7 +158,7 @@ differently.
 ## Launching a gated feature/bot alongside a release (the announcements system)
 
 This is the pattern behind FarmBot's launch (`FARMBOT_GOLIVE_RUNBOOK.md`) and the locations
-launch before it (`LOCATION_GOLIVE_RUNBOOK.md`) — write a fresh `<FEATURE>_GOLIVE_RUNBOOK.md`
+launch before it (`docs/archive/nightly/LOCATION_GOLIVE_RUNBOOK.md`) — write a fresh `<FEATURE>_GOLIVE_RUNBOOK.md`
 for any future one, following this same shape, and this skill is the generalized version of
 that pattern.
 

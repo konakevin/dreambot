@@ -1,6 +1,6 @@
 # Nightly composition audit: find and fix pools whose dreams look alike
 
-Status: **run 2026-10-02; two fixes applied (migs 660, 661), see Results.** Kevin: "we should do an entire audit of all
+Status: **run 2026-10-02; fixes applied as migs 660-665 (holiday couples, location spots, running-away features, year-round solo + couple, action re-split), see Results. Re-measure ~2026-10-16. The rules learned here now live in `NIGHTLY_RULE_BOOK.md`.** Kevin: "we should do an entire audit of all
 nightly seed pools to diagnose and fix similar issues with other pools?", then "go with your judgement, try to fix any
 problem pools you find" and "don't make blanket changes unless tested and confirmed with render tests".
 

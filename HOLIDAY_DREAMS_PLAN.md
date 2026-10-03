@@ -1,6 +1,9 @@
 # Holiday Dreams — Plan & Design
 
-**Status:** DESIGN (2026-08-18). Halloween ships first; the system is built for N holidays from day one.
+**Status:** the engine this designed is LIVE (Fall + Halloween 2026); the current mechanics, live odds and pool rules are in
+`NIGHTLY_RULE_BOOK.md` (A2 step 3, C7). Numbers below (shares, odds, pool sizes) are the 2026-08 design and are stale where
+they disagree. Still the reference for adding a holiday (Christmas: `CHRISTMAS_2026_PLAN.md`). Original status: DESIGN
+(2026-08-18). Halloween ships first; the system is built for N holidays from day one.
 **Owner:** Kevin + Claude. **Scope:** nightly dreams only (Pro/trial users). Bots + Create are out of scope.
 
 ---

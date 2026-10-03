@@ -1,0 +1,428 @@
+> **ARCHIVED 2026-10-02.** Superseded by `NIGHTLY_RULE_BOOK.md` (the official nightly rule book: the current state, the rules and every lesson). Kept as history for its measurements and decisions. Do NOT follow it as the current state; when it disagrees with the rule book or the code, it is wrong.
+
+# Operation Expand Dreams — MASTER IMPLEMENTATION PLAN
+
+<!-- ============================================================================ -->
+## ▶ RESUME HERE (read first on any new session / after compaction)
+
+<!-- ============================================================================ -->
+### ⭐ CURRENT STATE v10 (2026-08-25 PM) — QUALITY RESET + 4+4 IA locked; resuming seed expansion under the NEW bar
+This block supersedes the older ACTIVE/FINALIZATION blocks below (kept for history). Read it first.
+
+**WHY A RESET:** A Viking quality deep-dive with Kevin surfaced SYSTEMIC quality bugs that the overnight
+"✅ passed" renders (v1–v9) predate. So those grades are stale — re-verify each card under the NEW bar as we
+touch it. All fixes are GLOBAL (shipped + deployed; **COMMIT PENDING** — Phase 0):
+- **Poses** — new `dynamic` hero-grade swap-safe pool + gentle prune of chore/farm poses + additive reweight
+  (dual 15/40/45 playful/dynamic/classic · solo 40/30/30). Files: `_shared/pools/{dual_actions,single_actions,
+  actionPoseLoader}.ts`; DB `action_poses` pools `dynamic`/`dynamic_solo` (migration **446** pending dashboard
+  apply — code fallback already works). Killed the "monument-touching" companion pose.
+- **Wardrobe** — costume-designer directive in `characterSlotPrompt.ts` (anchored branch): "dress each to look
+  their best, never frumpy/villager/drab." Lifts EVERY location's cast wardrobe.
+- **Model** — `flux-2-flex` clamped → `flux-2-pro` on DUAL swaps (25%→9% fail) in `nightly-dreams`.
+  `flux-1.1-pro-ultra` KEPT (12.9%, normal — it was one bad render, not a bad model).
+- **Spot dedup** — the "always touching a rock" bug = near-duplicate CONCEPT bloat (Viking had 25% stone
+  spots). NEW REQUIRED STEP: semantic-dedup every pool so no one concept exceeds ~8%. Viking fixed (26 stone
+  spots → 5). The gen script does NOT semantically dedup — build an automated sweep (Phase 1).
+- Test `classicPoolPickers.test.ts` updated; jest + deno typecheck green.
+- **Viking Age = the re-QA'd template** (rock rooted out, dynamic poses, de-frumped wardrobe → epic longship
+  renders). Use it as the quality reference.
+
+**4+4 IA LOCKED (Kevin):** picker collapses 12 categories → **8 (4 per tab)**. Spec: `LOCATION_CONSOLIDATION_
+PLAN.md` (⭐ top block) + mock `scratchpad/picker-grouping.html`.
+- Real World: **Cities & Landmarks · Around the World · Nature · Eras**
+- Dream Worlds: **Fantasy** (High Fantasy + Gothic) · **Whimsical** · **Sci-Fi** · **Adventure** (Wild West +
+  Heroes-broadened-to-6)
+
+**THE PLAN (current roadmap — supersedes the overnight ACTIVE block):**
+- **Phase 0 — protect shipped work:** commit the quality files (list at bottom of this block) + apply mig 446 +
+  delete temp scripts.
+- **Phase 1 — dedup sweep:** ✅ DONE (revised). Built `scripts/dedup-spot-pools.mjs` as a **DIAGNOSTIC
+  FLAGGER**, NOT a mass auto-thinner. LESSON: raw token frequency AND a Haiku judge both OVER-flag legitimate
+  dominant themes (called Hawaii beaches / Bora Bora lagoons "bloat" — would gut good pools). The systemic
+  "always touching a rock" repetition was the POSE (fixed globally), not the spot pools. So the tool reports
+  candidates for human review; `--write` is gated to ONE explicit `--location` and only right for a genuine
+  static-PROP bloat (Viking rune stones — already fixed). No fleet-wide thinning.
+- **Phase 2 — ~~SEED EMPTIES~~ CANCELLED (premise was false):** the "15 empty cards" was a **1000-row-cap
+  artifact** in the status query (`.limit(20000)` still returns only 1000 rows → 0 counted for everything past
+  them). Paginated re-check: **ALL 112 picker cards have ≥15 curated spots (90–340 each), 19,362 active spots
+  total, 0 thin, 0 empty.** The overnight run genuinely seeded everything. → Phase 2 becomes **RE-QA under the
+  new bar:** the overnight QA grades PREDATE this session's pose/wardrobe/model fixes, so spot-check a
+  representative slice per category (esp. cast couples) to confirm the fixes lifted quality fleet-wide (not just
+  Viking); fix card-specific misses. (Minor: `border cantina` has 38 uncurated NULL-eligibility spots + 85
+  inactive — curate.)
+- **Phase 3 — finish consolidations:** Through Time 3 (1920s speakeasy→Roaring 20s, pirate cove→Age of Pirates,
+  medieval village→Medieval Times), Wild West 8→5 (Frontier Town merge), Gothic (Cursed Cathedral→Haunted
+  Castle; Transylvania empty), Heroes→6 broaden. (Broaden = relax SUBJECT_RULE + EXPAND spots, never rename-only.)
+- **Phase 4 — apply 4+4 grouping:** remap `picker_category` on every card to the 8 buckets + update
+  `LocationPickerStep.tsx` SECTION_META to the 8.
+- **Phase 5 — QA sweep + go-live:** re-verify every visible card under the new bar → flip `admin_only=false` →
+  ship picker UI. (Also revert the announcement dev-hacks + `audience='all'` before any release.)
+- Critical path: Phase 1 → 2 → 4 → live. Phase 3 parallel to 2. Phase 0 = now.
+
+**IMMEDIATE NEXT:** awaiting Kevin's go on Phase 0 (commit) + Phase 2 proof (cyberpunk megacity + ancient elven
+city). Nothing flips live before Kevin's visual pass.
+
+**PHASE-0 COMMIT SET (uncommitted, tested+deployed):** `supabase/functions/_shared/pools/{dual_actions,
+single_actions,actionPoseLoader}.ts` · `supabase/functions/_shared/characterSlotPrompt.ts` ·
+`supabase/functions/nightly-dreams/index.ts` · `__tests__/lib/classicPoolPickers.test.ts` ·
+`supabase/migrations/446_dynamic_pose_pool.sql` · `LOCATION_CONSOLIDATION_PLAN.md` · `OPERATION_EXPAND_BUILD.md`.
+NOT in this commit (separate efforts, carry dev-hacks): announcement files, `LocationPickerStep.tsx` redesign.
+Temp `scripts/_tmp-*.js` = delete, never commit.
+<!-- ============================================================================ -->
+
+**ACTIVE (HISTORICAL — overnight run 2026-08-24; see v10 above for current):** autonomous run (see
+[[project_expand_dreams_autonomous_run]]). Task: seed + QA **every new location category**, then it's ready
+for Kevin's review tomorrow.
+
+**THE RULES (do not violate):**
+1. Per category: seed a QA-size batch → **up to 3 QA rounds, stop early if the test batch averages ≥4.5/5.**
+2. **Post every test render to Kevin's PRIVATE Dreams album** (uid `eab700d8-f11a-4f47-a3a1-addda6fb67ec`)
+   via `qa-location.js`. Grade each render myself (download + view) vs the integration+cinema bar.
+3. **DO NOT GO LIVE. Everything stays `admin_only=true` dark. Never set `admin_only=false` in this run.**
+4. Full quality per location (autonomous ≠ rushed). Can't reach 4.5 in 3 rounds → 🚩 Return-to, move on.
+5. Keep this doc's progress board + per-location tables current as each item moves.
+6. ★ **SET-DRESSER + COSTUME-DESIGNER mantra** ([[feedback_dream_shoot_set_dresser_costume_designer]]):
+   every shot = a composed masterpiece; cool/fun/sexy/interesting/cute/pretty/beautiful/rugged/badass,
+   NEVER plain/pedestrian/frumpy. Wardrobe = dream-wear (generator elevated). Discerning artistic eye:
+   backgrounds must look great AND naturally weave the swapped hero into the scene (not a cutout).
+7. ★ **`qa-location.js` now renders 4 surfaces: self, plus_one, COUPLE (dual face-swap), scene.** Couples
+   (dual self+plus_one) are core — QA them for every location (`force_cast_role:'dual'`).
+8. Wild West = Red Dead vision ([[project_wild_west_red_dead_vision]]); renamed old_west→wild_west.
+
+**HOW TO RESUME (post-compaction procedure):**
+1. Read this block + the Progress board below to see which category is in flight.
+2. Check in-flight background jobs / query DB for seed state:
+   `node -e` on `location_cards` (biome_config present?) + `location_iconic_spots` per `location_key`.
+3. Continue the per-category loop (bottom of doc): recipes → `seed-category.mjs` → `qa-location.js` →
+   grade → tweak → next. Categories left = any row on the board not ✅/🟢/🚩.
+
+**⏱ FINALIZATION STATUS v9 (2026-08-25) — DRY-RUN smoke test (Kevin's ask): every location produces a valid dream, no dead dreams:**
+> Built a **`dry_run`** mode into `nightly-dreams` (body `{dry_run:true}` → runs roll→recipe→Sonnet brief→
+> prompt-assembly, returns `{finalPrompt,promptLength,fallbackReasons}` WITHOUT render/swap/upload/log; inert
+> in prod since prod never sends the flag). Deployed. New reusable tool `scripts/dryrun-locations.mjs` exercises
+> every location × {cast-self, couple-dual, pure-scene} × N rolls and flags empty/crash/corrupt/degraded prompts.
+> **RESULT: 68 new cards × 3 surfaces × 2 rolls = 408 calls, 408/408 PASS (0 dead dreams).** Every location
+> returns a rich (1.3k-2.5k char) location-correct prompt on all surfaces.
+> The dry-run's random 2-roll sampling can miss a single latent bad spot in a 100-300 pool, so ALSO ran a
+> CONTENT scan: caught 10 latent junk rows (pirate cove 4 markdown-table/refusal, fairy cottage 2 refusal,
+> rose palace 1 list-item, + 3 real-world place leaks: Columbia CA / Chicago State St / Harrisburg) that the
+> earlier refusal-regex missed → deleted by id. Full-table re-scan = **all 19,560 active spots clean, 0 junk.**
+> LESSON: dry-run (systemic health) + content scan (per-spot purity) are COMPLEMENTARY — need both. Pending
+> commit: nightly-dreams `dry_run` flag, gen-iconic-spots `--fictional` flag, scripts/dryrun-locations.mjs.
+> REMAINING: Kevin visual pass → GO LIVE.
+
+**⏱ FINALIZATION STATUS v8 (2026-08-25) — pre-go-live "once over" (Kevin's ask): all prod-seeded, deduped, corruption purged. Final audit = 116 cards, 0 blockers / 0 SMALL / 0 corrupt:**
+> Kevin OK'd go-live pending a full production-readiness pass. Found + fixed 3 real gaps the earlier QA missed:
+> 1. **22 new cards were below production scale (<80 spots)** while peers/live sit at 100-340. Scaled ALL to
+>    ~150-300 via `gen-iconic-spots-50 --count 100` (4 concurrent gen batches) + classify (2188 new spots) +
+>    eligibility. Two confined thematic cards (pirate cove, saloon interior) hit a dedup/variety ceiling.
+> 2. **CORRUPTION BUG: 43 garbage rows = Sonnet refusal prose parsed as spots** (pirate cove 24, rose palace 7,
+>    saloon interior 6, haunted cathedral 4, fairy cottage 2). Root cause: gen-iconic-spots real-location
+>    prompt demands real landmarks → Sonnet refuses on fictional/thematic names → refusal parsed as spots.
+>    Fix: added **`--fictional`** flag (forces invent-prompt), deleted 43 rows by id, regen pirate cove clean
+>    (153 spots, 0 corrupt). Full-table scan now clean. See [[project_iconic_spot_refusal_corruption]].
+> 3. **Rose-trio dedup (Kevin: keep all 3 if truly distinct + rename):** confirmed 3 different dreams —
+>    outdoor rose gardens / interior rose-QUARTZ crystal palace / fairytale castle. Renamed display_names:
+>    Rose Garden Palace→**Enchanted Rose Garden**, Rose Palace→**Crystal Rose Palace**, Princess Garden
+>    Castle→**Princess Castle**. (Fairy Cottage vs Cottagecore Cottage = kept, genuinely distinct.)
+> Groupings audited = all sensible (gothic/heroes/high-fantasy/landmarks/scifi/through-time/whimsical/wild-west).
+> NON-BLOCKING note: 10 OLD LIVE real-world cards have ward=0 (Big Sur, Grand Canyon, Iceland, Moab, Norwegian
+> Fjords, Yellowstone, Zion, Australia, Paris, Santorini) — they use the climate-default wardrobe path (fine,
+> been live); optional backfill. Code change pending commit: gen-iconic-spots-50 `--fictional` flag.
+> REMAINING: Kevin's visual pass → GO LIVE (flip admin_only=false on all new-category cards).
+
+**⏱ FINALIZATION STATUS v7 (2026-08-25) — REAL 68-card sweep clean + QA content verified. READY for Kevin's visual pass:**
+> ⚠️ SWEEP BUG FIXED: prior "full sweeps" used `for n in $NAMES` which does NOT word-split in **zsh** →
+> the whole newline blob was passed as ONE arg → every batch sweep silently inspected one non-existent card
+> and reported false ✅. Use `ARGS=("${(@f)NAMES}")` (zsh newline-split) to pass a real array. The corrected
+> 68-card sweep caught a genuine hidden blocker (`princess garden castle`: 20 vista + unapproved) that the
+> bogus sweeps missed — NOW FIXED (98 fresh no-IP spots, classified, eligibility, approved, ✅).
+> **Corrected sweep = 62 ✅ / 5 ⚠️ / 0 blockers.** The 5 warns are defensible-by-nature: gothic realm /
+> high fantasy / sci-fi worlds (recipe.visuals=0 = the 3 umbrella cards, non-blocking backfill; all have
+> healthy 91-243 spot pools); mountain summit expedition (cast=10, summits are inherently wide vistas);
+> saloon interior (scene=3, an interior is inherently intimate; 30 cast healthy).
+> **QA CONTENT VERIFIED BY RENDER (not just sanity):** dragons keep, alien planet, ancient elven city,
+> cyberpunk megacity, rose garden palace, fairy cottage — self+couple+scene each. Scenes 4.7-4.8 (jaw-
+> dropping, 100% original no-IP). Selfs 4.2-4.5 (clean frontal faces, characterful on-register wardrobe).
+> Couples swap-SAFE (clear head-gap, distinct male+female, giant-head fix holding) + on-register wardrobe
+> (elven finery, cyberpunk leather, cottagecore) — CONFIRMED the dual path DOES apply biome_config.WARDROBE
+> (verified via logged Sonnet left/right_wardrobe fields; one rose-garden cargo-pants couple was a lone
+> Sonnet-remix/special-scene outlier, re-rendered to confirm variance — NOT a systemic gap).
+> **Picker-query verified: 115 picker-visible cards, 0 missing labels/thumbnails.** REMAINING: Kevin's
+> visual pass → GO LIVE (flip admin_only=false on all new-category cards). Nothing flips before his pass.
+
+**⏱ FINALIZATION STATUS v6 (2026-08-25) — ALL 16 empty/thin pools FIXED + QA-verified by render:**
+> The v5 fix sequence is DONE. All 16 under-built cards now have real spot pools (98-108 active each),
+> classified + eligibility-set + is_approved=true. Sci-fi/fantasy IP purged; generator rewritten to invent
+> ORIGINAL no-IP landmarks. **QA-RENDERED a sample (dragons keep, alien planet — self+scene) and graded with
+> the dream-shoot eye: scenes 4.8/5 (jaw-dropping, 100% original), self-swaps 4.2-4.4/5 (clean frontal faces,
+> giant-head dual fix holding, characterful wardrobe).** Content verified by RENDERING, not just sanity.
+> **Picker-query verified: 115 picker-visible cards, 0 missing labels, 0 missing thumbnails**, all new
+> categories correctly dark. Full sanity sweep across all 68 dark cards = clean (one transient 1000-row-cap
+> false-flag on 1920s speakeasy; passes individually + on re-sweep).
+> ✅ REMAINING before go-live: (a) Kevin's visual pass (onboarding/Settings as admin), then (b) GO LIVE =
+> flip admin_only=false on ALL new-category cards. Non-blocking later: backfill recipe.visuals arrays for the
+> 3 umbrella cards (sci-fi worlds, high fantasy, gothic realm). NOTHING flips live before Kevin's visual pass.
+
+**⏱ FINALIZATION STATUS v5 (2026-08-25) — CONTENT-QUALITY audit found LOTS of empty spot pools:**
+> Kevin: "no rush, TOP QUALITY, don't slap it on." Wardrobe for rose palace/cloud kingdom/fairy tale kingdom
+> = TOP QUALITY ✅. BUT 16 cards have <20 active iconic spots (graveyard revives that never got spot pools —
+> they render off biome_config alone, NOT set up like Tokyo's 180). **12 at ZERO:** dragons keep, alien
+> planet, mermaid lagoon, floating sky islands, rose garden palace, ancient elven city, cyberpunk megacity,
+> mars colony, underwater city atlantis, enchanted forest, dwarven fortress, crystal caverns. **Thin:** rose
+> palace(8), haunted cathedral(6), fairy cottage(9), race track garage(18).
+> ALSO: sci-fi spot generator emits **IP** — space station(12) + sci-fi worlds(20) have Babylon 5/Halo/Blade
+> Runner/Mass Effect/Star Trek spots. FIX SEQUENCE: (1) add NO-IP guard to gen-iconic-spots-50 scifi/fantasy
+> prompts; (2) delete existing IP-named spots; (3) gen 100 spots for all 16 thin/empty (scale-pools.mjs) +
+> classify + eligibility (skip grade for imagined → reactivate); (4) QA-RENDER a sample of each + grade with
+> dream-shoot eye (NOT just structural sanity); (5) re-sanity ALL; (6) picker-verify; (7) Kevin visual pass;
+> (8) GO LIVE. Nightly-eligible=auto. SECTION_META done. Thumbnails done. Grouping reshuffled (fantasy_worlds
+> dissolved). Selector copy updated. DO NOT go live until all 16 have real spot pools + QA-verified renders.
+
+**⏱ FINALIZATION STATUS v4 (2026-08-25) — sanity sweep found under-built graveyard cards:**
+> BLOCKERS to fix before go-live (all were surfaced/QA-rendered but never fully seeded):
+> - **7 with ZERO spots** (need gen-iconic-spots 100 + classify + eligibility): space station, transylvania,
+>   haunted cathedral, haunted castle, rose palace, cloud kingdom, fairy tale kingdom.
+> - **rose palace/cloud kingdom/fairy tale kingdom** ALSO need: is_approved=true + WARDROBE (gen-location-
+>   wardrobe) [biome_config exists].
+> - **wizard academy**: is_approved=true + classify (100 vista spots) [has spots + wardrobe].
+> - sci-fi worlds/gothic realm: OK (only umbrella recipe.visuals=0 warn — backfill later, non-blocking).
+> FIX = set is_approved on the 4 moved fantasy cards; gen wardrobe for the 3; gen spots for the 7; classify+
+> grade-skip+eligibility; re-sanity. THEN picker-verify + Kevin visual pass + GO LIVE (flip admin_only=false
+> on ALL new-category cards; Kevin wants ALL live).
+
+**⏱ FINALIZATION STATUS v3 (2026-08-25):** ✅ Scaled+gated: TT/WildWest/Heroes/Whimsical/Landmarks.
+✅ display_name (46) + THUMBNAILS done (dups parisian cafe + cherry blossom temple HIDDEN; 1920s speakeasy
+regen). ✅ GROUPING RESHUFFLE: dissolved incoherent `fantasy_worlds` — paris cafe→iconic_cities, cherry
+blossoms+japanese garden→epic_nature (live); wizard academy→high_fantasy, rose palace/cloud kingdom/fairy
+tale kingdom→whimsical_fun, ancient wonders→landmarks_wonders. SECTION_META: removed fantasy_worlds. ✅
+Selector subtitle copy updated (whimsy, real+imagined, no em dash). 🔨 dark-18 curation running (classify+
+reactivate+eligibility, +wizard academy). REMAINING: (1) curate the 3 moved fantasy cards rose palace/cloud
+kingdom/fairy tale kingdom (uncurated, from old fantasy_worlds) + verify thumbnails; (2) picker-query verify
++ full sanity sweep ALL sections; (3) Kevin VISUAL PASS (asked: visual-pass-first vs flip-when-ready —
+AWAITING answer); (4) GO LIVE = flip admin_only=false on ALL new-category cards. KEVIN WANTS ALL NEW
+CATEGORIES LIVE (dark is only temp staging).
+
+**⏱ FINALIZATION STATUS v2 (2026-08-25):** ✅ Scaled+gated: Through Time, Wild West, Heroes, Whimsical,
+**Landmarks** (all production, sane, DARK). ✅ display_name set on 46 new cards. ✅ SECTION_META wired.
+🔨 THUMBNAILS generating for ~46 new locs (job; generate-location-thumbnails.js now has a recipe-based
+fallback + --missing includes unmapped). REMAINING: (1) curate dark 18 (classify vista→scale + reactivate +
+eligibility; skip grade to avoid imagined-nuke; backfill recipes for 3 umbrella cards later); (2) picker-
+query verification (run the picker's exact select as admin, confirm each section returns label+thumbnail+
+tier); (3) final sanity sweep ALL. THEN Kevin does the VISUAL PASS (onboarding/Settings as admin, cards
+still dark) → THEN flip admin_only=false to GO LIVE. **Do NOT flip before Kevin's visual pass (his call).**
+
+**⏱ FINALIZATION STATUS (2026-08-25, live):**
+> ✅ SCALED + sanity-gated (production, sane, still DARK): Through Time (9), Wild West (8), Heroes (9),
+> Whimsical (6 — fairy tea party was all-B'd by grader → reactivated). Landmarks (8) SCALING now (job
+> b7czuvjfk). ✅ SECTION_META wired for all sections. ✅ Nightly-eligible = automatic (no flag).
+> ⚠️ **DARK HF(9)/SciFi(5)/Gothic(4) = 18 locs NOT production-ready** (sanity gate caught it): were set up
+> pre-seed-category, `is_approved` was false (NOW SET true), spots uncurated — many active=0, umbrella cards
+> (sci-fi worlds/high fantasy/gothic realm) stuck at spot_kind='vista' + NO recipe arrays (visuals=0).
+> TODO: run `scale-pools.mjs` on the 18 to curate (classify vista→scale, grade, eligibility); REACTIVATE
+> any the grader all-B's (imagined-location grader over-rejection — see fairy tea party); GENERATE recipe
+> arrays for the 3 umbrella cards (generate-full-location-card) OR treat them as umbrella-only.
+> ⚠️ sanity-check-pools.mjs: active=0 currently prints as warn — should be FATAL (minor script tweak).
+> **GO-LIVE (flip admin_only=false) only AFTER all pass the sanity gate.**
+
+**⏱ FINALIZATION / GO-LIVE (Kevin APPROVED all renders 2026-08-25 — "seed to production, ready to switch live, work in nightly"):**
+> Phase B now running. Decisions: superhero IP = LEAVE for now (remove later if a problem); ALL new
+> locations NIGHTLY-ELIGIBLE (work like any other place at night); scale everything then ONE batch go-live
+> flip. STEPS: (1) scale QA-25 spot pools → ~100 + re-curate for ~40 locs (Through Time 9, Wild West 8,
+> Heroes 9, Whimsical 6, Landmarks 8) via `scripts/scale-pools.mjs`; (2) add SECTION_META for through_time,
+> wild_west, heroes_adventure, landmarks_wonders (imagined 4 already in); (3) confirm nightly-eligible;
+> (4) flip `admin_only=false` per section (GO LIVE). Caption bug FIXED (nightly caption no longer the raw
+> prompt). Dual giant-heads FIXED (framing counter-pull, 9:16 kept). gpt-image-2 BANNED from nightly.
+
+**⏱ (prior) OVERNIGHT RUN COMPLETE (2026-08-25):**
+> ALL categories seeded + QA-rendered to Kevin's album, ALL DARK (`admin_only=true`, nothing live):
+> **Through Time** ✅ (9 @4.5+) · **Wild West** ✅ (8, recalibrated gritty-authentic even-mix + couples) ·
+> **Heroes** ✅ (7/9) · **Whimsical expand** ✅ (5/6) · **Landmarks & Wonders** ✅ (8) · dark **High
+> Fantasy** ✅ (9, wardrobe refreshed + re-rendered) · **Sci-Fi** ✅ (5) · **Gothic** ✅ (4). Couples (dual
+> face-swap) added as a 4th QA surface across the board. Register-aware wardrobe (grounded=authentic vs
+> fantastical=glam) validated. Seeder = QA-25 spots (scale to ~100+ post sign-off).
+> **AWAITING KEVIN'S REVIEW.** Then per section: fix 🚩 Return-to items, scale spot pools to production, add
+> SECTION_META for through_time/wild_west/old_west→wild_west/heroes_adventure/landmarks_wonders, flip live.
+> **REMAINING BUILD:** Wild West raw-nature/activity expansion (Return-to). Renders killed frequently late
+> in the run (infra) → some locations have partial surfaces; re-roll/complete as needed.
+> --- older ---
+> 2026-08-25 early: **Through Time ✅ DONE R1** (all 4.5+, dark). **WILD WEST (renamed from old_west)** in
+> heavy iteration: Kevin wants Red Dead/Tombstone — first wardrobe elevation over-fashioned it (fringe
+> dresses/turquoise/no hats = "costumes, didn't believe them"). RECALIBRATED to gritty-authentic EVEN-MIX
+> (½ weathered real gear + ½ sexy-authentic; saloon=full burlesque glam; hats FREQUENT not mandatory) —
+> hand-authored pools on the 8. **Validated:** frontier couple now gritty-authentic, on horseback, hats,
+> believable town ✅; settings believable ✅. Canyon couple = dual no_split→scene fallback (wide-vista
+> dual limit). Couples ADDED to qa-location (4th surface). NOW: re-rendering rest of WW (gold rush+cattle
+> job bnqxxoid5) → then ADD wild-nature/activity locs (wild frontier, mountain wilderness, outlaw camp,
+> burlesque hall, shootout) → then Heroes → Whimsical expand → Landmarks → finish dark HF/SciFi/Gothic.
+> ⚠️ REGISTER LESSON: for gritty-real worlds (WW, Heroes, Landmarks, real) author AUTHENTIC-cool wardrobe,
+> NOT fantasy-fashion (only fantasy/kawaii/gothic get fantastical). [[feedback_dream_shoot_set_dresser_costume_designer]]
+<!-- ============================================================================ -->
+
+**THE single source of truth for all remaining Operation Expand Dreams work.** Following this doc top to
+bottom = complete implementation. Update it as every item moves.
+
+- **Why** (strategy, category rationale, ~90 ideas): `OPERATION_DREAM_LOCATION_EXPANSION.md`
+- **How** (the 10/10 seed authoring pipeline + rules): `LOCATION_SEED_PLAYBOOK.md`
+- **What + status** (this doc). *(`LOCATION_EXPANSION_CHECKLIST.md` is now SUPERSEDED by this doc.)*
+- **Working mode:** autonomous, no per-category approval gates, FULL quality bar per location
+  ([[project_expand_dreams_autonomous_run]]).
+
+---
+
+## ✅ Definition of DONE (per location, then per category)
+A location is DONE when ALL are true:
+1. **Recipe** authored (`generate-full-location-card.js`).
+2. **Seeded** to the playbook bar (`seed-category.mjs`): valid `biome_config` + WARDROBE, ≥15 curated
+   cast spots (medium/intimate), recognizable scene spots (wide/medium), imagined flag correct.
+3. **QA ≥4.5** across cast (self+plus_one) + scene, over ≤3 rounds — OR flagged 🚩 Return-to.
+4. **Thumbnail** set (`thumbnail_url`).
+A category is DONE when all its locations are DONE, its **`SECTION_META` entry exists** in
+`LocationPickerStep.tsx`, and it's **flipped live** (`admin_only=false`) — or its failures are on Return-to.
+
+---
+
+## 📊 Progress board (update every move)
+Status: ⬜ not started · 🔨 seeding · 🔎 QA · ✅ passed (≥4.5, dark) · 🟢 live · 🚩 return-to
+
+| Category | picker_category | SECTION_META | # | Status |
+|---|---|---|---|---|
+| Cities & Countries | iconic_cities | ✅ | 26 | 🟢 live |
+| Epic Nature | epic_nature | ✅ | 16 | 🟢 live |
+| Tropical Escapes | tropical | ✅ | 6 | 🟢 live |
+| Fantasy Worlds | fantasy_worlds | ✅ | 7 | 🟢 live |
+| High Fantasy | high_fantasy | ✅ | 9 | 🔎 QA (slice ~4.5) |
+| Sci-Fi & Space | scifi_space | ✅ | 5 | 🔎 QA (2 ✅) |
+| Gothic & Haunted | gothic_haunted | ✅ | 4 | 🔎 QA |
+| Whimsical & Fun | whimsical_fun | ✅ | 3→9 | 🔎 QA + expand |
+| **Through Time** | through_time | ❌ TODO | 12 | ✅ passed R1 (dark) — all 4.5+ except 1920s speakeasy 4.0 |
+| Old West | old_west | ❌ TODO | 8 | 🔨 seeding |
+| Heroes & Adventure | heroes_adventure | ❌ TODO | 9 | ⬜ |
+| Landmarks & Wonders | landmarks_wonders | ❌ TODO (real tier) | 8 | ⬜ |
+
+---
+
+## Work breakdown (per-location status)
+Cols: R=recipe · S=seeded · Q=QA grade · T=thumb · St=status(⬜/🔎/✅/🚩)
+
+### High Fantasy (`high_fantasy`) — dark, finish QA + flip
+| Location | R | S | Q | T | St |
+|---|---|---|---|---|---|
+| ancient elven city | ✅ | ✅ | ~4.5 | ✅ | 🔎 |
+| dwarven fortress | ✅ | ✅ | ~4.5 | ✅ | 🔎 |
+| dragons keep | ✅ | ✅ | ~4.5 (thin scene DNA) | ✅ | 🔎 |
+| crystal caverns | ✅ | ✅ | ~4.5 | ✅ | 🔎 |
+| enchanted forest | ✅ | ✅ | — | ✅ | ⬜ |
+| floating sky islands | ✅ | ✅ | — | ✅ | ⬜ |
+| underwater city atlantis | ✅ | ✅ | ~4.5 | ✅ | 🔎 |
+| mermaid lagoon | ✅ | ✅ | ~4.5 | ❌ | 🔎 |
+| high fantasy (umbrella) | ✅ | ✅ | ⚠️ goofy scene | ✅ | 🔎 |
+
+### Sci-Fi & Space (`scifi_space`)
+| alien planet | ✅ | ✅ | 4.5 | ✅ | ✅ |
+| cyberpunk megacity | ✅ | ✅ | 4.75 | ✅ | ✅ |
+| mars colony | ✅ | ✅ | — | ✅ | ⬜ |
+| space station | ✅ | ✅ | — | ✅ | ⬜ |
+| sci-fi worlds (umbrella) | ✅ | ✅ | — | ✅ | ⬜ |
+
+### Gothic & Haunted (`gothic_haunted`)
+| transylvania | ✅ | ✅ | ~4.5 | ✅ | 🔎 |
+| haunted cathedral | ✅ | ✅ | — | ✅ | ⬜ |
+| haunted castle | ✅ | ✅ | — | ❌ | ⬜ |
+| gothic realm (umbrella) | ✅ | ✅ | — | ✅ | ⬜ |
+
+### Whimsical & Fun (`whimsical_fun`) — 3 seeded + build 6
+| princess garden castle | ✅ | ✅ | ~4.5 | ✅ | 🔎 |
+| rose garden palace | ✅ | ✅ | ~4.5 | ❌ | 🔎 |
+| fairy cottage | ✅ | ✅ | — | ✅ | ⬜ |
+| kawaii candy land | ⬜ | ⬜ | — | ⬜ | ⬜ |
+| unicorn meadow | ⬜ | ⬜ | — | ⬜ | ⬜ |
+| cottagecore cottage | ⬜ | ⬜ | — | ⬜ | ⬜ |
+| pastel dreamscape | ⬜ | ⬜ | — | ⬜ | ⬜ |
+| fairy tea party | ⬜ | ⬜ | — | ⬜ | ⬜ |
+| enchanted toy shop | ⬜ | ⬜ | — | ⬜ | ⬜ |
+
+### Through Time (`through_time`) — imagined=false (photography OK)
+| ancient egypt | ✅ | ✅ | 4.5 (R2) | ✅ | ✅ |
+| feudal japan | ✅ | ✅ | 4.5 (R2) | ✅ | ✅ |
+| 1920s speakeasy | ✅ | ✅ | 4.0 (garbled signage) | ✅ | 🔎 |
+| victorian london | ✅ | 🔨 | — | ⬜ | 🔨 |
+| ancient rome | ✅ | 🔨 | — | ⬜ | 🔨 |
+| viking longhouse | ✅ | 🔨 | — | ⬜ | 🔨 |
+| medieval village | ✅ | 🔨 | — | ⬜ | 🔨 |
+| renaissance venice | 🔨 | 🔨 | — | ⬜ | 🔨 |
+| pirate cove | ⬜ | 🔨 | — | ⬜ | 🔨 |
+| ancient greece | ⬜ | 🔨 | — | ⬜ | 🔨 |
+| silk road | ⬜ | 🔨 | — | ⬜ | 🔨 |
+| 1950s americana | ⬜ | 🔨 | — | ⬜ | 🔨 |
+
+### Old West (`old_west`) — build from scratch, imagined=false
+frontier town · saloon interior · desert canyon standoff · gold rush camp · cattle ranch golden hour ·
+steam train depot · monument valley trail · border cantina — all ⬜
+
+### Heroes & Adventure (`heroes_adventure`) — build, imagined=false (real-ish, some imagined)
+superhero city rooftop · spy lair secret hq · epic battlefield · mountain summit expedition ·
+race track garage · deep-sea research sub · jungle temple expedition · carrier flight deck ·
+gladiator arena — all ⬜
+
+### Landmarks & Wonders (`landmarks_wonders`) — REAL tier, nightly-eligible, revive graveyard
+taj mahal · petra · machu picchu · great wall of china · angkor wat · christ the redeemer ·
+sahara dunes · northern lights glacier — all ⬜
+
+---
+
+## Cross-cutting tasks (don't forget these)
+- [ ] **SECTION_META entries** in `components/onboarding/LocationPickerStep.tsx` for the new categories:
+      `through_time`, `old_west`, `heroes_adventure`, `landmarks_wonders` (real tier). *(The 4 imagined
+      ones — high_fantasy/scifi_space/gothic_haunted/whimsical_fun — are already added.)*
+- [ ] **Thumbnails** for cards missing them: haunted castle, mermaid lagoon, rose garden palace + every
+      new build (`generate-location-thumbnails.js`).
+- [ ] **Flip live** per section (`UPDATE location_cards SET admin_only=false WHERE picker_category='…'`)
+      once the section clears 4.5.
+- [ ] **Landmarks nightly-eligibility** — real landmarks may enter nightly (unlike imagined); verify.
+- [ ] Watch: profile-face on action beats (monitor at scale; nudge only if frequent).
+
+## 🚩 Return-to (couldn't hit 4.5 after 3 rounds)
+- **Heroes › superhero city rooftop** — HARD FAIL: recipe/fusions are IP-magnetic (rendered a **Batman
+  logo + "GOTHAM"** on a jet-ski) + off-concept (jet-ski on water, not a rooftop) + beachwear not heroic.
+  Needs a no-IP recipe rework (strip named-hero refs, re-anchor to a caped-vigilante rooftop silhouette) OR
+  replace the location. Do NOT ship until IP is gone.
+- **Heroes › race track garage** — very thin pool (5 active) + weak recipe; likely needs a richer recipe.
+- **Whimsical › kawaii candy land** — recipe came out as a generic garden (mood-neutral recipe stripped the
+  "candy"); rendered a gardener in overalls in a weird tube-garden, not a sweets/gumdrop candy land. Needs a
+  candy-specific recipe + cute wardrobe. (unicorn meadow ✅ on-concept, so it's kawaii-specific.)
+- **Wild West raw-nature/activity expansion** (deferred): wild frontier, mountain wilderness, outlaw camp,
+  burlesque hall, wild west shootout. [[project_wild_west_red_dead_vision]]
+- **1920s speakeasy** (Through Time) — 4.0, garbled signage.
+- Wide-vista couples (canyon, etc.) — dual `no_split`→scene fallback risk; re-roll.
+
+---
+
+## ⚙️ Ops constraint (learned 2026-08-24)
+Background jobs get **killed at ~30 min**. So: generate recipes in batches of **≤5 locations**, render QA
+in batches of **≤4-5 locations** (~15-20 min each). Seeds (`seed-category.mjs`) for ~8-9 locations run
+~15 min and complete fine as one job. **Do NOT use chained `until`-wait loops** — if the upstream job is
+killed, the waiter hangs until it's killed too. Instead: kick a batch, wait for ITS completion
+notification, then start the next stage as its own job.
+
+## Per-category loop (the process I follow)
+1. `generate-full-location-card.js "<loc>" ...` (recipes).
+2. `seed-category.mjs <picker_category> <imagined> <sortStart> "loc=biome" ...` (full seed).
+3. `generate-location-thumbnails.js` for the new locs.
+4. 3-round QA: `qa-location.js --location "<loc>"` → post to Kevin's Dreams album → grade each render vs
+   the integration+cinema 4.5 bar → fix the SPECIFIC cause → re-render. Cap 3 rounds → else 🚩 Return-to.
+5. Add `SECTION_META` entry if new category. Flip `admin_only=false` when the section passes.
+6. Update this doc + move to next category. No approval gate.
+
+## Locked decisions (2026-08-24)
+- Target ~120 (broad). Nightly scope = Create-first (imagined Create-only; real Landmarks may go nightly).
+- Neutral section labels (tweakable), no gender in UI. Revive graveyard recipes where they exist.
+- Autonomous, full quality bar per location, flag failures rather than stall.
+
+## Build log
+| 2026-08-26 | Heroes decision + Superhero IP fix | Kevin: **leave Heroes as 9, just fix the broken Superhero card.** Superhero was riddled with named IP (Batman/Gotham/Stark/Avengers + deep cuts: Smallville/Kent, Kamar-Taj, Nanda Parbat, Rand Corp, Rock of Eternity, Waverider) — regex whack-a-mole left 152 still contaminated, so **deactivated the ENTIRE pool + regen'd 102 GENERIC no-IP real-city rooftops** (Empire State, Chrysler, One WTC, Brooklyn Bridge) via explicit no-IP theme; also scrubbed fusion_settings of hero-crest/insignia/logo phrases. Curated (102 active, 77 cast). LESSON: a comic/hero concept auto-generates deep IP — regenerate generic, don't scrub. R2 render verifying. | Heroes ✅ (as-is + superhero fixed) |
+| 2026-08-26 | Wild West 8→5 + Gothic fold | **Wild West:** folded Saloon Interior + Steam Train Depot + Border Cantina (45 cast spots each) into a broadened **Frontier Town** (6 facets), hid the 3 (picker_category=null) → 236 spots. QA found Frontier Town's ORIGINAL spots were THEME-PARK replicas ("Frontier Town replica sheriff's office", "on display track") → rendered MODERN CARS on a paved street. Deactivated 14 replica/heritage spots → 222; **R2 couple 4.4 (modern cars GONE, gritty-authentic couple), scene 4.4.** ✅ **Gothic:** folded Cursed Cathedral (55 spots) → Haunted Castle (245), kept Transylvania → gothic 3→2 (both fold into "Fantasy" under 4+4). | Wild West R2 pending; Gothic ✅ |
+| 2026-08-26 | Through Time broaden (3) | Pirate Cove→**Age of Pirates**, 1920s Speakeasy→**Roaring 20s**, Medieval Village→**Medieval Times**: broadened SUBJECT_RULE + 6 sub_regions each, rebalanced narrow pools (pirate 200 cove-rocks→40), gen'd broad spots. GOTCHA: `--fictional` on REAL eras (1920s/medieval) invented FANTASY names ("Feldrith St", "Sablegate Spires") → deleted + regen'd with REAL prompt (Savoy Ballroom, Mont-Saint-Michel). Pirate keeps --fictional (genre). Curated: scale-classify + eligibility. Pools 145/201/206 active. **QA DONE (✅ all 3):** Roaring 20s 4.6–4.7 out of the box (tux+gown glam, Traymore Hotel, moody speakeasy). Age of Pirates + Medieval R1 had OFF-REGISTER wardrobe (pirate→blue sundress; medieval→Victorian/peasant) → **elevated WARDROBE pools** (pirate→swashbuckler tricorn/corset/sash; medieval→knights & nobles armor/gowns) → **R2: pirate couple 4.5, medieval couple 4.6, medieval self 4.3.** LESSON: broadening a card MUST re-theme its `biome_config.WARDROBE` to the new register, not just SUBJECT_RULE+spots. All dark (admin_only). | ✅ done |
+| 2026-08-24 | Slice (egypt/japan/speakeasy) | seed → R1 (5/6 cast @4.5, 1 misfire) → engine fix (dropped enviro_wide) + eligibility rules → R2 ✅ | Kevin: "looks good, keep going" |
+| 2026-08-24 | Engine (prod) | dropped enviro_wide from solo-cast comp (was silently scene-only-ing ~10% of cast nightlies); wardrobe de-burgundy; imagined medium affinity | committed 615cd7b2 |
+| 2026-08-24 | Through Time (9) | recipes + seed-category.mjs | 🔨 running |

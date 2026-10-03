@@ -77,7 +77,7 @@ flowchart TD
     %% ENTRY
     U["User types a blurb<br/>(Create screen)"]:::client
     OB["Onboarding reveal<br/>(first dream)"]:::client
-    CRON["GitHub Actions cron<br/>0 8 * * * UTC"]:::mech
+    CRON["Hourly enqueue (GitHub 0 * * * * +<br/>pg_cron backstop :17), local 4am"]:::mech
 
     %% CREATE ENQUEUE
     U --> ENQ
@@ -89,9 +89,9 @@ flowchart TD
 
     %% NIGHTLY ENQUEUE
     CRON --> NS
-    NS["nightly-dreams.js (cron script)<br/>paginate eligible Pro/trial users<br/>dedup_key · bulk INSERT"]:::edge
+    NS["nightly-dreams.js (cron script)<br/>paginate eligible Pro/Basic/admin users<br/>dedup_key · bulk INSERT"]:::edge
     UR[("user_recipes / users")]:::db
-    NSEED[("nightly_seeds<br/>8 pools x 100 templates")]:::db
+    NSEED[("location spots + scenario pools<br/>(holiday / goofy / elegant / active)")]:::db
     NS -->|reads eligibility| UR
     NS -->|"INSERT source=nightly, weight=heavy"| Q
 

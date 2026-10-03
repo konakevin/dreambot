@@ -1,5 +1,10 @@
 # Mediums FAQ — The Complete Guide
 
+> **Nightly note (2026-10-02):** this guide is about CREATE's mediums. Nightly dreams do NOT roll a user's `art_styles` or
+> the dream-eligible mediums any more: since 1.3.0 they roll a curated `nightly_*` LOOK (`dream_mediums.nightly_look`,
+> `nightly_enabled`, `nightly_look_approvals`). Lines below that describe nightly medium picks are historical; the nightly
+> truth is `NIGHTLY_RULE_BOOK.md` A3.
+
 ## What Is a Medium?
 
 A medium is an art style (anime, photography, gothic, lego, etc.). The `dream_mediums` Postgres table is the single source of truth. Every medium has a `key` (e.g., "lego"), a `directive` (style guide for Sonnet), a `flux_fragment` (opening tokens for Flux), and classification flags.

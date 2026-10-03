@@ -1,6 +1,6 @@
 # Holiday postcard overlays (transparent PNG lettering)
 
-Composited onto the day-of hero render by the `holiday-postcard` edge fn (migration 459); the live file per
+Composited onto the day-of render (the day-of hero look was deleted 2026-09-07) by the `holiday-postcard` edge fn (migration 459); the live file per
 holiday is `holidays.postcard_overlay_url` (+ layout columns). Set/preview with
 `node scripts/gen-holiday-postcard.mjs --holiday <key> --set <file.png> --anchor bottom --width 70 --margin 4`.
 

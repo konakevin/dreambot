@@ -1,5 +1,10 @@
 # Real-Face LOOKS Registry — proven look × model × surface results (LIVE doc)
 
+> **2026-10-02 note:** the generated matrix in §3 predates migs 523 / 528 / 530 / 538 / 539 (archived flux NOs, the
+> 09-18 per-look flux couple probe, flex mirroring gemini, classical_oil and colored_pencil retired). The live
+> `nightly_look_approvals`, `nightly_look_model_pins` and `dream_mediums.nightly_enabled` rows are the truth; nightly does
+> not read `nightly_surfaces`. Current look rules: `NIGHTLY_RULE_BOOK.md` A3 / B5.
+
 **Why this exists (Kevin, 2026-09-11):** the nightly looks research is producing a proven set of rendering styles
 that survive the face-swap pipeline with a natural, non-pasted face. That same evidence is the foundation for a
 LATER initiative: refactoring the mediums the app offers for "real face" Create dreams (single self and dual /

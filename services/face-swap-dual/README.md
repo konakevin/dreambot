@@ -1,9 +1,8 @@
 # face-swap-dual — Fly.io machine
 
-Dual face swap pipeline hosted on Fly.io. Mirrors the same-named
-Supabase Edge Function but runs on a Fly machine with 2 GB RAM
-(8x the 256 MB Supabase Edge Function cap) so it doesn't fall over
-on large outputs from flux-1.1-pro-ultra or gpt-image-2.
+Dual face swap pipeline hosted on Fly.io: the ONLY dual-swap engine (the in-isolate Supabase Edge Function version
+was deleted 2026-09-17; `_shared/dualSwapDispatch.ts` routes every dual swap here). It runs on a Fly machine with
+2 GB RAM (8x the 256 MB Supabase Edge Function cap) so it doesn't fall over on large outputs.
 
 ## Why this exists
 
@@ -69,7 +68,8 @@ solo rebuild. Roll back by redeploying a previous image of THIS service (`fly re
 
 ## Cost shape
 
-Default config (`auto_stop_machines = "stop"`, `min_machines_running = 0`):
+Current `fly.toml`: `auto_stop_machines = 'off'`, `min_machines_running = 1` (always on, no cold start). The figures
+below were for the original scale-to-zero config (`auto_stop_machines = "stop"`, `min_machines_running = 0`):
 
 - Idle: $0/mo (machine sleeps)
 - Light traffic (Kevin + a few testers): ~$1-5/mo
